@@ -40,7 +40,7 @@ public class EDatatypeIdResolver implements SingletonIdResolver {
 		datatypes.put("EString", EcorePackage.eINSTANCE.getEString());
 		// Date
 		datatypes.put("Date", EcorePackage.eINSTANCE.getEDate());
-		datatypes.put("EDate", EcorePackage.eINSTANCE.getEDate());
+		datatypes.put(sss"EDate", EcorePackage.eINSTANCE.getEDate());
 		// integer
 		datatypes.put("Int", EcorePackage.eINSTANCE.getEInt());
 		datatypes.put("EInt", EcorePackage.eINSTANCE.getEInt());
