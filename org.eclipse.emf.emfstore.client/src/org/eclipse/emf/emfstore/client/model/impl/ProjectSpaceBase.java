@@ -684,6 +684,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 				toDelete.add(resource);
 			}
 		}
+
 		for (Resource resource : toDelete) {
 			resource.delete(null);
 		}
