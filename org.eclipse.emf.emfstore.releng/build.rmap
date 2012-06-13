@@ -19,9 +19,6 @@
 	<locator pattern="^ECPDeveloper$" searchPathRef="localgitecp"/>
 	-->
 		
-		
-		
-		
 	<!-- path configuration for HUDSON build -->
 	<property key="local.reader.path.emfstore.base"   value="${hudson.git.checkout.base}" mutable="true"/>
 	<property key="local.reader.path.emfstore.core"   value="${hudson.git.checkout.emfstore.core.extension}" mutable="true"/>
