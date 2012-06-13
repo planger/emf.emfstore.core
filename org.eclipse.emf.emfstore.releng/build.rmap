@@ -44,7 +44,7 @@
 	<locator pattern="^ECPDeveloper$" searchPathRef="ecp"/>
 	
 	
-	<!-- path configuration for LOCAL buid
+	<!-- path configuration for LOCAL buid 
 	<property key="local.reader.path.emfstore.base"   value="${local.git.checkout.base}" mutable="true"/>
 	<property key="local.reader.path.emfstore.core"   value="${local.git.checkout.emfstore.core.extension}" mutable="true"/>
 	<property key="local.reader.path.emfstore.releng" value="${local.git.checkout.emfstore.releng.extension}" mutable="true"/>
