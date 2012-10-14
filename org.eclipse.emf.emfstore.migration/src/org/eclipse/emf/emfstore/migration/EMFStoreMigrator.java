@@ -34,4 +34,16 @@ public interface EMFStoreMigrator {
 	 */
 	void migrate(List<URI> resources, int sourceModelReleaseNumber, IProgressMonitor monitor)
 		throws EMFStoreMigrationException;
+	
+	/**
+	 * Migrate the data model in the given URIs from the given source version to the most recent version.
+	 * 
+	 * @param resources the URIs of the contents to migrate
+	 * @param sourceModelReleaseNumber the source version number
+	 * @param monitor a progress monitor
+	 * 
+	 * @throws EMFStoreMigrationException if the migration fails.
+	 */
+	void migrateDataModel(List<URI> resources, int sourceModelReleaseNumber, IProgressMonitor monitor)
+		throws EMFStoreMigrationException;
 }

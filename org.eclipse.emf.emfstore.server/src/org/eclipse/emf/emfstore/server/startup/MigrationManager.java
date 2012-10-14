@@ -41,10 +41,72 @@ import org.eclipse.emf.emfstore.server.exceptions.FatalEmfStoreException;
  */
 public class MigrationManager {
 
+	public static void migrateDataModel() throws FatalEmfStoreException {
+		// check for legacy server space
+		int modelVersionNumber;
+		try {
+			modelVersionNumber = ModelUtil.getModelVersionNumber();
+		} catch (MalformedModelVersionException e1) {
+			throw new FatalEmfStoreException(e1);
+		}
+
+		// check for legacy server space
+		File versionFile = new File(
+				ServerConfiguration.getModelReleaseNumberFileName());
+		if (!versionFile.exists()) {
+			// stampCurrentVersionNumber(modelVersionNumber);
+		}
+
+		// check if we need to migrate
+		ModelVersion modelVersion;
+		URI versionFileUri = URI.createFileURI(ServerConfiguration
+				.getModelReleaseNumberFileName());
+		ResourceSet resourceSet = new ResourceSetImpl();
+		try {
+			Resource resource = resourceSet.getResource(versionFileUri, true);
+			EList<EObject> directContents = resource.getContents();
+			modelVersion = (ModelVersion) directContents.get(0);
+			// BEGIN SUPRESS CATCH EXCEPTION
+		} catch (RuntimeException e) {
+			// END SUPRESS CATCH EXCEPTION
+			// resource can not be loaded, assume version number before
+			// metamodel split
+			modelVersion = ModelFactory.eINSTANCE.createModelVersion();
+			modelVersion.setReleaseNumber(4);
+		}
+
+		if (modelVersion.getReleaseNumber() == modelVersionNumber) {
+			return;
+		}
+
+		if (!EMFStoreMigratorUtil.isMigratorAvailable()) {
+			throw new FatalEmfStoreException(
+					"Model must be migrated to new version, but no migrators are available.");
+		}
+
+		// ask for confirmation
+		boolean doProcceed = askForConfirmationForMigration();
+		if (!doProcceed) {
+			String message = "Server shutting down, model update is mandatory.";
+			System.out.println(message);
+			throw new FatalEmfStoreException(message);
+		}
+		File serverSpaceDirectory = new File(
+				ServerConfiguration.getServerHome());
+		try {
+			EMFStoreMigratorUtil.getEMFStoreMigrator().migrateDataModel(null,
+					0, new ConsoleProgressMonitor());
+		} catch (EMFStoreMigrationException e) {
+			throw new FatalEmfStoreException(e.getMessage());
+		}
+		// stampCurrentVersionNumber(modelVersionNumber);
+	}
+
 	/**
 	 * Starts migration.
 	 * 
-	 * @throws FatalEmfStoreException in case of failure
+	 * @throws FatalEmfStoreException
+	 *             in case of failure
 	 */
 	public void migrateModel() throws FatalEmfStoreException {
 		int modelVersionNumber;
@@ -55,14 +117,16 @@ public class MigrationManager {
 		}
 
 		// check for legacy server space
-		File versionFile = new File(ServerConfiguration.getModelReleaseNumberFileName());
+		File versionFile = new File(
+				ServerConfiguration.getModelReleaseNumberFileName());
 		if (!versionFile.exists()) {
 			stampCurrentVersionNumber(modelVersionNumber);
 		}
 
 		// check if we need to migrate
 		ModelVersion modelVersion;
-		URI versionFileUri = URI.createFileURI(ServerConfiguration.getModelReleaseNumberFileName());
+		URI versionFileUri = URI.createFileURI(ServerConfiguration
+				.getModelReleaseNumberFileName());
 		ResourceSet resourceSet = new ResourceSetImpl();
 		try {
 			Resource resource = resourceSet.getResource(versionFileUri, true);
@@ -71,7 +135,8 @@ public class MigrationManager {
 			// BEGIN SUPRESS CATCH EXCEPTION
 		} catch (RuntimeException e) {
 			// END SUPRESS CATCH EXCEPTION
-			// resource can not be loaded, assume version number before metamodel split
+			// resource can not be loaded, assume version number before
+			// metamodel split
 			modelVersion = ModelFactory.eINSTANCE.createModelVersion();
 			modelVersion.setReleaseNumber(4);
 		}
@@ -81,7 +146,8 @@ public class MigrationManager {
 		}
 
 		if (!EMFStoreMigratorUtil.isMigratorAvailable()) {
-			throw new FatalEmfStoreException("Model must be migrated to new version, but no migrators are available.");
+			throw new FatalEmfStoreException(
+					"Model must be migrated to new version, but no migrators are available.");
 		}
 
 		// ask for confirmation
@@ -94,20 +160,24 @@ public class MigrationManager {
 
 		// migrate all versions of all projects
 		// we need to migrate
-		File serverSpaceDirectory = new File(ServerConfiguration.getServerHome());
+		File serverSpaceDirectory = new File(
+				ServerConfiguration.getServerHome());
 		// for all projects
 		for (File projectDirectory : serverSpaceDirectory.listFiles()) {
-			if (projectDirectory.getName().startsWith(ServerConfiguration.FILE_PREFIX_PROJECTFOLDER)
-				&& projectDirectory.isDirectory()) {
+			if (projectDirectory.getName().startsWith(
+					ServerConfiguration.FILE_PREFIX_PROJECTFOLDER)
+					&& projectDirectory.isDirectory()) {
 
-				System.out.println("Migrating project at " + projectDirectory + "...");
+				System.out.println("Migrating project at " + projectDirectory
+						+ "...");
 
 				convertInitialProjectState(modelVersion, projectDirectory);
 
 				File[] listFiles = projectDirectory.listFiles(new FileFilter() {
 					public boolean accept(File pathname) {
 						if (pathname.isFile()
-							&& (pathname.getName().endsWith(".ucp") || pathname.getName().endsWith(".ups"))) {
+								&& (pathname.getName().endsWith(".ucp") || pathname
+										.getName().endsWith(".ups"))) {
 							return true;
 						}
 						return false;
@@ -116,26 +186,34 @@ public class MigrationManager {
 
 				convertAllVersions(modelVersion, projectDirectory, listFiles);
 
-				// convertAllBackupStates(modelVersion, projectDirectory, listFiles);
+				// convertAllBackupStates(modelVersion, projectDirectory,
+				// listFiles);
 			}
 		}
 		stampCurrentVersionNumber(modelVersionNumber);
 	}
 
-	private void convertInitialProjectState(ModelVersion modelVersion, File projectDirectory)
-		throws FatalEmfStoreException {
-		URI version0StateURI = URI.createFileURI(projectDirectory.getAbsolutePath() + File.separatorChar
-			+ ServerConfiguration.FILE_PREFIX_PROJECTSTATE + "0" + ServerConfiguration.FILE_EXTENSION_PROJECTSTATE);
+	private void convertInitialProjectState(ModelVersion modelVersion,
+			File projectDirectory) throws FatalEmfStoreException {
+		URI version0StateURI = URI.createFileURI(projectDirectory
+				.getAbsolutePath()
+				+ File.separatorChar
+				+ ServerConfiguration.FILE_PREFIX_PROJECTSTATE
+				+ "0"
+				+ ServerConfiguration.FILE_EXTENSION_PROJECTSTATE);
 		try {
 			System.out.println("Migrating version 0...");
-			migrate(version0StateURI, new ArrayList<URI>(), modelVersion.getReleaseNumber());
+			migrate(version0StateURI, new ArrayList<URI>(),
+					modelVersion.getReleaseNumber());
 		} catch (EMFStoreMigrationException e) {
-			throw new FatalEmfStoreException("Migration of project at " + projectDirectory + " failed!", e);
+			throw new FatalEmfStoreException("Migration of project at "
+					+ projectDirectory + " failed!", e);
 		}
 	}
 
-	private void convertAllVersions(ModelVersion modelVersion, File projectDirectory, File[] listFiles)
-		throws FatalEmfStoreException {
+	private void convertAllVersions(ModelVersion modelVersion,
+			File projectDirectory, File[] listFiles)
+			throws FatalEmfStoreException {
 		List<URI> changePackageURIs = new ArrayList<URI>();
 
 		Arrays.sort(listFiles, new Comparator<File>() {
@@ -164,22 +242,31 @@ public class MigrationManager {
 
 		for (File changePackageFile : listFiles) {
 			String changePackageName = changePackageFile.getName();
-			if (changePackageName.startsWith(ServerConfiguration.FILE_PREFIX_CHANGEPACKAGE)) {
+			if (changePackageName
+					.startsWith(ServerConfiguration.FILE_PREFIX_CHANGEPACKAGE)) {
 				int versionSpec = parseVersionSpecFromFileName(changePackageName);
-				URI changePackageURI = URI.createFileURI(changePackageFile.getAbsolutePath());
+				URI changePackageURI = URI.createFileURI(changePackageFile
+						.getAbsolutePath());
 				changePackageURIs.add(changePackageURI);
-				String projectStateFilename = projectDirectory.getAbsolutePath() + File.separatorChar
-					+ ServerConfiguration.FILE_PREFIX_PROJECTSTATE + versionSpec
-					+ ServerConfiguration.FILE_EXTENSION_PROJECTSTATE;
+				String projectStateFilename = projectDirectory
+						.getAbsolutePath()
+						+ File.separatorChar
+						+ ServerConfiguration.FILE_PREFIX_PROJECTSTATE
+						+ versionSpec
+						+ ServerConfiguration.FILE_EXTENSION_PROJECTSTATE;
 				File projectStateFile = new File(projectStateFilename);
 				if (projectStateFile.exists()) {
 					URI projectURI = URI.createFileURI(projectStateFilename);
 					try {
-						System.out.println("Migrating version " + versionSpec + " with its "
-							+ (changePackageURIs.size() - 1) + " previous versions...");
-						migrate(projectURI, changePackageURIs, modelVersion.getReleaseNumber());
+						System.out.println("Migrating version " + versionSpec
+								+ " with its " + (changePackageURIs.size() - 1)
+								+ " previous versions...");
+						migrate(projectURI, changePackageURIs,
+								modelVersion.getReleaseNumber());
 					} catch (EMFStoreMigrationException e) {
-						throw new FatalEmfStoreException("Migration of project at " + projectDirectory + " failed!", e);
+						throw new FatalEmfStoreException(
+								"Migration of project at " + projectDirectory
+										+ " failed!", e);
 					}
 					changePackageURIs.clear();
 				}
@@ -191,8 +278,10 @@ public class MigrationManager {
 
 	private int parseVersionSpecFromFileName(String versionName) {
 		int startOfFileExtension = versionName.lastIndexOf(".");
-		int prefixLength = ServerConfiguration.FILE_PREFIX_CHANGEPACKAGE.length();
-		String versionSpecString = versionName.substring(prefixLength, startOfFileExtension);
+		int prefixLength = ServerConfiguration.FILE_PREFIX_CHANGEPACKAGE
+				.length();
+		String versionSpecString = versionName.substring(prefixLength,
+				startOfFileExtension);
 		int versionSpec = Integer.parseInt(versionSpecString);
 		return versionSpec;
 	}
@@ -200,26 +289,30 @@ public class MigrationManager {
 	/**
 	 * Migrate the model instance if neccessary.
 	 * 
-	 * @param projectURI the uri of the project state
-	 * @param changesURI the uri of the local changes of the project state
+	 * @param projectURI
+	 *            the uri of the project state
+	 * @param changesURI
+	 *            the uri of the local changes of the project state
 	 * @param sourceModelReleaseNumber
 	 * @throws ModelMigrationException
 	 */
-	private void migrate(URI projectURI, List<URI> changesURIs, int sourceModelReleaseNumber)
-		throws EMFStoreMigrationException {
+	private void migrate(URI projectURI, List<URI> changesURIs,
+			int sourceModelReleaseNumber) throws EMFStoreMigrationException {
 
 		List<URI> modelURIs = new ArrayList<URI>();
 		modelURIs.add(projectURI);
 		for (URI changeURI : changesURIs) {
 			modelURIs.add(changeURI);
 		}
-		EMFStoreMigratorUtil.getEMFStoreMigrator().migrate(modelURIs, sourceModelReleaseNumber,
-			new ConsoleProgressMonitor());
+		EMFStoreMigratorUtil.getEMFStoreMigrator().migrate(modelURIs,
+				sourceModelReleaseNumber, new ConsoleProgressMonitor());
 	}
 
 	private void stampCurrentVersionNumber(int modelReleaseNumber) {
-		URI versionFileUri = URI.createFileURI(ServerConfiguration.getModelReleaseNumberFileName());
-		Resource versionResource = new ResourceSetImpl().createResource(versionFileUri);
+		URI versionFileUri = URI.createFileURI(ServerConfiguration
+				.getModelReleaseNumberFileName());
+		Resource versionResource = new ResourceSetImpl()
+				.createResource(versionFileUri);
 		ModelVersion modelVersion = ModelFactory.eINSTANCE.createModelVersion();
 		modelVersion.setReleaseNumber(modelReleaseNumber);
 		versionResource.getContents().add(modelVersion);
@@ -237,9 +330,10 @@ public class MigrationManager {
 	 * @return true if user wants to proceed
 	 * @throws FatalEmfStoreException
 	 */
-	private boolean askForConfirmationForMigration() throws FatalEmfStoreException {
+	private static boolean askForConfirmationForMigration()
+			throws FatalEmfStoreException {
 		System.out
-			.println("Your model is not up to date. Do you want to update now and did you backup your emfstore folder? (y/n)");
+				.println("Your model is not up to date. Do you want to update now and did you backup your emfstore folder? (y/n)");
 
 		byte[] buffer = new byte[1];
 		String input = "";

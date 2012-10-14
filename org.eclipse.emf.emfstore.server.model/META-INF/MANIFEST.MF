@@ -34,5 +34,6 @@ Export-Package: org.eclipse.emf.emfstore.server.model,
  org.eclipse.emf.emfstore.server.model.versioning.operations.semantic.util,
  org.eclipse.emf.emfstore.server.model.versioning.operations.util,
  org.eclipse.emf.emfstore.server.model.versioning.util
-Require-Bundle: org.eclipse.emf.emfstore.common.model;visibility:=reexport
+Require-Bundle: org.eclipse.emf.emfstore.common.model;visibility:=reexport,
+ org.eclipse.emf.edapt.migration;bundle-version="0.3.0"
 Bundle-ActivationPolicy: lazy
