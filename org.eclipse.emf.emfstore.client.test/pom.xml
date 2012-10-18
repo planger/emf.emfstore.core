@@ -13,7 +13,7 @@
   <groupId>org.eclipse.emf.emfstore</groupId>
   <artifactId>org.eclipse.emf.emfstore.client.test</artifactId>
   <version>0.9.3-SNAPSHOT</version>
-  <packaging>eclipse-test-plugin</packaging>
+  <packaging>eclipse-plugin</packaging>
 
   <build>
     <plugins>
