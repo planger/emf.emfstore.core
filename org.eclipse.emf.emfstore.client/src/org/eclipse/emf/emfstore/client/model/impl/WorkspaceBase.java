@@ -882,4 +882,10 @@ public abstract class WorkspaceBase extends EObjectImpl implements Workspace, ID
 	public List<ServerInfo> getServers() {
 		return getServerInfos();
 	}
+
+	public IServer getServerByUsersession(IUsersession session) {
+		// TODO OTS
+		return null;
+	}
+
 }

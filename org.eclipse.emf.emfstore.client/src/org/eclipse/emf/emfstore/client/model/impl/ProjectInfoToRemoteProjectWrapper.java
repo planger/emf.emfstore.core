@@ -53,6 +53,11 @@ public class ProjectInfoToRemoteProjectWrapper implements IRemoteProject {
 
 	private final Usersession usersession;
 
+	public ProjectInfoToRemoteProjectWrapper(ProjectInfo projectInfo) {
+		this.usersession = null;
+		this.projectInfo = projectInfo;
+	}
+
 	public ProjectInfoToRemoteProjectWrapper(Usersession usersession, ProjectInfo projectInfo) {
 		this.usersession = usersession;
 		this.projectInfo = projectInfo;
@@ -66,6 +71,10 @@ public class ProjectInfoToRemoteProjectWrapper implements IRemoteProject {
 	 */
 	public void setConnectionManager(ConnectionManager connectionManager) {
 		this.connectionManager = connectionManager;
+	}
+
+	public ProjectInfo getProjectInfo() {
+		return projectInfo;
 	}
 
 	public IProjectId getProjectId() {
