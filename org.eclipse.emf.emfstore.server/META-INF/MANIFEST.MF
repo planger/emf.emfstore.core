@@ -40,6 +40,7 @@ Export-Package:
  org.eclipse.emf.emfstore.server.core.internal.subinterfaces;x-internal:=true,
  org.eclipse.emf.emfstore.server.exceptions,
  org.eclipse.emf.emfstore.server.filetransfer,
+ org.eclipse.emf.emfstore.server.internal.conflictDetection,
  org.eclipse.emf.emfstore.server.internal.eventmanager;x-internal:=true,
  org.eclipse.emf.emfstore.server.startup,
  org.eclipse.emf.emfstore.server.storage
