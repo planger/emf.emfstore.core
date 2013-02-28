@@ -56,33 +56,36 @@ public class ReservationToConflictBucketCandidateMap {
 			if (reservationSet.hasFullReservation(modelElement)
 				|| reservationToConflictMap.hasFullReservation(modelElement)) {
 				ConflictBucketCandidate mergedConflictBucketCandidates = mergeConflictBucketCandidates(
-					reservationToConflictMap.getConflictBucketCandidates(modelElement), currentConflictBucketCandidate);
+																										reservationToConflictMap
+																											.getConflictBucketCandidates(modelElement),
+																										currentConflictBucketCandidate);
 				reservationToConflictMap.addFullReservation(modelElement, mergedConflictBucketCandidates);
 				continue;
 			}
 
 			// at this point: neither full reservation of model element is existing nor requested to be joined
-
 			// handle existence reservations
 			if (reservationSet.hasExistenceReservation(modelElement)) {
 				reservationToConflictMap.addExistenceReservation(modelElement, currentConflictBucketCandidate);
-				continue;
 			}
 
 			// handle feature reservations
 			Set<String> featureNames = reservationSet.getFeatureNames(modelElement);
 			for (String featureName : featureNames) {
 				// we do not care about existence reservations since they will not colide with any other features
-
+				if (featureName.equals(FeatureNameReservationMap.EXISTENCE_FEATURE)) {
+					continue;
+				}
 				// handle normal feature reservations without opposite
 				if (!reservationSet.hasOppositeReservations(modelElement, featureName)) {
 					handleFeatureVsFeatureReservation(currentConflictBucketCandidate, modelElement, featureName);
 				} else {
 					handleOppositeVsOppositeReservation(reservationSet, currentConflictBucketCandidate, modelElement,
-						featureName);
+														featureName);
 				}
 
 			}
+
 		}
 	}
 
@@ -91,10 +94,12 @@ public class ReservationToConflictBucketCandidateMap {
 
 		if (reservationToConflictMap.hasFeatureReservation(modelElement, featureName)) {
 
-			Set<ConflictBucketCandidate> existingBuckets = reservationToConflictMap.getConflictBucketCandidates(
-				modelElement, featureName);
-			ConflictBucketCandidate mergedConflictBucketCandidates = mergeConflictBucketCandidates(existingBuckets,
-				currentConflictBucketCandidate);
+			Set<ConflictBucketCandidate> existingBuckets = reservationToConflictMap
+				.getConflictBucketCandidates(
+												modelElement, featureName);
+			ConflictBucketCandidate mergedConflictBucketCandidates = mergeConflictBucketCandidates(
+																									existingBuckets,
+																									currentConflictBucketCandidate);
 
 			reservationToConflictMap.addFeatureReservation(modelElement, featureName, mergedConflictBucketCandidates);
 
@@ -113,11 +118,18 @@ public class ReservationToConflictBucketCandidateMap {
 				if (reservationToConflictMap.hasOppositeReservation(modelElement, featureName, oppositeModelElement)) {
 
 					ConflictBucketCandidate mergedConflictBucketCandidates = mergeConflictBucketCandidates(
-						reservationToConflictMap.getConflictBucketCandidates(modelElement, featureName,
-							oppositeModelElement), currentConflictBucketCandidate);
+																											reservationToConflictMap
+																												.getConflictBucketCandidates(
+																																				modelElement,
+																																				featureName,
+																																				oppositeModelElement),
+																											currentConflictBucketCandidate);
 
-					reservationToConflictMap.addMultiReferenceWithOppositeReservation(modelElement, featureName,
-						oppositeModelElement, mergedConflictBucketCandidates);
+					reservationToConflictMap.addMultiReferenceWithOppositeReservation(
+																						modelElement,
+																						featureName,
+																						oppositeModelElement,
+																						mergedConflictBucketCandidates);
 				}
 			}
 		} else if (reservationToConflictMap.hasFeatureReservation(modelElement, featureName)) {
@@ -126,8 +138,11 @@ public class ReservationToConflictBucketCandidateMap {
 			Set<String> opposites = reservationSet.getOpposites(modelElement, featureName);
 
 			for (String oppositeModelElement : opposites) {
-				reservationToConflictMap.addMultiReferenceWithOppositeReservation(modelElement, featureName,
-					oppositeModelElement, currentConflictBucketCandidate);
+				reservationToConflictMap.addMultiReferenceWithOppositeReservation(
+																					modelElement,
+																					featureName,
+																					oppositeModelElement,
+																					currentConflictBucketCandidate);
 			}
 		}
 
@@ -212,7 +227,7 @@ public class ReservationToConflictBucketCandidateMap {
 			|| (featureOperation instanceof MultiReferenceSetOperation || featureOperation instanceof MultiReferenceMoveOperation)) {
 			for (ModelElementId otherModelElement : featureOperation.getOtherInvolvedModelElements()) {
 				reservationSet.addMultiReferenceWithOppositeReservation(modelElementId, featureName,
-					otherModelElement.getId());
+																		otherModelElement.getId());
 			}
 		} else {
 			reservationSet.addFeatureReservation(modelElementId, featureName);

@@ -49,7 +49,7 @@ public class MultiReferenceMergeTest extends MergeTest {
 		// my
 			.myIs(MultiReferenceOperation.class).andReturns("isAdd", true).andNoOtherMyOps()
 			// their
-			.theirsIs(MultiReferenceOperation.class).andReturns("isAdd", false).andNoOtherTheirOps();
+			.theirsIs(MultiReferenceOperation.class).andReturns("isAdd", false);
 	}
 
 	@Test
@@ -81,7 +81,7 @@ public class MultiReferenceMergeTest extends MergeTest {
 		// my
 			.myIs(MultiReferenceOperation.class).andReturns("isAdd", true).andNoOtherMyOps()
 			// their
-			.theirsIs(MultiReferenceOperation.class).andReturns("isAdd", false).andNoOtherTheirOps();
+			.theirsIs(MultiReferenceOperation.class).andReturns("isAdd", false);
 
 	}
 
@@ -139,7 +139,7 @@ public class MultiReferenceMergeTest extends MergeTest {
 		// my
 			.myIs(MultiReferenceOperation.class).andReturns("isAdd", true).andNoOtherMyOps()
 			// their
-			.theirsIs(MultiReferenceOperation.class).andReturns("isAdd", false).andNoOtherTheirOps();
+			.theirsIs(MultiReferenceOperation.class).andReturns("isAdd", false);
 	}
 
 	// Many
@@ -171,7 +171,7 @@ public class MultiReferenceMergeTest extends MergeTest {
 		// my
 			.myIs(MultiReferenceOperation.class).andReturns("isAdd", true).andNoOtherMyOps()
 			// their
-			.theirsIs(MultiReferenceOperation.class).andReturns("isAdd", false).andNoOtherTheirOps();
+			.theirsIs(MultiReferenceOperation.class).andReturns("isAdd", false);
 	}
 
 	@Test
@@ -205,7 +205,7 @@ public class MultiReferenceMergeTest extends MergeTest {
 			.andReturns("getReferencedModelElements", getIds(child, child2)).andNoOtherMyOps()
 			// their
 			.theirsIs(MultiReferenceOperation.class).andReturns("isAdd", false)
-			.andReturns("getReferencedModelElements", getIds(child, child2)).andNoOtherTheirOps();
+			.andReturns("getReferencedModelElements", getIds(child, child2));
 	}
 
 	@Test
@@ -267,7 +267,7 @@ public class MultiReferenceMergeTest extends MergeTest {
 			.andReturns("getReferencedModelElements", getIds(child, child2)).andNoOtherMyOps()
 			// their
 			.theirsIs(MultiReferenceOperation.class).andReturns("isAdd", false)
-			.andReturns("getReferencedModelElements", getIds(child)).andNoOtherTheirOps();
+			.andReturns("getReferencedModelElements", getIds(child));
 	}
 
 	// Remove
@@ -420,7 +420,7 @@ public class MultiReferenceMergeTest extends MergeTest {
 			}
 		}.run(false);
 
-		mc.hasConflict(null);
+		mc.hasConflict(MultiReferenceSetSetConflict.class);
 	}
 
 	@Test

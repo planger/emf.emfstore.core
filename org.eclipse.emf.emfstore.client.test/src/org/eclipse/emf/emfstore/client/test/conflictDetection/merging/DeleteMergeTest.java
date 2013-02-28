@@ -217,7 +217,7 @@ public class DeleteMergeTest extends MergeTest {
 		// my
 			.myIs(AttributeOperation.class).andNoOtherMyOps()
 			// theirs
-			.theirsIs(CreateDeleteOperation.class).andNoOtherTheirOps();
+			.theirsIs(CreateDeleteOperation.class);
 	}
 
 	@Test
@@ -251,6 +251,6 @@ public class DeleteMergeTest extends MergeTest {
 		// my
 			.myIs(AttributeOperation.class).andNoOtherMyOps()
 			// theirs
-			.theirsIs(CreateDeleteOperation.class).andNoOtherTheirOps();
+			.theirsIs(CreateDeleteOperation.class);
 	}
 }

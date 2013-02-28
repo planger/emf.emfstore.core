@@ -14,13 +14,10 @@ import static java.util.Arrays.asList;
 
 import org.eclipse.emf.emfstore.client.model.changeTracking.merging.conflict.conflicts.DeletionConflict;
 import org.eclipse.emf.emfstore.client.model.changeTracking.merging.conflict.conflicts.MultiReferenceConflict;
-import org.eclipse.emf.emfstore.client.model.changeTracking.merging.conflict.conflicts.MultiReferenceSetConflict;
-import org.eclipse.emf.emfstore.client.model.changeTracking.merging.conflict.conflicts.MultiReferenceSetSetConflict;
 import org.eclipse.emf.emfstore.client.model.util.EMFStoreCommand;
 import org.eclipse.emf.emfstore.client.test.testmodel.TestElement;
 import org.eclipse.emf.emfstore.server.model.versioning.operations.CreateDeleteOperation;
 import org.eclipse.emf.emfstore.server.model.versioning.operations.MultiReferenceOperation;
-import org.eclipse.emf.emfstore.server.model.versioning.operations.MultiReferenceSetOperation;
 import org.junit.Test;
 
 public class MultiReferenceContainmentMergeTest extends MergeTest {
@@ -75,7 +72,7 @@ public class MultiReferenceContainmentMergeTest extends MergeTest {
 			}
 		}.run(false);
 
-		mc.hasConflict(null);
+		mc.hasConflict(MultiReferenceConflict.class);
 	}
 
 	@Test
@@ -132,7 +129,7 @@ public class MultiReferenceContainmentMergeTest extends MergeTest {
 			}
 		}.run(false);
 
-		mc.hasConflict(null);
+		mc.hasConflict(MultiReferenceConflict.class);
 	}
 
 	@Test
@@ -191,11 +188,11 @@ public class MultiReferenceContainmentMergeTest extends MergeTest {
 			}
 		}.run(false);
 
-		mc.hasConflict(MultiReferenceSetConflict.class)
+		mc.hasConflict(DeletionConflict.class)
 		// My
 			.myIs(MultiReferenceOperation.class).andReturns("isAdd", true).andNoOtherMyOps()
 			// Theirs
-			.theirsIs(MultiReferenceSetOperation.class).andNoOtherTheirOps();
+			.theirsIs(CreateDeleteOperation.class);
 	}
 
 	@Test
@@ -230,7 +227,7 @@ public class MultiReferenceContainmentMergeTest extends MergeTest {
 			}
 		}.run(false);
 
-		mc.hasConflict(null);
+		mc.hasConflict(DeletionConflict.class);
 	}
 
 	@Test
@@ -259,11 +256,11 @@ public class MultiReferenceContainmentMergeTest extends MergeTest {
 			}
 		}.run(false);
 
-		mc.hasConflict(MultiReferenceSetSetConflict.class)
+		mc.hasConflict(DeletionConflict.class)
 		// My
-			.myIs(MultiReferenceSetOperation.class).andNoOtherMyOps()
+			.myIs(CreateDeleteOperation.class)
 			// Theirs
-			.theirsIs(MultiReferenceSetOperation.class).andNoOtherTheirOps();
+			.theirsIs(CreateDeleteOperation.class);
 	}
 
 	@Test

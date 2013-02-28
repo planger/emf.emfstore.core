@@ -16,7 +16,10 @@ import java.util.Set;
 import org.eclipse.emf.emfstore.server.conflictDetection.ConflictBucketCandidate;
 
 /**
- * Mapping from model elements to their features. The mapping uses {@link ReservationSet#ALL_FEATURES_NAME} as a magic
+ * <p>
+ * Mapping from model elements to their features.
+ * </p>
+ * The mapping uses {@link ReservationSet#ALL_FEATURES_NAME} as a magic
  * feature name to represent all features of a
  * model element. This magic feature name is used also in the singleton set representing the set of all feature,
  * {@link ReservationSet#ALL_FEATURE_NAME_SET}. Furthermore it uses the magic feature name
@@ -184,7 +187,7 @@ public class ReservationSet {
 	public Set<ConflictBucketCandidate> getConflictBucketCandidates(String modelElementId, String featureName,
 		String oppositeModelElement) {
 		return modelElementIdReservationMap.getConflictBucketCandidates(modelElementId, featureName,
-			oppositeModelElement);
+																		oppositeModelElement);
 	}
 
 	public boolean hasOppositeReservation(String modelElement, String featureName, String oppositeModelElement) {

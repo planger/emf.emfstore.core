@@ -304,7 +304,7 @@ public class MultiAttributeMergeTest extends MergeTest {
 	}
 
 	/**
-	 * Remove on a higher remove index than Set. That's not a conflict (NC).
+	 * Remove on a higher remove index than Set. That's a conflict.
 	 */
 	@Test
 	public void removeVsSetHigherIndexNC() {
@@ -329,7 +329,7 @@ public class MultiAttributeMergeTest extends MergeTest {
 			}
 		}.run(false);
 
-		mergeCase.hasConflict(null);
+		mergeCase.hasConflict(MultiAttributeSetConflict.class);
 	}
 
 	/**
@@ -465,7 +465,7 @@ public class MultiAttributeMergeTest extends MergeTest {
 			}
 		}.run(false);
 
-		mergeCase.hasConflict(null);
+		mergeCase.hasConflict(MultiAttributeSetConflict.class);
 	}
 
 	@Test
@@ -521,6 +521,6 @@ public class MultiAttributeMergeTest extends MergeTest {
 			}
 		}.run(false);
 
-		mergeCase.hasConflict(null);
+		mergeCase.hasConflict(MultiAttributeSetSetConflict.class);
 	}
 }
