@@ -16,6 +16,8 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.emf.emfstore.common.extensionpoint.ExtensionElement;
+import org.eclipse.emf.emfstore.common.extensionpoint.ExtensionPoint;
 import org.eclipse.emf.emfstore.common.model.ModelElementId;
 import org.eclipse.emf.emfstore.server.conflictDetection.ConflictBucketCandidate;
 import org.eclipse.emf.emfstore.server.model.versioning.operations.AbstractOperation;
@@ -36,8 +38,25 @@ import org.eclipse.emf.emfstore.server.model.versioning.operations.ReferenceOper
  */
 public class ReservationToConflictBucketCandidateMap {
 
+	private static ReservationSetModifier reservationSetModifier = initCustomReservationModifier();
 	private ReservationSet reservationToConflictMap;
 	private Set<ConflictBucketCandidate> conflictBucketCandidates;
+
+	private static ReservationSetModifier initCustomReservationModifier() {
+
+		ExtensionPoint extensionPoint = new ExtensionPoint("org.eclipse.emf.emfstore.server.conflictDetection");
+		ExtensionElement first = extensionPoint.getFirst();
+
+		if (first != null) {
+			return first.getClass("class", ReservationSetModifier.class);
+		}
+
+		return new ReservationSetModifier() {
+			public ReservationSet addCustomReservation(AbstractOperation operation, ReservationSet reservationSet) {
+				return reservationSet;
+			}
+		};
+	}
 
 	/**
 	 * Default constructor.
@@ -169,10 +188,15 @@ public class ReservationToConflictBucketCandidateMap {
 	public void scanOperationReservations(AbstractOperation operation, int priority, boolean isMyOperation) {
 
 		ReservationSet reservationSet = extractReservationFromOperation(operation, new ReservationSet());
+		reservationSet = addCustomReservations(operation, reservationSet);
 		ConflictBucketCandidate conflictBucketCandidate = new ConflictBucketCandidate();
 		conflictBucketCandidates.add(conflictBucketCandidate);
 		conflictBucketCandidate.addOperation(operation, isMyOperation, priority);
 		joinReservationSet(reservationSet, conflictBucketCandidate);
+	}
+
+	private ReservationSet addCustomReservations(AbstractOperation operation, ReservationSet reservationSet) {
+		return reservationSetModifier.addCustomReservation(operation, reservationSet);
 	}
 
 	private ReservationSet extractReservationFromOperation(AbstractOperation operation, ReservationSet reservationSet) {
