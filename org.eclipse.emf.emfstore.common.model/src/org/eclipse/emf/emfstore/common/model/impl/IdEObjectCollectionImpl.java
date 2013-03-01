@@ -88,7 +88,7 @@ public abstract class IdEObjectCollectionImpl extends EObjectImpl implements IdE
 			.getElementWithHighestPriority();
 		if (element != null) {
 			modelElementIdGenerator = element.getClass(MODELELEMENTID_GENERATOR_CLASS_ATTRIBUTE,
-				ModelElementIdGenerator.class);
+														ModelElementIdGenerator.class);
 		}
 	}
 

@@ -102,7 +102,7 @@ public class UpdateController extends ServerCall<PrimaryVersionSpec> {
 			@Override
 			public List<ChangePackage> run(IProgressMonitor monitor) throws EmfStoreException {
 				return getConnectionManager().getChanges(getSessionId(), getProjectSpace().getProjectId(),
-					getProjectSpace().getBaseVersion(), resolvedVersion);
+															getProjectSpace().getBaseVersion(), resolvedVersion);
 			}
 		}.execute();
 
@@ -133,8 +133,11 @@ public class UpdateController extends ServerCall<PrimaryVersionSpec> {
 
 		boolean potentialConflictsDetected = false;
 		if (getProjectSpace().getOperations().size() > 0) {
-			Set<ConflictBucketCandidate> conflictBucketCandidates = conflictDetector.calculateConflictCandidateBuckets(
-				Collections.singletonList(localChanges), changes);
+			Set<ConflictBucketCandidate> conflictBucketCandidates = conflictDetector
+				.calculateConflictCandidateBuckets(
+													Collections.singletonList(localChanges),
+													changes,
+													idToEObjectMapping);
 			potentialConflictsDetected = conflictDetector.containsConflictingBuckets(conflictBucketCandidates);
 			if (potentialConflictsDetected) {
 				getProgressMonitor().subTask("Conflicts detected, calculating conflicts");

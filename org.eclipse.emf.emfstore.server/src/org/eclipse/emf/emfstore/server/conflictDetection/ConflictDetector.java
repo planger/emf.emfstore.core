@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.emf.emfstore.common.extensionpoint.ExtensionPoint;
+import org.eclipse.emf.emfstore.common.model.IModelElementIdToEObjectMapping;
 import org.eclipse.emf.emfstore.server.internal.conflictDetection.ReservationToConflictBucketCandidateMap;
 import org.eclipse.emf.emfstore.server.model.versioning.ChangePackage;
 import org.eclipse.emf.emfstore.server.model.versioning.operations.AbstractOperation;
@@ -41,8 +42,9 @@ public class ConflictDetector {
 	private static ConflictDetectionStrategy getStrategy() {
 		if (defaultStrategy == null) {
 			ConflictDetectionStrategy strategy = new ExtensionPoint(
-				"org.eclipse.emf.emfstore.client.merge.conflictDetectorStrategy").getClass("class",
-				ConflictDetectionStrategy.class);
+				"org.eclipse.emf.emfstore.client.merge.conflictDetectorStrategy")
+				.getClass("class",
+							ConflictDetectionStrategy.class);
 			if (strategy != null) {
 				defaultStrategy = strategy;
 			} else {
@@ -93,12 +95,16 @@ public class ConflictDetector {
 	/**
 	 * Calculate a set of conflict candidate buckets from a list of my and their change packages.
 	 * 
-	 * @param myChangePackages their operations in a list of change packages
-	 * @param theirChangePackages their operations in a list of change packages
+	 * @param myChangePackages
+	 *            their operations in a list of change packages
+	 * @param theirChangePackages
+	 *            their operations in a list of change packages
+	 * @param idToEObjectMapping
+	 *            a mapping of model element IDs as used in the operations to EObjects
 	 * @return a set of buckets with potentially conflicting operations
 	 */
 	public Set<ConflictBucketCandidate> calculateConflictCandidateBuckets(List<ChangePackage> myChangePackages,
-		List<ChangePackage> theirChangePackages) {
+		List<ChangePackage> theirChangePackages, IModelElementIdToEObjectMapping idToEObjectMapping) {
 
 		List<AbstractOperation> myOperations = flattenChangepackages(myChangePackages);
 		List<AbstractOperation> theirOperations = flattenChangepackages(theirChangePackages);
@@ -107,12 +113,12 @@ public class ConflictDetector {
 
 		int counter = 0;
 		for (AbstractOperation myOperation : myOperations) {
-			conflictMap.scanOperationReservations(myOperation, counter, true);
+			conflictMap.scanOperationReservations(myOperation, idToEObjectMapping, counter, true);
 			counter++;
 		}
 
 		for (AbstractOperation theirOperation : theirOperations) {
-			conflictMap.scanOperationReservations(theirOperation, counter, false);
+			conflictMap.scanOperationReservations(theirOperation, idToEObjectMapping, counter, false);
 			counter++;
 		}
 		return conflictMap.getConflictBucketCandidates();

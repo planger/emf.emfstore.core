@@ -23,9 +23,9 @@ public interface IModelElementIdToEObjectMapping {
 	/**
 	 * Get the {@link EObject} for the given {@link ModelElementId}, if any.
 	 * 
-	 * @param modelElementId the ID
-	 * @return the ID or null if no EObject for the ID is found
+	 * @param modelElementId
+	 *            the ID
+	 * @return the ID or {@code null} if no EObject for the ID is found
 	 */
 	EObject get(ModelElementId modelElementId);
-
 }

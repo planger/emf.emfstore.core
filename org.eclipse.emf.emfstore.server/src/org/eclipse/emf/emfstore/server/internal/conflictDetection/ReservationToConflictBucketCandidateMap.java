@@ -18,6 +18,7 @@ import java.util.Set;
 
 import org.eclipse.emf.emfstore.common.extensionpoint.ExtensionElement;
 import org.eclipse.emf.emfstore.common.extensionpoint.ExtensionPoint;
+import org.eclipse.emf.emfstore.common.model.IModelElementIdToEObjectMapping;
 import org.eclipse.emf.emfstore.common.model.ModelElementId;
 import org.eclipse.emf.emfstore.server.conflictDetection.ConflictBucketCandidate;
 import org.eclipse.emf.emfstore.server.model.versioning.operations.AbstractOperation;
@@ -44,7 +45,7 @@ public class ReservationToConflictBucketCandidateMap {
 
 	private static ReservationSetModifier initCustomReservationModifier() {
 
-		ExtensionPoint extensionPoint = new ExtensionPoint("org.eclipse.emf.emfstore.server.conflictDetection");
+		ExtensionPoint extensionPoint = new ExtensionPoint("org.eclipse.emf.emfstore.server.reservationSetModifier");
 		ExtensionElement first = extensionPoint.getFirst();
 
 		if (first != null) {
@@ -52,7 +53,8 @@ public class ReservationToConflictBucketCandidateMap {
 		}
 
 		return new ReservationSetModifier() {
-			public ReservationSet addCustomReservation(AbstractOperation operation, ReservationSet reservationSet) {
+			public ReservationSet addCustomReservation(AbstractOperation operation, ReservationSet reservationSet,
+				IModelElementIdToEObjectMapping idToEObjectMapping) {
 				return reservationSet;
 			}
 		};
@@ -185,18 +187,20 @@ public class ReservationToConflictBucketCandidateMap {
 	// * @param replace whether existing entries should be overwritten, if this is not enabled and existing entries are
 	// * found an {@link IllegalStateException} will be thrown
 	// */
-	public void scanOperationReservations(AbstractOperation operation, int priority, boolean isMyOperation) {
+	public void scanOperationReservations(AbstractOperation operation,
+		IModelElementIdToEObjectMapping idToEObjectMapping, int priority, boolean isMyOperation) {
 
 		ReservationSet reservationSet = extractReservationFromOperation(operation, new ReservationSet());
-		reservationSet = addCustomReservations(operation, reservationSet);
+		reservationSet = addCustomReservations(operation, reservationSet, idToEObjectMapping);
 		ConflictBucketCandidate conflictBucketCandidate = new ConflictBucketCandidate();
 		conflictBucketCandidates.add(conflictBucketCandidate);
 		conflictBucketCandidate.addOperation(operation, isMyOperation, priority);
 		joinReservationSet(reservationSet, conflictBucketCandidate);
 	}
 
-	private ReservationSet addCustomReservations(AbstractOperation operation, ReservationSet reservationSet) {
-		return reservationSetModifier.addCustomReservation(operation, reservationSet);
+	private ReservationSet addCustomReservations(AbstractOperation operation, ReservationSet reservationSet,
+		IModelElementIdToEObjectMapping idToEObjectMapping) {
+		return reservationSetModifier.addCustomReservation(operation, reservationSet, idToEObjectMapping);
 	}
 
 	private ReservationSet extractReservationFromOperation(AbstractOperation operation, ReservationSet reservationSet) {

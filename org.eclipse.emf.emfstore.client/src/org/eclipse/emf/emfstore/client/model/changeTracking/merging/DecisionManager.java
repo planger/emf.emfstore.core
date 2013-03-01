@@ -151,12 +151,15 @@ public class DecisionManager {
 		if (conflictException != null) {
 			conflictBucketCandidates = conflictException.getConflictBucketCandidates();
 		} else {
-			conflictBucketCandidates = new ConflictDetector().calculateConflictCandidateBuckets(myChangePackages,
-				theirChangePackages);
+			conflictBucketCandidates = new ConflictDetector().calculateConflictCandidateBuckets(
+																								myChangePackages,
+																								theirChangePackages,
+																								getProject());
 		}
 
-		Set<ConflictBucket> conflictBucketsSet = conflictDetector.calculateConflictBucketsFromConflictCandidateBuckets(
-			conflictBucketCandidates, notInvolvedInConflict);
+		Set<ConflictBucket> conflictBucketsSet = conflictDetector
+			.calculateConflictBucketsFromConflictCandidateBuckets(
+																	conflictBucketCandidates, notInvolvedInConflict);
 
 		createConflicts(conflictBucketsSet);
 	}
@@ -231,9 +234,10 @@ public class DecisionManager {
 				conflict = notifyConflictHandlers(conflict);
 				addConflict(conflict);
 			} else {
-				WorkspaceUtil.log(
-					"A created conflict has been ignored (does not apply to any existing conflict rule).",
-					IStatus.WARNING);
+				WorkspaceUtil
+					.log(
+							"A created conflict has been ignored (does not apply to any existing conflict rule).",
+							IStatus.WARNING);
 			}
 		}
 	}
@@ -338,10 +342,10 @@ public class DecisionManager {
 	private Conflict createReferenceCompVSSingleMulti(ConflictBucket conf) {
 		if (isCompositeRef(conf.getMyOperation())) {
 			return createRefFromSub(conf, ((CompositeOperation) conf.getMyOperation()).getSubOperations(),
-				Arrays.asList(conf.getTheirOperation()));
+									Arrays.asList(conf.getTheirOperation()));
 		} else {
 			return createRefFromSub(conf, Arrays.asList(conf.getMyOperation()),
-				((CompositeOperation) conf.getTheirOperation()).getSubOperations());
+									((CompositeOperation) conf.getTheirOperation()).getSubOperations());
 		}
 	}
 

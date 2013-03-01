@@ -33,6 +33,7 @@ import org.eclipse.emf.emfstore.server.model.versioning.operations.CreateDeleteO
 public class BasicModelElementIdToEObjectMapping implements IModelElementIdToEObjectMapping {
 
 	private Map<String, EObject> idToEObjectMapping;
+	private Map<EObject, String> eObjectToIdMapping;
 	private IModelElementIdToEObjectMapping delegateMapping;
 
 	/**
@@ -44,6 +45,7 @@ public class BasicModelElementIdToEObjectMapping implements IModelElementIdToEOb
 	public BasicModelElementIdToEObjectMapping(IModelElementIdToEObjectMapping mapping) {
 		this.delegateMapping = mapping;
 		this.idToEObjectMapping = new LinkedHashMap<String, EObject>();
+		this.eObjectToIdMapping = new LinkedHashMap<EObject, String>();
 	}
 
 	/**
@@ -104,7 +106,7 @@ public class BasicModelElementIdToEObjectMapping implements IModelElementIdToEOb
 			CreateDeleteOperation createDeleteOperation = (CreateDeleteOperation) operation;
 			for (EObject modelElement : createDeleteOperation.getEObjectToIdMap().keySet()) {
 				idToEObjectMapping.put(createDeleteOperation.getEObjectToIdMap().get(modelElement).toString(),
-					modelElement);
+										modelElement);
 			}
 		}
 	}

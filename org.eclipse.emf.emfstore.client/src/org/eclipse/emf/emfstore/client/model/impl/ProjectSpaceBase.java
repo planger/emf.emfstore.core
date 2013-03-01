@@ -401,7 +401,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 		final ConnectionManager connectionManager = WorkspaceManager.getInstance().getConnectionManager();
 
 		List<ChangePackage> changes = connectionManager.getChanges(getUsersession().getSessionId(), getProjectId(),
-			sourceVersion, targetVersion);
+																	sourceVersion, targetVersion);
 		return changes;
 	}
 
@@ -886,12 +886,12 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 					throw new InvalidVersionSpecException("Can't merge branch with itself.");
 				}
 				PrimaryVersionSpec commonAncestor = resolveVersionSpec(Versions.createANCESTOR(getBaseVersion(),
-					branchSpec));
+																								branchSpec));
 				List<ChangePackage> baseChanges = getChanges(commonAncestor, getBaseVersion());
 				List<ChangePackage> branchChanges = getChanges(commonAncestor, branchSpec);
 
 				Set<ConflictBucketCandidate> calculateConflictCandidateBuckets = new ConflictDetector()
-					.calculateConflictCandidateBuckets(branchChanges, baseChanges);
+					.calculateConflictCandidateBuckets(branchChanges, baseChanges, getProject());
 
 				ChangeConflictException conflictException = new ChangeConflictException(ProjectSpaceBase.this,
 					branchChanges, baseChanges, calculateConflictCandidateBuckets, ProjectSpaceBase.this.getProject());
@@ -1024,7 +1024,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 			if (resource == null) {
 				if (!isTransient) {
 					WorkspaceUtil.logException("Resources of project space are not properly initialized!",
-						new IllegalProjectSpaceStateException("Resource to save is null"));
+												new IllegalProjectSpaceStateException("Resource to save is null"));
 				}
 				return;
 			}
@@ -1135,7 +1135,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 					.getInstance()
 					.getConnectionManager()
 					.transmitProperty(getUsersession().getSessionId(), iterator.next(), getUsersession().getACUser(),
-						getProjectId());
+										getProjectId());
 				iterator.remove();
 			} catch (EmfStoreException e) {
 				WorkspaceUtil.logException("Transmission of properties failed with exception", e);
