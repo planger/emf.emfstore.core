@@ -84,7 +84,7 @@
               <type>eclipse-plugin</type>
               <artifactId>org.eclipse.emf.emfstore.server.model</artifactId>
               <version>0.0.0</version>
-            </dependency>
+            </dependency> 
             <dependency>
               <type>eclipse-plugin</type>
               <artifactId>org.eclipse.emf.emfstore.server</artifactId>
