@@ -61,8 +61,6 @@ public class ImportExportTest extends WorkspaceTest {
 		new ExportImportControllerExecutor(temp, new NullProgressMonitor())
 			.execute(ExportImportControllerFactory.Import.getImportProjectController("importedProject"));
 
-		ProjectSpace newProjectSpace = null;
-
 		for (ProjectSpace projectSpace : WorkspaceManager.getInstance().getCurrentWorkspace().getProjectSpaces()) {
 			if (projectSpace.getProjectName().equals("importedProject")) {
 				newProjectSpace = projectSpace;
@@ -91,9 +89,6 @@ public class ImportExportTest extends WorkspaceTest {
 			.execute(ExportImportControllerFactory.Import.getImportProjectSpaceController());
 
 		Assert.assertEquals(2, WorkspaceManager.getInstance().getCurrentWorkspace().getProjectSpaces().size());
-
-		ProjectSpace a = WorkspaceManager.getInstance().getCurrentWorkspace().getProjectSpaces().get(0);
-		ProjectSpace b = WorkspaceManager.getInstance().getCurrentWorkspace().getProjectSpaces().get(1);
 
 		// TODO: are the imported IDs supposed to be the same as in the original project?
 		// Assert.assertTrue(ModelUtil.areEqual(a.getProject(), b.getProject()));
