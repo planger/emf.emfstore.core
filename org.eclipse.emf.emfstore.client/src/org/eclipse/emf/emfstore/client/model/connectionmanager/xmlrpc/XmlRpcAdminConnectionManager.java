@@ -29,7 +29,7 @@ import org.eclipse.emf.emfstore.server.model.accesscontrol.ACUser;
 import org.eclipse.emf.emfstore.server.model.accesscontrol.roles.Role;
 
 /**
- * Connection manager for admin emfstore.
+ * connection manager for adminemfstore.
  * 
  * @author wesendon
  */
@@ -144,7 +144,7 @@ public class XmlRpcAdminConnectionManager extends AbstractConnectionManager<XmlR
 	 */
 	public List<ACOrgUnit> getParticipants(SessionId sessionId, ProjectId projectId) throws EmfStoreException {
 		return getConnectionProxy(sessionId).callWithListResult("getParticipants", ACOrgUnit.class, sessionId,
-																projectId);
+			projectId);
 	}
 
 	/**

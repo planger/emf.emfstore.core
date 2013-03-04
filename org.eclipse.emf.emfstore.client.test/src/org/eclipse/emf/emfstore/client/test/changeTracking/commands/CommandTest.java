@@ -541,6 +541,11 @@ public class CommandTest extends WorkspaceTest {
 		// redo the paste command
 		editingDomain.getCommandStack().redo();
 
+		Actor pastedActor2 = (Actor) leafSection.getModelElements().get(0);
+		// TODO: we do not guarantee anymore that the ID will be the same
+		// ModelElementId pastedActor2Id = ModelUtil.getProject(pastedActor2).getModelElementId(pastedActor2);
+
+		// assertTrue(actorId.equals(pastedActor2Id));
 		assertEquals(1, leafSection.getModelElements().size());
 	}
 
