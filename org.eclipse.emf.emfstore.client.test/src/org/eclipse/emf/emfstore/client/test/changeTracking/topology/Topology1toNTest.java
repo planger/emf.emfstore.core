@@ -1445,7 +1445,7 @@ public class Topology1toNTest extends TopologyTest {
 
 		assertEquals(op10.getModelElementId(), oldSection2Id);
 		assertEquals(op10.getFeatureName(), "modelElements");
-		assertEquals(op10.isAdd(), false);
+		assertEquals(false, op10.isAdd());
 		assertEquals(op10.getReferencedModelElements().size(), 1);
 		assertEquals(op10.getReferencedModelElements().get(0), sectionSolution3Id);
 		assertEquals(op11.getModelElementId(), sectionSolution3Id);
