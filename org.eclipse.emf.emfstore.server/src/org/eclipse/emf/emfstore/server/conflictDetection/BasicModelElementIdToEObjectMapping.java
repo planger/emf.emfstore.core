@@ -33,7 +33,6 @@ import org.eclipse.emf.emfstore.server.model.versioning.operations.CreateDeleteO
 public class BasicModelElementIdToEObjectMapping implements IModelElementIdToEObjectMapping {
 
 	private Map<String, EObject> idToEObjectMapping;
-	private Map<EObject, String> eObjectToIdMapping;
 	private IModelElementIdToEObjectMapping delegateMapping;
 
 	/**
