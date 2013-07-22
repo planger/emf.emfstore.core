@@ -33,10 +33,8 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.emf.emfstore.internal.client.model.ModelPackage;
 import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
-import org.eclipse.emf.emfstore.internal.common.model.ModelFactory;
 import org.eclipse.emf.emfstore.internal.common.model.Project;
 import org.eclipse.emf.emfstore.internal.common.model.provider.IdentifiableElementItemProvider;
-import org.eclipse.emf.emfstore.internal.server.model.ModelFactory;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.VersioningFactory;
 
 /**
@@ -402,7 +400,7 @@ public class ProjectSpaceItemProvider extends IdentifiableElementItemProvider im
 		newChildDescriptors.add
 			(createChildParameter
 			(ModelPackage.Literals.PROJECT_SPACE__PROJECT_ID,
-				ModelFactory.eINSTANCE.createProjectId()));
+				org.eclipse.emf.emfstore.internal.server.model.ModelFactory.eINSTANCE.createProjectId()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -412,7 +410,7 @@ public class ProjectSpaceItemProvider extends IdentifiableElementItemProvider im
 		newChildDescriptors.add
 			(createChildParameter
 			(ModelPackage.Literals.PROJECT_SPACE__WAITING_UPLOADS,
-				ModelFactory.eINSTANCE.createFileIdentifier()));
+				org.eclipse.emf.emfstore.internal.server.model.ModelFactory.eINSTANCE.createFileIdentifier()));
 
 		newChildDescriptors.add
 			(createChildParameter

@@ -1032,4 +1032,33 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 */
 	boolean isShared();
 
+	// custom interface
+	/**
+	 * Return the local {@link ChangePackage} associated with this ProjectSpace.
+	 * 
+	 * @return the local ChangePackage
+	 */
+	ChangePackage getLocalChangePackage();
+
+	/**
+	 * Setter for the local {@link ChangePackage}.
+	 * 
+	 * @param newLocalChangePackage the new local ChangePackage
+	 */
+	void setLocalChangePackage(ChangePackage newLocalChangePackage);
+
+	/**
+	 * Setter for the {@link Project}.
+	 * 
+	 * @param newProject the new project
+	 */
+	void setProject(Project newProject);
+
+	/**
+	 * Returns the {@link Project} associated with this ProjectSpace.
+	 * 
+	 * @return the project
+	 */
+	Project getProject();
+
 } // ProjectContainer

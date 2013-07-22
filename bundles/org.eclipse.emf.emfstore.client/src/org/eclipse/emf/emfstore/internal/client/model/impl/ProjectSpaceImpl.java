@@ -29,7 +29,6 @@ import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
 import org.eclipse.emf.emfstore.internal.client.model.Usersession;
 import org.eclipse.emf.emfstore.internal.client.model.Workspace;
 import org.eclipse.emf.emfstore.internal.common.model.EMFStoreProperty;
-import org.eclipse.emf.emfstore.internal.common.model.impl.IdentifiableElementImpl;
 import org.eclipse.emf.emfstore.internal.common.model.Project;
 import org.eclipse.emf.emfstore.internal.server.model.FileIdentifier;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectId;
@@ -263,6 +262,9 @@ public class ProjectSpaceImpl extends ProjectSpaceBase implements ProjectSpace {
 	 * @ordered
 	 */
 	protected PrimaryVersionSpec mergedVersion;
+
+	private Project project = null;
+	private ChangePackage localChangePackage = null;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -1099,5 +1101,42 @@ public class ProjectSpaceImpl extends ProjectSpaceBase implements ProjectSpace {
 		result.append(oldLogMessages);
 		result.append(')');
 		return result.toString();
+	}
+
+	// custom code
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getProject()
+	 */
+	public Project getProject() {
+		return project;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#setProject(org.eclipse.emf.emfstore.internal.common.model.Project)
+	 */
+	public void setProject(Project newProject) {
+		this.project = newProject;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getLocalChangePackage()
+	 */
+	public ChangePackage getLocalChangePackage() {
+		return localChangePackage;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#setLocalChangePackage(org.eclipse.emf.emfstore.internal.server.model.versioning.ChangePackage)
+	 */
+	public void setLocalChangePackage(ChangePackage newLocalChangePackage) {
+		this.localChangePackage = newLocalChangePackage;
 	}
 }
