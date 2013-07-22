@@ -369,36 +369,6 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	void setWorkspace(Workspace value);
 
 	/**
-	 * Returns the value of the '<em><b>Local Change Package</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Local Change Package</em>' containment reference isn't clear, there really should be
-	 * more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * 
-	 * @return the value of the '<em>Local Change Package</em>' containment reference.
-	 * @see #setLocalChangePackage(ChangePackage)
-	 * @see org.eclipse.emf.emfstore.internal.client.model.ModelPackage#getProjectSpace_LocalChangePackage()
-	 * @model containment="true" resolveProxies="true"
-	 * @generated
-	 */
-	ChangePackage getLocalChangePackage();
-
-	/**
-	 * Sets the value of the ' {@link org.eclipse.emf.emfstore.client.model.ProjectSpace#getLocalChangePackage
-	 * <em>Local Change Package</em>}' containment reference. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Local Change Package</em>'
-	 *            containment reference.
-	 * @see #getLocalChangePackage()
-	 * @generated
-	 */
-	void setLocalChangePackage(ChangePackage value);
-
-	/**
 	 * Returns the value of the '<em><b>Merged Version</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -555,23 +525,6 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 * @generated NOT
 	 */
 	List<AbstractOperation> getOperations();
-
-	/**
-	 * Returns the value of the '<em><b>Project</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Project</em>' reference isn't clear, there really should be more of a description
-	 * here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * 
-	 * @return the value of the '<em>Project</em>' containment reference.
-	 * @see #setProject(Project)
-	 * @see org.eclipse.emf.emfstore.internal.client.model.ModelPackage#getProjectSpace_Project()
-	 * @model containment="true" resolveProxies="true"
-	 * @generated
-	 */
-	Project getProject();
 
 	/**
 	 * Returns the value of the '<em><b>Project Description</b></em>' attribute.
@@ -903,18 +856,6 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 * @generated
 	 */
 	void setLastUpdated(Date value);
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getProject
-	 * <em>Project</em>}' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 * 
-	 * @param value the new value of the '<em>Project</em>' containment reference.
-	 * @see #getProject()
-	 * @generated
-	 */
-	void setProject(Project value);
 
 	/**
 	 * Sets the value of the '{@link org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getProjectDescription

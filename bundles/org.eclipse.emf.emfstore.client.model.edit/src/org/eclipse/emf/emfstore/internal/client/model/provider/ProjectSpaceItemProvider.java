@@ -36,6 +36,7 @@ import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
 import org.eclipse.emf.emfstore.internal.common.model.ModelFactory;
 import org.eclipse.emf.emfstore.internal.common.model.Project;
 import org.eclipse.emf.emfstore.internal.common.model.provider.IdentifiableElementItemProvider;
+import org.eclipse.emf.emfstore.internal.server.model.ModelFactory;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.VersioningFactory;
 
 /**
@@ -71,7 +72,8 @@ public class ProjectSpaceItemProvider extends IdentifiableElementItemProvider im
 	 */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
-		if (itemPropertyDescriptors == null) {
+		if (itemPropertyDescriptors == null)
+		{
 			super.getPropertyDescriptors(object);
 
 			addProjectNamePropertyDescriptor(object);
@@ -284,12 +286,10 @@ public class ProjectSpaceItemProvider extends IdentifiableElementItemProvider im
 		if (childrenFeatures == null)
 		{
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(ModelPackage.Literals.PROJECT_SPACE__PROJECT);
 			childrenFeatures.add(ModelPackage.Literals.PROJECT_SPACE__PROJECT_ID);
 			childrenFeatures.add(ModelPackage.Literals.PROJECT_SPACE__BASE_VERSION);
 			childrenFeatures.add(ModelPackage.Literals.PROJECT_SPACE__WAITING_UPLOADS);
 			childrenFeatures.add(ModelPackage.Literals.PROJECT_SPACE__PROPERTIES);
-			childrenFeatures.add(ModelPackage.Literals.PROJECT_SPACE__LOCAL_CHANGE_PACKAGE);
 			childrenFeatures.add(ModelPackage.Literals.PROJECT_SPACE__MERGED_VERSION);
 		}
 		return childrenFeatures;
@@ -377,12 +377,10 @@ public class ProjectSpaceItemProvider extends IdentifiableElementItemProvider im
 		case ModelPackage.PROJECT_SPACE__OLD_LOG_MESSAGES:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
-		case ModelPackage.PROJECT_SPACE__PROJECT:
 		case ModelPackage.PROJECT_SPACE__PROJECT_ID:
 		case ModelPackage.PROJECT_SPACE__BASE_VERSION:
 		case ModelPackage.PROJECT_SPACE__WAITING_UPLOADS:
 		case ModelPackage.PROJECT_SPACE__PROPERTIES:
-		case ModelPackage.PROJECT_SPACE__LOCAL_CHANGE_PACKAGE:
 		case ModelPackage.PROJECT_SPACE__MERGED_VERSION:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
@@ -403,13 +401,8 @@ public class ProjectSpaceItemProvider extends IdentifiableElementItemProvider im
 
 		newChildDescriptors.add
 			(createChildParameter
-			(ModelPackage.Literals.PROJECT_SPACE__PROJECT,
-				ModelFactory.eINSTANCE.createProject()));
-
-		newChildDescriptors.add
-			(createChildParameter
 			(ModelPackage.Literals.PROJECT_SPACE__PROJECT_ID,
-				org.eclipse.emf.emfstore.internal.server.model.ModelFactory.eINSTANCE.createProjectId()));
+				ModelFactory.eINSTANCE.createProjectId()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -419,17 +412,12 @@ public class ProjectSpaceItemProvider extends IdentifiableElementItemProvider im
 		newChildDescriptors.add
 			(createChildParameter
 			(ModelPackage.Literals.PROJECT_SPACE__WAITING_UPLOADS,
-				org.eclipse.emf.emfstore.internal.server.model.ModelFactory.eINSTANCE.createFileIdentifier()));
+				ModelFactory.eINSTANCE.createFileIdentifier()));
 
 		newChildDescriptors.add
 			(createChildParameter
 			(ModelPackage.Literals.PROJECT_SPACE__PROPERTIES,
-				ModelFactory.eINSTANCE.createEMFStoreProperty()));
-
-		newChildDescriptors.add
-			(createChildParameter
-			(ModelPackage.Literals.PROJECT_SPACE__LOCAL_CHANGE_PACKAGE,
-				VersioningFactory.eINSTANCE.createChangePackage()));
+				org.eclipse.emf.emfstore.internal.common.model.ModelFactory.eINSTANCE.createEMFStoreProperty()));
 
 		newChildDescriptors.add
 			(createChildParameter
