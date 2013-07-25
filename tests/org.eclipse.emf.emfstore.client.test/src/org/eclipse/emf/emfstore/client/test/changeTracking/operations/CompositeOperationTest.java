@@ -187,9 +187,11 @@ public class CompositeOperationTest extends WorkspaceTest {
 
 	/**
 	 * Test the creation and completion of a composite operation.
+	 * 
+	 * @throws UnkownProjectException
 	 */
 	@Test
-	public void createSmallCompositeAcrossCommandsWithAutoOperationWrapper() {
+	public void createSmallCompositeAcrossCommandsWithAutoOperationWrapper() throws UnkownProjectException {
 
 		// TODO: Think about elegant solution to replace the operation modifier during a single test
 		ESOperationModifier operationModifier = ExtensionRegistry.INSTANCE.get(ESOperationModifier.ID,
@@ -221,7 +223,9 @@ public class CompositeOperationTest extends WorkspaceTest {
 		}.run(false);
 
 		final ModelElementId sectionId = ModelUtil.getProject(section).getModelElementId(section);
-		ProjectSpace projectSpace = ModelUtil.getParent(ProjectSpace.class, section);
+		ESWorkspace workspace = ESWorkspaceProvider.INSTANCE.getWorkspace();
+		ProjectSpace projectSpace = ((ESWorkspaceImpl) workspace).toInternalAPI().getProjectSpace(
+			ModelUtil.getProject(section));
 		assertEquals(0, projectSpace.getOperations().size());
 
 		new EMFStoreCommand() {

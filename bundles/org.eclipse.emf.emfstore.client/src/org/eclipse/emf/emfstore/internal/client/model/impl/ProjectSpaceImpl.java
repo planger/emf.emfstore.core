@@ -16,14 +16,22 @@ import java.util.Date;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipse.emf.emfstore.client.util.ClientURIUtil;
+import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionPoint;
+import org.eclipse.emf.emfstore.common.extensionpoint.ESPriorityComparator;
+import org.eclipse.emf.emfstore.common.extensionpoint.ESResourceSetProvider;
 import org.eclipse.emf.emfstore.internal.client.model.ModelPackage;
 import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
 import org.eclipse.emf.emfstore.internal.client.model.Usersession;
@@ -1110,6 +1118,11 @@ public class ProjectSpaceImpl extends ProjectSpaceBase implements ProjectSpace {
 	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getProject()
 	 */
 	public Project getProject() {
+		if (project == null) {
+			URI projectURI = ClientURIUtil.createProjectURI(this);
+			project = (Project) loadEObjectFromURI(projectURI);
+		}
+
 		return project;
 	}
 
@@ -1128,6 +1141,11 @@ public class ProjectSpaceImpl extends ProjectSpaceBase implements ProjectSpace {
 	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getLocalChangePackage()
 	 */
 	public ChangePackage getLocalChangePackage() {
+		if (localChangePackage == null) {
+			URI lcpURI = ClientURIUtil.createOperationsURI(this);
+			localChangePackage = (ChangePackage) loadEObjectFromURI(lcpURI);
+		}
+
 		return localChangePackage;
 	}
 
@@ -1138,5 +1156,23 @@ public class ProjectSpaceImpl extends ProjectSpaceBase implements ProjectSpace {
 	 */
 	public void setLocalChangePackage(ChangePackage newLocalChangePackage) {
 		this.localChangePackage = newLocalChangePackage;
+	}
+
+	private EObject loadEObjectFromURI(URI uri) {
+		ESExtensionPoint extensionPoint = new ESExtensionPoint("org.eclipse.emf.emfstore.client.resourceSetProvider",
+			true);
+		extensionPoint.setComparator(new ESPriorityComparator("priority", true));
+		extensionPoint.reload();
+
+		ESResourceSetProvider resourceSetProvider = extensionPoint.getElementWithHighestPriority().getClass("class",
+			ESResourceSetProvider.class);
+
+		ResourceSet resourceSet = resourceSetProvider.getResourceSet();
+		if (resourceSet.getURIConverter().exists(uri, null)) {
+			Resource resource = resourceSet.getResource(uri, true);
+			return resource.getContents().get(0);
+		} else {
+			return null;
+		}
 	}
 }
