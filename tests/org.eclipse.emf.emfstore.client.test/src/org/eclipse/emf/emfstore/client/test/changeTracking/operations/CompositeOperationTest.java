@@ -18,6 +18,8 @@ import static org.junit.Assert.fail;
 import java.io.IOException;
 import java.util.concurrent.Callable;
 
+import org.eclipse.emf.emfstore.client.ESWorkspace;
+import org.eclipse.emf.emfstore.client.ESWorkspaceProvider;
 import org.eclipse.emf.emfstore.client.handler.ESOperationModifier;
 import org.eclipse.emf.emfstore.client.test.WorkspaceTest;
 import org.eclipse.emf.emfstore.client.test.model.document.DocumentFactory;
@@ -31,7 +33,9 @@ import org.eclipse.emf.emfstore.client.util.RunESCommand;
 import org.eclipse.emf.emfstore.internal.client.model.CompositeOperationHandle;
 import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
 import org.eclipse.emf.emfstore.internal.client.model.exceptions.InvalidHandleException;
+import org.eclipse.emf.emfstore.internal.client.model.exceptions.UnkownProjectException;
 import org.eclipse.emf.emfstore.internal.client.model.impl.AutoOperationWrapper;
+import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESWorkspaceImpl;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommand;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommandWithResult;
 import org.eclipse.emf.emfstore.internal.common.ExtensionRegistry;
@@ -121,9 +125,11 @@ public class CompositeOperationTest extends WorkspaceTest {
 
 	/**
 	 * Test the creation and completion of a composite operation.
+	 * 
+	 * @throws UnkownProjectException
 	 */
 	@Test
-	public void createSmallCompositeAcrossCommands() {
+	public void createSmallCompositeAcrossCommands() throws UnkownProjectException {
 
 		final LeafSection section = addSection();
 		final UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
@@ -147,7 +153,11 @@ public class CompositeOperationTest extends WorkspaceTest {
 		}.run(false);
 
 		final ModelElementId sectionId = ModelUtil.getProject(section).getModelElementId(section);
-		ProjectSpace projectSpace = ModelUtil.getParent(ProjectSpace.class, section);
+		ESWorkspace workspace = ESWorkspaceProvider.INSTANCE.getWorkspace();
+		ProjectSpace projectSpace = ((ESWorkspaceImpl) workspace).toInternalAPI().getProjectSpace(
+			ModelUtil.getProject(section));
+
+		// ProjectSpace projectSpace handle= ModelUtil.getParent(ProjectSpace.class, section);
 		assertEquals(0, projectSpace.getOperations().size());
 
 		new EMFStoreCommand() {

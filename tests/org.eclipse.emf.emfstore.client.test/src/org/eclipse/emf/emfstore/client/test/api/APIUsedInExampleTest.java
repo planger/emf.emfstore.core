@@ -42,7 +42,7 @@ public class APIUsedInExampleTest extends BaseLoggedInUserTest {
 
 			public Void call() throws Exception {
 				org.eclipse.emf.emfstore.example.helloworld.Application.runClient(server);
-				org.eclipse.emf.emfstore.example.merging.Application.runClient(server);
+				// org.eclipse.emf.emfstore.example.merging.Application.runClient(server);
 				return null;
 			}
 		});
