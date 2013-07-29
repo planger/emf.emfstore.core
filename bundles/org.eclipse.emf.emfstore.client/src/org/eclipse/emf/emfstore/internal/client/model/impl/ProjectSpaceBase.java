@@ -50,6 +50,8 @@ import org.eclipse.emf.emfstore.client.util.ClientURIUtil;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
 import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionElement;
 import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionPoint;
+import org.eclipse.emf.emfstore.common.extensionpoint.ESPriorityComparator;
+import org.eclipse.emf.emfstore.common.extensionpoint.ESResourceSetProvider;
 import org.eclipse.emf.emfstore.internal.client.importexport.impl.ExportChangesController;
 import org.eclipse.emf.emfstore.internal.client.importexport.impl.ExportProjectController;
 import org.eclipse.emf.emfstore.internal.client.model.CompositeOperationHandle;
@@ -650,6 +652,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 	 * @generated NOT
 	 */
 	public void initResources(ResourceSet resourceSet) {
+		// only place projectSpace in provided resource set
 		this.resourceSet = resourceSet;
 		initCompleted = true;
 
@@ -660,7 +663,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 		setResourceCount(0);
 
 		List<Resource> resources = new ArrayList<Resource>();
-		Resource resource = resourceSet.createResource(projectURI);
+		Resource resource = getNewResourceSet().createResource(projectURI);
 		// if resource splitting fails, we need a reference to the old resource
 		resource.getContents().add(this.getProject());
 		resources.add(resource);
@@ -670,7 +673,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 			((XMIResource) resource).setID(modelElement, getProject().getModelElementId(modelElement).getId());
 		}
 
-		Resource localChangePackageResource = resourceSet.createResource(operationsURI);
+		Resource localChangePackageResource = getNewResourceSet().createResource(operationsURI);
 		if (this.getLocalChangePackage() == null) {
 			this.setLocalChangePackage(VersioningFactory.eINSTANCE.createChangePackage());
 		}
@@ -691,6 +694,16 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 		}
 
 		init();
+	}
+
+	private ResourceSet getNewResourceSet() {
+		ESExtensionPoint extensionPoint = new ESExtensionPoint("org.eclipse.emf.emfstore.client.resourceSetProvider",
+			true);
+		extensionPoint.setComparator(new ESPriorityComparator("priority", true));
+		extensionPoint.reload();
+		ESResourceSetProvider resourceSetProvider = extensionPoint.getElementWithHighestPriority().getClass("class",
+			ESResourceSetProvider.class);
+		return resourceSetProvider.getResourceSet();
 	}
 
 	/**

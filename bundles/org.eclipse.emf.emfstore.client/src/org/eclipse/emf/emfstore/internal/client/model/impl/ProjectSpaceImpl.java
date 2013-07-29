@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model.impl;
 
+import java.lang.ref.SoftReference;
 import java.util.Collection;
 import java.util.Date;
 
@@ -271,8 +272,8 @@ public class ProjectSpaceImpl extends ProjectSpaceBase implements ProjectSpace {
 	 */
 	protected PrimaryVersionSpec mergedVersion;
 
-	private Project project = null;
-	private ChangePackage localChangePackage = null;
+	private SoftReference<Project> projectReference = new SoftReference<Project>(null);
+	private SoftReference<ChangePackage> localChangePackageReference = new SoftReference<ChangePackage>(null);
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -1118,9 +1119,11 @@ public class ProjectSpaceImpl extends ProjectSpaceBase implements ProjectSpace {
 	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getProject()
 	 */
 	public Project getProject() {
+		Project project = projectReference.get();
 		if (project == null) {
 			URI projectURI = ClientURIUtil.createProjectURI(this);
 			project = (Project) loadEObjectFromURI(projectURI);
+			setProject(project);
 		}
 
 		return project;
@@ -1132,7 +1135,7 @@ public class ProjectSpaceImpl extends ProjectSpaceBase implements ProjectSpace {
 	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#setProject(org.eclipse.emf.emfstore.internal.common.model.Project)
 	 */
 	public void setProject(Project newProject) {
-		this.project = newProject;
+		this.projectReference = new SoftReference<Project>(newProject);
 	}
 
 	/**
@@ -1141,12 +1144,14 @@ public class ProjectSpaceImpl extends ProjectSpaceBase implements ProjectSpace {
 	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getLocalChangePackage()
 	 */
 	public ChangePackage getLocalChangePackage() {
-		if (localChangePackage == null) {
+		ChangePackage lcp = localChangePackageReference.get();
+		if (lcp == null) {
 			URI lcpURI = ClientURIUtil.createOperationsURI(this);
-			localChangePackage = (ChangePackage) loadEObjectFromURI(lcpURI);
+			lcp = (ChangePackage) loadEObjectFromURI(lcpURI);
+			setLocalChangePackage(lcp);
 		}
 
-		return localChangePackage;
+		return lcp;
 	}
 
 	/**
@@ -1155,7 +1160,7 @@ public class ProjectSpaceImpl extends ProjectSpaceBase implements ProjectSpace {
 	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#setLocalChangePackage(org.eclipse.emf.emfstore.internal.server.model.versioning.ChangePackage)
 	 */
 	public void setLocalChangePackage(ChangePackage newLocalChangePackage) {
-		this.localChangePackage = newLocalChangePackage;
+		this.localChangePackageReference = new SoftReference<ChangePackage>(newLocalChangePackage);
 	}
 
 	private EObject loadEObjectFromURI(URI uri) {
