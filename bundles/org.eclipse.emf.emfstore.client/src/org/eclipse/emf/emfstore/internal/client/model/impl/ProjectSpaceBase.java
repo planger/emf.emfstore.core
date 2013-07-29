@@ -652,7 +652,6 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 	 * @generated NOT
 	 */
 	public void initResources(ResourceSet resourceSet) {
-		// only place projectSpace in provided resource set
 		this.resourceSet = resourceSet;
 		initCompleted = true;
 
@@ -673,7 +672,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 			((XMIResource) resource).setID(modelElement, getProject().getModelElementId(modelElement).getId());
 		}
 
-		Resource localChangePackageResource = getNewResourceSet().createResource(operationsURI);
+		Resource localChangePackageResource = resourceSet.createResource(operationsURI);
 		if (this.getLocalChangePackage() == null) {
 			this.setLocalChangePackage(VersioningFactory.eINSTANCE.createChangePackage());
 		}

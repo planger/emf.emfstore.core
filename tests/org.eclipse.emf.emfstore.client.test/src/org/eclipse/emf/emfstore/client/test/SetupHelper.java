@@ -92,7 +92,6 @@ public class SetupHelper {
 
 	private Workspace workSpace;
 	private ProjectSpace testProjectSpace;
-	private Project testProject;
 	private Usersession usersession;
 
 	private ProjectId projectId;
@@ -151,7 +150,6 @@ public class SetupHelper {
 		ModelMutator.generateModel(config);
 		ESWorkspaceImpl workspace2 = ESWorkspaceProviderImpl.getInstance().getWorkspace();
 		testProjectSpace = workspace2.toInternalAPI().importProject(project, "Generated project", "");
-		testProject = testProjectSpace.getProject();
 		projectId = testProjectSpace.getProjectId();
 	}
 
@@ -431,8 +429,6 @@ public class SetupHelper {
 			}
 
 		}.run(false);
-
-		testProject = testProjectSpace.getProject();
 	}
 
 	/**
@@ -454,8 +450,6 @@ public class SetupHelper {
 			}
 
 		}.run(false);
-
-		testProject = testProjectSpace.getProject();
 
 	}
 
@@ -598,7 +592,6 @@ public class SetupHelper {
 				String uriString = Activator.getDefault().getBundle().getLocation() + path;
 				try {
 					testProjectSpace = workSpace.importProject(uriString);
-					testProject = testProjectSpace.getProject();
 					projectId = testProjectSpace.getProjectId();
 				} catch (IOException e) {
 					Assert.fail();
@@ -715,7 +708,7 @@ public class SetupHelper {
 	 * @return the testProject
 	 */
 	public Project getTestProject() {
-		return testProject;
+		return testProjectSpace.getProject();
 	}
 
 	/**
