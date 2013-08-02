@@ -1,5 +1,7 @@
 package org.eclipse.emf.emfstore.client.test.performance;
 
+import static org.junit.Assert.fail;
+
 import java.io.IOException;
 import java.lang.ref.PhantomReference;
 import java.lang.ref.Reference;
@@ -7,8 +9,8 @@ import java.lang.ref.ReferenceQueue;
 
 import org.eclipse.emf.emfstore.client.test.SetupHelper;
 import org.eclipse.emf.emfstore.client.test.performance.PerformanceTest.MemoryMeter;
+import org.eclipse.emf.emfstore.internal.client.model.impl.ProjectSpaceBase;
 import org.eclipse.emf.emfstore.internal.common.model.Project;
-import org.eclipse.emf.emfstore.internal.server.model.versioning.ChangePackage;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -56,26 +58,23 @@ public class ClientMemoryTest {
 		Project project = setupHelper.getTestProject(); // prevent gc
 		ReferenceQueue<Project> refQueue = new ReferenceQueue<Project>();
 		PhantomReference<Project> projectRef = new PhantomReference<Project>(setupHelper.getTestProject(), refQueue);
-		// ESWorkspaceProviderImpl.getInstance().getEditingDomain().getCommandStack().flush();
+
+		// ChangePackage cp = setupHelper.getTestProjectSpace().getLocalChangePackage();
+		// ReferenceQueue<ChangePackage> refQueue = new ReferenceQueue<ChangePackage>();
+		// new PhantomReference<ChangePackage>(setupHelper
+		// .getTestProjectSpace().getLocalChangePackage(), refQueue);
+
+		// unregister handlers
+		((ProjectSpaceBase) setupHelper.getTestProjectSpace()).dispose();
+		// CLEANUP END
+
 		project = null;
+		// cp = null;
 		Runtime.getRuntime().gc();
+
 		Reference result = refQueue.remove(5000);
 		if (result == null) {
-			// fail("Project was not garbage collected");
-			System.out.println("ProjectFail");
-		}
-
-		// gc
-		ChangePackage lcp = setupHelper.getTestProjectSpace().getLocalChangePackage();
-		ReferenceQueue<ChangePackage> refQueue2 = new ReferenceQueue<ChangePackage>();
-		PhantomReference<ChangePackage> lcpRef = new PhantomReference<ChangePackage>(setupHelper.getTestProjectSpace()
-			.getLocalChangePackage(), refQueue2);
-		lcp = null;
-		Runtime.getRuntime().gc();
-		Reference result2 = refQueue2.remove(5000);
-		if (result2 == null) {
-			// fail("Local change package was not garbage collected");
-			System.out.println("LCPFail");
+			fail("No GC");
 		}
 
 		// measure mem

@@ -39,7 +39,6 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.ECrossReferenceAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil.UsageCrossReferencer;
-import org.eclipse.emf.ecore.xmi.XMIResource;
 import org.eclipse.emf.emfstore.client.ESUsersession;
 import org.eclipse.emf.emfstore.client.callbacks.ESCommitCallback;
 import org.eclipse.emf.emfstore.client.callbacks.ESUpdateCallback;
@@ -50,8 +49,6 @@ import org.eclipse.emf.emfstore.client.util.ClientURIUtil;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
 import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionElement;
 import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionPoint;
-import org.eclipse.emf.emfstore.common.extensionpoint.ESPriorityComparator;
-import org.eclipse.emf.emfstore.common.extensionpoint.ESResourceSetProvider;
 import org.eclipse.emf.emfstore.internal.client.importexport.impl.ExportChangesController;
 import org.eclipse.emf.emfstore.internal.client.importexport.impl.ExportProjectController;
 import org.eclipse.emf.emfstore.internal.client.model.CompositeOperationHandle;
@@ -79,6 +76,7 @@ import org.eclipse.emf.emfstore.internal.client.model.util.WorkspaceUtil;
 import org.eclipse.emf.emfstore.internal.client.observers.DeleteProjectSpaceObserver;
 import org.eclipse.emf.emfstore.internal.client.properties.PropertyManager;
 import org.eclipse.emf.emfstore.internal.common.APIUtil;
+import org.eclipse.emf.emfstore.internal.common.EMFStoreResource;
 import org.eclipse.emf.emfstore.internal.common.ESDisposable;
 import org.eclipse.emf.emfstore.internal.common.ExtensionRegistry;
 import org.eclipse.emf.emfstore.internal.common.model.ModelElementId;
@@ -662,14 +660,14 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 		setResourceCount(0);
 
 		List<Resource> resources = new ArrayList<Resource>();
-		Resource resource = getNewResourceSet().createResource(projectURI);
+		Resource resource = resourceSet.createResource(projectURI);
 		// if resource splitting fails, we need a reference to the old resource
 		resource.getContents().add(this.getProject());
 		resources.add(resource);
 		setResourceCount(getResourceCount() + 1);
 
 		for (EObject modelElement : getProject().getAllModelElements()) {
-			((XMIResource) resource).setID(modelElement, getProject().getModelElementId(modelElement).getId());
+			((EMFStoreResource) resource).setID(modelElement, getProject().getModelElementId(modelElement).getId());
 		}
 
 		Resource localChangePackageResource = resourceSet.createResource(operationsURI);
@@ -693,16 +691,6 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 		}
 
 		init();
-	}
-
-	private ResourceSet getNewResourceSet() {
-		ESExtensionPoint extensionPoint = new ESExtensionPoint("org.eclipse.emf.emfstore.client.resourceSetProvider",
-			true);
-		extensionPoint.setComparator(new ESPriorityComparator("priority", true));
-		extensionPoint.reload();
-		ESResourceSetProvider resourceSetProvider = extensionPoint.getElementWithHighestPriority().getClass("class",
-			ESResourceSetProvider.class);
-		return resourceSetProvider.getResourceSet();
 	}
 
 	/**
@@ -1266,6 +1254,19 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 
 		operationManager.dispose();
 		resourcePersister.dispose();
+
+		operationManager = null;
+		resourcePersister = null;
+
+		if (getProject().eResource() != null) {
+			getProject().eResource().getResourceSet().getResources().remove(getProject().eResource());
+		}
+		if (getLocalChangePackage().eResource() != null) {
+			getLocalChangePackage().eResource().getResourceSet().getResources()
+				.remove(getLocalChangePackage().eResource());
+		}
+		ESWorkspaceProviderImpl.getInstance().getEditingDomain().getCommandStack().flush();
+
 		disposed = true;
 	}
 

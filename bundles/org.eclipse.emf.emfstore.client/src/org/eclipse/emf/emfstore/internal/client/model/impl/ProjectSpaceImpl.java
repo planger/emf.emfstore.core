@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model.impl;
 
-import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.Date;
 
@@ -272,8 +272,8 @@ public class ProjectSpaceImpl extends ProjectSpaceBase implements ProjectSpace {
 	 */
 	protected PrimaryVersionSpec mergedVersion;
 
-	private SoftReference<Project> projectReference = new SoftReference<Project>(null);
-	private SoftReference<ChangePackage> localChangePackageReference = new SoftReference<ChangePackage>(null);
+	private WeakReference<Project> projectReference = new WeakReference<Project>(null);
+	private WeakReference<ChangePackage> localChangePackageReference = new WeakReference<ChangePackage>(null);
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -1124,6 +1124,7 @@ public class ProjectSpaceImpl extends ProjectSpaceBase implements ProjectSpace {
 			URI projectURI = ClientURIUtil.createProjectURI(this);
 			project = (Project) loadEObjectFromURI(projectURI);
 			setProject(project);
+			init();
 		}
 
 		return project;
@@ -1135,7 +1136,7 @@ public class ProjectSpaceImpl extends ProjectSpaceBase implements ProjectSpace {
 	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#setProject(org.eclipse.emf.emfstore.internal.common.model.Project)
 	 */
 	public void setProject(Project newProject) {
-		this.projectReference = new SoftReference<Project>(newProject);
+		this.projectReference = new WeakReference<Project>(newProject);
 	}
 
 	/**
@@ -1160,7 +1161,7 @@ public class ProjectSpaceImpl extends ProjectSpaceBase implements ProjectSpace {
 	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#setLocalChangePackage(org.eclipse.emf.emfstore.internal.server.model.versioning.ChangePackage)
 	 */
 	public void setLocalChangePackage(ChangePackage newLocalChangePackage) {
-		this.localChangePackageReference = new SoftReference<ChangePackage>(newLocalChangePackage);
+		this.localChangePackageReference = new WeakReference<ChangePackage>(newLocalChangePackage);
 	}
 
 	private EObject loadEObjectFromURI(URI uri) {

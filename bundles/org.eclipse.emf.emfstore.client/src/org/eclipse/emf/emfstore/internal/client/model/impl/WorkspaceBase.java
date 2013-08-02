@@ -87,7 +87,7 @@ public abstract class WorkspaceBase extends EObjectImpl implements Workspace, ES
 	 */
 	public void addProjectSpace(ProjectSpace projectSpace) {
 		getProjectSpaces().add(projectSpace);
-		projectToProjectSpaceMap.put(projectSpace.getProject(), projectSpace);
+		// projectToProjectSpaceMap.put(projectSpace.getProject(), projectSpace);
 	}
 
 	/**
@@ -132,7 +132,7 @@ public abstract class WorkspaceBase extends EObjectImpl implements Workspace, ES
 		// initialize all projectSpaces
 		for (ProjectSpace projectSpace : getProjectSpaces()) {
 			projectSpace.init();
-			projectToProjectSpaceMap.put(projectSpace.getProject(), projectSpace);
+			// projectToProjectSpaceMap.put(projectSpace.getProject(), projectSpace);
 		}
 
 		ESWorkspaceProviderImpl.getObserverBus().register(this, DeleteProjectSpaceObserver.class);
