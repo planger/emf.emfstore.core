@@ -1,5 +1,6 @@
 package org.eclipse.emf.emfstore.client.test.performance;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
@@ -7,10 +8,13 @@ import java.lang.ref.PhantomReference;
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.emfstore.client.test.SetupHelper;
 import org.eclipse.emf.emfstore.client.test.performance.PerformanceTest.MemoryMeter;
-import org.eclipse.emf.emfstore.internal.client.model.impl.ProjectSpaceBase;
+import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
 import org.eclipse.emf.emfstore.internal.common.model.Project;
+import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
+import org.eclipse.emf.emfstore.internal.server.model.versioning.ChangePackage;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -42,47 +46,29 @@ public class ClientMemoryTest {
 		memoryMeter.finish();
 	}
 
+	@SuppressWarnings({ "unused", "rawtypes" })
 	@Test
 	public void testClientMemory() throws IllegalArgumentException, InterruptedException, IOException {
-		// measure mem
-		memoryMeter.startMeasurements();
-		long memBefore = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-
-		// create big project
 		setupHelper.generateRandomProject();
+		Project clonedProject = ModelUtil.clone(setupHelper.getTestProject());
 
-		// measure mem
-		long memProject = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-
-		// gc
-		Project project = setupHelper.getTestProject(); // prevent gc
-		ReferenceQueue<Project> refQueue = new ReferenceQueue<Project>();
+		ReferenceQueue<EObject> refQueue = new ReferenceQueue<EObject>();
 		PhantomReference<Project> projectRef = new PhantomReference<Project>(setupHelper.getTestProject(), refQueue);
-
-		// ChangePackage cp = setupHelper.getTestProjectSpace().getLocalChangePackage();
-		// ReferenceQueue<ChangePackage> refQueue = new ReferenceQueue<ChangePackage>();
-		// new PhantomReference<ChangePackage>(setupHelper
-		// .getTestProjectSpace().getLocalChangePackage(), refQueue);
-
-		// unregister handlers
-		((ProjectSpaceBase) setupHelper.getTestProjectSpace()).dispose();
-		// CLEANUP END
-
-		project = null;
-		// cp = null;
+		PhantomReference<ChangePackage> cpRef = new PhantomReference<ChangePackage>(setupHelper.getTestProjectSpace()
+			.getLocalChangePackage(), refQueue);
+		ESWorkspaceProviderImpl.getInstance().getWorkspace().toInternalAPI()
+			.closeProject(setupHelper.getTestProjectSpace());
 		Runtime.getRuntime().gc();
-
 		Reference result = refQueue.remove(5000);
 		if (result == null) {
 			fail("No GC");
 		}
+		result = refQueue.remove(5000);
+		if (result == null) {
+			fail("Only one element was GC");
+		}
 
-		// measure mem
-		long memAfter = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-
-		System.out.println(memBefore);
-		System.out.println(memProject);
-		System.out.println(memAfter);
+		assertTrue(ModelUtil.areEqual(clonedProject, setupHelper.getTestProjectSpace().getProject()));
 
 	}
 }

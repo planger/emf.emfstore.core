@@ -1165,15 +1165,20 @@ public class ProjectSpaceImpl extends ProjectSpaceBase implements ProjectSpace {
 	}
 
 	private EObject loadEObjectFromURI(URI uri) {
-		ESExtensionPoint extensionPoint = new ESExtensionPoint("org.eclipse.emf.emfstore.client.resourceSetProvider",
-			true);
-		extensionPoint.setComparator(new ESPriorityComparator("priority", true));
-		extensionPoint.reload();
+		ResourceSet resourceSet = this.getResourceSet();
 
-		ESResourceSetProvider resourceSetProvider = extensionPoint.getElementWithHighestPriority().getClass("class",
-			ESResourceSetProvider.class);
+		if (resourceSet == null) {
+			ESExtensionPoint extensionPoint = new ESExtensionPoint(
+				"org.eclipse.emf.emfstore.client.resourceSetProvider",
+				true);
+			extensionPoint.setComparator(new ESPriorityComparator("priority", true));
+			extensionPoint.reload();
+			ESResourceSetProvider resourceSetProvider = extensionPoint.getElementWithHighestPriority().getClass(
+				"class",
+				ESResourceSetProvider.class);
+			resourceSet = resourceSetProvider.getResourceSet();
+		}
 
-		ResourceSet resourceSet = resourceSetProvider.getResourceSet();
 		if (resourceSet.getURIConverter().exists(uri, null)) {
 			Resource resource = resourceSet.getResource(uri, true);
 			return resource.getContents().get(0);

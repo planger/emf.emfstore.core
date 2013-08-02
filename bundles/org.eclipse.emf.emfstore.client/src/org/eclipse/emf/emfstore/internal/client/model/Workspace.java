@@ -351,4 +351,11 @@ public interface Workspace extends EObject, IAdaptable, APIDelegate<ESWorkspaceI
 	 */
 	void removeServerInfo(ServerInfo serverInfo);
 
+	/**
+	 * Makes the project of a given {@link ProjectSpace} garbage collectible in order to free memory.
+	 * 
+	 * @param projectSpace the ProjectSpace of the project
+	 */
+	void closeProject(ProjectSpace projectSpace);
+
 } // Workspace
