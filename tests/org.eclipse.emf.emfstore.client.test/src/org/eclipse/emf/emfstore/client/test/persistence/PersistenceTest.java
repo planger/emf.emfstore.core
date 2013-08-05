@@ -52,6 +52,9 @@ public class PersistenceTest extends WorkspaceTest {
 		Workspace internalWorkspace = ESWorkspaceProviderImpl.getInstance().getWorkspace().toInternalAPI();
 		Project project = internalWorkspace.getProjectSpaces().get(0).getProject();
 		assertTrue(ModelUtil.areEqual(project, originalProject));
+		// set new projectspace since old one got disposed but WorkspaceTest still holds a reference and tries to save
+		// it in teardown
+		setProjectSpace(internalWorkspace.getProjectSpaces().get(0));
 	}
 
 }
