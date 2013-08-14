@@ -30,6 +30,7 @@ import java.util.concurrent.Callable;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -39,16 +40,23 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.ECrossReferenceAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil.UsageCrossReferencer;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.emfstore.client.ESUsersession;
 import org.eclipse.emf.emfstore.client.callbacks.ESCommitCallback;
 import org.eclipse.emf.emfstore.client.callbacks.ESUpdateCallback;
 import org.eclipse.emf.emfstore.client.handler.ESRunnableContext;
 import org.eclipse.emf.emfstore.client.observer.ESLoginObserver;
 import org.eclipse.emf.emfstore.client.observer.ESMergeObserver;
+import org.eclipse.emf.emfstore.client.provider.ESEditingDomainProvider;
 import org.eclipse.emf.emfstore.client.util.ClientURIUtil;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
 import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionElement;
 import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionPoint;
+import org.eclipse.emf.emfstore.common.extensionpoint.ESPriorityComparator;
+import org.eclipse.emf.emfstore.common.extensionpoint.ESResourceSetProvider;
 import org.eclipse.emf.emfstore.internal.client.importexport.impl.ExportChangesController;
 import org.eclipse.emf.emfstore.internal.client.importexport.impl.ExportProjectController;
 import org.eclipse.emf.emfstore.internal.client.model.CompositeOperationHandle;
@@ -56,6 +64,7 @@ import org.eclipse.emf.emfstore.internal.client.model.Configuration;
 import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
 import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
 import org.eclipse.emf.emfstore.internal.client.model.Usersession;
+import org.eclipse.emf.emfstore.internal.client.model.changeTracking.commands.EMFStoreBasicCommandStack;
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.commands.EMFStoreCommandStack;
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.ConflictResolver;
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.notification.recording.NotificationRecorder;
@@ -132,6 +141,8 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 	private Map<String, OrgUnitProperty> propertyMap;
 
 	private ResourceSet resourceSet;
+	private ResourceSet projectResourceSet;
+	private EditingDomain editingDomain;
 	private ResourcePersister resourcePersister;
 
 	private ECrossReferenceAdapter crossReferenceAdapter;
@@ -558,10 +569,17 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 	 * @generated NOT
 	 */
 	public void init() {
+		ResourceSet projectResourceSet = getResourceSetForProject();
+		if (editingDomain == null) {
+			editingDomain = createEditingDomain(projectResourceSet);
+		}
+		projectResourceSet.getResources().add(getProject().eResource());
+		projectResourceSet.getResources().add(getLocalChangePackage().eResource());
+
 		initCrossReferenceAdapter();
 
 		EMFStoreCommandStack commandStack = (EMFStoreCommandStack)
-			ESWorkspaceProviderImpl.getInstance().getEditingDomain().getCommandStack();
+			editingDomain.getCommandStack();
 
 		fileTransferManager = new FileTransferManager(this);
 		operationManager = new OperationManager(this);
@@ -586,6 +604,50 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 		cleanCutElements();
 
 		initCompleted = true;
+	}
+
+	private ResourceSet getResourceSetForProject() {
+		if (projectResourceSet == null) {
+			ESExtensionPoint extensionPoint = new ESExtensionPoint(
+				"org.eclipse.emf.emfstore.client.resourceSetProvider",
+				true);
+			extensionPoint.setComparator(new ESPriorityComparator("priority", true));
+			extensionPoint.reload();
+
+			ESResourceSetProvider resourceSetProvider = extensionPoint.getElementWithHighestPriority().getClass(
+				"class",
+				ESResourceSetProvider.class);
+
+			projectResourceSet = resourceSetProvider.getResourceSet();
+		}
+
+		return projectResourceSet;
+	}
+
+	private EditingDomain createEditingDomain(ResourceSet resourceSet) {
+		ESEditingDomainProvider domainProvider = getDomainProvider();
+		if (domainProvider != null) {
+			return domainProvider.getEditingDomain(resourceSet);
+		} else {
+
+			AdapterFactory adapterFactory = new ComposedAdapterFactory(
+				ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+
+			adapterFactory = new ComposedAdapterFactory(new AdapterFactory[] { adapterFactory,
+				new ReflectiveItemProviderAdapterFactory() });
+
+			AdapterFactoryEditingDomain domain = new AdapterFactoryEditingDomain(adapterFactory,
+				new EMFStoreBasicCommandStack(), resourceSet);
+			resourceSet.eAdapters().add(new AdapterFactoryEditingDomain.EditingDomainProvider(domain));
+			return domain;
+		}
+	}
+
+	private ESEditingDomainProvider getDomainProvider() {
+		// TODO EXPT PRIO
+		return new ESExtensionPoint("org.eclipse.emf.emfstore.client.editingDomainProvider")
+			.getClass("class",
+				ESEditingDomainProvider.class);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -1240,8 +1302,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 			getProject().eAdapters().remove(crossReferenceAdapter);
 		}
 
-		EMFStoreCommandStack commandStack = (EMFStoreCommandStack)
-			ESWorkspaceProviderImpl.getInstance().getEditingDomain().getCommandStack();
+		EMFStoreCommandStack commandStack = (EMFStoreCommandStack) editingDomain.getCommandStack();
 		commandStack.removeCommandStackObserver(operationManager);
 		commandStack.removeCommandStackObserver(resourcePersister);
 
@@ -1265,7 +1326,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 			getLocalChangePackage().eResource().getResourceSet().getResources()
 				.remove(getLocalChangePackage().eResource());
 		}
-		ESWorkspaceProviderImpl.getInstance().getEditingDomain().getCommandStack().flush();
+		editingDomain.getCommandStack().flush();
 
 		disposed = true;
 	}
