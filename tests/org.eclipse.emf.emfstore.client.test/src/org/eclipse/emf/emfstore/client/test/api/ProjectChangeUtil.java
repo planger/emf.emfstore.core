@@ -22,6 +22,7 @@ import org.eclipse.emf.emfstore.bowling.TournamentType;
 import org.eclipse.emf.emfstore.client.ESLocalProject;
 import org.eclipse.emf.emfstore.client.ESWorkspaceProvider;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
+import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESLocalProjectImpl;
 
 public final class ProjectChangeUtil {
 
@@ -35,7 +36,7 @@ public final class ProjectChangeUtil {
 				localProject.getModelElements().add(player);
 				return null;
 			}
-		});
+		}, ((ESLocalProjectImpl) localProject).toInternalAPI());
 		return player;
 	}
 
@@ -113,7 +114,7 @@ public final class ProjectChangeUtil {
 				localProject.getModelElements().add(tournamentA);
 				return null;
 			}
-		});
+		}, ((ESLocalProjectImpl) localProject).toInternalAPI());
 
 		return localProject;
 	}

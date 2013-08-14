@@ -328,7 +328,7 @@ public class UnsharedLocalProjectTest extends BaseEmptyEmfstoreTest {
 				localProject.getModelElements().add(league);
 				return null;
 			}
-		});
+		}, league);
 		assertEquals(3, localProject.getAllModelElements().size());
 		assertEquals(1, localProject.getModelElements().size());
 		assertEquals(2, localProject.getAllModelElementsByClass(Player.class).size());

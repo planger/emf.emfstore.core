@@ -33,7 +33,7 @@ public class APIUsedInExampleTest extends BaseLoggedInUserTest {
 				org.eclipse.emf.emfstore.example.helloworld.Application.runClient(server);
 				return null;
 			}
-		});
+		}, null);
 	}
 
 	@Test
@@ -45,7 +45,7 @@ public class APIUsedInExampleTest extends BaseLoggedInUserTest {
 				// org.eclipse.emf.emfstore.example.merging.Application.runClient(server);
 				return null;
 			}
-		});
+		}, null);
 	}
 
 }

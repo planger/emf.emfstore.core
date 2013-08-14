@@ -18,6 +18,7 @@ import org.eclipse.emf.emfstore.bowling.BowlingFactory;
 import org.eclipse.emf.emfstore.bowling.Player;
 import org.eclipse.emf.emfstore.client.exceptions.ESCertificateException;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
+import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESLocalProjectImpl;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.junit.Test;
 
@@ -37,7 +38,7 @@ public class ClientUtilitiesTest extends BaseSharedProjectTest {
 					player.getName();
 					return player;
 				}
-			});
+			}, ((ESLocalProjectImpl) localProject).toInternalAPI());
 		} catch (Exception e) {
 			exception = e;
 		}
@@ -51,7 +52,7 @@ public class ClientUtilitiesTest extends BaseSharedProjectTest {
 				public Player call() throws Exception {
 					throw new ESException("test");
 				}
-			});
+			}, ((ESLocalProjectImpl) localProject).toInternalAPI());
 		} catch (Exception e) {
 			exception = e;
 		}
@@ -65,7 +66,7 @@ public class ClientUtilitiesTest extends BaseSharedProjectTest {
 				public Player call() throws Exception {
 					throw new ESException("test");
 				}
-			});
+			}, ((ESLocalProjectImpl) localProject).toInternalAPI());
 		} catch (Exception e) {
 			exception = e;
 		}
@@ -87,7 +88,7 @@ public class ClientUtilitiesTest extends BaseSharedProjectTest {
 					player.getName();
 					return null;
 				}
-			});
+			}, ((ESLocalProjectImpl) localProject).toInternalAPI());
 		} catch (Exception e) {
 			exception = e;
 		}
@@ -101,7 +102,7 @@ public class ClientUtilitiesTest extends BaseSharedProjectTest {
 				public Void call() throws Exception {
 					throw new ESException("");
 				}
-			});
+			}, ((ESLocalProjectImpl) localProject).toInternalAPI());
 		} catch (Exception e) {
 			exception = e;
 		}
@@ -115,7 +116,7 @@ public class ClientUtilitiesTest extends BaseSharedProjectTest {
 				public Void call() throws Exception {
 					throw new ESException("");
 				}
-			});
+			}, ((ESLocalProjectImpl) localProject).toInternalAPI());
 		} catch (Exception e) {
 			exception = e;
 		}
@@ -136,7 +137,7 @@ public class ClientUtilitiesTest extends BaseSharedProjectTest {
 					player.getName().length();
 					return player;
 				}
-			});
+			}, ((ESLocalProjectImpl) localProject).toInternalAPI());
 		} catch (Exception e) {
 			exception = e;
 		}
@@ -148,7 +149,7 @@ public class ClientUtilitiesTest extends BaseSharedProjectTest {
 				public Player call() throws Exception {
 					throw new ESException("");
 				}
-			});
+			}, ((ESLocalProjectImpl) localProject).toInternalAPI());
 		} catch (Exception e) {
 			exception = e;
 		}
@@ -167,7 +168,7 @@ public class ClientUtilitiesTest extends BaseSharedProjectTest {
 					player.getName().length();
 					return null;
 				}
-			});
+			}, ((ESLocalProjectImpl) localProject).toInternalAPI());
 		} catch (Exception e) {
 			exception = e;
 		}
@@ -179,7 +180,7 @@ public class ClientUtilitiesTest extends BaseSharedProjectTest {
 				public Void call() throws Exception {
 					throw new ESException("");
 				}
-			});
+			}, ((ESLocalProjectImpl) localProject).toInternalAPI());
 		} catch (Exception e) {
 			exception = e;
 		}

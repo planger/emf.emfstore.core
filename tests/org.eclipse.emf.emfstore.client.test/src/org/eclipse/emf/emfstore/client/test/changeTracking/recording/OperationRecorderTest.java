@@ -79,7 +79,7 @@ public class OperationRecorderTest extends WorkspaceTest {
 				Assert.assertNotNull(((IdEObjectCollectionImpl) project).getDeletedModelElementId(element2));
 				return null;
 			}
-		});
+		}, project);
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class OperationRecorderTest extends WorkspaceTest {
 					project.addModelElement(source);
 					return null;
 				}
-			});
+			}, project);
 
 			ModelElementId connectionId = project.getModelElementId(connection);
 
@@ -123,7 +123,7 @@ public class OperationRecorderTest extends WorkspaceTest {
 					cp.apply(clonedProjectSpace.getProject());
 					return cp;
 				}
-			});
+			}, project);
 
 			// do not use commands since we only have them on client side
 			// FIXME: if not wrapped in command fails with transactional editing domain, if wrapped in command assert

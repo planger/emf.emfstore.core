@@ -110,10 +110,12 @@ public abstract class AbstractEMFStoreCommand extends AbstractCommand {
 	 */
 	protected void aRun(EObject element, boolean ignoreExceptions) {
 		this.ignoreExceptions = ignoreExceptions;
-		if (element == null) {
+		EditingDomain retrievedEditingDomain = (EditingDomain) EcoreUtil.getExistingAdapter(element,
+			EditingDomain.class);
+		if (element == null || retrievedEditingDomain == null) {
 			ESWorkspaceProviderImpl.getInstance().getEditingDomain().getCommandStack().execute(this);
 		} else {
-			((EditingDomain) EcoreUtil.getExistingAdapter(element, EditingDomain.class)).getCommandStack()
+			retrievedEditingDomain.getCommandStack()
 				.execute(this);
 		}
 

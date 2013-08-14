@@ -77,7 +77,7 @@ public class AllocateIdsPolicyTest extends ServerTests {
 				collection.deleteModelElement(object);
 				return null;
 			}
-		});
+		}, collection);
 		assertNull(collection.getDeletedModelElementId(object));
 	}
 
@@ -107,7 +107,7 @@ public class AllocateIdsPolicyTest extends ServerTests {
 				collection.addModelElement(matchup);
 				return null;
 			}
-		});
+		}, collection);
 		ModelElementId matchupId1 = collection.getModelElementId(matchup);
 
 		RunESCommand.run(new Callable<Void>() {
@@ -115,7 +115,7 @@ public class AllocateIdsPolicyTest extends ServerTests {
 				matchup.getGames().add(game);
 				return null;
 			}
-		});
+		}, matchup);
 		ModelElementId gameId1 = collection.getModelElementId(game);
 
 		// remove and add matchup in different commands
@@ -126,7 +126,7 @@ public class AllocateIdsPolicyTest extends ServerTests {
 				collection.addModelElement(matchup);
 				return null;
 			}
-		});
+		}, collection);
 
 		comparator.compare(matchupId1, collection.getModelElementId(matchup));
 		comparator.compare(gameId1, collection.getModelElementId(game));
@@ -145,7 +145,7 @@ public class AllocateIdsPolicyTest extends ServerTests {
 				collection.addModelElement(matchup);
 				return null;
 			}
-		});
+		}, collection);
 		ModelElementId matchupId1 = collection.getModelElementId(matchup);
 
 		RunESCommand.run(new Callable<Void>() {
@@ -153,7 +153,7 @@ public class AllocateIdsPolicyTest extends ServerTests {
 				matchup.getGames().add(game);
 				return null;
 			}
-		});
+		}, collection);
 
 		ModelElementId gameId1 = collection.getModelElementId(game);
 
@@ -164,14 +164,14 @@ public class AllocateIdsPolicyTest extends ServerTests {
 				collection.deleteModelElement(matchup);
 				return null;
 			}
-		});
+		}, collection);
 		RunESCommand.run(new Callable<Void>() {
 
 			public Void call() throws Exception {
 				collection.addModelElement(matchup);
 				return null;
 			}
-		});
+		}, collection);
 
 		comparator.compare(matchupId1, collection.getModelElementId(matchup));
 		comparator.compare(gameId1, collection.getModelElementId(game));

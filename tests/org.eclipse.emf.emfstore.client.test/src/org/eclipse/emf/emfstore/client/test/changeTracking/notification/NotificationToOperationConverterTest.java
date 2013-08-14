@@ -62,14 +62,14 @@ public class NotificationToOperationConverterTest extends NotificationTest {
 				getProject().addModelElement(element);
 				return null;
 			}
-		});
+		}, getProject());
 
 		RunESCommand.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				element.getStrings().clear();
 				return null;
 			}
-		});
+		}, getProject());
 
 		AbstractOperation operation = getProjectSpace().getOperations().get(1);
 		Assert.assertTrue(operation instanceof MultiAttributeOperation);

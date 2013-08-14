@@ -31,8 +31,8 @@ import org.eclipse.emf.emfstore.client.callbacks.ESCommitCallback;
 import org.eclipse.emf.emfstore.client.callbacks.ESUpdateCallback;
 import org.eclipse.emf.emfstore.client.test.CommitCallbackAdapter;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
-import org.eclipse.emf.emfstore.server.exceptions.ESUpdateRequiredException;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
+import org.eclipse.emf.emfstore.server.exceptions.ESUpdateRequiredException;
 import org.eclipse.emf.emfstore.server.model.ESBranchInfo;
 import org.eclipse.emf.emfstore.server.model.ESHistoryInfo;
 import org.eclipse.emf.emfstore.server.model.query.ESHistoryQuery;
@@ -241,7 +241,7 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 				player.setName("A");
 				return null;
 			}
-		});
+		}, player);
 
 		localProject.commit(monitor);
 
@@ -250,7 +250,7 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 				checkedoutPlayer.setName("B");
 				return null;
 			}
-		});
+		}, checkedoutPlayer);
 		checkedoutCopy.commit(monitor);
 	}
 
@@ -265,7 +265,7 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 				localProject.getModelElements().add(league);
 				return null;
 			}
-		});
+		}, league);
 		assertTrue(localProject.contains(league));
 
 		final ESLocalProject secondProject = workspace.createLocalProject("SecondTestProject");
@@ -279,7 +279,7 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 				tournament.getPlayers().add(player);
 				return null;
 			}
-		});
+		}, tournament);
 
 		localProject.save();
 		secondProject.save();
