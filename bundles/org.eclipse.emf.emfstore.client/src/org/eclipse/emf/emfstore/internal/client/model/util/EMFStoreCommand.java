@@ -11,6 +11,8 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model.util;
 
+import org.eclipse.emf.ecore.EObject;
+
 /**
  * Recording command that can buffer a result for later retrieval.
  * 
@@ -52,18 +54,21 @@ public abstract class EMFStoreCommand extends AbstractEMFStoreCommand {
 	}
 
 	/**
-	 * Executes the command on the workspaces editing domain.
+	 * Executes the command on the editing domain of the given {@link EObject}.
 	 * 
+	 * @param element the EObject from which the editing domain is retrieved
 	 * @param ignoreExceptions true if any thrown exception in the execution of the command should be ignored.
 	 */
-	public void run(boolean ignoreExceptions) {
-		super.aRun(ignoreExceptions);
+	public void run(EObject element, boolean ignoreExceptions) {
+		super.aRun(element, ignoreExceptions);
 	}
 
 	/**
-	 * Executes the command on the workspaces editing domain with ignoring runtime exceptions.
+	 * Executes the command on the editing domain of the given {@link EObject} with ignoring runtime exceptions.
+	 * 
+	 * @param element the EObject from which the editing domain is retrieved
 	 */
-	public void run() {
-		run(true);
+	public void run(EObject element) {
+		run(element, true);
 	}
 }

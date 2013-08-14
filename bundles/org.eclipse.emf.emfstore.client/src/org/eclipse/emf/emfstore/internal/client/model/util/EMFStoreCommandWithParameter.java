@@ -11,6 +11,8 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model.util;
 
+import org.eclipse.emf.ecore.EObject;
+
 /**
  * Command with a parameter.
  * 
@@ -34,13 +36,14 @@ public abstract class EMFStoreCommandWithParameter<T> extends AbstractEMFStoreCo
 	protected abstract void doRun(T parameter);
 
 	/**
-	 * Executes the command on the workspaces editing domain.
+	 * Executes the command on the editing domain of the given {@link EObject}.
 	 * 
 	 * @param parameter the parameter
+	 * @param element the EObject from which the editing domain is retrieved
 	 * @param ignoreExceptions true if any thrown exception in the execution of the command should be ignored.
 	 */
-	public void run(T parameter, boolean ignoreExceptions) {
+	public void run(T parameter, EObject element, boolean ignoreExceptions) {
 		this.parameter = parameter;
-		super.aRun(ignoreExceptions);
+		super.aRun(element, ignoreExceptions);
 	}
 }

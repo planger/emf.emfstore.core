@@ -12,7 +12,9 @@
 package org.eclipse.emf.emfstore.internal.client.model.util;
 
 import org.eclipse.emf.common.command.AbstractCommand;
-import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.edit.domain.EditingDomain;
 
 /**
  * Super class for all commands.
@@ -97,15 +99,16 @@ public abstract class AbstractEMFStoreCommand extends AbstractCommand {
 	protected abstract void commandBody();
 
 	/**
-	 * Executes the command on the workspaces editing domain.
+	 * Executes the command on the editing domain of the given {@link EObject}.
 	 * 
+	 * @param element
+	 *            the EObject from which the editing domain is retrieved
 	 * @param ignoreExceptions
 	 *            should be set to {@code true} if any thrown exception in the execution of the command should be
 	 *            ignored
 	 */
-	protected void aRun(boolean ignoreExceptions) {
+	protected void aRun(EObject element, boolean ignoreExceptions) {
 		this.ignoreExceptions = ignoreExceptions;
-		ESWorkspaceProviderImpl.getInstance().getEditingDomain().getCommandStack().execute(this);
-
+		((EditingDomain) EcoreUtil.getExistingAdapter(element, EditingDomain.class)).getCommandStack().execute(this);
 	}
 }

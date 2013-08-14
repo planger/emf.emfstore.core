@@ -11,6 +11,8 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model.util;
 
+import org.eclipse.emf.ecore.EObject;
+
 /**
  * Command that can buffer a result for later retrieval.
  * 
@@ -42,28 +44,30 @@ public abstract class EMFStoreCommandWithParameterAndResult<T, U> extends Abstra
 	protected abstract T doRun(U parameter);
 
 	/**
-	 * Executes the command on the workspaces editing domain.
+	 * Executes the command on the editing domain of the given {@link EObject}.
 	 * 
 	 * @param parameter the parameter
+	 * @param element the EObject from which the editing domain is retrieved
 	 * @return the result
 	 * @deprecated Use run(boolean) instead
 	 */
 	@Deprecated
-	public T run(U parameter) {
-		return run(parameter, true);
+	public T run(U parameter, EObject element) {
+		return run(parameter, element, true);
 	}
 
 	/**
-	 * Executes the command on the workspaces editing domain.
+	 * Executes the command on the editing domain of the given {@link EObject}.
 	 * 
 	 * @param parameter the parameter
+	 * @param element the EObject from which the editing domain is retrieved
 	 * @param ignoreExceptions true if any thrown exception in the execution of the command should be ignored.
 	 * @return the result
 	 */
-	public T run(U parameter, boolean ignoreExceptions) {
+	public T run(U parameter, EObject element, boolean ignoreExceptions) {
 		this.parameter = parameter;
 
-		super.aRun(ignoreExceptions);
+		super.aRun(element, ignoreExceptions);
 
 		return this.result;
 	}

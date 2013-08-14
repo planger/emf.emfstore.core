@@ -11,6 +11,8 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model.util;
 
+import org.eclipse.emf.ecore.EObject;
+
 /**
  * Command that can buffer a result for later retrieval.
  * 
@@ -39,24 +41,26 @@ public abstract class EMFStoreCommandWithResult<T> extends AbstractEMFStoreComma
 	protected abstract T doRun();
 
 	/**
-	 * Executes the command on the workspaces editing domain.
+	 * Executes the command on the editing domain of the given {@link EObject}.
 	 * 
+	 * @param element the EObject from which the editing domain is retrieved
 	 * @return the result
 	 * @deprecated Use run(boolean) instead
 	 */
 	@Deprecated
-	public T run() {
-		return this.run(true);
+	public T run(EObject element) {
+		return this.run(element, true);
 	}
 
 	/**
-	 * Executes the command on the workspaces editing domain.
+	 * Executes the command on the editing domain of the given {@link EObject}.
 	 * 
+	 * @param element the EObject from which the editing domain is retrieved
 	 * @param ignoreExceptions true if any thrown exception in the execution of the command should be ignored.
 	 * @return the result
 	 */
-	public T run(boolean ignoreExceptions) {
-		super.aRun(ignoreExceptions);
+	public T run(EObject element, boolean ignoreExceptions) {
+		super.aRun(element, ignoreExceptions);
 		return this.result;
 	}
 
