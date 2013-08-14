@@ -180,7 +180,7 @@ public class UICommitProjectController extends
 							projectSpace.getUsersession().getUsername()));
 					return null;
 				}
-			});
+			}, projectSpace);
 
 			return true;
 		}

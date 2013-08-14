@@ -166,7 +166,7 @@ public class Application implements IApplication {
 				}
 				return session.toAPI();
 			}
-		}.run(false);
+		}.run(null, false);
 
 		// Retrieves a list of existing (and accessible) projects
 		// on the sever and deletes them permanently (to have a
@@ -183,7 +183,7 @@ public class Application implements IApplication {
 					throw new RuntimeException(e);
 				}
 			}
-		}.run(false);
+		}.run(null, false);
 	}
 
 	/**

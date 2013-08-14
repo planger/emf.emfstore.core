@@ -15,6 +15,7 @@ import org.eclipse.emf.common.command.AbstractCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
 
 /**
  * Super class for all commands.
@@ -109,6 +110,12 @@ public abstract class AbstractEMFStoreCommand extends AbstractCommand {
 	 */
 	protected void aRun(EObject element, boolean ignoreExceptions) {
 		this.ignoreExceptions = ignoreExceptions;
-		((EditingDomain) EcoreUtil.getExistingAdapter(element, EditingDomain.class)).getCommandStack().execute(this);
+		if (element == null) {
+			ESWorkspaceProviderImpl.getInstance().getEditingDomain().getCommandStack().execute(this);
+		} else {
+			((EditingDomain) EcoreUtil.getExistingAdapter(element, EditingDomain.class)).getCommandStack()
+				.execute(this);
+		}
+
 	}
 }

@@ -70,7 +70,7 @@ public class ExportImportControllerExecutor {
 				monitor.worked(60);
 				monitor.done();
 			}
-		}.run(false);
+		}.run(null, false);
 
 		if (importExportError != null) {
 			throw importExportError;

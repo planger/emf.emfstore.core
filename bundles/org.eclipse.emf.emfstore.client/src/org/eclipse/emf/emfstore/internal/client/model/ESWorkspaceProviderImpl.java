@@ -62,7 +62,6 @@ import org.eclipse.emf.emfstore.internal.common.observer.ObserverBus;
 import org.eclipse.emf.emfstore.internal.migration.EMFStoreMigrationException;
 import org.eclipse.emf.emfstore.internal.migration.EMFStoreMigrator;
 import org.eclipse.emf.emfstore.internal.migration.EMFStoreMigratorUtil;
-import org.eclipse.emf.emfstore.internal.server.DefaultServerWorkspaceLocationProvider;
 import org.eclipse.emf.emfstore.server.model.ESChangePackage;
 import org.eclipse.emf.emfstore.server.model.versionspec.ESPrimaryVersionSpec;
 
@@ -162,7 +161,7 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 					((WorkspaceImpl) currentWorkspace).dispose();
 					return null;
 				}
-			});
+			}, currentWorkspace);
 			currentWorkspace = null;
 		}
 	}
@@ -224,7 +223,7 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 			protected void doRun() {
 				workspace.init();
 			}
-		}.run(true);
+		}.run(workspace, true);
 
 		currentWorkspace = workspace;
 
@@ -446,7 +445,7 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 			protected void doRun() {
 				resource.getContents().add(workspace);
 			}
-		}.run(true);
+		}.run(workspace, true);
 
 		try {
 			resource.save(ModelUtil.getResourceSaveOptions());

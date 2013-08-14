@@ -250,7 +250,7 @@ public class LoginDialog extends TitleAreaDialog {
 					session.setUsername(username);
 					return null;
 				}
-			});
+			}, session);
 		}
 
 		password = passwordField.getText();

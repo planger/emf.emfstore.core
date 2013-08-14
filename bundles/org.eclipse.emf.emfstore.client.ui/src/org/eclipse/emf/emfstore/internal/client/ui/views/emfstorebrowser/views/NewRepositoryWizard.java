@@ -114,7 +114,7 @@ public class NewRepositoryWizard extends Wizard implements INewWizard {
 						return null;
 					}
 
-				});
+				}, workspace.toInternalAPI());
 
 			} else {
 				if (workspace.serverExists(editedServer)) {

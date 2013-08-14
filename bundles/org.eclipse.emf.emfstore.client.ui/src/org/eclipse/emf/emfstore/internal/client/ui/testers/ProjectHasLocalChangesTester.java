@@ -42,7 +42,7 @@ public class ProjectHasLocalChangesTester extends PropertyTester {
 					Boolean hasLocalChanges = new Boolean(localProject.hasUncommitedChanges());
 					return hasLocalChanges.equals(expectedValue);
 				}
-			});
+			}, null);
 		}
 
 		return false;

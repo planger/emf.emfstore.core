@@ -278,7 +278,7 @@ public class ESRemoteProjectImpl implements ESRemoteProject {
 					}
 				}.execute();
 			}
-		});
+		}, server);
 	}
 
 	/**
@@ -312,7 +312,7 @@ public class ESRemoteProjectImpl implements ESRemoteProject {
 				}.execute();
 				return null;
 			}
-		});
+		}, server);
 	}
 
 	/**
@@ -333,7 +333,7 @@ public class ESRemoteProjectImpl implements ESRemoteProject {
 					}
 				}.execute();
 			}
-		});
+		}, server);
 	}
 
 	/**
@@ -352,7 +352,7 @@ public class ESRemoteProjectImpl implements ESRemoteProject {
 					.toAPI(), monitor);
 				return checkout(name, usersession, primaryVersionSpec, monitor);
 			}
-		});
+		}, server);
 	}
 
 	/**
@@ -403,7 +403,7 @@ public class ESRemoteProjectImpl implements ESRemoteProject {
 
 				return initProjectSpace(usersession, projectInfoCopy, project, name).toAPI();
 			}
-		});
+		}, server);
 	}
 
 	/**
@@ -464,7 +464,7 @@ public class ESRemoteProjectImpl implements ESRemoteProject {
 					.execute();
 				return null;
 			}
-		});
+		}, server);
 	}
 
 	/**
@@ -484,7 +484,7 @@ public class ESRemoteProjectImpl implements ESRemoteProject {
 					.execute();
 				return null;
 			}
-		});
+		}, server);
 	}
 
 	/**

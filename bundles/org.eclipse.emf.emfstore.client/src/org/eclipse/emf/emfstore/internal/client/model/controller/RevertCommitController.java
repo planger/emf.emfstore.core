@@ -93,6 +93,6 @@ public class RevertCommitController extends ServerCall<Void> {
 				checkoutHeadAndReverseCommit(getProjectSpace(), versionSpec, headRevert);
 				return null;
 			}
-		});
+		}, getProjectSpace());
 	}
 }

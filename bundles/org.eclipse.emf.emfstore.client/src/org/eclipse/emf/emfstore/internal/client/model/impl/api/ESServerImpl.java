@@ -79,7 +79,7 @@ public class ESServerImpl extends AbstractAPIImpl<ESServerImpl, ServerInfo> impl
 			protected void doRun() {
 				toInternalAPI().setName(serverName);
 			}
-		}.run(false);
+		}.run(toInternalAPI(), false);
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class ESServerImpl extends AbstractAPIImpl<ESServerImpl, ServerInfo> impl
 			protected void doRun() {
 				toInternalAPI().setPort(port);
 			}
-		}.run(false);
+		}.run(toInternalAPI(), false);
 	}
 
 	/**
@@ -129,7 +129,7 @@ public class ESServerImpl extends AbstractAPIImpl<ESServerImpl, ServerInfo> impl
 			protected void doRun() {
 				toInternalAPI().setUrl(url);
 			}
-		}.run(false);
+		}.run(toInternalAPI(), false);
 	}
 
 	/**
@@ -154,7 +154,7 @@ public class ESServerImpl extends AbstractAPIImpl<ESServerImpl, ServerInfo> impl
 			protected void doRun() {
 				toInternalAPI().setCertificateAlias(alias);
 			}
-		}.run(false);
+		}.run(toInternalAPI(), false);
 	}
 
 	/**
@@ -232,7 +232,7 @@ public class ESServerImpl extends AbstractAPIImpl<ESServerImpl, ServerInfo> impl
 				}
 			};
 
-		cmd.run(false);
+		cmd.run(workspace.toInternalAPI(), false);
 
 		if (cmd.hasException()) {
 			if (cmd.getException() instanceof AccessControlException) {
@@ -284,7 +284,7 @@ public class ESServerImpl extends AbstractAPIImpl<ESServerImpl, ServerInfo> impl
 				public List<ProjectInfo> call() throws Exception {
 					return serverCall.execute();
 				}
-			});
+			}, null);
 
 		return APIUtil.copy(mapToRemoteProject(projectInfos));
 	}

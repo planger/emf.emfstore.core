@@ -70,7 +70,7 @@ public class ESWorkspaceImpl extends AbstractAPIImpl<ESWorkspaceImpl, Workspace>
 				ProjectSpace projectSpace = toInternalAPI().createLocalProject(projectName);
 				return projectSpace.toAPI();
 			}
-		}.run(false);
+		}.run(toInternalAPI(), false);
 	}
 
 	/**
@@ -98,7 +98,7 @@ public class ESWorkspaceImpl extends AbstractAPIImpl<ESWorkspaceImpl, Workspace>
 				toInternalAPI().addServerInfo(serverImpl.toInternalAPI());
 				return null;
 			}
-		});
+		}, toInternalAPI());
 
 		toInternalAPI().save();
 
@@ -148,7 +148,7 @@ public class ESWorkspaceImpl extends AbstractAPIImpl<ESWorkspaceImpl, Workspace>
 				toInternalAPI().removeServerInfo(existingServer.toInternalAPI());
 				return null;
 			}
-		});
+		}, toInternalAPI());
 		toInternalAPI().save();
 	}
 
@@ -165,7 +165,7 @@ public class ESWorkspaceImpl extends AbstractAPIImpl<ESWorkspaceImpl, Workspace>
 				ProjectSpace projectSpace = toInternalAPI().getProjectSpace(project);
 				return projectSpace.toAPI();
 			}
-		});
+		}, toInternalAPI());
 	}
 
 }

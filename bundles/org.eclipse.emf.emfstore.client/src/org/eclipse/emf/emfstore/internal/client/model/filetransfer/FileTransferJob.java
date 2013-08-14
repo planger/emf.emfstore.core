@@ -78,7 +78,7 @@ public abstract class FileTransferJob extends Job {
 				protected void doRun() {
 					sessionId = projectSpace.getUsersession().getSessionId();
 				}
-			}.run(false);
+			}.run(projectSpace, false);
 		}
 	}
 

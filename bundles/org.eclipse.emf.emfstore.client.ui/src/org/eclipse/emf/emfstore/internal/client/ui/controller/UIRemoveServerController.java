@@ -103,7 +103,7 @@ public class UIRemoveServerController extends
 					// TODO OTS auto save;
 					// ESWorkspaceProviderImpl.getInstance().getWorkspace().save();
 				};
-			}.run(false);
+			}.run(serverInfo, false);
 
 			return null;
 		}

@@ -174,7 +174,7 @@ public class UICreateBranchController extends
 					changePackage.setLogMessage(logMessage.toAPI());
 					return null;
 				}
-			});
+			}, projectSpace);
 			return true;
 		}
 

@@ -117,7 +117,7 @@ public class FileTransferManager {
 				projectSpace.getWaitingUploads().add(identifier);
 				projectSpace.saveProjectSpaceOnly();
 			}
-		}.run(true);
+		}.run(projectSpace, true);
 
 	}
 
@@ -149,7 +149,7 @@ public class FileTransferManager {
 							projectSpace.getWaitingUploads().remove(fi);
 							projectSpace.saveProjectSpaceOnly();
 						}
-					}.run(true);
+					}.run(projectSpace, true);
 					continue;
 
 				}

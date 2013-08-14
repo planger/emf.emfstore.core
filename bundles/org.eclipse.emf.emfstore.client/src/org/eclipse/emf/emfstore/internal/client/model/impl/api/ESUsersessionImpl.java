@@ -98,7 +98,7 @@ public class ESUsersessionImpl extends AbstractAPIImpl<ESUsersessionImpl, Userse
 				toInternalAPI().logIn();
 				return null;
 			}
-		});
+		}, toInternalAPI());
 	}
 
 	/**
@@ -113,7 +113,7 @@ public class ESUsersessionImpl extends AbstractAPIImpl<ESUsersessionImpl, Userse
 				toInternalAPI().logout();
 				return null;
 			}
-		});
+		}, toInternalAPI());
 	}
 
 	/**
@@ -137,7 +137,7 @@ public class ESUsersessionImpl extends AbstractAPIImpl<ESUsersessionImpl, Userse
 			protected void doRun() {
 				toInternalAPI().setUsername(name);
 			}
-		}.run(false);
+		}.run(toInternalAPI(), false);
 	}
 
 	/**
@@ -152,7 +152,7 @@ public class ESUsersessionImpl extends AbstractAPIImpl<ESUsersessionImpl, Userse
 				toInternalAPI().setPassword(password);
 				return null;
 			}
-		});
+		}, toInternalAPI());
 	}
 
 	/**
@@ -171,7 +171,7 @@ public class ESUsersessionImpl extends AbstractAPIImpl<ESUsersessionImpl, Userse
 					toInternalAPI().setServerInfo(server.toInternalAPI());
 				}
 			}
-		}.run(false);
+		}.run(toInternalAPI(), false);
 	}
 
 	/**

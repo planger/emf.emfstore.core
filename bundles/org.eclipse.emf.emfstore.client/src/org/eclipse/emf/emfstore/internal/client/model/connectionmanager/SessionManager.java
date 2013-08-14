@@ -88,7 +88,7 @@ public class SessionManager {
 							usersession.logIn();
 							return null;
 						}
-					});
+					}, usersession);
 					return usersession;
 				} catch (ESException e) {
 					// ignore, session provider should try to login
@@ -100,7 +100,7 @@ public class SessionManager {
 					public ESUsersession call() throws Exception {
 						return getSessionProvider().login(usersession.toAPI());
 					}
-				});
+				}, usersession);
 			return ((ESUsersessionImpl) session).toInternalAPI();
 		}
 

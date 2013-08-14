@@ -13,6 +13,7 @@ package org.eclipse.emf.emfstore.client.util;
 
 import java.util.concurrent.Callable;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommand;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommandWithException;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommandWithResult;
@@ -45,12 +46,14 @@ public final class RunESCommand {
 		 * 
 		 * @param callable
 		 *            the callable to be execued
+		 * @param element the EObject from which the editing domain is retrieved
 		 * @return the return value of the Callable
 		 * @throws ESException in case an error occurs during execution of the Callable
 		 * 
 		 * @param <T> the return type of the Callable
 		 */
-		public static <T, E extends Exception> T runWithResult(final Class<E> exceptionType, final Callable<T> callable)
+		public static <T, E extends Exception> T runWithResult(final Class<E> exceptionType,
+			final Callable<T> callable, EObject element)
 			throws E {
 			EMFStoreCommandWithResultAndException<T, E> cmd = new EMFStoreCommandWithResultAndException<T, E>() {
 				@Override
@@ -71,7 +74,7 @@ public final class RunESCommand {
 				}
 			};
 
-			T result = cmd.run(false);
+			T result = cmd.run(element, false);
 
 			if (cmd.hasException()) {
 				throw cmd.getExcpetion();
@@ -85,9 +88,11 @@ public final class RunESCommand {
 		 * 
 		 * @param callable
 		 *            the callable to be executed
+		 * @param element the EObject from which the editing domain is retrieved
 		 * @throws T in case an error occurs during execution of the callable
 		 */
-		public static <T extends Exception> void run(final Class<T> exceptionType, final Callable<Void> callable)
+		public static <T extends Exception> void run(final Class<T> exceptionType, final Callable<Void> callable,
+			EObject element)
 			throws T {
 
 			EMFStoreCommandWithException<T> cmd = new EMFStoreCommandWithException<T>() {
@@ -107,7 +112,7 @@ public final class RunESCommand {
 				}
 			};
 
-			cmd.run(false);
+			cmd.run(element, false);
 
 			if (cmd.hasException()) {
 				throw cmd.getException();
@@ -118,10 +123,11 @@ public final class RunESCommand {
 	/**
 	 * Executes the given {@link Callable} and returns the result.
 	 * 
+	 * @param element the EObject from which the editing domain is retrieved
 	 * @param callable
 	 *            the callable to be executed
 	 */
-	public static void run(final Callable<Void> callable) {
+	public static void run(final Callable<Void> callable, EObject element) {
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
@@ -131,19 +137,20 @@ public final class RunESCommand {
 					// ignore
 				}
 			}
-		}.run(false);
+		}.run(element, false);
 	}
 
 	/**
 	 * Executes the given {@link Callable} and returns the result.
 	 * 
+	 * @param element the EObject from which the editing domain is retrieved
 	 * @param callable
 	 *            the callable to be executed
 	 * @return the return value of the callable
 	 * 
 	 * @param <T> the return type of the callable
 	 */
-	public static <T> T runWithResult(final Callable<T> callable) {
+	public static <T> T runWithResult(final Callable<T> callable, EObject element) {
 		return new EMFStoreCommandWithResult<T>() {
 			@Override
 			protected T doRun() {
@@ -154,6 +161,6 @@ public final class RunESCommand {
 				}
 				return null;
 			}
-		}.run(false);
+		}.run(element, false);
 	}
 }

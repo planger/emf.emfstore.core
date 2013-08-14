@@ -110,7 +110,7 @@ public class LoginDialogController implements ILoginDialogController {
 				}
 				return null;
 			}
-		});
+		}, session);
 
 		validate(session.toAPI());
 
@@ -151,7 +151,7 @@ public class LoginDialogController implements ILoginDialogController {
 				}
 				return null;
 			}
-		});
+		}, usersession);
 
 		this.usersession = session;
 		ESWorkspaceProviderImpl.getInstance().getWorkspace().toInternalAPI().save();

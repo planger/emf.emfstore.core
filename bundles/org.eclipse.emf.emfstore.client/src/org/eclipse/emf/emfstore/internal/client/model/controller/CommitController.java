@@ -139,7 +139,7 @@ public class CommitController extends ServerCall<PrimaryVersionSpec> {
 				changePackage.setLogMessage(logMessageObject);
 				return null;
 			}
-		});
+		}, changePackage);
 
 		ESWorkspaceProviderImpl.getObserverBus().notify(ESCommitObserver.class)
 			.inspectChanges(getProjectSpace().toAPI(), changePackage.toAPI(), getProgressMonitor());
@@ -228,7 +228,7 @@ public class CommitController extends ServerCall<PrimaryVersionSpec> {
 				getProjectSpace().updateDirtyState();
 				return null;
 			}
-		});
+		}, getProjectSpace());
 
 		ESWorkspaceProviderImpl.getObserverBus().notify(ESCommitObserver.class)
 			.commitCompleted(getProjectSpace().toAPI(), newBaseVersion.toAPI(), getProgressMonitor());
