@@ -65,7 +65,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getModelElements().add(actor2);
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -73,7 +73,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
-			.size());
+				.size());
 		// same operations going on in both working copies, no conflicts expected
 		assertEquals(1, conflicts.size());
 
@@ -97,7 +97,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				getProject().addModelElement(actor);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
 		Project clonedProject = clonedProjectSpace.getProject();
@@ -118,7 +118,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getModelElements().add(actor2);
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -160,7 +160,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getModelElements().add(dummy2);
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -168,7 +168,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
-			.size());
+				.size());
 		// obviously an index-integrity conflict
 		assertEquals(conflicts.size(), 1);
 
@@ -201,7 +201,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getModelElements().remove(actor2);
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -244,7 +244,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				actor2.setLeafSection(otherSection2);
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -287,7 +287,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				otherSection2.getModelElements().add(actor2);
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -365,7 +365,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				otherSection2.getModelElements().add(actor2);
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -405,7 +405,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				actor2.setLeafSection(section2);
 				section2.getModelElements().remove(actor2);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
@@ -447,7 +447,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				otherSection2.getModelElements().add(actor2);
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -490,7 +490,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				otherSection2.getModelElements().add(actor2);
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -535,7 +535,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getModelElements().remove(actor2);
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -576,7 +576,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				actor.setLeafSection(section);
 				otherSection2.getModelElements().add(actor2);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -623,7 +623,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				actor2.setLeafSection(anotherSection2);
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -670,7 +670,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getModelElements().move(0, actor2);
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -679,7 +679,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
-			.size());
+				.size());
 
 		// index conflict arises: if the add happens before the move, the move will work
 		// if it does after the move, the move could be ineffective
@@ -716,7 +716,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getModelElements().add(actor2);
 				section2.getModelElements().move(0, actor2);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -725,7 +725,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
-			.size());
+				.size());
 
 		// index conflict arises: if the add happens before the move, the move will work
 		// if it does after the move, the move could be ineffective
@@ -764,7 +764,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section.getModelElements().move(1, actor);
 				section2.getModelElements().move(0, actor2);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -773,7 +773,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
-			.size());
+				.size());
 
 		// an index conflict arises: result depends on which move comes last
 		assertEquals(conflicts.size(), 1);
@@ -811,7 +811,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section.getModelElements().add(1, actor);
 				dummy2.setLeafSection(otherSection2);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -819,7 +819,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
-			.size());
+				.size());
 		assertEquals(conflicts.size(), 0);
 	}
 
@@ -853,7 +853,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section.getModelElements().add(1, actor);
 				dummy2.setLeafSection(otherSection2);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -861,7 +861,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
-			.size());
+				.size());
 		// no index-integrity conflict (the change happens at the boundary)
 		assertEquals(conflicts.size(), 0);
 
@@ -898,7 +898,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getModelElements().remove(dummy2);
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -906,7 +906,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
-			.size());
+				.size());
 		// no index-integrity conflict (outcome does not depend on serialization)
 		assertEquals(conflicts.size(), 0);
 
@@ -942,7 +942,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				otherSection2.getModelElements().add(dummy2);
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -950,7 +950,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
-			.size());
+				.size());
 		// no index-integrity conflict (outcome does not depend on serialization)
 		assertEquals(conflicts.size(), 0);
 
@@ -984,7 +984,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				actor.setLeafSection(section);
 				dummy2.setLeafSection(otherSection2);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -992,7 +992,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
-			.size());
+				.size());
 		// no index-integrity conflict (outcome does not depend on serialization)
 		assertEquals(conflicts.size(), 0);
 
@@ -1030,7 +1030,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getModelElements().remove(dummy2);
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -1038,7 +1038,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
-			.size());
+				.size());
 		// no index-integrity conflict: result independent of serialization
 		assertEquals(conflicts.size(), 0);
 
@@ -1076,7 +1076,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				otherSection2.getModelElements().add(dummy2);
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -1084,7 +1084,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
-			.size());
+				.size());
 		// no index-integrity conflict: result independent of serialization
 		assertEquals(conflicts.size(), 0);
 
@@ -1123,7 +1123,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				otherSection2.getModelElements().add(dummy2);
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -1131,7 +1131,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
-			.size());
+				.size());
 		// no index-integrity conflict: result independent of serialization
 		assertEquals(conflicts.size(), 0);
 
@@ -1170,7 +1170,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				actor.setLeafSection(anotherSection);
 				otherSection2.getModelElements().add(dummy2);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -1178,7 +1178,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
-			.size());
+				.size());
 		// no index-integrity conflict: result independent of serialization
 		assertEquals(conflicts.size(), 0);
 
@@ -1219,7 +1219,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				dummy2.setLeafSection(otherSection2);
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -1227,7 +1227,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
-			.size());
+				.size());
 		// no index-integrity conflict: result independent of serialization
 		assertEquals(conflicts.size(), 0);
 
@@ -1266,7 +1266,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				anotherSection.getModelElements().add(actor);
 				otherSection2.getModelElements().add(dummy2);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -1274,7 +1274,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
-			.size());
+				.size());
 		// no index-integrity conflict: result independent of serialization
 		assertEquals(conflicts.size(), 0);
 
@@ -1312,7 +1312,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section.getModelElements().add(0, actor);
 				section2.getModelElements().move(1, anotherDummy2);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -1320,7 +1320,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
-			.size());
+				.size());
 		// no index-integrity conflict: result independent of serialization
 		assertEquals(conflicts.size(), 0);
 	}
@@ -1357,7 +1357,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section.getModelElements().remove(actor);
 				section2.getModelElements().move(0, anotherDummy2);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -1365,7 +1365,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
-			.size());
+				.size());
 		// no index-integrity conflict: result independent of serialization
 		assertEquals(conflicts.size(), 0);
 
@@ -1403,7 +1403,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section.getModelElements().remove(dummy);
 				section2.getModelElements().move(1, anotherDummy2);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -1411,7 +1411,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
-			.size());
+				.size());
 		// no index-integrity conflict: result independent of serialization
 		assertEquals(conflicts.size(), 0);
 
@@ -1451,7 +1451,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				dummy.setLeafSection(otherSection);
 				section2.getModelElements().move(1, anotherDummy2);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -1459,7 +1459,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
-			.size());
+				.size());
 		// no index-integrity conflict: result independent of serialization
 		assertEquals(conflicts.size(), 0);
 
@@ -1499,14 +1499,14 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				otherSection.getModelElements().add(dummy);
 				section2.getModelElements().move(1, anotherDummy2);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
-			.size());
+				.size());
 		// no index-integrity conflict: result independent of serialization
 		assertEquals(conflicts.size(), 0);
 
@@ -1545,7 +1545,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section.getModelElements().move(2, actor);
 				section2.getModelElements().move(0, anotherDummy2);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -1553,7 +1553,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
-			.size());
+				.size());
 		// no index-integrity conflict: result independent of serialization
 		assertEquals(0, conflicts.size());
 
@@ -1583,7 +1583,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				}
 				return getProject().getModelElementId(eObject);
 			}
-		});
+		}, getProject());
 	}
 
 	private ModelElementId createLeafSection() {
@@ -1623,7 +1623,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				}
 				return null;
 			}
-		});
+		}, getProject());
 	}
 
 	private <U extends UnicaseModelElement> void addToUseCase(
@@ -1641,7 +1641,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				}
 				return null;
 			}
-		});
+		}, getProject());
 	}
 
 	private void setLeafSection(final Actor actor, final LeafSection leafSection) {
@@ -1657,7 +1657,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				}
 				return null;
 			}
-		});
+		}, getProject());
 	}
 
 	@Override

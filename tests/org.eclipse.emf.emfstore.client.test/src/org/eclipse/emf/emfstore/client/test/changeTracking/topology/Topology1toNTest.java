@@ -1696,7 +1696,7 @@ public class Topology1toNTest extends TopologyTest {
 			protected void doRun() {
 				section.getModelElements().remove(actor);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -1755,7 +1755,7 @@ public class Topology1toNTest extends TopologyTest {
 			protected void doRun() {
 				section.getModelElements().removeAll(Arrays.asList(actors));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -1819,7 +1819,7 @@ public class Topology1toNTest extends TopologyTest {
 			protected void doRun() {
 				section.getModelElements().remove(actor);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(1, operations.size());
@@ -2339,7 +2339,7 @@ public class Topology1toNTest extends TopologyTest {
 			protected void doRun() {
 				section.getModelElements().removeAll(Arrays.asList(actors));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 

@@ -65,7 +65,7 @@ public class MultiReferenceNotificationTest extends NotificationTest {
 				// notifications from this operations are tested
 				actor.getInitiatedUseCases().addAll(Arrays.asList(useCases));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
 		List<NotificationInfo> rec = recording.asMutableList();
@@ -124,7 +124,7 @@ public class MultiReferenceNotificationTest extends NotificationTest {
 				// notifications from this operations are tested
 				actor.getParticipatedUseCases().addAll(Arrays.asList(useCases));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
 		List<NotificationInfo> rec = recording.asMutableList();
@@ -185,7 +185,7 @@ public class MultiReferenceNotificationTest extends NotificationTest {
 				actor.getInitiatedUseCases().addAll(Arrays.asList(useCasesIn));
 				actor.getInitiatedUseCases().removeAll(Arrays.asList(useCasesOut));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
 		List<NotificationInfo> rec = recording.asMutableList();
@@ -248,7 +248,7 @@ public class MultiReferenceNotificationTest extends NotificationTest {
 				actor.getParticipatedUseCases().removeAll(Arrays.asList(useCasesOut));
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
 		List<NotificationInfo> rec = recording.asMutableList();

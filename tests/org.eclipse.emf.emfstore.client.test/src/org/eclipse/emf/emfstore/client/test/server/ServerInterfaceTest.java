@@ -90,7 +90,7 @@ public class ServerInterfaceTest extends ServerTests {
 					return null;
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 		assertEqual(getProject(), projectSpace2.getProject());
 	}
 
@@ -125,7 +125,7 @@ public class ServerInterfaceTest extends ServerTests {
 					Assert.fail();
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(getProjectsOnServerBeforeTest() + 1, getServer().getRemoteProjects().size());
 	}
@@ -163,7 +163,7 @@ public class ServerInterfaceTest extends ServerTests {
 					return null;
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(getServer().getRemoteProjects().size() == getProjectsOnServerBeforeTest() + 1);
 		assertNotNull(getProject());
@@ -258,7 +258,7 @@ public class ServerInterfaceTest extends ServerTests {
 				}
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		PrimaryVersionSpec baseVersion = getProjectSpace().getBaseVersion();
 
@@ -306,7 +306,7 @@ public class ServerInterfaceTest extends ServerTests {
 				getProject().addModelElement(
 					org.eclipse.emf.emfstore.internal.server.model.ModelFactory.eINSTANCE.createProjectHistory());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final AttributeOperation attributeOperation = OperationsFactory.eINSTANCE.createAttributeOperation();
 		attributeOperation.setModelElementId(getProject().getModelElementId(
@@ -330,7 +330,7 @@ public class ServerInterfaceTest extends ServerTests {
 				}
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 		// TODO: because commit cleared all local operations
 		setCompareAtEnd(false);
 
@@ -375,7 +375,7 @@ public class ServerInterfaceTest extends ServerTests {
 				}
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		HistoryQuery<ESHistoryQueryImpl<?, ?>> historyQuery = createHistoryQuery(createdVersion, createdVersion);
 		List<ESHistoryInfo> historyInfos = getProjectSpace().toAPI().getHistoryInfos(

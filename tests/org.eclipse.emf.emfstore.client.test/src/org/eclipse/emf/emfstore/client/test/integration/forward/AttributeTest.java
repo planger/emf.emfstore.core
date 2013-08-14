@@ -42,7 +42,7 @@ public class AttributeTest extends IntegrationTest {
 			protected void doRun() {
 				testHelper.doMultiAttributeMove();
 			}
-		}.run(false);
+		}.run(getTestProject(), false);
 
 		commitChanges();
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
@@ -67,7 +67,7 @@ public class AttributeTest extends IntegrationTest {
 				testHelper.doChangeAttribute();
 			}
 
-		}.run(false);
+		}.run(getTestProject(), false);
 
 		commitChanges();
 
@@ -93,7 +93,7 @@ public class AttributeTest extends IntegrationTest {
 
 			}
 
-		}.run(false);
+		}.run(getTestProject(), false);
 
 		commitChanges();
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));

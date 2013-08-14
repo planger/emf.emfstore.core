@@ -24,7 +24,6 @@ import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommand;
 import org.eclipse.emf.emfstore.internal.common.model.ModelElementId;
 import org.eclipse.emf.emfstore.internal.common.model.Project;
-import org.eclipse.emf.emfstore.internal.server.conflictDetection.ConflictDetector;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation;
 import org.junit.Test;
 
@@ -53,7 +52,7 @@ public class ConflictDetectionAttributeTest extends ConflictDetectionTest {
 
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		Project project2 = ps2.getProject();
@@ -70,12 +69,11 @@ public class ConflictDetectionAttributeTest extends ConflictDetectionTest {
 				actor1.setName("change 1");
 				actor2.setName("change 2");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> ops2 = ps2.getOperations();
 
-		
 		Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
 		assertEquals(getConflicts(ops1, ops2).size(), getConflicts(ops2, ops1).size());
 
@@ -100,7 +98,7 @@ public class ConflictDetectionAttributeTest extends ConflictDetectionTest {
 				section.getModelElements().add(actor);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		Project project2 = ps2.getProject();
@@ -117,12 +115,11 @@ public class ConflictDetectionAttributeTest extends ConflictDetectionTest {
 				actor1.setName("change 1");
 				actor2.setName("change 1");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> ops2 = ps2.getOperations();
 
-		
 		Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
 		assertEquals(getConflicts(ops1, ops2).size(), getConflicts(ops2, ops1).size());
 		// should not conflict, the same change happens on both sides
@@ -149,7 +146,7 @@ public class ConflictDetectionAttributeTest extends ConflictDetectionTest {
 				clearOperations();
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		Project project2 = ps2.getProject();
@@ -168,12 +165,11 @@ public class ConflictDetectionAttributeTest extends ConflictDetectionTest {
 				actor2.setDescription("unrelated change");
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> ops2 = ps2.getOperations();
 
-		
 		Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
 		assertEquals(getConflicts(ops1, ops2).size(), getConflicts(ops2, ops1).size());
 

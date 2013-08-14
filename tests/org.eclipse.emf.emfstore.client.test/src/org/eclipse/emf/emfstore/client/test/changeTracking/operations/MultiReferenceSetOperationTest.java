@@ -50,7 +50,7 @@ public class MultiReferenceSetOperationTest extends WorkspaceTest {
 				element.getReferences().add(oldValue);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(element.getReferences().size() == 1);
 		assertTrue(element.getReferences().get(0).equals(oldValue));
@@ -60,7 +60,7 @@ public class MultiReferenceSetOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				element.getReferences().set(0, newValue);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(element.getReferences().size() == 1);
 		assertTrue(element.getReferences().get(0).equals(newValue));
@@ -96,7 +96,7 @@ public class MultiReferenceSetOperationTest extends WorkspaceTest {
 				assertTrue(testElement.getReferences().size() == 1);
 				assertTrue(testElement.getReferences().get(0).equals(newValue));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 	}
 
 	/**
@@ -128,7 +128,7 @@ public class MultiReferenceSetOperationTest extends WorkspaceTest {
 				assertTrue(testElement.getReferences().size() == 1);
 				assertTrue(testElement.getReferences().get(0).equals(newValue));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 	}
 
 	/**
@@ -160,7 +160,7 @@ public class MultiReferenceSetOperationTest extends WorkspaceTest {
 				assertTrue(testElement.getReferences().get(1).equals(newValue));
 				assertTrue(testElement.getReferences().get(2).equals(third));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 	}
 
 	/**
@@ -180,14 +180,14 @@ public class MultiReferenceSetOperationTest extends WorkspaceTest {
 				assertTrue(element.getReferences().size() == 1);
 				assertTrue(element.getReferences().get(0).equals(oldValue));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				element.getReferences().set(0, newValue);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(element.getReferences().size() == 1);
 		assertTrue(element.getReferences().get(0).equals(newValue));
@@ -198,7 +198,7 @@ public class MultiReferenceSetOperationTest extends WorkspaceTest {
 				AbstractOperation operation = getProjectSpace().getOperations().get(0).reverse();
 				operation.apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(element.getReferences().size() == 1);
 		assertTrue(element.getReferences().get(0).equals(oldValue));

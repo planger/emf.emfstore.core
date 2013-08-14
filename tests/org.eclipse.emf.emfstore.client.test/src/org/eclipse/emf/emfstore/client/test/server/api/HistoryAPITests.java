@@ -115,7 +115,7 @@ public class HistoryAPITests extends CoreServerTest {
 				TestElement element = (TestElement) ps.getProject().getModelElements().get(0);
 				element.setName(elementNames[nameIndex]);
 			}
-		}.run(false);
+		}.run(ps.getProject(), false);
 	}
 
 	@Test

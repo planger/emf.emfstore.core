@@ -54,7 +54,7 @@ public class PropertiesTest extends TransmissionTests {
 					throw new RuntimeException(e);
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		// 1. Test, ob transmit funktioniert
 		Assert.assertEquals("test1", propertyManager1.getSharedStringProperty("FirstPropKey"));
@@ -85,7 +85,7 @@ public class PropertiesTest extends TransmissionTests {
 					throw new RuntimeException(e);
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		// 2. Funktioniert update
 		Assert.assertEquals("test5", propertyManager1.getSharedStringProperty("SecondTest"));
@@ -122,7 +122,7 @@ public class PropertiesTest extends TransmissionTests {
 
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		// check if rollback succeeded
 		Assert.assertEquals("test1", propertyManager1.getSharedStringProperty("SecondTest"));
@@ -137,7 +137,7 @@ public class PropertiesTest extends TransmissionTests {
 				getProjectSpace1().getPropertyManager().setLocalProperty("foo",
 					TestmodelFactory.eINSTANCE.createTestElement());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		((ProjectSpaceBase) getProjectSpace1()).save();
 		ProjectSpace loadedProjectSpace = ModelUtil.loadEObjectFromResource(ModelPackage.eINSTANCE.getProjectSpace(),

@@ -48,14 +48,14 @@ public class CompositeMergeTest extends MergeTest {
 
 				end(handle, mc.getMyId(element));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mc.getTheirItem(element).setName("Foobar");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(CompositeConflict.class)
 			// my
@@ -74,7 +74,7 @@ public class CompositeMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(element).setName("Blub");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -87,7 +87,7 @@ public class CompositeMergeTest extends MergeTest {
 				end(handle, theirId);
 			}
 
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(CompositeConflict.class)
 			// my
@@ -107,7 +107,7 @@ public class CompositeMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(element).setName("Blub");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -119,7 +119,7 @@ public class CompositeMergeTest extends MergeTest {
 				end(handle, mc.getTheirId(element));
 			}
 
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(null);
 	}
@@ -137,7 +137,7 @@ public class CompositeMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(element).setReference(mc.getMyItem(link));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -149,7 +149,7 @@ public class CompositeMergeTest extends MergeTest {
 				end(handle, mc.getTheirId(element));
 			}
 
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(CompositeConflict.class)
 			// my
@@ -172,7 +172,7 @@ public class CompositeMergeTest extends MergeTest {
 				mc.getMyItem(element).setName("blub");
 				mc.getMyItem(element).setReference(mc.getMyItem(link));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -185,7 +185,7 @@ public class CompositeMergeTest extends MergeTest {
 				end(handle, mc.getTheirId(element));
 			}
 
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(CompositeConflict.class)
 			// my
@@ -207,7 +207,7 @@ public class CompositeMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent).setContainedElement(mc.getMyItem(child));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -219,7 +219,7 @@ public class CompositeMergeTest extends MergeTest {
 				end(handle, mc.getTheirId(parent2));
 			}
 
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(CompositeConflict.class)
 			// my
@@ -243,7 +243,7 @@ public class CompositeMergeTest extends MergeTest {
 
 				end(handle, mc.getMyId(element));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -255,7 +255,7 @@ public class CompositeMergeTest extends MergeTest {
 				end(handle, mc.getTheirId(element));
 			}
 
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(CompositeConflict.class)
 			// my
@@ -281,7 +281,7 @@ public class CompositeMergeTest extends MergeTest {
 
 				end(handle, mc.getMyId(element));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -293,7 +293,7 @@ public class CompositeMergeTest extends MergeTest {
 				end(handle, mc.getTheirId(element));
 			}
 
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(CompositeConflict.class)
 			// my
@@ -317,7 +317,7 @@ public class CompositeMergeTest extends MergeTest {
 
 				end(handle, mc.getMyId(element));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -329,7 +329,7 @@ public class CompositeMergeTest extends MergeTest {
 				end(handle, mc.getTheirId(element));
 			}
 
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(null);
 	}

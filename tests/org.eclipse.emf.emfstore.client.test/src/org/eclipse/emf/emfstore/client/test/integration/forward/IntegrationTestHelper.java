@@ -150,7 +150,7 @@ public final class IntegrationTestHelper {
 				}
 			}
 
-		}.run(false);
+		}.run(null, false);
 		return changePackage;
 	}
 
@@ -213,7 +213,7 @@ public final class IntegrationTestHelper {
 					testSpace.getOperations().clear();
 				}
 			}
-		}.run(false);
+		}.run(testSpace.getProject(), false);
 	}
 
 	/**
@@ -1117,7 +1117,7 @@ public final class IntegrationTestHelper {
 			protected void doRun() {
 				getTestProject().deleteModelElement(modelElement);
 			}
-		}.run(false);
+		}.run(getTestProject(), false);
 
 		List<AbstractOperation> operations = ESWorkspaceProviderImpl.getProjectSpace(testProject).getOperations();
 		if (operations.size() == 0) {
@@ -1132,7 +1132,7 @@ public final class IntegrationTestHelper {
 				CreateDeleteOperation reverse = (CreateDeleteOperation) operation.reverse();
 				reverse.apply(getTestProject());
 			}
-		}.run(false);
+		}.run(getTestProject(), false);
 
 	}
 

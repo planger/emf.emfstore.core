@@ -88,7 +88,7 @@ public class CommandTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(leafSection);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
 
@@ -141,7 +141,7 @@ public class CommandTest extends WorkspaceTest {
 				clearOperations();
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		Command delete = DeleteCommand.create(
 			ESWorkspaceProviderImpl.getInstance().getEditingDomain(),
@@ -168,7 +168,7 @@ public class CommandTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(leafSection);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
 
@@ -212,7 +212,7 @@ public class CommandTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(leafSection);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
 
@@ -247,7 +247,7 @@ public class CommandTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(leafSection);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
 
@@ -289,7 +289,7 @@ public class CommandTest extends WorkspaceTest {
 				getProject().addModelElement(useCase);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
 
@@ -345,7 +345,7 @@ public class CommandTest extends WorkspaceTest {
 				assertEquals(getProject(), ModelUtil.getProject(useCase));
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		Project project = ModelUtil.getProject(useCase);
 		ModelElementId useCaseId = project.getModelElementId(useCase);
@@ -495,7 +495,7 @@ public class CommandTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(leafSection);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
 
@@ -557,7 +557,7 @@ public class CommandTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(leafSection);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
 
@@ -618,7 +618,7 @@ public class CommandTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(leafSection);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
 
@@ -640,7 +640,7 @@ public class CommandTest extends WorkspaceTest {
 			protected void doRun() {
 				editingDomain.getCommandStack().undo();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 		// does not work but is strange anyway
 		// assertTrue(editingDomain.getCommandStack().canRedo());
 		assertEquals(1, leafSection.getModelElements().size());
@@ -662,7 +662,7 @@ public class CommandTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(leafSection);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
 
@@ -702,7 +702,7 @@ public class CommandTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(leafSection);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
 
@@ -745,7 +745,7 @@ public class CommandTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(leafSection);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
 
@@ -787,7 +787,7 @@ public class CommandTest extends WorkspaceTest {
 				getProject().addModelElement(leafSection);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(0, getProjectSpace().getOperations().size());
 		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
@@ -848,7 +848,7 @@ public class CommandTest extends WorkspaceTest {
 				getProject().addModelElement(leafSection);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 		ModelElementId workPackageId = getProject().getModelElementId(workPackage);
 
 		EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
@@ -885,7 +885,7 @@ public class CommandTest extends WorkspaceTest {
 				getProject().addModelElement(leafSection);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(0, getProjectSpace().getOperations().size());
 
@@ -912,7 +912,7 @@ public class CommandTest extends WorkspaceTest {
 				getProject().addModelElement(leafSection);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(0, getProjectSpace().getOperations().size());
 		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
@@ -948,7 +948,7 @@ public class CommandTest extends WorkspaceTest {
 				// provoke NPE
 				col.getModelElements();
 			}
-		}.run(true);
+		}.run(getProject(), true);
 	}
 
 	@Test(expected = NullPointerException.class)
@@ -961,6 +961,6 @@ public class CommandTest extends WorkspaceTest {
 				// provoke NPE
 				col.getModelElements();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 	}
 }

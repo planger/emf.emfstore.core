@@ -35,7 +35,7 @@ public class MultiReferenceMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent).getReferences().add(mc.getMyItem(child));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -43,7 +43,7 @@ public class MultiReferenceMergeTest extends MergeTest {
 				mc.getTheirItem(parent).getReferences().add(mc.getTheirItem(child));
 				mc.getTheirItem(parent).getReferences().remove(mc.getTheirItem(child));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(MultiReferenceConflict.class)
 			// my
@@ -66,7 +66,7 @@ public class MultiReferenceMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent).getReferences().add(mc.getMyItem(child));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -75,7 +75,7 @@ public class MultiReferenceMergeTest extends MergeTest {
 				mc.getTheirItem(parent).getReferences()
 					.removeAll(asList(mc.getTheirItem(child), mc.getTheirItem(decoyChild)));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(MultiReferenceConflict.class)
 			// my
@@ -99,14 +99,14 @@ public class MultiReferenceMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent).getReferences().add(mc.getMyItem(child));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mc.getTheirItem(parent).getReferences().remove(mc.getTheirItem(child2));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(null);
 	}
@@ -125,7 +125,7 @@ public class MultiReferenceMergeTest extends MergeTest {
 				mc.getMyItem(parent).getReferences().add(mc.getMyItem(child));
 				mc.getMyItem(parent).getReferences().add(mc.getMyItem(child2));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -133,7 +133,7 @@ public class MultiReferenceMergeTest extends MergeTest {
 				mc.getTheirItem(parent).getReferences().add(mc.getTheirItem(child));
 				mc.getTheirItem(parent).getReferences().remove(mc.getTheirItem(child));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(MultiReferenceConflict.class)
 			// my
@@ -157,7 +157,7 @@ public class MultiReferenceMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent).getReferences().addAll(asList(mc.getMyItem(child), mc.getMyItem(child2)));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -165,7 +165,7 @@ public class MultiReferenceMergeTest extends MergeTest {
 				mc.getTheirItem(parent).getReferences().add(mc.getTheirItem(child));
 				mc.getTheirItem(parent).getReferences().remove(mc.getTheirItem(child));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(MultiReferenceConflict.class)
 			// my
@@ -187,7 +187,7 @@ public class MultiReferenceMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent).getReferences().addAll(asList(mc.getMyItem(child), mc.getMyItem(child2)));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -197,7 +197,7 @@ public class MultiReferenceMergeTest extends MergeTest {
 				mc.getTheirItem(parent).getReferences()
 					.removeAll(asList(mc.getTheirItem(child), mc.getTheirItem(child2)));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(MultiReferenceConflict.class)
 			// my
@@ -223,14 +223,14 @@ public class MultiReferenceMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent).getReferences().addAll(asList(mc.getMyItem(child), mc.getMyItem(child2)));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mc.getTheirItem(parent).getReferences().remove(mc.getTheirItem(child3));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(null);
 	}
@@ -251,7 +251,7 @@ public class MultiReferenceMergeTest extends MergeTest {
 				mc.getMyItem(parent).getReferences().addAll(asList(mc.getMyItem(child), mc.getMyItem(child2)));
 				mc.getMyItem(parent).getReferences().addAll(asList(mc.getMyItem(decoy1), mc.getMyItem(decoy2)));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -259,7 +259,7 @@ public class MultiReferenceMergeTest extends MergeTest {
 				mc.getTheirItem(parent).getReferences().add(mc.getTheirItem(child));
 				mc.getTheirItem(parent).getReferences().remove(mc.getTheirItem(child));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(MultiReferenceConflict.class)
 			// my
@@ -286,14 +286,14 @@ public class MultiReferenceMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent).getReferences().remove(mc.getMyItem(child));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mc.getTheirItem(parent).getReferences().set(0, mc.getTheirItem(newChild));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(MultiReferenceSetConflict.class)
 			// my
@@ -318,14 +318,14 @@ public class MultiReferenceMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent).getReferences().removeAll(asList(mc.getMyItem(child), mc.getTheirItem(child2)));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mc.getTheirItem(parent).getReferences().set(0, mc.getTheirItem(newChild));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(MultiReferenceSetConflict.class)
 			// my
@@ -352,14 +352,14 @@ public class MultiReferenceMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent).getReferences().removeAll(asList(mc.getMyItem(child), mc.getTheirItem(child2)));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mc.getTheirItem(parent).getReferences().set(2, mc.getTheirItem(newChild));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(null);
 	}
@@ -381,14 +381,14 @@ public class MultiReferenceMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent).getReferences().set(0, mc.getMyItem(newChild));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mc.getTheirItem(parent).getReferences().set(0, mc.getTheirItem(newChild2));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(MultiReferenceSetSetConflict.class)
 			// my
@@ -411,14 +411,14 @@ public class MultiReferenceMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent).getReferences().set(0, mc.getMyItem(newChild));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mc.getTheirItem(parent).getReferences().set(0, mc.getTheirItem(newChild));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(MultiReferenceSetSetConflict.class);
 	}
@@ -440,14 +440,14 @@ public class MultiReferenceMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent).getReferences().set(0, mc.getMyItem(newChild));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mc.getTheirItem(parent).getReferences().set(1, mc.getTheirItem(newChild2));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(null);
 	}

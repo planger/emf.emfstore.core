@@ -177,7 +177,7 @@ public class Topology1to1Test extends TopologyTest {
 			protected void doRun() {
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		// fetch id here, before oldSolution is removed from project
 		ModelElementId solutionOldId = ModelUtil.getProject(solutionOld).getModelElementId(solutionOld);
@@ -187,7 +187,7 @@ public class Topology1to1Test extends TopologyTest {
 			protected void doRun() {
 				issue.setSolution(solutionNew);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 		assertSame(solutionNew, issue.getSolution());
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
@@ -251,7 +251,7 @@ public class Topology1to1Test extends TopologyTest {
 			protected void doRun() {
 				issue.setSolution(solutionOld);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 		assertEquals(issue.getSolution(), solutionOld);
 
 		clearOperations();
@@ -261,7 +261,7 @@ public class Topology1to1Test extends TopologyTest {
 			protected void doRun() {
 				solutionNew.setIssue(issue);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 		assertSame(solutionNew, issue.getSolution());
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
@@ -338,7 +338,7 @@ public class Topology1to1Test extends TopologyTest {
 				issue1.setSolution(solution1);
 				issue2.setSolution(solution2);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(issue1.getSolution(), solution1);
 		assertEquals(issue2.getSolution(), solution2);
@@ -352,7 +352,7 @@ public class Topology1to1Test extends TopologyTest {
 			protected void doRun() {
 				issue1.setSolution(solution2);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertSame(solution2, issue1.getSolution());
 		assertNull(issue2.getSolution());
@@ -427,7 +427,7 @@ public class Topology1to1Test extends TopologyTest {
 				assertEquals(issue1.getSolution(), solution1);
 				assertEquals(issue2.getSolution(), solution2);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		clearOperations();
 
@@ -438,7 +438,7 @@ public class Topology1to1Test extends TopologyTest {
 			protected void doRun() {
 				solution2.setIssue(issue1);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertSame(solution2, issue1.getSolution());
 		assertNull(issue2.getSolution());
@@ -642,7 +642,7 @@ public class Topology1to1Test extends TopologyTest {
 				leafSection.getModelElements().add(solution2);
 				issue.setSolution(solution1);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(issue.getSolution(), solution1);
 		assertTrue(leafSection.getModelElements().contains(solution2));
@@ -655,7 +655,7 @@ public class Topology1to1Test extends TopologyTest {
 			protected void doRun() {
 				issue.setSolution(solution2);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertSame(solution2, issue.getSolution());
 		assertTrue(leafSection.getModelElements().isEmpty());
@@ -735,7 +735,7 @@ public class Topology1to1Test extends TopologyTest {
 			protected void doRun() {
 				issue.setSolution(solution1);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(issue.getSolution(), solution1);
 		assertTrue(leafSection.getModelElements().contains(solution2));
@@ -750,7 +750,7 @@ public class Topology1to1Test extends TopologyTest {
 			protected void doRun() {
 				solution2.setIssue(issue);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertSame(solution2, issue.getSolution());
 		assertTrue(leafSection.getModelElements().isEmpty());
@@ -992,7 +992,7 @@ public class Topology1to1Test extends TopologyTest {
 				issue.setSolution(solution);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertSame(solution, issue.getSolution());
 		ModelElementId solutionId = ModelUtil.getProject(solution).getModelElementId(solution);
@@ -1002,7 +1002,7 @@ public class Topology1to1Test extends TopologyTest {
 			protected void doRun() {
 				issue.setSolution(null);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(1, operations.size());
@@ -1049,7 +1049,7 @@ public class Topology1to1Test extends TopologyTest {
 			protected void doRun() {
 				issue.setSolution(solution);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		clearOperations();
 
@@ -1061,7 +1061,7 @@ public class Topology1to1Test extends TopologyTest {
 			protected void doRun() {
 				solution.setIssue(null);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(1, operations.size());

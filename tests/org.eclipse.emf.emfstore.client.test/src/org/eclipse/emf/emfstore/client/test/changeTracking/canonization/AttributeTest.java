@@ -61,7 +61,7 @@ public class AttributeTest extends WorkspaceTest {
 				getProject().addModelElement(useCase);
 				useCase.setName("oldName");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -76,7 +76,7 @@ public class AttributeTest extends WorkspaceTest {
 				useCase.setName("C");
 				useCase.setName("newName");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals("newName", useCase.getName());
 		assertEquals(4, getProjectSpace().getOperations().size());
@@ -89,7 +89,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(operations.size(), 1);
 
@@ -101,7 +101,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				reverse.apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 		getProjectSpace().save();
@@ -129,7 +129,7 @@ public class AttributeTest extends WorkspaceTest {
 				getProject().addModelElement(useCase);
 				useCase.setName("oldName");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -145,7 +145,7 @@ public class AttributeTest extends WorkspaceTest {
 				useCase.setName("C");
 				useCase.setName(null);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(null, useCase.getName());
 
@@ -156,7 +156,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(operations.size(), 1);
 
@@ -166,7 +166,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				reverse.apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
@@ -192,7 +192,7 @@ public class AttributeTest extends WorkspaceTest {
 				getProject().addModelElement(useCase);
 				useCase.setName(null);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -206,7 +206,7 @@ public class AttributeTest extends WorkspaceTest {
 				useCase.setName("B");
 				useCase.setName("C");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals("C", useCase.getName());
 
@@ -218,7 +218,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(operations.size(), 1);
 
@@ -229,7 +229,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				reverse.apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
@@ -257,7 +257,7 @@ public class AttributeTest extends WorkspaceTest {
 				getProject().addModelElement(useCase);
 				useCase.setName("oldName");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -272,7 +272,7 @@ public class AttributeTest extends WorkspaceTest {
 				useCase.setName("C");
 				useCase.setName("oldName");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals("oldName", useCase.getName());
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
@@ -285,7 +285,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		// should not have created any operations, we were just resetting the name to its original value
 		assertEquals(operations.size(), 0);
@@ -314,7 +314,7 @@ public class AttributeTest extends WorkspaceTest {
 				getProject().addModelElement(useCase);
 				useCase.setName(null);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -329,7 +329,7 @@ public class AttributeTest extends WorkspaceTest {
 				useCase.setName("C");
 				useCase.setName(null);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(null, useCase.getName());
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
@@ -342,7 +342,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		// should not have created any operations, we were just resetting the name to its original value
 		assertEquals(operations.size(), 0);
@@ -371,7 +371,7 @@ public class AttributeTest extends WorkspaceTest {
 				useCase.setName("oldName");
 				useCase.setDescription("oldDescription");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -390,7 +390,7 @@ public class AttributeTest extends WorkspaceTest {
 				useCase.setDescription("oldDescription");
 				useCase.setName("oldName");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
@@ -401,7 +401,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		// should not have created any operations, we were just resetting everything to its original value
 		assertEquals(operations.size(), 0);
@@ -429,7 +429,7 @@ public class AttributeTest extends WorkspaceTest {
 				getProject().addModelElement(useCase);
 				useCase.setName("oldName");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -446,7 +446,7 @@ public class AttributeTest extends WorkspaceTest {
 				useCase.setDescription("newDescription");
 				useCase.setName("newName");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals("newName", useCase.getName());
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
@@ -457,7 +457,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(operations.size(), 2);
 
@@ -469,7 +469,7 @@ public class AttributeTest extends WorkspaceTest {
 					reverse.apply(getProject());
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
@@ -504,7 +504,7 @@ public class AttributeTest extends WorkspaceTest {
 				section.setName("some section");
 				actor.setName("homer");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -522,7 +522,7 @@ public class AttributeTest extends WorkspaceTest {
 				section.setName("home");
 				useCase.setName("newName");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(7, operations.size());
@@ -532,7 +532,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -542,7 +542,7 @@ public class AttributeTest extends WorkspaceTest {
 					reverse.apply(getProject());
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
@@ -583,7 +583,7 @@ public class AttributeTest extends WorkspaceTest {
 				section.setName("some section");
 				actor.setName("homer");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -604,7 +604,7 @@ public class AttributeTest extends WorkspaceTest {
 				useCase.setName("newName");
 				useCase.setDescription("final desc");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals("newName", useCase.getName());
@@ -617,7 +617,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -627,7 +627,7 @@ public class AttributeTest extends WorkspaceTest {
 					reverse.apply(getProject());
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
@@ -656,7 +656,7 @@ public class AttributeTest extends WorkspaceTest {
 				section.setName("Name");
 				section.setDescription("oldDescription");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -680,7 +680,7 @@ public class AttributeTest extends WorkspaceTest {
 				}
 				section.setDescription("desc 2");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals("desc 2", section.getDescription());
@@ -691,7 +691,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -701,7 +701,7 @@ public class AttributeTest extends WorkspaceTest {
 					reverse.apply(getProject());
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
@@ -731,7 +731,7 @@ public class AttributeTest extends WorkspaceTest {
 				section.setName("Name");
 				section.setDescription("oldDescription");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -754,7 +754,7 @@ public class AttributeTest extends WorkspaceTest {
 					fail();
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(2, operations.size());
@@ -765,7 +765,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -775,7 +775,7 @@ public class AttributeTest extends WorkspaceTest {
 					reverse.apply(getProject());
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
@@ -804,7 +804,7 @@ public class AttributeTest extends WorkspaceTest {
 				section.setName("Name");
 				section.setDescription("oldDescription");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -827,7 +827,7 @@ public class AttributeTest extends WorkspaceTest {
 
 				section.setDescription("desc 2");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(2, operations.size());
@@ -837,7 +837,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -847,7 +847,7 @@ public class AttributeTest extends WorkspaceTest {
 					reverse.apply(getProject());
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
@@ -877,7 +877,7 @@ public class AttributeTest extends WorkspaceTest {
 				useCase.setName("NameOfUseCase");
 				useCase.setDescription("DescriptionOfUseCase");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals("NameOfUseCase", useCase.getName());
 
@@ -890,7 +890,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		// now expecting only the create with folded in attributes
 		assertEquals(operations.size(), 1);
@@ -908,7 +908,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				op.reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), originalProject));
 
@@ -917,7 +917,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				op.reverse().reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
@@ -954,7 +954,7 @@ public class AttributeTest extends WorkspaceTest {
 				useCase2.setName("NameOfUseCase2");
 				useCase2.setDescription("DescriptionOfUseCase2");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals("NameOfUseCase", useCase.getName());
 		assertEquals("NameOfUseCase2", useCase2.getName());
@@ -967,7 +967,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		// now expecting only the creates with folded in attributes
 		assertEquals(2, operations.size());
@@ -993,7 +993,7 @@ public class AttributeTest extends WorkspaceTest {
 				op2.reverse().apply(getProject());
 				op.reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), originalProject));
 
@@ -1038,7 +1038,7 @@ public class AttributeTest extends WorkspaceTest {
 
 				section.setDescription("desc 2");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -1055,7 +1055,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		// expect create, the composite and 1 attribute op
 		assertEquals(3, operations.size());
@@ -1075,7 +1075,7 @@ public class AttributeTest extends WorkspaceTest {
 					reverse.apply(getProject());
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), originalProject));
 
@@ -1087,7 +1087,7 @@ public class AttributeTest extends WorkspaceTest {
 				operations.get(1).apply(getProject());
 				operations.get(2).apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
@@ -1114,7 +1114,7 @@ public class AttributeTest extends WorkspaceTest {
 				useCase.setDescription("originalDescription");
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		Project originalProject = ModelUtil.clone(getProject());
 
@@ -1125,7 +1125,7 @@ public class AttributeTest extends WorkspaceTest {
 				useCase.setDescription("DescriptionOfUseCase");
 				getProject().deleteModelElement(useCase);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -1137,7 +1137,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		// now expecting only the delete with folded in attributes
 		assertEquals(1, operations.size());
@@ -1156,7 +1156,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				op.reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), originalProject));
 
@@ -1165,7 +1165,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				op.reverse().reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
@@ -1203,7 +1203,7 @@ public class AttributeTest extends WorkspaceTest {
 				useCase2.setDescription("originalDescription2");
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		Project originalProject = ModelUtil.clone(getProject());
 
@@ -1222,14 +1222,14 @@ public class AttributeTest extends WorkspaceTest {
 
 				getProject().deleteModelElement(useCase);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				getProject().deleteModelElement(useCase2);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -1241,7 +1241,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		// now expecting only the deletes with folded in attributes
 		assertEquals(2, operations.size());
@@ -1266,7 +1266,7 @@ public class AttributeTest extends WorkspaceTest {
 				op2.reverse().apply(getProject());
 				op.reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), originalProject));
 
@@ -1360,7 +1360,7 @@ public class AttributeTest extends WorkspaceTest {
 				section.setName("originalName");
 				section.setDescription("originalDescription");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		Project originalProject = ModelUtil.clone(getProject());
 
@@ -1385,7 +1385,7 @@ public class AttributeTest extends WorkspaceTest {
 
 				getProject().deleteModelElement(section);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -1401,7 +1401,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		// expect 1 attribute op, the composite and the delete with folded in attribute
 		assertEquals(3, operations.size());
@@ -1428,7 +1428,7 @@ public class AttributeTest extends WorkspaceTest {
 					reverse.apply(getProject());
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), originalProject));
 
@@ -1440,7 +1440,7 @@ public class AttributeTest extends WorkspaceTest {
 				operations.get(1).apply(getProject());
 				operations.get(2).apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
@@ -1473,7 +1473,7 @@ public class AttributeTest extends WorkspaceTest {
 				useCase.setName("newName");
 				getProject().deleteModelElement(useCase);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		// expect create, 2 attribute ops, delete
@@ -1484,7 +1484,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		// expect attributes folding into create, and create and delete removed,
 		// as they would be directly adjacent to each other
@@ -1515,7 +1515,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(useCase2);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		Project originalProject = ModelUtil.clone(getProject());
 
@@ -1530,7 +1530,7 @@ public class AttributeTest extends WorkspaceTest {
 				useCase.getExtendedUseCases().add(useCase2);
 				getProject().deleteModelElement(useCase);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		// expect create, 1 attribute ops, 1 multiref op, the delete
@@ -1541,7 +1541,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		// expect attributes folding into create, the multiref and delete remain
 		assertEquals(operations.size(), 3);
@@ -1561,7 +1561,7 @@ public class AttributeTest extends WorkspaceTest {
 				operations.get(1).reverse().apply(getProject());
 				operations.get(0).reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), originalProject));
 

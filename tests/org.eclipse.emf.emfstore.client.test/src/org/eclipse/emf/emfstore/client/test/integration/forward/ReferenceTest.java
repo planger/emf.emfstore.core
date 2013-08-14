@@ -45,7 +45,7 @@ public class ReferenceTest extends IntegrationTest {
 
 			}
 
-		}.run(false);
+		}.run(getTestProject(), false);
 
 		commitChanges();
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
@@ -72,7 +72,7 @@ public class ReferenceTest extends IntegrationTest {
 				testHelper.doContainmentRefTransitiveChange();
 			}
 
-		}.run(false);
+		}.run(getTestProject(), false);
 
 		commitChanges();
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
@@ -93,7 +93,7 @@ public class ReferenceTest extends IntegrationTest {
 			protected void doRun() {
 				testHelper.doMultiReferenceMove();
 			}
-		}.run(false);
+		}.run(getTestProject(), false);
 
 		commitChanges();
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
@@ -117,7 +117,7 @@ public class ReferenceTest extends IntegrationTest {
 				testHelper.doNonContainmentReferenceAdd();
 			}
 
-		}.run(false);
+		}.run(getTestProject(), false);
 
 		commitChanges();
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
@@ -140,7 +140,7 @@ public class ReferenceTest extends IntegrationTest {
 			protected void doRun() {
 				testHelper.doNonContainmentReferenceRemove();
 			}
-		}.run(false);
+		}.run(getTestProject(), false);
 
 		commitChanges();
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
@@ -163,7 +163,7 @@ public class ReferenceTest extends IntegrationTest {
 			protected void doRun() {
 				testHelper.doContainmentReferenceMove();
 			}
-		}.run(false);
+		}.run(getTestProject(), false);
 
 		commitChanges();
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));

@@ -52,7 +52,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				element.getStrings().add("oldValue");
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(element.getStrings().size() == 1);
 
@@ -61,7 +61,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 			protected void doRun() {
 				element.getStrings().set(0, "settedValue");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(element.getStrings().size() == 1);
 		assertTrue(element.getStrings().get(0).equals("settedValue"));
@@ -94,7 +94,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertTrue(testElement.getStrings().size() == 1);
 				assertTrue(testElement.getStrings().get(0).equals("inserted"));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 	}
 
 	/**
@@ -121,7 +121,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertTrue(testElement.getStrings().size() == 1);
 				assertTrue(testElement.getStrings().get(0).equals("oldValue"));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 	}
 
 	/**
@@ -150,7 +150,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertTrue(testElement.getStrings().get(1).equals("inserted"));
 				assertTrue(testElement.getStrings().get(2).equals("third"));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 	}
 
 	/**
@@ -166,7 +166,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(element.getStrings().size() == 1);
 		assertTrue(element.getStrings().get(0).equals("oldValue"));
@@ -179,7 +179,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertTrue(element.getStrings().size() == 1);
 				assertTrue(element.getStrings().get(0).equals("newValue"));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -187,7 +187,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				AbstractOperation operation = getProjectSpace().getOperations().get(0).reverse();
 				operation.apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(element.getStrings().size() == 1);
 		assertTrue(element.getStrings().get(0).equals("oldValue"));
@@ -207,7 +207,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertEquals(3, fan.getEMails().size());
 				assertTrue(fan.isSetEMails());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -219,7 +219,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertEquals(0, fan.getEMails().size());
 				assertTrue(!fan.isSetEMails());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -242,7 +242,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				multAttOp.apply(secondProject);
 				multAttSetOp.apply(secondProject);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 		assertEquals(0, ((Fan) secondProject.getModelElements().get(0)).getEMails().size());
 		assertTrue(!((Fan) secondProject.getModelElements().get(0)).isSetEMails());
 		assertTrue(ModelUtil.areEqual(getProject(), secondProject));
@@ -263,7 +263,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertEquals(3, fan.getEMails().size());
 				assertTrue(fan.isSetEMails());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -275,7 +275,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertEquals(0, fan.getEMails().size());
 				assertTrue(!fan.isSetEMails());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -299,7 +299,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				multAttOp.reverse().apply(getProject());
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(3, fan.getEMails().size());
 		assertTrue(fan.isSetEMails());
@@ -320,7 +320,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertEquals(3, fan.getEMails().size());
 				assertTrue(fan.isSetEMails());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		clearOperations();
 
@@ -331,7 +331,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertEquals(0, fan.getEMails().size());
 				assertTrue(!fan.isSetEMails());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final Project secondProject = ModelUtil.clone(getProject());
 
@@ -356,7 +356,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				multAttOp.reverse().reverse().apply(getProject());
 				multAttSetOp.reverse().reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(0, fan.getEMails().size());
 		assertTrue(!fan.isSetEMails());
@@ -374,7 +374,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertEquals(0, fan.getEMails().size());
 				assertTrue(!fan.isSetEMails());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -388,7 +388,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertEquals(3, fan.getEMails().size());
 				assertTrue(fan.isSetEMails());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -413,7 +413,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				multAttOp2.reverse().apply(getProject());
 				multAttOp1.reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(0, fan.getEMails().size());
 		assertTrue(!fan.isSetEMails());
@@ -431,7 +431,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertEquals(0, fan.getEMails().size());
 				assertTrue(!fan.isSetEMails());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -443,7 +443,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertEquals(0, fan.getEMails().size());
 				assertTrue(fan.isSetEMails());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -459,7 +459,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertEquals(0, fan.getEMails().size());
 				assertTrue(fan.isSetEMails());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), secondProject));
 	}

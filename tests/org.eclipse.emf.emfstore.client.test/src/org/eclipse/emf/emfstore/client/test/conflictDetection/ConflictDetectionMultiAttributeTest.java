@@ -44,7 +44,7 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 				testElement.getStrings().remove(0);
 				return testElement;
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		AbstractOperation removeOp = new EMFStoreCommandWithResult<AbstractOperation>() {
 
@@ -53,14 +53,14 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 				AbstractOperation removeOp = checkAndGetOperation(MultiAttributeOperation.class);
 				return removeOp;
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommandWithParameter<TestElement>() {
 			@Override
 			public void doRun(TestElement testElement) {
 				testElement.getStrings().add(1, "inserted");
 			}
-		}.run(testElement, false);
+		}.run(testElement, getProject(), false);
 
 		AbstractOperation addOp = new EMFStoreCommandWithResult<AbstractOperation>() {
 
@@ -69,7 +69,7 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 				AbstractOperation addOp = checkAndGetOperation(MultiAttributeOperation.class);
 				return addOp;
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(true, doConflict(removeOp, addOp));
 		assertEquals(true, doConflict(addOp, removeOp));
@@ -89,7 +89,7 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().add(0, "inserted1");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		AbstractOperation add1 = myCheckAndGetOperation(MultiAttributeOperation.class);
 
@@ -99,7 +99,7 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().add(1, "inserted2");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		AbstractOperation add2 = myCheckAndGetOperation(MultiAttributeOperation.class);
 
@@ -121,7 +121,7 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().remove(2);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		AbstractOperation remove1 = myCheckAndGetOperation(MultiAttributeOperation.class);
 
@@ -130,7 +130,7 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().remove(1);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		AbstractOperation remove2 = myCheckAndGetOperation(MultiAttributeOperation.class);
 
@@ -152,7 +152,7 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().add(0, "inserted");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		AbstractOperation add = myCheckAndGetOperation(MultiAttributeOperation.class);
 
@@ -161,7 +161,7 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().move(1, 2);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		AbstractOperation move = myCheckAndGetOperation(MultiAttributeMoveOperation.class);
 
@@ -183,7 +183,7 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().move(2, 0);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		AbstractOperation move = myCheckAndGetOperation(MultiAttributeMoveOperation.class);
 
@@ -192,7 +192,7 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().remove(0);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		AbstractOperation add = myCheckAndGetOperation(MultiAttributeOperation.class);
 
@@ -221,7 +221,7 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 	// assertEquals(true, doConflict(move2, move1));
 	// assertEquals(true, doConflict(move1, move2));
 	// }
-	// }.run(false);
+	// }.run(getProject(), false);
 	// }
 
 	/**
@@ -239,7 +239,7 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().move(0, 1);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		AbstractOperation move1 = myCheckAndGetOperation(MultiAttributeMoveOperation.class);
 
@@ -249,7 +249,7 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().move(2, 3);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		AbstractOperation move2 = myCheckAndGetOperation(MultiAttributeMoveOperation.class);
 
@@ -270,7 +270,7 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().set(0, "set");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		AbstractOperation set = myCheckAndGetOperation(MultiAttributeSetOperation.class);
 
@@ -279,7 +279,7 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().add(1, "added");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		AbstractOperation add = myCheckAndGetOperation(MultiAttributeOperation.class);
 
@@ -301,7 +301,7 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().set(1, "set");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		AbstractOperation set = myCheckAndGetOperation(MultiAttributeSetOperation.class);
 
@@ -310,7 +310,7 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().add(0, "added");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		AbstractOperation add = myCheckAndGetOperation(MultiAttributeOperation.class);
 
@@ -332,7 +332,7 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().set(0, "set");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		AbstractOperation set = myCheckAndGetOperation(MultiAttributeSetOperation.class);
 
@@ -342,7 +342,7 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().remove(1);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		AbstractOperation remove = myCheckAndGetOperation(MultiAttributeOperation.class);
 
@@ -364,7 +364,7 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().set(1, "set");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		AbstractOperation set = myCheckAndGetOperation(MultiAttributeSetOperation.class);
 
@@ -373,7 +373,7 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().remove(0);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		AbstractOperation remove = myCheckAndGetOperation(MultiAttributeOperation.class);
 
@@ -395,7 +395,7 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().set(1, "set");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		AbstractOperation set = myCheckAndGetOperation(MultiAttributeSetOperation.class);
 
@@ -404,7 +404,7 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().move(0, 2);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		AbstractOperation move = myCheckAndGetOperation(MultiAttributeMoveOperation.class);
 
@@ -426,7 +426,7 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().set(1, "set");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		AbstractOperation set = myCheckAndGetOperation(MultiAttributeSetOperation.class);
 
@@ -435,7 +435,7 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().move(2, 3);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		AbstractOperation move = myCheckAndGetOperation(MultiAttributeMoveOperation.class);
 

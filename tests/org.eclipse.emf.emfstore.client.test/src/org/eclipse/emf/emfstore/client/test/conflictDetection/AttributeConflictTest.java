@@ -41,7 +41,7 @@ public class AttributeConflictTest extends ConflictDetectionTest {
 			protected void doRun() {
 				getProject().addModelElement(modelElement);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		String featureName = "same Feature";
 		AttributeOperation attributeOperation1 = OperationsFactory.eINSTANCE.createAttributeOperation();

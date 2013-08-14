@@ -47,7 +47,7 @@ public class CreateDeleteTest extends IntegrationTest {
 
 			}
 
-		}.run(false);
+		}.run(getTestProject(), false);
 
 		commitChanges();
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
@@ -75,7 +75,7 @@ public class CreateDeleteTest extends IntegrationTest {
 
 			}
 
-		}.run(false);
+		}.run(getTestProject(), false);
 
 		commitChanges();
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
@@ -102,7 +102,7 @@ public class CreateDeleteTest extends IntegrationTest {
 
 			}
 
-		}.run(false);
+		}.run(getTestProject(), false);
 
 		commitChanges();
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
@@ -126,7 +126,7 @@ public class CreateDeleteTest extends IntegrationTest {
 				testHelper.doCreateChangeRefDelete();
 			}
 
-		}.run(false);
+		}.run(getTestProject(), false);
 
 		commitChanges();
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
@@ -150,7 +150,7 @@ public class CreateDeleteTest extends IntegrationTest {
 				testHelper.doCreateDelete();
 			}
 
-		}.run(false);
+		}.run(getTestProject(), false);
 
 		commitChanges();
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
@@ -193,7 +193,7 @@ public class CreateDeleteTest extends IntegrationTest {
 
 			}
 
-		}.run(false);
+		}.run(getTestProject(), false);
 
 		commitChanges();
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));

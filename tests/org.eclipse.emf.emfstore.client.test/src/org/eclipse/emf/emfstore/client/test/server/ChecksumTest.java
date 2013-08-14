@@ -80,7 +80,7 @@ public class ChecksumTest extends CoreServerTest {
 				getProject().getModelElements().remove(attribute);
 				// getProjectSpace().getOperationManager().endCompositeOperation();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		RunESCommand.run(new Callable<Void>() {
 			public Void call() throws Exception {
@@ -89,7 +89,7 @@ public class ChecksumTest extends CoreServerTest {
 				// getProjectSpace().getOperationManager().endCompositeOperation();
 				return null;
 			}
-		});
+		}, getProject());
 
 		long checksum = ModelUtil.computeChecksum(getProject());
 
@@ -115,7 +115,7 @@ public class ChecksumTest extends CoreServerTest {
 				getProject().getModelElements().add(b);
 				getProject().getModelElements().add(a);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		long checksum = ModelUtil.computeChecksum(getProject());
 
@@ -138,7 +138,7 @@ public class ChecksumTest extends CoreServerTest {
 			protected void doRun() {
 				testElement.setName("A");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		long expectedChecksum = ModelUtil.computeChecksum(getProject());
 		Project clonedProject = ModelUtil.clone(getProject());
@@ -190,7 +190,7 @@ public class ChecksumTest extends CoreServerTest {
 				getProject().addModelElement(testElement);
 				testElement.setName("A");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		commitWithoutCommand(getProjectSpace());
 
@@ -204,7 +204,7 @@ public class ChecksumTest extends CoreServerTest {
 				testElement.setName("B");
 				checkedOutProjectSpace.getProject().addModelElement(testElement);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 		update(checkedOutProjectSpace);
 		commitWithoutCommand(checkedOutProjectSpace);
 
@@ -217,7 +217,7 @@ public class ChecksumTest extends CoreServerTest {
 			protected void doRun() {
 				testElement.setName("B");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		getProjectSpace().getOperationManager().stopChangeRecording();
 		testElement.setName("C");
@@ -248,7 +248,7 @@ public class ChecksumTest extends CoreServerTest {
 				getProject().addModelElement(testElement);
 				testElement.setName("A");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		getProjectSpace().getOperationManager().stopChangeRecording();
 		testElement.setName("B");
@@ -282,7 +282,7 @@ public class ChecksumTest extends CoreServerTest {
 				getProject().addModelElement(testElement);
 				testElement.setName("A");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		commitWithoutCommand(getProjectSpace());
 
@@ -292,7 +292,7 @@ public class ChecksumTest extends CoreServerTest {
 			protected void doRun() {
 				checkedOutProjectSpace.getProject().addModelElement(createTestElement("B"));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 		update(checkedOutProjectSpace);
 		commitWithoutCommand(checkedOutProjectSpace);
 
@@ -329,7 +329,7 @@ public class ChecksumTest extends CoreServerTest {
 				getProject().addModelElement(testElement);
 				testElement.setName("A");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		commitWithoutCommand(getProjectSpace());
 
@@ -338,7 +338,7 @@ public class ChecksumTest extends CoreServerTest {
 			protected void doRun() {
 				checkedOutProjectSpace.getProject().addModelElement(TestmodelFactory.eINSTANCE.createTestElement());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 		update(checkedOutProjectSpace);
 		commitWithoutCommand(checkedOutProjectSpace);
 
@@ -371,7 +371,7 @@ public class ChecksumTest extends CoreServerTest {
 				getProject().addModelElement(testElement);
 				testElement.setName("A");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		commitWithoutCommand(getProjectSpace());
 
@@ -380,7 +380,7 @@ public class ChecksumTest extends CoreServerTest {
 			protected void doRun() {
 				checkedOutProjectSpace.getProject().addModelElement(TestmodelFactory.eINSTANCE.createTestElement());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		update(checkedOutProjectSpace);
 		commitWithoutCommand(checkedOutProjectSpace);
@@ -390,7 +390,7 @@ public class ChecksumTest extends CoreServerTest {
 			protected void doRun() {
 				testElement.setName("B");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		getProjectSpace().getOperationManager().stopChangeRecording();
 		testElement.setName("C");

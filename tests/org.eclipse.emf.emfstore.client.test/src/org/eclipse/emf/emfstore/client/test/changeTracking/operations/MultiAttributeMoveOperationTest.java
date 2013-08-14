@@ -60,7 +60,7 @@ public class MultiAttributeMoveOperationTest extends WorkspaceTest {
 				assertTrue(testElement.getStrings().get(1).equals("first"));
 				assertTrue(testElement.getStrings().get(2).equals("second"));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class MultiAttributeMoveOperationTest extends WorkspaceTest {
 				getProject().addModelElement(testElementc13);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -106,7 +106,7 @@ public class MultiAttributeMoveOperationTest extends WorkspaceTest {
 				testElement13.getReferences().add(testElementc11);
 				testElement1.getContainedElements().addAll(list);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(true, getProject().contains(testElement1));
 		assertEquals(true, getProject().contains(testElement11));
@@ -147,7 +147,7 @@ public class MultiAttributeMoveOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(testElement1);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -232,7 +232,7 @@ public class MultiAttributeMoveOperationTest extends WorkspaceTest {
 						.get(operation.getModelElement().eContents().get(1).eContents().get(1)));
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 	}
 
@@ -256,7 +256,7 @@ public class MultiAttributeMoveOperationTest extends WorkspaceTest {
 				assertTrue(testElement.getStrings().get(1).equals("first"));
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(getProjectSpace().getOperations().size() == 1);
 		AbstractOperation tmp = getProjectSpace().getOperations().get(0);
@@ -291,7 +291,7 @@ public class MultiAttributeMoveOperationTest extends WorkspaceTest {
 				assertTrue(testElement.getStrings().get(0).equals("second"));
 				assertTrue(testElement.getStrings().get(1).equals("first"));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -302,6 +302,6 @@ public class MultiAttributeMoveOperationTest extends WorkspaceTest {
 				assertTrue(testElement.getStrings().get(0).equals("first"));
 				assertTrue(testElement.getStrings().get(1).equals("second"));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 	}
 }

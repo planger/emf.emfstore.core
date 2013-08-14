@@ -378,7 +378,7 @@ public class SetupHelper {
 				testProjectSpace = projectSpace;
 
 			}
-		}.run(false);
+		}.run(null, false);
 	}
 
 	/**
@@ -428,7 +428,7 @@ public class SetupHelper {
 				}
 			}
 
-		}.run(false);
+		}.run(null, false);
 	}
 
 	/**
@@ -449,7 +449,7 @@ public class SetupHelper {
 				}
 			}
 
-		}.run(false);
+		}.run(null, false);
 
 	}
 
@@ -597,7 +597,7 @@ public class SetupHelper {
 					Assert.fail();
 				}
 			}
-		}.run(false);
+		}.run(null, false);
 	}
 
 	/**
@@ -629,7 +629,7 @@ public class SetupHelper {
 				}
 				projectId = testProjectSpace.getProjectId();
 			}
-		}.run(false);
+		}.run(null, false);
 	}
 
 	/**
@@ -651,7 +651,7 @@ public class SetupHelper {
 				}
 
 			}
-		}.run(false);
+		}.run(null, false);
 	}
 
 	/**
@@ -700,7 +700,7 @@ public class SetupHelper {
 
 			}
 
-		}.run(false);
+		}.run(null, false);
 		return compareProject;
 	}
 
@@ -756,7 +756,7 @@ public class SetupHelper {
 					.createProjectId());
 				projectId = testProjectSpace.getProjectId();
 			}
-		}.run(false);
+		}.run(null, false);
 	}
 
 	/**

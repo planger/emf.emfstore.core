@@ -103,7 +103,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(useCase);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -146,7 +146,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(useCase);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		ESWorkspaceProviderImpl.getObserverBus().unregister(observer);
 
@@ -180,7 +180,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(useCase);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(true, getProject().contains(useCase));
 		assertEquals(getProject(), ModelUtil.getProject(useCase));
@@ -193,7 +193,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 				clearOperations();
 				useCase.getFunctionalRequirements().add(functionalRequirement);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(functionalRequirement, useCase.getFunctionalRequirements().get(0));
 		assertEquals(useCase, functionalRequirement.getUseCases().get(0));
@@ -242,7 +242,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 				getProject().addModelElement(useCase);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
 
@@ -251,7 +251,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().deleteModelElement(useCase);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getLocalChangePackage().getOperations();
 
@@ -298,7 +298,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 				assertEquals(getProject(), ModelUtil.getProject(useCase));
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
 
@@ -307,7 +307,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().deleteModelElement(useCase);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(false, getProject().contains(useCase));
 		// assertEquals(null, useCase.eContainer());
@@ -547,7 +547,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		ModelElementId useCaseId = getProject().getModelElementId(useCase);
 
@@ -556,7 +556,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().deleteModelElement(useCase);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(false, getProject().contains(useCase));
 		assertEquals(0, oldActor.getInitiatedUseCases().size());
@@ -690,7 +690,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				reverse.apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(true, getProject().contains(useCaseId));
 		assertEquals(true, getProject().contains(oldActor));
@@ -741,7 +741,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 						createLeafSection.getModelElements().add(createActionItem);
 					}
 				}
-			}.run(false);
+			}.run(getProject(), false);
 		}
 		assertEquals(230, getProjectSpace().getOperations().size());
 
@@ -775,7 +775,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		ModelElementId solutionId = ModelUtil.getProject(solution).getModelElementId(solution);
 
@@ -784,7 +784,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().deleteModelElement(solution);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(true, getProject().contains(issue));
 		assertEquals(false, getProject().contains(solution));
@@ -834,7 +834,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 				useCase.getIncludedUseCases().add(useCase2);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -849,7 +849,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 				assertEquals(2, operation.getSubOperations().size());
 				assertEquals(true, operation.getSubOperations().get(0) instanceof MultiReferenceOperation);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 	}
 
@@ -874,7 +874,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 
 				section.getModelElements().add(useCase);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(true, getProject().contains(useCase));
 		assertEquals(true, getProject().contains(section));
@@ -936,7 +936,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(clazz);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		((ProjectSpaceImpl) getProjectSpace()).saveProjectSpaceOnly();
 		ProjectSpace loadedProjectSpace = ModelUtil.loadEObjectFromResource(ModelPackage.eINSTANCE.getProjectSpace(),
@@ -963,7 +963,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 				getProject().addModelElement(attribute);
 				getProject().addModelElement(clazz);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(2, getProject().getModelElements().size()); // clazz, attribute
 		assertEquals(attribute, getProject().getModelElements().get(0));
@@ -976,7 +976,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		// delete one ModelElement
 		new EMFStoreCommand() {
@@ -984,7 +984,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				EcoreUtil.delete(attribute);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(1, operations.size()); // one delete operation
@@ -1037,7 +1037,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(meeting);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(1, operations.size());
@@ -1066,7 +1066,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(compMeetingSection);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		ModelElementId compMeetingSectionId = getProject().getModelElementId(compMeetingSection);
 
@@ -1091,7 +1091,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 				testElement.getReferences().add(testElement2);
 				parentTestElement.getContainedElements().add(testElement);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(true, getProject().contains(parentTestElement));
 		assertEquals(getProject(), ModelUtil.getProject(parentTestElement));
@@ -1105,7 +1105,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 
@@ -1113,7 +1113,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				parentTestElement.getContainedElements().add(testElement2);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(true, getProject().contains(parentTestElement));
 		assertEquals(getProject(), ModelUtil.getProject(parentTestElement));
@@ -1177,7 +1177,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 				newChildElement2.getReferences().add(testElement);
 				testElement.getReferences().add(newChildElement3);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(true, getProject().contains(parentTestElement));
 		assertEquals(getProject(), ModelUtil.getProject(parentTestElement));
@@ -1202,14 +1202,14 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				parentTestElement.getContainedElements().add(newTestElement);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(true, getProject().contains(parentTestElement));
 		assertEquals(getProject(), ModelUtil.getProject(parentTestElement));
@@ -1288,7 +1288,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 				testElement.getContainedElements().add(subTestElement);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		ModelElementId parentElementId = getProject().getModelElementId(parentTestElement);
 		ModelElementId elementId = getProject().getModelElementId(testElement);
@@ -1320,7 +1320,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 				testElement.getContainedElements().clear();
 				parentTestElement.getContainedElements().clear();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(4, operations.size());
@@ -1331,7 +1331,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				getProjectSpace().revert();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(1, getProject().getModelElements().size());
 		assertEquals(parentTestElement, getProject().getModelElements().get(0));
@@ -1368,7 +1368,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 				testElement.getContainedElements().add(subTestElement);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		ModelElementId parentElementId = getProject().getModelElementId(parentTestElement);
 		ModelElementId elementId = getProject().getModelElementId(testElement);
@@ -1400,7 +1400,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 				parentTestElement.getContainedElements().clear();
 				testElement.getContainedElements().clear();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 
@@ -1408,7 +1408,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				getProjectSpace().revert();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(1, getProject().getModelElements().size());
 		assertEquals(parentTestElement, getProject().getModelElements().get(0));
@@ -1440,7 +1440,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(useCase);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(1, operations.size());
@@ -1457,7 +1457,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				createDeleteOperation.reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertNull(useCase.eContainer());
 		assertNull(((IdEObjectCollectionImpl) getProject()).getDeletedModelElement(useCaseId));
@@ -1487,7 +1487,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 				assertEquals(getProject(), ModelUtil.getProject(useCase));
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
 		assertNotNull(useCaseId);
@@ -1497,7 +1497,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().deleteModelElement(useCase);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -1513,7 +1513,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				createDeleteOperation.reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		EObject modelElement = getProject().getModelElement(useCaseId);
 		ModelElementId modelElementId = getProject().getModelElementId(modelElement);
@@ -1543,7 +1543,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 				testElement.getElementMap().put(keyRefeferenceTestElement, referenceTestElement);
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(getProject().contains(testElement));
 		assertTrue(getProject().contains(secondTestElement));
@@ -1556,7 +1556,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().deleteModelElement(secondTestElement);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(getProject().contains(testElement));
 		assertFalse(getProject().contains(secondTestElement));
@@ -1569,7 +1569,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 				// delete value reference
 				getProject().deleteModelElement(referenceTestElement);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertNull(testElement.getElementMap().get(referenceTestElement));
 		assertTrue(testElement.getElementMap().containsKey(keyRefeferenceTestElement));
@@ -1580,7 +1580,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 				// delete key reference
 				getProject().deleteModelElement(keyRefeferenceTestElement);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertFalse(testElement.getElementMap().containsKey(keyRefeferenceTestElement));
 
@@ -1589,7 +1589,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().deleteModelElement(testElement);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertFalse(getProject().contains(testElement));
 		assertTrue(getProject().contains(parentTestElement));
@@ -1616,7 +1616,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 				testElement.getStringToElementMap().put("referencedTestElement", referenceTestElement);
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(getProject().contains(testElement));
 		assertTrue(getProject().contains(secondTestElement));
@@ -1628,7 +1628,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().deleteModelElement(secondTestElement);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(getProject().contains(testElement));
 		assertFalse(getProject().contains(secondTestElement));
@@ -1642,7 +1642,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 				// delete value reference
 				getProject().deleteModelElement(referenceTestElement);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertNull(testElement.getStringToElementMap().get("referencedTestElement"));
 		assertTrue(testElement.getStringToElementMap().containsKey("referencedTestElement"));
@@ -1652,7 +1652,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().deleteModelElement(testElement);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertFalse(getProject().contains(testElement));
 		assertTrue(getProject().contains(parentTestElement));
@@ -1678,7 +1678,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 				testElement.getElementToStringMap().put(referenceKeyTestElement, "referencedTestElement");
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(getProject().contains(testElement));
 		assertTrue(getProject().contains(secondTestElement));
@@ -1692,7 +1692,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 				getProject().deleteModelElement(secondTestElement);
 				getProject().deleteModelElement(referenceKeyTestElement);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertFalse(getProject().contains(referenceKeyTestElement));
 		assertFalse(getProject().contains(secondTestElement));
@@ -1713,7 +1713,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 				testElement.getStringToStringMap().put("Hello", "Hallo");
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(getProject().contains(testElement));
 		assertEquals(testElement.getStringToStringMap().get("Day"), "Tag");
@@ -1724,7 +1724,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().deleteModelElement(testElement);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 		assertFalse(getProject().contains(testElement));
 	}
 
@@ -1764,7 +1764,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 				assertEquals(testElement1, testElement2.getReference());
 				return null;
 			}
-		});
+		}, getProject());
 	}
 
 	@Test
@@ -1812,7 +1812,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 
 				return null;
 			}
-		});
+		}, getProject());
 	}
 
 	@Test
@@ -1832,7 +1832,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 				referencedTestElement.setReference(testElement2);
 				return null;
 			}
-		});
+		}, getProject());
 
 		assertTrue(getProject().contains(testElement1));
 		assertTrue(getProject().contains(testElement2));
@@ -1864,7 +1864,7 @@ public class CreateDeleteOperationTest extends WorkspaceTest {
 				getProject().addModelElement(testElement2);
 				return null;
 			}
-		});
+		}, getProject());
 
 		assertTrue(getProject().contains(testElement1));
 		assertTrue(getProject().contains(testElement2));

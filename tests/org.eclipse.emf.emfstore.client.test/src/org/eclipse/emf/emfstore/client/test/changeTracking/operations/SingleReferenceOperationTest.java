@@ -85,7 +85,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				assertEquals(1, initiatedUseCases.size());
 				assertEquals(useCase, initiatedUseCases.get(0));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -208,7 +208,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				assertEquals(1, initiatedUseCases.size());
 				assertEquals(useCase, initiatedUseCases.get(0));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -253,7 +253,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				reversedSingleReferenceOperation.apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(oldActor, useCase.getInitiatingActor());
 
@@ -297,7 +297,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				clearOperations();
 				useCase.setLeafSection(section);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		// composite operation containing a multiref operation and a singleref operation expected
@@ -310,7 +310,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				AbstractOperation reverse = operations.get(0).reverse();
 				reverse.apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 	}
@@ -349,7 +349,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				assertEquals(proposal, newIssue.getProposals().get(0));
 				assertEquals(newIssue, proposal.getIssue());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -424,7 +424,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				proposal.setIssue(issue);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(1, issue.getProposals().size());
 		assertEquals(proposal, issue.getProposals().get(0));
@@ -442,7 +442,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				proposal.setIssue(null);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(true, getProject().contains(issue));
 		assertEquals(false, getProject().contains(proposal));
@@ -501,7 +501,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				fan.setFavouritePlayer(favPlayer);
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(favPlayer, fan.getFavouritePlayer());
 		assertEquals(true, fan.isSetFavouritePlayer());
@@ -514,7 +514,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				fan.unsetFavouritePlayer();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertFalse(favPlayer.equals(fan.getFavouritePlayer()));
 		assertEquals(null, fan.getFavouritePlayer());
@@ -551,7 +551,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				fan.setFavouritePlayer(favPlayer);
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(favPlayer, fan.getFavouritePlayer());
 		assertEquals(true, fan.isSetFavouritePlayer());
@@ -564,7 +564,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				fan.unsetFavouritePlayer();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertFalse(favPlayer.equals(fan.getFavouritePlayer()));
 		assertEquals(null, fan.getFavouritePlayer());
@@ -588,7 +588,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				singleRefOp.reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(favPlayer, fan.getFavouritePlayer());
 		assertEquals(true, fan.isSetFavouritePlayer());
@@ -609,7 +609,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				fan.setFavouritePlayer(favPlayer);
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(favPlayer, fan.getFavouritePlayer());
 		assertEquals(true, fan.isSetFavouritePlayer());
@@ -621,7 +621,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				fan.unsetFavouritePlayer();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertFalse(favPlayer.equals(fan.getFavouritePlayer()));
 		assertEquals(null, fan.getFavouritePlayer());
@@ -646,7 +646,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				singleRefOp.reverse().reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertFalse(favPlayer.equals(fan.getFavouritePlayer()));
 		assertEquals(null, fan.getFavouritePlayer());
@@ -666,7 +666,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				getProject().addModelElement(fan);
 				getProject().addModelElement(favPlayer);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(false, fan.isSetFavouritePlayer());
 
@@ -678,7 +678,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				fan.setFavouritePlayer(favPlayer);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(favPlayer.equals(fan.getFavouritePlayer()));
 		assertEquals(favPlayer, fan.getFavouritePlayer());
@@ -701,7 +701,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				singleRefOp.reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(null, fan.getFavouritePlayer());
 		assertEquals(false, fan.isSetFavouritePlayer());
@@ -722,7 +722,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				fan.setFavouriteMerchandise(merch);
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(merch, fan.getFavouriteMerchandise());
 		assertEquals(true, fan.isSetFavouriteMerchandise());
@@ -735,7 +735,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				fan.unsetFavouriteMerchandise();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertFalse(merch.equals(fan.getFavouriteMerchandise()));
 		assertEquals(null, fan.getFavouriteMerchandise());
@@ -766,7 +766,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				fan.setFavouriteMerchandise(merch);
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(merch, fan.getFavouriteMerchandise());
 		assertEquals(true, fan.isSetFavouriteMerchandise());
@@ -778,7 +778,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				fan.unsetFavouriteMerchandise();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertFalse(merch.equals(fan.getFavouriteMerchandise()));
 		assertEquals(null, fan.getFavouriteMerchandise());
@@ -797,7 +797,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				creaDelOp.reverse().reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertFalse(merch.equals(fan.getFavouriteMerchandise()));
 		assertEquals(null, fan.getFavouriteMerchandise());
@@ -818,7 +818,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				fan.setFavouriteMerchandise(merch);
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(merch, fan.getFavouriteMerchandise());
 		assertEquals(true, fan.isSetFavouriteMerchandise());
@@ -831,7 +831,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				fan.unsetFavouriteMerchandise();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertFalse(merch.equals(fan.getFavouriteMerchandise()));
 		assertEquals(null, fan.getFavouriteMerchandise());
@@ -849,7 +849,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				creaDelOp.reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(merch.getName(), fan.getFavouriteMerchandise().getName());
 		assertEquals(merch.getPrice(), fan.getFavouriteMerchandise().getPrice());
@@ -871,7 +871,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				assertEquals(null, fan.getFavouriteMerchandise());
 				assertEquals(false, fan.isSetFavouriteMerchandise());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		clearOperations();
 		Project secondProject = ModelUtil.clone(getProject());
@@ -883,7 +883,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				assertEquals(merch, fan.getFavouriteMerchandise());
 				assertEquals(true, fan.isSetFavouriteMerchandise());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -902,7 +902,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				singleRefOp.reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(null, fan.getFavouriteMerchandise());
 		assertEquals(false, fan.isSetFavouriteMerchandise());
@@ -920,7 +920,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				assertEquals(null, fan.getFavouritePlayer());
 				assertTrue(!fan.isSetFavouritePlayer());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -932,7 +932,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				assertEquals(null, fan.getFavouritePlayer());
 				assertTrue(fan.isSetFavouritePlayer());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -946,7 +946,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				singleRefOp.apply(secondProject);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), secondProject));
 	}

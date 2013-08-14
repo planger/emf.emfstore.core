@@ -35,14 +35,14 @@ public class MultiReferenceContainmentMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent).getContainedElements().add(mc.getMyItem(child));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mc.getTheirItem(parent2).getContainedElements().add(mc.getTheirItem(child));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(MultiReferenceConflict.class)
 			// My
@@ -63,14 +63,14 @@ public class MultiReferenceContainmentMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent).getContainedElements().add(mc.getMyItem(child));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mc.getTheirItem(parent).getContainedElements().add(mc.getTheirItem(child));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(MultiReferenceConflict.class);
 	}
@@ -89,7 +89,7 @@ public class MultiReferenceContainmentMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent).getContainedElements().addAll(asList(mc.getMyItem(child), mc.getMyItem(child2)));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -97,7 +97,7 @@ public class MultiReferenceContainmentMergeTest extends MergeTest {
 				mc.getTheirItem(parent2).getContainedElements()
 					.addAll(asList(mc.getTheirItem(child), mc.getTheirItem(child2)));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(MultiReferenceConflict.class)
 			// My
@@ -119,7 +119,7 @@ public class MultiReferenceContainmentMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent).getContainedElements().addAll(asList(mc.getMyItem(child), mc.getMyItem(child2)));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -127,7 +127,7 @@ public class MultiReferenceContainmentMergeTest extends MergeTest {
 				mc.getTheirItem(parent).getContainedElements()
 					.addAll(asList(mc.getTheirItem(child), mc.getTheirItem(child2)));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(MultiReferenceConflict.class);
 	}
@@ -146,7 +146,7 @@ public class MultiReferenceContainmentMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent).getContainedElements().add(mc.getMyItem(child));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -155,7 +155,7 @@ public class MultiReferenceContainmentMergeTest extends MergeTest {
 				mc.getTheirItem(parent2).getContainedElements().add(mc.getTheirItem(child));
 				mc.getTheirItem(parent2).getContainedElements().remove(mc.getTheirItem(child));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(DeletionConflict.class)
 			// My
@@ -179,14 +179,14 @@ public class MultiReferenceContainmentMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent).getContainedElements().add(mc.getMyItem(child));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mc.getTheirItem(parent2).getContainedElements().set(0, mc.getTheirItem(child));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(DeletionConflict.class)
 			// My
@@ -211,21 +211,21 @@ public class MultiReferenceContainmentMergeTest extends MergeTest {
 				mc.getMyItem(parent).setContainedElement(mc.getMyItem(decoy));
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mc.getMyItem(parent).getContainedElements().add(mc.getMyItem(child));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mc.getTheirItem(parent).getContainedElements().set(0, mc.getTheirItem(child));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(DeletionConflict.class);
 	}
@@ -247,14 +247,14 @@ public class MultiReferenceContainmentMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent).getContainedElements().set(0, mc.getMyItem(child));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mc.getTheirItem(parent2).getContainedElements().set(0, mc.getTheirItem(child));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(DeletionConflict.class)
 			// My
@@ -277,14 +277,14 @@ public class MultiReferenceContainmentMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent).getContainedElements().set(0, mc.getMyItem(child));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mc.getTheirItem(parent).getContainedElements().set(0, mc.getTheirItem(child));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		// false negative
 		mc.hasConflict(DeletionConflict.class, 1);

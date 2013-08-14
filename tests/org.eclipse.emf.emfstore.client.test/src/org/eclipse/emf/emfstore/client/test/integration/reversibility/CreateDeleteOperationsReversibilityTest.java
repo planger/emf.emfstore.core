@@ -46,7 +46,7 @@ public class CreateDeleteOperationsReversibilityTest extends OperationsReversibi
 				getTestProjectSpace().revert();
 			}
 
-		}.run(false);
+		}.run(getTestProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -54,7 +54,7 @@ public class CreateDeleteOperationsReversibilityTest extends OperationsReversibi
 				getTestProjectSpace().revert();
 			}
 
-		}.run(false);
+		}.run(getTestProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
 	}
@@ -79,7 +79,7 @@ public class CreateDeleteOperationsReversibilityTest extends OperationsReversibi
 				getTestProjectSpace().revert();
 			}
 
-		}.run(false);
+		}.run(getTestProject(), false);
 
 		new EMFStoreCommand() {
 
@@ -88,7 +88,7 @@ public class CreateDeleteOperationsReversibilityTest extends OperationsReversibi
 				getTestProjectSpace().revert();
 			}
 
-		}.run(false);
+		}.run(getTestProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
 	}
@@ -111,7 +111,7 @@ public class CreateDeleteOperationsReversibilityTest extends OperationsReversibi
 				getTestProjectSpace().revert();
 			}
 
-		}.run(false);
+		}.run(getTestProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
 	}
@@ -134,7 +134,7 @@ public class CreateDeleteOperationsReversibilityTest extends OperationsReversibi
 				getTestProjectSpace().revert();
 			}
 
-		}.run(false);
+		}.run(getTestProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
 	}

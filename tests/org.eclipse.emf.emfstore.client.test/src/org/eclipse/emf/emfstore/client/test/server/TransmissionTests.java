@@ -72,7 +72,7 @@ public abstract class TransmissionTests extends ServerTests {
 					throw new RuntimeException(e);
 				}
 			}
-		}.run(false);
+		}.run(null, false);
 
 	}
 

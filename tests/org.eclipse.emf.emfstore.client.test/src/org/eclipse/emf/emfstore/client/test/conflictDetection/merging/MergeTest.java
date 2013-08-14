@@ -100,7 +100,7 @@ public class MergeTest extends ConflictDetectionTest {
 						getProject().addModelElement(obj);
 					}
 				}
-			}.run(false);
+			}.run(getProject(), false);
 		}
 
 		public void addTheirs(final EObject... objs) {
@@ -111,7 +111,7 @@ public class MergeTest extends ConflictDetectionTest {
 						getTheirProject().addModelElement(obj);
 					}
 				}
-			}.run(false);
+			}.run(getProject(), false);
 		}
 
 		@SuppressWarnings("unchecked")
@@ -146,7 +146,7 @@ public class MergeTest extends ConflictDetectionTest {
 						clearOperations();
 						theirProjectSpace = cloneProjectSpace(getProjectSpace());
 					}
-				}.run(false);
+				}.run(getProject(), false);
 			}
 		}
 

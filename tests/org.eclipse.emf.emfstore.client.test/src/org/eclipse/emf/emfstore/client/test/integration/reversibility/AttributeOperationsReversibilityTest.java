@@ -44,7 +44,7 @@ public class AttributeOperationsReversibilityTest extends OperationsReversibilit
 				testHelper.doMultiAttributeMove();
 				getTestProjectSpace().revert();
 			}
-		}.run(false);
+		}.run(getTestProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
 	}
@@ -67,7 +67,7 @@ public class AttributeOperationsReversibilityTest extends OperationsReversibilit
 				testHelper.doChangeAttribute();
 			}
 
-		}.run(false);
+		}.run(getTestProject(), false);
 
 		new EMFStoreCommand() {
 
@@ -75,7 +75,7 @@ public class AttributeOperationsReversibilityTest extends OperationsReversibilit
 			protected void doRun() {
 				getTestProjectSpace().revert();
 			}
-		}.run(false);
+		}.run(getTestProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
 
@@ -97,7 +97,7 @@ public class AttributeOperationsReversibilityTest extends OperationsReversibilit
 			protected void doRun() {
 				testHelper.doAttributeTransitiveChange();
 			}
-		}.run(false);
+		}.run(getTestProject(), false);
 
 		new EMFStoreCommand() {
 
@@ -105,7 +105,7 @@ public class AttributeOperationsReversibilityTest extends OperationsReversibilit
 			protected void doRun() {
 				getTestProjectSpace().revert();
 			}
-		}.run(false);
+		}.run(getTestProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
 	}

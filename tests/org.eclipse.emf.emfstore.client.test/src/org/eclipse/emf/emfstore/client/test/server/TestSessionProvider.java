@@ -62,7 +62,7 @@ public final class TestSessionProvider extends ESAbstractSessionProvider {
 					Assert.fail();
 				}
 			}
-		}.run(false);
+		}.run(usersession, false);
 
 		return usersession;
 	}

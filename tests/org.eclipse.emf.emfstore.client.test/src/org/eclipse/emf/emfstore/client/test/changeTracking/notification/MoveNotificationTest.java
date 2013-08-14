@@ -72,7 +72,7 @@ public class MoveNotificationTest extends NotificationTest {
 				// now move actor 2 to top of the list
 				useCase.getParticipatingActors().move(0, actor2);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
 		List<NotificationInfo> rec = recording.asMutableList();
@@ -111,7 +111,7 @@ public class MoveNotificationTest extends NotificationTest {
 			protected void doRun() {
 				project.addModelElement(tournament1);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 		assertTrue(project.contains(tournament1));
 		assertTrue("unexpected notidications",
 			observer.resetNotifyCalled() && observer.resetAddedCalled() && !observer.resetRemovedCalled()
@@ -123,7 +123,7 @@ public class MoveNotificationTest extends NotificationTest {
 			protected void doRun() {
 				tournament1.getMatchups().add(matchup);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 		assertTrue(project.contains(matchup));
 		assertTrue(tournament1.getMatchups().contains(matchup));
 		assertTrue("unexpected notifications",
@@ -136,7 +136,7 @@ public class MoveNotificationTest extends NotificationTest {
 			protected void doRun() {
 				project.addModelElement(tournament2);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 		assertTrue(project.contains(tournament2));
 		assertTrue("unexpected notifications",
 			observer.resetNotifyCalled() && observer.resetAddedCalled() && !observer.resetRemovedCalled()
@@ -157,7 +157,7 @@ public class MoveNotificationTest extends NotificationTest {
 				tournament1.getMatchups().remove(matchup);
 				tournament2.getMatchups().add(matchup);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 		assertTrue(!tournament1.getMatchups().contains(matchup));
 		assertTrue(tournament2.getMatchups().contains(matchup));
 		assertTrue("unexpected notidications",
@@ -170,7 +170,7 @@ public class MoveNotificationTest extends NotificationTest {
 			protected void doRun() {
 				projectSpace.undoLastOperation();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 		assertTrue(!tournament1.getMatchups().contains(matchup));
 		assertTrue(!tournament2.getMatchups().contains(matchup));
 		assertTrue(project.contains(matchup));
@@ -184,7 +184,7 @@ public class MoveNotificationTest extends NotificationTest {
 			protected void doRun() {
 				projectSpace.undoLastOperation();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 		assertTrue(tournament1.getMatchups().contains(matchup));
 		assertTrue(!tournament2.getMatchups().contains(matchup));
 		assertTrue("unexpected notidications", observer.resetNotifyCalled() && !observer.resetAddedCalled()

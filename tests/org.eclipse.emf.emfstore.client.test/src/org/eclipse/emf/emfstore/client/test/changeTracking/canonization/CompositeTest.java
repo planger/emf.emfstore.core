@@ -56,7 +56,7 @@ public class CompositeTest extends WorkspaceTest {
 					fail();
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -67,7 +67,7 @@ public class CompositeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(operations.size(), 0);
 
@@ -89,7 +89,7 @@ public class CompositeTest extends WorkspaceTest {
 				getProject().addModelElement(useCase);
 				useCase.setName("oldName");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -116,7 +116,7 @@ public class CompositeTest extends WorkspaceTest {
 					fail();
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(operations.size(), 1);
@@ -126,7 +126,7 @@ public class CompositeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		// should not have left any operations, we were just resetting the name to its original value
 		assertEquals(operations.size(), 0);
@@ -150,7 +150,7 @@ public class CompositeTest extends WorkspaceTest {
 				useCase.setName("oldName");
 				useCase.setDescription("oldDescription");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -179,7 +179,7 @@ public class CompositeTest extends WorkspaceTest {
 					fail();
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(operations.size(), 1);
@@ -189,7 +189,7 @@ public class CompositeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		// should not have left any operations, we were just resetting the name to its original value
 		assertEquals(operations.size(), 0);
@@ -225,7 +225,7 @@ public class CompositeTest extends WorkspaceTest {
 					fail();
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(operations.size(), 1);
@@ -237,7 +237,7 @@ public class CompositeTest extends WorkspaceTest {
 				comp.setMainOperation(comp.getSubOperations().get(1)); // setName to from "A" to "B"
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		// the main one was a candidate for removal, but since it is the main one, it may not be touched
 		// in this case it will not even be modified
@@ -274,7 +274,7 @@ public class CompositeTest extends WorkspaceTest {
 					fail();
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(operations.size(), 1);
@@ -286,7 +286,7 @@ public class CompositeTest extends WorkspaceTest {
 				comp.setMainOperation(comp.getSubOperations().get(0)); // setName to from "oldName" to "A"
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		// the main one was a candidate for removal, but since it is the main one, it may not be removed
 		// it might have been altered though (newValue, oldValue etc., might have changed in the canonization
@@ -324,7 +324,7 @@ public class CompositeTest extends WorkspaceTest {
 					fail();
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(operations.size(), 1);
@@ -335,7 +335,7 @@ public class CompositeTest extends WorkspaceTest {
 				comp.setMainOperation(comp.getSubOperations().get(1)); // setName to from "A" to "B"
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 		// since this composite is a noop, everything should have been removed
 		assertEquals(comp.getSubOperations().size(), 0);
 	}

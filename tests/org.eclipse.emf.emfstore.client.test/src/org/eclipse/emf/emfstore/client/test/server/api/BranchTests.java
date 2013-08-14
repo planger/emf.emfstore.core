@@ -64,7 +64,7 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				testElement.setName("J?rgen");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		branch(ps, "b1");
 
@@ -119,7 +119,7 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				testElement.setName("J?rgen");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		commit(ps);
 
@@ -152,7 +152,7 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				testElement.setName("J?rgen");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		commit(ps);
 
@@ -179,7 +179,7 @@ public class BranchTests extends CoreServerTest {
 					throw new RuntimeException(e);
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(newVersion, ps.getBaseVersion());
 	}
@@ -195,7 +195,7 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				testElement.setName("J?rgen");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		PrimaryVersionSpec branch = branch(ps, "b1");
 
@@ -224,7 +224,7 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				testElement.setName("J?rgen");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		PrimaryVersionSpec branch = branch(ps, "b1");
 
@@ -260,7 +260,7 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				testElement.setName("J?rgen");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final PrimaryVersionSpec latestOnBranch = commit(ps);
 
@@ -297,7 +297,7 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				testElement.setName("J?rgen");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		commit(ps);
 
@@ -306,7 +306,7 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				testElement.setName("Tom");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final PrimaryVersionSpec latestOnBranch = commit(ps);
 
@@ -344,7 +344,7 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				branchElement.setName("J?rgen");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		PrimaryVersionSpec latestOnBranch = branch(branch, "b1");
 
@@ -353,7 +353,7 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				trunkElement.setName("G?nter");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		commit(trunk);
 
@@ -376,7 +376,7 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				branchElement.setName("Tom");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		latestOnBranch = commit(branch);
 
@@ -405,7 +405,7 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				branchElement.setName("J?rgen");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		PrimaryVersionSpec latestOnBranch = branch(branch, "b1");
 
@@ -414,7 +414,7 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				trunkElement.setName("G?nter");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		commit(trunk);
 
@@ -428,7 +428,7 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				branchElement.setName("Jerry");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		latestOnBranch = commit(branch);
 
@@ -437,7 +437,7 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				branchElement.setName("Tom");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		latestOnBranch = commit(branch);
 
@@ -468,7 +468,7 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				outterBranchElement.setName("J?rgen");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		PrimaryVersionSpec latestOnBranch = branch(outterBranch, "b2");
 
@@ -477,7 +477,7 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				innerBranchElement.setName("Jerry");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		commit(innerBranch);
 
@@ -500,7 +500,7 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				testElement.setName("J?rgen");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		PrimaryVersionSpec lastFromBranch = commit(ps);
 

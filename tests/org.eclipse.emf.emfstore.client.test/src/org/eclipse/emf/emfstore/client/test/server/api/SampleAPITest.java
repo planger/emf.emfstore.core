@@ -37,7 +37,7 @@ public class SampleAPITest extends CoreServerTest {
 					throw new RuntimeException(e);
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(1, getServerSpace().getProjects().size());
 		ProjectHistory projectHistory = getServerSpace().getProjects().get(0);
@@ -65,7 +65,7 @@ public class SampleAPITest extends CoreServerTest {
 				} catch (ESException e) {
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 	}
 }

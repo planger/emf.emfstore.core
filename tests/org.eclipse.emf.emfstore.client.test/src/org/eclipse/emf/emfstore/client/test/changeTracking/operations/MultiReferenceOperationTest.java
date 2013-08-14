@@ -70,7 +70,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				actor.getInitiatedUseCases().add(useCase);
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 		assertEquals(actor, useCase.getInitiatingActor());
 		EList<UseCase> initiatedUseCases = actor.getInitiatedUseCases();
 		assertEquals(1, initiatedUseCases.size());
@@ -148,7 +148,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertEquals(1, initiatedUseCases.size());
 				assertEquals(useCase, initiatedUseCases.get(0));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -194,7 +194,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				reversedMultiReferenceOperation.apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(0, actor.getInitiatedUseCases().size());
 		assertEquals(null, useCase.getInitiatingActor());
@@ -241,7 +241,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertEquals(useCase2, initiatedUseCases.get(1));
 				assertEquals(useCase3, initiatedUseCases.get(2));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -338,14 +338,14 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertEquals(useCase2, initiatedUseCases.get(1));
 				assertEquals(useCase3, initiatedUseCases.get(2));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				actor.getInitiatedUseCases().removeAll(useCases);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(null, useCase.getInitiatingActor());
 		assertEquals(null, useCase2.getInitiatingActor());
@@ -428,7 +428,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertEquals(3, fan.getVisitedTournaments().size());
 				assertTrue(fan.isSetVisitedTournaments());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -443,7 +443,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertTrue(getProject().getAllModelElements().contains(tournament2));
 				assertTrue(getProject().getAllModelElements().contains(tournament3));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -467,7 +467,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				operations.get(0).apply(secondProject);
 				operations.get(1).apply(secondProject);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(0, ((Fan) secondProject.getModelElements().get(0)).getVisitedTournaments().size());
 		assertTrue(!((Fan) secondProject.getModelElements().get(0)).isSetVisitedTournaments());
@@ -494,7 +494,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertEquals(3, fan.getVisitedTournaments().size());
 				assertTrue(fan.isSetVisitedTournaments());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -509,7 +509,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertTrue(getProject().getAllModelElements().contains(tournament2));
 				assertTrue(getProject().getAllModelElements().contains(tournament3));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -533,7 +533,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				mrop2.reverse().apply(getProject());
 				mrop1.reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(3, fan.getVisitedTournaments().size());
 		assertTrue(fan.getVisitedTournaments().contains(tournament1));
@@ -563,7 +563,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertEquals(3, fan.getVisitedTournaments().size());
 				assertTrue(fan.isSetVisitedTournaments());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		clearOperations();
 
@@ -577,7 +577,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertTrue(getProject().getAllModelElements().contains(tournament2));
 				assertTrue(getProject().getAllModelElements().contains(tournament3));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final Project secondProject = ModelUtil.clone(getProject());
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
@@ -602,7 +602,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				mrop1.reverse().reverse().apply(getProject());
 				mrop2.reverse().reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(0, fan.getVisitedTournaments().size());
 		assertTrue(!fan.isSetVisitedTournaments());
@@ -632,7 +632,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertTrue(getProject().getAllModelElements().contains(tournament2));
 				assertTrue(getProject().getAllModelElements().contains(tournament3));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -646,7 +646,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertEquals(3, fan.getVisitedTournaments().size());
 				assertTrue(fan.isSetVisitedTournaments());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -676,7 +676,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				mrop2.reverse().apply(getProject());
 				mrop1.reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(0, fan.getVisitedTournaments().size());
 		assertTrue(!fan.isSetVisitedTournaments());
@@ -703,7 +703,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertEquals(3, fan.getFanMerchandise().size());
 				assertTrue(fan.isSetFanMerchandise());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -718,7 +718,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertTrue(!getProject().getAllModelElements().contains(merch2));
 				assertTrue(!getProject().getAllModelElements().contains(merch3));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -757,7 +757,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				creaDelOp2.apply(secondProject);
 				creaDelOp3.apply(secondProject);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(0, ((Fan) secondProject.getModelElements().get(0)).getFanMerchandise().size());
 		assertTrue(!((Fan) secondProject.getModelElements().get(0)).isSetFanMerchandise());
@@ -784,7 +784,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertEquals(3, fan.getFanMerchandise().size());
 				assertTrue(fan.isSetFanMerchandise());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -799,7 +799,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertTrue(!getProject().getAllModelElements().contains(merch2));
 				assertTrue(!getProject().getAllModelElements().contains(merch3));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -838,7 +838,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				mrop2.reverse().apply(getProject());
 				mrop1.reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(3, fan.getFanMerchandise().size());
 		assertTrue(fan.isSetFanMerchandise());
@@ -865,7 +865,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertEquals(3, fan.getFanMerchandise().size());
 				assertTrue(fan.isSetFanMerchandise());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		clearOperations();
 
@@ -879,7 +879,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertTrue(!getProject().getAllModelElements().contains(merch2));
 				assertTrue(!getProject().getAllModelElements().contains(merch3));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final Project secondProject = ModelUtil.clone(getProject());
 
@@ -920,7 +920,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				creaDelOp2.reverse().reverse().apply(getProject());
 				creaDelOp3.reverse().reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(0, fan.getFanMerchandise().size());
 		assertTrue(!fan.isSetFanMerchandise());
@@ -950,7 +950,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertEquals(0, fan.getFanMerchandise().size());
 				assertTrue(!fan.isSetFanMerchandise());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -964,7 +964,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertEquals(3, fan.getFanMerchandise().size());
 				assertTrue(fan.isSetFanMerchandise());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -994,7 +994,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				mrop2.reverse().apply(getProject());
 				mrop1.reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(0, fan.getFanMerchandise().size());
 		assertTrue(!fan.isSetFanMerchandise());
@@ -1013,7 +1013,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertEquals(0, fan.getVisitedTournaments().size());
 				assertTrue(!fan.isSetVisitedTournaments());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -1025,7 +1025,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertEquals(0, fan.getVisitedTournaments().size());
 				assertTrue(fan.isSetVisitedTournaments());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -1039,7 +1039,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				multRefOp.apply(secondProject);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), secondProject));
 	}

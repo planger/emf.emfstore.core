@@ -45,14 +45,14 @@ public class MultiAttributeMergeTest extends MergeTest {
 			protected void doRun() {
 				mergeCase.getMyItem(element).getStrings().add(1, "X");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mergeCase.getTheirItem(element).getStrings().remove(1);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mergeCase.hasConflict(MultiAttributeConflict.class)
 			// My
@@ -75,14 +75,14 @@ public class MultiAttributeMergeTest extends MergeTest {
 			protected void doRun() {
 				mergeCase.getMyItem(element).getStrings().add("X");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mergeCase.getTheirItem(element).getStrings().remove(1);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mergeCase.hasConflict(MultiAttributeConflict.class)
 			// My
@@ -105,14 +105,14 @@ public class MultiAttributeMergeTest extends MergeTest {
 			protected void doRun() {
 				mergeCase.getMyItem(element).getStrings().addAll(1, Arrays.asList("x", "y"));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mergeCase.getTheirItem(element).getStrings().remove(1);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mergeCase.hasConflict(MultiAttributeConflict.class)
 			// My
@@ -135,14 +135,14 @@ public class MultiAttributeMergeTest extends MergeTest {
 			protected void doRun() {
 				mergeCase.getMyItem(element).getStrings().addAll(1, Arrays.asList("x", "y"));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mergeCase.getTheirItem(element).getStrings().removeAll(Arrays.asList("b", "c"));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mergeCase.hasConflict(MultiAttributeConflict.class)
 			// My
@@ -165,14 +165,14 @@ public class MultiAttributeMergeTest extends MergeTest {
 			protected void doRun() {
 				mergeCase.getMyItem(element).getStrings().remove(1);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mergeCase.getTheirItem(element).getStrings().remove(2);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mergeCase.hasConflict(MultiAttributeConflict.class)
 			// My
@@ -195,14 +195,14 @@ public class MultiAttributeMergeTest extends MergeTest {
 			protected void doRun() {
 				mergeCase.getMyItem(element).getStrings().remove(1);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mergeCase.getTheirItem(element).getStrings().remove(1);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		// TODO: false positive, fix later
 		mergeCase.hasConflict(MultiAttributeConflict.class);
@@ -222,14 +222,14 @@ public class MultiAttributeMergeTest extends MergeTest {
 			protected void doRun() {
 				mergeCase.getMyItem(element).getStrings().removeAll(Arrays.asList("a", "b"));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mergeCase.getTheirItem(element).getStrings().removeAll(Arrays.asList("b", "c"));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mergeCase.hasConflict(MultiAttributeConflict.class)
 			// My
@@ -255,14 +255,14 @@ public class MultiAttributeMergeTest extends MergeTest {
 			protected void doRun() {
 				mergeCase.getMyItem(element).getStrings().remove(1);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mergeCase.getTheirItem(element).getStrings().set(1, "X");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mergeCase.hasConflict(MultiAttributeSetConflict.class)
 			// My
@@ -288,14 +288,14 @@ public class MultiAttributeMergeTest extends MergeTest {
 			protected void doRun() {
 				mergeCase.getMyItem(element).getStrings().remove(0);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mergeCase.getTheirItem(element).getStrings().set(1, "X");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mergeCase.hasConflict(MultiAttributeSetConflict.class)
 			// My
@@ -321,14 +321,14 @@ public class MultiAttributeMergeTest extends MergeTest {
 			protected void doRun() {
 				mergeCase.getMyItem(element).getStrings().remove(1);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mergeCase.getTheirItem(element).getStrings().set(0, "X");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mergeCase.hasConflict(MultiAttributeSetConflict.class);
 	}
@@ -351,14 +351,14 @@ public class MultiAttributeMergeTest extends MergeTest {
 				mergeCase.getMyItem(element).getStrings().remove(1);
 				mergeCase.getMyItem(element).getStrings().remove(1);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mergeCase.getTheirItem(element).getStrings().set(1, "X");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mergeCase.hasConflict(MultiAttributeSetConflict.class)
 			// My first
@@ -387,14 +387,14 @@ public class MultiAttributeMergeTest extends MergeTest {
 			protected void doRun() {
 				mergeCase.getMyItem(element).getStrings().removeAll(asList("b", "c"));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mergeCase.getTheirItem(element).getStrings().set(1, "X");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mergeCase
 			.hasConflict(MultiAttributeSetConflict.class)
@@ -423,14 +423,14 @@ public class MultiAttributeMergeTest extends MergeTest {
 			protected void doRun() {
 				mergeCase.getMyItem(element).getStrings().removeAll(asList("a", "b"));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mergeCase.getTheirItem(element).getStrings().set(2, "X");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mergeCase.hasConflict(MultiAttributeSetConflict.class)
 			// My first
@@ -457,14 +457,14 @@ public class MultiAttributeMergeTest extends MergeTest {
 			protected void doRun() {
 				mergeCase.getMyItem(element).getStrings().removeAll(asList("b", "c"));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mergeCase.getTheirItem(element).getStrings().set(0, "X");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mergeCase.hasConflict(MultiAttributeSetConflict.class);
 	}
@@ -483,14 +483,14 @@ public class MultiAttributeMergeTest extends MergeTest {
 			protected void doRun() {
 				mergeCase.getMyItem(element).getStrings().set(1, "Y");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mergeCase.getTheirItem(element).getStrings().set(1, "X");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mergeCase.hasConflict(MultiAttributeSetSetConflict.class)
 			// My
@@ -513,14 +513,14 @@ public class MultiAttributeMergeTest extends MergeTest {
 			protected void doRun() {
 				mergeCase.getMyItem(element).getStrings().set(1, "Y");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mergeCase.getTheirItem(element).getStrings().set(2, "X");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mergeCase.hasConflict(MultiAttributeSetSetConflict.class);
 	}

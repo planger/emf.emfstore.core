@@ -73,7 +73,7 @@ public class CompositeOperationTest extends WorkspaceTest {
 
 				return section;
 			}
-		}.run(false);
+		}.run(getProject(), false);
 	}
 
 	/**
@@ -108,7 +108,7 @@ public class CompositeOperationTest extends WorkspaceTest {
 					fail();
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(true, getProject().contains(useCase));
 		assertEquals(getProject(), ModelUtil.getProject(useCase));
@@ -150,7 +150,7 @@ public class CompositeOperationTest extends WorkspaceTest {
 
 				return handle;
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final ModelElementId sectionId = ModelUtil.getProject(section).getModelElementId(section);
 		ESWorkspace workspace = ESWorkspaceProvider.INSTANCE.getWorkspace();
@@ -170,7 +170,7 @@ public class CompositeOperationTest extends WorkspaceTest {
 					fail();
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(true, getProject().contains(useCase));
 		assertEquals(getProject(), ModelUtil.getProject(useCase));
@@ -220,7 +220,7 @@ public class CompositeOperationTest extends WorkspaceTest {
 
 				return handle;
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final ModelElementId sectionId = ModelUtil.getProject(section).getModelElementId(section);
 		ESWorkspace workspace = ESWorkspaceProvider.INSTANCE.getWorkspace();
@@ -238,7 +238,7 @@ public class CompositeOperationTest extends WorkspaceTest {
 					fail();
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(true, getProject().contains(useCase));
 		assertEquals(getProject(), ModelUtil.getProject(useCase));
@@ -290,7 +290,7 @@ public class CompositeOperationTest extends WorkspaceTest {
 					fail();
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(true, getProject().contains(section));
 		assertEquals("Name", section.getName());
@@ -337,7 +337,7 @@ public class CompositeOperationTest extends WorkspaceTest {
 				assertEquals(workPackage, actionItem.getContainingWorkpackage());
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 	}
 
 	/**
@@ -360,7 +360,7 @@ public class CompositeOperationTest extends WorkspaceTest {
 					fail();
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 	}
 
 	/**
@@ -376,7 +376,7 @@ public class CompositeOperationTest extends WorkspaceTest {
 				getProject().addModelElement(DocumentFactory.eINSTANCE.createLeafSection());
 				getProject().addModelElement(DocumentFactory.eINSTANCE.createLeafSection());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -384,14 +384,14 @@ public class CompositeOperationTest extends WorkspaceTest {
 				getProject().addModelElement(DocumentFactory.eINSTANCE.createLeafSection());
 				getProject().addModelElement(DocumentFactory.eINSTANCE.createLeafSection());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		RunESCommand.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				getProjectSpace().getOperationManager().endCompositeOperation();
 				return null;
 			}
-		});
+		}, getProject());
 
 		assertTrue(getProjectSpace().getOperationManager().getNotificationRecorder().isRecordingComplete());
 
@@ -403,7 +403,7 @@ public class CompositeOperationTest extends WorkspaceTest {
 				getProject().addModelElement(DocumentFactory.eINSTANCE.createLeafSection());
 				getProject().addModelElement(DocumentFactory.eINSTANCE.createLeafSection());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -411,14 +411,14 @@ public class CompositeOperationTest extends WorkspaceTest {
 				getProject().addModelElement(DocumentFactory.eINSTANCE.createLeafSection());
 				getProject().addModelElement(DocumentFactory.eINSTANCE.createLeafSection());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		RunESCommand.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				getProjectSpace().getOperationManager().endCompositeOperation();
 				return null;
 			}
-		});
+		}, getProject());
 
 		assertTrue(getProjectSpace().getOperationManager().getNotificationRecorder().isRecordingComplete());
 	}

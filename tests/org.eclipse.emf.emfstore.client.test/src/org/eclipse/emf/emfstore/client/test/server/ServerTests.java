@@ -233,7 +233,7 @@ public abstract class ServerTests extends WorkspaceTest {
 					Assert.fail();
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 		this.projectsOnServerBeforeTest = 1;
 	}
 
@@ -258,7 +258,7 @@ public abstract class ServerTests extends WorkspaceTest {
 
 				SetupHelper.cleanupServer();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 	}
 
 	/**

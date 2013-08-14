@@ -109,7 +109,7 @@ public abstract class WorkspaceTest {
 					Assert.assertTrue(ModelUtil.areEqual(projectSpace.getProject(), clonedProjectSpace.getProject()));
 				}
 			}
-		}.run(false);
+		}.run(null, false);
 	}
 
 	protected void configureCompareAtEnd() {
@@ -157,7 +157,7 @@ public abstract class WorkspaceTest {
 				cleanEmfstoreFolders();
 				return null;
 			}
-		});
+		}, null);
 	}
 
 	private void cleanProjects() {
@@ -183,7 +183,7 @@ public abstract class WorkspaceTest {
 					// ignore
 				}
 			}
-		}.run(false);
+		}.run(null, false);
 	}
 
 	/**
@@ -212,7 +212,7 @@ public abstract class WorkspaceTest {
 					}
 				}
 			}
-		}.run(false);
+		}.run(null, false);
 
 		setProject(null);
 		setProjectSpace(null);
@@ -262,7 +262,7 @@ public abstract class WorkspaceTest {
 				getProjectSpace().getOperations().clear();
 				return null;
 			}
-		});
+		}, getProjectSpace());
 
 	}
 
@@ -319,7 +319,7 @@ public abstract class WorkspaceTest {
 			protected TestElement doRun() {
 				return createTestElementWithoutTransaction(name);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 	}
 
 	public TestElement createFilledTestElement(final int count) {
@@ -332,7 +332,7 @@ public abstract class WorkspaceTest {
 					testElement.getStrings().add("value" + i);
 				}
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		return testElement;
 	}

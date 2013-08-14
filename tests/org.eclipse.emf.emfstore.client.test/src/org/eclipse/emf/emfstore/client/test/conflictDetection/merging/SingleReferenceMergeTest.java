@@ -31,14 +31,14 @@ public class SingleReferenceMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(target).setReference(myLink);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mc.getTheirItem(target).setReference(mc.getTheirItem(theirLink));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(SingleReferenceConflict.class)
 			// My
@@ -60,14 +60,14 @@ public class SingleReferenceMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(target).setReference(link);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mc.getTheirItem(secondTarget).setReference(mc.getTheirItem(link));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(null);
 	}
@@ -88,7 +88,7 @@ public class SingleReferenceMergeTest extends MergeTest {
 				mc.getMyItem(target).setReference(myLink);
 				mc.getMyItem(decoy).setOtherReference(myLink);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -96,7 +96,7 @@ public class SingleReferenceMergeTest extends MergeTest {
 				mc.getTheirItem(target).setOtherReference(mc.getTheirItem(theirLink));
 				mc.getTheirItem(target).setReference(mc.getTheirItem(theirLink));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(SingleReferenceConflict.class)
 			// My
@@ -122,14 +122,14 @@ public class SingleReferenceMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(target).setContainedElement(myLink);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mc.getTheirItem(target).setContainedElement(mc.getTheirItem(theirLink));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(SingleReferenceConflict.class)
 			// My
@@ -151,14 +151,14 @@ public class SingleReferenceMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent).setContainedElement(child);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mc.getTheirItem(secondParent).setContainedElement(mc.getTheirItem(child));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(SingleReferenceConflict.class)
 			//
@@ -180,14 +180,14 @@ public class SingleReferenceMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent).setContainedElement(child);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mc.getTheirItem(grandParent).setContainedElement(mc.getTheirItem(parent));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		mc.hasConflict(null);
 	}

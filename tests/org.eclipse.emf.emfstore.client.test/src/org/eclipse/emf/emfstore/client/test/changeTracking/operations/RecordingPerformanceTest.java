@@ -165,7 +165,7 @@ public class RecordingPerformanceTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(parentTestElement);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 		insertWatch.stop();
 		Assert.assertEquals(COUNT, parentTestElement.getContainedElements().size());
 	}

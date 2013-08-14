@@ -66,7 +66,7 @@ public class MultiReferenceMoveOperationTest extends WorkspaceTest {
 				actor.getInitiatedUseCases().add(useCase2);
 				actor.getInitiatedUseCases().add(useCase3);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(actor, useCase1.getInitiatingActor());
 		assertEquals(actor, useCase2.getInitiatingActor());
@@ -86,7 +86,7 @@ public class MultiReferenceMoveOperationTest extends WorkspaceTest {
 
 				actor.getInitiatedUseCases().move(2, 1);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -143,7 +143,7 @@ public class MultiReferenceMoveOperationTest extends WorkspaceTest {
 				actor.getInitiatedUseCases().add(useCase3);
 
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -160,7 +160,7 @@ public class MultiReferenceMoveOperationTest extends WorkspaceTest {
 
 				actor.getInitiatedUseCases().move(2, 1);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -185,7 +185,7 @@ public class MultiReferenceMoveOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				reverse.apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		EList<UseCase> initiatedUseCases = actor.getInitiatedUseCases();
 		assertEquals(actor, useCase1.getInitiatingActor());
@@ -223,7 +223,7 @@ public class MultiReferenceMoveOperationTest extends WorkspaceTest {
 				actor.getInitiatedUseCases().add(useCase2);
 				actor.getInitiatedUseCases().add(useCase3);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(actor, useCase1.getInitiatingActor());
 		assertEquals(actor, useCase2.getInitiatingActor());
@@ -240,7 +240,7 @@ public class MultiReferenceMoveOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final MultiReferenceMoveOperation multiReferenceMoveOperation = OperationsFactory.eINSTANCE
 			.createMultiReferenceMoveOperation();
@@ -270,7 +270,7 @@ public class MultiReferenceMoveOperationTest extends WorkspaceTest {
 
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		final MultiReferenceMoveOperation multiReferenceMoveOperation2 = OperationsFactory.eINSTANCE
 			.createMultiReferenceMoveOperation();
@@ -306,7 +306,7 @@ public class MultiReferenceMoveOperationTest extends WorkspaceTest {
 				getProject().addModelElement(useCase4);
 				clearOperations();
 			}
-		}.run();
+		}.run(getProject());
 
 		final MultiReferenceMoveOperation multiReferenceMoveOperation3 = OperationsFactory.eINSTANCE
 			.createMultiReferenceMoveOperation();

@@ -128,7 +128,7 @@ public class PerformanceTest {
 				workspace.toInternalAPI().getUsersessions().add(session);
 				usersession = session;
 			}
-		}.run(false);
+		}.run(setupHelper.getTestProjectSpace().getProject(), false);
 
 		final ProjectSpace projectSpace = setupHelper.getTestProjectSpace();
 
@@ -148,7 +148,7 @@ public class PerformanceTest {
 						fail();
 					}
 				}
-			}.run(false);
+			}.run(setupHelper.getTestProjectSpace().getProject(), false);
 			times[i] = (System.currentTimeMillis() - time) / 1000.0;
 
 			assertNotNull(setupHelper.getTestProject());
@@ -173,7 +173,7 @@ public class PerformanceTest {
 						e.printStackTrace();
 					}
 				}
-			}.run(false);
+			}.run(setupHelper.getTestProjectSpace().getProject(), false);
 		} // for loop with iterations
 		ModelUtil.logInfo("times=" + Arrays.toString(times));
 		usersession = null;
@@ -213,7 +213,7 @@ public class PerformanceTest {
 						e.printStackTrace();
 					}
 				}
-			}.run(false);
+			}.run(setupHelper.getTestProjectSpace().getProject(), false);
 			times[i] = (System.currentTimeMillis() - time) / 1000.0;
 			memAfter[i] = usedMemory();
 			memDuring[i] = memoryMeter.stopMeasurements();
@@ -236,7 +236,7 @@ public class PerformanceTest {
 						e.printStackTrace();
 					}
 				}
-			}.run(false);
+			}.run(setupHelper.getTestProjectSpace().getProject(), false);
 		}
 
 		ModelUtil.logInfo("times=" + Arrays.toString(times));
@@ -253,7 +253,7 @@ public class PerformanceTest {
 					SetupHelper.cleanupServer();
 				}
 			}
-		}.run(false);
+		}.run(setupHelper.getTestProjectSpace().getProject(), false);
 	}
 
 	/**
@@ -290,7 +290,7 @@ public class PerformanceTest {
 					e.printStackTrace();
 				}
 			}
-		}.run(false);
+		}.run(setupHelper.getTestProjectSpace().getProject(), false);
 
 		final ProjectSpace projectSpace1 = setupHelper.getTestProjectSpace();
 		double[] modelChangeTimes = new double[NUM_ITERATIONS];
@@ -328,7 +328,7 @@ public class PerformanceTest {
 						e.printStackTrace();
 					}
 				}
-			}.run(false);
+			}.run(setupHelper.getTestProjectSpace().getProject(), false);
 			memoryMeter.startMeasurements();
 			time = System.currentTimeMillis();
 
@@ -341,7 +341,7 @@ public class PerformanceTest {
 						fail();
 					}
 				}
-			}.run(false);
+			}.run(setupHelper.getTestProjectSpace().getProject(), false);
 
 			commitTimes[i] = (System.currentTimeMillis() - time) / 1000.0;
 
@@ -366,7 +366,7 @@ public class PerformanceTest {
 						e.printStackTrace();
 					}
 				}
-			}.run(false);
+			}.run(setupHelper.getTestProjectSpace().getProject(), false);
 			updateTimes[i] = (System.currentTimeMillis() - time) / 1000.0;
 			ESWorkspaceImpl workspace = ESWorkspaceProviderImpl.getInstance().getWorkspace();
 
@@ -412,7 +412,7 @@ public class PerformanceTest {
 		// projectSpace2 = null;
 		// }
 		// }
-		// }.run(false);
+		// }.run(setupHelper.getTestProjectSpace().getProject(), false);
 	}
 
 	public void changeModel(final ProjectSpace prjSpace) {
@@ -427,7 +427,7 @@ public class PerformanceTest {
 				ModelMutator.changeModel(mmc);
 				System.out.println("Changed model: " + (System.currentTimeMillis() - time) / 1000.0 + "sec");
 			}
-		}.run(false);
+		}.run(setupHelper.getTestProjectSpace().getProject(), false);
 		System.out.println("Number of changes: " + prjSpace.getOperations().size());
 	}
 

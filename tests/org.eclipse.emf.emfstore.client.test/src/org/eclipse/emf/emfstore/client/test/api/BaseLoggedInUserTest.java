@@ -79,7 +79,7 @@ public abstract class BaseLoggedInUserTest extends BaseEmptyEmfstoreTest {
 			}
 		};
 
-		cmd.run();
+		cmd.run(((ESServerImpl) server).toInternalAPI());
 
 		if (cmd.hasException()) {
 			throw cmd.getException();

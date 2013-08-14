@@ -123,7 +123,7 @@ public class TopologyNto1Test extends TopologyTest {
 			protected void doRun() {
 				useCase.setLeafSection(section);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(section.getModelElements().contains(useCase));
 
@@ -135,7 +135,7 @@ public class TopologyNto1Test extends TopologyTest {
 			protected void doRun() {
 				useCase.setLeafSection(null);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(1, operations.size());

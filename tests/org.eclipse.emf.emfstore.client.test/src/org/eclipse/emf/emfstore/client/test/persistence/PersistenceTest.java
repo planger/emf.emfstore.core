@@ -43,7 +43,7 @@ public class PersistenceTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(TestmodelFactory.eINSTANCE.createTestElement());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertEquals(
 			ESWorkspaceProviderImpl.getInstance().getWorkspace().getLocalProjects().get(0).getModelElements().size(), 1);

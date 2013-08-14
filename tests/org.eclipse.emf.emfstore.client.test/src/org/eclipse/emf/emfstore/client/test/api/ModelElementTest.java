@@ -36,6 +36,7 @@ import org.eclipse.emf.emfstore.client.ESLocalProject;
 import org.eclipse.emf.emfstore.client.ESWorkspaceProvider;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
 import org.eclipse.emf.emfstore.common.model.ESModelElementId;
+import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESLocalProjectImpl;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommand;
 import org.junit.Test;
 
@@ -63,7 +64,7 @@ public class ModelElementTest {
 				localProject.getModelElements().add(leagueB);
 				return null;
 			}
-		});
+		}, ((ESLocalProjectImpl) localProject).toInternalAPI().getProject());
 
 		assertEquals(2, localProject.getAllModelElements().size());
 
@@ -76,7 +77,7 @@ public class ModelElementTest {
 				leagueA.getPlayers().add(playerA);
 				leagueA.getPlayers().add(playerB);
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		assertEquals(4, localProject.getAllModelElements().size());
 
@@ -89,7 +90,7 @@ public class ModelElementTest {
 				leagueA.getPlayers().add(playerC);
 				leagueA.getPlayers().add(playerD);
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		assertEquals(6, localProject.getAllModelElements().size());
 		assertEquals(2, localProject.getModelElements().size());
@@ -101,7 +102,7 @@ public class ModelElementTest {
 			protected void doRun() {
 				localProject.getModelElements().add(tournamentA);
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		final Matchup matchupA = ProjectChangeUtil.createMatchup(null, null);
 		final Matchup matchupB = ProjectChangeUtil.createMatchup(null, null);
@@ -118,7 +119,7 @@ public class ModelElementTest {
 				matchupA.getGames().add(gameA);
 				matchupA.getGames().add(gameB);
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		assertEquals(10, localProject.getAllModelElements().size());
 
@@ -129,7 +130,7 @@ public class ModelElementTest {
 				matchupB.getGames().add(gameC);
 				matchupB.getGames().add(gameD);
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		assertEquals(13, localProject.getAllModelElements().size());
 		assertEquals(3, localProject.getModelElements().size());
@@ -148,7 +149,7 @@ public class ModelElementTest {
 					localProject.getModelElements().remove(object);
 				}
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		// assertEquals(0, loca lProject.getAllModelElements().size());
 	}
@@ -167,7 +168,7 @@ public class ModelElementTest {
 			protected void doRun() {
 				localProject.getModelElements().add(player);
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		assertTrue(localProject.getAllModelElements().contains(player));
 		assertTrue(localProject.contains(player));
@@ -178,7 +179,7 @@ public class ModelElementTest {
 			protected void doRun() {
 				localProject.getModelElements().remove(player);
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		assertEquals(SIZE, localProject.getAllModelElements().size());
 		assertFalse(localProject.getAllModelElements().contains(player));
@@ -190,7 +191,7 @@ public class ModelElementTest {
 			protected void doRun() {
 				localProject.undoLastOperation();
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		assertEquals(SIZE + 1, localProject.getAllModelElements().size());
 		assertFalse(localProject.getAllModelElements().contains(player));
@@ -208,7 +209,7 @@ public class ModelElementTest {
 			protected void doRun() {
 				localProject.getModelElements().add(tournament);
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		final Player player = ProjectChangeUtil.createPlayer("Heinrich");
 		final Player player2 = ProjectChangeUtil.createPlayer("Walter");
@@ -221,7 +222,7 @@ public class ModelElementTest {
 				tournament.getPlayers().add(player2);
 				tournament.getPlayers().add(player3);
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		assertEquals(3, tournament.getPlayers().size());
 
@@ -230,7 +231,7 @@ public class ModelElementTest {
 			protected void doRun() {
 				localProject.getModelElements().remove(player2);
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		assertEquals(2, tournament.getPlayers().size());
 		assertTrue(localProject.contains(player));
@@ -248,7 +249,7 @@ public class ModelElementTest {
 			protected void doRun() {
 				localProject.getModelElements().add(tournament);
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -256,7 +257,7 @@ public class ModelElementTest {
 				for (int i = 0; i < numTrophies; i++)
 					tournament.getReceivesTrophy().add(false);
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		assertEquals(numTrophies, tournament.getReceivesTrophy().size());
 
@@ -265,7 +266,7 @@ public class ModelElementTest {
 			protected void doRun() {
 				localProject.revert();
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		assertEquals(0, tournament.getReceivesTrophy().size());
 	}
@@ -282,7 +283,7 @@ public class ModelElementTest {
 			protected void doRun() {
 				localProject.getModelElements().add(tournament);
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -290,7 +291,7 @@ public class ModelElementTest {
 				for (int i = 0; i < numTrophies; i++)
 					tournament.getReceivesTrophy().add(false);
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		assertEquals(numTrophies, tournament.getReceivesTrophy().size());
 
@@ -300,7 +301,7 @@ public class ModelElementTest {
 				for (int i = 0; i < numDeletes; i++)
 					tournament.getReceivesTrophy().remove(i);
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		assertEquals(numTrophies - numDeletes, tournament.getReceivesTrophy().size());
 
@@ -309,7 +310,7 @@ public class ModelElementTest {
 			protected void doRun() {
 				localProject.revert();
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		assertEquals(0, tournament.getReceivesTrophy().size());
 	}
@@ -326,7 +327,7 @@ public class ModelElementTest {
 			protected void doRun() {
 				localProject.getModelElements().add(tournament);
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -334,7 +335,7 @@ public class ModelElementTest {
 				for (int i = 0; i < numTrophies; i++)
 					tournament.getReceivesTrophy().add(false);
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		assertEquals(numTrophies, tournament.getReceivesTrophy().size());
 
@@ -352,7 +353,7 @@ public class ModelElementTest {
 			protected void doRun() {
 				localProject.revert();
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		assertEquals(0, tournament.getReceivesTrophy().size());
 	}
@@ -369,7 +370,7 @@ public class ModelElementTest {
 			protected void doRun() {
 				localProject.getModelElements().add(tournament);
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -377,7 +378,7 @@ public class ModelElementTest {
 				for (int i = 0; i < numTrophies; i++)
 					tournament.getReceivesTrophy().add(Boolean.FALSE);
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		assertEquals(numTrophies, tournament.getReceivesTrophy().size());
 
@@ -396,7 +397,7 @@ public class ModelElementTest {
 			protected void doRun() {
 				localProject.revert();
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		assertEquals(0, tournament.getReceivesTrophy().size());
 	}
@@ -413,7 +414,7 @@ public class ModelElementTest {
 				localProject.getModelElements().add(tournamentA);
 				localProject.getModelElements().add(tournamentB);
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		final Matchup matchupA = ProjectChangeUtil.createMatchup(null, null);
 
@@ -422,7 +423,7 @@ public class ModelElementTest {
 			protected void doRun() {
 				tournamentA.getMatchups().add(matchupA);
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		assertEquals(1, tournamentA.getMatchups().size());
 		assertTrue(tournamentA.getMatchups().contains(matchupA));
@@ -432,7 +433,7 @@ public class ModelElementTest {
 			protected void doRun() {
 				tournamentB.getMatchups().add(matchupA);
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		assertEquals(1, tournamentB.getMatchups().size());
 		assertTrue(tournamentB.getMatchups().contains(matchupA));
@@ -443,7 +444,7 @@ public class ModelElementTest {
 			protected void doRun() {
 				localProject.undoLastOperation();
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		assertEquals(0, tournamentB.getMatchups().size());
 
@@ -466,14 +467,14 @@ public class ModelElementTest {
 				localProject.getModelElements().add(tournamentA);
 
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				tournamentA.getMatchups().add(matchupA);
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		ESModelElementId matchupID = localProject.getModelElementId(matchupA);
 
@@ -482,7 +483,7 @@ public class ModelElementTest {
 			protected void doRun() {
 				localProject.getModelElements().add(tournamentB);
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		assertEquals(1, tournamentA.getMatchups().size());
 		assertTrue(tournamentA.getMatchups().contains(matchupA));
@@ -492,7 +493,7 @@ public class ModelElementTest {
 			protected void doRun() {
 				tournamentA.getMatchups().remove(matchupA);
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		assertEquals(2, localProject.getModelElements().size());
 
@@ -501,7 +502,7 @@ public class ModelElementTest {
 			protected void doRun() {
 				tournamentB.getMatchups().add(matchupA);
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		assertEquals(1, tournamentB.getMatchups().size());
 		assertTrue(tournamentB.getMatchups().contains(matchupA));
@@ -514,7 +515,7 @@ public class ModelElementTest {
 			protected void doRun() {
 				localProject.undoLastOperation();
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		assertEquals(0, tournamentB.getMatchups().size());
 		assertEquals(0, tournamentA.getMatchups().size());
@@ -525,7 +526,7 @@ public class ModelElementTest {
 			protected void doRun() {
 				localProject.undoLastOperation();
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		assertEquals(0, tournamentA.getMatchups().size());
 		assertEquals(2, localProject.getModelElements().size());
@@ -535,7 +536,7 @@ public class ModelElementTest {
 			protected void doRun() {
 				localProject.undoLastOperation();
 			}
-		}.run(false);
+		}.run(((ESLocalProjectImpl) localProject).toInternalAPI().getProject(), false);
 
 		assertEquals(1, tournamentA.getMatchups().size());
 		assertEquals(2, localProject.getModelElements().size());

@@ -57,7 +57,7 @@ public class MultiAttributeTest extends WorkspaceTest {
 				assertTrue(testElement.getStrings().size() == 1);
 				assertTrue(testElement.getStrings().get(0).equals("inserted"));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class MultiAttributeTest extends WorkspaceTest {
 				assertTrue(testElement.getStrings().get(0).equals("inserted"));
 				assertTrue(testElement.getStrings().get(1).equals("first"));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 	}
 
 	/**
@@ -118,7 +118,7 @@ public class MultiAttributeTest extends WorkspaceTest {
 				assertTrue(testElement.getStrings().get(1).equals("first"));
 				assertTrue(testElement.getStrings().get(2).equals("inserted2"));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 	}
 
 	/**
@@ -145,7 +145,7 @@ public class MultiAttributeTest extends WorkspaceTest {
 
 				assertTrue(testElement.getStrings().size() == 0);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 	}
 
 	/**
@@ -161,7 +161,7 @@ public class MultiAttributeTest extends WorkspaceTest {
 				testElement.getStrings().add("first");
 				testElement.getStrings().addAll(Arrays.asList("second", "third"));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		AbstractOperation abstractOperation = getProjectSpace().getOperations().get(0);
 		assertTrue(abstractOperation instanceof MultiAttributeOperation);
@@ -199,7 +199,7 @@ public class MultiAttributeTest extends WorkspaceTest {
 				clearOperations();
 				testElement.getStrings().removeAll(Arrays.asList("second", "third"));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(getProjectSpace().getOperations().size() == 1);
 		AbstractOperation abstractOperation = getProjectSpace().getOperations().get(0);
@@ -229,7 +229,7 @@ public class MultiAttributeTest extends WorkspaceTest {
 				assertTrue(testElement.getStrings().get(1).equals("second"));
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -238,7 +238,7 @@ public class MultiAttributeTest extends WorkspaceTest {
 				assertTrue(testElement.getStrings().size() == 1);
 				assertTrue(testElement.getStrings().get(0).equals("first"));
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -246,7 +246,7 @@ public class MultiAttributeTest extends WorkspaceTest {
 				AbstractOperation ao = getProjectSpace().getOperations().get(0).reverse();
 				ao.apply(getProject());
 			}
-		}.run(false);
+		}.run(getProject(), false);
 
 		assertTrue(testElement.getStrings().size() == 2);
 		assertTrue(testElement.getStrings().get(0).equals("first"));
