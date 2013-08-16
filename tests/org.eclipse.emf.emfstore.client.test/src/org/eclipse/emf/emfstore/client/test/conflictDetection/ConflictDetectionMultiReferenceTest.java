@@ -197,11 +197,18 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				section1.getModelElements().add(actor1);
+			}
+		}.run(getProject(), false);
+
+		new EMFStoreCommand() {
+
+			@Override
+			protected void doRun() {
 				section2.getModelElements().add(actor2);
 				section2.getModelElements().remove(actor2);
 
 			}
-		}.run(getProject(), false);
+		}.run(clonedProject, false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -402,10 +409,17 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				actor1.setLeafSection(section1);
+			}
+		}.run(getProject(), false);
+
+		new EMFStoreCommand() {
+
+			@Override
+			protected void doRun() {
 				actor2.setLeafSection(section2);
 				section2.getModelElements().remove(actor2);
 			}
-		}.run(getProject(), false);
+		}.run(clonedProject, false);
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
@@ -532,10 +546,18 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				section1.getModelElements().remove(actor1);
-				section2.getModelElements().remove(actor2);
 
 			}
 		}.run(getProject(), false);
+
+		new EMFStoreCommand() {
+
+			@Override
+			protected void doRun() {
+				section2.getModelElements().remove(actor2);
+
+			}
+		}.run(clonedProject, false);
 
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();

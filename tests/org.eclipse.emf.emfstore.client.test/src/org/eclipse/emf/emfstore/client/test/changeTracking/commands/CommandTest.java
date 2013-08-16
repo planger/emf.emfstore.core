@@ -143,10 +143,10 @@ public class CommandTest extends WorkspaceTest {
 			}
 		}.run(getProject(), false);
 
-		Command delete = DeleteCommand.create(
-			ESWorkspaceProviderImpl.getInstance().getEditingDomain(),
+		EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(getProject());
+		Command delete = DeleteCommand.create(editingDomain,
 			createWorkPackage);
-		ESWorkspaceProviderImpl.getInstance().getEditingDomain().getCommandStack().execute(delete);
+		editingDomain.getCommandStack().execute(delete);
 
 		assertEquals(0, createComment.getRecipients().size());
 		assertEquals(1, getProjectSpace().getOperations().size());
@@ -350,10 +350,10 @@ public class CommandTest extends WorkspaceTest {
 		Project project = ModelUtil.getProject(useCase);
 		ModelElementId useCaseId = project.getModelElementId(useCase);
 
-		Command deleteCommand = DeleteCommand.create(
-			ESWorkspaceProviderImpl.getInstance().getEditingDomain(),
+		EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(getProject());
+		Command deleteCommand = DeleteCommand.create(editingDomain,
 			useCase);
-		ESWorkspaceProviderImpl.getInstance().getEditingDomain().getCommandStack().execute(deleteCommand);
+		editingDomain.getCommandStack().execute(deleteCommand);
 
 		assertFalse(getProject().contains(useCase));
 
@@ -497,7 +497,7 @@ public class CommandTest extends WorkspaceTest {
 			}
 		}.run(getProject(), false);
 
-		EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
+		EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(getProject());
 
 		// cut to clipboard
 		Collection<Actor> toCut = new ArrayList<Actor>();
@@ -559,7 +559,7 @@ public class CommandTest extends WorkspaceTest {
 			}
 		}.run(getProject(), false);
 
-		EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
+		EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(getProject());
 
 		// copy to clipboard
 		Command cutCommand = CutToClipboardCommand.create(editingDomain, leafSection,
@@ -620,7 +620,7 @@ public class CommandTest extends WorkspaceTest {
 			}
 		}.run(getProject(), false);
 
-		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
+		final EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(getProject());
 
 		// cut to clipboard
 		Command cutCommand = CutToClipboardCommand.create(editingDomain, leafSection,
@@ -664,7 +664,7 @@ public class CommandTest extends WorkspaceTest {
 			}
 		}.run(getProject(), false);
 
-		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
+		final EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(getProject());
 
 		// remove
 		Command removeCommand = RemoveCommand.create(editingDomain, leafSection,
@@ -704,7 +704,7 @@ public class CommandTest extends WorkspaceTest {
 			}
 		}.run(getProject(), false);
 
-		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
+		final EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(getProject());
 
 		// remove
 		Collection<Actor> toRemove = new ArrayList<Actor>();
@@ -747,7 +747,7 @@ public class CommandTest extends WorkspaceTest {
 			}
 		}.run(getProject(), false);
 
-		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
+		final EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(getProject());
 
 		// delete
 		Collection<Actor> toDelete = new ArrayList<Actor>();
@@ -790,7 +790,7 @@ public class CommandTest extends WorkspaceTest {
 		}.run(getProject(), false);
 
 		assertEquals(0, getProjectSpace().getOperations().size());
-		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
+		final EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(getProject());
 
 		// delete
 		Collection<Actor> toDelete = new ArrayList<Actor>();
@@ -889,7 +889,7 @@ public class CommandTest extends WorkspaceTest {
 
 		assertEquals(0, getProjectSpace().getOperations().size());
 
-		EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
+		EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(getProject());
 
 		EditingDomain domain1 = AdapterFactoryEditingDomain.getEditingDomainFor(actor);
 		assertSame(editingDomain, domain1);
@@ -915,7 +915,7 @@ public class CommandTest extends WorkspaceTest {
 		}.run(getProject(), false);
 
 		assertEquals(0, getProjectSpace().getOperations().size());
-		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
+		final EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(getProject());
 
 		// delete
 		editingDomain.getCommandStack().execute(DeleteCommand.create(editingDomain, actor));

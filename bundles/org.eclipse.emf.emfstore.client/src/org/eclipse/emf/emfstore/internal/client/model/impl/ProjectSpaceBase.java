@@ -570,11 +570,26 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 	 */
 	public void init() {
 		ResourceSet projectResourceSet = getResourceSetForProject();
+
 		if (editingDomain == null) {
 			editingDomain = createEditingDomain(projectResourceSet);
 		}
-		projectResourceSet.getResources().add(getProject().eResource());
-		projectResourceSet.getResources().add(getLocalChangePackage().eResource());
+
+		if (getProject().eResource() != null) {
+			projectResourceSet.getResources().add(getProject().eResource());
+		} else {
+			Resource resource = projectResourceSet.createResource(ClientURIUtil.createProjectURI(this));
+			resource.getContents().add(getProject());
+		}
+
+		if (getLocalChangePackage() != null) {
+			if (getLocalChangePackage().eResource() != null) {
+				projectResourceSet.getResources().add(getLocalChangePackage().eResource());
+			} else {
+				Resource resource = projectResourceSet.createResource(ClientURIUtil.createOperationsURI(this));
+				resource.getContents().add(getLocalChangePackage());
+			}
+		}
 
 		initCrossReferenceAdapter();
 
