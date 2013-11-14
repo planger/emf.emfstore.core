@@ -7,12 +7,12 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Johannes Faltermeier
+ * Johannes Faltermeier - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.mongodb.server;
 
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.emfstore.server.AbstractESServerURIConverter;
+import org.eclipse.emf.emfstore.server.ESAbstractServerURIConverter;
 
 /**
  * Converts from EMFStore to mongoDB URIs.
@@ -23,7 +23,7 @@ import org.eclipse.emf.emfstore.server.AbstractESServerURIConverter;
  * @author jfaltermeier
  * 
  */
-public class MongoServerURIConverter extends AbstractESServerURIConverter {
+public class MongoServerURIConverter extends ESAbstractServerURIConverter {
 
 	@Override
 	protected URI normalizeServerSpaceURI(String profile) {
@@ -32,7 +32,7 @@ public class MongoServerURIConverter extends AbstractESServerURIConverter {
 
 	@Override
 	protected URI normalizeDynamicModelsURI(String profile, String ecoreName) {
-		return URI.createURI(getMongoURIPrefix(profile) + "dynamic-models/" + ecoreName);
+		return URI.createURI(getMongoURIPrefix(profile) + "dynamic-models/ecore");
 	}
 
 	@Override
@@ -55,7 +55,13 @@ public class MongoServerURIConverter extends AbstractESServerURIConverter {
 		return URI.createURI(getMongoURIPrefix(profile) + "projectstate/" + projectId + "-v" + version);
 	}
 
-	private String getMongoURIPrefix(String profile) {
+	/**
+	 * Returns the URI-prefix for mongodb URIs.
+	 * 
+	 * @param profile the profile name
+	 * @return the prefix
+	 */
+	static String getMongoURIPrefix(String profile) {
 		return "mongodb://localhost/esserver-" + profile + "/";
 	}
 

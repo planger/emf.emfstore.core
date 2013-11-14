@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 EclipseSource Muenchen GmbH.
+ * Copyright (c) 2012-2013 EclipseSource Muenchen GmbH and others.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,10 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model.util;
 
+import java.io.IOException;
+
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.emfstore.client.ESLocalProject;
 import org.eclipse.emf.emfstore.client.handler.ESChecksumErrorHandler;
 import org.eclipse.emf.emfstore.internal.client.common.UnknownEMFStoreWorkloadCommand;
@@ -75,16 +78,19 @@ public enum ChecksumErrorHandler implements ESChecksumErrorHandler {
 			IProgressMonitor monitor) throws ESException {
 
 			// TODO: OTS casts
-			ProjectSpace projectSpace = ((ESLocalProjectImpl) project).toInternalAPI();
+			final ESLocalProjectImpl localProjectImpl = (ESLocalProjectImpl) project;
+			final ProjectSpace projectSpace = localProjectImpl.toInternalAPI();
+			final Resource projectResource = localProjectImpl.toInternalAPI().getProject().eResource();
 
-			Project fetchedProject = new UnknownEMFStoreWorkloadCommand<Project>(monitor) {
+			final Project fetchedProject = new UnknownEMFStoreWorkloadCommand<Project>(monitor) {
 				@Override
 				public Project run(IProgressMonitor monitor) throws ESException {
 
-					ESSessionIdImpl sessionIdImpl = (ESSessionIdImpl) project.getUsersession().getSessionId();
-					ESGlobalProjectIdImpl globalProjectIdImpl = (ESGlobalProjectIdImpl) project.getRemoteProject()
+					final ESSessionIdImpl sessionIdImpl = (ESSessionIdImpl) project.getUsersession().getSessionId();
+					final ESGlobalProjectIdImpl globalProjectIdImpl = (ESGlobalProjectIdImpl) project
+						.getRemoteProject()
 						.getGlobalProjectId();
-					ESVersionSpecImpl<?, ? extends VersionSpec> versionSpecImpl = ((ESVersionSpecImpl<?, ?>) versionSpec);
+					final ESVersionSpecImpl<?, ? extends VersionSpec> versionSpecImpl = (ESVersionSpecImpl<?, ?>) versionSpec;
 
 					return ESWorkspaceProviderImpl
 						.getInstance()
@@ -100,6 +106,13 @@ public enum ChecksumErrorHandler implements ESChecksumErrorHandler {
 				throw new ESException("Server returned a null project!");
 			}
 
+			projectResource.getContents().clear();
+			projectResource.getContents().add(fetchedProject);
+			try {
+				projectResource.save(ModelUtil.getResourceSaveOptions());
+			} catch (final IOException ex) {
+				throw new ESException("Could not save project resource while performing autocorrect.");
+			}
 			projectSpace.setProject(fetchedProject);
 			projectSpace.init();
 

@@ -23,9 +23,9 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.xmi.DanglingHREFException;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
+import org.eclipse.emf.emfstore.common.ESResourceSetProvider;
 import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionPoint;
 import org.eclipse.emf.emfstore.common.extensionpoint.ESPriorityComparator;
-import org.eclipse.emf.emfstore.common.extensionpoint.ESResourceSetProvider;
 import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
 import org.eclipse.emf.emfstore.internal.server.core.AbstractEmfstoreInterface;
 import org.eclipse.emf.emfstore.internal.server.core.AbstractSubEmfstoreInterface;
@@ -94,9 +94,7 @@ public class EPackageSubInterfaceImpl extends AbstractSubEmfstoreInterface {
 			// create a resource to save the file to disc
 			ESExtensionPoint extensionPoint = new ESExtensionPoint(
 				"org.eclipse.emf.emfstore.server.resourceSetProvider",
-				true);
-			extensionPoint.setComparator(new ESPriorityComparator("priority", true));
-			extensionPoint.reload();
+				true, new ESPriorityComparator("priority", true));
 
 			ESResourceSetProvider resourceSetProvider = extensionPoint.getElementWithHighestPriority().getClass(
 				"class",

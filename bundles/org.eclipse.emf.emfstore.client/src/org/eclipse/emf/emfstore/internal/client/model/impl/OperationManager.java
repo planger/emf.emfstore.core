@@ -7,8 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Maximilian Koegel
- * Edgar Mueller
+ * Maximilian Koegel, Edgar Mueller - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model.impl;
 
@@ -18,11 +17,11 @@ import java.util.List;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.emfstore.client.changetracking.ESCommandObserver;
 import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionPoint;
 import org.eclipse.emf.emfstore.internal.client.model.CompositeOperationHandle;
 import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
 import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
-import org.eclipse.emf.emfstore.internal.client.model.changeTracking.commands.CommandObserver;
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.notification.recording.NotificationRecorder;
 import org.eclipse.emf.emfstore.internal.client.observers.OperationObserver;
 import org.eclipse.emf.emfstore.internal.common.ESDisposable;
@@ -38,12 +37,12 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.sema
  * @author koegel
  * @author emueller
  */
-public class OperationManager implements OperationRecorderListener, ESDisposable, CommandObserver,
+public class OperationManager implements OperationRecorderListener, ESDisposable, ESCommandObserver,
 	IdEObjectCollectionChangeObserver {
 
-	private OperationRecorder operationRecorder;
-	private List<OperationObserver> operationListeners;
-	private ProjectSpace projectSpace;
+	private final OperationRecorder operationRecorder;
+	private final List<OperationObserver> operationListeners;
+	private final ProjectSpace projectSpace;
 
 	/**
 	 * Constructor.
@@ -112,7 +111,7 @@ public class OperationManager implements OperationRecorderListener, ESDisposable
 	 *            the operation that has been undone
 	 */
 	public void notifyOperationUndone(AbstractOperation operation) {
-		for (OperationObserver operationListener : operationListeners) {
+		for (final OperationObserver operationListener : operationListeners) {
 			operationListener.operationUndone(operation);
 		}
 	}
@@ -124,7 +123,7 @@ public class OperationManager implements OperationRecorderListener, ESDisposable
 	 *            the operation
 	 */
 	void notifyOperationExecuted(AbstractOperation operation) {
-		for (OperationObserver operationListener : operationListeners) {
+		for (final OperationObserver operationListener : operationListeners) {
 			operationListener.operationExecuted(operation);
 		}
 	}
@@ -152,7 +151,7 @@ public class OperationManager implements OperationRecorderListener, ESDisposable
 	 *            the semantic operation that replaces the composite operation
 	 */
 	public void endCompositeOperation(SemanticCompositeOperation semanticCompositeOperation) {
-		List<AbstractOperation> operations = projectSpace.getOperations();
+		final List<AbstractOperation> operations = projectSpace.getOperations();
 		operations.remove(operations.size() - 1);
 		operations.add(semanticCompositeOperation);
 		endCompositeOperation();
@@ -190,7 +189,7 @@ public class OperationManager implements OperationRecorderListener, ESDisposable
 	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see org.org.eclipse.emf.emfstore.internal.common.ESDisposable#dispose()
+	 * @see org.eclipse.emf.emfstore.internal.common.ESDisposable#dispose()
 	 */
 	public void dispose() {
 		ESWorkspaceProviderImpl.getObserverBus().unregister(operationRecorder);
@@ -210,7 +209,7 @@ public class OperationManager implements OperationRecorderListener, ESDisposable
 	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see org.eclipse.emf.emfstore.internal.client.model.changeTracking.commands.CommandObserver#commandStarted(org.eclipse.emf.common.command.Command)
+	 * @see org.eclipse.emf.emfstore.client.changetracking.ESCommandObserver#commandStarted(org.eclipse.emf.common.command.Command)
 	 */
 	public void commandStarted(Command command) {
 		operationRecorder.commandStarted(command);
@@ -220,7 +219,7 @@ public class OperationManager implements OperationRecorderListener, ESDisposable
 	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see org.eclipse.emf.emfstore.internal.client.model.changeTracking.commands.CommandObserver#commandCompleted(org.eclipse.emf.common.command.Command)
+	 * @see org.eclipse.emf.emfstore.client.changetracking.ESCommandObserver#commandCompleted(org.eclipse.emf.common.command.Command)
 	 */
 	public void commandCompleted(Command command) {
 		operationRecorder.commandCompleted(command);
@@ -230,7 +229,7 @@ public class OperationManager implements OperationRecorderListener, ESDisposable
 	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see org.eclipse.emf.emfstore.internal.client.model.changeTracking.commands.CommandObserver#commandFailed(org.eclipse.emf.common.command.Command,
+	 * @see org.eclipse.emf.emfstore.client.changetracking.ESCommandObserver#commandFailed(org.eclipse.emf.common.command.Command,
 	 *      java.lang.Exception)
 	 */
 	public void commandFailed(Command command, Exception exception) {
@@ -241,9 +240,8 @@ public class OperationManager implements OperationRecorderListener, ESDisposable
 	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see org.eclipse.emf.emfstore.internal.common.model.util.internal.common.model.util.IdEObjectCollectionChangeObserver#notify(org.eclipse.emf.common.notify.Notification,
-	 *      org.eclipse.emf.emfstore.internal.common.model.internal.common.model.IdEObjectCollection,
-	 *      org.eclipse.emf.ecore.EObject)
+	 * @see org.eclipse.emf.emfstore.internal.common.model.util.IdEObjectCollectionChangeObserver#notify(org.eclipse.emf.common.notify.Notification,
+	 *      org.eclipse.emf.emfstore.internal.common.model.IdEObjectCollection, org.eclipse.emf.ecore.EObject)
 	 */
 	public void notify(Notification notification, IdEObjectCollection collection, EObject modelElement) {
 		operationRecorder.notify(notification, collection, modelElement);
@@ -253,7 +251,7 @@ public class OperationManager implements OperationRecorderListener, ESDisposable
 	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see org.eclipse.emf.emfstore.internal.common.model.util.internal.common.model.util.IdEObjectCollectionChangeObserver#modelElementAdded(org.eclipse.emf.emfstore.internal.common.model.internal.common.model.IdEObjectCollection,
+	 * @see org.eclipse.emf.emfstore.internal.common.model.util.IdEObjectCollectionChangeObserver#modelElementAdded(org.eclipse.emf.emfstore.internal.common.model.IdEObjectCollection,
 	 *      org.eclipse.emf.ecore.EObject)
 	 */
 	public void modelElementAdded(IdEObjectCollection collection, EObject modelElement) {
@@ -264,7 +262,7 @@ public class OperationManager implements OperationRecorderListener, ESDisposable
 	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see org.eclipse.emf.emfstore.internal.common.model.util.internal.common.model.util.IdEObjectCollectionChangeObserver#modelElementRemoved(org.eclipse.emf.emfstore.internal.common.model.internal.common.model.IdEObjectCollection,
+	 * @see org.eclipse.emf.emfstore.internal.common.model.util.IdEObjectCollectionChangeObserver#modelElementRemoved(org.eclipse.emf.emfstore.internal.common.model.IdEObjectCollection,
 	 *      org.eclipse.emf.ecore.EObject)
 	 */
 	public void modelElementRemoved(IdEObjectCollection collection, EObject modelElement) {
@@ -275,7 +273,7 @@ public class OperationManager implements OperationRecorderListener, ESDisposable
 	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see org.eclipse.emf.emfstore.internal.common.model.util.internal.common.model.util.IdEObjectCollectionChangeObserver#collectionDeleted(org.eclipse.emf.emfstore.internal.common.model.internal.common.model.IdEObjectCollection)
+	 * @see org.eclipse.emf.emfstore.internal.common.model.util.IdEObjectCollectionChangeObserver#collectionDeleted(org.eclipse.emf.emfstore.internal.common.model.IdEObjectCollection)
 	 */
 	public void collectionDeleted(IdEObjectCollection collection) {
 		operationRecorder.collectionDeleted(collection);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 EclipseSource Muenchen GmbH.
+ * Copyright (c) 2012-2013 EclipseSource Muenchen GmbH and others.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,10 +17,16 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.emfstore.bowling.BowlingFactory;
 import org.eclipse.emf.emfstore.bowling.League;
 import org.eclipse.emf.emfstore.bowling.Player;
 import org.eclipse.emf.emfstore.bowling.Tournament;
@@ -31,6 +37,7 @@ import org.eclipse.emf.emfstore.client.callbacks.ESCommitCallback;
 import org.eclipse.emf.emfstore.client.callbacks.ESUpdateCallback;
 import org.eclipse.emf.emfstore.client.test.CommitCallbackAdapter;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
+import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.eclipse.emf.emfstore.server.exceptions.ESUpdateRequiredException;
 import org.eclipse.emf.emfstore.server.model.ESBranchInfo;
@@ -55,10 +62,10 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 	@Test
 	public void testShare() {
 		try {
-			ESRemoteProject remoteProject = localProject.getRemoteProject();
+			final ESRemoteProject remoteProject = localProject.getRemoteProject();
 			assertNotNull(remoteProject);
 			assertTrue(localProject.isShared());
-		} catch (ESException e) {
+		} catch (final ESException e) {
 			log(e);
 			fail(e.getMessage());
 		}
@@ -67,11 +74,11 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 	@Test
 	public void testCommit() {
 		try {
-			ESPrimaryVersionSpec base = localProject.getBaseVersion();
+			final ESPrimaryVersionSpec base = localProject.getBaseVersion();
 			addPlayerToProject();
-			ESPrimaryVersionSpec head = localProject.commit(new NullProgressMonitor());
+			final ESPrimaryVersionSpec head = localProject.commit(new NullProgressMonitor());
 			assertNotSame(base, head);
-		} catch (ESException e) {
+		} catch (final ESException e) {
 			log(e);
 			fail(e.getMessage());
 		}
@@ -91,11 +98,12 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 	public void testCommitLog() {
 
 		try {
-			ESPrimaryVersionSpec base = localProject.getBaseVersion();
+			final ESPrimaryVersionSpec base = localProject.getBaseVersion();
 			addPlayerToProject();
-			ESPrimaryVersionSpec head = localProject.commit("SomeCommitMessage", callback, new NullProgressMonitor());
+			final ESPrimaryVersionSpec head = localProject.commit("SomeCommitMessage", callback,
+				new NullProgressMonitor());
 			assertNotSame(base, head);
-		} catch (ESException e) {
+		} catch (final ESException e) {
 			log(e);
 			fail(e.getMessage());
 		}
@@ -105,20 +113,20 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 	public void testCommitBranch() {
 
 		try {
-			ESPrimaryVersionSpec base = localProject.getBaseVersion();
+			final ESPrimaryVersionSpec base = localProject.getBaseVersion();
 			addPlayerToProject();
-			ESBranchVersionSpec branch = ESVersionSpec.FACTORY.createBRANCH("newBranch");
-			ESPrimaryVersionSpec head = localProject.commitToBranch(branch, "SomeCommitMessage", callback,
+			final ESBranchVersionSpec branch = ESVersionSpec.FACTORY.createBRANCH("newBranch");
+			final ESPrimaryVersionSpec head = localProject.commitToBranch(branch, "SomeCommitMessage", callback,
 				new NullProgressMonitor());
 			assertNotSame(base, head);
-		} catch (ESException e) {
+		} catch (final ESException e) {
 			log(e);
 			fail(e.getMessage());
 		}
 	}
 
 	public void testCommitBranchWithoutChange() throws ESException {
-		ESBranchVersionSpec branch = ESVersionSpec.FACTORY.createBRANCH("newBranch");
+		final ESBranchVersionSpec branch = ESVersionSpec.FACTORY.createBRANCH("newBranch");
 		localProject.commitToBranch(branch, "SomeCommitMessage", new CommitCallbackAdapter() {
 			@Override
 			public void noLocalChanges(ESLocalProject projectSpace) {
@@ -131,10 +139,10 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 	@Test
 	public void testBranchesOnlyTrunk() {
 		try {
-			List<? extends ESBranchInfo> branches = localProject.getBranches(new NullProgressMonitor());
+			final List<? extends ESBranchInfo> branches = localProject.getBranches(new NullProgressMonitor());
 			assertEquals(1, branches.size());
 			// TODO assert branch name
-		} catch (ESException e) {
+		} catch (final ESException e) {
 			log(e);
 			fail(e.getMessage());
 		}
@@ -148,13 +156,13 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 			assertEquals(1, branches.size());
 
 			addPlayerToProject();
-			ESBranchVersionSpec branch = ESVersionSpec.FACTORY.createBRANCH("newBranch");
-			ESPrimaryVersionSpec head = localProject.commitToBranch(branch, "SomeCommitMessage", callback,
+			final ESBranchVersionSpec branch = ESVersionSpec.FACTORY.createBRANCH("newBranch");
+			final ESPrimaryVersionSpec head = localProject.commitToBranch(branch, "SomeCommitMessage", callback,
 				new NullProgressMonitor());
 			branches = localProject.getBranches(new NullProgressMonitor());
 			assertEquals(2, branches.size());
 			// TODO assert branch names
-		} catch (ESException e) {
+		} catch (final ESException e) {
 			log(e);
 			fail(e.getMessage());
 		}
@@ -163,23 +171,25 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 	@Test
 	public void testHistoryInfoOnlyTrunk() {
 		try {
-			ESRangeQuery query = ESHistoryQuery.FACTORY.rangeQuery(localProject.getBaseVersion(), 1, 1, true, true,
+			final ESRangeQuery query = ESHistoryQuery.FACTORY.rangeQuery(localProject.getBaseVersion(), 1, 1, true,
+				true,
 				true,
 				true);
-			NullProgressMonitor monitor = new NullProgressMonitor();
+			final NullProgressMonitor monitor = new NullProgressMonitor();
 			List<ESHistoryInfo> infos = localProject.getHistoryInfos(query, monitor);
 			assertEquals(1, infos.size());
 
 			addPlayerToProject();
 
 			assertEquals(0, localProject.getBaseVersion().getIdentifier());
-			ESPrimaryVersionSpec head = localProject.commit("SomeCommitMessage", callback, new NullProgressMonitor());
+			final ESPrimaryVersionSpec head = localProject.commit("SomeCommitMessage", callback,
+				new NullProgressMonitor());
 			assertEquals(1, localProject.getBaseVersion().getIdentifier());
 			infos = localProject.getHistoryInfos(ESHistoryQuery.FACTORY.rangeQuery(head, 1, 1, true, true, true, true),
 				monitor);
 			assertEquals(2, infos.size());
 			// TODO assert infos
-		} catch (ESException e) {
+		} catch (final ESException e) {
 			log(e);
 			fail(e.getMessage());
 		}
@@ -188,22 +198,23 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 	@Test
 	public void testHistoryInfoBranch() {
 		try {
-			ESRangeQuery query = ESHistoryQuery.FACTORY.rangeQuery(localProject.getBaseVersion(), 1, 1, true, true,
+			final ESRangeQuery query = ESHistoryQuery.FACTORY.rangeQuery(localProject.getBaseVersion(), 1, 1, true,
+				true,
 				true,
 				true);
-			NullProgressMonitor monitor = new NullProgressMonitor();
+			final NullProgressMonitor monitor = new NullProgressMonitor();
 
 			List<ESHistoryInfo> infos = localProject.getHistoryInfos(query, monitor);
 			assertEquals(1, infos.size());
 
 			addPlayerToProject();
-			ESBranchVersionSpec branch = ESVersionSpec.FACTORY.createBRANCH("newBranch");
-			ESPrimaryVersionSpec head = localProject.commitToBranch(branch, "SomeCommitMessage", callback,
+			final ESBranchVersionSpec branch = ESVersionSpec.FACTORY.createBRANCH("newBranch");
+			final ESPrimaryVersionSpec head = localProject.commitToBranch(branch, "SomeCommitMessage", callback,
 				new NullProgressMonitor());
 			infos = localProject.getHistoryInfos(query, monitor);
 			assertEquals(2, infos.size());
 			// TODO assert infos
-		} catch (ESException e) {
+		} catch (final ESException e) {
 			log(e);
 			fail(e.getMessage());
 		}
@@ -220,7 +231,7 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 		assertTrue(localProject.hasUncommitedChanges());
 		try {
 			localProject.commit("SomeCommitMessage", callback, new NullProgressMonitor());
-		} catch (ESException e) {
+		} catch (final ESException e) {
 			log(e);
 			fail(e.getMessage());
 		}
@@ -230,10 +241,10 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 
 	@Test(expected = ESUpdateRequiredException.class)
 	public void testMergeAndExpectBaseVersionOutOfDateException() throws ESException {
-		NullProgressMonitor monitor = new NullProgressMonitor();
+		final NullProgressMonitor monitor = new NullProgressMonitor();
 		final Player player = ProjectChangeUtil.addPlayerToProject(localProject);
 		localProject.commit(monitor);
-		ESLocalProject checkedoutCopy = localProject.getRemoteProject().checkout("testCheckout", monitor);
+		final ESLocalProject checkedoutCopy = localProject.getRemoteProject().checkout("testCheckout", monitor);
 		final Player checkedoutPlayer = (Player) checkedoutCopy.getModelElements().get(0);
 
 		RunESCommand.run(new Callable<Void>() {
@@ -241,7 +252,7 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 				player.setName("A");
 				return null;
 			}
-		}, player);
+		});
 
 		localProject.commit(monitor);
 
@@ -250,7 +261,7 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 				checkedoutPlayer.setName("B");
 				return null;
 			}
-		}, checkedoutPlayer);
+		});
 		checkedoutCopy.commit(monitor);
 	}
 
@@ -265,7 +276,7 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 				localProject.getModelElements().add(league);
 				return null;
 			}
-		}, league);
+		});
 		assertTrue(localProject.contains(league));
 
 		final ESLocalProject secondProject = workspace.createLocalProject("SecondTestProject");
@@ -279,7 +290,7 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 				tournament.getPlayers().add(player);
 				return null;
 			}
-		}, tournament);
+		});
 
 		localProject.save();
 		secondProject.save();
@@ -288,13 +299,47 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 		stopEMFStore();
 		startEMFStore();
 
-		for (ESLocalProject localProject : ESWorkspaceProvider.INSTANCE.getWorkspace().getLocalProjects()) {
+		for (final ESLocalProject localProject : ESWorkspaceProvider.INSTANCE.getWorkspace().getLocalProjects()) {
 			if (localProject.getProjectName().equals("SecondTestProject")) {
-				Tournament t = (Tournament) localProject.getModelElements().get(0);
+				final Tournament t = (Tournament) localProject.getModelElements().get(0);
 				assertEquals(t.getPlayers().size(), 1);
 			}
 		}
 	}
+
+	@Test
+	public void testShareWithModelInExistingResource() throws IOException, ESException {
+		final Resource resource = createResource();
+		final League league = createLeague();
+		resource.getContents().add(league);
+		resource.save(ModelUtil.getResourceSaveOptions());
+
+		final ESLocalProject localProject = ESWorkspaceProvider.INSTANCE.getWorkspace().createLocalProject("test");
+		RunESCommand.run(new Callable<Void>() {
+			public Void call() throws Exception {
+				localProject.getModelElements().add(league);
+				return null;
+			}
+		});
+		localProject.shareProject(usersession, new NullProgressMonitor());
+
+		assertTrue(localProject.isShared());
+	}
+
+	private static Resource createResource() throws IOException {
+		final ResourceSetImpl resourceSet = new ResourceSetImpl();
+		final Resource resource = resourceSet.createResource(
+			URI.createFileURI(File.createTempFile("league", ".xmi").getAbsolutePath()));
+		return resource;
+	}
+
+	private static League createLeague() {
+		final League league = BowlingFactory.eINSTANCE.createLeague();
+		final Player player = BowlingFactory.eINSTANCE.createPlayer();
+		league.getPlayers().add(player);
+		return league;
+	}
+
 	// TODO: API does not support merging currently
 	// @Test
 	// public void testMerge() throws ESException {

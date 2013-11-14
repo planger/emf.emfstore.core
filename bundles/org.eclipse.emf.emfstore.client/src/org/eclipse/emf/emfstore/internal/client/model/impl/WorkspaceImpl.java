@@ -34,7 +34,7 @@ import org.eclipse.emf.emfstore.internal.client.model.Workspace;
  * <ul>
  * <li>{@link org.eclipse.emf.emfstore.internal.client.model.impl.WorkspaceImpl#getProjectSpaces <em>Project Spaces
  * </em>}</li>
- * <li>{@link org.eclipse.emf.emfstore.internal.client.model.impl.WorekspaceImpl#getServerInfos <em>Server Infos</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.internal.client.model.impl.WorkspaceImpl#getServerInfos <em>Server Infos</em>}</li>
  * <li>{@link org.eclipse.emf.emfstore.internal.client.model.impl.WorkspaceImpl#getUsersessions <em>Usersessions </em>}</li>
  * </ul>
  * </p>

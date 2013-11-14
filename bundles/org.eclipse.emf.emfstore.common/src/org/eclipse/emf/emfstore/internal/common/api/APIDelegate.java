@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 EclipseSource Muenchen GmbH.
+ * Copyright (c) 2012-2013 EclipseSource Muenchen GmbH and others.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Edgar Mueller
+ * Edgar Mueller - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.common.api;
 
@@ -20,7 +20,17 @@ package org.eclipse.emf.emfstore.internal.common.api;
  */
 public interface APIDelegate<API> {
 
+	/**
+	 * Returns the API interface of this class.
+	 * 
+	 * @return the API interface of this class
+	 */
 	API toAPI();
 
+	/**
+	 * Creates the API interface for this class.
+	 * 
+	 * @return the API interface of this class
+	 */
 	API createAPI();
 }

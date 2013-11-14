@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2012 EclipseSource Muenchen GmbH.
+ * Copyright (c) 2012-2013 EclipseSource Muenchen GmbH and others.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors: 
+ * Contributors:
  * JulianSommerfeldt
  ******************************************************************************/
 package org.eclipse.emf.emfstore.fuzzy.emf.diff;
@@ -23,9 +23,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite.SuiteClasses;
 
 /**
- * Class used as junit plugin test to create
- * {@link org.eclipse.emf.emfstore.fuzzy.emf.config.DiffReport}s from an
- * {@link TestRunProvider}.
+ * Class used as junit plugin test to create {@link org.eclipse.emf.emfstore.fuzzy.emf.config.DiffReport DiffReport}s
+ * from a {@link TestRunProvider}.
  * 
  * @author Julian Sommerfeldt
  * 
@@ -42,18 +41,18 @@ public class CreateAllDiffs {
 	@Test
 	public void createAllDiffs() {
 
-		DiffGenerator diffGenerator = new DiffGenerator();
+		final DiffGenerator diffGenerator = new DiffGenerator();
 
 		try {
-			HudsonTestRunProvider runProvider = new HudsonTestRunProvider();
-			for (TestConfig config : runProvider.getAllConfigs()) {
+			final HudsonTestRunProvider runProvider = new HudsonTestRunProvider();
+			for (final TestConfig config : runProvider.getAllConfigs()) {
 				runProvider.setConfig(config);
-				TestRun[] runs = runProvider.getTestRuns();
+				final TestRun[] runs = runProvider.getTestRuns();
 				diffGenerator.createDiff(runs[0], runs[1]);
 			}
-		} catch (DocumentException e) {
+		} catch (final DocumentException e) {
 			throw new RuntimeException("Could not create diffs.", e);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new RuntimeException("Could not create diffs.", e);
 		}
 	}

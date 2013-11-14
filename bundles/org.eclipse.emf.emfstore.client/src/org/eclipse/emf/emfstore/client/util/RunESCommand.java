@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 EclipseSource Muenchen GmbH.
+ * Copyright (c) 2012-2013 EclipseSource Muenchen GmbH and others.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,7 +18,6 @@ import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommand;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommandWithException;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommandWithResult;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommandWithResultAndException;
-import org.eclipse.emf.emfstore.server.exceptions.ESException;
 
 /**
  * Utility class for automatically wrapping changes against a model element
@@ -50,17 +49,21 @@ public final class RunESCommand {
 		 * @return the return value of the Callable
 		 * @throws ESException in case an error occurs during execution of the Callable
 		 * 
+		 * @param <E> Exception in case an error occurs during execution of the Callable
 		 * @param <T> the return type of the Callable
+		 * @throws E on execution failure
 		 */
 		public static <T, E extends Exception> T runWithResult(final Class<E> exceptionType,
 			final Callable<T> callable, EObject element)
 			throws E {
-			EMFStoreCommandWithResultAndException<T, E> cmd = new EMFStoreCommandWithResultAndException<T, E>() {
+			final EMFStoreCommandWithResultAndException<T, E> cmd = new EMFStoreCommandWithResultAndException<T, E>() {
 				@Override
 				protected T doRun() {
 					try {
 						return callable.call();
-					} catch (Exception e) {
+						// BEGIN SUPRESS CATCH EXCEPTION
+					} catch (final Exception e) {
+						// END SUPRESS CATCH EXCEPTION
 						if (exceptionType.isInstance(e)) {
 							setException(exceptionType.cast(e));
 						} else if (e instanceof RuntimeException) {
@@ -77,7 +80,7 @@ public final class RunESCommand {
 			T result = cmd.run(element, false);
 
 			if (cmd.hasException()) {
-				throw cmd.getExcpetion();
+				throw cmd.getException();
 			}
 
 			return result;
@@ -95,12 +98,14 @@ public final class RunESCommand {
 			EObject element)
 			throws T {
 
-			EMFStoreCommandWithException<T> cmd = new EMFStoreCommandWithException<T>() {
+			final EMFStoreCommandWithException<T> cmd = new EMFStoreCommandWithException<T>() {
 				@Override
 				protected void doRun() {
 					try {
 						callable.call();
-					} catch (Exception e) {
+						// BEGIN SUPRESS CATCH EXCEPTION
+					} catch (final Exception e) {
+						// END SUPRESS CATCH EXCEPTION
 						if (exceptionType.isInstance(e)) {
 							setException(exceptionType.cast(e));
 						} else if (e instanceof RuntimeException) {
@@ -133,7 +138,9 @@ public final class RunESCommand {
 			protected void doRun() {
 				try {
 					callable.call();
-				} catch (Exception e) {
+					// BEGIN SUPRESS CATCH EXCEPTION
+				} catch (final Exception e) {
+					// END SUPRESS CATCH EXCEPTION
 					// ignore
 				}
 			}
@@ -156,7 +163,9 @@ public final class RunESCommand {
 			protected T doRun() {
 				try {
 					return callable.call();
-				} catch (Exception e) {
+					// BEGIN SUPRESS CATCH EXCEPTION
+				} catch (final Exception e) {
+					// END SUPRESS CATCH EXCEPTION
 					// ignore
 				}
 				return null;

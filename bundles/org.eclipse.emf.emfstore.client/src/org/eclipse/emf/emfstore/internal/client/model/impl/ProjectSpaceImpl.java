@@ -7,6 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
+ * Otto von Wesendonk, Edgar Mueller, Maximilian Koegel - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model.impl;
 
@@ -39,6 +40,7 @@ import org.eclipse.emf.emfstore.internal.client.model.Usersession;
 import org.eclipse.emf.emfstore.internal.client.model.Workspace;
 import org.eclipse.emf.emfstore.internal.common.model.EMFStoreProperty;
 import org.eclipse.emf.emfstore.internal.common.model.Project;
+import org.eclipse.emf.emfstore.internal.common.model.impl.IdentifiableElementImpl;
 import org.eclipse.emf.emfstore.internal.server.model.FileIdentifier;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectId;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.ChangePackage;
@@ -67,8 +69,8 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.PrimaryVersionS
  * <li>{@link org.eclipse.emf.emfstore.internal.client.model.impl.ProjectSpaceImpl#isDirty <em>Dirty</em>}</li>
  * <li>{@link org.eclipse.emf.emfstore.internal.client.model.impl.ProjectSpaceImpl#getOldLogMessages <em>Old Log
  * Messages</em>}</li>
- * <li>{@link org.eclipse.emf.emfstore.internal.client.model.impl.ProjectSpaceImpl#getLocalOperations <em>Local
- * Operations</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.internal.client.model.impl.ProjectSpaceImpl#getLocalChangePackage() <em>Local
+ * Change Package</em>}</li>
  * <li>{@link org.eclipse.emf.emfstore.internal.client.model.impl.ProjectSpaceImpl#getWaitingUploads <em>Waiting Uploads
  * </em>}</li>
  * <li>{@link org.eclipse.emf.emfstore.internal.client.model.impl.ProjectSpaceImpl#getProperties <em>Properties</em>}</li>
@@ -79,7 +81,7 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.PrimaryVersionS
  * </p>
  * 
  */
-public class ProjectSpaceImpl extends ProjectSpaceBase implements ProjectSpace {
+public class ProjectSpaceImpl extends ProjectSpaceBase {
 
 	/**
 	 * The cached value of the '{@link #getProjectId() <em>Project Id</em>}' containment reference.
@@ -713,7 +715,7 @@ public class ProjectSpaceImpl extends ProjectSpaceBase implements ProjectSpace {
 	public EList<String> getOldLogMessages() {
 		if (oldLogMessages == null)
 		{
-			oldLogMessages = new EDataTypeUniqueEList<String>(String.class, this,
+			oldLogMessages = new EDataTypeEList<String>(String.class, this,
 				ModelPackage.PROJECT_SPACE__OLD_LOG_MESSAGES);
 		}
 		return oldLogMessages;

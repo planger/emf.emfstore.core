@@ -7,6 +7,8 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
+ * Otto von Wesendonk, Edgar Mueller, Maximilian Koegel - initial API and implementation
+ * Johannes Faltermeier - Decoupling ProjectSpace from Project and ChangePackage
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model;
 
@@ -21,6 +23,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.emfstore.client.callbacks.ESCommitCallback;
 import org.eclipse.emf.emfstore.client.callbacks.ESUpdateCallback;
+import org.eclipse.emf.emfstore.client.handler.ESRunnableContext;
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.ConflictResolver;
 import org.eclipse.emf.emfstore.internal.client.model.exceptions.ChangeConflictException;
 import org.eclipse.emf.emfstore.internal.client.model.exceptions.MEUrlResolutionException;
@@ -59,63 +62,67 @@ import org.eclipse.emf.emfstore.server.exceptions.ESException;
  *          <p>
  *          The following features are supported:
  *          <ul>
- *          <li>{@link org.eclipse.emf.emfstore.client.model.ProjectSpace#getProject <em> Project</em>}</li>
- *          <li>{@link org.eclipse.emf.emfstore.client.model.ProjectSpace#getProjectId
+ *          <li>{@link org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getProject <em> Project</em>}</li>
+ *          <li>{@link org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getProjectId
  *          <em>Project Id</em>}</li>
- *          <li>{@link org.eclipse.emf.emfstore.client.model.ProjectSpace#getProjectName
+ *          <li>{@link org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getProjectName
  *          <em>Project Name</em>}</li>
  *          <li>
- *          {@link org.eclipse.emf.emfstore.client.model.ProjectSpace#getProjectDescription
+ *          {@link org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getProjectDescription
  *          <em>Project Description</em>}</li>
- *          <li>{@link org.eclipse.emf.emfstore.client.model.ProjectSpace#getEvents <em> Events</em>}</li>
- *          <li>{@link org.eclipse.emf.emfstore.client.model.ProjectSpace#getUsersession
+ *          <li>{@link org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getUsersession
  *          <em>Usersession</em>}</li>
- *          <li>{@link org.eclipse.emf.emfstore.client.model.ProjectSpace#getLastUpdated
+ *          <li>{@link org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getLastUpdated
  *          <em>Last Updated</em>}</li>
- *          <li>{@link org.eclipse.emf.emfstore.client.model.ProjectSpace#getBaseVersion
+ *          <li>{@link org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getBaseVersion
  *          <em>Base Version</em>}</li>
  *          <li>
- *          {@link org.eclipse.emf.emfstore.client.model.ProjectSpace#getResourceCount
+ *          {@link org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getResourceCount
  *          <em>Resource Count</em>}</li>
- *          <li>{@link org.eclipse.emf.emfstore.client.model.ProjectSpace#isDirty <em> Dirty</em>}</li>
+ *          <li>{@link org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#isDirty <em> Dirty</em>}</li>
  *          <li>
- *          {@link org.eclipse.emf.emfstore.client.model.ProjectSpace#getOldLogMessages
+ *          {@link org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getOldLogMessages
  *          <em>Old Log Messages</em>}</li>
  *          <li>
- *          {@link org.eclipse.emf.emfstore.client.model.ProjectSpace#getLocalOperations
- *          <em>Local Operations</em>}</li>
+ *          {@link org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getLocalChangePackage()
+ *          <em>Local Change Package</em>}</li>
  *          <li>
- *          {@link org.eclipse.emf.emfstore.client.model.ProjectSpace#getNotifications
- *          <em>Notifications</em>}</li>
- *          <li>
- *          {@link org.eclipse.emf.emfstore.client.model.ProjectSpace#getEventComposite
- *          <em>Event Composite</em>}</li>
- *          <li>
- *          {@link org.eclipse.emf.emfstore.client.model.ProjectSpace#getNotificationComposite
- *          <em>Notification Composite </em>}</li>
- *          <li>
- *          {@link org.eclipse.emf.emfstore.client.model.ProjectSpace#getWaitingUploads
+ *          {@link org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getWaitingUploads
  *          <em>Waiting Uploads</em>}</li>
- *          <li>{@link org.eclipse.emf.emfstore.client.model.ProjectSpace#getProperties
+ *          <li>{@link org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getProperties
  *          <em>Properties</em>}</li>
  *          <li>
- *          {@link org.eclipse.emf.emfstore.client.model.ProjectSpace#getChangedSharedProperties
+ *          {@link org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getChangedSharedProperties
  *          <em>Changed Shared Properties</em>}</li>
  *          </ul>
  *          </p>
  * 
- * @see org.eclipse.emf.emfstore.client.model.ModelPackage#getProjectSpace()
+ * @see org.eclipse.emf.emfstore.internal.client.model.ModelPackage#getProjectSpace()
  * @model
  * @generated
  */
 public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalProjectImpl> {
 
 	/**
-	 * ID of the runnable context option.
+	 * ID of the runnable change context option.
 	 * 
 	 * @generated NOT
 	 */
-	static final String RUNNABLE_CONTEXT_ID = "org.eclipse.emf.emfstore.client.runnableContext";
+	String RUNNABLE_CONTEXT_ID = "org.eclipse.emf.emfstore.client.runnableChangeContext";
+
+	/**
+	 * <p>
+	 * Provides a context in which a {@link Runnable} is executed.
+	 * </p>
+	 * <p>
+	 * This may be used to provide a context while applying operations on a
+	 * {@link org.eclipse.emf.emfstore.client.ESLocalProject}.
+	 * </p>
+	 * 
+	 * @param runnableContext
+	 *            the runnable context to be set
+	 */
+	void setRunnableContext(ESRunnableContext runnableContext);
 
 	/**
 	 * Adds a file to this project space. The file will be uploaded to the
@@ -170,6 +177,9 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	/**
 	 * Commits all pending changes of the project space.
 	 * 
+	 * @param monitor
+	 *            a progress monitor that may be used during the commit to indicate the progress
+	 * 
 	 * @throws ESException
 	 *             in case the commit went wrong
 	 * 
@@ -201,8 +211,8 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 
 	/**
 	 * This method allows to commit changes to a new branch. It works very
-	 * similar to {@link #commit()} with the addition of a Branch specifier.
-	 * Once the branch is created use {@link #commit()} for further commits.
+	 * similar to {@link #commit(IProgressMonitor)} with the addition of a Branch specifier.
+	 * Once the branch is created use {@link #commit(IProgressMonitor)} for further commits.
 	 * 
 	 * 
 	 * @param branch
@@ -228,12 +238,27 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 *            the version which is supposed to be merged
 	 * @param conflictResolver
 	 *            a {@link ConflictResolver} for conflict resolving
+	 * @param monitor
+	 *            a progress monitor that may be used during the merge to indicate the progress
 	 * @throws ESException
 	 *             in case of an exception
 	 */
 	void mergeBranch(PrimaryVersionSpec branchSpec, ConflictResolver conflictResolver, IProgressMonitor monitor)
 		throws ESException;
 
+	/**
+	 * Merges the resolved conflict sets.
+	 * 
+	 * @param conflictSet
+	 *            a set containing the conflicts
+	 * @param myChangePackages
+	 *            a list of local change packages
+	 * @param theirChangePackages
+	 *            a list of containing the incoming change packages
+	 * @return a merge change package
+	 * 
+	 * @throws ChangeConflictException in case the conflicts can not be resolved
+	 */
 	ChangePackage mergeResolvedConflicts(ChangeConflictSet conflictSet,
 		List<ChangePackage> myChangePackages, List<ChangePackage> theirChangePackages)
 		throws ChangeConflictException;
@@ -319,7 +344,8 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 
 	/**
 	 * Returns the value of the '<em><b>Changed Shared Properties</b></em>'
-	 * reference list. The list contents are of type {@link org.eclipse.emf.emfstore.common.model.EMFStoreProperty}.
+	 * reference list. The list contents are of type
+	 * {@link org.eclipse.emf.emfstore.internal.common.model.EMFStoreProperty}.
 	 * <!--
 	 * begin-user-doc -->
 	 * <p>
@@ -330,7 +356,7 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 * 
 	 * @return the value of the '<em>Changed Shared Properties</em>' reference
 	 *         list.
-	 * @see org.eclipse.emf.emfstore.client.model.ModelPackage#getProjectSpace_ChangedSharedProperties()
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ModelPackage#getProjectSpace_ChangedSharedProperties()
 	 * @model
 	 * @generated
 	 */
@@ -367,6 +393,36 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 * @generated
 	 */
 	void setWorkspace(Workspace value);
+
+	/**
+	 * Returns the value of the '<em><b>Local Change Package</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Local Change Package</em>' containment reference isn't clear, there really should be
+	 * more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * 
+	 * @return the value of the '<em>Local Change Package</em>' containment reference.
+	 * @see #setLocalChangePackage(ChangePackage)
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ModelPackage#getProjectSpace_LocalChangePackage()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	ChangePackage getLocalChangePackage();
+
+	/**
+	 * Sets the value of the ' {@link org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getLocalChangePackage
+	 * <em>Local Change Package</em>}' containment reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Local Change Package</em>'
+	 *            containment reference.
+	 * @see #getLocalChangePackage()
+	 * @generated
+	 */
+	void setLocalChangePackage(ChangePackage value);
 
 	/**
 	 * Returns the value of the '<em><b>Merged Version</b></em>' containment reference.
@@ -475,7 +531,7 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 * 
 	 * @return the value of the '<em>Last Updated</em>' attribute.
 	 * @see #setLastUpdated(Date)
-	 * @see org.eclipse.emf.emfstore.client.model.ModelPackage#getProjectSpace_LastUpdated()
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ModelPackage#getProjectSpace_LastUpdated()
 	 * @model
 	 * @generated
 	 */
@@ -503,7 +559,7 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 * <!-- end-user-doc -->
 	 * 
 	 * @return the value of the '<em>Old Log Messages</em>' attribute list.
-	 * @see org.eclipse.emf.emfstore.client.model.ModelPackage#getProjectSpace_OldLogMessages()
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ModelPackage#getProjectSpace_OldLogMessages()
 	 * @model
 	 * @generated
 	 */
@@ -580,7 +636,7 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 * 
 	 * @return the value of the '<em>Project Name</em>' attribute.
 	 * @see #setProjectName(String)
-	 * @see org.eclipse.emf.emfstore.client.model.ModelPackage#getProjectSpace_ProjectName()
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ModelPackage#getProjectSpace_ProjectName()
 	 * @model required="true"
 	 * @generated
 	 */
@@ -588,7 +644,8 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 
 	/**
 	 * Returns the value of the '<em><b>Properties</b></em>' containment
-	 * reference list. The list contents are of type {@link org.eclipse.emf.emfstore.common.model.EMFStoreProperty}.
+	 * reference list. The list contents are of type
+	 * {@link org.eclipse.emf.emfstore.internal.common.model.EMFStoreProperty}.
 	 * <!--
 	 * begin-user-doc -->
 	 * <p>
@@ -598,7 +655,7 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 * 
 	 * @return the value of the '<em>Properties</em>' containment reference
 	 *         list.
-	 * @see org.eclipse.emf.emfstore.client.model.ModelPackage#getProjectSpace_Properties()
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ModelPackage#getProjectSpace_Properties()
 	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
@@ -623,7 +680,7 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 * 
 	 * @return the value of the '<em>Usersession</em>' reference.
 	 * @see #setUsersession(Usersession)
-	 * @see org.eclipse.emf.emfstore.client.model.ModelPackage#getProjectSpace_Usersession()
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ModelPackage#getProjectSpace_Usersession()
 	 * @model
 	 * @generated
 	 */
@@ -631,7 +688,8 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 
 	/**
 	 * Returns the value of the '<em><b>Waiting Uploads</b></em>' containment
-	 * reference list. The list contents are of type {@link org.eclipse.emf.emfstore.server.model.FileIdentifier}. <!--
+	 * reference list. The list contents are of type
+	 * {@link org.eclipse.emf.emfstore.internal.server.model.FileIdentifier}. <!--
 	 * begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Waiting Uploads</em>' containment reference list isn't clear, there really should be
@@ -641,7 +699,7 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 * 
 	 * @return the value of the '<em>Waiting Uploads</em>' containment reference
 	 *         list.
-	 * @see org.eclipse.emf.emfstore.client.model.ModelPackage#getProjectSpace_WaitingUploads()
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ModelPackage#getProjectSpace_WaitingUploads()
 	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
@@ -677,6 +735,9 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	/**
 	 * Deletes the project space.
 	 * 
+	 * @param monitor
+	 *            a progress monitor that may be used during the delete to indicate the progress
+	 * 
 	 * @generated NOT
 	 * 
 	 * @throws IOException
@@ -688,6 +749,8 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 * Returns the resource set of the ProjectSpace.
 	 * 
 	 * @return resource set of the ProjectSpace
+	 * 
+	 * @generated NOT
 	 */
 	ResourceSet getResourceSet();
 
@@ -710,7 +773,7 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 * 
 	 * @return the value of the '<em>Dirty</em>' attribute.
 	 * @see #setDirty(boolean)
-	 * @see org.eclipse.emf.emfstore.client.model.ModelPackage#getProjectSpace_Dirty()
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ModelPackage#getProjectSpace_Dirty()
 	 * @model
 	 * @generated
 	 */
@@ -777,7 +840,10 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 * 
 	 * @param versionSpec
 	 *            the spec to resolve
-	 * @return the primary version spec <!-- end-user-doc -->
+	 * @param monitor
+	 *            a progress monitor that may be used during resolving the version to indicate the progress
+	 * 
+	 * @return the primary version specifier <!-- end-user-doc -->
 	 * @throws ESException
 	 *             if resolving fails
 	 * @model
@@ -816,7 +882,7 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 * 
 	 * @return the value of the '<em>Resource Count</em>' attribute.
 	 * @see #setResourceCount(int)
-	 * @see org.eclipse.emf.emfstore.client.model.ModelPackage#getProjectSpace_ResourceCount()
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ModelPackage#getProjectSpace_ResourceCount()
 	 * @model
 	 * @generated
 	 */
@@ -966,6 +1032,9 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	/**
 	 * <!-- begin-user-doc --> Update the project to the head version.
 	 * 
+	 * @param monitor
+	 *            a progress monitor that may be used during update to indicate progress
+	 * 
 	 * @return the new base version
 	 * @throws ESException
 	 *             if update fails <!-- end-user-doc -->
@@ -993,15 +1062,15 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 * @param version
 	 *            the {@link VersionSpec} to update to
 	 * @param callback
-	 *            the {@link UpdateCallback} that will be called when the update
+	 *            the {@link ESUpdateCallback} that will be called when the update
 	 *            has been performed
 	 * @param progress
 	 *            an {@link IProgressMonitor} instance
-	 * @return the current version spec
+	 * @return the current version specifier
 	 * 
 	 * @throws ESException
 	 *             in case the update went wrong
-	 * @see UpdateCallback#updateCompleted(ProjectSpace, PrimaryVersionSpec, PrimaryVersionSpec)
+	 * 
 	 * @generated NOT
 	 */
 	PrimaryVersionSpec update(VersionSpec version, ESUpdateCallback callback, IProgressMonitor progress)

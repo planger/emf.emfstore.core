@@ -39,9 +39,9 @@ import org.eclipse.emf.emfstore.client.ESWorkspaceProvider;
 import org.eclipse.emf.emfstore.client.test.integration.forward.IntegrationTestHelper;
 import org.eclipse.emf.emfstore.client.test.server.TestSessionProvider;
 import org.eclipse.emf.emfstore.client.util.ClientURIUtil;
+import org.eclipse.emf.emfstore.common.ESResourceSetProvider;
 import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionPoint;
 import org.eclipse.emf.emfstore.common.extensionpoint.ESPriorityComparator;
-import org.eclipse.emf.emfstore.common.extensionpoint.ESResourceSetProvider;
 import org.eclipse.emf.emfstore.internal.client.model.Configuration;
 import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
 import org.eclipse.emf.emfstore.internal.client.model.ModelFactory;
@@ -458,9 +458,7 @@ public class SetupHelper {
 	 */
 	public static void cleanupServer() {
 		ESExtensionPoint extensionPoint = new ESExtensionPoint("org.eclipse.emf.emfstore.server.resourceSetProvider",
-			true);
-		extensionPoint.setComparator(new ESPriorityComparator("priority", true));
-		extensionPoint.reload();
+			true, new ESPriorityComparator("priority", true));
 
 		ESResourceSetProvider resourceSetProvider = extensionPoint.getElementWithHighestPriority().getClass("class",
 			ESResourceSetProvider.class);
@@ -508,9 +506,7 @@ public class SetupHelper {
 		ESWorkspaceProviderImpl.getInstance().dispose();
 
 		ESExtensionPoint extensionPoint = new ESExtensionPoint("org.eclipse.emf.emfstore.client.resourceSetProvider",
-			true);
-		extensionPoint.setComparator(new ESPriorityComparator("priority", true));
-		extensionPoint.reload();
+			true, new ESPriorityComparator("priority", true));
 
 		ESResourceSetProvider resourceSetProvider = extensionPoint.getElementWithHighestPriority().getClass("class",
 			ESResourceSetProvider.class);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 EclipseSource Muenchen GmbH.
+ * Copyright (c) 2012-2013 EclipseSource Muenchen GmbH and others.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -46,8 +46,9 @@ public class WorkspaceTest {
 
 	@After
 	public void tearDown() throws Exception {
-		for (ESLocalProject lp : workspace.getLocalProjects())
+		for (final ESLocalProject lp : workspace.getLocalProjects()) {
 			lp.delete(new NullProgressMonitor());
+		}
 	}
 
 	@Test
@@ -60,13 +61,13 @@ public class WorkspaceTest {
 
 	@Test
 	public void testAddServer() {
-		int servers = workspace.getServers().size();
-		ESServer server = ESServer.FACTORY.createServer("foo.net", 1234, KeyStoreManager.DEFAULT_CERTIFICATE);
+		final int servers = workspace.getServers().size();
+		final ESServer server = ESServer.FACTORY.createServer("foo.net", 1234, KeyStoreManager.DEFAULT_CERTIFICATE);
 		workspace.addServer(server);
 		assertEquals(servers + 1, workspace.getServers().size());
 		try {
 			workspace.removeServer(server);
-		} catch (ESServerNotFoundException e) {
+		} catch (final ESServerNotFoundException e) {
 			fail(e.getMessage());
 		}
 		assertEquals(servers, workspace.getServers().size());
@@ -76,5 +77,15 @@ public class WorkspaceTest {
 	public void testRemoveNotExistingServer() throws ESServerNotFoundException {
 		workspace.removeServer(
 			ESServer.FACTORY.createServer("foo.net", 1234, KeyStoreManager.DEFAULT_CERTIFICATE));
+	}
+
+	@Test
+	public void testRemoveServer() throws ESServerNotFoundException {
+		final ESServer server = ESServer.FACTORY.createServer("foo.net", 1234, KeyStoreManager.DEFAULT_CERTIFICATE);
+		workspace.addServer(server);
+		for (final ESServer s : workspace.getServers()) {
+			workspace.removeServer(s);
+		}
+		assertEquals(0, workspace.getServers().size());
 	}
 }
