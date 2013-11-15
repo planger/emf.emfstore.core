@@ -1370,6 +1370,23 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 			getLocalChangePackage().eResource().getResourceSet().getResources()
 				.remove(getLocalChangePackage().eResource());
 		}
+
+		if (eResource() instanceof EMFStoreResource) {
+			final EMFStoreResource emfStoreResource = (EMFStoreResource) eResource();
+			emfStoreResource.getEObjectToIDMap().clear();
+			emfStoreResource.getIDToEObjectMap().clear();
+		}
+		if (getProject().eResource() instanceof EMFStoreResource) {
+			final EMFStoreResource emfStoreResource = (EMFStoreResource) getProject().eResource();
+			emfStoreResource.getEObjectToIDMap().clear();
+			emfStoreResource.getIDToEObjectMap().clear();
+		}
+		if (getLocalChangePackage().eResource() instanceof EMFStoreResource) {
+			final EMFStoreResource emfStoreResource = (EMFStoreResource) getLocalChangePackage().eResource();
+			emfStoreResource.getEObjectToIDMap().clear();
+			emfStoreResource.getIDToEObjectMap().clear();
+		}
+
 		editingDomain.getCommandStack().flush();
 
 		disposed = true;

@@ -32,6 +32,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.emfstore.client.ESLocalProject;
 import org.eclipse.emf.emfstore.client.ESRemoteProject;
 import org.eclipse.emf.emfstore.client.ESServer;
@@ -143,27 +145,34 @@ public class SetupHelper {
 	 * @return the project space containing the generated project
 	 */
 	public void generateRandomProject() {
-		Project project = org.eclipse.emf.emfstore.internal.common.model.ModelFactory.eINSTANCE.createProject();
-		ModelMutatorConfiguration config = createModelMutatorConfigurationRandom(modelKey, project, minObjectsCount,
-			seed);
+		final Project project = org.eclipse.emf.emfstore.internal.common.model.ModelFactory.eINSTANCE.createProject();
 		Configuration.getClientBehavior().setAutoSave(false);
-		ModelMutator.generateModel(config);
-		ESWorkspaceImpl workspace2 = ESWorkspaceProviderImpl.getInstance().getWorkspace();
+		final ESWorkspaceImpl workspace2 = ESWorkspaceProviderImpl.getInstance().getWorkspace();
 		testProjectSpace = workspace2.toInternalAPI().importProject(project, "Generated project", "");
+
+		final EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(project);
+		final ModelMutatorConfiguration config = createModelMutatorConfigurationRandom(modelKey, project,
+			minObjectsCount, seed, editingDomain);
+		ModelMutator.generateModel(config);
 		projectId = testProjectSpace.getProjectId();
 	}
 
 	private ModelMutatorConfiguration createModelMutatorConfigurationRandom(String modelKey, EObject rootObject,
-		int minObjectsCount, long seed) {
-		ModelMutatorConfiguration config = new ModelMutatorConfiguration(ModelMutatorUtil.getEPackage(modelKey),
+		int minObjectsCount, long seed, EditingDomain editingDomain) {
+
+		if (editingDomain == null) {
+			final ESWorkspaceImpl workspace2 = ESWorkspaceProviderImpl.getInstance().getWorkspace();
+			editingDomain = workspace2.toInternalAPI().getEditingDomain();
+		}
+
+		final ModelMutatorConfiguration config = new ModelMutatorConfiguration(ModelMutatorUtil.getEPackage(modelKey),
 			rootObject, seed);
 		config.setIgnoreAndLog(false);
 		config.setMinObjectsCount(minObjectsCount);
-		List<EStructuralFeature> eStructuralFeaturesToIgnore = new ArrayList<EStructuralFeature>();
+		final List<EStructuralFeature> eStructuralFeaturesToIgnore = new ArrayList<EStructuralFeature>();
 		eStructuralFeaturesToIgnore.remove(org.eclipse.emf.emfstore.internal.common.model.ModelPackage.eINSTANCE
 			.getProject_CutElements());
-		ESWorkspaceImpl workspace2 = ESWorkspaceProviderImpl.getInstance().getWorkspace();
-		config.setEditingDomain(workspace2.toInternalAPI().getEditingDomain());
+		config.setEditingDomain(editingDomain);
 		config.seteStructuralFeaturesToIgnore(eStructuralFeaturesToIgnore);
 		return config;
 	}
@@ -179,7 +188,7 @@ public class SetupHelper {
 			// properties.setProperty(ServerConfiguration.RMI_ENCRYPTION, ServerConfiguration.FALSE);
 			EMFStoreController.runAsNewThread();
 			LOGGER.log(Level.INFO, "server started. ");
-		} catch (FatalESException e) {
+		} catch (final FatalESException e) {
 			e.printStackTrace();
 		}
 	}
@@ -188,14 +197,14 @@ public class SetupHelper {
 	 * Stops the server.
 	 */
 	public static void stopServer() {
-		EMFStoreController server = EMFStoreController.getInstance();
+		final EMFStoreController server = EMFStoreController.getInstance();
 		if (server != null) {
 			server.stop();
 		}
 		try {
 			// give the server some time to unbind from it's ips. Not the nicest solution ...
 			Thread.sleep(10000);
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 		}
 	}
 
@@ -206,13 +215,13 @@ public class SetupHelper {
 	 */
 	public static void addUserFileToServer(boolean override) {
 		try {
-			File file = new File(ServerConfiguration.getProperties().getProperty(
+			final File file = new File(ServerConfiguration.getProperties().getProperty(
 				ServerConfiguration.AUTHENTICATION_SPFV_FILEPATH, ServerConfiguration.getDefaultSPFVFilePath()));
 			if (override && file.exists()) {
 				file.delete();
 			}
 			FileUtil.copyFile(SetupHelper.class.getResourceAsStream("user.properties"), file);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -225,9 +234,9 @@ public class SetupHelper {
 	 * @throws ESException in case of failure
 	 */
 	public static ACOrgUnitId createUserOnServer(String username) throws ESException {
-		AdminConnectionManager adminConnectionManager = ESWorkspaceProviderImpl.getInstance()
+		final AdminConnectionManager adminConnectionManager = ESWorkspaceProviderImpl.getInstance()
 			.getAdminConnectionManager();
-		SessionId sessionId = TestSessionProvider.getInstance().getDefaultUsersession().getSessionId();
+		final SessionId sessionId = TestSessionProvider.getInstance().getDefaultUsersession().getSessionId();
 		adminConnectionManager.initConnection(createServer().toInternalAPI(), sessionId);
 		return adminConnectionManager.createUser(sessionId, username);
 	}
@@ -239,9 +248,9 @@ public class SetupHelper {
 	 * @throws ESException if deletion fails
 	 */
 	public static void deleteUserOnServer(ACOrgUnitId userId) throws ESException {
-		AdminConnectionManager adminConnectionManager = ESWorkspaceProviderImpl.getInstance()
+		final AdminConnectionManager adminConnectionManager = ESWorkspaceProviderImpl.getInstance()
 			.getAdminConnectionManager();
-		SessionId sessionId = TestSessionProvider.getInstance().getDefaultUsersession().getSessionId();
+		final SessionId sessionId = TestSessionProvider.getInstance().getDefaultUsersession().getSessionId();
 		adminConnectionManager.initConnection(createServer().toInternalAPI(), sessionId);
 		adminConnectionManager.deleteUser(sessionId, userId);
 	}
@@ -255,9 +264,9 @@ public class SetupHelper {
 	 * @throws ESException in case of failure
 	 */
 	public static void setUsersRole(ACOrgUnitId orgUnitId, EClass role, ProjectId projectId) throws ESException {
-		AdminConnectionManager adminConnectionManager = ESWorkspaceProviderImpl.getInstance()
+		final AdminConnectionManager adminConnectionManager = ESWorkspaceProviderImpl.getInstance()
 			.getAdminConnectionManager();
-		SessionId sessionId = TestSessionProvider.getInstance().getDefaultUsersession().getSessionId();
+		final SessionId sessionId = TestSessionProvider.getInstance().getDefaultUsersession().getSessionId();
 		adminConnectionManager.initConnection(createServer().toInternalAPI(), sessionId);
 		adminConnectionManager.changeRole(sessionId, projectId, orgUnitId, role);
 	}
@@ -278,9 +287,9 @@ public class SetupHelper {
 		// copy whole folders and storage from file system to .unicase.test/emfstore
 
 		ServerConfiguration.setTesting(true);
-		String serverPath = ServerConfiguration.getServerHome();
-		File targetLocation = new File(serverPath);
-		String path = "TestProjects/Projects";
+		final String serverPath = ServerConfiguration.getServerHome();
+		final File targetLocation = new File(serverPath);
+		final String path = "TestProjects/Projects";
 		String srcPath = Activator.getDefault().getBundle().getLocation() + path;
 		if (File.separator.equals("/")) {
 			srcPath = srcPath.replace("reference:file:", "");
@@ -288,21 +297,21 @@ public class SetupHelper {
 		} else {
 			srcPath = srcPath.replace("reference:file:/", "");
 		}
-		File sourceLocation = new File(srcPath);
+		final File sourceLocation = new File(srcPath);
 
 		try {
 			FileUtils.copyDirectory(sourceLocation, targetLocation);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 
 		// start server.
 
 		try {
-			Properties properties = ServerConfiguration.getProperties();
+			final Properties properties = ServerConfiguration.getProperties();
 			properties.setProperty(ServerConfiguration.RMI_ENCRYPTION, ServerConfiguration.FALSE);
 			EMFStoreController.runAsNewThread();
-		} catch (FatalESException e) {
+		} catch (final FatalESException e) {
 			e.printStackTrace();
 		}
 		LOGGER.log(Level.INFO, "setup server space finished");
@@ -316,7 +325,7 @@ public class SetupHelper {
 		if (usersession == null) {
 			usersession = ModelFactory.eINSTANCE.createUsersession();
 
-			ServerInfo serverInfo = createServer().toInternalAPI();
+			final ServerInfo serverInfo = createServer().toInternalAPI();
 			usersession.setServerInfo(serverInfo);
 			usersession.setUsername("super");
 			usersession.setPassword("super");
@@ -325,9 +334,9 @@ public class SetupHelper {
 		if (!usersession.isLoggedIn()) {
 			try {
 				usersession.logIn();
-			} catch (AccessControlException e) {
+			} catch (final AccessControlException e) {
 				e.printStackTrace();
-			} catch (ESException e) {
+			} catch (final ESException e) {
 				e.printStackTrace();
 			}
 		}
@@ -339,7 +348,7 @@ public class SetupHelper {
 	 * @return server info
 	 */
 	public static ESServerImpl createServer() {
-		ESServerImpl server = (ESServerImpl) ESServer.FACTORY.createServer(
+		final ESServerImpl server = (ESServerImpl) ESServer.FACTORY.createServer(
 			"localhost", port, KeyStoreManager.DEFAULT_CERTIFICATE);
 		ESWorkspaceProvider.INSTANCE.getWorkspace().addServer(server);
 		return server;
@@ -351,7 +360,7 @@ public class SetupHelper {
 	public void setupWorkSpace() {
 		LOGGER.log(Level.INFO, "setting up workspace...");
 		CommonUtil.setTesting(true);
-		ESWorkspaceProviderImpl instance = ESWorkspaceProviderImpl.getInstance();
+		final ESWorkspaceProviderImpl instance = ESWorkspaceProviderImpl.getInstance();
 		instance.dispose();
 		workSpace = instance.getWorkspace().toInternalAPI();
 		LOGGER.log(Level.INFO, "workspace initialized");
@@ -365,7 +374,7 @@ public class SetupHelper {
 
 			@Override
 			protected void doRun() {
-				ProjectSpace projectSpace = ModelFactory.eINSTANCE.createProjectSpace();
+				final ProjectSpace projectSpace = ModelFactory.eINSTANCE.createProjectSpace();
 				projectSpace.setProject(org.eclipse.emf.emfstore.internal.common.model.ModelFactory.eINSTANCE
 					.createProject());
 				projectSpace.setProjectName("Testproject");
@@ -423,7 +432,7 @@ public class SetupHelper {
 					uriString = new File(uriString).getCanonicalPath();
 					LOGGER.log(Level.INFO, "importing " + uriString);
 					testProjectSpace = importProject(uriString);
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					e.printStackTrace();
 				}
 			}
@@ -444,7 +453,7 @@ public class SetupHelper {
 			protected void doRun() {
 				try {
 					testProjectSpace = importProject(absolutePath);
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					e.printStackTrace();
 				}
 			}
@@ -457,27 +466,29 @@ public class SetupHelper {
 	 * Cleans server up.
 	 */
 	public static void cleanupServer() {
-		ESExtensionPoint extensionPoint = new ESExtensionPoint("org.eclipse.emf.emfstore.server.resourceSetProvider",
+		final ESExtensionPoint extensionPoint = new ESExtensionPoint(
+			"org.eclipse.emf.emfstore.server.resourceSetProvider",
 			true, new ESPriorityComparator("priority", true));
 
-		ESResourceSetProvider resourceSetProvider = extensionPoint.getElementWithHighestPriority().getClass("class",
+		final ESResourceSetProvider resourceSetProvider = extensionPoint.getElementWithHighestPriority().getClass(
+			"class",
 			ESResourceSetProvider.class);
 
-		ResourceSet resourceSet = resourceSetProvider.getResourceSet();
+		final ResourceSet resourceSet = resourceSetProvider.getResourceSet();
 
-		URI serverspaceURI = ServerURIUtil.createServerSpaceURI();
+		final URI serverspaceURI = ServerURIUtil.createServerSpaceURI();
 
 		if (resourceSet.getURIConverter().exists(serverspaceURI, null)) {
-			Resource mainResource = resourceSet.getResource(serverspaceURI, true);
-			ServerSpace serverspace = (ServerSpace) mainResource.getContents().get(0);
+			final Resource mainResource = resourceSet.getResource(serverspaceURI, true);
+			final ServerSpace serverspace = (ServerSpace) mainResource.getContents().get(0);
 			try {
-				for (ProjectHistory project : serverspace.getProjects()) {
-					for (Version version : project.getVersions()) {
-						ChangePackage changes = version.getChanges();
+				for (final ProjectHistory project : serverspace.getProjects()) {
+					for (final Version version : project.getVersions()) {
+						final ChangePackage changes = version.getChanges();
 						if (changes != null) {
 							changes.eResource().delete(null);
 						}
-						Project projectState = version.getProjectState();
+						final Project projectState = version.getProjectState();
 						if (projectState != null) {
 							projectState.eResource().delete(null);
 						}
@@ -488,7 +499,7 @@ public class SetupHelper {
 					}
 				}
 				mainResource.delete(null);
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				e.printStackTrace();
 			}
 		}
@@ -505,20 +516,22 @@ public class SetupHelper {
 	public static void cleanupWorkspace() throws IOException {
 		ESWorkspaceProviderImpl.getInstance().dispose();
 
-		ESExtensionPoint extensionPoint = new ESExtensionPoint("org.eclipse.emf.emfstore.client.resourceSetProvider",
+		final ESExtensionPoint extensionPoint = new ESExtensionPoint(
+			"org.eclipse.emf.emfstore.client.resourceSetProvider",
 			true, new ESPriorityComparator("priority", true));
 
-		ESResourceSetProvider resourceSetProvider = extensionPoint.getElementWithHighestPriority().getClass("class",
+		final ESResourceSetProvider resourceSetProvider = extensionPoint.getElementWithHighestPriority().getClass(
+			"class",
 			ESResourceSetProvider.class);
 
-		ResourceSet resourceSet = resourceSetProvider.getResourceSet();
+		final ResourceSet resourceSet = resourceSetProvider.getResourceSet();
 
-		URI workspaceURI = ClientURIUtil.createWorkspaceURI();
+		final URI workspaceURI = ClientURIUtil.createWorkspaceURI();
 
 		if (resourceSet.getURIConverter().exists(workspaceURI, null)) {
-			Resource mainResource = resourceSet.getResource(workspaceURI, true);
-			Workspace workspace = (Workspace) mainResource.getContents().get(0);
-			for (ProjectSpace ps : workspace.getProjectSpaces()) {
+			final Resource mainResource = resourceSet.getResource(workspaceURI, true);
+			final Workspace workspace = (Workspace) mainResource.getContents().get(0);
+			for (final ProjectSpace ps : workspace.getProjectSpaces()) {
 				ps.getProject().eResource().delete(null);
 				ps.getLocalChangePackage().eResource().delete(null);
 				ps.eResource().delete(null);
@@ -585,11 +598,11 @@ public class SetupHelper {
 
 			@Override
 			protected void doRun() {
-				String uriString = Activator.getDefault().getBundle().getLocation() + path;
+				final String uriString = Activator.getDefault().getBundle().getLocation() + path;
 				try {
 					testProjectSpace = workSpace.importProject(uriString);
 					projectId = testProjectSpace.getProjectId();
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					Assert.fail();
 				}
 			}
@@ -606,11 +619,11 @@ public class SetupHelper {
 			protected void doRun() {
 				if (usersession == null) {
 					usersession = ModelFactory.eINSTANCE.createUsersession();
-					ServerInfo serverInfo = createServer().toInternalAPI();
+					final ServerInfo serverInfo = createServer().toInternalAPI();
 					usersession.setServerInfo(serverInfo);
 					usersession.setUsername("super");
 					usersession.setPassword("super");
-					ESWorkspaceImpl workspace = ESWorkspaceProviderImpl.getInstance().getWorkspace();
+					final ESWorkspaceImpl workspace = ESWorkspaceProviderImpl.getInstance().getWorkspace();
 					workspace.toInternalAPI().getUsersessions().add(usersession);
 				}
 				try {
@@ -620,7 +633,7 @@ public class SetupHelper {
 
 					getTestProjectSpace().shareProject(usersession, new NullProgressMonitor());
 					LOGGER.log(Level.INFO, "project shared.");
-				} catch (ESException e) {
+				} catch (final ESException e) {
 					e.printStackTrace();
 				}
 				projectId = testProjectSpace.getProjectId();
@@ -642,7 +655,7 @@ public class SetupHelper {
 				try {
 					getTestProjectSpace().commit("SomeCommitMessage", null, new NullProgressMonitor());
 					System.out.println("commit successful!");
-				} catch (ESException e) {
+				} catch (final ESException e) {
 					e.printStackTrace();
 				}
 
@@ -686,11 +699,12 @@ public class SetupHelper {
 			protected void doRun() {
 
 				try {
-					ESRemoteProject remoteProject = new ESRemoteProjectImpl(usersession.getServerInfo(), projectInfo);
-					ESLocalProject checkout = remoteProject.checkout("testCheckout", new NullProgressMonitor());
+					final ESRemoteProject remoteProject = new ESRemoteProjectImpl(usersession.getServerInfo(),
+						projectInfo);
+					final ESLocalProject checkout = remoteProject.checkout("testCheckout", new NullProgressMonitor());
 					compareProject = ((ESLocalProjectImpl) checkout).toInternalAPI().getProject();
 					LOGGER.log(Level.INFO, "compare project checked out.");
-				} catch (ESException e) {
+				} catch (final ESException e) {
 					e.printStackTrace();
 				}
 
@@ -735,7 +749,7 @@ public class SetupHelper {
 	 * @return versionspec
 	 */
 	public static PrimaryVersionSpec createPrimaryVersionSpec(int i) {
-		PrimaryVersionSpec versionSpec = VersioningFactory.eINSTANCE.createPrimaryVersionSpec();
+		final PrimaryVersionSpec versionSpec = VersioningFactory.eINSTANCE.createPrimaryVersionSpec();
 		versionSpec.setIdentifier(i);
 		return versionSpec;
 	}
@@ -764,10 +778,10 @@ public class SetupHelper {
 		cleanupWorkspace();
 		cleanupServer();
 
-		String serverPath = ServerConfiguration.getServerHome();
-		String clientPath = Configuration.getFileInfo().getWorkspaceDirectory();
-		File serverDirectory = new File(serverPath);
-		File clientDirectory = new File(clientPath);
+		final String serverPath = ServerConfiguration.getServerHome();
+		final String clientPath = Configuration.getFileInfo().getWorkspaceDirectory();
+		final File serverDirectory = new File(serverPath);
+		final File clientDirectory = new File(clientPath);
 
 		if (serverDirectory.exists()) {
 			FileUtil.deleteDirectory(serverDirectory, true);

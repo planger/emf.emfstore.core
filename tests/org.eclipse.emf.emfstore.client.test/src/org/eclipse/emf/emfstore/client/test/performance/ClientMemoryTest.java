@@ -26,8 +26,8 @@ public class ClientMemoryTest {
 	private static MemoryMeter memoryMeter;
 
 	private static String modelKey = "http://org/eclipse/example/bowling";
-	private static int minObjectsCount = 100000;
-	private static long seed = 1234567800;
+	private static int minObjectsCount = 100;
+	private static long seed = 100;
 
 	@BeforeClass
 	public static void beforeClass() {
@@ -50,12 +50,15 @@ public class ClientMemoryTest {
 	@Test
 	public void testClientMemory() throws IllegalArgumentException, InterruptedException, IOException {
 		setupHelper.generateRandomProject();
-		Project clonedProject = ModelUtil.clone(setupHelper.getTestProject());
+		final Project clonedProject = ModelUtil.clone(setupHelper.getTestProject());
 
-		ReferenceQueue<EObject> refQueue = new ReferenceQueue<EObject>();
-		PhantomReference<Project> projectRef = new PhantomReference<Project>(setupHelper.getTestProject(), refQueue);
-		PhantomReference<ChangePackage> cpRef = new PhantomReference<ChangePackage>(setupHelper.getTestProjectSpace()
+		final ReferenceQueue<EObject> refQueue = new ReferenceQueue<EObject>();
+		final PhantomReference<Project> projectRef = new PhantomReference<Project>(setupHelper.getTestProject(),
+			refQueue);
+		final PhantomReference<ChangePackage> cpRef = new PhantomReference<ChangePackage>(setupHelper
+			.getTestProjectSpace()
 			.getLocalChangePackage(), refQueue);
+		setupHelper.getTestProjectSpace().save();
 		ESWorkspaceProviderImpl.getInstance().getWorkspace().toInternalAPI()
 			.closeProject(setupHelper.getTestProjectSpace());
 		Runtime.getRuntime().gc();
@@ -63,7 +66,8 @@ public class ClientMemoryTest {
 		if (result == null) {
 			fail("No GC");
 		}
-		result = refQueue.remove(5000);
+		System.gc();
+		result = refQueue.remove(10000);
 		if (result == null) {
 			fail("Only one element was GC");
 		}
