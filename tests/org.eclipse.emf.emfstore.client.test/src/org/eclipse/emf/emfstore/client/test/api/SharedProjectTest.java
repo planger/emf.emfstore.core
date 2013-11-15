@@ -252,7 +252,7 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 				player.setName("A");
 				return null;
 			}
-		});
+		}, player);
 
 		localProject.commit(monitor);
 
@@ -261,7 +261,7 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 				checkedoutPlayer.setName("B");
 				return null;
 			}
-		});
+		}, checkedoutPlayer);
 		checkedoutCopy.commit(monitor);
 	}
 
@@ -276,7 +276,7 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 				localProject.getModelElements().add(league);
 				return null;
 			}
-		});
+		}, league);
 		assertTrue(localProject.contains(league));
 
 		final ESLocalProject secondProject = workspace.createLocalProject("SecondTestProject");
@@ -290,7 +290,7 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 				tournament.getPlayers().add(player);
 				return null;
 			}
-		});
+		}, tournament);
 
 		localProject.save();
 		secondProject.save();
@@ -320,7 +320,7 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 				localProject.getModelElements().add(league);
 				return null;
 			}
-		});
+		}, league);
 		localProject.shareProject(usersession, new NullProgressMonitor());
 
 		assertTrue(localProject.isShared());

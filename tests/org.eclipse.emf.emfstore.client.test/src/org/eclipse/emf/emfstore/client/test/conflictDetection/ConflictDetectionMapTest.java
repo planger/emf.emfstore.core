@@ -165,7 +165,7 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 				testElement.getStringToStringMap().remove(key);
 				return null;
 			}
-		});
+		}, testElement);
 	}
 
 	private void updateMapEntry(final TestElement testElement, final String key, final String value) {
@@ -174,7 +174,7 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 				testElement.getStringToStringMap().put(key, value);
 				return null;
 			}
-		});
+		}, testElement);
 	}
 
 	private void addTestElement(final TestElement testElement) {
@@ -184,7 +184,7 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 				clearOperations();
 				return null;
 			}
-		});
+		}, testElement);
 	}
 
 	@Override

@@ -57,7 +57,7 @@ public abstract class ConflictDetectionTest extends WorkspaceTest {
 				final Project clonedProject = ModelUtil.clone(ps.getProject());
 				return workspace.importProject(clonedProject, "clonedProject", "cloned Project");
 			}
-		}.run(false);
+		}.run(getProject(), false);
 		return result;
 	}
 
@@ -119,7 +119,7 @@ public abstract class ConflictDetectionTest extends WorkspaceTest {
 			protected AbstractOperation doRun() {
 				return checkAndGetOperation(clazz);
 			}
-		}.run(false);
+		}.run(getProject(), false);
 	}
 
 	public void myClearOperations() {
@@ -128,7 +128,7 @@ public abstract class ConflictDetectionTest extends WorkspaceTest {
 			protected void doRun() {
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProject(), false);
 	}
 
 }
