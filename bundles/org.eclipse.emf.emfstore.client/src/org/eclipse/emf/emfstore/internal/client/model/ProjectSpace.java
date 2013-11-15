@@ -108,7 +108,7 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 * 
 	 * @generated NOT
 	 */
-	String RUNNABLE_CONTEXT_ID = "org.eclipse.emf.emfstore.client.runnableChangeContext";
+	String RUNNABLE_CONTEXT_ID = "org.eclipse.emf.emfstore.client.runnableChangeContext"; //$NON-NLS-1$
 
 	/**
 	 * <p>
@@ -393,36 +393,6 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 * @generated
 	 */
 	void setWorkspace(Workspace value);
-
-	/**
-	 * Returns the value of the '<em><b>Local Change Package</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Local Change Package</em>' containment reference isn't clear, there really should be
-	 * more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * 
-	 * @return the value of the '<em>Local Change Package</em>' containment reference.
-	 * @see #setLocalChangePackage(ChangePackage)
-	 * @see org.eclipse.emf.emfstore.internal.client.model.ModelPackage#getProjectSpace_LocalChangePackage()
-	 * @model containment="true" resolveProxies="true"
-	 * @generated
-	 */
-	ChangePackage getLocalChangePackage();
-
-	/**
-	 * Sets the value of the ' {@link org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getLocalChangePackage
-	 * <em>Local Change Package</em>}' containment reference. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Local Change Package</em>'
-	 *            containment reference.
-	 * @see #getLocalChangePackage()
-	 * @generated
-	 */
-	void setLocalChangePackage(ChangePackage value);
 
 	/**
 	 * Returns the value of the '<em><b>Merged Version</b></em>' containment reference.

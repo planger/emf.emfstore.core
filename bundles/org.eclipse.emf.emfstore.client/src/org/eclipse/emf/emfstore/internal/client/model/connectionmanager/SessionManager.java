@@ -82,7 +82,7 @@ public class SessionManager {
 			throw new RuntimeException("Ouch.");
 		}
 		if (!isLoggedIn(usersession) || forceLogin) {
-			if (!(usersession.getUsername() == null || usersession.getUsername().equals(""))
+			if (!(usersession.getUsername() == null || usersession.getUsername().equals("")) //$NON-NLS-1$
 				&& usersession.getPassword() != null) {
 				try {
 					// if login fails, let the session provider handle the rest
@@ -91,7 +91,7 @@ public class SessionManager {
 							usersession.logIn();
 							return null;
 						}
-					});
+					}, usersession);
 					return usersession;
 				} catch (final ESException e) {
 					// ignore, session provider should try to login
@@ -103,7 +103,7 @@ public class SessionManager {
 					public ESUsersession call() throws Exception {
 						return getSessionProvider().login(usersession.toAPI());
 					}
-				});
+				}, usersession);
 			return ((ESUsersessionImpl) session).toInternalAPI();
 		}
 
@@ -150,10 +150,10 @@ public class SessionManager {
 
 	private void initSessionProvider() {
 		final ESExtensionPoint extensionPoint = new ESExtensionPoint(
-			"org.eclipse.emf.emfstore.client.usersessionProvider");
+			"org.eclipse.emf.emfstore.client.usersessionProvider"); //$NON-NLS-1$
 
 		if (extensionPoint.getExtensionElements().size() > 0) {
-			final ESAbstractSessionProvider sessionProvider = extensionPoint.getFirst().getClass("class",
+			final ESAbstractSessionProvider sessionProvider = extensionPoint.getFirst().getClass("class", //$NON-NLS-1$
 				ESAbstractSessionProvider.class);
 			if (sessionProvider != null) {
 				provider = sessionProvider;

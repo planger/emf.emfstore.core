@@ -102,7 +102,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 			public ESGlobalProjectId call() throws Exception {
 				return toInternalAPI().getProjectId().toAPI();
 			}
-		});
+		}, toInternalAPI());
 	}
 
 	/**
@@ -116,7 +116,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 			public String call() throws Exception {
 				return toInternalAPI().getProjectName();
 			}
-		});
+		}, toInternalAPI());
 	}
 
 	/**
@@ -131,7 +131,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 				toInternalAPI().delete(monitor);
 				return null;
 			}
-		});
+		}, toInternalAPI());
 		// dispose();
 	}
 
@@ -162,13 +162,13 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 						}
 					}.execute();
 				}
-			});
+			}, toInternalAPI());
 
 		return RunESCommand.runWithResult(new Callable<ESPrimaryVersionSpec>() {
 			public ESPrimaryVersionSpec call() throws Exception {
 				return resolvedVersionSpec.toAPI();
 			}
-		});
+		}, toInternalAPI());
 	}
 
 	// TODO: ab hier weiter
@@ -226,7 +226,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 				}.execute();
 				return null;
 			}
-		});
+		}, toInternalAPI());
 	}
 
 	/**
@@ -260,7 +260,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 				}.execute();
 				return null;
 			}
-		});
+		}, toInternalAPI());
 	}
 
 	/**
@@ -366,7 +366,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 					return toInternalAPI()
 						.commit(monitor);
 				}
-			});
+			}, toInternalAPI());
 		return versionSpec.toAPI();
 	}
 
@@ -393,7 +393,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 							callback,
 							monitor);
 				}
-			});
+			}, toInternalAPI());
 
 		return versionSpec.toAPI();
 	}
@@ -428,7 +428,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 							callback,
 							monitor);
 				}
-			});
+			}, toInternalAPI());
 
 		return versionSpec.toAPI();
 	}
@@ -445,7 +445,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 				final PrimaryVersionSpec versionSpec = toInternalAPI().update(monitor);
 				return versionSpec.toAPI();
 			}
-		});
+		}, toInternalAPI());
 	}
 
 	/**
@@ -477,7 +477,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 					monitor);
 				return primaryVersionSpec.toAPI();
 			}
-		});
+		}, toInternalAPI());
 	}
 
 	/**
@@ -553,7 +553,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 
 				return null;
 			}
-		});
+		}, toInternalAPI());
 	}
 
 	/**
@@ -568,7 +568,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 				toInternalAPI().shareProject(monitor);
 				return null;
 			}
-		});
+		}, toInternalAPI());
 	}
 
 	/**
@@ -590,7 +590,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 				return new ESRemoteProjectImpl(getUsersession().toInternalAPI().getServerInfo(), projectInfo);
 
 			}
-		});
+		}, toInternalAPI());
 	}
 
 	/**
@@ -661,7 +661,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 			protected void doRun() {
 				toInternalAPI().undoLastOperation();
 			}
-		}.run(false);
+		}.run(toInternalAPI(), false);
 	}
 
 	/**
@@ -676,7 +676,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 			protected void doRun() {
 				toInternalAPI().undoLastOperations(nrOperations);
 			}
-		}.run(false);
+		}.run(toInternalAPI(), false);
 	}
 
 	/**
@@ -702,7 +702,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 				toInternalAPI().revert();
 				return null;
 			}
-		});
+		}, toInternalAPI());
 	}
 
 	/**
@@ -717,7 +717,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 				toInternalAPI().save();
 				return null;
 			}
-		});
+		}, toInternalAPI());
 	}
 
 	/**

@@ -25,22 +25,20 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
+import org.eclipse.emf.ecore.util.EDataTypeEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.emf.emfstore.client.util.ClientURIUtil;
+import org.eclipse.emf.emfstore.common.ESResourceSetProvider;
 import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionPoint;
 import org.eclipse.emf.emfstore.common.extensionpoint.ESPriorityComparator;
-import org.eclipse.emf.emfstore.common.extensionpoint.ESResourceSetProvider;
 import org.eclipse.emf.emfstore.internal.client.model.ModelPackage;
-import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
 import org.eclipse.emf.emfstore.internal.client.model.Usersession;
 import org.eclipse.emf.emfstore.internal.client.model.Workspace;
 import org.eclipse.emf.emfstore.internal.common.model.EMFStoreProperty;
 import org.eclipse.emf.emfstore.internal.common.model.Project;
-import org.eclipse.emf.emfstore.internal.common.model.impl.IdentifiableElementImpl;
 import org.eclipse.emf.emfstore.internal.server.model.FileIdentifier;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectId;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.ChangePackage;
@@ -320,8 +318,9 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	 * @generated
 	 */
 	public Workspace basicGetWorkspace() {
-		if (eContainerFeatureID() != ModelPackage.PROJECT_SPACE__WORKSPACE)
+		if (eContainerFeatureID() != ModelPackage.PROJECT_SPACE__WORKSPACE) {
 			return null;
+		}
 		return (Workspace) eInternalContainer();
 	}
 
@@ -331,16 +330,17 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	 * @generated
 	 */
 	public NotificationChain basicSetBaseVersion(PrimaryVersionSpec newBaseVersion, NotificationChain msgs) {
-		PrimaryVersionSpec oldBaseVersion = baseVersion;
+		final PrimaryVersionSpec oldBaseVersion = baseVersion;
 		baseVersion = newBaseVersion;
 		if (eNotificationRequired())
 		{
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
 				ModelPackage.PROJECT_SPACE__BASE_VERSION, oldBaseVersion, newBaseVersion);
-			if (msgs == null)
+			if (msgs == null) {
 				msgs = notification;
-			else
+			} else {
 				msgs.add(notification);
+			}
 		}
 		return msgs;
 	}
@@ -351,16 +351,17 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	 * @generated
 	 */
 	public NotificationChain basicSetProjectId(ProjectId newProjectId, NotificationChain msgs) {
-		ProjectId oldProjectId = projectId;
+		final ProjectId oldProjectId = projectId;
 		projectId = newProjectId;
 		if (eNotificationRequired())
 		{
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
 				ModelPackage.PROJECT_SPACE__PROJECT_ID, oldProjectId, newProjectId);
-			if (msgs == null)
+			if (msgs == null) {
 				msgs = notification;
-			else
+			} else {
 				msgs.add(notification);
+			}
 		}
 		return msgs;
 	}
@@ -403,22 +404,25 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 		switch (featureID)
 		{
 		case ModelPackage.PROJECT_SPACE__PROJECT_ID:
-			if (resolve)
+			if (resolve) {
 				return getProjectId();
+			}
 			return basicGetProjectId();
 		case ModelPackage.PROJECT_SPACE__PROJECT_NAME:
 			return getProjectName();
 		case ModelPackage.PROJECT_SPACE__PROJECT_DESCRIPTION:
 			return getProjectDescription();
 		case ModelPackage.PROJECT_SPACE__USERSESSION:
-			if (resolve)
+			if (resolve) {
 				return getUsersession();
+			}
 			return basicGetUsersession();
 		case ModelPackage.PROJECT_SPACE__LAST_UPDATED:
 			return getLastUpdated();
 		case ModelPackage.PROJECT_SPACE__BASE_VERSION:
-			if (resolve)
+			if (resolve) {
 				return getBaseVersion();
+			}
 			return basicGetBaseVersion();
 		case ModelPackage.PROJECT_SPACE__RESOURCE_COUNT:
 			return getResourceCount();
@@ -433,12 +437,14 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 		case ModelPackage.PROJECT_SPACE__CHANGED_SHARED_PROPERTIES:
 			return getChangedSharedProperties();
 		case ModelPackage.PROJECT_SPACE__WORKSPACE:
-			if (resolve)
+			if (resolve) {
 				return getWorkspace();
+			}
 			return basicGetWorkspace();
 		case ModelPackage.PROJECT_SPACE__MERGED_VERSION:
-			if (resolve)
+			if (resolve) {
 				return getMergedVersion();
+			}
 			return basicGetMergedVersion();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -455,8 +461,9 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 		switch (featureID)
 		{
 		case ModelPackage.PROJECT_SPACE__WORKSPACE:
-			if (eInternalContainer() != null)
+			if (eInternalContainer() != null) {
 				msgs = eBasicRemoveFromContainer(msgs);
+			}
 			return basicSetWorkspace((Workspace) otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
@@ -662,11 +669,11 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	public PrimaryVersionSpec getBaseVersion() {
 		if (baseVersion != null && baseVersion.eIsProxy())
 		{
-			InternalEObject oldBaseVersion = (InternalEObject) baseVersion;
+			final InternalEObject oldBaseVersion = (InternalEObject) baseVersion;
 			baseVersion = (PrimaryVersionSpec) eResolveProxy(oldBaseVersion);
 			if (baseVersion != oldBaseVersion)
 			{
-				InternalEObject newBaseVersion = (InternalEObject) baseVersion;
+				final InternalEObject newBaseVersion = (InternalEObject) baseVersion;
 				NotificationChain msgs = oldBaseVersion.eInverseRemove(this, EOPPOSITE_FEATURE_BASE
 					- ModelPackage.PROJECT_SPACE__BASE_VERSION, null, null);
 				if (newBaseVersion.eInternalContainer() == null)
@@ -674,11 +681,13 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 					msgs = newBaseVersion.eInverseAdd(this, EOPPOSITE_FEATURE_BASE
 						- ModelPackage.PROJECT_SPACE__BASE_VERSION, null, msgs);
 				}
-				if (msgs != null)
+				if (msgs != null) {
 					msgs.dispatch();
-				if (eNotificationRequired())
+				}
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ModelPackage.PROJECT_SPACE__BASE_VERSION,
 						oldBaseVersion, baseVersion));
+				}
 			}
 		}
 		return baseVersion;
@@ -738,11 +747,11 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	public ProjectId getProjectId() {
 		if (projectId != null && projectId.eIsProxy())
 		{
-			InternalEObject oldProjectId = (InternalEObject) projectId;
+			final InternalEObject oldProjectId = (InternalEObject) projectId;
 			projectId = (ProjectId) eResolveProxy(oldProjectId);
 			if (projectId != oldProjectId)
 			{
-				InternalEObject newProjectId = (InternalEObject) projectId;
+				final InternalEObject newProjectId = (InternalEObject) projectId;
 				NotificationChain msgs = oldProjectId.eInverseRemove(this, EOPPOSITE_FEATURE_BASE
 					- ModelPackage.PROJECT_SPACE__PROJECT_ID, null, null);
 				if (newProjectId.eInternalContainer() == null)
@@ -750,11 +759,13 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 					msgs = newProjectId.eInverseAdd(this, EOPPOSITE_FEATURE_BASE
 						- ModelPackage.PROJECT_SPACE__PROJECT_ID, null, msgs);
 				}
-				if (msgs != null)
+				if (msgs != null) {
 					msgs.dispatch();
-				if (eNotificationRequired())
+				}
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ModelPackage.PROJECT_SPACE__PROJECT_ID,
 						oldProjectId, projectId));
+				}
 			}
 		}
 		return projectId;
@@ -800,13 +811,14 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	public Usersession getUsersession() {
 		if (usersession != null && usersession.eIsProxy())
 		{
-			InternalEObject oldUsersession = (InternalEObject) usersession;
+			final InternalEObject oldUsersession = (InternalEObject) usersession;
 			usersession = (Usersession) eResolveProxy(oldUsersession);
 			if (usersession != oldUsersession)
 			{
-				if (eNotificationRequired())
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ModelPackage.PROJECT_SPACE__USERSESSION,
 						oldUsersession, usersession));
+				}
 			}
 		}
 		return usersession;
@@ -833,8 +845,9 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	 * @generated
 	 */
 	public Workspace getWorkspace() {
-		if (eContainerFeatureID() != ModelPackage.PROJECT_SPACE__WORKSPACE)
+		if (eContainerFeatureID() != ModelPackage.PROJECT_SPACE__WORKSPACE) {
 			return null;
+		}
 		return (Workspace) eContainer();
 	}
 
@@ -856,19 +869,23 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 		if (newBaseVersion != baseVersion)
 		{
 			NotificationChain msgs = null;
-			if (baseVersion != null)
+			if (baseVersion != null) {
 				msgs = ((InternalEObject) baseVersion).eInverseRemove(this, EOPPOSITE_FEATURE_BASE
 					- ModelPackage.PROJECT_SPACE__BASE_VERSION, null, msgs);
-			if (newBaseVersion != null)
+			}
+			if (newBaseVersion != null) {
 				msgs = ((InternalEObject) newBaseVersion).eInverseAdd(this, EOPPOSITE_FEATURE_BASE
 					- ModelPackage.PROJECT_SPACE__BASE_VERSION, null, msgs);
+			}
 			msgs = basicSetBaseVersion(newBaseVersion, msgs);
-			if (msgs != null)
+			if (msgs != null) {
 				msgs.dispatch();
+			}
 		}
-		else if (eNotificationRequired())
+		else if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.PROJECT_SPACE__BASE_VERSION,
 				newBaseVersion, newBaseVersion));
+		}
 	}
 
 	/**
@@ -877,10 +894,11 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	 * @generated
 	 */
 	public void setDirty(boolean newDirty) {
-		boolean oldDirty = dirty;
+		final boolean oldDirty = dirty;
 		dirty = newDirty;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.PROJECT_SPACE__DIRTY, oldDirty, dirty));
+		}
 	}
 
 	/**
@@ -889,11 +907,12 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	 * @generated
 	 */
 	public void setLastUpdated(Date newLastUpdated) {
-		Date oldLastUpdated = lastUpdated;
+		final Date oldLastUpdated = lastUpdated;
 		lastUpdated = newLastUpdated;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.PROJECT_SPACE__LAST_UPDATED,
 				oldLastUpdated, lastUpdated));
+		}
 	}
 
 	/**
@@ -902,11 +921,12 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	 * @generated
 	 */
 	public void setProjectDescription(String newProjectDescription) {
-		String oldProjectDescription = projectDescription;
+		final String oldProjectDescription = projectDescription;
 		projectDescription = newProjectDescription;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.PROJECT_SPACE__PROJECT_DESCRIPTION,
 				oldProjectDescription, projectDescription));
+		}
 	}
 
 	/**
@@ -918,19 +938,23 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 		if (newProjectId != projectId)
 		{
 			NotificationChain msgs = null;
-			if (projectId != null)
+			if (projectId != null) {
 				msgs = ((InternalEObject) projectId).eInverseRemove(this, EOPPOSITE_FEATURE_BASE
 					- ModelPackage.PROJECT_SPACE__PROJECT_ID, null, msgs);
-			if (newProjectId != null)
+			}
+			if (newProjectId != null) {
 				msgs = ((InternalEObject) newProjectId).eInverseAdd(this, EOPPOSITE_FEATURE_BASE
 					- ModelPackage.PROJECT_SPACE__PROJECT_ID, null, msgs);
+			}
 			msgs = basicSetProjectId(newProjectId, msgs);
-			if (msgs != null)
+			if (msgs != null) {
 				msgs.dispatch();
+			}
 		}
-		else if (eNotificationRequired())
+		else if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.PROJECT_SPACE__PROJECT_ID, newProjectId,
 				newProjectId));
+		}
 	}
 
 	/**
@@ -939,11 +963,12 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	 * @generated
 	 */
 	public void setProjectName(String newProjectName) {
-		String oldProjectName = projectName;
+		final String oldProjectName = projectName;
 		projectName = newProjectName;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.PROJECT_SPACE__PROJECT_NAME,
 				oldProjectName, projectName));
+		}
 	}
 
 	/**
@@ -952,11 +977,12 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	 * @generated
 	 */
 	public void setResourceCount(int newResourceCount) {
-		int oldResourceCount = resourceCount;
+		final int oldResourceCount = resourceCount;
 		resourceCount = newResourceCount;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.PROJECT_SPACE__RESOURCE_COUNT,
 				oldResourceCount, resourceCount));
+		}
 	}
 
 	/**
@@ -965,11 +991,12 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	 * @generated
 	 */
 	public void setUsersession(Usersession newUsersession) {
-		Usersession oldUsersession = usersession;
+		final Usersession oldUsersession = usersession;
 		usersession = newUsersession;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.PROJECT_SPACE__USERSESSION,
 				oldUsersession, usersession));
+		}
 	}
 
 	/**
@@ -980,23 +1007,28 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	 */
 	public void setWorkspace(Workspace newWorkspace) {
 		if (newWorkspace != eInternalContainer()
-			|| (eContainerFeatureID() != ModelPackage.PROJECT_SPACE__WORKSPACE && newWorkspace != null))
+			|| eContainerFeatureID() != ModelPackage.PROJECT_SPACE__WORKSPACE && newWorkspace != null)
 		{
-			if (EcoreUtil.isAncestor(this, newWorkspace))
+			if (EcoreUtil.isAncestor(this, newWorkspace)) {
 				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
+			}
 			NotificationChain msgs = null;
-			if (eInternalContainer() != null)
+			if (eInternalContainer() != null) {
 				msgs = eBasicRemoveFromContainer(msgs);
-			if (newWorkspace != null)
+			}
+			if (newWorkspace != null) {
 				msgs = ((InternalEObject) newWorkspace).eInverseAdd(this, ModelPackage.WORKSPACE__PROJECT_SPACES,
 					Workspace.class, msgs);
+			}
 			msgs = basicSetWorkspace(newWorkspace, msgs);
-			if (msgs != null)
+			if (msgs != null) {
 				msgs.dispatch();
+			}
 		}
-		else if (eNotificationRequired())
+		else if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.PROJECT_SPACE__WORKSPACE, newWorkspace,
 				newWorkspace));
+		}
 	}
 
 	/**
@@ -1008,11 +1040,11 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	public PrimaryVersionSpec getMergedVersion() {
 		if (mergedVersion != null && mergedVersion.eIsProxy())
 		{
-			InternalEObject oldMergedVersion = (InternalEObject) mergedVersion;
+			final InternalEObject oldMergedVersion = (InternalEObject) mergedVersion;
 			mergedVersion = (PrimaryVersionSpec) eResolveProxy(oldMergedVersion);
 			if (mergedVersion != oldMergedVersion)
 			{
-				InternalEObject newMergedVersion = (InternalEObject) mergedVersion;
+				final InternalEObject newMergedVersion = (InternalEObject) mergedVersion;
 				NotificationChain msgs = oldMergedVersion.eInverseRemove(this, EOPPOSITE_FEATURE_BASE
 					- ModelPackage.PROJECT_SPACE__MERGED_VERSION, null, null);
 				if (newMergedVersion.eInternalContainer() == null)
@@ -1020,11 +1052,13 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 					msgs = newMergedVersion.eInverseAdd(this, EOPPOSITE_FEATURE_BASE
 						- ModelPackage.PROJECT_SPACE__MERGED_VERSION, null, msgs);
 				}
-				if (msgs != null)
+				if (msgs != null) {
 					msgs.dispatch();
-				if (eNotificationRequired())
+				}
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
 						ModelPackage.PROJECT_SPACE__MERGED_VERSION, oldMergedVersion, mergedVersion));
+				}
 			}
 		}
 		return mergedVersion;
@@ -1047,16 +1081,17 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	 * @generated
 	 */
 	public NotificationChain basicSetMergedVersion(PrimaryVersionSpec newMergedVersion, NotificationChain msgs) {
-		PrimaryVersionSpec oldMergedVersion = mergedVersion;
+		final PrimaryVersionSpec oldMergedVersion = mergedVersion;
 		mergedVersion = newMergedVersion;
 		if (eNotificationRequired())
 		{
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
 				ModelPackage.PROJECT_SPACE__MERGED_VERSION, oldMergedVersion, newMergedVersion);
-			if (msgs == null)
+			if (msgs == null) {
 				msgs = notification;
-			else
+			} else {
 				msgs.add(notification);
+			}
 		}
 		return msgs;
 	}
@@ -1071,19 +1106,23 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 		if (newMergedVersion != mergedVersion)
 		{
 			NotificationChain msgs = null;
-			if (mergedVersion != null)
+			if (mergedVersion != null) {
 				msgs = ((InternalEObject) mergedVersion).eInverseRemove(this, EOPPOSITE_FEATURE_BASE
 					- ModelPackage.PROJECT_SPACE__MERGED_VERSION, null, msgs);
-			if (newMergedVersion != null)
+			}
+			if (newMergedVersion != null) {
 				msgs = ((InternalEObject) newMergedVersion).eInverseAdd(this, EOPPOSITE_FEATURE_BASE
 					- ModelPackage.PROJECT_SPACE__MERGED_VERSION, null, msgs);
+			}
 			msgs = basicSetMergedVersion(newMergedVersion, msgs);
-			if (msgs != null)
+			if (msgs != null) {
 				msgs.dispatch();
+			}
 		}
-		else if (eNotificationRequired())
+		else if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.PROJECT_SPACE__MERGED_VERSION,
 				newMergedVersion, newMergedVersion));
+		}
 	}
 
 	/**
@@ -1094,10 +1133,11 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (eIsProxy()) {
 			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
+		final StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (projectName: ");
 		result.append(projectName);
 		result.append(", projectDescription: ");
@@ -1123,7 +1163,7 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	public Project getProject() {
 		Project project = projectReference.get();
 		if (project == null) {
-			URI projectURI = ClientURIUtil.createProjectURI(this);
+			final URI projectURI = ClientURIUtil.createProjectURI(this);
 			project = (Project) loadEObjectFromURI(projectURI);
 			setProject(project);
 			init();
@@ -1138,7 +1178,7 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#setProject(org.eclipse.emf.emfstore.internal.common.model.Project)
 	 */
 	public void setProject(Project newProject) {
-		this.projectReference = new WeakReference<Project>(newProject);
+		projectReference = new WeakReference<Project>(newProject);
 	}
 
 	/**
@@ -1149,7 +1189,7 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	public ChangePackage getLocalChangePackage() {
 		ChangePackage lcp = localChangePackageReference.get();
 		if (lcp == null) {
-			URI lcpURI = ClientURIUtil.createOperationsURI(this);
+			final URI lcpURI = ClientURIUtil.createOperationsURI(this);
 			lcp = (ChangePackage) loadEObjectFromURI(lcpURI);
 			setLocalChangePackage(lcp);
 		}
@@ -1163,26 +1203,26 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#setLocalChangePackage(org.eclipse.emf.emfstore.internal.server.model.versioning.ChangePackage)
 	 */
 	public void setLocalChangePackage(ChangePackage newLocalChangePackage) {
-		this.localChangePackageReference = new WeakReference<ChangePackage>(newLocalChangePackage);
+		localChangePackageReference = new WeakReference<ChangePackage>(newLocalChangePackage);
 	}
 
 	private EObject loadEObjectFromURI(URI uri) {
-		ResourceSet resourceSet = this.getResourceSet();
+		ResourceSet resourceSet = getResourceSet();
 
 		if (resourceSet == null) {
-			ESExtensionPoint extensionPoint = new ESExtensionPoint(
+			final ESExtensionPoint extensionPoint = new ESExtensionPoint(
 				"org.eclipse.emf.emfstore.client.resourceSetProvider",
 				true);
 			extensionPoint.setComparator(new ESPriorityComparator("priority", true));
 			extensionPoint.reload();
-			ESResourceSetProvider resourceSetProvider = extensionPoint.getElementWithHighestPriority().getClass(
+			final ESResourceSetProvider resourceSetProvider = extensionPoint.getElementWithHighestPriority().getClass(
 				"class",
 				ESResourceSetProvider.class);
 			resourceSet = resourceSetProvider.getResourceSet();
 		}
 
 		if (resourceSet.getURIConverter().exists(uri, null)) {
-			Resource resource = resourceSet.getResource(uri, true);
+			final Resource resource = resourceSet.getResource(uri, true);
 			return resource.getContents().get(0);
 		} else {
 			return null;
