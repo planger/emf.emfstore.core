@@ -640,9 +640,6 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	 */
 	public Project getProject()
 	{
-		if (isClosed()) {
-			throw new ESProjectIsClosedException();
-		}
 		final Project project = basicGetProject();
 		return project != null && project.eIsProxy() ? (Project) eResolveProxy((InternalEObject) project) : project;
 	}
@@ -658,6 +655,9 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	 */
 	public Project basicGetProject()
 	{
+		if (isClosed()) {
+			throw new ESProjectIsClosedException();
+		}
 		Project project = null;
 		if (projectReference != null) {
 			project = projectReference.get();
@@ -1177,9 +1177,6 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	 */
 	public ChangePackage getLocalChangePackage()
 	{
-		if (isClosed()) {
-			throw new ESProjectIsClosedException();
-		}
 		final ChangePackage localChangePackage = basicGetLocalChangePackage();
 		return localChangePackage != null && localChangePackage.eIsProxy() ? (ChangePackage) eResolveProxy((InternalEObject) localChangePackage)
 			: localChangePackage;
@@ -1196,6 +1193,9 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	 */
 	public ChangePackage basicGetLocalChangePackage()
 	{
+		if (isClosed()) {
+			throw new ESProjectIsClosedException();
+		}
 		ChangePackage lcp = null;
 		if (localChangePackageReference != null) {
 			lcp = localChangePackageReference.get();

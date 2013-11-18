@@ -71,7 +71,7 @@ public abstract class WorkspaceTest {
 
 		cleanEmfstoreFolders();
 
-		ESWorkspaceProviderImpl workspaceManager = ESWorkspaceProviderImpl.getInstance();
+		final ESWorkspaceProviderImpl workspaceManager = ESWorkspaceProviderImpl.getInstance();
 		workspaceManager.load();
 		// workspace = (Workspace) workspaceManager.getWorkspace();
 	}
@@ -80,7 +80,7 @@ public abstract class WorkspaceTest {
 		try {
 			FileUtil.deleteDirectory(new File(Configuration.getFileInfo().getWorkspaceDirectory()), true);
 			FileUtil.deleteDirectory(new File(ServerConfiguration.getLocationProvider().getWorkspaceDirectory()), true);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -95,14 +95,15 @@ public abstract class WorkspaceTest {
 
 			@Override
 			protected void doRun() {
-				ESLocalProjectImpl localProject = ESWorkspaceProviderImpl.getInstance().getWorkspace()
+				final ESLocalProjectImpl localProject = ESWorkspaceProviderImpl.getInstance().getWorkspace()
 					.createLocalProject("testProject");
-				ProjectSpace localProjectSpace = localProject.toInternalAPI();
+				final ProjectSpace localProjectSpace = localProject.toInternalAPI();
 				setProjectSpace(localProjectSpace);
 				setProject(getProjectSpace().getProject());
 
 				if (isCompareAtEnd()) {
-					WorkspaceBase workspace = (WorkspaceBase) ESWorkspaceProviderImpl.getInstance().getWorkspace()
+					final WorkspaceBase workspace = (WorkspaceBase) ESWorkspaceProviderImpl.getInstance()
+						.getWorkspace()
 						.toInternalAPI();
 					workspace.cloneProject("clonedProject", getProject());
 					clonedProjectSpace = (ProjectSpaceBase) workspace.cloneProject("clonedProject", getProject());
@@ -157,7 +158,7 @@ public abstract class WorkspaceTest {
 				cleanEmfstoreFolders();
 				return null;
 			}
-		}, null);
+		}, ESWorkspaceProviderImpl.getInstance().getInternalWorkspace());
 	}
 
 	private void cleanProjects() {
@@ -167,8 +168,8 @@ public abstract class WorkspaceTest {
 			protected void doRun() {
 				try {
 
-					ESWorkspaceImpl workspace = ESWorkspaceProviderImpl.getInstance().getWorkspace();
-					for (ProjectSpace projectSpace : new ArrayList<ProjectSpace>(workspace.toInternalAPI()
+					final ESWorkspaceImpl workspace = ESWorkspaceProviderImpl.getInstance().getWorkspace();
+					for (final ProjectSpace projectSpace : new ArrayList<ProjectSpace>(workspace.toInternalAPI()
 						.getProjectSpaces())) {
 						// TODO: monitor
 						projectSpace.delete(new NullProgressMonitor());
@@ -179,7 +180,7 @@ public abstract class WorkspaceTest {
 					// ESWorkspaceProviderImpl.getInstance().dispose();
 					// workspace = null;
 					// FileUtil.deleteDirectory(new File(Configuration.getWorkspaceDirectory()), true);
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					// ignore
 				}
 			}
@@ -199,13 +200,13 @@ public abstract class WorkspaceTest {
 				try {
 					// TODO: monitor
 					ps.delete(new NullProgressMonitor());
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					if (retried++ > 2) {
 						fail();
 					} else {
 						try {
 							Thread.sleep(retried * 1000);
-						} catch (InterruptedException e1) {
+						} catch (final InterruptedException e1) {
 							// ignore
 						}
 						WorkspaceUtil.logWarning(e.getMessage() + " Retrying...(" + retried + " out of 3)", e);
@@ -274,7 +275,7 @@ public abstract class WorkspaceTest {
 	 * @return test element
 	 */
 	protected TestElement createTestElementWithoutTransaction(String name) {
-		TestElement element = TestmodelFactory.eINSTANCE.createTestElement();
+		final TestElement element = TestmodelFactory.eINSTANCE.createTestElement();
 		element.setName(name);
 		getProject().getModelElements().add(element);
 		return element;
@@ -290,7 +291,7 @@ public abstract class WorkspaceTest {
 	 * @return test element
 	 */
 	protected TestElement getTestElement(String name) {
-		TestElement element = TestmodelFactory.eINSTANCE.createTestElement();
+		final TestElement element = TestmodelFactory.eINSTANCE.createTestElement();
 		if (name != null) {
 			element.setName(name);
 		}

@@ -39,10 +39,10 @@ public class ProjectHasLocalChangesTester extends PropertyTester {
 
 			return RunESCommand.runWithResult(new Callable<Boolean>() {
 				public Boolean call() throws Exception {
-					Boolean hasLocalChanges = new Boolean(localProject.hasUncommitedChanges());
+					final Boolean hasLocalChanges = new Boolean(localProject.hasUncommitedChanges());
 					return hasLocalChanges.equals(expectedValue);
 				}
-			}, null);
+			}, localProject);
 		}
 
 		return false;

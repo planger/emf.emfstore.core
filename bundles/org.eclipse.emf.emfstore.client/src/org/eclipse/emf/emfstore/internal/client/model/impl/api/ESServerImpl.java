@@ -279,7 +279,7 @@ public class ESServerImpl extends AbstractAPIImpl<ESServerImpl, ServerInfo> impl
 				public List<ProjectInfo> call() throws Exception {
 					return serverCall.execute();
 				}
-			}, null);
+			}, toInternalAPI());
 
 		return APIUtil.copy(mapToRemoteProject(projectInfos));
 	}

@@ -23,6 +23,7 @@ import java.util.concurrent.Callable;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.emfstore.client.ESRemoteProject;
 import org.eclipse.emf.emfstore.client.ESUsersession;
+import org.eclipse.emf.emfstore.client.ESWorkspaceProvider;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
 import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
 import org.eclipse.emf.emfstore.internal.client.model.ServerInfo;
@@ -56,7 +57,7 @@ public class ServerCommunicationTest extends BaseLoggedInUserTest {
 					serverInfo.setLastUsersession(null);
 					return null;
 				}
-			}, null);
+			}, serverInfo);
 		}
 		RunESCommand.run(new Callable<Void>() {
 			public Void call() throws Exception {
@@ -64,12 +65,12 @@ public class ServerCommunicationTest extends BaseLoggedInUserTest {
 				ESWorkspaceProviderImpl.getInstance().getWorkspace().toInternalAPI().save();
 				return null;
 			}
-		}, null);
+		}, ESWorkspaceProviderImpl.getInstance().getWorkspace().toInternalAPI());
 	}
 
 	protected static void deleteRemoteProjects(ESUsersession usersession) throws IOException, FatalESException,
 		ESException {
-		for (ESRemoteProject project : ESWorkspaceProviderImpl.INSTANCE.getWorkspace().getServers().get(0)
+		for (final ESRemoteProject project : ESWorkspaceProvider.INSTANCE.getWorkspace().getServers().get(0)
 			.getRemoteProjects(usersession)) {
 			project.delete(usersession, new NullProgressMonitor());
 		}
@@ -91,7 +92,7 @@ public class ServerCommunicationTest extends BaseLoggedInUserTest {
 		try {
 			usersession.logout();
 			assertFalse(usersession.isLoggedIn());
-		} catch (ESException e) {
+		} catch (final ESException e) {
 			log(e);
 			fail(e.getMessage());
 		}
@@ -101,16 +102,16 @@ public class ServerCommunicationTest extends BaseLoggedInUserTest {
 	@Test
 	public void testCreateRemoteProject() {
 		try {
-			ESRemoteProject remoteProject = server.createRemoteProject(usersession, "MyProject",
+			final ESRemoteProject remoteProject = server.createRemoteProject(usersession, "MyProject",
 				new NullProgressMonitor());
 			assertNotNull(remoteProject);
 			assertEquals("MyProject", remoteProject.getProjectName());
-			List<ESRemoteProject> remoteProjects = server.getRemoteProjects();
+			final List<ESRemoteProject> remoteProjects = server.getRemoteProjects();
 			assertEquals(1, remoteProjects.size());
 			// we expect a copy to be returned
 			assertFalse(remoteProject.equals(remoteProjects.get(0)));
 			assertEquals(remoteProject.getProjectName(), remoteProjects.get(0).getProjectName());
-		} catch (ESException e) {
+		} catch (final ESException e) {
 			log(e);
 			fail(e.getMessage());
 		}
@@ -120,16 +121,16 @@ public class ServerCommunicationTest extends BaseLoggedInUserTest {
 	@Test
 	public void testCreateRemoteProjectWithoutUsersession() {
 		try {
-			ESRemoteProject remoteProject = server.createRemoteProject("MyProject",
+			final ESRemoteProject remoteProject = server.createRemoteProject("MyProject",
 				new NullProgressMonitor());
 			assertNotNull(remoteProject);
 			assertEquals("MyProject", remoteProject.getProjectName());
-			List<? extends ESRemoteProject> remoteProjects = server.getRemoteProjects();
+			final List<? extends ESRemoteProject> remoteProjects = server.getRemoteProjects();
 			assertEquals(1, remoteProjects.size());
 			// we expect a copy to be returned
 			assertFalse(remoteProject.equals(remoteProjects.get(0)));
 			assertEquals(remoteProject.getProjectName(), remoteProjects.get(0).getProjectName());
-		} catch (ESException e) {
+		} catch (final ESException e) {
 			log(e);
 			fail(e.getMessage());
 		}
@@ -138,12 +139,12 @@ public class ServerCommunicationTest extends BaseLoggedInUserTest {
 	@Test
 	public void testDeleteRemoteProject() {
 		try {
-			ESRemoteProject remoteProject = server.createRemoteProject(usersession, "MyProject",
+			final ESRemoteProject remoteProject = server.createRemoteProject(usersession, "MyProject",
 				new NullProgressMonitor());
 			assertEquals(1, server.getRemoteProjects().size());
 			remoteProject.delete(new NullProgressMonitor());
 			assertEquals(0, server.getRemoteProjects().size());
-		} catch (ESException e) {
+		} catch (final ESException e) {
 			log(e);
 			fail(e.getMessage());
 		}
@@ -152,12 +153,13 @@ public class ServerCommunicationTest extends BaseLoggedInUserTest {
 	@Test
 	public void testGetRemoteProjectsFromServer() {
 		try {
-			ESRemoteProject project = server.createRemoteProject(usersession, "MyProject", new NullProgressMonitor());
+			final ESRemoteProject project = server.createRemoteProject(usersession, "MyProject",
+				new NullProgressMonitor());
 			server.createRemoteProject(usersession, "MyProject2", new NullProgressMonitor());
 			assertEquals(2, server.getRemoteProjects().size());
 			server.getRemoteProjects().add(project);
 			assertEquals(2, server.getRemoteProjects().size());
-		} catch (ESException e) {
+		} catch (final ESException e) {
 			log(e);
 			fail(e.getMessage());
 		}

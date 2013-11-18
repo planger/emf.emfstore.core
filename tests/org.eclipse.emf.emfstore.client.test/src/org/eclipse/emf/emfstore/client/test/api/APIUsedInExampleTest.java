@@ -14,6 +14,7 @@ package org.eclipse.emf.emfstore.client.test.api;
 import java.util.concurrent.Callable;
 
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
+import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.junit.Test;
 
@@ -33,7 +34,7 @@ public class APIUsedInExampleTest extends BaseLoggedInUserTest {
 				org.eclipse.emf.emfstore.example.helloworld.Application.runClient(server);
 				return null;
 			}
-		}, null);
+		}, ESWorkspaceProviderImpl.getInstance().getInternalWorkspace());
 	}
 
 	@Test
@@ -45,7 +46,7 @@ public class APIUsedInExampleTest extends BaseLoggedInUserTest {
 				// org.eclipse.emf.emfstore.example.merging.Application.runClient(server);
 				return null;
 			}
-		}, null);
+		}, ESWorkspaceProviderImpl.getInstance().getInternalWorkspace());
 	}
 
 }
