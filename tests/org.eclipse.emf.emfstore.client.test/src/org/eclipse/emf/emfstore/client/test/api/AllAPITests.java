@@ -31,7 +31,8 @@ import org.junit.runners.Suite;
 	WorkspaceTest.class,
 	RemoteProjectTest.class,
 	ClientUtilitiesTest.class,
-	APIUsedInExampleTest.class
+	APIUsedInExampleTest.class,
+	LocalProjectOpenClose.class
 })
 public class AllAPITests {
 

@@ -171,7 +171,7 @@ public class ESWorkspaceImpl extends AbstractAPIImpl<ESWorkspaceImpl, Workspace>
 				final ProjectSpace projectSpace = toInternalAPI().getProjectSpace(project);
 				return projectSpace.toAPI();
 			}
-		}, toInternalAPI());
+		}, modelElement);
 	}
 
 }
