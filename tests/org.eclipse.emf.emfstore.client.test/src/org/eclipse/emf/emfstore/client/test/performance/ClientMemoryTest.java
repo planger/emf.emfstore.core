@@ -11,7 +11,6 @@ import java.lang.ref.ReferenceQueue;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.emfstore.client.test.SetupHelper;
 import org.eclipse.emf.emfstore.client.test.performance.PerformanceTest.MemoryMeter;
-import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
 import org.eclipse.emf.emfstore.internal.common.model.Project;
 import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.ChangePackage;
@@ -49,7 +48,9 @@ public class ClientMemoryTest {
 	@SuppressWarnings({ "unused", "rawtypes" })
 	@Test
 	public void testClientMemory() throws IllegalArgumentException, InterruptedException, IOException {
+
 		setupHelper.generateRandomProject();
+
 		final Project clonedProject = ModelUtil.clone(setupHelper.getTestProject());
 
 		final ReferenceQueue<EObject> refQueue = new ReferenceQueue<EObject>();
@@ -58,14 +59,14 @@ public class ClientMemoryTest {
 		final PhantomReference<ChangePackage> cpRef = new PhantomReference<ChangePackage>(setupHelper
 			.getTestProjectSpace()
 			.getLocalChangePackage(), refQueue);
-		ESWorkspaceProviderImpl.getInstance().getWorkspace().toInternalAPI()
-			.closeProject(setupHelper.getTestProjectSpace(), true);
+
+		setupHelper.getTestProjectSpace().close(true);
+
 		Runtime.getRuntime().gc();
 		Reference result = refQueue.remove(5000);
 		if (result == null) {
 			fail("No GC");
 		}
-		System.gc();
 		result = refQueue.remove(10000);
 		if (result == null) {
 			fail("Only one element was GC");

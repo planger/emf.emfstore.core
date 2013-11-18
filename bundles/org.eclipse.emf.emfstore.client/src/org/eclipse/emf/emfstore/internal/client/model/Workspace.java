@@ -66,6 +66,20 @@ public interface Workspace extends EObject, IAdaptable, APIDelegate<ESWorkspaceI
 	ProjectSpace createLocalProject(String projectName);
 
 	/**
+	 * Removes a project to project space mapping from the workspace's map.
+	 * 
+	 * @param projectSpace the project space
+	 */
+	void removeProjectToProjectSpaceEntry(ProjectSpace projectSpace);
+
+	/**
+	 * Adds a project to project space mapping to the workspace's map.
+	 * 
+	 * @param projectSpace the project space
+	 */
+	void addProjectToProjectSpaceEntry(ProjectSpace projectSpace);
+
+	/**
 	 * Exports a project space to a file.
 	 * 
 	 * @param projectSpace
@@ -352,13 +366,5 @@ public interface Workspace extends EObject, IAdaptable, APIDelegate<ESWorkspaceI
 	 *            the server info to be removed
 	 */
 	void removeServerInfo(ServerInfo serverInfo);
-
-	/**
-	 * Makes the project of a given {@link ProjectSpace} garbage collectible in order to free memory.
-	 * 
-	 * @param projectSpace the ProjectSpace of the project
-	 * @param saveBeforeClose whether to save the ProjectSpace before closing. Unsaved changes will be lost.
-	 */
-	void closeProject(ProjectSpace projectSpace, boolean saveBeforeClose);
 
 } // Workspace

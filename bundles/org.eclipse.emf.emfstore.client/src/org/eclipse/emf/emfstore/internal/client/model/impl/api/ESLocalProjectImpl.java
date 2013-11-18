@@ -792,4 +792,31 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 		return copy(getRemoteProject().getHistoryInfos(getUsersession(), query, monitor));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.client.ESLocalProject#isClosed()
+	 */
+	public boolean isClosed() {
+		return toInternalAPI().isClosed();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.client.ESLocalProject#close(boolean)
+	 */
+	public void close(boolean saveBeforeClose) {
+		toInternalAPI().close(saveBeforeClose);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.client.ESLocalProject#open()
+	 */
+	public void open() {
+		toInternalAPI().open();
+	}
+
 }

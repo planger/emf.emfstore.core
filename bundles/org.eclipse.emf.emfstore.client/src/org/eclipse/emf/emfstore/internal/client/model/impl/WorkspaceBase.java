@@ -124,6 +124,26 @@ public abstract class WorkspaceBase extends EObjectImpl implements Workspace, ES
 	 * 
 	 * {@inheritDoc}
 	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.Workspace#removeProjectToProjectSpaceEntry(org.eclipse.emf.emfstore.internal.client.model.ProjectSpace)
+	 */
+	public void removeProjectToProjectSpaceEntry(ProjectSpace projectSpace) {
+		projectToProjectSpaceMap.remove(projectSpace.getProject());
+	}
+
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.Workspace#addProjectToProjectSpaceEntry(org.eclipse.emf.emfstore.internal.client.model.ProjectSpace)
+	 */
+	public void addProjectToProjectSpaceEntry(ProjectSpace projectSpace) {
+		projectToProjectSpaceMap.put(projectSpace.getProject(), projectSpace);
+	}
+
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
 	 * @see org.eclipse.emf.emfstore.internal.client.model.Workspace#init()
 	 */
 	@SuppressWarnings("unchecked")
@@ -489,17 +509,6 @@ public abstract class WorkspaceBase extends EObjectImpl implements Workspace, ES
 
 	public ESWorkspaceImpl createAPI() {
 		return new ESWorkspaceImpl(this);
-	}
-
-	/**
-	 * 
-	 * {@inheritDoc}
-	 * 
-	 * @see org.eclipse.emf.emfstore.internal.client.model.Workspace#closeProject()
-	 */
-	public void closeProject(ProjectSpace projectSpace, boolean saveBeforeClose) {
-		((ProjectSpaceBase) projectSpace).close(saveBeforeClose);
-		projectToProjectSpaceMap.remove(projectSpace.getProject());
 	}
 
 }

@@ -31,6 +31,7 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipse.emf.emfstore.client.exceptions.ESProjectIsClosedException;
 import org.eclipse.emf.emfstore.client.util.ClientURIUtil;
 import org.eclipse.emf.emfstore.common.ESResourceSetProvider;
 import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionPoint;
@@ -639,6 +640,9 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	 */
 	public Project getProject()
 	{
+		if (isClosed()) {
+			throw new ESProjectIsClosedException();
+		}
 		final Project project = basicGetProject();
 		return project != null && project.eIsProxy() ? (Project) eResolveProxy((InternalEObject) project) : project;
 	}
@@ -661,10 +665,7 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 		if (project == null) {
 			final URI projectURI = ClientURIUtil.createProjectURI(this);
 			project = (Project) loadEObjectFromURI(projectURI);
-			if (project != null) {
-				projectReference = new WeakReference<Project>(project);
-				init();
-			}
+			projectReference = new WeakReference<Project>(project);
 		}
 		return project;
 	}
@@ -1176,6 +1177,9 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	 */
 	public ChangePackage getLocalChangePackage()
 	{
+		if (isClosed()) {
+			throw new ESProjectIsClosedException();
+		}
 		final ChangePackage localChangePackage = basicGetLocalChangePackage();
 		return localChangePackage != null && localChangePackage.eIsProxy() ? (ChangePackage) eResolveProxy((InternalEObject) localChangePackage)
 			: localChangePackage;

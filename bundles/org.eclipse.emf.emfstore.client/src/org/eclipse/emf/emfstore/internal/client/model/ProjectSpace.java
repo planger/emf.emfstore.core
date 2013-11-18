@@ -1071,7 +1071,26 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 */
 	boolean isShared();
 
-	// custom interface
+	/**
+	 * Whether this project space has been closed.
+	 * 
+	 * @return <code>true</code> if the project space has been closed, <code>false</code> otherwise
+	 */
+	boolean isClosed();
+
+	/**
+	 * Closes the project space.
+	 * 
+	 * @param saveBeforeClose <code>true</code> if the project space shall be saved before closing, <code>false</code>
+	 *            otherwise. Unsaved changes will be lost.
+	 */
+	void close(boolean saveBeforeClose);
+
+	/**
+	 * Opens the project space.
+	 */
+	void open();
+
 	/**
 	 * Return the local {@link ChangePackage} associated with this ProjectSpace.
 	 * 

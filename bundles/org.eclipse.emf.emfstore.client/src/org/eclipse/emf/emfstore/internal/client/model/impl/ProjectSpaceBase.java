@@ -134,6 +134,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 	private boolean initCompleted;
 	private boolean isTransient;
 	private boolean disposed;
+	private boolean closed;
 
 	private FileTransferManager fileTransferManager;
 	private OperationManager operationManager;
@@ -142,8 +143,8 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 	private final Map<String, OrgUnitProperty> propertyMap;
 
 	private ResourceSet resourceSet;
-	private ResourceSet projectResourceSet;
-	private EditingDomain editingDomain;
+	private ResourceSet contentResourceSet;
+	private EditingDomain contentEditingDomain;
 	private ResourcePersister resourcePersister;
 
 	private ECrossReferenceAdapter crossReferenceAdapter;
@@ -591,24 +592,24 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#init()
 	 */
 	public void init() {
-		final ResourceSet projectResourceSet = getResourceSetForProject();
+		final ResourceSet contentResourceSet = getResourceSetForContents();
 
-		if (editingDomain == null) {
-			editingDomain = createEditingDomain(projectResourceSet);
+		if (contentEditingDomain == null) {
+			contentEditingDomain = getEditingDomainForContents(contentResourceSet);
 		}
 
 		if (getProject().eResource() != null) {
-			projectResourceSet.getResources().add(getProject().eResource());
+			contentResourceSet.getResources().add(getProject().eResource());
 		} else {
-			final Resource resource = projectResourceSet.createResource(ClientURIUtil.createProjectURI(this));
+			final Resource resource = contentResourceSet.createResource(ClientURIUtil.createProjectURI(this));
 			resource.getContents().add(getProject());
 		}
 
 		if (getLocalChangePackage() != null) {
 			if (getLocalChangePackage().eResource() != null) {
-				projectResourceSet.getResources().add(getLocalChangePackage().eResource());
+				contentResourceSet.getResources().add(getLocalChangePackage().eResource());
 			} else {
-				final Resource resource = projectResourceSet.createResource(ClientURIUtil.createOperationsURI(this));
+				final Resource resource = contentResourceSet.createResource(ClientURIUtil.createOperationsURI(this));
 				resource.getContents().add(getLocalChangePackage());
 			}
 		}
@@ -616,7 +617,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 		initCrossReferenceAdapter();
 
 		final ESCommandStack commandStack = (ESCommandStack)
-			editingDomain.getCommandStack();
+			contentEditingDomain.getCommandStack();
 
 		fileTransferManager = new FileTransferManager(this);
 		operationManager = new OperationManager(this);
@@ -643,41 +644,52 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 		initCompleted = true;
 	}
 
-	private ResourceSet getResourceSetForProject() {
-		if (projectResourceSet == null) {
+	/**
+	 * Returns the {@link ResourceSet} for the project and the local change package of this project space. If the
+	 * resource set was null, it will be created.
+	 * 
+	 * @return the resource set
+	 */
+	private ResourceSet getResourceSetForContents() {
+		if (contentResourceSet == null) {
 			final ESExtensionPoint extensionPoint = new ESExtensionPoint(
-				"org.eclipse.emf.emfstore.client.resourceSetProvider",
+				"org.eclipse.emf.emfstore.client.resourceSetProvider", //$NON-NLS-1$
 				true);
-			extensionPoint.setComparator(new ESPriorityComparator("priority", true));
+			extensionPoint.setComparator(new ESPriorityComparator("priority", true)); //$NON-NLS-1$
 			extensionPoint.reload();
 
 			final ESResourceSetProvider resourceSetProvider = extensionPoint.getElementWithHighestPriority().getClass(
-				"class",
+				"class", //$NON-NLS-1$
 				ESResourceSetProvider.class);
 
-			projectResourceSet = resourceSetProvider.getResourceSet();
+			contentResourceSet = resourceSetProvider.getResourceSet();
 		}
 
-		return projectResourceSet;
+		return contentResourceSet;
 	}
 
-	private EditingDomain createEditingDomain(ResourceSet resourceSet) {
+	/**
+	 * Returns the {@link EditingDomain} for this project space's project and local change package.
+	 * 
+	 * @param resourceSet the {@link ResourceSet} of the project and local change package
+	 * @return
+	 */
+	private EditingDomain getEditingDomainForContents(ResourceSet resourceSet) {
 		final ESEditingDomainProvider domainProvider = getDomainProvider();
 		if (domainProvider != null) {
 			return domainProvider.getEditingDomain(resourceSet);
-		} else {
-
-			AdapterFactory adapterFactory = new ComposedAdapterFactory(
-				ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-
-			adapterFactory = new ComposedAdapterFactory(new AdapterFactory[] { adapterFactory,
-				new ReflectiveItemProviderAdapterFactory() });
-
-			final AdapterFactoryEditingDomain domain = new AdapterFactoryEditingDomain(adapterFactory,
-				new EMFStoreBasicCommandStack(), resourceSet);
-			resourceSet.eAdapters().add(new AdapterFactoryEditingDomain.EditingDomainProvider(domain));
-			return domain;
 		}
+
+		AdapterFactory adapterFactory = new ComposedAdapterFactory(
+			ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+
+		adapterFactory = new ComposedAdapterFactory(new AdapterFactory[] { adapterFactory,
+			new ReflectiveItemProviderAdapterFactory() });
+
+		final AdapterFactoryEditingDomain domain = new AdapterFactoryEditingDomain(adapterFactory,
+			new EMFStoreBasicCommandStack(), resourceSet);
+		resourceSet.eAdapters().add(new AdapterFactoryEditingDomain.EditingDomainProvider(domain));
+		return domain;
 	}
 
 	private ESEditingDomainProvider getDomainProvider() {
@@ -709,9 +721,9 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 		boolean useCrossReferenceAdapter = true;
 
 		for (final ESExtensionElement element : new ESExtensionPoint(
-			"org.eclipse.emf.emfstore.client.inverseCrossReferenceCache")
+			"org.eclipse.emf.emfstore.client.inverseCrossReferenceCache") //$NON-NLS-1$
 			.getExtensionElements()) {
-			useCrossReferenceAdapter &= element.getBoolean("activated");
+			useCrossReferenceAdapter &= element.getBoolean("activated"); //$NON-NLS-1$
 		}
 
 		if (useCrossReferenceAdapter) {
@@ -1346,7 +1358,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 			getProject().eAdapters().remove(crossReferenceAdapter);
 		}
 
-		final ESCommandStack commandStack = (ESCommandStack) editingDomain.getCommandStack();
+		final ESCommandStack commandStack = (ESCommandStack) contentEditingDomain.getCommandStack();
 		commandStack.removeCommandStackObserver(operationManager);
 		commandStack.removeCommandStackObserver(resourcePersister);
 
@@ -1387,21 +1399,9 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 			emfStoreResource.getIDToEObjectMap().clear();
 		}
 
-		editingDomain.getCommandStack().flush();
+		contentEditingDomain.getCommandStack().flush();
 
 		disposed = true;
-	}
-
-	/**
-	 * Closes the project.
-	 * 
-	 * @param saveBeforeClose whether to save existing changes before closing the project. Unsaved changes will be lost.
-	 */
-	public void close(boolean saveBeforeClose) {
-		if (saveBeforeClose) {
-			save();
-		}
-		dispose();
 	}
 
 	/**
@@ -1412,6 +1412,43 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 	 */
 	public boolean isShared() {
 		return getUsersession() != null;
+	}
+
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#isClosed()
+	 */
+	public boolean isClosed() {
+		return closed;
+	}
+
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#close(boolean)
+	 */
+	public void close(boolean saveBeforeClose) {
+		if (saveBeforeClose) {
+			save();
+		}
+		getWorkspace().removeProjectToProjectSpaceEntry(this);
+		dispose();
+		closed = true;
+	}
+
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#open()
+	 */
+	public void open() {
+		init();
+		getWorkspace().addProjectToProjectSpaceEntry(this);
+		closed = false;
 	}
 
 	private void notifyPreRevertMyChanges(final ChangePackage changePackage) {
