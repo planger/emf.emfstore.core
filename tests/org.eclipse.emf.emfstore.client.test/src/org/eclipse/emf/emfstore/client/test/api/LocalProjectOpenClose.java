@@ -16,14 +16,21 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.emfstore.client.ESLocalProject;
+import org.eclipse.emf.emfstore.client.ESServer;
 import org.eclipse.emf.emfstore.client.exceptions.ESProjectIsClosedException;
 import org.eclipse.emf.emfstore.client.test.GCCollectable;
 import org.eclipse.emf.emfstore.client.test.SetupHelper;
 import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
+import org.eclipse.emf.emfstore.internal.client.model.connectionmanager.KeyStoreManager;
 import org.eclipse.emf.emfstore.internal.common.model.Project;
 import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
+import org.eclipse.emf.emfstore.internal.server.EMFStoreController;
+import org.eclipse.emf.emfstore.internal.server.exceptions.FatalESException;
+import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -42,12 +49,15 @@ public class LocalProjectOpenClose {
 	private ESLocalProject esLocalProject;
 
 	@BeforeClass
-	public static void beforeClass() {
+	public static void beforeClass() throws FatalESException {
+		EMFStoreController.runAsNewThread();
 		setupHelper = new SetupHelper(modelKey, minObjectsCount, seed);
 	}
 
 	@Before
-	public void beforeTest() {
+	public void beforeTest() throws ESException, FatalESException {
+		final ESServer server = ESServer.FACTORY.createServer("localhost", 8080, KeyStoreManager.DEFAULT_CERTIFICATE);
+		server.login("super", "super");
 		setupHelper.generateRandomProject();
 		copyOfGeneratedProject = ModelUtil.clone(setupHelper.getTestProject());
 		projectCollectable = new GCCollectable(setupHelper.getTestProject());
@@ -61,6 +71,11 @@ public class LocalProjectOpenClose {
 	@After
 	public void afterTest() throws IOException {
 		SetupHelper.cleanupWorkspace();
+	}
+
+	@AfterClass
+	public static void afterClass() {
+		EMFStoreController.getInstance().stop();
 	}
 
 	@Test
@@ -81,6 +96,16 @@ public class LocalProjectOpenClose {
 		assertFalse(ModelUtil.areEqual(copyOfGeneratedProject, setupHelper.getTestProjectSpace().getProject()));
 		assertEquals(0, setupHelper.getTestProjectSpace().getProject().getModelElements().size());
 		assertEquals(0, setupHelper.getTestProjectSpace().getLocalChangePackage().getOperations().size());
+	}
+
+	@Test
+	public void testCloseOpenNoSaveClientMemoryShared() throws ESException {
+		esLocalProject.shareProject(new NullProgressMonitor());
+		esLocalProject.close(false);
+		assertTrue(projectCollectable.isCollectable());
+		assertTrue(localChangePackageCollectable.isCollectable());
+		esLocalProject.open();
+		assertTrue(ModelUtil.areEqual(copyOfGeneratedProject, setupHelper.getTestProjectSpace().getProject()));
 	}
 
 	@Test(expected = ESProjectIsClosedException.class)
