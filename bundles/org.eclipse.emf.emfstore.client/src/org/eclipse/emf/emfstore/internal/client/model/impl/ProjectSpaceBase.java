@@ -1446,9 +1446,9 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#open()
 	 */
 	public void open() {
+		closed = false;
 		init();
 		getWorkspace().addProjectToProjectSpaceEntry(this);
-		closed = false;
 	}
 
 	private void notifyPreRevertMyChanges(final ChangePackage changePackage) {
