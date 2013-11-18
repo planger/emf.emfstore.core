@@ -58,7 +58,7 @@ public final class RunESCommand {
 		public static <T, E extends Exception> T runWithResult(final Class<E> exceptionType,
 			final Callable<T> callable, ESLocalProject project)
 			throws E {
-			return runWithResult(exceptionType, callable, ((ESLocalProjectImpl) project).toInternalAPI());
+			return runWithResult(exceptionType, callable, ((ESLocalProjectImpl) project).toInternalAPI().getProject());
 		}
 
 		/**
@@ -120,7 +120,7 @@ public final class RunESCommand {
 		public static <T extends Exception> void run(final Class<T> exceptionType, final Callable<Void> callable,
 			ESLocalProject project)
 			throws T {
-			run(exceptionType, callable, ((ESLocalProjectImpl) project).toInternalAPI());
+			run(exceptionType, callable, ((ESLocalProjectImpl) project).toInternalAPI().getProject());
 		}
 
 		/**
@@ -172,7 +172,7 @@ public final class RunESCommand {
 	 *            the callable to be executed
 	 */
 	public static void run(final Callable<Void> callable, ESLocalProject project) {
-		run(callable, ((ESLocalProjectImpl) project).toInternalAPI());
+		run(callable, ((ESLocalProjectImpl) project).toInternalAPI().getProject());
 	}
 
 	/**
@@ -208,7 +208,7 @@ public final class RunESCommand {
 	 * @param <T> the return type of the callable
 	 */
 	public static <T> T runWithResult(final Callable<T> callable, ESLocalProject project) {
-		return runWithResult(callable, ((ESLocalProjectImpl) project).toInternalAPI());
+		return runWithResult(callable, ((ESLocalProjectImpl) project).toInternalAPI().getProject());
 	}
 
 	/**
