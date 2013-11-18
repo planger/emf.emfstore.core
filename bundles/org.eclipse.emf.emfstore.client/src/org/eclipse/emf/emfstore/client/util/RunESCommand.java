@@ -18,6 +18,7 @@ import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommand;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommandWithException;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommandWithResult;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommandWithResultAndException;
+import org.eclipse.emf.emfstore.server.exceptions.ESException;
 
 /**
  * Utility class for automatically wrapping changes against a model element

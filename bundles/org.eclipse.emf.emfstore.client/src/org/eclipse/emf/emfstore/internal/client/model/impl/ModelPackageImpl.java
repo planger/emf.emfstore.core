@@ -118,7 +118,8 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 
 		// Obtain or create and register package
 		ModelPackageImpl theModelPackage = (ModelPackageImpl) (EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ModelPackageImpl ? EPackage.Registry.INSTANCE
-			.get(eNS_URI) : new ModelPackageImpl());
+			.get(eNS_URI)
+			: new ModelPackageImpl());
 
 		isInited = true;
 
@@ -355,7 +356,8 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * 
 	 * @generated
 	 */
-	public EReference getProjectSpace_ProjectId() {
+	public EReference getProjectSpace_Project()
+	{
 		return (EReference) projectSpaceEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -365,8 +367,8 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * 
 	 * @generated
 	 */
-	public EAttribute getProjectSpace_ProjectName() {
-		return (EAttribute) projectSpaceEClass.getEStructuralFeatures().get(1);
+	public EReference getProjectSpace_ProjectId() {
+		return (EReference) projectSpaceEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -375,7 +377,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * 
 	 * @generated
 	 */
-	public EAttribute getProjectSpace_ProjectDescription() {
+	public EAttribute getProjectSpace_ProjectName() {
 		return (EAttribute) projectSpaceEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -385,8 +387,18 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * 
 	 * @generated
 	 */
+	public EAttribute getProjectSpace_ProjectDescription() {
+		return (EAttribute) projectSpaceEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	public EReference getProjectSpace_Usersession() {
-		return (EReference) projectSpaceEClass.getEStructuralFeatures().get(3);
+		return (EReference) projectSpaceEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -396,7 +408,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * @generated
 	 */
 	public EAttribute getProjectSpace_LastUpdated() {
-		return (EAttribute) projectSpaceEClass.getEStructuralFeatures().get(4);
+		return (EAttribute) projectSpaceEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -406,7 +418,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * @generated
 	 */
 	public EReference getProjectSpace_BaseVersion() {
-		return (EReference) projectSpaceEClass.getEStructuralFeatures().get(5);
+		return (EReference) projectSpaceEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -416,16 +428,6 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * @generated
 	 */
 	public EAttribute getProjectSpace_ResourceCount() {
-		return (EAttribute) projectSpaceEClass.getEStructuralFeatures().get(6);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	public EAttribute getProjectSpace_Dirty() {
 		return (EAttribute) projectSpaceEClass.getEStructuralFeatures().get(7);
 	}
 
@@ -435,7 +437,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * 
 	 * @generated
 	 */
-	public EAttribute getProjectSpace_OldLogMessages() {
+	public EAttribute getProjectSpace_Dirty() {
 		return (EAttribute) projectSpaceEClass.getEStructuralFeatures().get(8);
 	}
 
@@ -445,8 +447,8 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * 
 	 * @generated
 	 */
-	public EReference getProjectSpace_WaitingUploads() {
-		return (EReference) projectSpaceEClass.getEStructuralFeatures().get(9);
+	public EAttribute getProjectSpace_OldLogMessages() {
+		return (EAttribute) projectSpaceEClass.getEStructuralFeatures().get(9);
 	}
 
 	/**
@@ -455,7 +457,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * 
 	 * @generated
 	 */
-	public EReference getProjectSpace_Properties() {
+	public EReference getProjectSpace_WaitingUploads() {
 		return (EReference) projectSpaceEClass.getEStructuralFeatures().get(10);
 	}
 
@@ -465,7 +467,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * 
 	 * @generated
 	 */
-	public EReference getProjectSpace_ChangedSharedProperties() {
+	public EReference getProjectSpace_Properties() {
 		return (EReference) projectSpaceEClass.getEStructuralFeatures().get(11);
 	}
 
@@ -475,7 +477,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * 
 	 * @generated
 	 */
-	public EReference getProjectSpace_Workspace() {
+	public EReference getProjectSpace_ChangedSharedProperties() {
 		return (EReference) projectSpaceEClass.getEStructuralFeatures().get(12);
 	}
 
@@ -485,8 +487,29 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * 
 	 * @generated
 	 */
-	public EReference getProjectSpace_MergedVersion() {
+	public EReference getProjectSpace_Workspace() {
 		return (EReference) projectSpaceEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	public EReference getProjectSpace_LocalChangePackage()
+	{
+		return (EReference) projectSpaceEClass.getEStructuralFeatures().get(14);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	public EReference getProjectSpace_MergedVersion() {
+		return (EReference) projectSpaceEClass.getEStructuralFeatures().get(15);
 	}
 
 	/**
@@ -615,6 +638,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		createEReference(usersessionEClass, USERSESSION__CHANGED_PROPERTIES);
 
 		projectSpaceEClass = createEClass(PROJECT_SPACE);
+		createEReference(projectSpaceEClass, PROJECT_SPACE__PROJECT);
 		createEReference(projectSpaceEClass, PROJECT_SPACE__PROJECT_ID);
 		createEAttribute(projectSpaceEClass, PROJECT_SPACE__PROJECT_NAME);
 		createEAttribute(projectSpaceEClass, PROJECT_SPACE__PROJECT_DESCRIPTION);
@@ -628,6 +652,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		createEReference(projectSpaceEClass, PROJECT_SPACE__PROPERTIES);
 		createEReference(projectSpaceEClass, PROJECT_SPACE__CHANGED_SHARED_PROPERTIES);
 		createEReference(projectSpaceEClass, PROJECT_SPACE__WORKSPACE);
+		createEReference(projectSpaceEClass, PROJECT_SPACE__LOCAL_CHANGE_PACKAGE);
 		createEReference(projectSpaceEClass, PROJECT_SPACE__MERGED_VERSION);
 
 		pendingFileTransferEClass = createEClass(PENDING_FILE_TRANSFER);
@@ -741,6 +766,9 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 
 		initEClass(projectSpaceEClass, ProjectSpace.class, "ProjectSpace", !IS_ABSTRACT, !IS_INTERFACE,
 			IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getProjectSpace_Project(), theModelPackage_2.getProject(), null, "project", null, 0, 1,
+			ProjectSpace.class, !IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES,
+			!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getProjectSpace_ProjectId(), theModelPackage_1.getProjectId(), null, "projectId", null, 1, 1,
 			ProjectSpace.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES,
 			!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -779,6 +807,9 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		initEReference(getProjectSpace_Workspace(), this.getWorkspace(), this.getWorkspace_ProjectSpaces(),
 			"workspace", null, 0, 1, ProjectSpace.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
 			IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getProjectSpace_LocalChangePackage(), theVersioningPackage.getChangePackage(), null,
+			"localChangePackage", null, 0, 1, ProjectSpace.class, !IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE,
+			IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getProjectSpace_MergedVersion(), theVersioningPackage.getPrimaryVersionSpec(), null,
 			"mergedVersion", null, 0, 1, ProjectSpace.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE,
 			IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
