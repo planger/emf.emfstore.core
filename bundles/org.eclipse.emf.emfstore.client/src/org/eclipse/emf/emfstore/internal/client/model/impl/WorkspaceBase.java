@@ -497,8 +497,8 @@ public abstract class WorkspaceBase extends EObjectImpl implements Workspace, ES
 	 * 
 	 * @see org.eclipse.emf.emfstore.internal.client.model.Workspace#closeProject()
 	 */
-	public void closeProject(ProjectSpace projectSpace) {
-		((ProjectSpaceBase) projectSpace).dispose();
+	public void closeProject(ProjectSpace projectSpace, boolean saveBeforeClose) {
+		((ProjectSpaceBase) projectSpace).close(saveBeforeClose);
 		projectToProjectSpaceMap.remove(projectSpace.getProject());
 	}
 

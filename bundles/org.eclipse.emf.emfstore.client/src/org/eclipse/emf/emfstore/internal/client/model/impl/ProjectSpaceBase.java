@@ -1393,6 +1393,18 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 	}
 
 	/**
+	 * Closes the project.
+	 * 
+	 * @param saveBeforeClose whether to save existing changes before closing the project. Unsaved changes will be lost.
+	 */
+	public void close(boolean saveBeforeClose) {
+		if (saveBeforeClose) {
+			save();
+		}
+		dispose();
+	}
+
+	/**
 	 * 
 	 * {@inheritDoc}
 	 * 

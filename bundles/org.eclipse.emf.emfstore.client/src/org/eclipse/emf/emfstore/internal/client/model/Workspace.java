@@ -357,7 +357,8 @@ public interface Workspace extends EObject, IAdaptable, APIDelegate<ESWorkspaceI
 	 * Makes the project of a given {@link ProjectSpace} garbage collectible in order to free memory.
 	 * 
 	 * @param projectSpace the ProjectSpace of the project
+	 * @param saveBeforeClose whether to save the ProjectSpace before closing. Unsaved changes will be lost.
 	 */
-	void closeProject(ProjectSpace projectSpace);
+	void closeProject(ProjectSpace projectSpace, boolean saveBeforeClose);
 
 } // Workspace

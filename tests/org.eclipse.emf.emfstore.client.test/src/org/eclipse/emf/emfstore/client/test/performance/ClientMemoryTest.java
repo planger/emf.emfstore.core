@@ -58,9 +58,8 @@ public class ClientMemoryTest {
 		final PhantomReference<ChangePackage> cpRef = new PhantomReference<ChangePackage>(setupHelper
 			.getTestProjectSpace()
 			.getLocalChangePackage(), refQueue);
-		setupHelper.getTestProjectSpace().save();
 		ESWorkspaceProviderImpl.getInstance().getWorkspace().toInternalAPI()
-			.closeProject(setupHelper.getTestProjectSpace());
+			.closeProject(setupHelper.getTestProjectSpace(), true);
 		Runtime.getRuntime().gc();
 		Reference result = refQueue.remove(5000);
 		if (result == null) {
