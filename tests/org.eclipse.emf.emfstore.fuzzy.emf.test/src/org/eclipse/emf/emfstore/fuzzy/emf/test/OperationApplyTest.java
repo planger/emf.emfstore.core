@@ -45,7 +45,7 @@ public class OperationApplyTest extends FuzzyProjectTest {
 			protected void doRun() {
 				getUtil().mutate(mmc);
 			}
-		}.run(false);
+		}.run(projectSpace.getProject(), false);
 
 		final ProjectSpace copyProjectSpace = getCopyProjectSpace();
 
@@ -55,7 +55,7 @@ public class OperationApplyTest extends FuzzyProjectTest {
 				((ProjectSpaceBase) copyProjectSpace).applyOperations(
 					projectSpace.getOperations(), false);
 			}
-		}.run(false);
+		}.run(copyProjectSpace.getProject(), false);
 
 		compareIgnoreOrder(projectSpace.getProject(),
 			copyProjectSpace.getProject());

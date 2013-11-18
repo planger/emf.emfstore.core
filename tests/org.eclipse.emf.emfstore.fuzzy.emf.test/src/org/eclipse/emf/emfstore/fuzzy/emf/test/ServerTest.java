@@ -21,9 +21,9 @@ import org.eclipse.emf.emfstore.fuzzy.FuzzyRunner;
 import org.eclipse.emf.emfstore.fuzzy.emf.EMFDataProvider;
 import org.eclipse.emf.emfstore.fuzzy.emf.MutateUtil;
 import org.eclipse.emf.emfstore.internal.client.model.Configuration;
+import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
 import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
 import org.eclipse.emf.emfstore.internal.client.model.impl.WorkspaceImpl;
-import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESLocalProjectImpl;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommand;
 import org.eclipse.emf.emfstore.internal.common.CommonUtil;
 import org.eclipse.emf.emfstore.internal.common.model.Project;
@@ -63,7 +63,7 @@ public class ServerTest extends CoreServerTest {
 				setProjectSpace(((WorkspaceImpl) ESWorkspaceProvider.INSTANCE
 					.getWorkspace()).importProject(project, "", ""));
 			}
-		}.run(false);
+		}.run(ESWorkspaceProviderImpl.getInstance().getInternalWorkspace(), false);
 		setProject(project);
 	}
 
@@ -74,10 +74,10 @@ public class ServerTest extends CoreServerTest {
 	@Test
 	public void shareCheckoutCommitUpdate() throws ESException {
 
-		ProjectSpace projectSpace = getProjectSpace();
+		final ProjectSpace projectSpace = getProjectSpace();
 
 		// share original project
-		PrimaryVersionSpec versionSpec = share(projectSpace);
+		final PrimaryVersionSpec versionSpec = share(projectSpace);
 
 		// checkout project
 		final ProjectSpace psCheckedout = checkout(projectSpace.toAPI()
@@ -95,7 +95,7 @@ public class ServerTest extends CoreServerTest {
 			protected void doRun() {
 				util.mutate(mmc);
 			}
-		}.run(false);
+		}.run(projectSpace.getProject(), false);
 
 		commit(projectSpace);
 
@@ -105,11 +105,11 @@ public class ServerTest extends CoreServerTest {
 			protected void doRun() {
 				try {
 					psCheckedout.update(new NullProgressMonitor());
-				} catch (ESException e) {
+				} catch (final ESException e) {
 					throw new RuntimeException(e);
 				}
 			}
-		}.run(false);
+		}.run(psCheckedout.getProject(), false);
 
 		// compare original and updated project
 		FuzzyProjectTest.compareIgnoreOrder(projectSpace.getProject(),
