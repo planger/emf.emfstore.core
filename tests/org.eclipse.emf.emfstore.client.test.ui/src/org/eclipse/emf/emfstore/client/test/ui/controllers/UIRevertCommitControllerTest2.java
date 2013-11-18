@@ -42,8 +42,8 @@ public class UIRevertCommitControllerTest2 extends AbstractUIControllerTestWithC
 	@Test
 	public void testController() throws ESException {
 		assertEquals(0, localProject.getModelElements().size());
-		ESUpdateCallback updateCallback = new MyUpdateCallback();
-		IProgressMonitor monitor = new NullProgressMonitor();
+		final ESUpdateCallback updateCallback = new MyUpdateCallback();
+		final IProgressMonitor monitor = new NullProgressMonitor();
 
 		// create checkout
 		checkout();
@@ -67,7 +67,7 @@ public class UIRevertCommitControllerTest2 extends AbstractUIControllerTestWithC
 		// update checkout
 		getCopy().update(ESVersionSpec.FACTORY.createHEAD(), updateCallback, monitor);
 		assertEquals(2, getCopy().getModelElements().size());
-		Tournament tournament = getCopy().getAllModelElementsByClass(Tournament.class).iterator().next();
+		final Tournament tournament = getCopy().getAllModelElementsByClass(Tournament.class).iterator().next();
 		assertEquals(new Integer(32), tournament.getPlayerPoints().values().iterator().next());
 
 		// revert again, should have no effect
@@ -89,7 +89,7 @@ public class UIRevertCommitControllerTest2 extends AbstractUIControllerTestWithC
 				localProject.getModelElements().add(tournament);
 				return null;
 			}
-		});
+		}, localProject);
 		commit();
 	}
 
@@ -99,7 +99,7 @@ public class UIRevertCommitControllerTest2 extends AbstractUIControllerTestWithC
 
 		UIThreadRunnable.asyncExec(new VoidResult() {
 			public void run() {
-				UIRevertCommitController revertCommitController = new UIRevertCommitController(
+				final UIRevertCommitController revertCommitController = new UIRevertCommitController(
 					bot.getDisplay().getActiveShell(),
 					baseVersion,
 					localProject);
@@ -107,7 +107,7 @@ public class UIRevertCommitControllerTest2 extends AbstractUIControllerTestWithC
 			}
 		});
 
-		SWTBotShell shell = bot.shell("Confirmation");
+		final SWTBotShell shell = bot.shell("Confirmation");
 		shell.bot().button("OK").click();
 
 		bot.waitUntil(new DefaultCondition() {
@@ -120,8 +120,8 @@ public class UIRevertCommitControllerTest2 extends AbstractUIControllerTestWithC
 			}
 		}, timeout());
 
-		List<ESLocalProject> localProjects = ESWorkspaceProvider.INSTANCE.getWorkspace().getLocalProjects();
-		ESLocalProject localProject = localProjects.get(localProjects.size() - 1);
+		final List<ESLocalProject> localProjects = ESWorkspaceProvider.INSTANCE.getWorkspace().getLocalProjects();
+		final ESLocalProject localProject = localProjects.get(localProjects.size() - 1);
 		localProject.commit(new NullProgressMonitor());
 
 	}
@@ -131,11 +131,12 @@ public class UIRevertCommitControllerTest2 extends AbstractUIControllerTestWithC
 		final ESPrimaryVersionSpec baseVersion = localProject.getBaseVersion();
 		RunESCommand.run(new Callable<Void>() {
 			public Void call() throws Exception {
-				Tournament tournament = localProject.getAllModelElementsByClass(Tournament.class).iterator().next();
+				final Tournament tournament = localProject.getAllModelElementsByClass(Tournament.class).iterator()
+					.next();
 				localProject.getModelElements().remove(tournament);
 				return null;
 			}
-		});
+		}, localProject);
 		commit();
 		assertEquals(1, localProject.getModelElements().size());
 	}

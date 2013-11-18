@@ -54,7 +54,7 @@ public abstract class AbstractUIControllerTestWithCommit extends AbstractUIContr
 				localProject.getModelElements().add(tournament);
 				return null;
 			}
-		});
+		}, localProject);
 		commit(localProject);
 	}
 
@@ -73,7 +73,7 @@ public abstract class AbstractUIControllerTestWithCommit extends AbstractUIContr
 				localProject.getModelElements().add(player);
 				return null;
 			}
-		});
+		}, localProject);
 		commit(localProject);
 	}
 
@@ -84,7 +84,7 @@ public abstract class AbstractUIControllerTestWithCommit extends AbstractUIContr
 				localProject.getModelElements().add(league);
 				return null;
 			}
-		});
+		}, localProject);
 		commit(localProject);
 	}
 
@@ -102,7 +102,7 @@ public abstract class AbstractUIControllerTestWithCommit extends AbstractUIContr
 			}
 		});
 
-		SWTBotButton buttonWithLabel = bot.button("OK");
+		final SWTBotButton buttonWithLabel = bot.button("OK");
 		buttonWithLabel.click();
 
 		bot.waitUntil(new DefaultCondition() {
@@ -131,7 +131,7 @@ public abstract class AbstractUIControllerTestWithCommit extends AbstractUIContr
 						bot.getDisplay().getActiveShell(),
 						localProject.getRemoteProject());
 					checkedoutCopy = checkoutController.execute();
-				} catch (ESException e) {
+				} catch (final ESException e) {
 					fail(e.getMessage());
 				}
 			}
@@ -166,7 +166,7 @@ public abstract class AbstractUIControllerTestWithCommit extends AbstractUIContr
 						versionSpec,
 						localProject.getRemoteProject());
 					localProjectArr[0] = checkoutController.execute();
-				} catch (ESException e) {
+				} catch (final ESException e) {
 					fail(e.getMessage());
 				}
 			}
@@ -197,19 +197,20 @@ public abstract class AbstractUIControllerTestWithCommit extends AbstractUIContr
 		SWTBotPreferences.PLAYBACK_DELAY = 100;
 		didUpdate = false;
 
-		ESUpdateObserver updateObserver = createUpdateObserver();
-		ESWorkspaceProviderImpl.getInstance().getObserverBus().register(updateObserver);
+		final ESUpdateObserver updateObserver = createUpdateObserver();
+		ESWorkspaceProviderImpl.getInstance();
+		ESWorkspaceProviderImpl.getObserverBus().register(updateObserver);
 
 		UIThreadRunnable.asyncExec(new VoidResult() {
 			public void run() {
-				UIUpdateProjectController updateProjectController = new UIUpdateProjectController(
+				final UIUpdateProjectController updateProjectController = new UIUpdateProjectController(
 					bot.getDisplay().getActiveShell(),
 					getCopy());
 				updateProjectController.execute();
 			}
 		});
 
-		Matcher<Shell> matcher = withText("Update");
+		final Matcher<Shell> matcher = withText("Update");
 		bot.waitUntil(waitForShell(matcher));
 		bot.button("OK").click();
 
@@ -223,7 +224,8 @@ public abstract class AbstractUIControllerTestWithCommit extends AbstractUIContr
 			}
 		}, timeout());
 
-		ESWorkspaceProviderImpl.getInstance().getObserverBus().unregister(updateObserver);
+		ESWorkspaceProviderImpl.getInstance();
+		ESWorkspaceProviderImpl.getObserverBus().unregister(updateObserver);
 
 		return getCopy().getBaseVersion();
 	}
@@ -232,12 +234,13 @@ public abstract class AbstractUIControllerTestWithCommit extends AbstractUIContr
 		SWTBotPreferences.PLAYBACK_DELAY = 100;
 		didUpdate = false;
 
-		ESUpdateObserver updateObserver = createUpdateObserver();
-		ESWorkspaceProviderImpl.getInstance().getObserverBus().register(updateObserver);
+		final ESUpdateObserver updateObserver = createUpdateObserver();
+		ESWorkspaceProviderImpl.getInstance();
+		ESWorkspaceProviderImpl.getObserverBus().register(updateObserver);
 
 		UIThreadRunnable.asyncExec(new VoidResult() {
 			public void run() {
-				UIUpdateProjectToVersionController updateProjectController = new UIUpdateProjectToVersionController(
+				final UIUpdateProjectToVersionController updateProjectController = new UIUpdateProjectToVersionController(
 					bot.getDisplay().getActiveShell(),
 					getCopy());
 				updateProjectController.execute();
@@ -262,7 +265,8 @@ public abstract class AbstractUIControllerTestWithCommit extends AbstractUIContr
 			}
 		}, 600000);
 
-		ESWorkspaceProviderImpl.getInstance().getObserverBus().unregister(updateObserver);
+		ESWorkspaceProviderImpl.getInstance();
+		ESWorkspaceProviderImpl.getObserverBus().unregister(updateObserver);
 
 		return getCopy().getBaseVersion();
 	}
@@ -285,14 +289,14 @@ public abstract class AbstractUIControllerTestWithCommit extends AbstractUIContr
 
 		UIThreadRunnable.asyncExec(new VoidResult() {
 			public void run() {
-				UIUpdateProjectController updateProjectController = new UIUpdateProjectController(
+				final UIUpdateProjectController updateProjectController = new UIUpdateProjectController(
 					bot.getDisplay().getActiveShell(),
 					getCopy());
 				updateProjectController.execute();
 			}
 		});
 
-		SWTBotButton buttonWithLabel = bot.button("OK");
+		final SWTBotButton buttonWithLabel = bot.button("OK");
 		buttonWithLabel.click();
 
 		bot.waitUntil(new DefaultCondition() {
@@ -306,7 +310,7 @@ public abstract class AbstractUIControllerTestWithCommit extends AbstractUIContr
 			}
 		}, timeout());
 
-		Matcher<Shell> matcher = withText("More updates available");
+		final Matcher<Shell> matcher = withText("More updates available");
 		bot.waitUntil(waitForShell(matcher));
 		bot.button("OK").click(); // update notification hint
 		bot.button("OK").click(); // inspect changes on update
