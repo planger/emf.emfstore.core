@@ -79,7 +79,7 @@ public class NewRepositoryWizard extends Wizard implements INewWizard {
 	}
 
 	private void invalidateSessions(final ESWorkspaceImpl workspace) throws ESException {
-		for (Usersession session : workspace.toInternalAPI().getUsersessions()) {
+		for (final Usersession session : workspace.toInternalAPI().getUsersessions()) {
 			if (session.getServerInfo() == server) {
 				session.logout();
 			}
@@ -114,7 +114,7 @@ public class NewRepositoryWizard extends Wizard implements INewWizard {
 						return null;
 					}
 
-				}, workspace.toInternalAPI());
+				});
 
 			} else {
 				if (workspace.serverExists(editedServer)) {

@@ -52,11 +52,11 @@ public class LoginDialogController implements ILoginDialogController {
 	 * @see org.eclipse.emf.emfstore.internal.client.ui.dialogs.login.ILoginDialogController#getKnownUsersessions()
 	 */
 	public List<ESUsersession> getKnownUsersessions() {
-		EList<Usersession> usersessions = ESWorkspaceProviderImpl.getInstance().getWorkspace().toInternalAPI()
+		final EList<Usersession> usersessions = ESWorkspaceProviderImpl.getInstance().getWorkspace().toInternalAPI()
 			.getUsersessions();
-		List<ESUsersession> knownSessions = new ArrayList<ESUsersession>();
-		for (Usersession session : usersessions) {
-			ServerInfo serverInfo = session.getServerInfo();
+		final List<ESUsersession> knownSessions = new ArrayList<ESUsersession>();
+		for (final Usersession session : usersessions) {
+			final ServerInfo serverInfo = session.getServerInfo();
 			// server info should never be null, but in case it is (whatever the reason may be)
 			// make sure it does not kill the initialization of the login dialog
 			if (serverInfo != null && serverInfo.toAPI() == server) {
@@ -78,7 +78,7 @@ public class LoginDialogController implements ILoginDialogController {
 			return server.getLastUsersession();
 		}
 
-		Integer userInput = RunInUI.runWithResult(new Callable<Integer>() {
+		final Integer userInput = RunInUI.runWithResult(new Callable<Integer>() {
 			public Integer call() throws Exception {
 				dialog = new LoginDialog(Display
 					.getCurrent().getActiveShell(),
@@ -110,7 +110,7 @@ public class LoginDialogController implements ILoginDialogController {
 				}
 				return null;
 			}
-		}, session);
+		});
 
 		validate(session.toAPI());
 
@@ -151,7 +151,7 @@ public class LoginDialogController implements ILoginDialogController {
 				}
 				return null;
 			}
-		}, usersession);
+		});
 
 		this.usersession = session;
 		ESWorkspaceProviderImpl.getInstance().getWorkspace().toInternalAPI().save();
@@ -197,7 +197,7 @@ public class LoginDialogController implements ILoginDialogController {
 	public ESUsersession login(ESServer server, boolean force)
 		throws ESException {
 		this.server = server;
-		this.usersession = null;
+		usersession = null;
 		return login(force);
 	}
 
@@ -213,7 +213,7 @@ public class LoginDialogController implements ILoginDialogController {
 	 */
 	public void login(ESUsersession usersession, boolean force)
 		throws ESException {
-		this.server = null;
+		server = null;
 		this.usersession = usersession;
 		login(force);
 	}
@@ -232,7 +232,7 @@ public class LoginDialogController implements ILoginDialogController {
 	 */
 	public ESUsersession login(ESServer server) throws ESException {
 		this.server = server;
-		this.usersession = null;
+		usersession = null;
 		return login(false);
 	}
 
@@ -247,7 +247,7 @@ public class LoginDialogController implements ILoginDialogController {
 	 */
 	public ESUsersession login(ESUsersession usersession) throws ESException {
 		this.usersession = usersession;
-		this.server = usersession.getServer();
+		server = usersession.getServer();
 		return login(false);
 	}
 }
