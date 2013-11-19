@@ -12,8 +12,6 @@
 package org.eclipse.emf.emfstore.internal.client.model.util;
 
 import org.eclipse.emf.common.command.AbstractCommand;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
 
@@ -66,7 +64,7 @@ public abstract class AbstractEMFStoreCommand extends AbstractCommand {
 		try {
 			commandBody();
 			// BEGIN SUPRESS CATCH EXCEPTION
-		} catch (RuntimeException e) {
+		} catch (final RuntimeException e) {
 			// END SUPRESS CATCH EXCEPTION
 			// record exception
 			runtimeException = e;
@@ -100,26 +98,27 @@ public abstract class AbstractEMFStoreCommand extends AbstractCommand {
 	protected abstract void commandBody();
 
 	/**
-	 * Executes the command on the editing domain of the given {@link EObject}.
+	 * Executes the command on the workspaces editing domain.
 	 * 
-	 * @param element
-	 *            the EObject from which the editing domain is retrieved
 	 * @param ignoreExceptions
 	 *            should be set to {@code true} if any thrown exception in the execution of the command should be
 	 *            ignored
 	 */
-	protected void aRun(EObject element, boolean ignoreExceptions) {
-		this.ignoreExceptions = ignoreExceptions;
-		EditingDomain retrievedEditingDomain = null;
-		if (element != null) {
-			retrievedEditingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(element);
-		}
-		if (retrievedEditingDomain == null) {
-			ESWorkspaceProviderImpl.getInstance().getEditingDomain().getCommandStack().execute(this);
-		} else {
-			retrievedEditingDomain.getCommandStack()
-				.execute(this);
-		}
+	protected void aRun(boolean ignoreExceptions) {
+		aRun(ESWorkspaceProviderImpl.getInstance().getEditingDomain(), ignoreExceptions);
 
+	}
+
+	/**
+	 * Executes the command on the given editing domain.
+	 * 
+	 * @param editingDomain the editing domain
+	 * @param ignoreExceptions
+	 *            should be set to {@code true} if any thrown exception in the execution of the command should be
+	 *            ignored
+	 */
+	protected void aRun(EditingDomain editingDomain, boolean ignoreExceptions) {
+		this.ignoreExceptions = ignoreExceptions;
+		editingDomain.getCommandStack().execute(this);
 	}
 }
