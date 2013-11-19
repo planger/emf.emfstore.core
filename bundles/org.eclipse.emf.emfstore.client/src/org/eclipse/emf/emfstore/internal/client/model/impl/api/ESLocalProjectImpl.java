@@ -819,4 +819,44 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 		toInternalAPI().open();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.client.ESLocalProject#runWithResult(java.util.concurrent.Callable)
+	 */
+	public <T> T runWithResult(Callable<T> callable) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.client.ESLocalProject#runWithResult(java.lang.Class, java.util.concurrent.Callable)
+	 */
+	public <T, E extends Exception> T runWithResult(Class<E> exceptionType, Callable<T> callable) throws E {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.client.ESLocalProject#run(java.util.concurrent.Callable)
+	 */
+	public void run(Callable<Void> callable) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.client.ESLocalProject#run(java.lang.Class, java.util.concurrent.Callable)
+	 */
+	public <E extends Exception> void run(Class<E> exceptionType, Callable<Void> callable) throws E {
+		// TODO Auto-generated method stub
+
+	}
+
 }

@@ -18,6 +18,7 @@ package org.eclipse.emf.emfstore.client.exceptions;
  * 
  * @noextend This class is not intended to be subclassed by clients.
  * @noinstantiate This class is not intended to be instantiated by clients.
+ * @since 1.1
  */
 public class ESProjectIsClosedException extends RuntimeException {
 

@@ -13,6 +13,7 @@ package org.eclipse.emf.emfstore.client;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.emfstore.client.callbacks.ESCommitCallback;
@@ -309,6 +310,7 @@ public interface ESLocalProject extends ESProject, ESObjectContainer<ESModelElem
 	 * Whether this project space has been closed.
 	 * 
 	 * @return <code>true</code> if the project space has been closed, <code>false</code> otherwise
+	 * @since 1.1
 	 */
 	boolean isClosed();
 
@@ -317,11 +319,65 @@ public interface ESLocalProject extends ESProject, ESObjectContainer<ESModelElem
 	 * 
 	 * @param saveBeforeClose <code>true</code> if the project space shall be saved before closing, <code>false</code>
 	 *            otherwise. Unsaved changes will be lost.
+	 * @since 1.1
 	 */
 	void close(boolean saveBeforeClose);
 
 	/**
 	 * Opens the project space.
+	 * 
+	 * @since 1.1
 	 */
 	void open();
+
+	/**
+	 * Executes the given {@link Callable} on the editing domain of this project and returns the result.
+	 * 
+	 * @param callable the callable to be execued
+	 * @return the return value of the callable
+	 * 
+	 * @param <T> the return type of the callable
+	 * 
+	 * @since 1.1
+	 */
+	<T> T runWithResult(final Callable<T> callable);
+
+	/**
+	 * Executes the given {@link Callable} on the editing domain of this project and returns the result.
+	 * 
+	 * @param exceptionType the class of the exception to be thrown
+	 * @param callable the callable to be execued
+	 * @return the return value of the callable
+	 * 
+	 * @param <E> the type of the exception to be thrown
+	 * @param <T> the return type of the callable
+	 * 
+	 * @throws E on execution failure
+	 * 
+	 * @since 1.1
+	 */
+	<T, E extends Exception> T runWithResult(Class<E> exceptionType, Callable<T> callable) throws E;
+
+	/**
+	 * Executes the given {@link Callable} on the editing domain of this project.
+	 * 
+	 * @param callable the callable to be execued
+	 * 
+	 * @since 1.1
+	 */
+	void run(final Callable<Void> callable);
+
+	/**
+	 * Executes the given {@link Callable} on the editing domain of this project.
+	 * 
+	 * @param exceptionType the class of the exception to be thrown
+	 * @param callable the callable to be execued
+	 * 
+	 * @param <E> the type of the exception to be thrown
+	 * 
+	 * @throws E on execution failure
+	 * 
+	 * @since 1.1
+	 */
+	<E extends Exception> void run(final Class<E> exceptionType, final Callable<Void> callable) throws E;
 }

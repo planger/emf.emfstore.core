@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.emfstore.client.callbacks.ESCommitCallback;
 import org.eclipse.emf.emfstore.client.callbacks.ESUpdateCallback;
 import org.eclipse.emf.emfstore.client.handler.ESRunnableContext;
@@ -1090,6 +1091,14 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 * Opens the project space.
 	 */
 	void open();
+
+	/**
+	 * Return the editing domain which tracks changes on the projects space's {@link Project} and local
+	 * {@link ChangePackage}.
+	 * 
+	 * @return the editing domain of the contents
+	 */
+	EditingDomain getContentEditingDomain();
 
 	/**
 	 * Return the local {@link ChangePackage} associated with this ProjectSpace.

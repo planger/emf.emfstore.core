@@ -1451,6 +1451,15 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 		getWorkspace().addProjectToProjectSpaceEntry(this);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getContentEditingDomain()
+	 */
+	public EditingDomain getContentEditingDomain() {
+		return contentEditingDomain;
+	}
+
 	private void notifyPreRevertMyChanges(final ChangePackage changePackage) {
 		ESWorkspaceProviderImpl.getObserverBus().notify(ESMergeObserver.class)
 			.preRevertMyChanges(toAPI(), changePackage.toAPI());
