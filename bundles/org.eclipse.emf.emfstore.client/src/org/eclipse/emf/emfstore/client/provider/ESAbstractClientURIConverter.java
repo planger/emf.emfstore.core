@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 EclipseSource Muenchen GmbH.
+ * Copyright (c) 2012-2013 EclipseSource Muenchen GmbH and others.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,6 +20,7 @@ import org.eclipse.emf.emfstore.client.util.ClientURIUtil;
  * which have to be implemented by extenders.
  * 
  * @author jfaltermeier
+ * @since 1.1
  * 
  */
 public abstract class ESAbstractClientURIConverter extends ExtensibleURIConverterImpl {

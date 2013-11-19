@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 EclipseSource Muenchen GmbH.
+ * Copyright (c) 2012-2013 EclipseSource Muenchen GmbH and others.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -44,9 +44,10 @@ public class MongoConfigurator {
 	 * @throws IOException if config update fails
 	 */
 	void activate() throws IOException {
-		Configuration config = configurationAdmin.createFactoryConfiguration("org.eclipselabs.mongo.provider", null);
-		Dictionary<String, Object> properties = new Hashtable<String, Object>();
-		properties.put(IMongoProvider.PROP_URI, "mongodb://localhost/");
+		final Configuration config = configurationAdmin.createFactoryConfiguration(
+			"org.eclipselabs.mongo.provider", null); //$NON-NLS-1$
+		final Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(IMongoProvider.PROP_URI, MongoDBConfiguration.INSTANCE.getMongoURIPrefix());
 		config.update(properties);
 	}
 

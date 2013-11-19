@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 EclipseSource Muenchen GmbH.
+ * Copyright (c) 2012-2013 EclipseSource Muenchen GmbH and others.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,6 +20,7 @@ import org.eclipse.emf.emfstore.internal.server.ServerConfiguration;
  * which have to be implemented by extenders.
  * 
  * @author jfaltermeier
+ * @since 1.1
  * 
  */
 public abstract class ESAbstractServerURIConverter extends ExtensibleURIConverterImpl {
@@ -99,7 +100,7 @@ public abstract class ESAbstractServerURIConverter extends ExtensibleURIConverte
 	 * @return the normalized URI
 	 */
 	protected URI normalizeDynamicModelsURI(String profile, String ecoreName) {
-		return URI.createFileURI(ServerConfiguration.getServerHome() + ServerURIUtil.DYNAMIC_MODELS_SEGMENT + "/"
+		return URI.createFileURI(ServerConfiguration.getServerHome() + ServerURIUtil.DYNAMIC_MODELS_SEGMENT + "/" //$NON-NLS-1$
 			+ ecoreName);
 	}
 
