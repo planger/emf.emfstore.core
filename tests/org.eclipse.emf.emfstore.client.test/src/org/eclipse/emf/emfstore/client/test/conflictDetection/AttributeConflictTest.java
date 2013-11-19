@@ -41,10 +41,10 @@ public class AttributeConflictTest extends ConflictDetectionTest {
 			protected void doRun() {
 				getProject().addModelElement(modelElement);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		String featureName = "same Feature";
-		AttributeOperation attributeOperation1 = OperationsFactory.eINSTANCE.createAttributeOperation();
+		final String featureName = "same Feature";
+		final AttributeOperation attributeOperation1 = OperationsFactory.eINSTANCE.createAttributeOperation();
 		attributeOperation1.setClientDate(new Date());
 		attributeOperation1.setFeatureName(featureName);
 		attributeOperation1.setIdentifier("id1");
@@ -52,7 +52,7 @@ public class AttributeConflictTest extends ConflictDetectionTest {
 		attributeOperation1.setOldValue("oldValue");
 		attributeOperation1.setNewValue("oldeValue");
 
-		AttributeOperation attributeOperation2 = OperationsFactory.eINSTANCE.createAttributeOperation();
+		final AttributeOperation attributeOperation2 = OperationsFactory.eINSTANCE.createAttributeOperation();
 		attributeOperation2.setClientDate(new Date());
 		attributeOperation2.setFeatureName(featureName);
 		attributeOperation2.setIdentifier("id1");

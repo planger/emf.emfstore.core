@@ -36,18 +36,18 @@ public class RecordingPerformanceTest extends WorkspaceTest {
 
 	@Test
 	public void testElementAddIterationWithSave() {
-		StopWatch allStopWatch = new StopWatch("EMFStore Plain");
+		final StopWatch allStopWatch = new StopWatch("EMFStore Plain");
 		runIterationTestWithoutOptimization();
 		allStopWatch.stop();
 	}
 
 	@Test
 	public void testElementAddIterationWithoutSave() {
-		StopWatch allStopWatch = new StopWatch("EMFStore Plain without AutoSave but with Save at End");
+		final StopWatch allStopWatch = new StopWatch("EMFStore Plain without AutoSave but with Save at End");
 		org.eclipse.emf.emfstore.internal.client.model.Configuration.getClientBehavior().setAutoSave(false);
 		runIterationTestWithoutOptimization();
-		ProjectSpaceBase projectSpaceBase = (ProjectSpaceBase) getProjectSpace();
-		StopWatch saveTimer = new StopWatch("Save");
+		final ProjectSpaceBase projectSpaceBase = (ProjectSpaceBase) getProjectSpace();
+		final StopWatch saveTimer = new StopWatch("Save");
 		projectSpaceBase.save();
 		saveTimer.stop();
 		org.eclipse.emf.emfstore.internal.client.model.Configuration.getClientBehavior().setAutoSave(true);
@@ -58,8 +58,8 @@ public class RecordingPerformanceTest extends WorkspaceTest {
 
 		final TestElement parentTestElement = getTestElement("parentTestElement");
 
-		StopWatch setupWatch = new StopWatch("Setup").silent();
-		AbstractCommand command = new AbstractCommand() {
+		final StopWatch setupWatch = new StopWatch("Setup").silent();
+		final AbstractCommand command = new AbstractCommand() {
 			public void execute() {
 				getProject().addModelElement(parentTestElement);
 			}
@@ -81,12 +81,12 @@ public class RecordingPerformanceTest extends WorkspaceTest {
 		};
 		AdapterFactoryEditingDomain.getEditingDomainFor(getProject()).getCommandStack().execute(command);
 		setupWatch.stop();
-		StopWatch iterationWatch = new StopWatch("Iterations");
-		AbstractCommand command2 = new AbstractCommand() {
+		final StopWatch iterationWatch = new StopWatch("Iterations");
+		final AbstractCommand command2 = new AbstractCommand() {
 			public void execute() {
 				for (int i = 0; i < COUNT; i++) {
 					final String name = "Element" + i;
-					TestElement testElement = getTestElement(name);
+					final TestElement testElement = getTestElement(name);
 					parentTestElement.getContainedElements().add(testElement);
 				}
 			}
@@ -109,25 +109,25 @@ public class RecordingPerformanceTest extends WorkspaceTest {
 		};
 		AdapterFactoryEditingDomain.getEditingDomainFor(getProject()).getCommandStack().execute(command2);
 
-		int count = COUNT;
+		final int count = COUNT;
 		Assert.assertEquals(count, parentTestElement.getContainedElements().size());
 		iterationWatch.stop();
 	}
 
 	@Test
 	public void testElementAddIterationWithSaveOptimized() {
-		Project project2 = ModelUtil.clone(getProject());
-		String testName = "EMFStore Plain with AutoSave but Optimized";
-		StopWatch allStopWatch = new StopWatch(testName);
+		final Project project2 = ModelUtil.clone(getProject());
+		final String testName = "EMFStore Plain with AutoSave but Optimized";
+		final StopWatch allStopWatch = new StopWatch(testName);
 		for (int i = 0; i < ITERATIONS; i++) {
-			StopWatch run = new StopWatch(i + " run");
+			final StopWatch run = new StopWatch(i + " run");
 			runOptimizedIterationTest();
 			run.stop();
 		}
 		allStopWatch.stop();
 		Assert.assertEquals(ITERATIONS, getProject().getModelElements().size());
 		Assert.assertEquals(ITERATIONS * COUNT + ITERATIONS, getProject().getAllModelElements().size());
-		for (AbstractOperation operation : getProjectSpace().getOperations()) {
+		for (final AbstractOperation operation : getProjectSpace().getOperations()) {
 			operation.apply(project2);
 		}
 		Assert.assertEquals(true, ModelUtil.areEqual(getProject(), project2));
@@ -135,11 +135,12 @@ public class RecordingPerformanceTest extends WorkspaceTest {
 
 	@Test
 	public void testElementAddWithoutSaveOptimized() {
-		StopWatch allStopWatch = new StopWatch("EMFStore Plain without AutoSave but with Save at End and Optimized");
+		final StopWatch allStopWatch = new StopWatch(
+			"EMFStore Plain without AutoSave but with Save at End and Optimized");
 		org.eclipse.emf.emfstore.internal.client.model.Configuration.getClientBehavior().setAutoSave(false);
 		runOptimizedIterationTest();
-		ProjectSpaceBase projectSpaceBase = (ProjectSpaceBase) getProjectSpace();
-		StopWatch saveTimer = new StopWatch("Save");
+		final ProjectSpaceBase projectSpaceBase = (ProjectSpaceBase) getProjectSpace();
+		final StopWatch saveTimer = new StopWatch("Save");
 		projectSpaceBase.save();
 		saveTimer.stop();
 		org.eclipse.emf.emfstore.internal.client.model.Configuration.getClientBehavior().setAutoSave(true);
@@ -150,35 +151,35 @@ public class RecordingPerformanceTest extends WorkspaceTest {
 
 		final TestElement parentTestElement = getTestElement("parentTestElement");
 
-		StopWatch iterationWatch = new StopWatch("Iterations");
+		final StopWatch iterationWatch = new StopWatch("Iterations");
 		for (int i = 0; i < COUNT; i++) {
 			final String name = "Element" + i;
-			TestElement testElement = getTestElement(name);
+			final TestElement testElement = getTestElement(name);
 			parentTestElement.getContainedElements().add(testElement);
 		}
 
 		iterationWatch.stop();
 
-		StopWatch insertWatch = new StopWatch("Insertion");
+		final StopWatch insertWatch = new StopWatch("Insertion");
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				getProject().addModelElement(parentTestElement);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 		insertWatch.stop();
 		Assert.assertEquals(COUNT, parentTestElement.getContainedElements().size());
 	}
 
 	@Test
 	public void testElementAddIterationWithoutEMFStore() {
-		StopWatch allStopWatch = new StopWatch("EMF Only All");
+		final StopWatch allStopWatch = new StopWatch("EMF Only All");
 		final TestElement parentTestElement = getTestElement("parentTestElement");
 
-		StopWatch iterationWatch = new StopWatch("Iterations").silent();
+		final StopWatch iterationWatch = new StopWatch("Iterations").silent();
 		for (int i = 0; i < 1000; i++) {
 			final String name = "Element" + i;
-			TestElement testElement = getTestElement(name);
+			final TestElement testElement = getTestElement(name);
 			parentTestElement.getContainedElements().add(testElement);
 		}
 

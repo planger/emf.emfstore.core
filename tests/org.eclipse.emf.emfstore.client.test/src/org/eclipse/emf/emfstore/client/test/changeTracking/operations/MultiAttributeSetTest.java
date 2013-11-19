@@ -52,7 +52,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				element.getStrings().add("oldValue");
 				clearOperations();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(element.getStrings().size() == 1);
 
@@ -61,7 +61,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 			protected void doRun() {
 				element.getStrings().set(0, "settedValue");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(element.getStrings().size() == 1);
 		assertTrue(element.getStrings().get(0).equals("settedValue"));
@@ -78,11 +78,12 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				TestElement testElement = createTestElementWithoutTransaction();
+				final TestElement testElement = createTestElementWithoutTransaction();
 				testElement.getStrings().add("oldValue");
 				assertTrue(testElement.getStrings().size() == 1);
 
-				MultiAttributeSetOperation operation = OperationsFactory.eINSTANCE.createMultiAttributeSetOperation();
+				final MultiAttributeSetOperation operation = OperationsFactory.eINSTANCE
+					.createMultiAttributeSetOperation();
 				operation.setFeatureName("strings");
 				operation.setIndex(0);
 				operation.setNewValue("inserted");
@@ -94,7 +95,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertTrue(testElement.getStrings().size() == 1);
 				assertTrue(testElement.getStrings().get(0).equals("inserted"));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	/**
@@ -105,11 +106,12 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				TestElement testElement = createTestElementWithoutTransaction();
+				final TestElement testElement = createTestElementWithoutTransaction();
 				testElement.getStrings().add("oldValue");
 				assertTrue(testElement.getStrings().size() == 1);
 
-				MultiAttributeSetOperation operation = OperationsFactory.eINSTANCE.createMultiAttributeSetOperation();
+				final MultiAttributeSetOperation operation = OperationsFactory.eINSTANCE
+					.createMultiAttributeSetOperation();
 				operation.setFeatureName("strings");
 				operation.setIndex(42);
 				operation.setNewValue("inserted");
@@ -121,7 +123,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertTrue(testElement.getStrings().size() == 1);
 				assertTrue(testElement.getStrings().get(0).equals("oldValue"));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	/**
@@ -132,11 +134,12 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				TestElement testElement = createTestElementWithoutTransaction();
+				final TestElement testElement = createTestElementWithoutTransaction();
 				testElement.getStrings().addAll(Arrays.asList("first", "second", "third"));
 				assertTrue(testElement.getStrings().size() == 3);
 
-				MultiAttributeSetOperation operation = OperationsFactory.eINSTANCE.createMultiAttributeSetOperation();
+				final MultiAttributeSetOperation operation = OperationsFactory.eINSTANCE
+					.createMultiAttributeSetOperation();
 				operation.setFeatureName("strings");
 				operation.setIndex(1);
 				operation.setNewValue("inserted");
@@ -150,7 +153,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertTrue(testElement.getStrings().get(1).equals("inserted"));
 				assertTrue(testElement.getStrings().get(2).equals("third"));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	/**
@@ -166,7 +169,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 
 				clearOperations();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(element.getStrings().size() == 1);
 		assertTrue(element.getStrings().get(0).equals("oldValue"));
@@ -179,15 +182,15 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertTrue(element.getStrings().size() == 1);
 				assertTrue(element.getStrings().get(0).equals("newValue"));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				AbstractOperation operation = getProjectSpace().getOperations().get(0).reverse();
+				final AbstractOperation operation = getProjectSpace().getOperations().get(0).reverse();
 				operation.apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(element.getStrings().size() == 1);
 		assertTrue(element.getStrings().get(0).equals("oldValue"));
@@ -207,7 +210,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertEquals(3, fan.getEMails().size());
 				assertTrue(fan.isSetEMails());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -219,21 +222,21 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertEquals(0, fan.getEMails().size());
 				assertTrue(!fan.isSetEMails());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(2, operations.size());
 
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof MultiAttributeOperation);
 		final MultiAttributeOperation multAttOp = (MultiAttributeOperation) operation;
 
-		AbstractOperation operation2 = operations.get(1);
+		final AbstractOperation operation2 = operations.get(1);
 		assertEquals(true, operation2 instanceof MultiAttributeSetOperation);
 		final MultiAttributeSetOperation multAttSetOp = (MultiAttributeSetOperation) operation2;
 
-		ModelElementId fanId = ModelUtil.getProject(fan).getModelElementId(fan);
+		final ModelElementId fanId = ModelUtil.getProject(fan).getModelElementId(fan);
 		assertEquals(fanId, multAttOp.getModelElementId());
 
 		new EMFStoreCommand() {
@@ -242,7 +245,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				multAttOp.apply(secondProject);
 				multAttSetOp.apply(secondProject);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 		assertEquals(0, ((Fan) secondProject.getModelElements().get(0)).getEMails().size());
 		assertTrue(!((Fan) secondProject.getModelElements().get(0)).isSetEMails());
 		assertTrue(ModelUtil.areEqual(getProject(), secondProject));
@@ -263,7 +266,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertEquals(3, fan.getEMails().size());
 				assertTrue(fan.isSetEMails());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -275,21 +278,21 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertEquals(0, fan.getEMails().size());
 				assertTrue(!fan.isSetEMails());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(2, operations.size());
 
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof MultiAttributeOperation);
 		final MultiAttributeOperation multAttOp = (MultiAttributeOperation) operation;
 
-		AbstractOperation operation2 = operations.get(1);
+		final AbstractOperation operation2 = operations.get(1);
 		assertEquals(true, operation2 instanceof MultiAttributeSetOperation);
 		final MultiAttributeSetOperation multAttSetOp = (MultiAttributeSetOperation) operation2;
 
-		ModelElementId fanId = ModelUtil.getProject(fan).getModelElementId(fan);
+		final ModelElementId fanId = ModelUtil.getProject(fan).getModelElementId(fan);
 		assertEquals(fanId, multAttOp.getModelElementId());
 
 		new EMFStoreCommand() {
@@ -299,7 +302,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				multAttOp.reverse().apply(getProject());
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(3, fan.getEMails().size());
 		assertTrue(fan.isSetEMails());
@@ -320,7 +323,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertEquals(3, fan.getEMails().size());
 				assertTrue(fan.isSetEMails());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		clearOperations();
 
@@ -331,23 +334,23 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertEquals(0, fan.getEMails().size());
 				assertTrue(!fan.isSetEMails());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final Project secondProject = ModelUtil.clone(getProject());
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(2, operations.size());
 
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof MultiAttributeOperation);
 		final MultiAttributeOperation multAttOp = (MultiAttributeOperation) operation;
 
-		AbstractOperation operation2 = operations.get(1);
+		final AbstractOperation operation2 = operations.get(1);
 		assertEquals(true, operation2 instanceof MultiAttributeSetOperation);
 		final MultiAttributeSetOperation multAttSetOp = (MultiAttributeSetOperation) operation2;
 
-		ModelElementId fanId = ModelUtil.getProject(fan).getModelElementId(fan);
+		final ModelElementId fanId = ModelUtil.getProject(fan).getModelElementId(fan);
 		assertEquals(fanId, multAttOp.getModelElementId());
 
 		new EMFStoreCommand() {
@@ -356,7 +359,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				multAttOp.reverse().reverse().apply(getProject());
 				multAttSetOp.reverse().reverse().apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(0, fan.getEMails().size());
 		assertTrue(!fan.isSetEMails());
@@ -374,7 +377,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertEquals(0, fan.getEMails().size());
 				assertTrue(!fan.isSetEMails());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -388,21 +391,21 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertEquals(3, fan.getEMails().size());
 				assertTrue(fan.isSetEMails());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(3, operations.size());
 
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof MultiAttributeOperation);
 		final MultiAttributeOperation multAttOp1 = (MultiAttributeOperation) operation;
 
-		AbstractOperation operation2 = operations.get(1);
+		final AbstractOperation operation2 = operations.get(1);
 		assertEquals(true, operation2 instanceof MultiAttributeOperation);
 		final MultiAttributeOperation multAttOp2 = (MultiAttributeOperation) operation2;
 
-		AbstractOperation operation3 = operations.get(2);
+		final AbstractOperation operation3 = operations.get(2);
 		assertEquals(true, operation3 instanceof MultiAttributeOperation);
 		final MultiAttributeOperation multAttOp3 = (MultiAttributeOperation) operation3;
 
@@ -413,7 +416,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				multAttOp2.reverse().apply(getProject());
 				multAttOp1.reverse().apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(0, fan.getEMails().size());
 		assertTrue(!fan.isSetEMails());
@@ -431,7 +434,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertEquals(0, fan.getEMails().size());
 				assertTrue(!fan.isSetEMails());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -443,12 +446,12 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertEquals(0, fan.getEMails().size());
 				assertTrue(fan.isSetEMails());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof MultiAttributeOperation);
 		final MultiAttributeOperation multAttOp = (MultiAttributeOperation) operation;
 
@@ -459,7 +462,7 @@ public class MultiAttributeSetTest extends WorkspaceTest {
 				assertEquals(0, fan.getEMails().size());
 				assertTrue(fan.isSetEMails());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), secondProject));
 	}

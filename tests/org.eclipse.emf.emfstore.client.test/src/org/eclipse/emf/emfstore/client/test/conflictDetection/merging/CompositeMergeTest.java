@@ -29,7 +29,7 @@ public class CompositeMergeTest extends MergeTest {
 		assertTrue(id != null);
 		try {
 			handle.end("", "", id);
-		} catch (InvalidHandleException e) {
+		} catch (final InvalidHandleException e) {
 			throw new AssertionError(e);
 		}
 	}
@@ -42,20 +42,20 @@ public class CompositeMergeTest extends MergeTest {
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				CompositeOperationHandle handle = mc.getMyProjectSpace().beginCompositeOperation();
+				final CompositeOperationHandle handle = mc.getMyProjectSpace().beginCompositeOperation();
 
 				mc.getMyItem(element).setName("Blub");
 
 				end(handle, mc.getMyId(element));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mc.getTheirItem(element).setName("Foobar");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		mc.hasConflict(CompositeConflict.class)
 			// my
@@ -74,20 +74,20 @@ public class CompositeMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(element).setName("Blub");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				CompositeOperationHandle handle = mc.getTheirProjectSpace().beginCompositeOperation();
+				final CompositeOperationHandle handle = mc.getTheirProjectSpace().beginCompositeOperation();
 
 				mc.getTheirItem(element).setName("Foobar");
 
-				ModelElementId theirId = mc.getTheirId(element);
+				final ModelElementId theirId = mc.getTheirId(element);
 				end(handle, theirId);
 			}
 
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		mc.hasConflict(CompositeConflict.class)
 			// my
@@ -107,19 +107,19 @@ public class CompositeMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(element).setName("Blub");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				CompositeOperationHandle handle = mc.getTheirProjectSpace().beginCompositeOperation();
+				final CompositeOperationHandle handle = mc.getTheirProjectSpace().beginCompositeOperation();
 
 				mc.getTheirItem(element).setDescription("Foobar");
 
 				end(handle, mc.getTheirId(element));
 			}
 
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		mc.hasConflict(null);
 	}
@@ -137,19 +137,19 @@ public class CompositeMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(element).setReference(mc.getMyItem(link));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				CompositeOperationHandle handle = mc.getTheirProjectSpace().beginCompositeOperation();
+				final CompositeOperationHandle handle = mc.getTheirProjectSpace().beginCompositeOperation();
 
 				mc.getTheirItem(element).setReference(mc.getTheirItem(link2));
 
 				end(handle, mc.getTheirId(element));
 			}
 
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		mc.hasConflict(CompositeConflict.class)
 			// my
@@ -172,12 +172,12 @@ public class CompositeMergeTest extends MergeTest {
 				mc.getMyItem(element).setName("blub");
 				mc.getMyItem(element).setReference(mc.getMyItem(link));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				CompositeOperationHandle handle = mc.getTheirProjectSpace().beginCompositeOperation();
+				final CompositeOperationHandle handle = mc.getTheirProjectSpace().beginCompositeOperation();
 
 				mc.getTheirItem(element).setName("foobar");
 				mc.getTheirItem(element).setReference(mc.getTheirItem(link2));
@@ -185,7 +185,7 @@ public class CompositeMergeTest extends MergeTest {
 				end(handle, mc.getTheirId(element));
 			}
 
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		mc.hasConflict(CompositeConflict.class)
 			// my
@@ -207,19 +207,19 @@ public class CompositeMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent).setContainedElement(mc.getMyItem(child));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				CompositeOperationHandle handle = mc.getTheirProjectSpace().beginCompositeOperation();
+				final CompositeOperationHandle handle = mc.getTheirProjectSpace().beginCompositeOperation();
 
 				mc.getTheirItem(parent2).setContainedElement(mc.getTheirItem(child));
 
 				end(handle, mc.getTheirId(parent2));
 			}
 
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		mc.hasConflict(CompositeConflict.class)
 			// my
@@ -237,25 +237,25 @@ public class CompositeMergeTest extends MergeTest {
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				CompositeOperationHandle handle = mc.getMyProjectSpace().beginCompositeOperation();
+				final CompositeOperationHandle handle = mc.getMyProjectSpace().beginCompositeOperation();
 
 				mc.getMyItem(element).setName("Blub");
 
 				end(handle, mc.getMyId(element));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				CompositeOperationHandle handle = mc.getTheirProjectSpace().beginCompositeOperation();
+				final CompositeOperationHandle handle = mc.getTheirProjectSpace().beginCompositeOperation();
 
 				mc.getTheirItem(element).setName("Foobar");
 
 				end(handle, mc.getTheirId(element));
 			}
 
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		mc.hasConflict(CompositeConflict.class)
 			// my
@@ -275,25 +275,25 @@ public class CompositeMergeTest extends MergeTest {
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				CompositeOperationHandle handle = mc.getMyProjectSpace().beginCompositeOperation();
+				final CompositeOperationHandle handle = mc.getMyProjectSpace().beginCompositeOperation();
 
 				mc.getMyItem(element).setReference(mc.getMyItem(link));
 
 				end(handle, mc.getMyId(element));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				CompositeOperationHandle handle = mc.getTheirProjectSpace().beginCompositeOperation();
+				final CompositeOperationHandle handle = mc.getTheirProjectSpace().beginCompositeOperation();
 
 				mc.getTheirItem(element).setReference(mc.getTheirItem(link2));
 
 				end(handle, mc.getTheirId(element));
 			}
 
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		mc.hasConflict(CompositeConflict.class)
 			// my
@@ -311,25 +311,25 @@ public class CompositeMergeTest extends MergeTest {
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				CompositeOperationHandle handle = mc.getMyProjectSpace().beginCompositeOperation();
+				final CompositeOperationHandle handle = mc.getMyProjectSpace().beginCompositeOperation();
 
 				mc.getMyItem(element).setName("Blub");
 
 				end(handle, mc.getMyId(element));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				CompositeOperationHandle handle = mc.getTheirProjectSpace().beginCompositeOperation();
+				final CompositeOperationHandle handle = mc.getTheirProjectSpace().beginCompositeOperation();
 
 				mc.getTheirItem(element).setDescription("Foobar");
 
 				end(handle, mc.getTheirId(element));
 			}
 
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		mc.hasConflict(null);
 	}

@@ -69,7 +69,7 @@ public class SimpleOperationObserverTest extends WorkspaceTest {
 				getProjectSpace().revert();
 				return null;
 			}
-		}, getProject());
+		}, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(operationPerformed);
 	}

@@ -158,7 +158,7 @@ public abstract class WorkspaceTest {
 				cleanEmfstoreFolders();
 				return null;
 			}
-		}, ESWorkspaceProviderImpl.getInstance().getInternalWorkspace());
+		});
 	}
 
 	private void cleanProjects() {
@@ -263,7 +263,7 @@ public abstract class WorkspaceTest {
 				getProjectSpace().getOperations().clear();
 				return null;
 			}
-		}, getProjectSpace());
+		}, getProjectSpace().getContentEditingDomain());
 
 	}
 
@@ -320,7 +320,7 @@ public abstract class WorkspaceTest {
 			protected TestElement doRun() {
 				return createTestElementWithoutTransaction(name);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	public TestElement createFilledTestElement(final int count) {
@@ -333,7 +333,7 @@ public abstract class WorkspaceTest {
 					testElement.getStrings().add("value" + i);
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		return testElement;
 	}

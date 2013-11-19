@@ -66,12 +66,12 @@ public class MultiReferenceMoveOperationTest extends WorkspaceTest {
 				actor.getInitiatedUseCases().add(useCase2);
 				actor.getInitiatedUseCases().add(useCase3);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(actor, useCase1.getInitiatingActor());
 		assertEquals(actor, useCase2.getInitiatingActor());
 		assertEquals(actor, useCase3.getInitiatingActor());
-		EList<UseCase> initiatedUseCases = actor.getInitiatedUseCases();
+		final EList<UseCase> initiatedUseCases = actor.getInitiatedUseCases();
 		assertEquals(3, initiatedUseCases.size());
 		assertEquals(useCase1, initiatedUseCases.get(0));
 		assertEquals(useCase2, initiatedUseCases.get(1));
@@ -86,17 +86,17 @@ public class MultiReferenceMoveOperationTest extends WorkspaceTest {
 
 				actor.getInitiatedUseCases().move(2, 1);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof MultiReferenceMoveOperation);
-		MultiReferenceMoveOperation multiReferenceMoveOperation = (MultiReferenceMoveOperation) operation;
+		final MultiReferenceMoveOperation multiReferenceMoveOperation = (MultiReferenceMoveOperation) operation;
 
-		ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
-		ModelElementId useCase2Id = ModelUtil.getProject(useCase2).getModelElementId(useCase2);
+		final ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
+		final ModelElementId useCase2Id = ModelUtil.getProject(useCase2).getModelElementId(useCase2);
 
 		assertEquals("initiatedUseCases", multiReferenceMoveOperation.getFeatureName());
 		assertEquals(actorId, multiReferenceMoveOperation.getModelElementId());
@@ -143,7 +143,7 @@ public class MultiReferenceMoveOperationTest extends WorkspaceTest {
 				actor.getInitiatedUseCases().add(useCase3);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -151,7 +151,7 @@ public class MultiReferenceMoveOperationTest extends WorkspaceTest {
 				assertEquals(actor, useCase1.getInitiatingActor());
 				assertEquals(actor, useCase2.getInitiatingActor());
 				assertEquals(actor, useCase3.getInitiatingActor());
-				EList<UseCase> initiatedUseCases = actor.getInitiatedUseCases();
+				final EList<UseCase> initiatedUseCases = actor.getInitiatedUseCases();
 				assertEquals(3, initiatedUseCases.size());
 				assertEquals(useCase1, initiatedUseCases.get(0));
 				assertEquals(useCase2, initiatedUseCases.get(1));
@@ -160,19 +160,19 @@ public class MultiReferenceMoveOperationTest extends WorkspaceTest {
 
 				actor.getInitiatedUseCases().move(2, 1);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		final AbstractOperation reverse = operation.reverse();
 
 		assertEquals(true, reverse instanceof MultiReferenceMoveOperation);
-		MultiReferenceMoveOperation multiReferenceMoveOperation = (MultiReferenceMoveOperation) reverse;
+		final MultiReferenceMoveOperation multiReferenceMoveOperation = (MultiReferenceMoveOperation) reverse;
 
-		ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
-		ModelElementId useCase2Id = ModelUtil.getProject(useCase2).getModelElementId(useCase2);
+		final ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
+		final ModelElementId useCase2Id = ModelUtil.getProject(useCase2).getModelElementId(useCase2);
 
 		assertEquals("initiatedUseCases", multiReferenceMoveOperation.getFeatureName());
 		assertEquals(actorId, multiReferenceMoveOperation.getModelElementId());
@@ -185,9 +185,9 @@ public class MultiReferenceMoveOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				reverse.apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		EList<UseCase> initiatedUseCases = actor.getInitiatedUseCases();
+		final EList<UseCase> initiatedUseCases = actor.getInitiatedUseCases();
 		assertEquals(actor, useCase1.getInitiatingActor());
 		assertEquals(actor, useCase2.getInitiatingActor());
 		assertEquals(actor, useCase3.getInitiatingActor());
@@ -223,12 +223,12 @@ public class MultiReferenceMoveOperationTest extends WorkspaceTest {
 				actor.getInitiatedUseCases().add(useCase2);
 				actor.getInitiatedUseCases().add(useCase3);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(actor, useCase1.getInitiatingActor());
 		assertEquals(actor, useCase2.getInitiatingActor());
 		assertEquals(actor, useCase3.getInitiatingActor());
-		EList<UseCase> initiatedUseCases = actor.getInitiatedUseCases();
+		final EList<UseCase> initiatedUseCases = actor.getInitiatedUseCases();
 		assertEquals(3, initiatedUseCases.size());
 		assertEquals(useCase1, initiatedUseCases.get(0));
 		assertEquals(useCase2, initiatedUseCases.get(1));
@@ -240,13 +240,13 @@ public class MultiReferenceMoveOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				clearOperations();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final MultiReferenceMoveOperation multiReferenceMoveOperation = OperationsFactory.eINSTANCE
 			.createMultiReferenceMoveOperation();
 
-		ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
-		ModelElementId useCase1Id = ModelUtil.getProject(useCase1).getModelElementId(useCase1);
+		final ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
+		final ModelElementId useCase1Id = ModelUtil.getProject(useCase1).getModelElementId(useCase1);
 
 		multiReferenceMoveOperation.setModelElementId(actorId);
 		multiReferenceMoveOperation.setFeatureName(RequirementPackage.eINSTANCE.getActor_InitiatedUseCases().getName());
@@ -262,7 +262,7 @@ public class MultiReferenceMoveOperationTest extends WorkspaceTest {
 				assertEquals(actor, useCase1.getInitiatingActor());
 				assertEquals(actor, useCase2.getInitiatingActor());
 				assertEquals(actor, useCase3.getInitiatingActor());
-				List<UseCase> initiatedUseCases2 = actor.getInitiatedUseCases();
+				final List<UseCase> initiatedUseCases2 = actor.getInitiatedUseCases();
 				assertEquals(3, initiatedUseCases2.size());
 				assertEquals(useCase1, initiatedUseCases2.get(0));
 				assertEquals(useCase2, initiatedUseCases2.get(1));
@@ -270,7 +270,7 @@ public class MultiReferenceMoveOperationTest extends WorkspaceTest {
 
 				clearOperations();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final MultiReferenceMoveOperation multiReferenceMoveOperation2 = OperationsFactory.eINSTANCE
 			.createMultiReferenceMoveOperation();
@@ -291,7 +291,7 @@ public class MultiReferenceMoveOperationTest extends WorkspaceTest {
 		assertEquals(actor, useCase1.getInitiatingActor());
 		assertEquals(actor, useCase2.getInitiatingActor());
 		assertEquals(actor, useCase3.getInitiatingActor());
-		List<UseCase> initiatedUseCases3 = actor.getInitiatedUseCases();
+		final List<UseCase> initiatedUseCases3 = actor.getInitiatedUseCases();
 		assertEquals(3, initiatedUseCases3.size());
 		assertEquals(useCase1, initiatedUseCases3.get(0));
 		assertEquals(useCase2, initiatedUseCases3.get(1));
@@ -306,7 +306,7 @@ public class MultiReferenceMoveOperationTest extends WorkspaceTest {
 				getProject().addModelElement(useCase4);
 				clearOperations();
 			}
-		}.run(getProject());
+		}.run(getProjectSpace().getContentEditingDomain(), true);
 
 		final MultiReferenceMoveOperation multiReferenceMoveOperation3 = OperationsFactory.eINSTANCE
 			.createMultiReferenceMoveOperation();
@@ -314,7 +314,7 @@ public class MultiReferenceMoveOperationTest extends WorkspaceTest {
 		multiReferenceMoveOperation3
 			.setFeatureName(RequirementPackage.eINSTANCE.getActor_InitiatedUseCases().getName());
 
-		ModelElementId useCase4Id = ModelUtil.getProject(useCase4).getModelElementId(useCase4);
+		final ModelElementId useCase4Id = ModelUtil.getProject(useCase4).getModelElementId(useCase4);
 
 		multiReferenceMoveOperation3.setReferencedModelElementId(useCase4Id);
 		multiReferenceMoveOperation3.setOldIndex(0);
@@ -331,7 +331,7 @@ public class MultiReferenceMoveOperationTest extends WorkspaceTest {
 		assertEquals(actor, useCase2.getInitiatingActor());
 		assertEquals(actor, useCase3.getInitiatingActor());
 		assertEquals(null, useCase4.getInitiatingActor());
-		List<UseCase> initiatedUseCases4 = actor.getInitiatedUseCases();
+		final List<UseCase> initiatedUseCases4 = actor.getInitiatedUseCases();
 		assertEquals(3, initiatedUseCases4.size());
 		assertEquals(useCase1, initiatedUseCases4.get(0));
 		assertEquals(useCase2, initiatedUseCases4.get(1));

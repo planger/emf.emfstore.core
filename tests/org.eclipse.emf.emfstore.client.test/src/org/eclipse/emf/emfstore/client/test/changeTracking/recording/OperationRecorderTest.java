@@ -51,9 +51,9 @@ public class OperationRecorderTest extends WorkspaceTest {
 	@SuppressWarnings("restriction")
 	@Test(expected = RuntimeException.class)
 	public void forceCommands() {
-		this.setCompareAtEnd(false);
+		setCompareAtEnd(false);
 		getProjectSpace().getOperationManager().getRecorderConfig().setForceCommands(true);
-		Project project = getProject();
+		final Project project = getProject();
 		project.addModelElement(getTestElement());
 	}
 
@@ -79,7 +79,7 @@ public class OperationRecorderTest extends WorkspaceTest {
 				Assert.assertNotNull(((IdEObjectCollectionImpl) project).getDeletedModelElementId(element2));
 				return null;
 			}
-		}, project);
+		}, getProjectSpace().getContentEditingDomain());
 	}
 
 	/**
@@ -110,20 +110,20 @@ public class OperationRecorderTest extends WorkspaceTest {
 					project.addModelElement(source);
 					return null;
 				}
-			}, project);
+			}, getProjectSpace().getContentEditingDomain());
 
-			ModelElementId connectionId = project.getModelElementId(connection);
+			final ModelElementId connectionId = project.getModelElementId(connection);
 
 			clonedProjectSpace.getOperationManager().stopChangeRecording();
 			ChangePackage cp = RunESCommand.runWithResult(new Callable<ChangePackage>() {
 
 				public ChangePackage call() throws Exception {
-					ChangePackage cp = VersioningFactory.eINSTANCE.createChangePackage();
+					final ChangePackage cp = VersioningFactory.eINSTANCE.createChangePackage();
 					cp.getOperations().addAll(getProjectSpace().getOperations());
 					cp.apply(clonedProjectSpace.getProject());
 					return cp;
 				}
-			}, project);
+			}, getProjectSpace().getContentEditingDomain());
 
 			// do not use commands since we only have them on client side
 			// FIXME: if not wrapped in command fails with transactional editing domain, if wrapped in command assert
@@ -131,7 +131,7 @@ public class OperationRecorderTest extends WorkspaceTest {
 			// see comment above
 			connection.setContainer(null);
 
-			List<AbstractOperation> ops = getProjectSpace().getOperations();
+			final List<AbstractOperation> ops = getProjectSpace().getOperations();
 			assertEquals(2, ops.size());
 			assertThat(ops.get(0), instanceOf(CompositeOperation.class));
 			assertThat(ops.get(1), instanceOf(CreateDeleteOperation.class));

@@ -61,9 +61,9 @@ public class AttributeTest extends WorkspaceTest {
 				getProject().addModelElement(useCase);
 				useCase.setName("oldName");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		Project expectedProject = ModelUtil.clone(getProject());
+		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
 		new EMFStoreCommand() {
@@ -76,7 +76,7 @@ public class AttributeTest extends WorkspaceTest {
 				useCase.setName("C");
 				useCase.setName("newName");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals("newName", useCase.getName());
 		assertEquals(4, getProjectSpace().getOperations().size());
@@ -89,7 +89,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(operations.size(), 1);
 
@@ -101,12 +101,12 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				reverse.apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 		getProjectSpace().save();
 
-		Project loadedProject = ModelUtil.loadEObjectFromResource(
+		final Project loadedProject = ModelUtil.loadEObjectFromResource(
 			org.eclipse.emf.emfstore.internal.common.model.ModelFactory.eINSTANCE.getModelPackage().getProject(),
 			getProject()
 				.eResource().getURI(), false);
@@ -129,9 +129,9 @@ public class AttributeTest extends WorkspaceTest {
 				getProject().addModelElement(useCase);
 				useCase.setName("oldName");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		Project expectedProject = ModelUtil.clone(getProject());
+		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
 		new EMFStoreCommand() {
@@ -145,7 +145,7 @@ public class AttributeTest extends WorkspaceTest {
 				useCase.setName("C");
 				useCase.setName(null);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(null, useCase.getName());
 
@@ -156,7 +156,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(operations.size(), 1);
 
@@ -166,11 +166,11 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				reverse.apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
-		Project loadedProject = ModelUtil.loadEObjectFromResource(
+		final Project loadedProject = ModelUtil.loadEObjectFromResource(
 			ModelFactory.eINSTANCE.getModelPackage().getProject(), getProject().eResource().getURI(), false);
 
 		assertTrue(ModelUtil.areEqual(loadedProject, expectedProject));
@@ -192,9 +192,9 @@ public class AttributeTest extends WorkspaceTest {
 				getProject().addModelElement(useCase);
 				useCase.setName(null);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		Project expectedProject = ModelUtil.clone(getProject());
+		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
 		new EMFStoreCommand() {
@@ -206,7 +206,7 @@ public class AttributeTest extends WorkspaceTest {
 				useCase.setName("B");
 				useCase.setName("C");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals("C", useCase.getName());
 
@@ -218,7 +218,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(operations.size(), 1);
 
@@ -229,11 +229,11 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				reverse.apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
-		Project loadedProject = ModelUtil.loadEObjectFromResource(
+		final Project loadedProject = ModelUtil.loadEObjectFromResource(
 			org.eclipse.emf.emfstore.internal.common.model.ModelFactory.eINSTANCE.getModelPackage().getProject(),
 			getProject()
 				.eResource().getURI(), false);
@@ -257,9 +257,9 @@ public class AttributeTest extends WorkspaceTest {
 				getProject().addModelElement(useCase);
 				useCase.setName("oldName");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		Project expectedProject = ModelUtil.clone(getProject());
+		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
 		new EMFStoreCommand() {
@@ -272,7 +272,7 @@ public class AttributeTest extends WorkspaceTest {
 				useCase.setName("C");
 				useCase.setName("oldName");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals("oldName", useCase.getName());
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
@@ -285,12 +285,12 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		// should not have created any operations, we were just resetting the name to its original value
 		assertEquals(operations.size(), 0);
 
-		Project loadedProject = ModelUtil.loadEObjectFromResource(
+		final Project loadedProject = ModelUtil.loadEObjectFromResource(
 			org.eclipse.emf.emfstore.internal.common.model.ModelFactory.eINSTANCE.getModelPackage().getProject(),
 			getProject()
 				.eResource().getURI(), false);
@@ -314,9 +314,9 @@ public class AttributeTest extends WorkspaceTest {
 				getProject().addModelElement(useCase);
 				useCase.setName(null);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		Project expectedProject = ModelUtil.clone(getProject());
+		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
 		new EMFStoreCommand() {
@@ -329,7 +329,7 @@ public class AttributeTest extends WorkspaceTest {
 				useCase.setName("C");
 				useCase.setName(null);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(null, useCase.getName());
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
@@ -342,12 +342,12 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		// should not have created any operations, we were just resetting the name to its original value
 		assertEquals(operations.size(), 0);
 
-		Project loadedProject = ModelUtil.loadEObjectFromResource(
+		final Project loadedProject = ModelUtil.loadEObjectFromResource(
 			org.eclipse.emf.emfstore.internal.common.model.ModelFactory.eINSTANCE.getModelPackage().getProject(),
 			getProject()
 				.eResource().getURI(), false);
@@ -371,9 +371,9 @@ public class AttributeTest extends WorkspaceTest {
 				useCase.setName("oldName");
 				useCase.setDescription("oldDescription");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		Project expectedProject = ModelUtil.clone(getProject());
+		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
 		new EMFStoreCommand() {
@@ -390,7 +390,7 @@ public class AttributeTest extends WorkspaceTest {
 				useCase.setDescription("oldDescription");
 				useCase.setName("oldName");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
@@ -401,12 +401,12 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		// should not have created any operations, we were just resetting everything to its original value
 		assertEquals(operations.size(), 0);
 
-		Project loadedProject = ModelUtil.loadEObjectFromResource(
+		final Project loadedProject = ModelUtil.loadEObjectFromResource(
 			org.eclipse.emf.emfstore.internal.common.model.ModelFactory.eINSTANCE.getModelPackage().getProject(),
 			getProject()
 				.eResource().getURI(), false);
@@ -429,9 +429,9 @@ public class AttributeTest extends WorkspaceTest {
 				getProject().addModelElement(useCase);
 				useCase.setName("oldName");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		Project expectedProject = ModelUtil.clone(getProject());
+		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
 		new EMFStoreCommand() {
@@ -446,7 +446,7 @@ public class AttributeTest extends WorkspaceTest {
 				useCase.setDescription("newDescription");
 				useCase.setName("newName");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals("newName", useCase.getName());
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
@@ -457,7 +457,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(operations.size(), 2);
 
@@ -465,15 +465,15 @@ public class AttributeTest extends WorkspaceTest {
 			@Override
 			protected void doRun() {
 				for (int i = operations.size() - 1; i >= 0; i--) {
-					AbstractOperation reverse = operations.get(i).reverse();
+					final AbstractOperation reverse = operations.get(i).reverse();
 					reverse.apply(getProject());
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
-		Project loadedProject = ModelUtil.loadEObjectFromResource(
+		final Project loadedProject = ModelUtil.loadEObjectFromResource(
 			org.eclipse.emf.emfstore.internal.common.model.ModelFactory.eINSTANCE.getModelPackage().getProject(),
 			getProject()
 				.eResource().getURI(), false);
@@ -504,9 +504,9 @@ public class AttributeTest extends WorkspaceTest {
 				section.setName("some section");
 				actor.setName("homer");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		Project expectedProject = ModelUtil.clone(getProject());
+		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
 		new EMFStoreCommand() {
@@ -522,7 +522,7 @@ public class AttributeTest extends WorkspaceTest {
 				section.setName("home");
 				useCase.setName("newName");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(7, operations.size());
@@ -532,21 +532,21 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				for (int i = operations.size() - 1; i >= 0; i--) {
-					AbstractOperation reverse = operations.get(i).reverse();
+					final AbstractOperation reverse = operations.get(i).reverse();
 					reverse.apply(getProject());
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
-		Project loadedProject = ModelUtil.loadEObjectFromResource(
+		final Project loadedProject = ModelUtil.loadEObjectFromResource(
 			org.eclipse.emf.emfstore.internal.common.model.ModelFactory.eINSTANCE.getModelPackage().getProject(),
 			getProject()
 				.eResource().getURI(), false);
@@ -583,9 +583,9 @@ public class AttributeTest extends WorkspaceTest {
 				section.setName("some section");
 				actor.setName("homer");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		Project expectedProject = ModelUtil.clone(getProject());
+		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
 		new EMFStoreCommand() {
@@ -604,7 +604,7 @@ public class AttributeTest extends WorkspaceTest {
 				useCase.setName("newName");
 				useCase.setDescription("final desc");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals("newName", useCase.getName());
@@ -617,21 +617,21 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				for (int i = operations.size() - 1; i >= 0; i--) {
-					AbstractOperation reverse = operations.get(i).reverse();
+					final AbstractOperation reverse = operations.get(i).reverse();
 					reverse.apply(getProject());
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
-		Project loadedProject = ModelUtil.loadEObjectFromResource(
+		final Project loadedProject = ModelUtil.loadEObjectFromResource(
 			org.eclipse.emf.emfstore.internal.common.model.ModelFactory.eINSTANCE.getModelPackage().getProject(),
 			getProject()
 				.eResource().getURI(), false);
@@ -656,9 +656,9 @@ public class AttributeTest extends WorkspaceTest {
 				section.setName("Name");
 				section.setDescription("oldDescription");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		Project expectedProject = ModelUtil.clone(getProject());
+		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
 		new EMFStoreCommand() {
@@ -668,19 +668,19 @@ public class AttributeTest extends WorkspaceTest {
 
 				section.setDescription("desc 1");
 
-				CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
+				final CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
 				section.setDescription("newDescription");
-				UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
+				final UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
 				section.getModelElements().add(useCase);
 				try {
 					handle.end("sectionCreation", "description",
 						ModelUtil.getProject(section).getModelElementId(section));
-				} catch (InvalidHandleException e) {
+				} catch (final InvalidHandleException e) {
 					fail();
 				}
 				section.setDescription("desc 2");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals("desc 2", section.getDescription());
@@ -691,21 +691,21 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				for (int i = operations.size() - 1; i >= 0; i--) {
-					AbstractOperation reverse = operations.get(i).reverse();
+					final AbstractOperation reverse = operations.get(i).reverse();
 					reverse.apply(getProject());
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
-		Project loadedProject = ModelUtil.loadEObjectFromResource(
+		final Project loadedProject = ModelUtil.loadEObjectFromResource(
 			org.eclipse.emf.emfstore.internal.common.model.ModelFactory.eINSTANCE.getModelPackage().getProject(),
 			getProject()
 				.eResource().getURI(), false);
@@ -731,9 +731,9 @@ public class AttributeTest extends WorkspaceTest {
 				section.setName("Name");
 				section.setDescription("oldDescription");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		Project expectedProject = ModelUtil.clone(getProject());
+		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
 		new EMFStoreCommand() {
@@ -743,18 +743,18 @@ public class AttributeTest extends WorkspaceTest {
 
 				section.setDescription("desc 1");
 
-				CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
+				final CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
 				section.setDescription("newDescription");
-				UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
+				final UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
 				section.getModelElements().add(useCase);
 				try {
 					handle.end("sectionCreation", "description",
 						ModelUtil.getProject(section).getModelElementId(section));
-				} catch (InvalidHandleException e) {
+				} catch (final InvalidHandleException e) {
 					fail();
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(2, operations.size());
@@ -765,21 +765,21 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				for (int i = operations.size() - 1; i >= 0; i--) {
-					AbstractOperation reverse = operations.get(i).reverse();
+					final AbstractOperation reverse = operations.get(i).reverse();
 					reverse.apply(getProject());
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
-		Project loadedProject = ModelUtil.loadEObjectFromResource(
+		final Project loadedProject = ModelUtil.loadEObjectFromResource(
 			org.eclipse.emf.emfstore.internal.common.model.ModelFactory.eINSTANCE.getModelPackage().getProject(),
 			getProject()
 				.eResource().getURI(), false);
@@ -804,9 +804,9 @@ public class AttributeTest extends WorkspaceTest {
 				section.setName("Name");
 				section.setDescription("oldDescription");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		Project expectedProject = ModelUtil.clone(getProject());
+		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
 		new EMFStoreCommand() {
@@ -814,20 +814,20 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				clearOperations();
 
-				CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
+				final CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
 				section.setDescription("newDescription");
-				UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
+				final UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
 				section.getModelElements().add(useCase);
 				try {
 					handle.end("sectionCreation", "description",
 						ModelUtil.getProject(section).getModelElementId(section));
-				} catch (InvalidHandleException e) {
+				} catch (final InvalidHandleException e) {
 					fail();
 				}
 
 				section.setDescription("desc 2");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(2, operations.size());
@@ -837,21 +837,21 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				for (int i = operations.size() - 1; i >= 0; i--) {
-					AbstractOperation reverse = operations.get(i).reverse();
+					final AbstractOperation reverse = operations.get(i).reverse();
 					reverse.apply(getProject());
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
-		Project loadedProject = ModelUtil.loadEObjectFromResource(
+		final Project loadedProject = ModelUtil.loadEObjectFromResource(
 			org.eclipse.emf.emfstore.internal.common.model.ModelFactory.eINSTANCE.getModelPackage().getProject(),
 			getProject()
 				.eResource().getURI(), false);
@@ -867,7 +867,7 @@ public class AttributeTest extends WorkspaceTest {
 	@Test
 	public void createAndChangeAttributesSimple() throws IOException {
 
-		Project originalProject = ModelUtil.clone(getProject());
+		final Project originalProject = ModelUtil.clone(getProject());
 
 		final UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
 		new EMFStoreCommand() {
@@ -877,7 +877,7 @@ public class AttributeTest extends WorkspaceTest {
 				useCase.setName("NameOfUseCase");
 				useCase.setDescription("DescriptionOfUseCase");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals("NameOfUseCase", useCase.getName());
 
@@ -890,7 +890,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		// now expecting only the create with folded in attributes
 		assertEquals(operations.size(), 1);
@@ -902,13 +902,13 @@ public class AttributeTest extends WorkspaceTest {
 		assertEquals(((UnicaseModelElement) op.getModelElement()).getDescription(), "DescriptionOfUseCase");
 
 		// test if the create is reversible and re-reversible
-		Project expectedProject = ModelUtil.clone(getProject());
+		final Project expectedProject = ModelUtil.clone(getProject());
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				op.reverse().apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), originalProject));
 
@@ -917,11 +917,11 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				op.reverse().reverse().apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
-		Project loadedProject = ModelUtil.loadEObjectFromResource(
+		final Project loadedProject = ModelUtil.loadEObjectFromResource(
 			org.eclipse.emf.emfstore.internal.common.model.ModelFactory.eINSTANCE.getModelPackage().getProject(),
 			getProject()
 				.eResource().getURI(), false);
@@ -937,7 +937,7 @@ public class AttributeTest extends WorkspaceTest {
 	@Test
 	public void createAndChangeAttributesComplex() throws IOException {
 
-		Project originalProject = ModelUtil.clone(getProject());
+		final Project originalProject = ModelUtil.clone(getProject());
 
 		final UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
 		final UseCase useCase2 = RequirementFactory.eINSTANCE.createUseCase();
@@ -954,7 +954,7 @@ public class AttributeTest extends WorkspaceTest {
 				useCase2.setName("NameOfUseCase2");
 				useCase2.setDescription("DescriptionOfUseCase2");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals("NameOfUseCase", useCase.getName());
 		assertEquals("NameOfUseCase2", useCase2.getName());
@@ -967,7 +967,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		// now expecting only the creates with folded in attributes
 		assertEquals(2, operations.size());
@@ -993,11 +993,11 @@ public class AttributeTest extends WorkspaceTest {
 				op2.reverse().apply(getProject());
 				op.reverse().apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), originalProject));
 
-		Project loadedProject = ModelUtil.loadEObjectFromResource(
+		final Project loadedProject = ModelUtil.loadEObjectFromResource(
 			org.eclipse.emf.emfstore.internal.common.model.ModelFactory.eINSTANCE.getModelPackage().getProject(),
 			getProject()
 				.eResource().getURI(), false);
@@ -1014,7 +1014,7 @@ public class AttributeTest extends WorkspaceTest {
 	@Test
 	public void createAndAttributeChangesACA() throws InvalidHandleException, IOException {
 
-		Project originalProject = ModelUtil.clone(getProject());
+		final Project originalProject = ModelUtil.clone(getProject());
 
 		final LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
 
@@ -1025,20 +1025,20 @@ public class AttributeTest extends WorkspaceTest {
 				section.setName("Name");
 				section.setDescription("oldDescription");
 
-				CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
+				final CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
 				section.setDescription("newDescription");
-				UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
+				final UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
 				section.getModelElements().add(useCase);
 				try {
 					handle.end("sectionCreation", "description",
 						ModelUtil.getProject(section).getModelElementId(section));
-				} catch (InvalidHandleException e) {
+				} catch (final InvalidHandleException e) {
 					fail();
 				}
 
 				section.setDescription("desc 2");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -1055,7 +1055,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		// expect create, the composite and 1 attribute op
 		assertEquals(3, operations.size());
@@ -1063,7 +1063,7 @@ public class AttributeTest extends WorkspaceTest {
 		assertTrue(operations.get(1) instanceof CompositeOperation);
 		assertTrue(operations.get(2) instanceof AttributeOperation);
 
-		Project expectedProject = ModelUtil.clone(getProject());
+		final Project expectedProject = ModelUtil.clone(getProject());
 
 		// test reversibility
 
@@ -1071,11 +1071,11 @@ public class AttributeTest extends WorkspaceTest {
 			@Override
 			protected void doRun() {
 				for (int i = operations.size() - 1; i >= 0; i--) {
-					AbstractOperation reverse = operations.get(i).reverse();
+					final AbstractOperation reverse = operations.get(i).reverse();
 					reverse.apply(getProject());
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), originalProject));
 
@@ -1087,11 +1087,11 @@ public class AttributeTest extends WorkspaceTest {
 				operations.get(1).apply(getProject());
 				operations.get(2).apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
-		Project loadedProject = ModelUtil.loadEObjectFromResource(
+		final Project loadedProject = ModelUtil.loadEObjectFromResource(
 			ModelFactory.eINSTANCE.getModelPackage().getProject(), getProject().eResource().getURI(), false);
 
 		assertTrue(ModelUtil.areEqual(loadedProject, expectedProject));
@@ -1114,9 +1114,9 @@ public class AttributeTest extends WorkspaceTest {
 				useCase.setDescription("originalDescription");
 				clearOperations();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		Project originalProject = ModelUtil.clone(getProject());
+		final Project originalProject = ModelUtil.clone(getProject());
 
 		new EMFStoreCommand() {
 			@Override
@@ -1125,7 +1125,7 @@ public class AttributeTest extends WorkspaceTest {
 				useCase.setDescription("DescriptionOfUseCase");
 				getProject().deleteModelElement(useCase);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -1137,7 +1137,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		// now expecting only the delete with folded in attributes
 		assertEquals(1, operations.size());
@@ -1150,13 +1150,13 @@ public class AttributeTest extends WorkspaceTest {
 		assertEquals(((UnicaseModelElement) op.getModelElement()).getDescription(), "originalDescription");
 
 		// test if the delete is reversible and re-reversible
-		Project expectedProject = ModelUtil.clone(getProject());
+		final Project expectedProject = ModelUtil.clone(getProject());
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				op.reverse().apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), originalProject));
 
@@ -1165,11 +1165,11 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				op.reverse().reverse().apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
-		Project loadedProject = ModelUtil.loadEObjectFromResource(
+		final Project loadedProject = ModelUtil.loadEObjectFromResource(
 			org.eclipse.emf.emfstore.internal.common.model.ModelFactory.eINSTANCE.getModelPackage().getProject(),
 			getProject()
 				.eResource().getURI(), false);
@@ -1203,9 +1203,9 @@ public class AttributeTest extends WorkspaceTest {
 				useCase2.setDescription("originalDescription2");
 				clearOperations();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		Project originalProject = ModelUtil.clone(getProject());
+		final Project originalProject = ModelUtil.clone(getProject());
 
 		new EMFStoreCommand() {
 			@Override
@@ -1222,14 +1222,14 @@ public class AttributeTest extends WorkspaceTest {
 
 				getProject().deleteModelElement(useCase);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				getProject().deleteModelElement(useCase2);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -1241,7 +1241,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		// now expecting only the deletes with folded in attributes
 		assertEquals(2, operations.size());
@@ -1266,11 +1266,11 @@ public class AttributeTest extends WorkspaceTest {
 				op2.reverse().apply(getProject());
 				op.reverse().apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), originalProject));
 
-		Project loadedProject = ModelUtil.loadEObjectFromResource(
+		final Project loadedProject = ModelUtil.loadEObjectFromResource(
 			org.eclipse.emf.emfstore.internal.common.model.ModelFactory.eINSTANCE.getModelPackage().getProject(),
 			getProject()
 				.eResource().getURI(), false);
@@ -1360,9 +1360,9 @@ public class AttributeTest extends WorkspaceTest {
 				section.setName("originalName");
 				section.setDescription("originalDescription");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		Project originalProject = ModelUtil.clone(getProject());
+		final Project originalProject = ModelUtil.clone(getProject());
 
 		new EMFStoreCommand() {
 			@Override
@@ -1370,14 +1370,14 @@ public class AttributeTest extends WorkspaceTest {
 				clearOperations();
 				section.setName("some new Name");
 
-				CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
+				final CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
 				section.setDescription("newDescription");
-				UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
+				final UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
 				section.getModelElements().add(useCase);
 				try {
 					handle.end("sectionCreation", "description",
 						ModelUtil.getProject(section).getModelElementId(section));
-				} catch (InvalidHandleException e) {
+				} catch (final InvalidHandleException e) {
 					fail();
 				}
 
@@ -1385,7 +1385,7 @@ public class AttributeTest extends WorkspaceTest {
 
 				getProject().deleteModelElement(section);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -1401,7 +1401,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		// expect 1 attribute op, the composite and the delete with folded in attribute
 		assertEquals(3, operations.size());
@@ -1409,14 +1409,14 @@ public class AttributeTest extends WorkspaceTest {
 		assertTrue(operations.get(1) instanceof CompositeOperation);
 		assertTrue(operations.get(2) instanceof CreateDeleteOperation);
 
-		CreateDeleteOperation delOp = (CreateDeleteOperation) operations.get(2);
+		final CreateDeleteOperation delOp = (CreateDeleteOperation) operations.get(2);
 		assertTrue(delOp.isDelete());
 		// not folded, interfering composite was inbeetween
 		assertEquals("some new Name", ((UnicaseModelElement) delOp.getModelElement()).getName());
 		// folded, value is oldValue from "newDescription"-> "desc 2"
 		assertEquals("newDescription", ((UnicaseModelElement) delOp.getModelElement()).getDescription());
 
-		Project expectedProject = ModelUtil.clone(getProject());
+		final Project expectedProject = ModelUtil.clone(getProject());
 
 		// test reversibility
 
@@ -1424,11 +1424,11 @@ public class AttributeTest extends WorkspaceTest {
 			@Override
 			protected void doRun() {
 				for (int i = operations.size() - 1; i >= 0; i--) {
-					AbstractOperation reverse = operations.get(i).reverse();
+					final AbstractOperation reverse = operations.get(i).reverse();
 					reverse.apply(getProject());
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), originalProject));
 
@@ -1440,11 +1440,11 @@ public class AttributeTest extends WorkspaceTest {
 				operations.get(1).apply(getProject());
 				operations.get(2).apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
-		Project loadedProject = ModelUtil.loadEObjectFromResource(
+		final Project loadedProject = ModelUtil.loadEObjectFromResource(
 			org.eclipse.emf.emfstore.internal.common.model.ModelFactory.eINSTANCE.getModelPackage().getProject(),
 			getProject()
 				.eResource().getURI(), false);
@@ -1461,7 +1461,7 @@ public class AttributeTest extends WorkspaceTest {
 	@Test
 	public void createChangeAttributeAndDelete() throws IOException {
 
-		Project originalProject = ModelUtil.clone(getProject());
+		final Project originalProject = ModelUtil.clone(getProject());
 
 		final UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
 
@@ -1473,7 +1473,7 @@ public class AttributeTest extends WorkspaceTest {
 				useCase.setName("newName");
 				getProject().deleteModelElement(useCase);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		// expect create, 2 attribute ops, delete
@@ -1484,7 +1484,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		// expect attributes folding into create, and create and delete removed,
 		// as they would be directly adjacent to each other
@@ -1492,7 +1492,7 @@ public class AttributeTest extends WorkspaceTest {
 
 		assertTrue(ModelUtil.areEqual(getProject(), originalProject));
 
-		Project loadedProject = ModelUtil.loadEObjectFromResource(
+		final Project loadedProject = ModelUtil.loadEObjectFromResource(
 			org.eclipse.emf.emfstore.internal.common.model.ModelFactory.eINSTANCE.getModelPackage().getProject(),
 			getProject()
 				.eResource().getURI(), false);
@@ -1515,22 +1515,22 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(useCase2);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		Project originalProject = ModelUtil.clone(getProject());
+		final Project originalProject = ModelUtil.clone(getProject());
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				clearOperations();
 
-				UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
+				final UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
 				getProject().addModelElement(useCase);
 				useCase.setName("someName");
 				useCase.getExtendedUseCases().add(useCase2);
 				getProject().deleteModelElement(useCase);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		// expect create, 1 attribute ops, 1 multiref op, the delete
@@ -1541,7 +1541,7 @@ public class AttributeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		// expect attributes folding into create, the multiref and delete remain
 		assertEquals(operations.size(), 3);
@@ -1550,7 +1550,7 @@ public class AttributeTest extends WorkspaceTest {
 		assertTrue(operations.get(2) instanceof CreateDeleteOperation);
 
 		// check the folding of the attribute
-		CreateDeleteOperation createOp = (CreateDeleteOperation) operations.get(0);
+		final CreateDeleteOperation createOp = (CreateDeleteOperation) operations.get(0);
 		assertEquals("someName", ((UnicaseModelElement) createOp.getModelElement()).getName());
 
 		// check reversibility
@@ -1561,11 +1561,11 @@ public class AttributeTest extends WorkspaceTest {
 				operations.get(1).reverse().apply(getProject());
 				operations.get(0).reverse().apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), originalProject));
 
-		Project loadedProject = ModelUtil.loadEObjectFromResource(
+		final Project loadedProject = ModelUtil.loadEObjectFromResource(
 			ModelFactory.eINSTANCE.getModelPackage().getProject(), getProject().eResource().getURI(), false);
 
 		assertTrue(ModelUtil.areEqual(loadedProject, originalProject));

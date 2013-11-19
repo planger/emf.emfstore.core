@@ -62,20 +62,20 @@ public class AttributeOperationTest extends WorkspaceTest {
 				useCase.setName("newName");
 				assertEquals("newName", useCase.getName());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof AttributeOperation);
-		AttributeOperation attributeOperation = (AttributeOperation) operation;
+		final AttributeOperation attributeOperation = (AttributeOperation) operation;
 
 		assertEquals("new UseCase", attributeOperation.getOldValue());
 		assertEquals("newName", attributeOperation.getNewValue());
 		assertEquals("name", attributeOperation.getFeatureName());
 
-		ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
+		final ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
 
 		assertEquals(useCaseId, attributeOperation.getModelElementId());
 
@@ -101,7 +101,7 @@ public class AttributeOperationTest extends WorkspaceTest {
 
 				useCase.setName("newName");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -109,7 +109,7 @@ public class AttributeOperationTest extends WorkspaceTest {
 				useCase.setName("otherName");
 				assertEquals("otherName", useCase.getName());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -118,18 +118,18 @@ public class AttributeOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(1, operations.size());
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof AttributeOperation);
-		AttributeOperation attributeOperation = (AttributeOperation) operation;
+		final AttributeOperation attributeOperation = (AttributeOperation) operation;
 
 		assertEquals("new UseCase", attributeOperation.getOldValue());
 		assertEquals("otherName", attributeOperation.getNewValue());
 		assertEquals("name", attributeOperation.getFeatureName());
 
-		ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
+		final ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
 
 		assertEquals(useCaseId, attributeOperation.getModelElementId());
 	}
@@ -157,20 +157,20 @@ public class AttributeOperationTest extends WorkspaceTest {
 				useCase.setName("newName");
 				assertEquals("newName", useCase.getName());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
 		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof AttributeOperation);
-		AttributeOperation attributeOperation = (AttributeOperation) operation;
+		final AttributeOperation attributeOperation = (AttributeOperation) operation;
 
 		assertEquals("oldName", attributeOperation.getOldValue());
 		assertEquals("newName", attributeOperation.getNewValue());
 		assertEquals("name", attributeOperation.getFeatureName());
 
-		ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
+		final ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
 
 		assertEquals(useCaseId, attributeOperation.getModelElementId());
 
@@ -178,17 +178,17 @@ public class AttributeOperationTest extends WorkspaceTest {
 
 			@Override
 			protected void doRun() {
-				AbstractOperation reverse = operation.reverse();
+				final AbstractOperation reverse = operation.reverse();
 				reverse.apply(getProject());
 				assertEquals(true, reverse instanceof AttributeOperation);
-				AttributeOperation reversedAttributeOperation = (AttributeOperation) reverse;
+				final AttributeOperation reversedAttributeOperation = (AttributeOperation) reverse;
 				assertEquals("newName", reversedAttributeOperation.getOldValue());
 				assertEquals("oldName", reversedAttributeOperation.getNewValue());
 				assertEquals("name", reversedAttributeOperation.getFeatureName());
-				ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
+				final ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
 				assertEquals(useCaseId, reversedAttributeOperation.getModelElementId());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals("oldName", useCase.getName());
 	}
@@ -218,24 +218,24 @@ public class AttributeOperationTest extends WorkspaceTest {
 				useCase.setName("newName");
 				assertEquals("newName", useCase.getName());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 
 		assertEquals(true, operation instanceof AttributeOperation);
 		final AttributeOperation attributeOperation = (AttributeOperation) operation;
 
-		AttributeOperation cmpOperation = (AttributeOperation) attributeOperation.reverse().reverse();
+		final AttributeOperation cmpOperation = (AttributeOperation) attributeOperation.reverse().reverse();
 
 		assertEquals(attributeOperation.getFeatureName(), cmpOperation.getFeatureName());
 		assertEquals(attributeOperation.getModelElementId(), cmpOperation.getModelElementId());
 		assertEquals(attributeOperation.getNewValue(), cmpOperation.getNewValue());
 		assertEquals(attributeOperation.getOldValue(), cmpOperation.getOldValue());
 
-		Project expectedProject = ModelUtil.clone(getProject());
+		final Project expectedProject = ModelUtil.clone(getProject());
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
@@ -249,7 +249,7 @@ public class AttributeOperationTest extends WorkspaceTest {
 				r.apply(getProject());
 				rr.apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
@@ -260,11 +260,11 @@ public class AttributeOperationTest extends WorkspaceTest {
 				attributeOperation.reverse().apply(getProject());
 				attributeOperation.reverse().reverse().apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
-		Project loadedProject = ModelUtil.loadEObjectFromResource(
+		final Project loadedProject = ModelUtil.loadEObjectFromResource(
 			org.eclipse.emf.emfstore.internal.common.model.ModelFactory.eINSTANCE.getModelPackage().getProject(),
 			getProject()
 				.eResource().getURI(), false);
@@ -283,9 +283,9 @@ public class AttributeOperationTest extends WorkspaceTest {
 				fan.setName("Fan");
 				clearOperations();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		Project secondProject = ModelUtil.clone(getProject());
+		final Project secondProject = ModelUtil.clone(getProject());
 
 		// Test unsetting name
 		assertEquals(true, fan.isSetName());
@@ -296,7 +296,7 @@ public class AttributeOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				fan.unsetName();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(false, fan.isSetName());
 		assertEquals(null, fan.getName());
@@ -324,7 +324,7 @@ public class AttributeOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				fan.setName(null);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(true, fan.isSetName());
 		assertEquals(null, fan.getName());
@@ -353,27 +353,27 @@ public class AttributeOperationTest extends WorkspaceTest {
 				fan.setName("Fan");
 				clearOperations();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals("Fan", fan.getName());
 		assertEquals(true, fan.isSetName());
 
-		Project secondProject = ModelUtil.clone(getProject());
+		final Project secondProject = ModelUtil.clone(getProject());
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				fan.unsetName();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(false, fan.isSetName());
 		assertEquals(null, fan.getName());
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof AttributeOperation);
 		final AttributeOperation attributeOperation = (AttributeOperation) operation;
 
@@ -387,7 +387,7 @@ public class AttributeOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				attributeOperation.reverse().apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals("Fan", fan.getName());
 		assertEquals(true, fan.isSetName());
@@ -406,7 +406,7 @@ public class AttributeOperationTest extends WorkspaceTest {
 				fan.setName("Fan");
 				clearOperations();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals("Fan", fan.getName());
 		assertEquals(true, fan.isSetName());
@@ -416,17 +416,17 @@ public class AttributeOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				fan.unsetName();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		Project secondProject = ModelUtil.clone(getProject());
+		final Project secondProject = ModelUtil.clone(getProject());
 
 		assertEquals(false, fan.isSetName());
 		assertEquals(null, fan.getName());
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof AttributeOperation);
 		final AttributeOperation attributeOperation = (AttributeOperation) operation;
 
@@ -440,7 +440,7 @@ public class AttributeOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				attributeOperation.reverse().reverse().apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(null, fan.getName());
 		assertEquals(false, fan.isSetName());
@@ -458,27 +458,27 @@ public class AttributeOperationTest extends WorkspaceTest {
 				getProject().addModelElement(fan);
 				clearOperations();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(null, fan.getName());
 		assertEquals(false, fan.isSetName());
 
-		Project secondProject = ModelUtil.clone(getProject());
+		final Project secondProject = ModelUtil.clone(getProject());
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				fan.setName("Fan");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(true, fan.isSetName());
 		assertEquals("Fan", fan.getName());
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof AttributeOperation);
 		final AttributeOperation attributeOperation = (AttributeOperation) operation;
 
@@ -491,7 +491,7 @@ public class AttributeOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				attributeOperation.reverse().apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(null, fan.getName());
 		assertEquals(false, fan.isSetName());

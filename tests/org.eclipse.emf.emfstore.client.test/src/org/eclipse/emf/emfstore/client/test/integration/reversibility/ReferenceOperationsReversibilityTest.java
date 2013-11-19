@@ -25,7 +25,7 @@ import org.junit.Test;
  */
 public class ReferenceOperationsReversibilityTest extends OperationsReversibilityTest {
 
-	private long randomSeed = 1;
+	private final long randomSeed = 1;
 
 	/**
 	 * Takes a random ME (meA). Takes randomly one of its containment references. Creates a new ME matching containment
@@ -46,7 +46,7 @@ public class ReferenceOperationsReversibilityTest extends OperationsReversibilit
 				testHelper.doContainemntReferenceAddNew();
 			}
 
-		}.run(getTestProject(), false);
+		}.run(getTestProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 
@@ -55,7 +55,7 @@ public class ReferenceOperationsReversibilityTest extends OperationsReversibilit
 				getTestProjectSpace().revert();
 
 			}
-		}.run(getTestProject(), false);
+		}.run(getTestProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
 
@@ -80,7 +80,7 @@ public class ReferenceOperationsReversibilityTest extends OperationsReversibilit
 			protected void doRun() {
 				testHelper.doContainmentRefTransitiveChange();
 			}
-		}.run(getTestProject(), false);
+		}.run(getTestProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 
@@ -88,7 +88,7 @@ public class ReferenceOperationsReversibilityTest extends OperationsReversibilit
 			protected void doRun() {
 				getTestProjectSpace().revert();
 			}
-		}.run(getTestProject(), false);
+		}.run(getTestProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
 	}
@@ -109,7 +109,7 @@ public class ReferenceOperationsReversibilityTest extends OperationsReversibilit
 				testHelper.doMultiReferenceMove();
 				getTestProjectSpace().revert();
 			}
-		}.run(getTestProject(), false);
+		}.run(getTestProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
 	}
@@ -131,7 +131,7 @@ public class ReferenceOperationsReversibilityTest extends OperationsReversibilit
 			protected void doRun() {
 				testHelper.doNonContainmentReferenceAdd();
 			}
-		}.run(getTestProject(), false);
+		}.run(getTestProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 
@@ -139,7 +139,7 @@ public class ReferenceOperationsReversibilityTest extends OperationsReversibilit
 			protected void doRun() {
 				getTestProjectSpace().revert();
 			}
-		}.run(getTestProject(), false);
+		}.run(getTestProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
 	}
@@ -162,7 +162,7 @@ public class ReferenceOperationsReversibilityTest extends OperationsReversibilit
 				testHelper.doNonContainmentReferenceRemove();
 				getTestProjectSpace().revert();
 			}
-		}.run(getTestProject(), false);
+		}.run(getTestProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 
@@ -170,7 +170,7 @@ public class ReferenceOperationsReversibilityTest extends OperationsReversibilit
 			protected void doRun() {
 				getTestProjectSpace().revert();
 			}
-		}.run(getTestProject(), false);
+		}.run(getTestProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
 	}
@@ -192,14 +192,14 @@ public class ReferenceOperationsReversibilityTest extends OperationsReversibilit
 			protected void doRun() {
 				testHelper.doContainmentReferenceMove();
 			}
-		}.run(getTestProject(), false);
+		}.run(getTestProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				getTestProjectSpace().revert();
 			}
-		}.run(getTestProject(), false);
+		}.run(getTestProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
 	}

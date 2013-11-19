@@ -61,8 +61,8 @@ public class TopologyNto1Test extends TopologyTest {
 	@Test
 	public void setContainerFromNullToValue() throws UnsupportedOperationException, UnsupportedNotificationException {
 
-		LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
-		UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
+		final LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
+		final UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
 
 		getProject().addModelElement(section);
 		getProject().addModelElement(useCase);
@@ -71,22 +71,22 @@ public class TopologyNto1Test extends TopologyTest {
 
 		useCase.setLeafSection(section);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertTrue(operation instanceof CompositeOperation);
-		CompositeOperation compositeOperation = (CompositeOperation) operation;
+		final CompositeOperation compositeOperation = (CompositeOperation) operation;
 
-		List<AbstractOperation> subOperations = compositeOperation.getSubOperations();
+		final List<AbstractOperation> subOperations = compositeOperation.getSubOperations();
 
 		assertTrue(subOperations.get(0) instanceof MultiReferenceOperation);
-		MultiReferenceOperation op = (MultiReferenceOperation) subOperations.get(0);
+		final MultiReferenceOperation op = (MultiReferenceOperation) subOperations.get(0);
 		assertTrue(op.isAdd());
 		assertEquals(1, op.getReferencedModelElements().size());
 
-		ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
-		ModelElementId sectionId = ModelUtil.getProject(section).getModelElementId(section);
+		final ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
+		final ModelElementId sectionId = ModelUtil.getProject(section).getModelElementId(section);
 
 		assertEquals("modelElements", op.getFeatureName());
 		assertEquals(useCaseId, op.getReferencedModelElements().get(0));
@@ -94,7 +94,7 @@ public class TopologyNto1Test extends TopologyTest {
 		assertEquals(op.getIndex(), 0);
 
 		assertTrue(subOperations.get(1) instanceof SingleReferenceOperation);
-		SingleReferenceOperation sop = (SingleReferenceOperation) subOperations.get(1);
+		final SingleReferenceOperation sop = (SingleReferenceOperation) subOperations.get(1);
 		assertEquals(useCaseId, sop.getModelElementId());
 		assertEquals("leafSection", sop.getFeatureName());
 		assertNull(sop.getOldValue());
@@ -123,30 +123,30 @@ public class TopologyNto1Test extends TopologyTest {
 			protected void doRun() {
 				useCase.setLeafSection(section);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(section.getModelElements().contains(useCase));
 
 		clearOperations();
-		ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
+		final ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				useCase.setLeafSection(null);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(1, operations.size());
-		EList<ReferenceOperation> subOperations = checkAndCast(operations.get(0), CreateDeleteOperation.class)
+		final EList<ReferenceOperation> subOperations = checkAndCast(operations.get(0), CreateDeleteOperation.class)
 			.getSubOperations();
 		assertEquals(2, subOperations.size());
 
-		ModelElementId sectionId = ModelUtil.getProject(section).getModelElementId(section);
+		final ModelElementId sectionId = ModelUtil.getProject(section).getModelElementId(section);
 
-		MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
-		SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
+		final MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
+		final SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
 
 		assertEquals(sectionId, op0.getModelElementId());
 		assertEquals("modelElements", op0.getFeatureName());
@@ -169,8 +169,8 @@ public class TopologyNto1Test extends TopologyTest {
 	public void setNoncontainingParentFromNullToValue() throws UnsupportedOperationException,
 		UnsupportedNotificationException {
 
-		Actor actor = RequirementFactory.eINSTANCE.createActor();
-		UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
+		final Actor actor = RequirementFactory.eINSTANCE.createActor();
+		final UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
 
 		getProject().addModelElement(actor);
 		getProject().addModelElement(useCase);
@@ -180,30 +180,30 @@ public class TopologyNto1Test extends TopologyTest {
 		useCase.setInitiatingActor(actor);
 		assertSame(useCase.getInitiatingActor(), actor);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertTrue(operation instanceof CompositeOperation);
-		CompositeOperation compositeOperation = (CompositeOperation) operation;
+		final CompositeOperation compositeOperation = (CompositeOperation) operation;
 
-		List<AbstractOperation> subOperations = compositeOperation.getSubOperations();
+		final List<AbstractOperation> subOperations = compositeOperation.getSubOperations();
 
 		assertTrue(subOperations.get(0) instanceof MultiReferenceOperation);
-		MultiReferenceOperation op = (MultiReferenceOperation) subOperations.get(0);
+		final MultiReferenceOperation op = (MultiReferenceOperation) subOperations.get(0);
 		assertTrue(op.isAdd());
 		assertEquals(1, op.getReferencedModelElements().size());
 		assertEquals("initiatedUseCases", op.getFeatureName());
 
-		ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
-		ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
+		final ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
+		final ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
 
 		assertEquals(useCaseId, op.getReferencedModelElements().get(0));
 		assertEquals(op.getModelElementId(), actorId);
 		assertEquals(op.getIndex(), 0);
 
 		assertTrue(subOperations.get(1) instanceof SingleReferenceOperation);
-		SingleReferenceOperation sop = (SingleReferenceOperation) subOperations.get(1);
+		final SingleReferenceOperation sop = (SingleReferenceOperation) subOperations.get(1);
 		assertEquals(useCaseId, sop.getModelElementId());
 		assertEquals("initiatingActor", sop.getFeatureName());
 		assertNull(sop.getOldValue());
@@ -221,8 +221,8 @@ public class TopologyNto1Test extends TopologyTest {
 	public void setNoncontainingParentFromValueToNull() throws UnsupportedOperationException,
 		UnsupportedNotificationException {
 
-		Actor actor = RequirementFactory.eINSTANCE.createActor();
-		UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
+		final Actor actor = RequirementFactory.eINSTANCE.createActor();
+		final UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
 
 		getProject().addModelElement(actor);
 		getProject().addModelElement(useCase);
@@ -245,17 +245,17 @@ public class TopologyNto1Test extends TopologyTest {
 		assertEquals(2, operations.size());
 
 		assertTrue(operations.get(0) instanceof MultiReferenceOperation);
-		MultiReferenceOperation op0 = (MultiReferenceOperation) operations.get(0);
+		final MultiReferenceOperation op0 = (MultiReferenceOperation) operations.get(0);
 
-		ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
-		ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
+		final ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
+		final ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
 
 		assertEquals(actorId, op0.getModelElementId());
 		assertEquals("initiatedUseCases", op0.getFeatureName());
 		assertEquals(op0.getReferencedModelElements().get(0), useCaseId);
 
 		assertTrue(operations.get(1) instanceof SingleReferenceOperation);
-		SingleReferenceOperation op = (SingleReferenceOperation) operations.get(1);
+		final SingleReferenceOperation op = (SingleReferenceOperation) operations.get(1);
 		assertEquals(useCaseId, op.getModelElementId());
 		assertEquals("initiatingActor", op.getFeatureName());
 		assertNull(op.getNewValue());
@@ -273,9 +273,9 @@ public class TopologyNto1Test extends TopologyTest {
 	public void setNoncontainingParentFromValueToOtherValue() throws UnsupportedOperationException,
 		UnsupportedNotificationException {
 
-		Actor actor = RequirementFactory.eINSTANCE.createActor();
-		Actor otherActor = RequirementFactory.eINSTANCE.createActor();
-		UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
+		final Actor actor = RequirementFactory.eINSTANCE.createActor();
+		final Actor otherActor = RequirementFactory.eINSTANCE.createActor();
+		final UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
 
 		getProject().addModelElement(actor);
 		getProject().addModelElement(otherActor);
@@ -300,11 +300,11 @@ public class TopologyNto1Test extends TopologyTest {
 		assertEquals(3, operations.size());
 
 		assertTrue(operations.get(0) instanceof MultiReferenceOperation);
-		MultiReferenceOperation op0 = (MultiReferenceOperation) operations.get(0);
+		final MultiReferenceOperation op0 = (MultiReferenceOperation) operations.get(0);
 
-		ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
-		ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
-		ModelElementId otherActorId = ModelUtil.getProject(otherActor).getModelElementId(otherActor);
+		final ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
+		final ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
+		final ModelElementId otherActorId = ModelUtil.getProject(otherActor).getModelElementId(otherActor);
 
 		assertEquals(actorId, op0.getModelElementId());
 		assertEquals("initiatedUseCases", op0.getFeatureName());
@@ -312,14 +312,14 @@ public class TopologyNto1Test extends TopologyTest {
 		assertFalse(op0.isAdd());
 
 		assertTrue(operations.get(1) instanceof MultiReferenceOperation);
-		MultiReferenceOperation op1 = (MultiReferenceOperation) operations.get(1);
+		final MultiReferenceOperation op1 = (MultiReferenceOperation) operations.get(1);
 		assertEquals(otherActorId, op1.getModelElementId());
 		assertEquals("initiatedUseCases", op1.getFeatureName());
 		assertEquals(op1.getReferencedModelElements().get(0), useCaseId);
 		assertTrue(op1.isAdd());
 
 		assertTrue(operations.get(2) instanceof SingleReferenceOperation);
-		SingleReferenceOperation op = (SingleReferenceOperation) operations.get(2);
+		final SingleReferenceOperation op = (SingleReferenceOperation) operations.get(2);
 		assertEquals(useCaseId, op.getModelElementId());
 		assertEquals("initiatingActor", op.getFeatureName());
 		assertEquals(op.getNewValue(), otherActorId);
@@ -337,9 +337,9 @@ public class TopologyNto1Test extends TopologyTest {
 	public void setContainerFromValueToOtherValueSameFeature() throws UnsupportedOperationException,
 		UnsupportedNotificationException {
 
-		LeafSection section1 = DocumentFactory.eINSTANCE.createLeafSection();
-		LeafSection section2 = DocumentFactory.eINSTANCE.createLeafSection();
-		UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
+		final LeafSection section1 = DocumentFactory.eINSTANCE.createLeafSection();
+		final LeafSection section2 = DocumentFactory.eINSTANCE.createLeafSection();
+		final UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
 
 		getProject().addModelElement(section1);
 		getProject().addModelElement(section2);
@@ -365,11 +365,11 @@ public class TopologyNto1Test extends TopologyTest {
 		assertEquals(3, operations.size());
 
 		assertTrue(operations.get(0) instanceof MultiReferenceOperation);
-		MultiReferenceOperation op0 = (MultiReferenceOperation) operations.get(0);
+		final MultiReferenceOperation op0 = (MultiReferenceOperation) operations.get(0);
 
-		ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
-		ModelElementId section1Id = ModelUtil.getProject(section1).getModelElementId(section1);
-		ModelElementId section2Id = ModelUtil.getProject(section2).getModelElementId(section2);
+		final ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
+		final ModelElementId section1Id = ModelUtil.getProject(section1).getModelElementId(section1);
+		final ModelElementId section2Id = ModelUtil.getProject(section2).getModelElementId(section2);
 
 		assertEquals(section1Id, op0.getModelElementId());
 		assertEquals("modelElements", op0.getFeatureName());
@@ -377,14 +377,14 @@ public class TopologyNto1Test extends TopologyTest {
 		assertFalse(op0.isAdd());
 
 		assertTrue(operations.get(1) instanceof MultiReferenceOperation);
-		MultiReferenceOperation op1 = (MultiReferenceOperation) operations.get(1);
+		final MultiReferenceOperation op1 = (MultiReferenceOperation) operations.get(1);
 		assertEquals(section2Id, op1.getModelElementId());
 		assertEquals("modelElements", op1.getFeatureName());
 		assertEquals(op1.getReferencedModelElements().get(0), useCaseId);
 		assertTrue(op1.isAdd());
 
 		assertTrue(operations.get(2) instanceof SingleReferenceOperation);
-		SingleReferenceOperation op = (SingleReferenceOperation) operations.get(2);
+		final SingleReferenceOperation op = (SingleReferenceOperation) operations.get(2);
 		assertEquals(useCaseId, op.getModelElementId());
 		assertEquals("leafSection", op.getFeatureName());
 		assertEquals(op.getNewValue(), section2Id);
@@ -403,9 +403,9 @@ public class TopologyNto1Test extends TopologyTest {
 	public void setContainerFromValueToOtherValueDifferentFeatureN() throws UnsupportedOperationException,
 		UnsupportedNotificationException {
 
-		LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
-		WorkPackage pack = TaskFactory.eINSTANCE.createWorkPackage();
-		BugReport br = BugFactory.eINSTANCE.createBugReport();
+		final LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
+		final WorkPackage pack = TaskFactory.eINSTANCE.createWorkPackage();
+		final BugReport br = BugFactory.eINSTANCE.createBugReport();
 
 		getProject().addModelElement(section);
 		getProject().addModelElement(pack);
@@ -431,31 +431,31 @@ public class TopologyNto1Test extends TopologyTest {
 
 		assertEquals(4, operations.size());
 
-		ModelElementId sectionId = ModelUtil.getProject(section).getModelElementId(section);
-		ModelElementId packId = ModelUtil.getProject(pack).getModelElementId(pack);
-		ModelElementId brId = ModelUtil.getProject(br).getModelElementId(br);
+		final ModelElementId sectionId = ModelUtil.getProject(section).getModelElementId(section);
+		final ModelElementId packId = ModelUtil.getProject(pack).getModelElementId(pack);
+		final ModelElementId brId = ModelUtil.getProject(br).getModelElementId(br);
 
 		assertTrue(operations.get(0) instanceof MultiReferenceOperation);
-		MultiReferenceOperation op0 = (MultiReferenceOperation) operations.get(0);
+		final MultiReferenceOperation op0 = (MultiReferenceOperation) operations.get(0);
 		assertEquals(sectionId, op0.getModelElementId());
 		assertEquals("modelElements", op0.getFeatureName());
 		assertEquals(op0.getReferencedModelElements().get(0), brId);
 
 		assertTrue(operations.get(1) instanceof MultiReferenceOperation);
-		MultiReferenceOperation op1 = (MultiReferenceOperation) operations.get(1);
+		final MultiReferenceOperation op1 = (MultiReferenceOperation) operations.get(1);
 		assertEquals(packId, op1.getModelElementId());
 		assertEquals("containedWorkItems", op1.getFeatureName());
 		assertEquals(op1.getReferencedModelElements().get(0), brId);
 
 		assertTrue(operations.get(2) instanceof SingleReferenceOperation);
-		SingleReferenceOperation op2 = (SingleReferenceOperation) operations.get(2);
+		final SingleReferenceOperation op2 = (SingleReferenceOperation) operations.get(2);
 		assertEquals(brId, op2.getModelElementId());
 		assertEquals("leafSection", op2.getFeatureName());
 		assertEquals(op2.getNewValue(), null);
 		assertEquals(op2.getOldValue(), sectionId);
 
 		assertTrue(operations.get(3) instanceof SingleReferenceOperation);
-		SingleReferenceOperation op3 = (SingleReferenceOperation) operations.get(3);
+		final SingleReferenceOperation op3 = (SingleReferenceOperation) operations.get(3);
 		assertEquals(brId, op3.getModelElementId());
 		assertEquals("containingWorkpackage", op3.getFeatureName());
 		assertEquals(op3.getOldValue(), null);
@@ -474,9 +474,9 @@ public class TopologyNto1Test extends TopologyTest {
 	public void setContainerFromValueToOtherValueDifferentFeature1() throws UnsupportedOperationException,
 		UnsupportedNotificationException {
 
-		Issue issue = RationaleFactory.eINSTANCE.createIssue();
-		LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
-		Solution solution = RationaleFactory.eINSTANCE.createSolution();
+		final Issue issue = RationaleFactory.eINSTANCE.createIssue();
+		final LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
+		final Solution solution = RationaleFactory.eINSTANCE.createSolution();
 
 		getProject().addModelElement(issue);
 		getProject().addModelElement(section);
@@ -502,11 +502,11 @@ public class TopologyNto1Test extends TopologyTest {
 		assertEquals(4, operations.size());
 
 		assertTrue(operations.get(0) instanceof SingleReferenceOperation);
-		SingleReferenceOperation op0 = (SingleReferenceOperation) operations.get(0);
+		final SingleReferenceOperation op0 = (SingleReferenceOperation) operations.get(0);
 
-		ModelElementId sectionId = ModelUtil.getProject(section).getModelElementId(section);
-		ModelElementId issueId = ModelUtil.getProject(issue).getModelElementId(issue);
-		ModelElementId solutionId = ModelUtil.getProject(solution).getModelElementId(solution);
+		final ModelElementId sectionId = ModelUtil.getProject(section).getModelElementId(section);
+		final ModelElementId issueId = ModelUtil.getProject(issue).getModelElementId(issue);
+		final ModelElementId solutionId = ModelUtil.getProject(solution).getModelElementId(solution);
 
 		assertEquals(issueId, op0.getModelElementId());
 		assertEquals("solution", op0.getFeatureName());
@@ -514,20 +514,20 @@ public class TopologyNto1Test extends TopologyTest {
 		assertNull(op0.getNewValue());
 
 		assertTrue(operations.get(1) instanceof MultiReferenceOperation);
-		MultiReferenceOperation op1 = (MultiReferenceOperation) operations.get(1);
+		final MultiReferenceOperation op1 = (MultiReferenceOperation) operations.get(1);
 		assertEquals(sectionId, op1.getModelElementId());
 		assertEquals("modelElements", op1.getFeatureName());
 		assertEquals(op1.getReferencedModelElements().get(0), solutionId);
 
 		assertTrue(operations.get(2) instanceof SingleReferenceOperation);
-		SingleReferenceOperation op2 = (SingleReferenceOperation) operations.get(2);
+		final SingleReferenceOperation op2 = (SingleReferenceOperation) operations.get(2);
 		assertEquals(solutionId, op2.getModelElementId());
 		assertEquals("issue", op2.getFeatureName());
 		assertEquals(op2.getOldValue(), issueId);
 		assertNull(op2.getNewValue());
 
 		assertTrue(operations.get(3) instanceof SingleReferenceOperation);
-		SingleReferenceOperation op3 = (SingleReferenceOperation) operations.get(3);
+		final SingleReferenceOperation op3 = (SingleReferenceOperation) operations.get(3);
 		assertEquals(solutionId, op3.getModelElementId());
 		assertEquals("leafSection", op3.getFeatureName());
 		assertEquals(op3.getNewValue(), sectionId);

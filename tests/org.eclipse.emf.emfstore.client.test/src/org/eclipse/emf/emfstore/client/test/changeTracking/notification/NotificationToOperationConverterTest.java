@@ -53,7 +53,7 @@ public class NotificationToOperationConverterTest extends NotificationTest {
 	@Test
 	public void removeAllAttributes() {
 		final TestElement element = getTestElement();
-		List<String> children = new ArrayList<String>();
+		final List<String> children = new ArrayList<String>();
 		children.add("eclipse");
 		children.add("hudson");
 		element.getStrings().addAll(children);
@@ -62,18 +62,18 @@ public class NotificationToOperationConverterTest extends NotificationTest {
 				getProject().addModelElement(element);
 				return null;
 			}
-		}, getProject());
+		}, getProjectSpace().getContentEditingDomain());
 
 		RunESCommand.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				element.getStrings().clear();
 				return null;
 			}
-		}, getProject());
+		}, getProjectSpace().getContentEditingDomain());
 
-		AbstractOperation operation = getProjectSpace().getOperations().get(1);
+		final AbstractOperation operation = getProjectSpace().getOperations().get(1);
 		Assert.assertTrue(operation instanceof MultiAttributeOperation);
-		List<Integer> indices = ((MultiAttributeOperation) operation).getIndexes();
+		final List<Integer> indices = ((MultiAttributeOperation) operation).getIndexes();
 		Assert.assertEquals(indices.get(0), (Integer) 0);
 		Assert.assertEquals(indices.get(0), (Integer) 0);
 	}

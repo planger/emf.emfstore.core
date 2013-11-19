@@ -33,6 +33,7 @@ import org.eclipse.emf.emfstore.client.exceptions.ESProjectNotSharedException;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
 import org.eclipse.emf.emfstore.common.model.ESModelElementId;
 import org.eclipse.emf.emfstore.internal.client.model.connectionmanager.KeyStoreManager;
+import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESLocalProjectImpl;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.eclipse.emf.emfstore.server.model.query.ESHistoryQuery;
 import org.eclipse.emf.emfstore.server.model.versionspec.ESPrimaryVersionSpec;
@@ -98,7 +99,7 @@ public class UnsharedLocalProjectTest extends BaseEmptyEmfstoreTest {
 	@Test(expected = ESProjectNotSharedException.class)
 	public void testGetBaseVersion() {
 		// unshared project has no base version
-		ESPrimaryVersionSpec version = localProject.getBaseVersion();
+		final ESPrimaryVersionSpec version = localProject.getBaseVersion();
 		assertNull(version);
 	}
 
@@ -110,9 +111,10 @@ public class UnsharedLocalProjectTest extends BaseEmptyEmfstoreTest {
 
 	@Test(expected = ESProjectNotSharedException.class)
 	public void testGetHistoryInfos() throws ESException {
-		Player player = ProjectChangeUtil.addPlayerToProject(localProject);
-		ESModelElementId id = localProject.getModelElementId(player);
-		ESHistoryQuery query = ESHistoryQuery.FACTORY.modelElementQuery(localProject.getBaseVersion(), id, 1, 0, true,
+		final Player player = ProjectChangeUtil.addPlayerToProject(localProject);
+		final ESModelElementId id = localProject.getModelElementId(player);
+		final ESHistoryQuery query = ESHistoryQuery.FACTORY.modelElementQuery(localProject.getBaseVersion(), id, 1, 0,
+			true,
 			true);
 		localProject.getHistoryInfos(query, new NullProgressMonitor());
 		fail("Should not be able to getHistoryInfos from an unshared Project!");
@@ -121,19 +123,19 @@ public class UnsharedLocalProjectTest extends BaseEmptyEmfstoreTest {
 	@Test(expected = ESProjectNotSharedException.class)
 	public void testGetLastUpdated() {
 		// unshared project has no last updated date
-		Date date = localProject.getLastUpdated();
+		final Date date = localProject.getLastUpdated();
 		assertNull(date);
 	}
 
 	@Test(expected = ESProjectNotSharedException.class)
 	public void testGetRemoteProject() throws ESException {
-		ESRemoteProject remoteProject = localProject.getRemoteProject();
+		final ESRemoteProject remoteProject = localProject.getRemoteProject();
 		assertNull(remoteProject);
 		fail("Should not be able to getRemoteProject from an unshared Project!");
 	}
 
 	public void testGetUsersession() {
-		ESUsersession session = localProject.getUsersession();
+		final ESUsersession session = localProject.getUsersession();
 		assertNull(session);
 	}
 
@@ -195,9 +197,9 @@ public class UnsharedLocalProjectTest extends BaseEmptyEmfstoreTest {
 
 	@Test
 	public void testRevert() {
-		Player player1 = ProjectChangeUtil.addPlayerToProject(localProject);
-		Player player2 = ProjectChangeUtil.addPlayerToProject(localProject);
-		Player player3 = ProjectChangeUtil.addPlayerToProject(localProject);
+		final Player player1 = ProjectChangeUtil.addPlayerToProject(localProject);
+		final Player player2 = ProjectChangeUtil.addPlayerToProject(localProject);
+		final Player player3 = ProjectChangeUtil.addPlayerToProject(localProject);
 
 		assertTrue(localProject.getAllModelElements().contains(player1));
 		assertTrue(localProject.getAllModelElements().contains(player2));
@@ -220,8 +222,8 @@ public class UnsharedLocalProjectTest extends BaseEmptyEmfstoreTest {
 
 	@Test
 	public void testUndoLastOperation() {
-		Player player1 = ProjectChangeUtil.addPlayerToProject(localProject);
-		Player player2 = ProjectChangeUtil.addPlayerToProject(localProject);
+		final Player player1 = ProjectChangeUtil.addPlayerToProject(localProject);
+		final Player player2 = ProjectChangeUtil.addPlayerToProject(localProject);
 
 		assertTrue(localProject.getAllModelElements().contains(player1));
 		assertTrue(localProject.getAllModelElements().contains(player2));
@@ -234,7 +236,7 @@ public class UnsharedLocalProjectTest extends BaseEmptyEmfstoreTest {
 
 	@Test
 	public void testUndoLastOperationsMore() {
-		Player player = ProjectChangeUtil.addPlayerToProject(localProject);
+		final Player player = ProjectChangeUtil.addPlayerToProject(localProject);
 		assertTrue(localProject.getAllModelElements().contains(player));
 		localProject.undoLastOperations(0);
 		assertTrue(localProject.getAllModelElements().contains(player));
@@ -245,9 +247,9 @@ public class UnsharedLocalProjectTest extends BaseEmptyEmfstoreTest {
 
 	@Test
 	public void testUndoLastOperations() {
-		Player player1 = ProjectChangeUtil.addPlayerToProject(localProject);
-		Player player2 = ProjectChangeUtil.addPlayerToProject(localProject);
-		Player player3 = ProjectChangeUtil.addPlayerToProject(localProject);
+		final Player player1 = ProjectChangeUtil.addPlayerToProject(localProject);
+		final Player player2 = ProjectChangeUtil.addPlayerToProject(localProject);
+		final Player player3 = ProjectChangeUtil.addPlayerToProject(localProject);
 
 		assertTrue(localProject.getAllModelElements().contains(player1));
 		assertTrue(localProject.getAllModelElements().contains(player2));
@@ -294,7 +296,7 @@ public class UnsharedLocalProjectTest extends BaseEmptyEmfstoreTest {
 	public void testShare() {
 		try {
 			localProject.shareProject(new NullProgressMonitor());
-		} catch (ESException e) {
+		} catch (final ESException e) {
 			log(e);
 			fail(e.getMessage());
 		}
@@ -303,12 +305,13 @@ public class UnsharedLocalProjectTest extends BaseEmptyEmfstoreTest {
 	@Test
 	public void testShareSession() {
 		try {
-			ESServer server = ESServer.FACTORY.createServer("localhost", port, KeyStoreManager.DEFAULT_CERTIFICATE);
-			ESUsersession usersession = server.login("super", "super");
+			final ESServer server = ESServer.FACTORY.createServer("localhost", port,
+				KeyStoreManager.DEFAULT_CERTIFICATE);
+			final ESUsersession usersession = server.login("super", "super");
 			localProject.shareProject(usersession, new NullProgressMonitor());
-			ESRemoteProject remote = localProject.getRemoteProject();
+			final ESRemoteProject remote = localProject.getRemoteProject();
 			assertNotNull(remote);
-		} catch (ESException e) {
+		} catch (final ESException e) {
 			log(e);
 			fail(e.getMessage());
 		}
@@ -328,7 +331,7 @@ public class UnsharedLocalProjectTest extends BaseEmptyEmfstoreTest {
 				localProject.getModelElements().add(league);
 				return null;
 			}
-		}, league);
+		}, ((ESLocalProjectImpl) localProject).toInternalAPI().getContentEditingDomain());
 		assertEquals(3, localProject.getAllModelElements().size());
 		assertEquals(1, localProject.getModelElements().size());
 		assertEquals(2, localProject.getAllModelElementsByClass(Player.class).size());

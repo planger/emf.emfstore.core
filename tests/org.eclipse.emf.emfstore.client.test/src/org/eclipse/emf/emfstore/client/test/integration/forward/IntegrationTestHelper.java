@@ -71,9 +71,9 @@ public final class IntegrationTestHelper {
 
 	private static EditingDomain domain;
 	private static final String TEMP_PATH = Configuration.getFileInfo().getWorkspaceDirectory() + "tmp";
-	private Random random;
+	private final Random random;
 	private Set<EObject> allMEsInProject;
-	private Project testProject;
+	private final Project testProject;
 
 	/**
 	 * Constructor.
@@ -82,7 +82,7 @@ public final class IntegrationTestHelper {
 	 * @param testProject test project
 	 */
 	public IntegrationTestHelper(long randomSeed, Project testProject) {
-		this.random = new Random(randomSeed);
+		random = new Random(randomSeed);
 		this.testProject = testProject;
 	}
 
@@ -94,14 +94,15 @@ public final class IntegrationTestHelper {
 	 */
 	public static ProjectSpace createEmptyProjectSpace(String name) {
 
-		ProjectSpace projectSpace = ModelFactory.eINSTANCE.createProjectSpace();
-		ProjectId projectId = org.eclipse.emf.emfstore.internal.server.model.ModelFactory.eINSTANCE.createProjectId();
+		final ProjectSpace projectSpace = ModelFactory.eINSTANCE.createProjectSpace();
+		final ProjectId projectId = org.eclipse.emf.emfstore.internal.server.model.ModelFactory.eINSTANCE
+			.createProjectId();
 		projectId.setId(name);
 		projectSpace.setIdentifier(name);
 		projectSpace.setProjectId(projectId);
 		projectSpace.setProjectName(name);
 		projectSpace.setProjectDescription("description");
-		PrimaryVersionSpec versionSpec = VersioningFactory.eINSTANCE.createPrimaryVersionSpec();
+		final PrimaryVersionSpec versionSpec = VersioningFactory.eINSTANCE.createPrimaryVersionSpec();
 		versionSpec.setIdentifier(0);
 		projectSpace.setBaseVersion(versionSpec);
 		projectSpace.setLastUpdated(new Date());
@@ -109,7 +110,7 @@ public final class IntegrationTestHelper {
 		// projectSpace.setProject(ModelFactory.eINSTANCE.createProject());
 		projectSpace.setResourceCount(0);
 
-		File file = new File(TEMP_PATH);
+		final File file = new File(TEMP_PATH);
 		if (!file.exists()) {
 
 			new File(TEMP_PATH).mkdir();
@@ -137,7 +138,7 @@ public final class IntegrationTestHelper {
 
 			@Override
 			protected void doRun() {
-				for (AbstractOperation op : operations) {
+				for (final AbstractOperation op : operations) {
 					changePackage.getOperations().add(ModelUtil.clone(op));
 
 				}
@@ -183,21 +184,21 @@ public final class IntegrationTestHelper {
 		final boolean accumulative) {
 		System.out.println("extracting operations from test project...");
 
-		List<AbstractOperation> operations = testSpace.getOperations();
+		final List<AbstractOperation> operations = testSpace.getOperations();
 		System.out.println(operations.size() + " operatoins");
 		final ChangePackage changePackage = getChangePackage(operations, true, false);
 
 		// Save change package for later reference to disk.
 		// The saved change package will be overwritten every time a test
 		// succeeds.
-		EObject copyChangePackage = ModelUtil.clone(changePackage);
-		ResourceSet reseourceSet = new ResourceSetImpl();
-		Resource resource = reseourceSet.createResource(URI.createFileURI(TEMP_PATH + File.separator
+		final EObject copyChangePackage = ModelUtil.clone(changePackage);
+		final ResourceSet reseourceSet = new ResourceSetImpl();
+		final Resource resource = reseourceSet.createResource(URI.createFileURI(TEMP_PATH + File.separator
 			+ "changePackage.txt"));
 		resource.getContents().add(copyChangePackage);
 		try {
 			resource.save(ModelUtil.getResourceSaveOptions());
-		} catch (IOException e) {
+		} catch (final IOException e) {
 
 			e.printStackTrace();
 		}
@@ -213,7 +214,7 @@ public final class IntegrationTestHelper {
 					testSpace.getOperations().clear();
 				}
 			}
-		}.run(testSpace.getProject(), false);
+		}.run(testSpace.getContentEditingDomain(), false);
 	}
 
 	/**
@@ -240,14 +241,14 @@ public final class IntegrationTestHelper {
 	 */
 	public List<EObject> getRandomMEs(Project project, int num, boolean unique) {
 
-		List<EObject> result = new ArrayList<EObject>();
+		final List<EObject> result = new ArrayList<EObject>();
 		if (allMEsInProject == null) {
 			System.out.println("getting list of all model elements in project...");
 			allMEsInProject = project.getAllModelElements();
 			System.out.println(allMEsInProject.size() + " MEs in project...");
 		}
 
-		int numOfMEs = allMEsInProject.size();
+		final int numOfMEs = allMEsInProject.size();
 		if (num > numOfMEs) {
 			throw new IllegalArgumentException(
 				"Number of random MEs to return is greater than total number of MEs in project.");
@@ -279,7 +280,7 @@ public final class IntegrationTestHelper {
 	 * @return randomly selected ME
 	 */
 	public EObject getRandomME(Project project) {
-		List<EObject> modelElements = getRandomMEs(project, 1, false);
+		final List<EObject> modelElements = getRandomMEs(project, 1, false);
 		return modelElements.get(0);
 	}
 
@@ -293,16 +294,16 @@ public final class IntegrationTestHelper {
 	 */
 	public EObject getRandomMEofType(Project project, EClass type) {
 		// TODO: OTS
-		Set<? extends EObject> refTypeMEs = project.getAllModelElementsByClass(type.getClass());
+		final Set<? extends EObject> refTypeMEs = project.getAllModelElementsByClass(type.getClass());
 
-		int size = refTypeMEs.size();
+		final int size = refTypeMEs.size();
 		if (size == 0) {
 			return null;
 			// throw new IllegalStateException("There is no ME of this type in Project: " + type.getName());
 		}
 
-		ArrayList<? extends EObject> list = new ArrayList<EObject>(refTypeMEs);
-		EObject me = list.get(getRandomPosition(size));
+		final ArrayList<? extends EObject> list = new ArrayList<EObject>(refTypeMEs);
+		final EObject me = list.get(getRandomPosition(size));
 		return me;
 	}
 
@@ -312,10 +313,10 @@ public final class IntegrationTestHelper {
 	 * @return ME
 	 */
 	public EObject createRandomME() {
-		Set<EClass> eClazzSet = getSubclasses(EcoreFactory.eINSTANCE.getEcorePackage().getEObject());
-		ArrayList<EClass> eClazz = new ArrayList<EClass>(eClazzSet);
-		EClass eClass = eClazz.get(getRandom().nextInt(eClazz.size() - 1));
-		EObject me = eClass.getEPackage().getEFactoryInstance().create(eClass);
+		final Set<EClass> eClazzSet = getSubclasses(EcoreFactory.eINSTANCE.getEcorePackage().getEObject());
+		final ArrayList<EClass> eClazz = new ArrayList<EClass>(eClazzSet);
+		final EClass eClass = eClazz.get(getRandom().nextInt(eClazz.size() - 1));
+		final EObject me = eClass.getEPackage().getEFactoryInstance().create(eClass);
 
 		return me;
 	}
@@ -349,8 +350,8 @@ public final class IntegrationTestHelper {
 		// + "\" is not a subtype of EClass ModelElement");
 		// }
 
-		Set<EClass> ret = new LinkedHashSet<EClass>();
-		for (EPackage ePackage : getAllModelPackages()) {
+		final Set<EClass> ret = new LinkedHashSet<EClass>();
+		for (final EPackage ePackage : getAllModelPackages()) {
 			getSubclasses(clazz, ret, ePackage, includeAbstractClassesAndInterfaces);
 		}
 		return ret;
@@ -359,16 +360,16 @@ public final class IntegrationTestHelper {
 	private static void getSubclasses(EClass clazz, Set<EClass> ret, EPackage ePackage,
 		boolean includeAbstractClassesAndInterfaces) {
 
-		for (EClassifier classifier : ePackage.getEClassifiers()) {
+		for (final EClassifier classifier : ePackage.getEClassifiers()) {
 			if (EcorePackage.eINSTANCE.getEClass().isInstance(classifier)) {
-				EClass subClass = (EClass) classifier;
+				final EClass subClass = (EClass) classifier;
 				if ((clazz.isSuperTypeOf(subClass) || clazz == EcorePackage.eINSTANCE.getEObject())
 					&& (includeAbstractClassesAndInterfaces || canHaveInstances(subClass))) {
 					ret.add(subClass);
 				}
 			}
 		}
-		for (EPackage subPackage : ePackage.getESubpackages()) {
+		for (final EPackage subPackage : ePackage.getESubpackages()) {
 			getSubclasses(clazz, ret, subPackage, includeAbstractClassesAndInterfaces);
 		}
 	}
@@ -384,13 +385,13 @@ public final class IntegrationTestHelper {
 	 * @return a set of EPackages
 	 */
 	public static Set<EPackage> getAllModelPackages() {
-		Set<EPackage> result = new LinkedHashSet<EPackage>();
-		Registry registry = EPackage.Registry.INSTANCE;
+		final Set<EPackage> result = new LinkedHashSet<EPackage>();
+		final Registry registry = EPackage.Registry.INSTANCE;
 
-		for (Entry<String, Object> entry : registry.entrySet()) {
+		for (final Entry<String, Object> entry : registry.entrySet()) {
 			// if (entry.getKey().startsWith(ModelPackage..MODEL_URL_PREFIX)) {
 			// try {
-			EPackage model = EPackage.Registry.INSTANCE.getEPackage(entry.getKey());
+			final EPackage model = EPackage.Registry.INSTANCE.getEPackage(entry.getKey());
 			result.add(model);
 			// }
 			// BEGIN SUPRESS CATCH EXCEPTION
@@ -415,8 +416,8 @@ public final class IntegrationTestHelper {
 		EObject ret = null;
 
 		if (refType.isAbstract() || refType.isInterface()) {
-			List<EClass> eClazz = new ArrayList<EClass>(getSubclasses(refType));
-			int index = getRandomPosition(eClazz.size());
+			final List<EClass> eClazz = new ArrayList<EClass>(getSubclasses(refType));
+			final int index = getRandomPosition(eClazz.size());
 			refType = eClazz.get(index);
 		}
 
@@ -439,22 +440,22 @@ public final class IntegrationTestHelper {
 
 		if (attribute.getEType().getInstanceClass().equals(String.class)) {
 			if (attribute.isMany()) {
-				Object object = me.eGet(attribute);
-				EList<String> eList = (EList<String>) object;
-				int position = getRandomPosition(eList.size());
+				final Object object = me.eGet(attribute);
+				final EList<String> eList = (EList<String>) object;
+				final int position = getRandomPosition(eList.size());
 				eList.add(position, "new entry for" + attribute.getName());
 
 			} else {
-				String oldValue = (String) me.eGet(attribute);
-				String newValue = "changed-" + oldValue;
+				final String oldValue = (String) me.eGet(attribute);
+				final String newValue = "changed-" + oldValue;
 				me.eSet(attribute, newValue);
 			}
 
 		} else if (attribute.getEType().getInstanceClass().equals(boolean.class)) {
 			if (attribute.isMany()) {
-				Object object = me.eGet(attribute);
-				EList<Boolean> eList = (EList<Boolean>) object;
-				int position = getRandomPosition(eList.size());
+				final Object object = me.eGet(attribute);
+				final EList<Boolean> eList = (EList<Boolean>) object;
+				final int position = getRandomPosition(eList.size());
 				eList.add(position, getRandom().nextBoolean());
 			} else {
 				me.eSet(attribute, !((Boolean) me.eGet(attribute)));
@@ -462,9 +463,9 @@ public final class IntegrationTestHelper {
 
 		} else if (attribute.getEType().getInstanceClass().equals(int.class)) {
 			if (attribute.isMany()) {
-				Object object = me.eGet(attribute);
-				EList<Integer> eList = (EList<Integer>) object;
-				int position = getRandomPosition(eList.size());
+				final Object object = me.eGet(attribute);
+				final EList<Integer> eList = (EList<Integer>) object;
+				final int position = getRandomPosition(eList.size());
 				eList.add(position, getRandom().nextInt());
 			} else {
 				me.eSet(attribute, getRandom().nextInt());
@@ -472,9 +473,9 @@ public final class IntegrationTestHelper {
 
 		} else if (attribute.getEType().getInstanceClass().equals(Date.class)) {
 			if (attribute.isMany()) {
-				Object object = me.eGet(attribute);
-				EList<Date> eList = (EList<Date>) object;
-				int position = getRandomPosition(eList.size());
+				final Object object = me.eGet(attribute);
+				final EList<Date> eList = (EList<Date>) object;
+				final int position = getRandomPosition(eList.size());
 				eList.add(position, getRandomDate());
 			} else {
 				me.eSet(attribute, getRandomDate());
@@ -482,10 +483,10 @@ public final class IntegrationTestHelper {
 
 		}
 		if (attribute.getEType() instanceof EEnum) {
-			EEnum en = (EEnum) attribute.getEType();
-			int numOfLiterals = en.getELiterals().size();
-			int index = getRandomPosition(numOfLiterals);
-			EEnumLiteral value = en.getELiterals().get(index);
+			final EEnum en = (EEnum) attribute.getEType();
+			final int numOfLiterals = en.getELiterals().size();
+			final int index = getRandomPosition(numOfLiterals);
+			final EEnumLiteral value = en.getELiterals().get(index);
 			me.eSet(attribute, value.getInstance());
 		}
 
@@ -535,14 +536,14 @@ public final class IntegrationTestHelper {
 	 */
 	public EAttribute getRandomAttribute(EObject me) {
 		EAttribute attribute = null;
-		List<EAttribute> attributes = new ArrayList<EAttribute>();
-		for (EAttribute tmpAttr : me.eClass().getEAllAttributes()) {
+		final List<EAttribute> attributes = new ArrayList<EAttribute>();
+		for (final EAttribute tmpAttr : me.eClass().getEAllAttributes()) {
 			if (tmpAttr.isChangeable() && !tmpAttr.isTransient()) {
 				attributes.add(tmpAttr);
 			}
 		}
 
-		int size = attributes.size();
+		final int size = attributes.size();
 		if (size != 0) {
 			attribute = attributes.get(getRandomPosition(size));
 
@@ -559,8 +560,8 @@ public final class IntegrationTestHelper {
 	 * @return random reference of this ME
 	 */
 	public EReference getRandomReference(EObject me) {
-		int size = me.eClass().getEAllReferences().size();
-		int position = getRandomPosition(size);
+		final int size = me.eClass().getEAllReferences().size();
+		final int position = getRandomPosition(size);
 		EReference ref = null;
 		if (size != 0) {
 			ref = me.eClass().getEAllReferences().get(position);
@@ -578,14 +579,14 @@ public final class IntegrationTestHelper {
 	 */
 	public EReference getRandomNonContainmentRef(EObject me) {
 		EReference nonContainmentRef = null;
-		List<EReference> nonContainmentRefs = new ArrayList<EReference>();
-		for (EReference ref : me.eClass().getEAllReferences()) {
+		final List<EReference> nonContainmentRefs = new ArrayList<EReference>();
+		for (final EReference ref : me.eClass().getEAllReferences()) {
 			if (!ref.isContainment() && !ref.isContainer() && ref.isChangeable() && !ref.isTransient()) {
 				nonContainmentRefs.add(ref);
 			}
 		}
 
-		int size = nonContainmentRefs.size();
+		final int size = nonContainmentRefs.size();
 		if (size != 0) {
 			nonContainmentRef = nonContainmentRefs.get(getRandomPosition(size));
 		}
@@ -603,13 +604,13 @@ public final class IntegrationTestHelper {
 	 */
 	public EReference getRandomContainmentRef(EObject me) {
 		EReference containmentRef = null;
-		List<EReference> containments = new ArrayList<EReference>();
-		for (EReference ref : me.eClass().getEAllContainments()) {
+		final List<EReference> containments = new ArrayList<EReference>();
+		for (final EReference ref : me.eClass().getEAllContainments()) {
 			if (ref.isChangeable() && !ref.isTransient()) {
 				containments.add(ref);
 			}
 		}
-		int size = containments.size();
+		final int size = containments.size();
 		if (size != 0) {
 			containmentRef = containments.get(getRandomPosition(size));
 		}
@@ -630,25 +631,25 @@ public final class IntegrationTestHelper {
 	@SuppressWarnings("unchecked")
 	public EObject changeNonContainementRef(EObject me, EReference ref, Project project) {
 
-		EClass refType = ref.getEReferenceType();
+		final EClass refType = ref.getEReferenceType();
 		// TODO: OTS
-		Set<? extends EObject> refTypeMEs = project.getAllModelElementsByClass(refType.getClass());
+		final Set<? extends EObject> refTypeMEs = project.getAllModelElementsByClass(refType.getClass());
 
 		if (refTypeMEs.contains(me)) {
 			refTypeMEs.remove(me);
 		}
 
-		ArrayList<? extends EObject> list = new ArrayList<EObject>(refTypeMEs);
-		EObject toBeReferencedME = list.get(getRandomPosition(refTypeMEs.size()));
+		final ArrayList<? extends EObject> list = new ArrayList<EObject>(refTypeMEs);
+		final EObject toBeReferencedME = list.get(getRandomPosition(refTypeMEs.size()));
 
-		Object object = me.eGet(ref);
+		final Object object = me.eGet(ref);
 		if (ref.isMany()) {
-			EList<EObject> eList = (EList<EObject>) object;
+			final EList<EObject> eList = (EList<EObject>) object;
 			if (eList == null) {
 				throw new IllegalStateException("Null list return for feature " + ref.getName() + " on "
 					+ ModelUtil.getProject(me).getModelElementId(me).getId());
 			} else {
-				int position = getRandomPosition(eList.size());
+				final int position = getRandomPosition(eList.size());
 				eList.add(position, toBeReferencedME);
 			}
 		} else {
@@ -669,14 +670,14 @@ public final class IntegrationTestHelper {
 	 */
 	@SuppressWarnings("unchecked")
 	public void changeReference(EObject me, EReference ref, EObject toBeReferencedME) {
-		Object object = me.eGet(ref);
+		final Object object = me.eGet(ref);
 		if (ref.isMany()) {
-			EList<EObject> eList = (EList<EObject>) object;
+			final EList<EObject> eList = (EList<EObject>) object;
 			if (eList == null) {
 				throw new IllegalStateException("Null list return for feature " + ref.getName() + " on "
 					+ ModelUtil.getProject(me).getModelElementId(me).getId());
 			} else {
-				int position = getRandomPosition(eList.size());
+				final int position = getRandomPosition(eList.size());
 				if (!eList.contains(toBeReferencedME)) {
 					eList.add(position, toBeReferencedME);
 				}
@@ -698,10 +699,10 @@ public final class IntegrationTestHelper {
 			throw new IllegalArgumentException("Given attribute must be multiple valued (isMany = true)");
 		}
 
-		Object object = me.eGet(attribute);
-		EList<?> eList = (EList<?>) object;
-		int position1 = getRandomPosition(eList.size());
-		int position2 = getRandomPosition(eList.size());
+		final Object object = me.eGet(attribute);
+		final EList<?> eList = (EList<?>) object;
+		final int position1 = getRandomPosition(eList.size());
+		final int position2 = getRandomPosition(eList.size());
 		if (position1 == position2) {
 			return;
 		}
@@ -720,14 +721,14 @@ public final class IntegrationTestHelper {
 		if (!ref.isMany()) {
 			throw new IllegalArgumentException("Given reference must be multiple valued (isMany = true)");
 		}
-		Object object = me.eGet(ref);
-		EList<EObject> eList = (EList<EObject>) object;
+		final Object object = me.eGet(ref);
+		final EList<EObject> eList = (EList<EObject>) object;
 		if (eList == null) {
 			throw new IllegalStateException("Null list return for feature " + ref.getName() + " on "
 				+ ModelUtil.getProject(me).getModelElementId(me).getId());
 		} else {
-			int position1 = getRandomPosition(eList.size());
-			int position2 = getRandomPosition(eList.size());
+			final int position1 = getRandomPosition(eList.size());
+			final int position2 = getRandomPosition(eList.size());
 			if (position1 == position2) {
 				return;
 			}
@@ -759,24 +760,24 @@ public final class IntegrationTestHelper {
 			refToChange = getRandomContainmentRef(me);
 		}
 
-		EClass refType = refToChange.getEReferenceType();
+		final EClass refType = refToChange.getEReferenceType();
 
 		// create a new instance of reference type
-		EObject newInstance = createInstance(refType);
+		final EObject newInstance = createInstance(refType);
 
 		if (newInstance == null) {
 			throw new IllegalStateException("could not create a model element of specified type.");
 		}
 
-		Object object = me.eGet(refToChange);
+		final Object object = me.eGet(refToChange);
 		if (refToChange.isMany()) {
-			EList<EObject> eList = (EList<EObject>) object;
+			final EList<EObject> eList = (EList<EObject>) object;
 
 			if (eList == null) {
 				throw new IllegalStateException("Null list return for feature " + refToChange.getName() + " on "
 					+ ModelUtil.getProject(me).getModelElementId(me).getId());
 			} else {
-				int position = getRandomPosition(eList.size());
+				final int position = getRandomPosition(eList.size());
 				eList.add(position, newInstance);
 			}
 
@@ -790,8 +791,8 @@ public final class IntegrationTestHelper {
 	 * 1. Get a random model element form test project; 2. get randomly one of its attributes. 3. change the attribute
 	 */
 	public void doChangeAttribute() {
-		EObject me = getRandomME(getTestProject());
-		EAttribute attributeToChange = getRandomAttribute(me);
+		final EObject me = getRandomME(getTestProject());
+		final EAttribute attributeToChange = getRandomAttribute(me);
 		changeAttribute(me, attributeToChange);
 
 	}
@@ -827,8 +828,8 @@ public final class IntegrationTestHelper {
 	 * Change the same attribute on a randomly selected ME twice.
 	 */
 	public void doAttributeTransitiveChange() {
-		EObject me = getRandomME(getTestProject());
-		EAttribute attributeToChange = getRandomAttribute(me);
+		final EObject me = getRandomME(getTestProject());
+		final EAttribute attributeToChange = getRandomAttribute(me);
 
 		// from unset or a to b
 		changeAttribute(me, attributeToChange);
@@ -859,7 +860,7 @@ public final class IntegrationTestHelper {
 	 */
 	public void doDelete() {
 
-		EObject me = getRandomME(getTestProject());
+		final EObject me = getRandomME(getTestProject());
 		ModelUtil.getProject(me).deleteModelElement(me);
 
 	}
@@ -911,7 +912,7 @@ public final class IntegrationTestHelper {
 			while (meToMove == null) {
 				// get a random ME and one of its containment references (refToChange)
 				meA = getRandomME(testProject);
-				int contentsSize = meA.eContents().size();
+				final int contentsSize = meA.eContents().size();
 				if (contentsSize != 0) {
 					meToMove = meA.eContents().get(getRandomPosition(contentsSize));
 				}
@@ -1099,7 +1100,7 @@ public final class IntegrationTestHelper {
 	 */
 	public void doCreateDelete() {
 
-		EObject me = createRandomME();
+		final EObject me = createRandomME();
 		getTestProject().getModelElements().add(me);
 		getTestProject().deleteModelElement(me);
 
@@ -1117,9 +1118,9 @@ public final class IntegrationTestHelper {
 			protected void doRun() {
 				getTestProject().deleteModelElement(modelElement);
 			}
-		}.run(getTestProject(), false);
+		}.run(((ProjectSpace) getTestProject().eContainer()).getContentEditingDomain(), false);
 
-		List<AbstractOperation> operations = ESWorkspaceProviderImpl.getProjectSpace(testProject).getOperations();
+		final List<AbstractOperation> operations = ESWorkspaceProviderImpl.getProjectSpace(testProject).getOperations();
 		if (operations.size() == 0) {
 			throw new IllegalStateException("No operations recorded");
 		}
@@ -1129,10 +1130,10 @@ public final class IntegrationTestHelper {
 
 			@Override
 			protected void doRun() {
-				CreateDeleteOperation reverse = (CreateDeleteOperation) operation.reverse();
+				final CreateDeleteOperation reverse = (CreateDeleteOperation) operation.reverse();
 				reverse.apply(getTestProject());
 			}
-		}.run(getTestProject(), false);
+		}.run(((ProjectSpace) getTestProject().eContainer()).getContentEditingDomain(), false);
 
 	}
 
@@ -1148,14 +1149,14 @@ public final class IntegrationTestHelper {
 			me = getRandomME(getTestProject());
 		}
 
-		int indexToRemove = getRandomPosition(me.eCrossReferences().size());
-		EObject meToRemove = me.eCrossReferences().get(indexToRemove);
+		final int indexToRemove = getRandomPosition(me.eCrossReferences().size());
+		final EObject meToRemove = me.eCrossReferences().get(indexToRemove);
 
-		EReference refToChange = findReference(me, meToRemove);
+		final EReference refToChange = findReference(me, meToRemove);
 
-		Object object = me.eGet(refToChange);
+		final Object object = me.eGet(refToChange);
 		if (refToChange.isMany()) {
-			EList<EObject> eList = (EList<EObject>) object;
+			final EList<EObject> eList = (EList<EObject>) object;
 			eList.remove(meToRemove);
 		} else {
 			me.eSet(refToChange, null);
@@ -1173,8 +1174,8 @@ public final class IntegrationTestHelper {
 	@SuppressWarnings("unchecked")
 	private EReference findReference(EObject modelElement, EObject referencedME) {
 
-		List<EReference> refsMatchingReferencedME = new ArrayList<EReference>();
-		for (EReference ref : modelElement.eClass().getEAllReferences()) {
+		final List<EReference> refsMatchingReferencedME = new ArrayList<EReference>();
+		for (final EReference ref : modelElement.eClass().getEAllReferences()) {
 			if (!(ref.isContainer() || ref.isContainment())
 				&& (ref.getEReferenceType().equals(referencedME.eClass()) || ref.getEReferenceType().isSuperTypeOf(
 					referencedME.eClass())) || ref.getEReferenceType().equals(EcorePackage.eINSTANCE.getEObject())) {
@@ -1186,13 +1187,13 @@ public final class IntegrationTestHelper {
 			return refsMatchingReferencedME.get(0);
 		}
 
-		for (EReference ref : refsMatchingReferencedME) {
-			Object object = modelElement.eGet(ref);
+		for (final EReference ref : refsMatchingReferencedME) {
+			final Object object = modelElement.eGet(ref);
 			if (object == null) {
 				continue;
 			}
 			if (ref.isMany()) {
-				EList<EObject> eList = (EList<EObject>) object;
+				final EList<EObject> eList = (EList<EObject>) object;
 				if (eList.contains(referencedME)) {
 					return ref;
 				}

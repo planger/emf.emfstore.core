@@ -19,6 +19,7 @@ import junit.framework.Assert;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.emfstore.client.ESLocalProject;
+import org.eclipse.emf.emfstore.client.ESWorkspaceProvider;
 import org.eclipse.emf.emfstore.client.callbacks.ESCommitCallback;
 import org.eclipse.emf.emfstore.client.callbacks.ESUpdateCallback;
 import org.eclipse.emf.emfstore.client.test.server.api.CoreServerTest;
@@ -70,7 +71,7 @@ public class ChecksumTest extends CoreServerTest {
 		// getProject().getModelElements().add(b);
 		getProject().getModelElements().add(table);
 
-		long computeChecksum = ModelUtil.computeChecksum(getProject());
+		final long computeChecksum = ModelUtil.computeChecksum(getProject());
 		clearOperations();
 
 		new EMFStoreCommand() {
@@ -80,7 +81,7 @@ public class ChecksumTest extends CoreServerTest {
 				getProject().getModelElements().remove(attribute);
 				// getProjectSpace().getOperationManager().endCompositeOperation();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		RunESCommand.run(new Callable<Void>() {
 			public Void call() throws Exception {
@@ -89,9 +90,9 @@ public class ChecksumTest extends CoreServerTest {
 				// getProjectSpace().getOperationManager().endCompositeOperation();
 				return null;
 			}
-		}, getProject());
+		}, getProjectSpace().getContentEditingDomain());
 
-		long checksum = ModelUtil.computeChecksum(getProject());
+		final long checksum = ModelUtil.computeChecksum(getProject());
 
 		Assert.assertEquals(computeChecksum, checksum);
 	}
@@ -105,7 +106,7 @@ public class ChecksumTest extends CoreServerTest {
 		getProject().getModelElements().add(a);
 		getProject().getModelElements().add(b);
 
-		long computeChecksum = ModelUtil.computeChecksum(getProject());
+		final long computeChecksum = ModelUtil.computeChecksum(getProject());
 
 		new EMFStoreCommand() {
 
@@ -115,9 +116,9 @@ public class ChecksumTest extends CoreServerTest {
 				getProject().getModelElements().add(b);
 				getProject().getModelElements().add(a);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		long checksum = ModelUtil.computeChecksum(getProject());
+		final long checksum = ModelUtil.computeChecksum(getProject());
 
 		Assert.assertEquals(computeChecksum, checksum);
 	}
@@ -138,10 +139,10 @@ public class ChecksumTest extends CoreServerTest {
 			protected void doRun() {
 				testElement.setName("A");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		long expectedChecksum = ModelUtil.computeChecksum(getProject());
-		Project clonedProject = ModelUtil.clone(getProject());
+		final long expectedChecksum = ModelUtil.computeChecksum(getProject());
+		final Project clonedProject = ModelUtil.clone(getProject());
 
 		getProjectSpace().getOperationManager().stopChangeRecording();
 		testElement.setName("B");
@@ -150,13 +151,13 @@ public class ChecksumTest extends CoreServerTest {
 		Assert.assertEquals(1, getProjectSpace().getOperations().size());
 
 		// re-checkout should be triggered
-		PrimaryVersionSpec commit = commitWithoutCommand(getProjectSpace());
+		final PrimaryVersionSpec commit = commitWithoutCommand(getProjectSpace());
 		Assert.assertEquals(1, ESWorkspaceProviderImpl.getInstance().getWorkspace().getLocalProjects().size());
 
-		Project restoredProject = ESWorkspaceProviderImpl.getInstance().getWorkspace().toInternalAPI()
+		final Project restoredProject = ESWorkspaceProviderImpl.getInstance().getWorkspace().toInternalAPI()
 			.getProjectSpaces()
 			.get(0).getProject();
-		long computedChecksum = ModelUtil.computeChecksum(restoredProject);
+		final long computedChecksum = ModelUtil.computeChecksum(restoredProject);
 
 		Assert.assertTrue(ModelUtil.areEqual(restoredProject, clonedProject));
 		Assert.assertEquals(expectedChecksum, commit.getProjectStateChecksum());
@@ -169,12 +170,12 @@ public class ChecksumTest extends CoreServerTest {
 		Assert.assertEquals(1, ESWorkspaceProviderImpl.getInstance().getWorkspace().getLocalProjects().size());
 
 		Configuration.getClientBehavior().setChecksumErrorHandler(ChecksumErrorHandler.AUTOCORRECT);
-		((ESWorkspaceProviderImpl) ESWorkspaceProviderImpl.INSTANCE).setConnectionManager(getConnectionMock());
+		((ESWorkspaceProviderImpl) ESWorkspaceProvider.INSTANCE).setConnectionManager(getConnectionMock());
 
 		final TestElement testElement = createTestElement();
 		share(getProjectSpace());
 
-		ESLocalProject checkout = getProjectSpace()
+		final ESLocalProject checkout = getProjectSpace()
 			.toAPI()
 			.getRemoteProject()
 			.checkout(
@@ -190,7 +191,7 @@ public class ChecksumTest extends CoreServerTest {
 				getProject().addModelElement(testElement);
 				testElement.setName("A");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		commitWithoutCommand(getProjectSpace());
 
@@ -200,11 +201,11 @@ public class ChecksumTest extends CoreServerTest {
 
 			@Override
 			protected void doRun() {
-				TestElement testElement = TestmodelFactory.eINSTANCE.createTestElement();
+				final TestElement testElement = TestmodelFactory.eINSTANCE.createTestElement();
 				testElement.setName("B");
 				checkedOutProjectSpace.getProject().addModelElement(testElement);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 		update(checkedOutProjectSpace);
 		commitWithoutCommand(checkedOutProjectSpace);
 
@@ -217,7 +218,7 @@ public class ChecksumTest extends CoreServerTest {
 			protected void doRun() {
 				testElement.setName("B");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		getProjectSpace().getOperationManager().stopChangeRecording();
 		testElement.setName("C");
@@ -248,7 +249,7 @@ public class ChecksumTest extends CoreServerTest {
 				getProject().addModelElement(testElement);
 				testElement.setName("A");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		getProjectSpace().getOperationManager().stopChangeRecording();
 		testElement.setName("B");
@@ -268,7 +269,7 @@ public class ChecksumTest extends CoreServerTest {
 		final TestElement testElement = createTestElement();
 		share(getProjectSpace());
 
-		ESLocalProject checkout = getProjectSpace().toAPI().getRemoteProject()
+		final ESLocalProject checkout = getProjectSpace().toAPI().getRemoteProject()
 			.checkout(
 				"testCheckout",
 				getProjectSpace().getUsersession().toAPI(),
@@ -282,7 +283,7 @@ public class ChecksumTest extends CoreServerTest {
 				getProject().addModelElement(testElement);
 				testElement.setName("A");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		commitWithoutCommand(getProjectSpace());
 
@@ -292,7 +293,7 @@ public class ChecksumTest extends CoreServerTest {
 			protected void doRun() {
 				checkedOutProjectSpace.getProject().addModelElement(createTestElement("B"));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 		update(checkedOutProjectSpace);
 		commitWithoutCommand(checkedOutProjectSpace);
 
@@ -315,7 +316,7 @@ public class ChecksumTest extends CoreServerTest {
 		final TestElement testElement = createTestElement();
 		share(getProjectSpace());
 
-		ESLocalProject checkout = getProjectSpace().toAPI().getRemoteProject()
+		final ESLocalProject checkout = getProjectSpace().toAPI().getRemoteProject()
 			.checkout(
 				"testCheckout",
 				getProjectSpace().getUsersession().toAPI(),
@@ -329,7 +330,7 @@ public class ChecksumTest extends CoreServerTest {
 				getProject().addModelElement(testElement);
 				testElement.setName("A");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		commitWithoutCommand(getProjectSpace());
 
@@ -338,11 +339,11 @@ public class ChecksumTest extends CoreServerTest {
 			protected void doRun() {
 				checkedOutProjectSpace.getProject().addModelElement(TestmodelFactory.eINSTANCE.createTestElement());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 		update(checkedOutProjectSpace);
 		commitWithoutCommand(checkedOutProjectSpace);
 
-		PrimaryVersionSpec update = update(getProjectSpace());
+		final PrimaryVersionSpec update = update(getProjectSpace());
 		Assert.assertTrue(ModelUtil.areEqual(getProject(), checkedOutProjectSpace.getProject()));
 		Assert.assertEquals(ModelUtil.computeChecksum(getProject()), update.getProjectStateChecksum());
 	}
@@ -357,7 +358,7 @@ public class ChecksumTest extends CoreServerTest {
 		final TestElement testElement = createTestElement();
 		share(getProjectSpace());
 
-		ESLocalProject checkout = getProjectSpace().toAPI().getRemoteProject()
+		final ESLocalProject checkout = getProjectSpace().toAPI().getRemoteProject()
 			.checkout(
 				"testCheckout",
 				getProjectSpace().getUsersession().toAPI(),
@@ -371,7 +372,7 @@ public class ChecksumTest extends CoreServerTest {
 				getProject().addModelElement(testElement);
 				testElement.setName("A");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		commitWithoutCommand(getProjectSpace());
 
@@ -380,7 +381,7 @@ public class ChecksumTest extends CoreServerTest {
 			protected void doRun() {
 				checkedOutProjectSpace.getProject().addModelElement(TestmodelFactory.eINSTANCE.createTestElement());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		update(checkedOutProjectSpace);
 		commitWithoutCommand(checkedOutProjectSpace);
@@ -390,7 +391,7 @@ public class ChecksumTest extends CoreServerTest {
 			protected void doRun() {
 				testElement.setName("B");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		getProjectSpace().getOperationManager().stopChangeRecording();
 		testElement.setName("C");

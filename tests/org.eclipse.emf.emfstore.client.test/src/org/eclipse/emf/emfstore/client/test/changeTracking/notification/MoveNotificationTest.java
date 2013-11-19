@@ -72,15 +72,15 @@ public class MoveNotificationTest extends NotificationTest {
 				// now move actor 2 to top of the list
 				useCase.getParticipatingActors().move(0, actor2);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
-		List<NotificationInfo> rec = recording.asMutableList();
+		final NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
+		final List<NotificationInfo> rec = recording.asMutableList();
 
 		// exactly one MOVE notification is expected
 		assertEquals(1, rec.size());
 
-		NotificationInfo n = rec.get(0);
+		final NotificationInfo n = rec.get(0);
 		assertSame(useCase, n.getNotifier());
 		assertTrue(n.isMoveEvent());
 		assertEquals(n.getNewValue(), actor2);
@@ -93,12 +93,12 @@ public class MoveNotificationTest extends NotificationTest {
 
 	@Test
 	public void testMoveElementAndUndoOnRootLevel() {
-		ESLocalProjectImpl localProject = ESWorkspaceProviderImpl.getInstance().getWorkspace()
+		final ESLocalProjectImpl localProject = ESWorkspaceProviderImpl.getInstance().getWorkspace()
 			.createLocalProject("testProject");
 		final ProjectSpace projectSpace = localProject.toInternalAPI();
 		final Project project = projectSpace.getProject();
 
-		TestIdEObjectCollectionChangeObserver observer = new TestIdEObjectCollectionChangeObserver();
+		final TestIdEObjectCollectionChangeObserver observer = new TestIdEObjectCollectionChangeObserver();
 		project.addIdEObjectCollectionChangeObserver(observer);
 
 		final Tournament tournament1 = BowlingFactory.eINSTANCE.createTournament();
@@ -111,7 +111,7 @@ public class MoveNotificationTest extends NotificationTest {
 			protected void doRun() {
 				project.addModelElement(tournament1);
 			}
-		}.run(project, false);
+		}.run(projectSpace.getContentEditingDomain(), false);
 		assertTrue(project.contains(tournament1));
 		assertTrue("unexpected notidications",
 			observer.resetNotifyCalled() && observer.resetAddedCalled() && !observer.resetRemovedCalled()
@@ -123,7 +123,7 @@ public class MoveNotificationTest extends NotificationTest {
 			protected void doRun() {
 				tournament1.getMatchups().add(matchup);
 			}
-		}.run(project, false);
+		}.run(projectSpace.getContentEditingDomain(), false);
 		assertTrue(project.contains(matchup));
 		assertTrue(tournament1.getMatchups().contains(matchup));
 		assertTrue("unexpected notifications",
@@ -136,7 +136,7 @@ public class MoveNotificationTest extends NotificationTest {
 			protected void doRun() {
 				project.addModelElement(tournament2);
 			}
-		}.run(project, false);
+		}.run(projectSpace.getContentEditingDomain(), false);
 		assertTrue(project.contains(tournament2));
 		assertTrue("unexpected notifications",
 			observer.resetNotifyCalled() && observer.resetAddedCalled() && !observer.resetRemovedCalled()
@@ -157,7 +157,7 @@ public class MoveNotificationTest extends NotificationTest {
 				tournament1.getMatchups().remove(matchup);
 				tournament2.getMatchups().add(matchup);
 			}
-		}.run(project, false);
+		}.run(projectSpace.getContentEditingDomain(), false);
 		assertTrue(!tournament1.getMatchups().contains(matchup));
 		assertTrue(tournament2.getMatchups().contains(matchup));
 		assertTrue("unexpected notidications",
@@ -170,7 +170,7 @@ public class MoveNotificationTest extends NotificationTest {
 			protected void doRun() {
 				projectSpace.undoLastOperation();
 			}
-		}.run(project, false);
+		}.run(projectSpace.getContentEditingDomain(), false);
 		assertTrue(!tournament1.getMatchups().contains(matchup));
 		assertTrue(!tournament2.getMatchups().contains(matchup));
 		assertTrue(project.contains(matchup));
@@ -184,7 +184,7 @@ public class MoveNotificationTest extends NotificationTest {
 			protected void doRun() {
 				projectSpace.undoLastOperation();
 			}
-		}.run(project, false);
+		}.run(projectSpace.getContentEditingDomain(), false);
 		assertTrue(tournament1.getMatchups().contains(matchup));
 		assertTrue(!tournament2.getMatchups().contains(matchup));
 		assertTrue("unexpected notidications", observer.resetNotifyCalled() && !observer.resetAddedCalled()
@@ -203,7 +203,7 @@ public class MoveNotificationTest extends NotificationTest {
 		}
 
 		public boolean resetNotifyCalled() {
-			boolean toReturn = notifyCalled;
+			final boolean toReturn = notifyCalled;
 			notifyCalled = false;
 			return toReturn;
 		}
@@ -213,7 +213,7 @@ public class MoveNotificationTest extends NotificationTest {
 		}
 
 		public boolean resetAddedCalled() {
-			boolean toReturn = addedCalled;
+			final boolean toReturn = addedCalled;
 			addedCalled = false;
 			return toReturn;
 		}
@@ -223,7 +223,7 @@ public class MoveNotificationTest extends NotificationTest {
 		}
 
 		public boolean resetRemovedCalled() {
-			boolean toReturn = removedCalled;
+			final boolean toReturn = removedCalled;
 			removedCalled = false;
 			return toReturn;
 		}
@@ -233,7 +233,7 @@ public class MoveNotificationTest extends NotificationTest {
 		}
 
 		public boolean resetDeletedCalled() {
-			boolean toReturn = deletedCalled;
+			final boolean toReturn = deletedCalled;
 			deletedCalled = false;
 			return toReturn;
 		}

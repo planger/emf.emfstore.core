@@ -13,6 +13,7 @@ package org.eclipse.emf.emfstore.client.test.integration.forward;
 
 import static org.junit.Assert.assertTrue;
 
+import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommand;
 import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
 import org.eclipse.emf.emfstore.internal.server.exceptions.SerializationException;
@@ -24,7 +25,7 @@ import org.junit.Test;
  */
 public class ReferenceTest extends IntegrationTest {
 
-	private long randomSeed = 1;
+	private final long randomSeed = 1;
 
 	/**
 	 * Takes a random ME (meA). Takes randomly one of its containment references. Creates a new ME matching containment
@@ -45,7 +46,7 @@ public class ReferenceTest extends IntegrationTest {
 
 			}
 
-		}.run(getTestProject(), false);
+		}.run(((ProjectSpace) getTestProject().eContainer()).getContentEditingDomain(), false);
 
 		commitChanges();
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
@@ -72,7 +73,7 @@ public class ReferenceTest extends IntegrationTest {
 				testHelper.doContainmentRefTransitiveChange();
 			}
 
-		}.run(getTestProject(), false);
+		}.run(((ProjectSpace) getTestProject().eContainer()).getContentEditingDomain(), false);
 
 		commitChanges();
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
@@ -93,7 +94,7 @@ public class ReferenceTest extends IntegrationTest {
 			protected void doRun() {
 				testHelper.doMultiReferenceMove();
 			}
-		}.run(getTestProject(), false);
+		}.run(((ProjectSpace) getTestProject().eContainer()).getContentEditingDomain(), false);
 
 		commitChanges();
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
@@ -117,7 +118,7 @@ public class ReferenceTest extends IntegrationTest {
 				testHelper.doNonContainmentReferenceAdd();
 			}
 
-		}.run(getTestProject(), false);
+		}.run(((ProjectSpace) getTestProject().eContainer()).getContentEditingDomain(), false);
 
 		commitChanges();
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
@@ -140,7 +141,7 @@ public class ReferenceTest extends IntegrationTest {
 			protected void doRun() {
 				testHelper.doNonContainmentReferenceRemove();
 			}
-		}.run(getTestProject(), false);
+		}.run(((ProjectSpace) getTestProject().eContainer()).getContentEditingDomain(), false);
 
 		commitChanges();
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
@@ -163,7 +164,7 @@ public class ReferenceTest extends IntegrationTest {
 			protected void doRun() {
 				testHelper.doContainmentReferenceMove();
 			}
-		}.run(getTestProject(), false);
+		}.run(((ProjectSpace) getTestProject().eContainer()).getContentEditingDomain(), false);
 
 		commitChanges();
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));

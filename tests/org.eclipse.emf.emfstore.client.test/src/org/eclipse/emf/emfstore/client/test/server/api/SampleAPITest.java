@@ -33,14 +33,14 @@ public class SampleAPITest extends CoreServerTest {
 				ps.getProject().addModelElement(createTestElement("Horst"));
 				try {
 					ps.shareProject(new NullProgressMonitor());
-				} catch (ESException e) {
+				} catch (final ESException e) {
 					throw new RuntimeException(e);
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(1, getServerSpace().getProjects().size());
-		ProjectHistory projectHistory = getServerSpace().getProjects().get(0);
+		final ProjectHistory projectHistory = getServerSpace().getProjects().get(0);
 
 		projectHistory.getVersions().get(projectHistory.getVersions().size() - 1);
 		assertEquals(1, getProject().getModelElements().size());
@@ -52,7 +52,7 @@ public class SampleAPITest extends CoreServerTest {
 			@Override
 			protected void doRun() {
 				try {
-					TestElement testElement = createTestElement("Horst");
+					final TestElement testElement = createTestElement("Horst");
 					getProjectSpace().getProject().addModelElement(testElement);
 					getProjectSpace().shareProject(new NullProgressMonitor());
 
@@ -62,10 +62,10 @@ public class SampleAPITest extends CoreServerTest {
 					testElement.setName("2");
 					getProjectSpace().commitToBranch(Versions.createBRANCH("test"), null, null, null);
 
-				} catch (ESException e) {
+				} catch (final ESException e) {
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 	}
 }

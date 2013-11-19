@@ -64,8 +64,8 @@ public class MergeTest extends ConflictDetectionTest {
 	}
 
 	public List<ModelElementId> getIds(EObject... objs) {
-		ArrayList<ModelElementId> result = new ArrayList<ModelElementId>();
-		for (EObject obj : objs) {
+		final ArrayList<ModelElementId> result = new ArrayList<ModelElementId>();
+		for (final EObject obj : objs) {
 			result.add(mergeCase.getMyId(obj));
 		}
 		return result;
@@ -96,22 +96,22 @@ public class MergeTest extends ConflictDetectionTest {
 			new EMFStoreCommand() {
 				@Override
 				protected void doRun() {
-					for (EObject obj : objs) {
+					for (final EObject obj : objs) {
 						getProject().addModelElement(obj);
 					}
 				}
-			}.run(getProject(), false);
+			}.run(getProjectSpace().getContentEditingDomain(), false);
 		}
 
 		public void addTheirs(final EObject... objs) {
 			new EMFStoreCommand() {
 				@Override
 				protected void doRun() {
-					for (EObject obj : objs) {
+					for (final EObject obj : objs) {
 						getTheirProject().addModelElement(obj);
 					}
 				}
-			}.run(getProject(), false);
+			}.run(getProjectSpace().getContentEditingDomain(), false);
 		}
 
 		@SuppressWarnings("unchecked")
@@ -146,43 +146,44 @@ public class MergeTest extends ConflictDetectionTest {
 						clearOperations();
 						theirProjectSpace = cloneProjectSpace(getProjectSpace());
 					}
-				}.run(getProject(), false);
+				}.run(getProjectSpace().getContentEditingDomain(), false);
 			}
 		}
 
 		public Project getTheirProject() {
 			ensureCopy();
-			return this.theirProjectSpace.getProject();
+			return theirProjectSpace.getProject();
 		}
 
 		public ProjectSpace getTheirProjectSpace() {
 			ensureCopy();
-			return this.theirProjectSpace;
+			return theirProjectSpace;
 		}
 
 		public DecisionManager execute() {
 			ensureCopy();
-			PrimaryVersionSpec spec = Versions.createPRIMARY(23);
+			final PrimaryVersionSpec spec = Versions.createPRIMARY(23);
 
-			List<ChangePackage> myChangePackages = Arrays.asList(getProjectSpace().getLocalChangePackage(true));
-			List<ChangePackage> theirChangePackages = Arrays.asList(getTheirProjectSpace().getLocalChangePackage(true));
+			final List<ChangePackage> myChangePackages = Arrays.asList(getProjectSpace().getLocalChangePackage(true));
+			final List<ChangePackage> theirChangePackages = Arrays.asList(getTheirProjectSpace().getLocalChangePackage(
+				true));
 
-			ChangeConflictSet changeConflictSet = new ConflictDetector().calculateConflicts(myChangePackages,
+			final ChangeConflictSet changeConflictSet = new ConflictDetector().calculateConflicts(myChangePackages,
 				theirChangePackages, getProject());
 
-			DecisionManager manager = new DecisionManager(getProject(), changeConflictSet, false);
+			final DecisionManager manager = new DecisionManager(getProject(), changeConflictSet, false);
 
 			return manager;
 		}
 
 		public <T extends VisualConflict> MergeTestQuery hasConflict(Class<T> clazz, int expectedConflicts) {
-			MergeTestQuery query = new MergeTestQuery(execute());
+			final MergeTestQuery query = new MergeTestQuery(execute());
 			return query.hasConflict(clazz, expectedConflicts);
 		}
 
 		public <T extends VisualConflict> MergeTestQuery hasConflict(Class<T> clazz) {
 			if (clazz == null) {
-				ArrayList<VisualConflict> conflicts = execute().getConflicts();
+				final ArrayList<VisualConflict> conflicts = execute().getConflicts();
 				assertEquals(0, conflicts.size());
 				return null;
 			}
@@ -199,8 +200,8 @@ public class MergeTest extends ConflictDetectionTest {
 		private final DecisionManager manager;
 		private ArrayList<VisualConflict> conflicts;
 		private Object lastObject;
-		private HashSet<AbstractOperation> mySeen;
-		private HashSet<AbstractOperation> theirSeen;
+		private final HashSet<AbstractOperation> mySeen;
+		private final HashSet<AbstractOperation> theirSeen;
 
 		public MergeTestQuery(DecisionManager manager) {
 			this.manager = manager;
@@ -211,10 +212,10 @@ public class MergeTest extends ConflictDetectionTest {
 		public <T extends VisualConflict> MergeTestQuery hasConflict(Class<T> clazz, int i) {
 			conflicts = manager.getConflicts();
 			assertEquals("Number of conflicts", i, conflicts.size());
-			VisualConflict currentConflict = currentConflict();
+			final VisualConflict currentConflict = currentConflict();
 			if (!clazz.isInstance(currentConflict)) {
 				throw new AssertionError("Expected: " + clazz.getName() + " but found: "
-					+ ((currentConflict == null) ? "null" : currentConflict.getClass().getName()));
+					+ (currentConflict == null ? "null" : currentConflict.getClass().getName()));
 			}
 			return this;
 		}
@@ -225,17 +226,17 @@ public class MergeTest extends ConflictDetectionTest {
 
 		@SuppressWarnings("unchecked")
 		public <T extends AbstractOperation> T getMy(Class<T> class1) {
-			AbstractOperation myOp = currentConflict().getMyOperation();
+			final AbstractOperation myOp = currentConflict().getMyOperation();
 			if (!class1.isInstance(myOp)) {
 				throw new AssertionError("Expected: " + class1.getName() + " but found: "
-					+ ((myOp == null) ? "null" : myOp.getClass().getName()));
+					+ (myOp == null ? "null" : myOp.getClass().getName()));
 			}
 			return (T) myOp;
 		}
 
 		@SuppressWarnings("unchecked")
 		public <T extends AbstractOperation> T getTheir(Class<T> class1) {
-			AbstractOperation theirOp = currentConflict().getTheirOperation();
+			final AbstractOperation theirOp = currentConflict().getTheirOperation();
 			assertTrue(class1.isInstance(theirOp));
 			return (T) theirOp;
 		}
@@ -246,8 +247,8 @@ public class MergeTest extends ConflictDetectionTest {
 		}
 
 		public <T extends AbstractOperation> MergeTestQuery myOtherContains(Class<T> class1) {
-			Set<AbstractOperation> ops = currentConflict().getMyOperations();
-			for (AbstractOperation op : ops) {
+			final Set<AbstractOperation> ops = currentConflict().getMyOperations();
+			for (final AbstractOperation op : ops) {
 				if (class1.isInstance(op) && op != currentConflict().getMyOperation()) {
 					last(true, op);
 					return this;
@@ -271,14 +272,15 @@ public class MergeTest extends ConflictDetectionTest {
 		}
 
 		public MergeTestQuery andNoOtherMyOps() {
-			HashSet<AbstractOperation> my = new LinkedHashSet<AbstractOperation>(currentConflict().getMyOperations());
+			final HashSet<AbstractOperation> my = new LinkedHashSet<AbstractOperation>(currentConflict()
+				.getMyOperations());
 			my.removeAll(mySeen);
 			assertEquals(0, my.size());
 			return this;
 		}
 
 		public MergeTestQuery andNoOtherTheirOps() {
-			HashSet<AbstractOperation> theirs = new LinkedHashSet<AbstractOperation>(currentConflict()
+			final HashSet<AbstractOperation> theirs = new LinkedHashSet<AbstractOperation>(currentConflict()
 				.getTheirOperations());
 			theirs.removeAll(theirSeen);
 			assertEquals(0, theirs.size());
@@ -288,16 +290,16 @@ public class MergeTest extends ConflictDetectionTest {
 		public MergeTestQuery andReturns(String methodName, Object b) {
 			assertTrue(lastObject != null);
 			try {
-				for (Method method : lastObject.getClass().getMethods()) {
+				for (final Method method : lastObject.getClass().getMethods()) {
 					if (method.getName().equals(methodName)) {
-						Object invoke = method.invoke(lastObject, (Object[]) null);
+						final Object invoke = method.invoke(lastObject, (Object[]) null);
 						assertEquals(b, invoke);
 						return this;
 					}
 				}
-			} catch (IllegalArgumentException e) {
-			} catch (IllegalAccessException e) {
-			} catch (InvocationTargetException e) {
+			} catch (final IllegalArgumentException e) {
+			} catch (final IllegalAccessException e) {
+			} catch (final InvocationTargetException e) {
 			}
 			throw new AssertionError("No such method");
 		}

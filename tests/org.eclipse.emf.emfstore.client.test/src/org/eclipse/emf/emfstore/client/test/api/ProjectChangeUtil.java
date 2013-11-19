@@ -36,30 +36,30 @@ public final class ProjectChangeUtil {
 				localProject.getModelElements().add(player);
 				return null;
 			}
-		}, ((ESLocalProjectImpl) localProject).toInternalAPI());
+		}, ((ESLocalProjectImpl) localProject).toInternalAPI().getContentEditingDomain());
 		return player;
 	}
 
 	public static League createLeague(String name) {
-		League league = BowlingFactory.eINSTANCE.createLeague();
+		final League league = BowlingFactory.eINSTANCE.createLeague();
 		league.setName(name);
 		return league;
 	}
 
 	public static Game createGame(Player player) {
-		Game game = BowlingFactory.eINSTANCE.createGame();
+		final Game game = BowlingFactory.eINSTANCE.createGame();
 		game.setPlayer(player);
 		return game;
 	}
 
 	public static Player createPlayer(String name) {
-		Player player = BowlingFactory.eINSTANCE.createPlayer();
+		final Player player = BowlingFactory.eINSTANCE.createPlayer();
 		player.setName(name);
 		return player;
 	}
 
 	public static Tournament createTournament(boolean professional) {
-		Tournament tournament = BowlingFactory.eINSTANCE.createTournament();
+		final Tournament tournament = BowlingFactory.eINSTANCE.createTournament();
 		if (professional) {
 			tournament.setType(TournamentType.PRO);
 		} else {
@@ -69,7 +69,7 @@ public final class ProjectChangeUtil {
 	}
 
 	public static Matchup createMatchup(Game firstGame, Game secondGame) {
-		Matchup matchup = BowlingFactory.eINSTANCE.createMatchup();
+		final Matchup matchup = BowlingFactory.eINSTANCE.createMatchup();
 
 		if (firstGame != null) {
 			matchup.getGames().add(firstGame);
@@ -87,17 +87,17 @@ public final class ProjectChangeUtil {
 
 		final League leagueA = ProjectChangeUtil.createLeague("America");
 		final League leagueB = ProjectChangeUtil.createLeague("Europe");
-		Player playerA = ProjectChangeUtil.createPlayer("Hans");
-		Player playerB = ProjectChangeUtil.createPlayer("Anton");
-		Player playerC = ProjectChangeUtil.createPlayer("Paul");
-		Player playerD = ProjectChangeUtil.createPlayer("Klaus");
+		final Player playerA = ProjectChangeUtil.createPlayer("Hans");
+		final Player playerB = ProjectChangeUtil.createPlayer("Anton");
+		final Player playerC = ProjectChangeUtil.createPlayer("Paul");
+		final Player playerD = ProjectChangeUtil.createPlayer("Klaus");
 		final Tournament tournamentA = ProjectChangeUtil.createTournament(false);
-		Game gameA = ProjectChangeUtil.createGame(playerA);
-		Game gameB = ProjectChangeUtil.createGame(playerB);
-		Game gameC = ProjectChangeUtil.createGame(playerC);
-		Game gameD = ProjectChangeUtil.createGame(playerD);
-		Matchup matchupA = ProjectChangeUtil.createMatchup(gameA, gameB);
-		Matchup matchupB = ProjectChangeUtil.createMatchup(gameC, gameD);
+		final Game gameA = ProjectChangeUtil.createGame(playerA);
+		final Game gameB = ProjectChangeUtil.createGame(playerB);
+		final Game gameC = ProjectChangeUtil.createGame(playerC);
+		final Game gameD = ProjectChangeUtil.createGame(playerD);
+		final Matchup matchupA = ProjectChangeUtil.createMatchup(gameA, gameB);
+		final Matchup matchupB = ProjectChangeUtil.createMatchup(gameC, gameD);
 
 		leagueA.getPlayers().add(playerA);
 		leagueA.getPlayers().add(playerB);
@@ -114,7 +114,7 @@ public final class ProjectChangeUtil {
 				localProject.getModelElements().add(tournamentA);
 				return null;
 			}
-		}, ((ESLocalProjectImpl) localProject).toInternalAPI());
+		}, ((ESLocalProjectImpl) localProject).toInternalAPI().getContentEditingDomain());
 
 		return localProject;
 	}

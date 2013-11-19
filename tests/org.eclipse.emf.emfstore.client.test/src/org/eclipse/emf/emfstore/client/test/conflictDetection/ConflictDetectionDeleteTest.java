@@ -59,12 +59,12 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				clearOperations();
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
-		Project project2 = ps2.getProject();
+		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
+		final Project project2 = ps2.getProject();
 
-		ModelElementId actorId = getProject().getModelElementId(actor);
+		final ModelElementId actorId = getProject().getModelElementId(actor);
 
 		final Actor actor1 = (Actor) getProject().getModelElement(actorId);
 		final Actor actor2 = (Actor) project2.getModelElement(actorId);
@@ -77,12 +77,12 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				actor2.setName("change to the deleted object on another working copy");
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> ops2 = ps2.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> ops2 = ps2.getOperations();
 
-		Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
 		assertEquals(getConflicts(ops1, ops2).size(), getConflicts(ops2, ops1).size());
 
 		assertEquals(conflicts.size(), 1);
@@ -107,13 +107,13 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				clearOperations();
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
-		Project project2 = ps2.getProject();
+		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
+		final Project project2 = ps2.getProject();
 
-		ModelElementId section1Id = getProject().getModelElementId(section);
-		ModelElementId actorId = getProject().getModelElementId(actor);
+		final ModelElementId section1Id = getProject().getModelElementId(section);
+		final ModelElementId actorId = getProject().getModelElementId(actor);
 
 		final LeafSection section1 = (LeafSection) getProject().getModelElement(section1Id);
 		final Actor actor2 = (Actor) project2.getModelElement(actorId);
@@ -125,12 +125,12 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				actor2.setName("change to object inside deltree on another working copy");
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> ops2 = ps2.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> ops2 = ps2.getOperations();
 
-		Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
 		assertEquals(getConflicts(ops1, ops2).size(), getConflicts(ops2, ops1).size());
 
 		assertEquals(conflicts.size(), 1);
@@ -152,12 +152,12 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				clearOperations();
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
-		Project project2 = ps2.getProject();
+		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
+		final Project project2 = ps2.getProject();
 
-		ModelElementId sectionId = getProject().getModelElementId(section);
+		final ModelElementId sectionId = getProject().getModelElementId(section);
 
 		final LeafSection section1 = (LeafSection) getProject().getModelElement(sectionId);
 		final LeafSection section2 = (LeafSection) project2.getModelElement(sectionId);
@@ -169,12 +169,12 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				section2.setName("change to object inside deltree on another working copy");
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> ops2 = ps2.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> ops2 = ps2.getOperations();
 
-		Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
 		assertEquals(getConflicts(ops1, ops2).size(), getConflicts(ops2, ops1).size());
 
 		assertEquals(conflicts.size(), 1);
@@ -199,13 +199,13 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				clearOperations();
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
+		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		final Project project2 = ps2.getProject();
 
-		ModelElementId actorId = getProject().getModelElementId(actor);
-		ModelElementId sectionId = getProject().getModelElementId(section);
+		final ModelElementId actorId = getProject().getModelElementId(actor);
+		final ModelElementId sectionId = getProject().getModelElementId(section);
 
 		final Actor actor1 = (Actor) getProject().getModelElement(actorId);
 		final LeafSection section2 = (LeafSection) project2.getModelElement(sectionId);
@@ -217,12 +217,12 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				project2.deleteModelElement(section2);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> ops2 = ps2.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> ops2 = ps2.getOperations();
 
-		Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
 		assertEquals(getConflicts(ops1, ops2).size(), getConflicts(ops2, ops1).size());
 
 		assertEquals(conflicts.size(), 0);
@@ -248,14 +248,14 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				section.getModelElements().add(pack);
 				clearOperations();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
+		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		final Project project2 = ps2.getProject();
 
-		ModelElementId brId = getProject().getModelElementId(br);
-		ModelElementId packId = getProject().getModelElementId(pack);
-		ModelElementId sectionId = getProject().getModelElementId(section);
+		final ModelElementId brId = getProject().getModelElementId(br);
+		final ModelElementId packId = getProject().getModelElementId(pack);
+		final ModelElementId sectionId = getProject().getModelElementId(section);
 
 		final BugReport br1 = (BugReport) getProject().getModelElement(brId);
 		final WorkPackage pack1 = (WorkPackage) getProject().getModelElement(packId);
@@ -268,12 +268,12 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				project2.deleteModelElement(section2);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> ops2 = ps2.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> ops2 = ps2.getOperations();
 
-		Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
 		assertEquals(getConflicts(ops1, ops2).size(), getConflicts(ops2, ops1).size());
 
 		assertEquals(conflicts.size(), 1);
@@ -299,14 +299,14 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				section.getModelElements().add(useCase);
 				clearOperations();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
+		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		final Project project2 = ps2.getProject();
 
-		ModelElementId mileStoneId = getProject().getModelElementId(mileStone);
-		ModelElementId useCaseId = getProject().getModelElementId(useCase);
-		ModelElementId sectionId = getProject().getModelElementId(section);
+		final ModelElementId mileStoneId = getProject().getModelElementId(mileStone);
+		final ModelElementId useCaseId = getProject().getModelElementId(useCase);
+		final ModelElementId sectionId = getProject().getModelElementId(section);
 
 		final Milestone mileStone1 = (Milestone) getProject().getModelElement(mileStoneId);
 		final UseCase useCase1 = (UseCase) getProject().getModelElement(useCaseId);
@@ -319,12 +319,12 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				project2.deleteModelElement(section2);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> ops2 = ps2.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> ops2 = ps2.getOperations();
 
-		Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
 		assertEquals(getConflicts(ops1, ops2).size(), getConflicts(ops2, ops1).size());
 
 		// technically no conflict, since annotated milestone will not be deleted,
@@ -356,7 +356,7 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				br2.setContainingWorkpackage(pack);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(pack.getContainedWorkItems().get(0), br1);
 		assertEquals(pack.getContainedWorkItems().get(1), br2);
@@ -367,13 +367,13 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				section.getModelElements().add(pack);
 				clearOperations();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
+		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		final Project project2 = ps2.getProject();
 
-		ModelElementId packId = getProject().getModelElementId(pack);
-		ModelElementId sectionId = getProject().getModelElementId(section);
+		final ModelElementId packId = getProject().getModelElementId(pack);
+		final ModelElementId sectionId = getProject().getModelElementId(section);
 
 		final WorkPackage pack1 = (WorkPackage) getProject().getModelElement(packId);
 		final LeafSection section2 = (LeafSection) project2.getModelElement(sectionId);
@@ -386,12 +386,12 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				project2.deleteModelElement(section2);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> ops2 = ps2.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> ops2 = ps2.getOperations();
 
-		Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
 		assertEquals(getConflicts(ops1, ops2).size(), getConflicts(ops2, ops1).size());
 
 		// a move change is a change... from users perspective it should not be lost, probably..

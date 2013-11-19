@@ -56,10 +56,10 @@ public class ReferenceNotificationTest extends NotificationTest {
 				// notifications from this operations are tested
 				useCase.setInitiatingActor(actor);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
-		List<NotificationInfo> rec = recording.asMutableList();
+		final NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
+		final List<NotificationInfo> rec = recording.asMutableList();
 
 		// exactly one SET notification is expected with attribute feature "initiatingActor" on our useCase and
 		// newValue
@@ -68,8 +68,8 @@ public class ReferenceNotificationTest extends NotificationTest {
 		// due to refactoring and removing the bidirectional filter two notifications are expected.
 		assertEquals(2, rec.size());
 
-		NotificationInfo addNotification = rec.get(0);
-		NotificationInfo setNotification = rec.get(1);
+		final NotificationInfo addNotification = rec.get(0);
+		final NotificationInfo setNotification = rec.get(1);
 
 		assertSame(actor, addNotification.getNotifier());
 		assertTrue(addNotification.isReferenceNotification());
@@ -119,17 +119,17 @@ public class ReferenceNotificationTest extends NotificationTest {
 				actor.getInitiatedUseCases().add(useCase);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
-		List<NotificationInfo> rec = recording.asMutableList();
+		final NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
+		final List<NotificationInfo> rec = recording.asMutableList();
 
 		// exactly one ADD notification is expected
 		// after refactoring: additional SET is expected
 		assertEquals(2, rec.size());
 
-		NotificationInfo setNotification = rec.get(0);
-		NotificationInfo addNotification = rec.get(1);
+		final NotificationInfo setNotification = rec.get(0);
+		final NotificationInfo addNotification = rec.get(1);
 
 		assertSame(useCase, setNotification.getNotifier());
 		assertTrue(setNotification.isReferenceNotification());
@@ -169,16 +169,16 @@ public class ReferenceNotificationTest extends NotificationTest {
 				// notifications from this operations are tested
 				useCase.getParticipatingActors().add(actor);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
-		List<NotificationInfo> rec = recording.asMutableList();
+		final NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
+		final List<NotificationInfo> rec = recording.asMutableList();
 
 		// exactly two ADD notification is expected
 		assertEquals(2, rec.size());
 
-		NotificationInfo actorAdd = rec.get(0);
-		NotificationInfo useCaseAdd = rec.get(1);
+		final NotificationInfo actorAdd = rec.get(0);
+		final NotificationInfo useCaseAdd = rec.get(1);
 
 		assertSame(actor, actorAdd.getNotifier());
 		assertTrue(actorAdd.isReferenceNotification());
@@ -218,10 +218,10 @@ public class ReferenceNotificationTest extends NotificationTest {
 				actor.getInitiatedUseCases().add(useCase);
 				actor.getInitiatedUseCases().remove(useCase);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
-		List<NotificationInfo> rec = recording.asMutableList();
+		final NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
+		final List<NotificationInfo> rec = recording.asMutableList();
 
 		// exactly one REMOVE notification is expected from the actor
 
@@ -268,10 +268,10 @@ public class ReferenceNotificationTest extends NotificationTest {
 				useCase.getParticipatingActors().add(actor);
 				useCase.getParticipatingActors().remove(actor);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
-		List<NotificationInfo> rec = recording.asMutableList();
+		final NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
+		final List<NotificationInfo> rec = recording.asMutableList();
 
 		// exactly two REMOVE notifications are expected
 		// actor loses its useCase (message needed to retain index of useCase)

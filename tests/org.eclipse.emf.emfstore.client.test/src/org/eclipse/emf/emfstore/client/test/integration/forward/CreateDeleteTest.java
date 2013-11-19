@@ -13,6 +13,7 @@ package org.eclipse.emf.emfstore.client.test.integration.forward;
 
 import static org.junit.Assert.assertTrue;
 
+import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommand;
 import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
 import org.eclipse.emf.emfstore.internal.server.exceptions.SerializationException;
@@ -25,7 +26,7 @@ import org.junit.Test;
 
 public class CreateDeleteTest extends IntegrationTest {
 
-	private long randomSeed = 1;
+	private final long randomSeed = 1;
 
 	/**
 	 * create a random ME and change one of its attributes.
@@ -47,7 +48,7 @@ public class CreateDeleteTest extends IntegrationTest {
 
 			}
 
-		}.run(getTestProject(), false);
+		}.run(((ProjectSpace) getTestProject().eContainer()).getContentEditingDomain(), false);
 
 		commitChanges();
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
@@ -75,7 +76,7 @@ public class CreateDeleteTest extends IntegrationTest {
 
 			}
 
-		}.run(getTestProject(), false);
+		}.run(((ProjectSpace) getTestProject().eContainer()).getContentEditingDomain(), false);
 
 		commitChanges();
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
@@ -102,7 +103,7 @@ public class CreateDeleteTest extends IntegrationTest {
 
 			}
 
-		}.run(getTestProject(), false);
+		}.run(((ProjectSpace) getTestProject().eContainer()).getContentEditingDomain(), false);
 
 		commitChanges();
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
@@ -126,7 +127,7 @@ public class CreateDeleteTest extends IntegrationTest {
 				testHelper.doCreateChangeRefDelete();
 			}
 
-		}.run(getTestProject(), false);
+		}.run(((ProjectSpace) getTestProject().eContainer()).getContentEditingDomain(), false);
 
 		commitChanges();
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
@@ -150,7 +151,7 @@ public class CreateDeleteTest extends IntegrationTest {
 				testHelper.doCreateDelete();
 			}
 
-		}.run(getTestProject(), false);
+		}.run(((ProjectSpace) getTestProject().eContainer()).getContentEditingDomain(), false);
 
 		commitChanges();
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
@@ -193,7 +194,7 @@ public class CreateDeleteTest extends IntegrationTest {
 
 			}
 
-		}.run(getTestProject(), false);
+		}.run(((ProjectSpace) getTestProject().eContainer()).getContentEditingDomain(), false);
 
 		commitChanges();
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));

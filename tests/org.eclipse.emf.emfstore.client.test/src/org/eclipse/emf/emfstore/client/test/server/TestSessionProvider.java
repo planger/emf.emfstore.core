@@ -56,24 +56,24 @@ public final class TestSessionProvider extends ESAbstractSessionProvider {
 			protected void doRun() {
 				try {
 					usersession.logIn();
-				} catch (AccessControlException e) {
+				} catch (final AccessControlException e) {
 					Assert.fail();
-				} catch (ESException e) {
+				} catch (final ESException e) {
 					Assert.fail();
 				}
 			}
-		}.run(usersession, false);
+		}.run(false);
 
 		return usersession;
 	}
 
 	public TestSessionProvider() {
-		ESServer server = SetupHelper.createServer();
+		final ESServer server = SetupHelper.createServer();
 		ESUsersessionImpl login;
 		try {
 			login = (ESUsersessionImpl) server.login("super", "super");
 			usersession = login.toInternalAPI();
-		} catch (ESException e) {
+		} catch (final ESException e) {
 			throw new RuntimeException(e);
 		}
 	}

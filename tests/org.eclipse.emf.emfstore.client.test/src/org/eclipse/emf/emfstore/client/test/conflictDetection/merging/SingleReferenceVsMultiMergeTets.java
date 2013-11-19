@@ -42,14 +42,14 @@ public class SingleReferenceVsMultiMergeTets extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent).setContainedElement(child);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mc.getTheirItem(secondparent).getContainedElements().add(mc.getTheirItem(child));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		mc.hasConflict(MultiReferenceSingleConflict.class)
 			// My
@@ -72,14 +72,14 @@ public class SingleReferenceVsMultiMergeTets extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent).setContainedElement(child);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mc.getTheirItem(secondparent).getContainedElements().add(mc.getTheirItem(secondChild));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		mc.hasConflict(null);
 	}
@@ -98,7 +98,7 @@ public class SingleReferenceVsMultiMergeTets extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent).setContainedElement(child);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -106,7 +106,7 @@ public class SingleReferenceVsMultiMergeTets extends MergeTest {
 				mc.getTheirItem(secondparent).getContainedElements()
 					.addAll(asList(mc.getTheirItem(child), mc.getTheirItem(secondChild)));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		mc.hasConflict(MultiReferenceSingleConflict.class)
 			// My
@@ -129,14 +129,14 @@ public class SingleReferenceVsMultiMergeTets extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent).setContainedElement(child);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mc.getTheirItem(secondparent).getContainedElements().set(0, mc.getTheirItem(child));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		mc.hasConflict(DeletionConflict.class)
 			// My

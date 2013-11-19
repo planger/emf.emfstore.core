@@ -44,20 +44,20 @@ public class AttributeNotificationTest extends NotificationTest {
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
+				final UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
 				getProject().addModelElement(useCase);
 
 				useCase.setName("newName");
 				assertEquals("newName", useCase.getName());
 
-				NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
-				List<NotificationInfo> rec = recording.asMutableList();
+				final NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
+				final List<NotificationInfo> rec = recording.asMutableList();
 
 				// exactly one SET notification is expected with attribute feature "name" on our useCase and newValue
 				// newName
 				assertEquals(1, rec.size());
 
-				NotificationInfo n = rec.get(0);
+				final NotificationInfo n = rec.get(0);
 				assertSame(useCase, n.getNotifier());
 				assertTrue(n.isAttributeNotification());
 				assertTrue(n.isSetEvent());
@@ -65,7 +65,7 @@ public class AttributeNotificationTest extends NotificationTest {
 				assertEquals(n.getAttribute().getName(), "name");
 				assertEquals(n.getOldValue(), "new UseCase");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 	}
 }

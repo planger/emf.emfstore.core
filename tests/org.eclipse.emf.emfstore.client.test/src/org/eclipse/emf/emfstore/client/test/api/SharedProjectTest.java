@@ -37,6 +37,7 @@ import org.eclipse.emf.emfstore.client.callbacks.ESCommitCallback;
 import org.eclipse.emf.emfstore.client.callbacks.ESUpdateCallback;
 import org.eclipse.emf.emfstore.client.test.CommitCallbackAdapter;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
+import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESLocalProjectImpl;
 import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.eclipse.emf.emfstore.server.exceptions.ESUpdateRequiredException;
@@ -252,7 +253,7 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 				player.setName("A");
 				return null;
 			}
-		}, player);
+		}, ((ESLocalProjectImpl) localProject).toInternalAPI().getContentEditingDomain());
 
 		localProject.commit(monitor);
 
@@ -261,7 +262,7 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 				checkedoutPlayer.setName("B");
 				return null;
 			}
-		}, checkedoutPlayer);
+		}, ((ESLocalProjectImpl) localProject).toInternalAPI().getContentEditingDomain());
 		checkedoutCopy.commit(monitor);
 	}
 
@@ -276,7 +277,7 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 				localProject.getModelElements().add(league);
 				return null;
 			}
-		}, league);
+		}, ((ESLocalProjectImpl) localProject).toInternalAPI().getContentEditingDomain());
 		assertTrue(localProject.contains(league));
 
 		final ESLocalProject secondProject = workspace.createLocalProject("SecondTestProject");
@@ -290,7 +291,7 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 				tournament.getPlayers().add(player);
 				return null;
 			}
-		}, tournament);
+		}, ((ESLocalProjectImpl) localProject).toInternalAPI().getContentEditingDomain());
 
 		localProject.save();
 		secondProject.save();
@@ -320,7 +321,7 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 				localProject.getModelElements().add(league);
 				return null;
 			}
-		}, league);
+		}, ((ESLocalProjectImpl) localProject).toInternalAPI().getContentEditingDomain());
 		localProject.shareProject(usersession, new NullProgressMonitor());
 
 		assertTrue(localProject.isShared());

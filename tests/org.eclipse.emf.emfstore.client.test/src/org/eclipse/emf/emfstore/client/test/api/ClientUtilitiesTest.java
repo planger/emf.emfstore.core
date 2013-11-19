@@ -34,12 +34,12 @@ public class ClientUtilitiesTest extends BaseSharedProjectTest {
 			player = RunESCommand.WithException.runWithResult(ESCertificateException.class, new Callable<Player>() {
 				@SuppressWarnings("null")
 				public Player call() throws Exception {
-					Player player = null;
+					final Player player = null;
 					player.getName();
 					return player;
 				}
-			}, ((ESLocalProjectImpl) localProject).toInternalAPI());
-		} catch (Exception e) {
+			}, ((ESLocalProjectImpl) localProject).toInternalAPI().getContentEditingDomain());
+		} catch (final Exception e) {
 			exception = e;
 		}
 		assertTrue(exception != null);
@@ -52,8 +52,8 @@ public class ClientUtilitiesTest extends BaseSharedProjectTest {
 				public Player call() throws Exception {
 					throw new ESException("test");
 				}
-			}, ((ESLocalProjectImpl) localProject).toInternalAPI());
-		} catch (Exception e) {
+			}, ((ESLocalProjectImpl) localProject).toInternalAPI().getContentEditingDomain());
+		} catch (final Exception e) {
 			exception = e;
 		}
 		assertTrue(exception != null);
@@ -66,8 +66,8 @@ public class ClientUtilitiesTest extends BaseSharedProjectTest {
 				public Player call() throws Exception {
 					throw new ESException("test");
 				}
-			}, ((ESLocalProjectImpl) localProject).toInternalAPI());
-		} catch (Exception e) {
+			}, ((ESLocalProjectImpl) localProject).toInternalAPI().getContentEditingDomain());
+		} catch (final Exception e) {
 			exception = e;
 		}
 		assertTrue(exception != null);
@@ -78,18 +78,18 @@ public class ClientUtilitiesTest extends BaseSharedProjectTest {
 	@Test
 	public void testRunESCommandWithException() {
 		Exception exception = null;
-		Player player = null;
+		final Player player = null;
 
 		try {
 			RunESCommand.WithException.run(ESCertificateException.class, new Callable<Void>() {
 				@SuppressWarnings("null")
 				public Void call() throws Exception {
-					Player player = null;
+					final Player player = null;
 					player.getName();
 					return null;
 				}
-			}, ((ESLocalProjectImpl) localProject).toInternalAPI());
-		} catch (Exception e) {
+			}, ((ESLocalProjectImpl) localProject).toInternalAPI().getContentEditingDomain());
+		} catch (final Exception e) {
 			exception = e;
 		}
 		assertTrue(exception != null);
@@ -102,8 +102,8 @@ public class ClientUtilitiesTest extends BaseSharedProjectTest {
 				public Void call() throws Exception {
 					throw new ESException("");
 				}
-			}, ((ESLocalProjectImpl) localProject).toInternalAPI());
-		} catch (Exception e) {
+			}, ((ESLocalProjectImpl) localProject).toInternalAPI().getContentEditingDomain());
+		} catch (final Exception e) {
 			exception = e;
 		}
 		assertTrue(exception != null);
@@ -116,8 +116,8 @@ public class ClientUtilitiesTest extends BaseSharedProjectTest {
 				public Void call() throws Exception {
 					throw new ESException("");
 				}
-			}, ((ESLocalProjectImpl) localProject).toInternalAPI());
-		} catch (Exception e) {
+			}, ((ESLocalProjectImpl) localProject).toInternalAPI().getContentEditingDomain());
+		} catch (final Exception e) {
 			exception = e;
 		}
 		assertTrue(exception != null);
@@ -133,12 +133,12 @@ public class ClientUtilitiesTest extends BaseSharedProjectTest {
 		try {
 			RunESCommand.runWithResult(new Callable<Player>() {
 				public Player call() throws Exception {
-					Player player = BowlingFactory.eINSTANCE.createPlayer();
+					final Player player = BowlingFactory.eINSTANCE.createPlayer();
 					player.getName().length();
 					return player;
 				}
-			}, ((ESLocalProjectImpl) localProject).toInternalAPI());
-		} catch (Exception e) {
+			}, ((ESLocalProjectImpl) localProject).toInternalAPI().getContentEditingDomain());
+		} catch (final Exception e) {
 			exception = e;
 		}
 		assertTrue(exception == null);
@@ -149,8 +149,8 @@ public class ClientUtilitiesTest extends BaseSharedProjectTest {
 				public Player call() throws Exception {
 					throw new ESException("");
 				}
-			}, ((ESLocalProjectImpl) localProject).toInternalAPI());
-		} catch (Exception e) {
+			}, ((ESLocalProjectImpl) localProject).toInternalAPI().getContentEditingDomain());
+		} catch (final Exception e) {
 			exception = e;
 		}
 		assertTrue(exception == null);
@@ -164,12 +164,12 @@ public class ClientUtilitiesTest extends BaseSharedProjectTest {
 		try {
 			RunESCommand.run(new Callable<Void>() {
 				public Void call() throws Exception {
-					Player player = BowlingFactory.eINSTANCE.createPlayer();
+					final Player player = BowlingFactory.eINSTANCE.createPlayer();
 					player.getName().length();
 					return null;
 				}
-			}, ((ESLocalProjectImpl) localProject).toInternalAPI());
-		} catch (Exception e) {
+			}, ((ESLocalProjectImpl) localProject).toInternalAPI().getContentEditingDomain());
+		} catch (final Exception e) {
 			exception = e;
 		}
 		assertTrue(exception == null);
@@ -180,8 +180,8 @@ public class ClientUtilitiesTest extends BaseSharedProjectTest {
 				public Void call() throws Exception {
 					throw new ESException("");
 				}
-			}, ((ESLocalProjectImpl) localProject).toInternalAPI());
-		} catch (Exception e) {
+			}, ((ESLocalProjectImpl) localProject).toInternalAPI().getContentEditingDomain());
+		} catch (final Exception e) {
 			exception = e;
 		}
 		assertTrue(exception == null);

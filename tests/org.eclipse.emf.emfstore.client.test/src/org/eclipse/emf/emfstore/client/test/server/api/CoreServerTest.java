@@ -125,7 +125,7 @@ public abstract class CoreServerTest extends WorkspaceTest {
 					throw new RuntimeException(e);
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	protected PrimaryVersionSpec share(final ProjectSpace ps) {
@@ -139,7 +139,7 @@ public abstract class CoreServerTest extends WorkspaceTest {
 					throw new RuntimeException(e);
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	protected PrimaryVersionSpec commit(final ProjectSpace ps) {
@@ -152,7 +152,7 @@ public abstract class CoreServerTest extends WorkspaceTest {
 					throw new RuntimeException(e);
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	protected ProjectSpace reCheckout(final ProjectSpace projectSpace) {
@@ -173,7 +173,7 @@ public abstract class CoreServerTest extends WorkspaceTest {
 					throw new RuntimeException(e);
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	protected ProjectSpace checkout(final ESRemoteProjectImpl remoteProject, final PrimaryVersionSpec baseVersion) {
@@ -194,7 +194,7 @@ public abstract class CoreServerTest extends WorkspaceTest {
 					throw new RuntimeException(e);
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	protected void mergeWithBranch(final ProjectSpace trunk, final PrimaryVersionSpec latestOnBranch,
@@ -210,6 +210,6 @@ public abstract class CoreServerTest extends WorkspaceTest {
 					throw new RuntimeException(e);
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 }

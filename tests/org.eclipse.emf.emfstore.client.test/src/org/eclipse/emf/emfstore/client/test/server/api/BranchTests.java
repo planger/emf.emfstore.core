@@ -37,11 +37,11 @@ public class BranchTests extends CoreServerTest {
 
 		branch(ps, "b1");
 
-		ProjectHistory history = getProjectHistory(ps);
+		final ProjectHistory history = getProjectHistory(ps);
 		assertEquals(2, history.getVersions().size());
 
-		Version initialVersion = history.getVersions().get(0);
-		Version branchedVersion = history.getVersions().get(1);
+		final Version initialVersion = history.getVersions().get(0);
+		final Version branchedVersion = history.getVersions().get(1);
 
 		assertEquals("trunk", initialVersion.getPrimarySpec().getBranch());
 		assertEquals("b1", branchedVersion.getPrimarySpec().getBranch());
@@ -64,15 +64,15 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				testElement.setName("J?rgen");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		branch(ps, "b1");
 
-		ProjectHistory history = getProjectHistory(ps);
+		final ProjectHistory history = getProjectHistory(ps);
 		assertEquals(2, history.getVersions().size());
 
-		Version initialVersion = history.getVersions().get(0);
-		Version branchedVersion = history.getVersions().get(1);
+		final Version initialVersion = history.getVersions().get(0);
+		final Version branchedVersion = history.getVersions().get(1);
 
 		assertEquals("trunk", initialVersion.getPrimarySpec().getBranch());
 		assertEquals("b1", branchedVersion.getPrimarySpec().getBranch());
@@ -90,12 +90,12 @@ public class BranchTests extends CoreServerTest {
 		branch(ps, "b1");
 		branch(ps, "b2");
 
-		ProjectHistory history = getProjectHistory(ps);
+		final ProjectHistory history = getProjectHistory(ps);
 		assertEquals(3, history.getVersions().size());
 
-		Version initialVersion = history.getVersions().get(0);
-		Version branchedVersion = history.getVersions().get(1);
-		Version branchOfBranch = history.getVersions().get(2);
+		final Version initialVersion = history.getVersions().get(0);
+		final Version branchedVersion = history.getVersions().get(1);
+		final Version branchOfBranch = history.getVersions().get(2);
 
 		assertEquals("trunk", initialVersion.getPrimarySpec().getBranch());
 		assertEquals("b1", branchedVersion.getPrimarySpec().getBranch());
@@ -119,16 +119,16 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				testElement.setName("J?rgen");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		commit(ps);
 
-		ProjectHistory history = getProjectHistory(ps);
+		final ProjectHistory history = getProjectHistory(ps);
 		assertEquals(3, history.getVersions().size());
 
-		Version initialVersion = history.getVersions().get(0);
-		Version branchedVersion = history.getVersions().get(1);
-		Version commit = history.getVersions().get(2);
+		final Version initialVersion = history.getVersions().get(0);
+		final Version branchedVersion = history.getVersions().get(1);
+		final Version commit = history.getVersions().get(2);
 
 		assertEquals("trunk", initialVersion.getPrimarySpec().getBranch());
 		assertEquals("b1", branchedVersion.getPrimarySpec().getBranch());
@@ -152,16 +152,16 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				testElement.setName("J?rgen");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		commit(ps);
 
-		ProjectHistory history = getProjectHistory(ps);
+		final ProjectHistory history = getProjectHistory(ps);
 		assertEquals(3, history.getVersions().size());
-		Version commit = history.getVersions().get(2);
+		final Version commit = history.getVersions().get(2);
 
 		// create version
-		PrimaryVersionSpec newVersion = ModelUtil.clone(getEmfStore().createVersion(
+		final PrimaryVersionSpec newVersion = ModelUtil.clone(getEmfStore().createVersion(
 			ModelUtil.clone(ps.getUsersession().getSessionId()), ModelUtil.clone(ps.getProjectId()),
 			ModelUtil.clone(commit.getPrimarySpec()), ModelUtil.clone(commit.getChanges()), null, null,
 			ModelUtil.clone(commit.getLogMessage())));
@@ -175,11 +175,11 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				try {
 					ps.update(new NullProgressMonitor());
-				} catch (ESException e) {
+				} catch (final ESException e) {
 					throw new RuntimeException(e);
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(newVersion, ps.getBaseVersion());
 	}
@@ -195,17 +195,17 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				testElement.setName("J?rgen");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		PrimaryVersionSpec branch = branch(ps, "b1");
+		final PrimaryVersionSpec branch = branch(ps, "b1");
 
 		ps.addTag(branch, Versions.createTAG("mytag", branch.getBranch()));
 
-		ProjectHistory history = getProjectHistory(ps);
+		final ProjectHistory history = getProjectHistory(ps);
 		assertEquals(2, history.getVersions().size());
 
-		Version initialVersion = history.getVersions().get(0);
-		Version branchedVersion = history.getVersions().get(1);
+		final Version initialVersion = history.getVersions().get(0);
+		final Version branchedVersion = history.getVersions().get(1);
 
 		assertEquals("trunk", initialVersion.getPrimarySpec().getBranch());
 		assertEquals("b1", branchedVersion.getPrimarySpec().getBranch());
@@ -224,14 +224,14 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				testElement.setName("J?rgen");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		PrimaryVersionSpec branch = branch(ps, "b1");
+		final PrimaryVersionSpec branch = branch(ps, "b1");
 
-		ProjectHistory history = getProjectHistory(ps);
+		final ProjectHistory history = getProjectHistory(ps);
 		assertEquals(2, history.getVersions().size());
 
-		Version branchedVersion = history.getVersions().get(1);
+		final Version branchedVersion = history.getVersions().get(1);
 
 		branchedVersion.getTagSpecs().add(Versions.createTAG("mytag", "b1"));
 
@@ -260,11 +260,11 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				testElement.setName("J?rgen");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final PrimaryVersionSpec latestOnBranch = commit(ps);
 
-		TestElement test1 = (TestElement) trunk.getProject().getModelElement(
+		final TestElement test1 = (TestElement) trunk.getProject().getModelElement(
 			ps.getProject().getModelElementId(testElement));
 
 		assertTrue(test1 != null);
@@ -273,7 +273,7 @@ public class BranchTests extends CoreServerTest {
 		// merge
 		mergeWithBranch(trunk, latestOnBranch, 1);
 
-		TestElement test2 = (TestElement) trunk.getProject().getModelElement(
+		final TestElement test2 = (TestElement) trunk.getProject().getModelElement(
 			ps.getProject().getModelElementId(testElement));
 
 		assertTrue(test2 != null);
@@ -297,7 +297,7 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				testElement.setName("J?rgen");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		commit(ps);
 
@@ -306,11 +306,11 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				testElement.setName("Tom");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final PrimaryVersionSpec latestOnBranch = commit(ps);
 
-		TestElement test1 = (TestElement) trunk.getProject().getModelElement(
+		final TestElement test1 = (TestElement) trunk.getProject().getModelElement(
 			ps.getProject().getModelElementId(testElement));
 
 		assertTrue(test1 != null);
@@ -319,7 +319,7 @@ public class BranchTests extends CoreServerTest {
 		// merge
 		mergeWithBranch(trunk, latestOnBranch, 1);
 
-		TestElement test2 = (TestElement) trunk.getProject().getModelElement(
+		final TestElement test2 = (TestElement) trunk.getProject().getModelElement(
 			ps.getProject().getModelElementId(testElement));
 
 		assertTrue(test2 != null);
@@ -344,7 +344,7 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				branchElement.setName("J?rgen");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		PrimaryVersionSpec latestOnBranch = branch(branch, "b1");
 
@@ -353,7 +353,7 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				trunkElement.setName("G?nter");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		commit(trunk);
 
@@ -363,10 +363,10 @@ public class BranchTests extends CoreServerTest {
 		assertEquals("J?rgen", trunkElement.getName());
 
 		// commit merged changes
-		PrimaryVersionSpec mergedToVersion = commit(trunk);
+		final PrimaryVersionSpec mergedToVersion = commit(trunk);
 
-		ProjectHistory projectHistory = getProjectHistory(trunk);
-		Version version = projectHistory.getVersions().get(mergedToVersion.getIdentifier());
+		final ProjectHistory projectHistory = getProjectHistory(trunk);
+		final Version version = projectHistory.getVersions().get(mergedToVersion.getIdentifier());
 		assertEquals(1, version.getMergedFromVersion().size());
 
 		assertTrue(trunk.getMergedVersion() == null);
@@ -376,7 +376,7 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				branchElement.setName("Tom");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		latestOnBranch = commit(branch);
 
@@ -405,7 +405,7 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				branchElement.setName("J?rgen");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		PrimaryVersionSpec latestOnBranch = branch(branch, "b1");
 
@@ -414,7 +414,7 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				trunkElement.setName("G?nter");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		commit(trunk);
 
@@ -428,7 +428,7 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				branchElement.setName("Jerry");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		latestOnBranch = commit(branch);
 
@@ -437,7 +437,7 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				branchElement.setName("Tom");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		latestOnBranch = commit(branch);
 
@@ -468,16 +468,16 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				outterBranchElement.setName("J?rgen");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		PrimaryVersionSpec latestOnBranch = branch(outterBranch, "b2");
+		final PrimaryVersionSpec latestOnBranch = branch(outterBranch, "b2");
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				innerBranchElement.setName("Jerry");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		commit(innerBranch);
 
@@ -500,13 +500,13 @@ public class BranchTests extends CoreServerTest {
 			protected void doRun() {
 				testElement.setName("J?rgen");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		PrimaryVersionSpec lastFromBranch = commit(ps);
+		final PrimaryVersionSpec lastFromBranch = commit(ps);
 
-		ProjectSpace secondProjectSpace = reCheckout(ps);
+		final ProjectSpace secondProjectSpace = reCheckout(ps);
 
-		TestElement test = (TestElement) secondProjectSpace.getProject().getModelElement(
+		final TestElement test = (TestElement) secondProjectSpace.getProject().getModelElement(
 			ps.getProject().getModelElementId(testElement));
 
 		assertTrue(test != null);

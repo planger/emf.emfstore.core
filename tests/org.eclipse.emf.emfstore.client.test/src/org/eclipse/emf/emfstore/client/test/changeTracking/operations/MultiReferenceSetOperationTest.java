@@ -50,7 +50,7 @@ public class MultiReferenceSetOperationTest extends WorkspaceTest {
 				element.getReferences().add(oldValue);
 				clearOperations();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(element.getReferences().size() == 1);
 		assertTrue(element.getReferences().get(0).equals(oldValue));
@@ -60,7 +60,7 @@ public class MultiReferenceSetOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				element.getReferences().set(0, newValue);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(element.getReferences().size() == 1);
 		assertTrue(element.getReferences().get(0).equals(newValue));
@@ -77,14 +77,15 @@ public class MultiReferenceSetOperationTest extends WorkspaceTest {
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				TestElement testElement = createTestElementWithoutTransaction();
-				TestElement oldValue = createTestElementWithoutTransaction();
+				final TestElement testElement = createTestElementWithoutTransaction();
+				final TestElement oldValue = createTestElementWithoutTransaction();
 				testElement.getReferences().add(oldValue);
-				TestElement newValue = createTestElementWithoutTransaction();
+				final TestElement newValue = createTestElementWithoutTransaction();
 				assertTrue(testElement.getReferences().size() == 1);
 				assertTrue(testElement.getReferences().get(0).equals(oldValue));
 
-				MultiReferenceSetOperation operation = OperationsFactory.eINSTANCE.createMultiReferenceSetOperation();
+				final MultiReferenceSetOperation operation = OperationsFactory.eINSTANCE
+					.createMultiReferenceSetOperation();
 				operation.setFeatureName("references");
 				operation.setIndex(0);
 				operation.setNewValue(ModelUtil.getProject(newValue).getModelElementId(newValue));
@@ -96,7 +97,7 @@ public class MultiReferenceSetOperationTest extends WorkspaceTest {
 				assertTrue(testElement.getReferences().size() == 1);
 				assertTrue(testElement.getReferences().get(0).equals(newValue));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	/**
@@ -108,15 +109,16 @@ public class MultiReferenceSetOperationTest extends WorkspaceTest {
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				TestElement testElement = createTestElementWithoutTransaction();
-				TestElement oldValue = createTestElementWithoutTransaction();
+				final TestElement testElement = createTestElementWithoutTransaction();
+				final TestElement oldValue = createTestElementWithoutTransaction();
 				testElement.getReferences().add(oldValue);
-				TestElement newValue = createTestElementWithoutTransaction();
+				final TestElement newValue = createTestElementWithoutTransaction();
 
 				assertTrue(testElement.getReferences().size() == 1);
 				assertTrue(testElement.getReferences().get(0).equals(oldValue));
 
-				MultiReferenceSetOperation operation = OperationsFactory.eINSTANCE.createMultiReferenceSetOperation();
+				final MultiReferenceSetOperation operation = OperationsFactory.eINSTANCE
+					.createMultiReferenceSetOperation();
 				operation.setFeatureName("references");
 				operation.setIndex(42);
 				operation.setNewValue(ModelUtil.getProject(newValue).getModelElementId(newValue));
@@ -128,7 +130,7 @@ public class MultiReferenceSetOperationTest extends WorkspaceTest {
 				assertTrue(testElement.getReferences().size() == 1);
 				assertTrue(testElement.getReferences().get(0).equals(newValue));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	/**
@@ -139,16 +141,17 @@ public class MultiReferenceSetOperationTest extends WorkspaceTest {
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				TestElement testElement = createTestElementWithoutTransaction();
-				TestElement first = createTestElementWithoutTransaction();
-				TestElement second = createTestElementWithoutTransaction();
-				TestElement third = createTestElementWithoutTransaction();
-				TestElement newValue = createTestElementWithoutTransaction();
+				final TestElement testElement = createTestElementWithoutTransaction();
+				final TestElement first = createTestElementWithoutTransaction();
+				final TestElement second = createTestElementWithoutTransaction();
+				final TestElement third = createTestElementWithoutTransaction();
+				final TestElement newValue = createTestElementWithoutTransaction();
 
 				testElement.getReferences().addAll(Arrays.asList(first, second, third));
 				assertTrue(testElement.getReferences().size() == 3);
 
-				MultiReferenceSetOperation operation = OperationsFactory.eINSTANCE.createMultiReferenceSetOperation();
+				final MultiReferenceSetOperation operation = OperationsFactory.eINSTANCE
+					.createMultiReferenceSetOperation();
 				operation.setFeatureName("references");
 				operation.setIndex(1);
 				operation.setNewValue(ModelUtil.getProject(newValue).getModelElementId(newValue));
@@ -160,7 +163,7 @@ public class MultiReferenceSetOperationTest extends WorkspaceTest {
 				assertTrue(testElement.getReferences().get(1).equals(newValue));
 				assertTrue(testElement.getReferences().get(2).equals(third));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	/**
@@ -180,14 +183,14 @@ public class MultiReferenceSetOperationTest extends WorkspaceTest {
 				assertTrue(element.getReferences().size() == 1);
 				assertTrue(element.getReferences().get(0).equals(oldValue));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				element.getReferences().set(0, newValue);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(element.getReferences().size() == 1);
 		assertTrue(element.getReferences().get(0).equals(newValue));
@@ -195,10 +198,10 @@ public class MultiReferenceSetOperationTest extends WorkspaceTest {
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				AbstractOperation operation = getProjectSpace().getOperations().get(0).reverse();
+				final AbstractOperation operation = getProjectSpace().getOperations().get(0).reverse();
 				operation.apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(element.getReferences().size() == 1);
 		assertTrue(element.getReferences().get(0).equals(oldValue));

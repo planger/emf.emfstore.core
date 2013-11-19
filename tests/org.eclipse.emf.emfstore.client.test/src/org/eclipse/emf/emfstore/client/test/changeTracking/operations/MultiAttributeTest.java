@@ -41,11 +41,11 @@ public class MultiAttributeTest extends WorkspaceTest {
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				TestElement testElement = createTestElementWithoutTransaction();
+				final TestElement testElement = createTestElementWithoutTransaction();
 
 				assertTrue(testElement.getStrings().size() == 0);
 
-				MultiAttributeOperation operation = OperationsFactory.eINSTANCE.createMultiAttributeOperation();
+				final MultiAttributeOperation operation = OperationsFactory.eINSTANCE.createMultiAttributeOperation();
 				operation.setAdd(true);
 				operation.setFeatureName("strings");
 				operation.getIndexes().add(0);
@@ -57,7 +57,7 @@ public class MultiAttributeTest extends WorkspaceTest {
 				assertTrue(testElement.getStrings().size() == 1);
 				assertTrue(testElement.getStrings().get(0).equals("inserted"));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	/**
@@ -68,12 +68,12 @@ public class MultiAttributeTest extends WorkspaceTest {
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				TestElement testElement = createTestElementWithoutTransaction();
+				final TestElement testElement = createTestElementWithoutTransaction();
 				testElement.getStrings().add("first");
 
 				assertTrue(testElement.getStrings().size() == 1);
 
-				MultiAttributeOperation operation = OperationsFactory.eINSTANCE.createMultiAttributeOperation();
+				final MultiAttributeOperation operation = OperationsFactory.eINSTANCE.createMultiAttributeOperation();
 				operation.setAdd(true);
 				operation.setFeatureName("strings");
 				operation.getIndexes().add(0);
@@ -86,7 +86,7 @@ public class MultiAttributeTest extends WorkspaceTest {
 				assertTrue(testElement.getStrings().get(0).equals("inserted"));
 				assertTrue(testElement.getStrings().get(1).equals("first"));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	/**
@@ -97,12 +97,12 @@ public class MultiAttributeTest extends WorkspaceTest {
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				TestElement testElement = createTestElementWithoutTransaction();
+				final TestElement testElement = createTestElementWithoutTransaction();
 				testElement.getStrings().add("first");
 
 				assertTrue(testElement.getStrings().size() == 1);
 
-				MultiAttributeOperation operation = OperationsFactory.eINSTANCE.createMultiAttributeOperation();
+				final MultiAttributeOperation operation = OperationsFactory.eINSTANCE.createMultiAttributeOperation();
 				operation.setAdd(true);
 				operation.setFeatureName("strings");
 				operation.getIndexes().add(0);
@@ -118,7 +118,7 @@ public class MultiAttributeTest extends WorkspaceTest {
 				assertTrue(testElement.getStrings().get(1).equals("first"));
 				assertTrue(testElement.getStrings().get(2).equals("inserted2"));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	/**
@@ -129,12 +129,12 @@ public class MultiAttributeTest extends WorkspaceTest {
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				TestElement testElement = createTestElementWithoutTransaction();
+				final TestElement testElement = createTestElementWithoutTransaction();
 				testElement.getStrings().add("first");
 
 				assertTrue(testElement.getStrings().size() == 1);
 
-				MultiAttributeOperation operation = OperationsFactory.eINSTANCE.createMultiAttributeOperation();
+				final MultiAttributeOperation operation = OperationsFactory.eINSTANCE.createMultiAttributeOperation();
 				operation.setAdd(false);
 				operation.setFeatureName("strings");
 				operation.getIndexes().add(0);
@@ -145,7 +145,7 @@ public class MultiAttributeTest extends WorkspaceTest {
 
 				assertTrue(testElement.getStrings().size() == 0);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	/**
@@ -161,7 +161,7 @@ public class MultiAttributeTest extends WorkspaceTest {
 				testElement.getStrings().add("first");
 				testElement.getStrings().addAll(Arrays.asList("second", "third"));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		AbstractOperation abstractOperation = getProjectSpace().getOperations().get(0);
 		assertTrue(abstractOperation instanceof MultiAttributeOperation);
@@ -199,12 +199,12 @@ public class MultiAttributeTest extends WorkspaceTest {
 				clearOperations();
 				testElement.getStrings().removeAll(Arrays.asList("second", "third"));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(getProjectSpace().getOperations().size() == 1);
-		AbstractOperation abstractOperation = getProjectSpace().getOperations().get(0);
+		final AbstractOperation abstractOperation = getProjectSpace().getOperations().get(0);
 		assertTrue(abstractOperation instanceof MultiAttributeOperation);
-		MultiAttributeOperation ao = (MultiAttributeOperation) abstractOperation;
+		final MultiAttributeOperation ao = (MultiAttributeOperation) abstractOperation;
 		assertTrue(ao.getIndexes().get(0) == 1);
 		assertTrue(ao.getIndexes().get(1) == 2);
 		assertTrue(ao.getReferencedValues().get(0).equals("second"));
@@ -229,7 +229,7 @@ public class MultiAttributeTest extends WorkspaceTest {
 				assertTrue(testElement.getStrings().get(1).equals("second"));
 				clearOperations();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -238,15 +238,15 @@ public class MultiAttributeTest extends WorkspaceTest {
 				assertTrue(testElement.getStrings().size() == 1);
 				assertTrue(testElement.getStrings().get(0).equals("first"));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				AbstractOperation ao = getProjectSpace().getOperations().get(0).reverse();
+				final AbstractOperation ao = getProjectSpace().getOperations().get(0).reverse();
 				ao.apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(testElement.getStrings().size() == 2);
 		assertTrue(testElement.getStrings().get(0).equals("first"));

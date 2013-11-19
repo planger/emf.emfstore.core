@@ -40,7 +40,7 @@ public abstract class BaseLoggedInUserTest extends BaseEmptyEmfstoreTest {
 		server = ESServer.FACTORY.createServer("localhost", port, KeyStoreManager.DEFAULT_CERTIFICATE);
 		try {
 			usersession = server.login("super", "super");
-		} catch (ESException e) {
+		} catch (final ESException e) {
 			log(e);
 			fail(e.getMessage());
 		}
@@ -50,7 +50,7 @@ public abstract class BaseLoggedInUserTest extends BaseEmptyEmfstoreTest {
 	@Override
 	@After
 	public void tearDown() throws Exception {
-		EMFStoreCommandWithException<ESException> cmd = new EMFStoreCommandWithException<ESException>() {
+		final EMFStoreCommandWithException<ESException> cmd = new EMFStoreCommandWithException<ESException>() {
 			@Override
 			protected void doRun() {
 				((ESServerImpl) server).toInternalAPI().setLastUsersession(null);
@@ -59,11 +59,12 @@ public abstract class BaseLoggedInUserTest extends BaseEmptyEmfstoreTest {
 				if (usersession != null && usersession.isLoggedIn()) {
 					try {
 						usersession.logout();
-					} catch (ESException e) {
+					} catch (final ESException e) {
 						setException(e);
 					}
 
-					Iterator<Usersession> iter = ESWorkspaceProviderImpl.getInstance().getWorkspace().toInternalAPI()
+					final Iterator<Usersession> iter = ESWorkspaceProviderImpl.getInstance().getWorkspace()
+						.toInternalAPI()
 						.getUsersessions().iterator();
 					while (iter.hasNext()) {
 						if (iter.next().getServerInfo() == ((ESServerImpl) server).toInternalAPI()) {
@@ -73,13 +74,13 @@ public abstract class BaseLoggedInUserTest extends BaseEmptyEmfstoreTest {
 				}
 				try {
 					ESWorkspaceProvider.INSTANCE.getWorkspace().removeServer(server);
-				} catch (ESServerNotFoundException e) {
+				} catch (final ESServerNotFoundException e) {
 					fail(e.getMessage());
 				}
 			}
 		};
 
-		cmd.run(((ESServerImpl) server).toInternalAPI());
+		cmd.run();
 
 		if (cmd.hasException()) {
 			throw cmd.getException();

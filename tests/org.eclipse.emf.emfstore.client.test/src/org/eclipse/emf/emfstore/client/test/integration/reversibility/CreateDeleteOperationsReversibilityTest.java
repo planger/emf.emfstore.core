@@ -26,7 +26,7 @@ import org.junit.Test;
 
 public class CreateDeleteOperationsReversibilityTest extends OperationsReversibilityTest {
 
-	private long randomSeed = 1;
+	private final long randomSeed = 1;
 
 	/**
 	 * create a random ME and change one of its attributes.
@@ -46,7 +46,7 @@ public class CreateDeleteOperationsReversibilityTest extends OperationsReversibi
 				getTestProjectSpace().revert();
 			}
 
-		}.run(getTestProject(), false);
+		}.run(getTestProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -54,7 +54,7 @@ public class CreateDeleteOperationsReversibilityTest extends OperationsReversibi
 				getTestProjectSpace().revert();
 			}
 
-		}.run(getTestProject(), false);
+		}.run(getTestProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
 	}
@@ -79,7 +79,7 @@ public class CreateDeleteOperationsReversibilityTest extends OperationsReversibi
 				getTestProjectSpace().revert();
 			}
 
-		}.run(getTestProject(), false);
+		}.run(getTestProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 
@@ -88,7 +88,7 @@ public class CreateDeleteOperationsReversibilityTest extends OperationsReversibi
 				getTestProjectSpace().revert();
 			}
 
-		}.run(getTestProject(), false);
+		}.run(getTestProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
 	}
@@ -111,7 +111,7 @@ public class CreateDeleteOperationsReversibilityTest extends OperationsReversibi
 				getTestProjectSpace().revert();
 			}
 
-		}.run(getTestProject(), false);
+		}.run(getTestProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
 	}
@@ -134,7 +134,7 @@ public class CreateDeleteOperationsReversibilityTest extends OperationsReversibi
 				getTestProjectSpace().revert();
 			}
 
-		}.run(getTestProject(), false);
+		}.run(getTestProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
 	}

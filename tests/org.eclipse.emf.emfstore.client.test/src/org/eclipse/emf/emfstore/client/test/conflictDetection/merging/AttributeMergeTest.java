@@ -91,14 +91,14 @@ public class AttributeMergeTest extends MergeTest {
 			protected void doRun() {
 				mergeCase.getMyItem(item).setName("Otto");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mergeCase.getTheirItem(item).setName("Max");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		mergeCase.hasConflict(AttributeConflict.class).myIs(AttributeOperation.class)
 			.theirsIs(AttributeOperation.class);
@@ -120,14 +120,14 @@ public class AttributeMergeTest extends MergeTest {
 				mergeCase.getMyItem(item).setDescription("some random description");
 				mergeCase.getMyItem(item).setName("Otto");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mergeCase.getTheirItem(item).setName("Max");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		mergeCase.execute().getConflicts();
 
@@ -151,14 +151,14 @@ public class AttributeMergeTest extends MergeTest {
 				mergeCase.getMyItem(item).setName("Otto");
 				mergeCase.getMyItem(item).setDescription("some random description");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				mergeCase.getTheirItem(item).setName("Max");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		mergeCase.hasConflict(AttributeConflict.class).myIs(AttributeOperation.class)
 			.theirsIs(AttributeOperation.class);
@@ -178,7 +178,7 @@ public class AttributeMergeTest extends MergeTest {
 			protected void doRun() {
 				mergeCase.getMyItem(item).setName("Otto");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -186,7 +186,7 @@ public class AttributeMergeTest extends MergeTest {
 				mergeCase.getTheirItem(item).setDescription("some random description");
 				mergeCase.getTheirItem(item).setName("Max");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		mergeCase.hasConflict(AttributeConflict.class).myIs(AttributeOperation.class)
 			.theirsIs(AttributeOperation.class);

@@ -59,10 +59,10 @@ public class ContainmentNotificationTest extends NotificationTest {
 				// section2.getModelElements().add(useCase);
 				useCase.setLeafSection(section2);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
-		List<NotificationInfo> rec = recording.asMutableList();
+		final NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
+		final List<NotificationInfo> rec = recording.asMutableList();
 
 		// exactly one SET notification is expected, resetting the leaf section
 		// and one ADD
@@ -114,24 +114,24 @@ public class ContainmentNotificationTest extends NotificationTest {
 				// req.getRefiningRequirements().add(child);
 				child.setRefinedRequirement(req);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
-		List<NotificationInfo> rec = recording.asMutableList();
+		final NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
+		final List<NotificationInfo> rec = recording.asMutableList();
 
 		// one REMOVE and two SET notification are expected, resetting the leaf section to "null" and the refined req to
 		// "req"
 		assertEquals(4, rec.size());
 
 		// check index maintaining remove
-		NotificationInfo n0 = rec.get(0);
+		final NotificationInfo n0 = rec.get(0);
 		assertSame(section, n0.getNotifier());
 		assertTrue(n0.isRemoveEvent());
 		assertEquals(n0.getReference().getName(), "modelElements");
 		assertSame(child, n0.getOldValue());
 		assertEquals(0, n0.getPosition());
 
-		NotificationInfo n1 = rec.get(1);
+		final NotificationInfo n1 = rec.get(1);
 		assertSame(req, n1.getNotifier());
 		assertTrue(n1.isReferenceNotification());
 		assertTrue(n1.isAddEvent());
@@ -139,7 +139,7 @@ public class ContainmentNotificationTest extends NotificationTest {
 		assertEquals(n1.getReference().getName(), "refiningRequirements");
 
 		// check first set
-		NotificationInfo n2 = rec.get(2);
+		final NotificationInfo n2 = rec.get(2);
 		assertSame(child, n2.getNotifier());
 		assertTrue(n2.isSetEvent());
 		assertEquals(n2.getReference().getName(), "leafSection");
@@ -147,7 +147,7 @@ public class ContainmentNotificationTest extends NotificationTest {
 		assertEquals(n2.getNewValue(), null);
 
 		// check second set
-		NotificationInfo n3 = rec.get(3);
+		final NotificationInfo n3 = rec.get(3);
 		assertSame(child, n3.getNotifier());
 		assertTrue(n3.isSetEvent());
 		assertEquals(n3.getReference().getName(), "refinedRequirement");

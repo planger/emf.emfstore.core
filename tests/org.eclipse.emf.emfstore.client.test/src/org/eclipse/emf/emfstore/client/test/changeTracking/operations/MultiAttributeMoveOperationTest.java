@@ -47,7 +47,7 @@ public class MultiAttributeMoveOperationTest extends WorkspaceTest {
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				TestElement testElement = createTestElementWithoutTransaction();
+				final TestElement testElement = createTestElementWithoutTransaction();
 				testElement.getStrings().add("first");
 				testElement.getStrings().add("second");
 				testElement.getStrings().add("third");
@@ -60,7 +60,7 @@ public class MultiAttributeMoveOperationTest extends WorkspaceTest {
 				assertTrue(testElement.getStrings().get(1).equals("first"));
 				assertTrue(testElement.getStrings().get(2).equals("second"));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class MultiAttributeMoveOperationTest extends WorkspaceTest {
 				getProject().addModelElement(testElementc13);
 				clearOperations();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -106,7 +106,7 @@ public class MultiAttributeMoveOperationTest extends WorkspaceTest {
 				testElement13.getReferences().add(testElementc11);
 				testElement1.getContainedElements().addAll(list);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(true, getProject().contains(testElement1));
 		assertEquals(true, getProject().contains(testElement11));
@@ -147,7 +147,7 @@ public class MultiAttributeMoveOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(testElement1);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -188,7 +188,7 @@ public class MultiAttributeMoveOperationTest extends WorkspaceTest {
 					operation.getEObjectToIdMap()
 						.get(operation.getModelElement().eContents().get(1).eContents().get(1)));
 
-				CreateDeleteOperation copy = ModelUtil.clone(operation);
+				final CreateDeleteOperation copy = ModelUtil.clone(operation);
 
 				operation = (CreateDeleteOperation) operation.reverse().reverse();
 
@@ -232,7 +232,7 @@ public class MultiAttributeMoveOperationTest extends WorkspaceTest {
 						.get(operation.getModelElement().eContents().get(1).eContents().get(1)));
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 	}
 
@@ -244,7 +244,7 @@ public class MultiAttributeMoveOperationTest extends WorkspaceTest {
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				TestElement testElement = createTestElementWithoutTransaction();
+				final TestElement testElement = createTestElementWithoutTransaction();
 				testElement.getStrings().add("first");
 				testElement.getStrings().add("second");
 
@@ -256,12 +256,12 @@ public class MultiAttributeMoveOperationTest extends WorkspaceTest {
 				assertTrue(testElement.getStrings().get(1).equals("first"));
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(getProjectSpace().getOperations().size() == 1);
-		AbstractOperation tmp = getProjectSpace().getOperations().get(0);
+		final AbstractOperation tmp = getProjectSpace().getOperations().get(0);
 		assertTrue(tmp instanceof MultiAttributeMoveOperation);
-		MultiAttributeMoveOperation operation = (MultiAttributeMoveOperation) tmp;
+		final MultiAttributeMoveOperation operation = (MultiAttributeMoveOperation) tmp;
 		assertTrue(operation.getNewIndex() == 0);
 		assertTrue(operation.getOldIndex() == 1);
 		assertTrue(operation.getReferencedValue().equals("second"));
@@ -291,17 +291,17 @@ public class MultiAttributeMoveOperationTest extends WorkspaceTest {
 				assertTrue(testElement.getStrings().get(0).equals("second"));
 				assertTrue(testElement.getStrings().get(1).equals("first"));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				AbstractOperation operation = getProjectSpace().getOperations().get(0).reverse();
+				final AbstractOperation operation = getProjectSpace().getOperations().get(0).reverse();
 				operation.apply(getProject());
 				assertTrue(testElement.getStrings().size() == 2);
 				assertTrue(testElement.getStrings().get(0).equals("first"));
 				assertTrue(testElement.getStrings().get(1).equals("second"));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 }

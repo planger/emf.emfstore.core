@@ -88,27 +88,28 @@ public class CommandTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(leafSection);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
+		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
 
 		// copy to clipboard
-		Collection<EObject> toCopy = new ArrayList<EObject>();
+		final Collection<EObject> toCopy = new ArrayList<EObject>();
 		toCopy.add(actor);
-		Command copyCommand = editingDomain.createCommand(CopyToClipboardCommand.class, new CommandParameter(null,
+		final Command copyCommand = editingDomain.createCommand(CopyToClipboardCommand.class, new CommandParameter(
+			null,
 			null, toCopy));
 		editingDomain.getCommandStack().execute(copyCommand);
 
 		// paste from clipboard
-		Command pasteCommand = editingDomain.createCommand(PasteFromClipboardCommand.class, new CommandParameter(
+		final Command pasteCommand = editingDomain.createCommand(PasteFromClipboardCommand.class, new CommandParameter(
 			leafSection, DocumentPackage.Literals.LEAF_SECTION__MODEL_ELEMENTS, Collections.emptyList(),
 			CommandParameter.NO_INDEX));
 
 		editingDomain.getCommandStack().execute(pasteCommand);
 
-		EObject copyOfActor = leafSection.getModelElements().get(1);
-		ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
-		ModelElementId copyOfActorId = ModelUtil.getProject(copyOfActor).getModelElementId(copyOfActor);
+		final EObject copyOfActor = leafSection.getModelElements().get(1);
+		final ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
+		final ModelElementId copyOfActorId = ModelUtil.getProject(copyOfActor).getModelElementId(copyOfActor);
 
 		assertTrue(actorId.equals(actorId));
 		assertTrue(!copyOfActorId.equals(actorId));
@@ -141,10 +142,10 @@ public class CommandTest extends WorkspaceTest {
 				clearOperations();
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(getProject());
-		Command delete = DeleteCommand.create(editingDomain,
+		final EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(getProject());
+		final Command delete = DeleteCommand.create(editingDomain,
 			createWorkPackage);
 		editingDomain.getCommandStack().execute(delete);
 
@@ -168,31 +169,33 @@ public class CommandTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(leafSection);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
+		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
 
 		// copy
-		CopyCommand.Helper helper = new CopyCommand.Helper();
-		CopyCommand command = (CopyCommand) editingDomain.createCommand(CopyCommand.class, new CommandParameter(actor,
+		final CopyCommand.Helper helper = new CopyCommand.Helper();
+		final CopyCommand command = (CopyCommand) editingDomain.createCommand(CopyCommand.class, new CommandParameter(
+			actor,
 			null, helper));
 		editingDomain.getCommandStack().execute(command);
 
 		// paste
-		Actor copyOfActor = (Actor) helper.get(actor);
+		final Actor copyOfActor = (Actor) helper.get(actor);
 
-		Collection<Actor> toPaste = new ArrayList<Actor>();
+		final Collection<Actor> toPaste = new ArrayList<Actor>();
 		toPaste.add(copyOfActor);
 
-		Command pasteCommand = editingDomain.createCommand(AddCommand.class, new CommandParameter(leafSection,
+		final Command pasteCommand = editingDomain.createCommand(AddCommand.class, new CommandParameter(leafSection,
 			DocumentPackage.Literals.LEAF_SECTION__MODEL_ELEMENTS, toPaste, CommandParameter.NO_INDEX));
 
 		editingDomain.getCommandStack().execute(pasteCommand);
 
-		EObject copyOfActorRead = leafSection.getModelElements().get(1);
+		final EObject copyOfActorRead = leafSection.getModelElements().get(1);
 
-		ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
-		ModelElementId copyOfActorReadId = ModelUtil.getProject(copyOfActorRead).getModelElementId(copyOfActorRead);
+		final ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
+		final ModelElementId copyOfActorReadId = ModelUtil.getProject(copyOfActorRead).getModelElementId(
+			copyOfActorRead);
 		assertFalse(actorId.equals(copyOfActorReadId));
 
 	}
@@ -212,23 +215,24 @@ public class CommandTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(leafSection);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
+		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
 
 		// copy
-		Command command = CopyToClipboardCommand.create(editingDomain, actor);
+		final Command command = CopyToClipboardCommand.create(editingDomain, actor);
 		editingDomain.getCommandStack().execute(command);
 
 		// paste
-		Command pasteCommand = PasteFromClipboardCommand.create(editingDomain, leafSection,
+		final Command pasteCommand = PasteFromClipboardCommand.create(editingDomain, leafSection,
 			DocumentPackage.Literals.LEAF_SECTION__MODEL_ELEMENTS, CommandParameter.NO_INDEX);
 		editingDomain.getCommandStack().execute(pasteCommand);
 
-		EObject copyOfActorRead = leafSection.getModelElements().get(1);
+		final EObject copyOfActorRead = leafSection.getModelElements().get(1);
 
-		ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
-		ModelElementId copyOfActorReadId = ModelUtil.getProject(copyOfActorRead).getModelElementId(copyOfActorRead);
+		final ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
+		final ModelElementId copyOfActorReadId = ModelUtil.getProject(copyOfActorRead).getModelElementId(
+			copyOfActorRead);
 		assertFalse(actorId.equals(copyOfActorReadId));
 	}
 
@@ -247,29 +251,30 @@ public class CommandTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(leafSection);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
+		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
 
 		// copy
-		Command command = CopyCommand.create(editingDomain, actor);
+		final Command command = CopyCommand.create(editingDomain, actor);
 		editingDomain.getCommandStack().execute(command);
 
 		// paste
-		Actor copyOfActor = (Actor) command.getResult().toArray()[0];
+		final Actor copyOfActor = (Actor) command.getResult().toArray()[0];
 
-		Collection<Actor> toPaste = new ArrayList<Actor>();
+		final Collection<Actor> toPaste = new ArrayList<Actor>();
 		toPaste.add(copyOfActor);
 
-		Command pasteCommand = AddCommand.create(editingDomain, leafSection,
+		final Command pasteCommand = AddCommand.create(editingDomain, leafSection,
 			DocumentPackage.Literals.LEAF_SECTION__MODEL_ELEMENTS, toPaste, CommandParameter.NO_INDEX);
 
 		editingDomain.getCommandStack().execute(pasteCommand);
 
-		EObject copyOfActorRead = leafSection.getModelElements().get(1);
+		final EObject copyOfActorRead = leafSection.getModelElements().get(1);
 
-		ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
-		ModelElementId copyOfActorReadId = ModelUtil.getProject(copyOfActorRead).getModelElementId(copyOfActorRead);
+		final ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
+		final ModelElementId copyOfActorReadId = ModelUtil.getProject(copyOfActorRead).getModelElementId(
+			copyOfActorRead);
 		assertFalse(actorId.equals(copyOfActorReadId));
 	}
 
@@ -289,21 +294,21 @@ public class CommandTest extends WorkspaceTest {
 				getProject().addModelElement(useCase);
 				clearOperations();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
+		final ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
 
-		Command deleteCommand = DeleteCommand.create(
+		final Command deleteCommand = DeleteCommand.create(
 			ESWorkspaceProviderImpl.getInstance().getEditingDomain(),
 			useCase);
 		ESWorkspaceProviderImpl.getInstance().getEditingDomain().getCommandStack().execute(deleteCommand);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertTrue(operation instanceof CreateDeleteOperation);
-		CreateDeleteOperation createDeleteOperation = (CreateDeleteOperation) operation;
+		final CreateDeleteOperation createDeleteOperation = (CreateDeleteOperation) operation;
 
 		assertEquals(useCaseId, createDeleteOperation.getModelElementId());
 		assertEquals(0, createDeleteOperation.getSubOperations().size());
@@ -345,38 +350,38 @@ public class CommandTest extends WorkspaceTest {
 				assertEquals(getProject(), ModelUtil.getProject(useCase));
 				clearOperations();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		Project project = ModelUtil.getProject(useCase);
-		ModelElementId useCaseId = project.getModelElementId(useCase);
+		final Project project = ModelUtil.getProject(useCase);
+		final ModelElementId useCaseId = project.getModelElementId(useCase);
 
-		EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(getProject());
-		Command deleteCommand = DeleteCommand.create(editingDomain,
+		final EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(getProject());
+		final Command deleteCommand = DeleteCommand.create(editingDomain,
 			useCase);
 		editingDomain.getCommandStack().execute(deleteCommand);
 
 		assertFalse(getProject().contains(useCase));
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertTrue(operation instanceof CreateDeleteOperation);
-		CreateDeleteOperation createDeleteOperation = (CreateDeleteOperation) operation;
+		final CreateDeleteOperation createDeleteOperation = (CreateDeleteOperation) operation;
 		assertTrue(createDeleteOperation.isDelete());
 
 		assertEquals(useCaseId, createDeleteOperation.getModelElementId());
-		EList<ReferenceOperation> subOperations = createDeleteOperation.getSubOperations();
+		final EList<ReferenceOperation> subOperations = createDeleteOperation.getSubOperations();
 
 		assertEquals(8, subOperations.size());
-		AbstractOperation suboperation0 = subOperations.get(0);
-		AbstractOperation suboperation1 = subOperations.get(1);
-		AbstractOperation suboperation2 = subOperations.get(2);
-		AbstractOperation suboperation3 = subOperations.get(3);
-		AbstractOperation suboperation4 = subOperations.get(4);
-		AbstractOperation suboperation5 = subOperations.get(5);
-		AbstractOperation suboperation6 = subOperations.get(6);
-		AbstractOperation suboperation7 = subOperations.get(7);
+		final AbstractOperation suboperation0 = subOperations.get(0);
+		final AbstractOperation suboperation1 = subOperations.get(1);
+		final AbstractOperation suboperation2 = subOperations.get(2);
+		final AbstractOperation suboperation3 = subOperations.get(3);
+		final AbstractOperation suboperation4 = subOperations.get(4);
+		final AbstractOperation suboperation5 = subOperations.get(5);
+		final AbstractOperation suboperation6 = subOperations.get(6);
+		final AbstractOperation suboperation7 = subOperations.get(7);
 
 		assertTrue(suboperation0 instanceof SingleReferenceOperation);
 		assertTrue(suboperation1 instanceof MultiReferenceOperation);
@@ -387,16 +392,16 @@ public class CommandTest extends WorkspaceTest {
 		assertTrue(suboperation6 instanceof MultiReferenceOperation);
 		assertTrue(suboperation7 instanceof MultiReferenceOperation);
 
-		SingleReferenceOperation mrSuboperation0 = (SingleReferenceOperation) suboperation0;
-		MultiReferenceOperation mrSuboperation1 = (MultiReferenceOperation) suboperation1;
-		SingleReferenceOperation mrSuboperation2 = (SingleReferenceOperation) suboperation2;
-		MultiReferenceOperation mrSuboperation3 = (MultiReferenceOperation) suboperation3;
-		MultiReferenceOperation mrSuboperation4 = (MultiReferenceOperation) suboperation4;
-		MultiReferenceOperation mrSuboperation5 = (MultiReferenceOperation) suboperation5;
-		MultiReferenceOperation mrSuboperation6 = (MultiReferenceOperation) suboperation6;
-		MultiReferenceOperation mrSuboperation7 = (MultiReferenceOperation) suboperation7;
+		final SingleReferenceOperation mrSuboperation0 = (SingleReferenceOperation) suboperation0;
+		final MultiReferenceOperation mrSuboperation1 = (MultiReferenceOperation) suboperation1;
+		final SingleReferenceOperation mrSuboperation2 = (SingleReferenceOperation) suboperation2;
+		final MultiReferenceOperation mrSuboperation3 = (MultiReferenceOperation) suboperation3;
+		final MultiReferenceOperation mrSuboperation4 = (MultiReferenceOperation) suboperation4;
+		final MultiReferenceOperation mrSuboperation5 = (MultiReferenceOperation) suboperation5;
+		final MultiReferenceOperation mrSuboperation6 = (MultiReferenceOperation) suboperation6;
+		final MultiReferenceOperation mrSuboperation7 = (MultiReferenceOperation) suboperation7;
 
-		ModelElementId sectionId = ModelUtil.getProject(section).getModelElementId(section);
+		final ModelElementId sectionId = ModelUtil.getProject(section).getModelElementId(section);
 
 		assertEquals(useCaseId, mrSuboperation0.getModelElementId());
 		assertEquals("leafSection", mrSuboperation0.getFeatureName());
@@ -409,13 +414,13 @@ public class CommandTest extends WorkspaceTest {
 		assertEquals("leafSection", mrSuboperation1.getOppositeFeatureName());
 		assertFalse(mrSuboperation1.isAdd());
 		assertTrue(mrSuboperation1.isBidirectional());
-		Set<ModelElementId> otherInvolvedModelElements3 = mrSuboperation1.getOtherInvolvedModelElements();
+		final Set<ModelElementId> otherInvolvedModelElements3 = mrSuboperation1.getOtherInvolvedModelElements();
 		assertEquals(1, otherInvolvedModelElements3.size());
-		EList<ModelElementId> referencedModelElements3 = mrSuboperation1.getReferencedModelElements();
+		final EList<ModelElementId> referencedModelElements3 = mrSuboperation1.getReferencedModelElements();
 		assertEquals(1, referencedModelElements3.size());
 		assertEquals(useCaseId, referencedModelElements3.get(0));
 
-		ModelElementId oldActorId = ModelUtil.getProject(oldActor).getModelElementId(oldActor);
+		final ModelElementId oldActorId = ModelUtil.getProject(oldActor).getModelElementId(oldActor);
 
 		assertEquals(oldActorId, mrSuboperation2.getOldValue());
 		assertEquals(null, mrSuboperation2.getNewValue());
@@ -423,7 +428,7 @@ public class CommandTest extends WorkspaceTest {
 		assertEquals(useCaseId, mrSuboperation2.getModelElementId());
 		assertEquals("initiatedUseCases", mrSuboperation2.getOppositeFeatureName());
 		assertTrue(mrSuboperation2.isBidirectional());
-		Set<ModelElementId> otherInvolvedModelElements = mrSuboperation2.getOtherInvolvedModelElements();
+		final Set<ModelElementId> otherInvolvedModelElements = mrSuboperation2.getOtherInvolvedModelElements();
 		assertEquals(1, otherInvolvedModelElements.size());
 		assertEquals(oldActorId, otherInvolvedModelElements.iterator().next());
 
@@ -433,13 +438,13 @@ public class CommandTest extends WorkspaceTest {
 		assertEquals("initiatingActor", mrSuboperation3.getOppositeFeatureName());
 		assertFalse(mrSuboperation3.isAdd());
 		assertTrue(mrSuboperation3.isBidirectional());
-		Set<ModelElementId> otherInvolvedModelElements0 = mrSuboperation3.getOtherInvolvedModelElements();
+		final Set<ModelElementId> otherInvolvedModelElements0 = mrSuboperation3.getOtherInvolvedModelElements();
 		assertEquals(1, otherInvolvedModelElements0.size());
-		EList<ModelElementId> referencedModelElements0 = mrSuboperation3.getReferencedModelElements();
+		final EList<ModelElementId> referencedModelElements0 = mrSuboperation3.getReferencedModelElements();
 		assertEquals(1, referencedModelElements0.size());
 		assertEquals(useCaseId, referencedModelElements0.get(0));
 
-		ModelElementId newActorId = ModelUtil.getProject(newActor).getModelElementId(newActor);
+		final ModelElementId newActorId = ModelUtil.getProject(newActor).getModelElementId(newActor);
 
 		assertEquals("participatingActors", mrSuboperation4.getFeatureName());
 		assertEquals(0, mrSuboperation4.getIndex());
@@ -447,9 +452,9 @@ public class CommandTest extends WorkspaceTest {
 		assertEquals("participatedUseCases", mrSuboperation4.getOppositeFeatureName());
 		assertEquals(false, mrSuboperation4.isAdd());
 		assertEquals(true, mrSuboperation4.isBidirectional());
-		Set<ModelElementId> otherInvolvedModelElements2 = mrSuboperation4.getOtherInvolvedModelElements();
+		final Set<ModelElementId> otherInvolvedModelElements2 = mrSuboperation4.getOtherInvolvedModelElements();
 		assertEquals(1, otherInvolvedModelElements2.size());
-		EList<ModelElementId> referencedModelElements = mrSuboperation4.getReferencedModelElements();
+		final EList<ModelElementId> referencedModelElements = mrSuboperation4.getReferencedModelElements();
 		assertEquals(1, referencedModelElements.size());
 		assertEquals(newActorId, referencedModelElements.get(0));
 
@@ -465,11 +470,11 @@ public class CommandTest extends WorkspaceTest {
 		assertEquals("participatedUseCases", mrSuboperation6.getOppositeFeatureName());
 		assertEquals(false, mrSuboperation6.isAdd());
 		assertEquals(true, mrSuboperation6.isBidirectional());
-		Set<ModelElementId> otherInvolvedModelElements6 = mrSuboperation6.getOtherInvolvedModelElements();
+		final Set<ModelElementId> otherInvolvedModelElements6 = mrSuboperation6.getOtherInvolvedModelElements();
 		assertEquals(1, otherInvolvedModelElements6.size());
-		EList<ModelElementId> referencedModelElements6 = mrSuboperation6.getReferencedModelElements();
+		final EList<ModelElementId> referencedModelElements6 = mrSuboperation6.getReferencedModelElements();
 		assertEquals(1, referencedModelElements6.size());
-		ModelElementId otherActorId = ModelUtil.getProject(otherActor).getModelElementId(otherActor);
+		final ModelElementId otherActorId = ModelUtil.getProject(otherActor).getModelElementId(otherActor);
 		assertEquals(otherActorId, referencedModelElements6.get(0));
 
 		assertEquals(otherActorId, mrSuboperation7.getModelElementId());
@@ -495,14 +500,14 @@ public class CommandTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(leafSection);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(getProject());
+		final EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(getProject());
 
 		// cut to clipboard
-		Collection<Actor> toCut = new ArrayList<Actor>();
+		final Collection<Actor> toCut = new ArrayList<Actor>();
 		toCut.add(actor);
-		Command copyCommand = editingDomain.createCommand(CutToClipboardCommand.class, new CommandParameter(
+		final Command copyCommand = editingDomain.createCommand(CutToClipboardCommand.class, new CommandParameter(
 			leafSection, DocumentPackage.Literals.LEAF_SECTION__MODEL_ELEMENTS, toCut));
 
 		editingDomain.getCommandStack().execute(copyCommand);
@@ -522,7 +527,7 @@ public class CommandTest extends WorkspaceTest {
 		assertEquals(0, leafSection.getModelElements().size());
 
 		// paste from clipboard
-		Command pasteCommand = editingDomain.createCommand(PasteFromClipboardCommand.class, new CommandParameter(
+		final Command pasteCommand = editingDomain.createCommand(PasteFromClipboardCommand.class, new CommandParameter(
 			leafSection, DocumentPackage.Literals.LEAF_SECTION__MODEL_ELEMENTS, Collections.emptyList(),
 			CommandParameter.NO_INDEX));
 
@@ -557,12 +562,12 @@ public class CommandTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(leafSection);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(getProject());
+		final EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(getProject());
 
 		// copy to clipboard
-		Command cutCommand = CutToClipboardCommand.create(editingDomain, leafSection,
+		final Command cutCommand = CutToClipboardCommand.create(editingDomain, leafSection,
 			DocumentPackage.Literals.LEAF_SECTION__MODEL_ELEMENTS, actor);
 
 		if (cutCommand.canExecute()) {
@@ -583,7 +588,7 @@ public class CommandTest extends WorkspaceTest {
 		assertEquals(0, leafSection.getModelElements().size());
 
 		// paste from clipboard
-		Command pasteCommand = PasteFromClipboardCommand.create(editingDomain, leafSection,
+		final Command pasteCommand = PasteFromClipboardCommand.create(editingDomain, leafSection,
 			DocumentPackage.Literals.LEAF_SECTION__MODEL_ELEMENTS, CommandParameter.NO_INDEX);
 
 		if (pasteCommand.canExecute()) {
@@ -618,12 +623,12 @@ public class CommandTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(leafSection);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(getProject());
 
 		// cut to clipboard
-		Command cutCommand = CutToClipboardCommand.create(editingDomain, leafSection,
+		final Command cutCommand = CutToClipboardCommand.create(editingDomain, leafSection,
 			DocumentPackage.Literals.LEAF_SECTION__MODEL_ELEMENTS, actor);
 
 		if (cutCommand.canExecute()) {
@@ -640,7 +645,7 @@ public class CommandTest extends WorkspaceTest {
 			protected void doRun() {
 				editingDomain.getCommandStack().undo();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 		// does not work but is strange anyway
 		// assertTrue(editingDomain.getCommandStack().canRedo());
 		assertEquals(1, leafSection.getModelElements().size());
@@ -662,12 +667,12 @@ public class CommandTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(leafSection);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(getProject());
 
 		// remove
-		Command removeCommand = RemoveCommand.create(editingDomain, leafSection,
+		final Command removeCommand = RemoveCommand.create(editingDomain, leafSection,
 			DocumentPackage.Literals.LEAF_SECTION__MODEL_ELEMENTS, actor);
 		if (removeCommand.canExecute()) {
 			editingDomain.getCommandStack().execute(removeCommand);
@@ -702,14 +707,14 @@ public class CommandTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(leafSection);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(getProject());
 
 		// remove
-		Collection<Actor> toRemove = new ArrayList<Actor>();
+		final Collection<Actor> toRemove = new ArrayList<Actor>();
 		toRemove.add(actor);
-		Command copyCommand = editingDomain.createCommand(RemoveCommand.class, new CommandParameter(leafSection,
+		final Command copyCommand = editingDomain.createCommand(RemoveCommand.class, new CommandParameter(leafSection,
 			DocumentPackage.Literals.LEAF_SECTION__MODEL_ELEMENTS, toRemove));
 		if (copyCommand.canExecute()) {
 			editingDomain.getCommandStack().execute(copyCommand);
@@ -745,14 +750,14 @@ public class CommandTest extends WorkspaceTest {
 			protected void doRun() {
 				getProject().addModelElement(leafSection);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(getProject());
 
 		// delete
-		Collection<Actor> toDelete = new ArrayList<Actor>();
+		final Collection<Actor> toDelete = new ArrayList<Actor>();
 		toDelete.add(actor);
-		Command command = DeleteCommand.create(editingDomain, toDelete);
+		final Command command = DeleteCommand.create(editingDomain, toDelete);
 		if (command.canExecute()) {
 			editingDomain.getCommandStack().execute(command);
 		} else {
@@ -787,17 +792,17 @@ public class CommandTest extends WorkspaceTest {
 				getProject().addModelElement(leafSection);
 				clearOperations();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(0, getProjectSpace().getOperations().size());
 		final EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(getProject());
 
 		// delete
-		Collection<Actor> toDelete = new ArrayList<Actor>();
+		final Collection<Actor> toDelete = new ArrayList<Actor>();
 		toDelete.add(actor);
 
 		// delete actor from model elements feature
-		Command command = editingDomain.createCommand(DeleteCommand.class, new CommandParameter(leafSection,
+		final Command command = editingDomain.createCommand(DeleteCommand.class, new CommandParameter(leafSection,
 			DocumentPackage.Literals.LEAF_SECTION__MODEL_ELEMENTS, toDelete));
 		if (command.canExecute()) {
 			editingDomain.getCommandStack().execute(command);
@@ -829,7 +834,7 @@ public class CommandTest extends WorkspaceTest {
 
 		final LeafSection leafSection = DocumentFactory.eINSTANCE.createLeafSection();
 		final WorkPackage workPackage = TaskFactory.eINSTANCE.createWorkPackage();
-		User user = OrganizationFactory.eINSTANCE.createUser();
+		final User user = OrganizationFactory.eINSTANCE.createUser();
 
 		workPackage.setName("Sprint1");
 		workPackage.setAssignee(user);
@@ -848,13 +853,13 @@ public class CommandTest extends WorkspaceTest {
 				getProject().addModelElement(leafSection);
 				clearOperations();
 			}
-		}.run(getProject(), false);
-		ModelElementId workPackageId = getProject().getModelElementId(workPackage);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
+		final ModelElementId workPackageId = getProject().getModelElementId(workPackage);
 
-		EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
+		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
 
 		// cut the element
-		Command command = CutToClipboardCommand.create(editingDomain, workPackage);
+		final Command command = CutToClipboardCommand.create(editingDomain, workPackage);
 		editingDomain.getCommandStack().execute(command);
 
 		assertTrue(ESWorkspaceProviderImpl.getInstance().getEditingDomain().getClipboard().contains(workPackage));
@@ -862,7 +867,7 @@ public class CommandTest extends WorkspaceTest {
 
 		assertTrue(getProject().contains(workPackageId));
 
-		Command pasteCommand = PasteFromClipboardCommand.create(editingDomain, leafSection,
+		final Command pasteCommand = PasteFromClipboardCommand.create(editingDomain, leafSection,
 			DocumentPackage.Literals.LEAF_SECTION__MODEL_ELEMENTS, CommandParameter.NO_INDEX);
 		editingDomain.getCommandStack().execute(pasteCommand);
 
@@ -885,13 +890,13 @@ public class CommandTest extends WorkspaceTest {
 				getProject().addModelElement(leafSection);
 				clearOperations();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(0, getProjectSpace().getOperations().size());
 
-		EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(getProject());
+		final EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(getProject());
 
-		EditingDomain domain1 = AdapterFactoryEditingDomain.getEditingDomainFor(actor);
+		final EditingDomain domain1 = AdapterFactoryEditingDomain.getEditingDomainFor(actor);
 		assertSame(editingDomain, domain1);
 		assertNotNull(domain1);
 		assertNotNull(editingDomain);
@@ -912,7 +917,7 @@ public class CommandTest extends WorkspaceTest {
 				getProject().addModelElement(leafSection);
 				clearOperations();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(0, getProjectSpace().getOperations().size());
 		final EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(getProject());
@@ -944,11 +949,11 @@ public class CommandTest extends WorkspaceTest {
 			@SuppressWarnings("null")
 			@Override
 			protected void doRun() {
-				IdEObjectCollection col = null;
+				final IdEObjectCollection col = null;
 				// provoke NPE
 				col.getModelElements();
 			}
-		}.run(getProject(), true);
+		}.run(getProjectSpace().getContentEditingDomain(), true);
 	}
 
 	@Test(expected = NullPointerException.class)
@@ -957,10 +962,10 @@ public class CommandTest extends WorkspaceTest {
 			@SuppressWarnings("null")
 			@Override
 			protected void doRun() {
-				IdEObjectCollection col = null;
+				final IdEObjectCollection col = null;
 				// provoke NPE
 				col.getModelElements();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 }

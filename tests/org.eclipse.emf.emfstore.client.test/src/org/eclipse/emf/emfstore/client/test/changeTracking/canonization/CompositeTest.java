@@ -49,14 +49,14 @@ public class CompositeTest extends WorkspaceTest {
 			@Override
 			protected void doRun() {
 				// create an empty composite, should be canonized out
-				CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
+				final CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
 				try {
 					handle.end("sectionCreation", "description", null);
-				} catch (InvalidHandleException e) {
+				} catch (final InvalidHandleException e) {
 					fail();
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -67,7 +67,7 @@ public class CompositeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(operations.size(), 0);
 
@@ -89,7 +89,7 @@ public class CompositeTest extends WorkspaceTest {
 				getProject().addModelElement(useCase);
 				useCase.setName("oldName");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -99,7 +99,7 @@ public class CompositeTest extends WorkspaceTest {
 			protected void doRun() {
 				clearOperations();
 
-				CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
+				final CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
 
 				useCase.setName("A");
 				useCase.setName("B");
@@ -112,11 +112,11 @@ public class CompositeTest extends WorkspaceTest {
 
 				try {
 					handle.end("blubb", "blibb", null);
-				} catch (InvalidHandleException e) {
+				} catch (final InvalidHandleException e) {
 					fail();
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(operations.size(), 1);
@@ -126,7 +126,7 @@ public class CompositeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		// should not have left any operations, we were just resetting the name to its original value
 		assertEquals(operations.size(), 0);
@@ -150,7 +150,7 @@ public class CompositeTest extends WorkspaceTest {
 				useCase.setName("oldName");
 				useCase.setDescription("oldDescription");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -160,7 +160,7 @@ public class CompositeTest extends WorkspaceTest {
 			protected void doRun() {
 				clearOperations();
 
-				CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
+				final CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
 
 				useCase.setName("A");
 				useCase.setDescription("X");
@@ -175,11 +175,11 @@ public class CompositeTest extends WorkspaceTest {
 
 				try {
 					handle.end("blubb", "blibb", null);
-				} catch (InvalidHandleException e) {
+				} catch (final InvalidHandleException e) {
 					fail();
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(operations.size(), 1);
@@ -189,7 +189,7 @@ public class CompositeTest extends WorkspaceTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		// should not have left any operations, we were just resetting the name to its original value
 		assertEquals(operations.size(), 0);
@@ -213,7 +213,7 @@ public class CompositeTest extends WorkspaceTest {
 				useCase.setName("oldName");
 				clearOperations();
 
-				CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
+				final CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
 
 				useCase.setName("A");
 				useCase.setName("B");
@@ -221,11 +221,11 @@ public class CompositeTest extends WorkspaceTest {
 
 				try {
 					handle.end("blubb", "blibb", null);
-				} catch (InvalidHandleException e) {
+				} catch (final InvalidHandleException e) {
 					fail();
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(operations.size(), 1);
@@ -237,7 +237,7 @@ public class CompositeTest extends WorkspaceTest {
 				comp.setMainOperation(comp.getSubOperations().get(1)); // setName to from "A" to "B"
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		// the main one was a candidate for removal, but since it is the main one, it may not be touched
 		// in this case it will not even be modified
@@ -262,7 +262,7 @@ public class CompositeTest extends WorkspaceTest {
 
 				clearOperations();
 
-				CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
+				final CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
 
 				useCase.setName("A");
 				useCase.setName("B");
@@ -270,11 +270,11 @@ public class CompositeTest extends WorkspaceTest {
 
 				try {
 					handle.end("blubb", "blibb", null);
-				} catch (InvalidHandleException e) {
+				} catch (final InvalidHandleException e) {
 					fail();
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(operations.size(), 1);
@@ -286,7 +286,7 @@ public class CompositeTest extends WorkspaceTest {
 				comp.setMainOperation(comp.getSubOperations().get(0)); // setName to from "oldName" to "A"
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		// the main one was a candidate for removal, but since it is the main one, it may not be removed
 		// it might have been altered though (newValue, oldValue etc., might have changed in the canonization
@@ -312,7 +312,7 @@ public class CompositeTest extends WorkspaceTest {
 
 				clearOperations();
 
-				CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
+				final CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
 
 				useCase.setName("A");
 				useCase.setName("B");
@@ -320,11 +320,11 @@ public class CompositeTest extends WorkspaceTest {
 
 				try {
 					handle.end("blubb", "blibb", null);
-				} catch (InvalidHandleException e) {
+				} catch (final InvalidHandleException e) {
 					fail();
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(operations.size(), 1);
@@ -335,7 +335,7 @@ public class CompositeTest extends WorkspaceTest {
 				comp.setMainOperation(comp.getSubOperations().get(1)); // setName to from "A" to "B"
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 		// since this composite is a noop, everything should have been removed
 		assertEquals(comp.getSubOperations().size(), 0);
 	}

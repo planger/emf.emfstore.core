@@ -65,7 +65,7 @@ public class BranchTest extends BaseSharedProjectTest {
 					noProgressMonitor());
 				return null;
 			}
-		}, ((ESLocalProjectImpl) trunk).toInternalAPI());
+		}, ((ESLocalProjectImpl) trunk).toInternalAPI().getContentEditingDomain());
 
 		trunk.commit(noProgressMonitor());
 
@@ -100,7 +100,7 @@ public class BranchTest extends BaseSharedProjectTest {
 					noProgressMonitor());
 				return null;
 			}
-		}, ((ESLocalProjectImpl) localProject).toInternalAPI());
+		}, ((ESLocalProjectImpl) localProject).toInternalAPI().getContentEditingDomain());
 
 		localProject.commit(noProgressMonitor());
 
@@ -115,6 +115,6 @@ public class BranchTest extends BaseSharedProjectTest {
 				localProject.getModelElements().add(testElement);
 				return null;
 			}
-		}, ((ESLocalProjectImpl) localProject).toInternalAPI());
+		}, ((ESLocalProjectImpl) localProject).toInternalAPI().getContentEditingDomain());
 	}
 }

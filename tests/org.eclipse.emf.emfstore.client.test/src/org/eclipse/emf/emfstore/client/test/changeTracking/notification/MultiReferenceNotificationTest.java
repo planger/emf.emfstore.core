@@ -65,17 +65,17 @@ public class MultiReferenceNotificationTest extends NotificationTest {
 				// notifications from this operations are tested
 				actor.getInitiatedUseCases().addAll(Arrays.asList(useCases));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
-		List<NotificationInfo> rec = recording.asMutableList();
+		final NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
+		final List<NotificationInfo> rec = recording.asMutableList();
 
 		// exactly one ADD_MANY notification is expected
 		// and 3 SET
 		assertEquals(4, rec.size());
 
 		for (int i = 0; i < 3; i++) {
-			NotificationInfo set = rec.get(i);
+			final NotificationInfo set = rec.get(i);
 
 			assertSame(useCases[i], set.getNotifier());
 			assertTrue(set.isReferenceNotification());
@@ -84,7 +84,7 @@ public class MultiReferenceNotificationTest extends NotificationTest {
 			assertEquals(set.getReference().getName(), "initiatingActor");
 		}
 
-		NotificationInfo addMany = rec.get(3);
+		final NotificationInfo addMany = rec.get(3);
 
 		assertSame(actor, addMany.getNotifier());
 		assertTrue(addMany.isReferenceNotification());
@@ -124,17 +124,17 @@ public class MultiReferenceNotificationTest extends NotificationTest {
 				// notifications from this operations are tested
 				actor.getParticipatedUseCases().addAll(Arrays.asList(useCases));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
-		List<NotificationInfo> rec = recording.asMutableList();
+		final NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
+		final List<NotificationInfo> rec = recording.asMutableList();
 
 		// exactly one ADD_MANY notification is expected
 		// and three ADD
 		assertEquals(4, rec.size());
 
 		for (int i = 0; i < 3; i++) {
-			NotificationInfo set = rec.get(i);
+			final NotificationInfo set = rec.get(i);
 
 			assertSame(useCases[i], set.getNotifier());
 			assertTrue(set.isReferenceNotification());
@@ -143,7 +143,7 @@ public class MultiReferenceNotificationTest extends NotificationTest {
 			assertEquals(set.getReference().getName(), "participatingActors");
 		}
 
-		NotificationInfo addMany = rec.get(3);
+		final NotificationInfo addMany = rec.get(3);
 
 		assertSame(actor, addMany.getNotifier());
 		assertTrue(addMany.isReferenceNotification());
@@ -185,17 +185,17 @@ public class MultiReferenceNotificationTest extends NotificationTest {
 				actor.getInitiatedUseCases().addAll(Arrays.asList(useCasesIn));
 				actor.getInitiatedUseCases().removeAll(Arrays.asList(useCasesOut));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
-		List<NotificationInfo> rec = recording.asMutableList();
+		final NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
+		final List<NotificationInfo> rec = recording.asMutableList();
 
 		// exactly one REMOVE_MANY notification is expected
 		// and two SET
 		assertEquals(3, rec.size());
 
 		for (int i = 0; i < 2; i++) {
-			NotificationInfo set = rec.get(i);
+			final NotificationInfo set = rec.get(i);
 
 			assertSame(useCasesOut[i], set.getNotifier());
 			assertTrue(set.isReferenceNotification());
@@ -205,7 +205,7 @@ public class MultiReferenceNotificationTest extends NotificationTest {
 			assertEquals(set.getReference().getName(), "initiatingActor");
 		}
 
-		NotificationInfo removeMany = rec.get(2);
+		final NotificationInfo removeMany = rec.get(2);
 
 		assertSame(actor, removeMany.getNotifier());
 		assertTrue(removeMany.isReferenceNotification());
@@ -248,17 +248,17 @@ public class MultiReferenceNotificationTest extends NotificationTest {
 				actor.getParticipatedUseCases().removeAll(Arrays.asList(useCasesOut));
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
-		List<NotificationInfo> rec = recording.asMutableList();
+		final NotificationRecording recording = getProjectSpaceImpl().getNotificationRecorder().getRecording();
+		final List<NotificationInfo> rec = recording.asMutableList();
 
 		// exactly one REMOVE_MANY notification is expected
 		// and 2 REMOVE
 		assertEquals(3, rec.size());
 
 		for (int i = 0; i < 2; i++) {
-			NotificationInfo set = rec.get(i);
+			final NotificationInfo set = rec.get(i);
 
 			assertSame(useCasesOut[i], set.getNotifier());
 			assertTrue(set.isReferenceNotification());
@@ -268,7 +268,7 @@ public class MultiReferenceNotificationTest extends NotificationTest {
 			assertEquals(set.getReference().getName(), "participatingActors");
 		}
 
-		NotificationInfo removeMany = rec.get(2);
+		final NotificationInfo removeMany = rec.get(2);
 
 		assertSame(actor, removeMany.getNotifier());
 		assertTrue(removeMany.isReferenceNotification());

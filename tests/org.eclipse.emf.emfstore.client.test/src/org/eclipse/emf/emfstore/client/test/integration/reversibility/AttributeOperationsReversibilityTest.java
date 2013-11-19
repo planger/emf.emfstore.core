@@ -25,7 +25,7 @@ import org.junit.Test;
  */
 public class AttributeOperationsReversibilityTest extends OperationsReversibilityTest {
 
-	private long randomSeed = 1;
+	private final long randomSeed = 1;
 
 	/**
 	 * Finds an attribute with isMany = true and moves elements inside this attribute.
@@ -44,7 +44,7 @@ public class AttributeOperationsReversibilityTest extends OperationsReversibilit
 				testHelper.doMultiAttributeMove();
 				getTestProjectSpace().revert();
 			}
-		}.run(getTestProject(), false);
+		}.run(getTestProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
 	}
@@ -67,7 +67,7 @@ public class AttributeOperationsReversibilityTest extends OperationsReversibilit
 				testHelper.doChangeAttribute();
 			}
 
-		}.run(getTestProject(), false);
+		}.run(getTestProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 
@@ -75,7 +75,7 @@ public class AttributeOperationsReversibilityTest extends OperationsReversibilit
 			protected void doRun() {
 				getTestProjectSpace().revert();
 			}
-		}.run(getTestProject(), false);
+		}.run(getTestProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
 
@@ -97,7 +97,7 @@ public class AttributeOperationsReversibilityTest extends OperationsReversibilit
 			protected void doRun() {
 				testHelper.doAttributeTransitiveChange();
 			}
-		}.run(getTestProject(), false);
+		}.run(getTestProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 
@@ -105,7 +105,7 @@ public class AttributeOperationsReversibilityTest extends OperationsReversibilit
 			protected void doRun() {
 				getTestProjectSpace().revert();
 			}
-		}.run(getTestProject(), false);
+		}.run(getTestProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getTestProject(), getCompareProject()));
 	}

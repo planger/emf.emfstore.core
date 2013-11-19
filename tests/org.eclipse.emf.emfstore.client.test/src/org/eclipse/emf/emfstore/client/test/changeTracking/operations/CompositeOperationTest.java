@@ -73,7 +73,7 @@ public class CompositeOperationTest extends WorkspaceTest {
 
 				return section;
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	/**
@@ -89,7 +89,7 @@ public class CompositeOperationTest extends WorkspaceTest {
 
 			@Override
 			protected void doRun() {
-				CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
+				final CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
 				section.setName("newName");
 				section.setDescription("newDescription");
 				section.getModelElements().add(useCase);
@@ -100,15 +100,15 @@ public class CompositeOperationTest extends WorkspaceTest {
 				assertEquals("newName", section.getName());
 				assertEquals("newDescription", section.getDescription());
 
-				ModelElementId sectionId = ModelUtil.getProject(section).getModelElementId(section);
+				final ModelElementId sectionId = ModelUtil.getProject(section).getModelElementId(section);
 
 				try {
 					handle.end("sectionCreation", "description", sectionId);
-				} catch (InvalidHandleException e) {
+				} catch (final InvalidHandleException e) {
 					fail();
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(true, getProject().contains(useCase));
 		assertEquals(getProject(), ModelUtil.getProject(useCase));
@@ -117,9 +117,9 @@ public class CompositeOperationTest extends WorkspaceTest {
 		assertEquals("newDescription", section.getDescription());
 
 		assertEquals(1, getProjectSpace().getOperations().size());
-		AbstractOperation operation = getProjectSpace().getOperations().iterator().next();
+		final AbstractOperation operation = getProjectSpace().getOperations().iterator().next();
 		assertEquals(true, operation instanceof CompositeOperation);
-		CompositeOperation compositeOperation = (CompositeOperation) operation;
+		final CompositeOperation compositeOperation = (CompositeOperation) operation;
 		assertEquals(4, compositeOperation.getSubOperations().size());
 	}
 
@@ -137,7 +137,7 @@ public class CompositeOperationTest extends WorkspaceTest {
 		final CompositeOperationHandle handle = new EMFStoreCommandWithResult<CompositeOperationHandle>() {
 			@Override
 			protected CompositeOperationHandle doRun() {
-				CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
+				final CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
 				section.setName("newName");
 				section.setDescription("newDescription");
 				section.getModelElements().add(useCase);
@@ -150,11 +150,11 @@ public class CompositeOperationTest extends WorkspaceTest {
 
 				return handle;
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final ModelElementId sectionId = ModelUtil.getProject(section).getModelElementId(section);
-		ESWorkspace workspace = ESWorkspaceProvider.INSTANCE.getWorkspace();
-		ProjectSpace projectSpace = ((ESWorkspaceImpl) workspace).toInternalAPI().getProjectSpace(
+		final ESWorkspace workspace = ESWorkspaceProvider.INSTANCE.getWorkspace();
+		final ProjectSpace projectSpace = ((ESWorkspaceImpl) workspace).toInternalAPI().getProjectSpace(
 			ModelUtil.getProject(section));
 
 		// ProjectSpace projectSpace handle= ModelUtil.getParent(ProjectSpace.class, section);
@@ -166,11 +166,11 @@ public class CompositeOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				try {
 					handle.end("sectionCreation", "description", sectionId);
-				} catch (InvalidHandleException e) {
+				} catch (final InvalidHandleException e) {
 					fail();
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(true, getProject().contains(useCase));
 		assertEquals(getProject(), ModelUtil.getProject(useCase));
@@ -179,9 +179,9 @@ public class CompositeOperationTest extends WorkspaceTest {
 		assertEquals("newDescription", section.getDescription());
 
 		assertEquals(1, getProjectSpace().getOperations().size());
-		AbstractOperation operation = getProjectSpace().getOperations().iterator().next();
+		final AbstractOperation operation = getProjectSpace().getOperations().iterator().next();
 		assertEquals(true, operation instanceof CompositeOperation);
-		CompositeOperation compositeOperation = (CompositeOperation) operation;
+		final CompositeOperation compositeOperation = (CompositeOperation) operation;
 		assertEquals(4, compositeOperation.getSubOperations().size());
 	}
 
@@ -194,7 +194,7 @@ public class CompositeOperationTest extends WorkspaceTest {
 	public void createSmallCompositeAcrossCommandsWithAutoOperationWrapper() throws UnkownProjectException {
 
 		// TODO: Think about elegant solution to replace the operation modifier during a single test
-		ESOperationModifier operationModifier = ExtensionRegistry.INSTANCE.get(ESOperationModifier.ID,
+		final ESOperationModifier operationModifier = ExtensionRegistry.INSTANCE.get(ESOperationModifier.ID,
 			ESOperationModifier.class);
 
 		ExtensionRegistry.INSTANCE.set(
@@ -207,7 +207,7 @@ public class CompositeOperationTest extends WorkspaceTest {
 		final CompositeOperationHandle handle = new EMFStoreCommandWithResult<CompositeOperationHandle>() {
 			@Override
 			protected CompositeOperationHandle doRun() {
-				CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
+				final CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
 				section.setName("newName");
 				section.setDescription("newDescription");
 				section.getModelElements().add(useCase);
@@ -220,11 +220,11 @@ public class CompositeOperationTest extends WorkspaceTest {
 
 				return handle;
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final ModelElementId sectionId = ModelUtil.getProject(section).getModelElementId(section);
-		ESWorkspace workspace = ESWorkspaceProvider.INSTANCE.getWorkspace();
-		ProjectSpace projectSpace = ((ESWorkspaceImpl) workspace).toInternalAPI().getProjectSpace(
+		final ESWorkspace workspace = ESWorkspaceProvider.INSTANCE.getWorkspace();
+		final ProjectSpace projectSpace = ((ESWorkspaceImpl) workspace).toInternalAPI().getProjectSpace(
 			ModelUtil.getProject(section));
 		assertEquals(0, projectSpace.getOperations().size());
 
@@ -234,11 +234,11 @@ public class CompositeOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				try {
 					handle.end("sectionCreation", "description", sectionId);
-				} catch (InvalidHandleException e) {
+				} catch (final InvalidHandleException e) {
 					fail();
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(true, getProject().contains(useCase));
 		assertEquals(getProject(), ModelUtil.getProject(useCase));
@@ -247,9 +247,9 @@ public class CompositeOperationTest extends WorkspaceTest {
 		assertEquals("newDescription", section.getDescription());
 
 		assertEquals(1, getProjectSpace().getOperations().size());
-		AbstractOperation operation = getProjectSpace().getOperations().iterator().next();
+		final AbstractOperation operation = getProjectSpace().getOperations().iterator().next();
 		assertEquals(true, operation instanceof CompositeOperation);
-		CompositeOperation compositeOperation = (CompositeOperation) operation;
+		final CompositeOperation compositeOperation = (CompositeOperation) operation;
 		assertEquals(4, compositeOperation.getSubOperations().size());
 
 		ExtensionRegistry.INSTANCE.set(
@@ -273,7 +273,7 @@ public class CompositeOperationTest extends WorkspaceTest {
 
 			@Override
 			protected void doRun() {
-				CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
+				final CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
 				section.setName("newName");
 				section.setDescription("newDescription");
 				section.getModelElements().add(useCase);
@@ -286,11 +286,11 @@ public class CompositeOperationTest extends WorkspaceTest {
 
 				try {
 					handle.abort();
-				} catch (InvalidHandleException e) {
+				} catch (final InvalidHandleException e) {
 					fail();
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(true, getProject().contains(section));
 		assertEquals("Name", section.getName());
@@ -300,7 +300,7 @@ public class CompositeOperationTest extends WorkspaceTest {
 
 		assertEquals(0, getProjectSpace().getOperations().size());
 
-		Project loadedProject = ModelUtil.loadEObjectFromResource(
+		final Project loadedProject = ModelUtil.loadEObjectFromResource(
 			org.eclipse.emf.emfstore.internal.common.model.ModelFactory.eINSTANCE.getModelPackage().getProject(),
 			getProject()
 				.eResource().getURI(), false);
@@ -327,17 +327,17 @@ public class CompositeOperationTest extends WorkspaceTest {
 				getProject().addModelElement(workPackage);
 				getProject().addModelElement(actionItem);
 				actionItem.setContainingWorkpackage(workPackage);
-				CompositeOperationHandle compositeOperationHandle = getProjectSpace().beginCompositeOperation();
+				final CompositeOperationHandle compositeOperationHandle = getProjectSpace().beginCompositeOperation();
 				try {
 					compositeOperationHandle.abort();
-				} catch (InvalidHandleException e) {
+				} catch (final InvalidHandleException e) {
 					throw new IllegalStateException(e);
 				}
 
 				assertEquals(workPackage, actionItem.getContainingWorkpackage());
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	/**
@@ -356,11 +356,11 @@ public class CompositeOperationTest extends WorkspaceTest {
 					compositeOperationHandle.abort();
 					compositeOperationHandle = getProjectSpace().beginCompositeOperation();
 					compositeOperationHandle.abort();
-				} catch (InvalidHandleException e) {
+				} catch (final InvalidHandleException e) {
 					fail();
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	/**
@@ -376,7 +376,7 @@ public class CompositeOperationTest extends WorkspaceTest {
 				getProject().addModelElement(DocumentFactory.eINSTANCE.createLeafSection());
 				getProject().addModelElement(DocumentFactory.eINSTANCE.createLeafSection());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -384,14 +384,14 @@ public class CompositeOperationTest extends WorkspaceTest {
 				getProject().addModelElement(DocumentFactory.eINSTANCE.createLeafSection());
 				getProject().addModelElement(DocumentFactory.eINSTANCE.createLeafSection());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		RunESCommand.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				getProjectSpace().getOperationManager().endCompositeOperation();
 				return null;
 			}
-		}, getProject());
+		}, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(getProjectSpace().getOperationManager().getNotificationRecorder().isRecordingComplete());
 
@@ -403,7 +403,7 @@ public class CompositeOperationTest extends WorkspaceTest {
 				getProject().addModelElement(DocumentFactory.eINSTANCE.createLeafSection());
 				getProject().addModelElement(DocumentFactory.eINSTANCE.createLeafSection());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -411,14 +411,14 @@ public class CompositeOperationTest extends WorkspaceTest {
 				getProject().addModelElement(DocumentFactory.eINSTANCE.createLeafSection());
 				getProject().addModelElement(DocumentFactory.eINSTANCE.createLeafSection());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		RunESCommand.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				getProjectSpace().getOperationManager().endCompositeOperation();
 				return null;
 			}
-		}, getProject());
+		}, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(getProjectSpace().getOperationManager().getNotificationRecorder().isRecordingComplete());
 	}

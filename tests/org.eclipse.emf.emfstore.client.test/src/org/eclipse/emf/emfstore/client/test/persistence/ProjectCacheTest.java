@@ -37,7 +37,7 @@ public class ProjectCacheTest extends WorkspaceTest {
 				project.addModelElement(element);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertNotNull(project.getModelElementId(element));
 		assertNotNull(project.getModelElementId(cutElement));
@@ -55,7 +55,7 @@ public class ProjectCacheTest extends WorkspaceTest {
 			protected void doRun() {
 				project.addModelElement(element);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 
@@ -63,7 +63,7 @@ public class ProjectCacheTest extends WorkspaceTest {
 			protected void doRun() {
 				project.deleteModelElement(element);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertNull(project.getModelElementId(element));
 	}
@@ -82,21 +82,21 @@ public class ProjectCacheTest extends WorkspaceTest {
 				project.addModelElement(container);
 				clearOperations();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				element.setContainer(null);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				container.getElements().add(element);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 	}
 
@@ -117,14 +117,14 @@ public class ProjectCacheTest extends WorkspaceTest {
 				project.addModelElement(container2);
 				clearOperations();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				element.setContainer(container2);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 	}
 
@@ -145,7 +145,7 @@ public class ProjectCacheTest extends WorkspaceTest {
 				project.addModelElement(container2);
 				clearOperations();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -153,7 +153,7 @@ public class ProjectCacheTest extends WorkspaceTest {
 				container.getElements().remove(element);
 				container2.getElements().add(element);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	@Test
@@ -170,21 +170,21 @@ public class ProjectCacheTest extends WorkspaceTest {
 				project.addModelElement(container);
 				clearOperations();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				container.getElements().add(element);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				element.setContainer(container);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -192,6 +192,6 @@ public class ProjectCacheTest extends WorkspaceTest {
 				container.getElements().remove(element);
 				element.setContainer(null);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 }

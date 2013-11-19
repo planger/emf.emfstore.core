@@ -35,14 +35,14 @@ public class DeleteMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(element).setName("Blub");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				EcoreUtil.delete(mc.getTheirItem(element));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		mc.hasConflict(DeletionConflict.class)
 			// my
@@ -62,14 +62,14 @@ public class DeleteMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(element).getStrings().add("Blub");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				EcoreUtil.delete(mc.getTheirItem(element));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		mc.hasConflict(DeletionConflict.class)
 			// my
@@ -90,14 +90,14 @@ public class DeleteMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(element).setName("Blub");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				EcoreUtil.delete(mc.getTheirItem(element2));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		mc.hasConflict(null);
 	}
@@ -114,14 +114,14 @@ public class DeleteMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(element).setReference(mc.getMyItem(link));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				EcoreUtil.delete(mc.getTheirItem(element));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		mc.hasConflict(DeletionConflict.class)
 			// my
@@ -142,14 +142,14 @@ public class DeleteMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(element).getReferences().add(mc.getMyItem(link));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				EcoreUtil.delete(mc.getTheirItem(element));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		mc.hasConflict(DeletionConflict.class)
 			// my
@@ -172,14 +172,14 @@ public class DeleteMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(parent2).getContainedElements().add(mc.getMyItem(child));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				EcoreUtil.delete(mc.getTheirItem(parent));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		mc.hasConflict(DeletionConflict.class)
 			// my
@@ -203,7 +203,7 @@ public class DeleteMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(child2).setName("Ja.");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -211,7 +211,7 @@ public class DeleteMergeTest extends MergeTest {
 				mc.getTheirItem(child).getContainedElements().remove(mc.getTheirItem(child2));
 				mc.getTheirItem(parent).getContainedElements().remove(mc.getTheirItem(child));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		mc.hasConflict(DeletionConflict.class)
 			// my
@@ -237,7 +237,7 @@ public class DeleteMergeTest extends MergeTest {
 			protected void doRun() {
 				mc.getMyItem(child3).setName("Ja.");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -245,7 +245,7 @@ public class DeleteMergeTest extends MergeTest {
 				mc.getTheirItem(child).getContainedElements().remove(mc.getTheirItem(child2));
 				mc.getTheirItem(parent).getContainedElements().remove(mc.getTheirItem(child));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		mc.hasConflict(DeletionConflict.class)
 			// my

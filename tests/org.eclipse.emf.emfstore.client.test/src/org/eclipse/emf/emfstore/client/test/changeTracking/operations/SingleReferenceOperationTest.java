@@ -81,30 +81,30 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				useCase.setInitiatingActor(actor);
 
 				assertEquals(actor, useCase.getInitiatingActor());
-				EList<UseCase> initiatedUseCases = actor.getInitiatedUseCases();
+				final EList<UseCase> initiatedUseCases = actor.getInitiatedUseCases();
 				assertEquals(1, initiatedUseCases.size());
 				assertEquals(useCase, initiatedUseCases.get(0));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
 		AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof CompositeOperation);
 
-		EList<AbstractOperation> subOperations = ((CompositeOperation) operation).getSubOperations();
+		final EList<AbstractOperation> subOperations = ((CompositeOperation) operation).getSubOperations();
 
 		assertEquals(2, subOperations.size());
 
 		operation = subOperations.get(0);
 		assertEquals(true, operation instanceof MultiReferenceOperationImpl);
-		MultiReferenceOperation multiReferenceOperation = (MultiReferenceOperation) operation;
+		final MultiReferenceOperation multiReferenceOperation = (MultiReferenceOperation) operation;
 		assertEquals("initiatedUseCases", multiReferenceOperation.getFeatureName());
 		assertEquals("initiatingActor", multiReferenceOperation.getOppositeFeatureName());
 
-		ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
-		ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
+		final ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
+		final ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
 
 		assertEquals(useCaseId, multiReferenceOperation.getReferencedModelElements().get(0));
 		assertEquals(actorId, multiReferenceOperation.getModelElementId());
@@ -114,7 +114,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 
 		operation = subOperations.get(1);
 		assertEquals(true, operation instanceof SingleReferenceOperation);
-		SingleReferenceOperation singleReferenceOperation = (SingleReferenceOperation) operation;
+		final SingleReferenceOperation singleReferenceOperation = (SingleReferenceOperation) operation;
 
 		assertEquals(null, singleReferenceOperation.getOldValue());
 		assertEquals(actorId, singleReferenceOperation.getNewValue());
@@ -122,7 +122,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 		assertEquals(useCaseId, singleReferenceOperation.getModelElementId());
 		assertEquals("initiatedUseCases", singleReferenceOperation.getOppositeFeatureName());
 		assertEquals(true, singleReferenceOperation.isBidirectional());
-		Set<ModelElementId> otherInvolvedModelElements = singleReferenceOperation.getOtherInvolvedModelElements();
+		final Set<ModelElementId> otherInvolvedModelElements = singleReferenceOperation.getOtherInvolvedModelElements();
 		assertEquals(1, otherInvolvedModelElements.size());
 		assertEquals(actorId, otherInvolvedModelElements.iterator().next());
 	}
@@ -208,7 +208,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				assertEquals(1, initiatedUseCases.size());
 				assertEquals(useCase, initiatedUseCases.get(0));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -224,13 +224,13 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 		assertEquals(3, operations.size());
 
 		// note: skipping multireferenceop at index 0 in test, as it is not interesting in this context
-		AbstractOperation operation = operations.get(2);
+		final AbstractOperation operation = operations.get(2);
 		assertEquals(true, operation instanceof SingleReferenceOperation);
-		SingleReferenceOperation singleReferenceOperation = (SingleReferenceOperation) operation;
+		final SingleReferenceOperation singleReferenceOperation = (SingleReferenceOperation) operation;
 
-		ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
-		ModelElementId oldActorId = ModelUtil.getProject(oldActor).getModelElementId(oldActor);
-		ModelElementId newActorId = ModelUtil.getProject(newActor).getModelElementId(newActor);
+		final ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
+		final ModelElementId oldActorId = ModelUtil.getProject(oldActor).getModelElementId(oldActor);
+		final ModelElementId newActorId = ModelUtil.getProject(newActor).getModelElementId(newActor);
 
 		assertEquals(oldActorId, singleReferenceOperation.getOldValue());
 		assertEquals(newActorId, singleReferenceOperation.getNewValue());
@@ -243,7 +243,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 		assertEquals(true, otherInvolvedModelElements.contains(oldActorId));
 		assertEquals(true, otherInvolvedModelElements.contains(newActorId));
 
-		AbstractOperation reverse = singleReferenceOperation.reverse();
+		final AbstractOperation reverse = singleReferenceOperation.reverse();
 		assertEquals(true, reverse instanceof SingleReferenceOperation);
 		final SingleReferenceOperation reversedSingleReferenceOperation = (SingleReferenceOperation) reverse;
 
@@ -253,7 +253,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				reversedSingleReferenceOperation.apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(oldActor, useCase.getInitiatingActor());
 
@@ -297,7 +297,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				clearOperations();
 				useCase.setLeafSection(section);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		// composite operation containing a multiref operation and a singleref operation expected
@@ -307,10 +307,10 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 
 			@Override
 			protected void doRun() {
-				AbstractOperation reverse = operations.get(0).reverse();
+				final AbstractOperation reverse = operations.get(0).reverse();
 				reverse.apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 	}
@@ -349,7 +349,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				assertEquals(proposal, newIssue.getProposals().get(0));
 				assertEquals(newIssue, proposal.getIssue());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -363,13 +363,13 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 
 		assertEquals(3, operations.size());
 
-		AbstractOperation op0 = operations.get(0);
+		final AbstractOperation op0 = operations.get(0);
 		assertTrue(op0 instanceof MultiReferenceOperation);
 		MultiReferenceOperation multiReferenceOperation = (MultiReferenceOperation) op0;
 
-		ModelElementId oldIssueId = ModelUtil.getProject(oldIssue).getModelElementId(oldIssue);
-		ModelElementId proposalId = ModelUtil.getProject(proposal).getModelElementId(proposal);
-		ModelElementId newIssueId = ModelUtil.getProject(newIssue).getModelElementId(newIssue);
+		final ModelElementId oldIssueId = ModelUtil.getProject(oldIssue).getModelElementId(oldIssue);
+		final ModelElementId proposalId = ModelUtil.getProject(proposal).getModelElementId(proposal);
+		final ModelElementId newIssueId = ModelUtil.getProject(newIssue).getModelElementId(newIssue);
 
 		assertEquals(multiReferenceOperation.getModelElementId(), oldIssueId);
 		assertFalse(multiReferenceOperation.isAdd());
@@ -377,7 +377,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 		assertEquals(multiReferenceOperation.getReferencedModelElements().size(), 1);
 		assertEquals(multiReferenceOperation.getIndex(), 0);
 
-		AbstractOperation op1 = operations.get(1);
+		final AbstractOperation op1 = operations.get(1);
 		assertTrue(op1 instanceof MultiReferenceOperation);
 		multiReferenceOperation = (MultiReferenceOperation) op1;
 		assertEquals(multiReferenceOperation.getModelElementId(), newIssueId);
@@ -386,9 +386,9 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 		assertEquals(multiReferenceOperation.getReferencedModelElements().size(), 1);
 		assertEquals(multiReferenceOperation.getIndex(), 0);
 
-		AbstractOperation operation = operations.get(2);
+		final AbstractOperation operation = operations.get(2);
 		assertEquals(true, operation instanceof SingleReferenceOperation);
-		SingleReferenceOperation singleReferenceOperation = (SingleReferenceOperation) operation;
+		final SingleReferenceOperation singleReferenceOperation = (SingleReferenceOperation) operation;
 
 		assertEquals(oldIssueId, singleReferenceOperation.getOldValue());
 		assertEquals(newIssueId, singleReferenceOperation.getNewValue());
@@ -398,7 +398,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 		assertEquals(RationalePackage.eINSTANCE.getIssue_Proposals().getName(),
 			singleReferenceOperation.getOppositeFeatureName());
 		assertEquals(true, singleReferenceOperation.isBidirectional());
-		Set<ModelElementId> otherInvolvedModelElements = singleReferenceOperation.getOtherInvolvedModelElements();
+		final Set<ModelElementId> otherInvolvedModelElements = singleReferenceOperation.getOtherInvolvedModelElements();
 		assertEquals(2, otherInvolvedModelElements.size());
 		assertEquals(true, otherInvolvedModelElements.contains(newIssueId));
 		assertEquals(true, otherInvolvedModelElements.contains(oldIssueId));
@@ -424,7 +424,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				proposal.setIssue(issue);
 				clearOperations();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(1, issue.getProposals().size());
 		assertEquals(proposal, issue.getProposals().get(0));
@@ -435,14 +435,14 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 		assertEquals(getProject(), ModelUtil.getProject(proposal));
 		assertEquals(issue, proposal.eContainer());
 
-		ModelElementId proposalId = ModelUtil.getProject(proposal).getModelElementId(proposal);
+		final ModelElementId proposalId = ModelUtil.getProject(proposal).getModelElementId(proposal);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				proposal.setIssue(null);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(true, getProject().contains(issue));
 		assertEquals(false, getProject().contains(proposal));
@@ -452,28 +452,28 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 		assertEquals(null, proposal.getIssue());
 		// assertEquals(null, proposal.eContainer());
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
 
-		ModelElementId issueId = ModelUtil.getProject(issue).getModelElementId(issue);
+		final ModelElementId issueId = ModelUtil.getProject(issue).getModelElementId(issue);
 
-		List<ReferenceOperation> subOperations = checkAndCast(operations.get(0), CreateDeleteOperation.class)
+		final List<ReferenceOperation> subOperations = checkAndCast(operations.get(0), CreateDeleteOperation.class)
 			.getSubOperations();
 		assertEquals(2, subOperations.size());
 
-		AbstractOperation op0 = subOperations.get(0);
+		final AbstractOperation op0 = subOperations.get(0);
 		assertTrue(op0 instanceof MultiReferenceOperation);
-		MultiReferenceOperation multiReferenceOperation = (MultiReferenceOperation) op0;
+		final MultiReferenceOperation multiReferenceOperation = (MultiReferenceOperation) op0;
 		assertEquals(multiReferenceOperation.getModelElementId(), issueId);
 		assertFalse(multiReferenceOperation.isAdd());
 		assertEquals(multiReferenceOperation.getReferencedModelElements().get(0), proposalId);
 		assertEquals(multiReferenceOperation.getReferencedModelElements().size(), 1);
 		assertEquals(multiReferenceOperation.getIndex(), 0);
 
-		AbstractOperation operation = subOperations.get(1);
+		final AbstractOperation operation = subOperations.get(1);
 		assertEquals(true, operation instanceof SingleReferenceOperation);
-		SingleReferenceOperation singleReferenceOperation = (SingleReferenceOperation) operation;
+		final SingleReferenceOperation singleReferenceOperation = (SingleReferenceOperation) operation;
 
 		assertEquals(issueId, singleReferenceOperation.getOldValue());
 		assertEquals(null, singleReferenceOperation.getNewValue());
@@ -483,7 +483,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 		assertEquals(RationalePackage.eINSTANCE.getIssue_Proposals().getName(),
 			singleReferenceOperation.getOppositeFeatureName());
 		assertEquals(true, singleReferenceOperation.isBidirectional());
-		Set<ModelElementId> otherInvolvedModelElements = singleReferenceOperation.getOtherInvolvedModelElements();
+		final Set<ModelElementId> otherInvolvedModelElements = singleReferenceOperation.getOtherInvolvedModelElements();
 		assertEquals(1, otherInvolvedModelElements.size());
 		assertEquals(true, otherInvolvedModelElements.contains(issueId));
 	}
@@ -501,33 +501,33 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				fan.setFavouritePlayer(favPlayer);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(favPlayer, fan.getFavouritePlayer());
 		assertEquals(true, fan.isSetFavouritePlayer());
 
 		clearOperations();
-		Project secondProject = ModelUtil.clone(getProject());
+		final Project secondProject = ModelUtil.clone(getProject());
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				fan.unsetFavouritePlayer();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertFalse(favPlayer.equals(fan.getFavouritePlayer()));
 		assertEquals(null, fan.getFavouritePlayer());
 		assertTrue(getProject().getAllModelElements().contains(favPlayer));
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof SingleReferenceOperation);
-		SingleReferenceOperation singleRefOp = (SingleReferenceOperation) operation;
+		final SingleReferenceOperation singleRefOp = (SingleReferenceOperation) operation;
 
-		ModelElementId playerId = ModelUtil.getProject(favPlayer).getModelElementId(favPlayer);
+		final ModelElementId playerId = ModelUtil.getProject(favPlayer).getModelElementId(favPlayer);
 		assertEquals(playerId, singleRefOp.getOldValue());
 		assertEquals(null, singleRefOp.getNewValue());
 		assertEquals(true, singleRefOp.getUnset() == UnsetType.IS_UNSET);
@@ -551,33 +551,33 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				fan.setFavouritePlayer(favPlayer);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(favPlayer, fan.getFavouritePlayer());
 		assertEquals(true, fan.isSetFavouritePlayer());
 
 		clearOperations();
-		Project secondProject = ModelUtil.clone(getProject());
+		final Project secondProject = ModelUtil.clone(getProject());
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				fan.unsetFavouritePlayer();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertFalse(favPlayer.equals(fan.getFavouritePlayer()));
 		assertEquals(null, fan.getFavouritePlayer());
 		assertTrue(getProject().getAllModelElements().contains(favPlayer));
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof SingleReferenceOperation);
 		final SingleReferenceOperation singleRefOp = (SingleReferenceOperation) operation;
 
-		ModelElementId playerId = ModelUtil.getProject(favPlayer).getModelElementId(favPlayer);
+		final ModelElementId playerId = ModelUtil.getProject(favPlayer).getModelElementId(favPlayer);
 		assertEquals(playerId, singleRefOp.getOldValue());
 		assertEquals(null, singleRefOp.getNewValue());
 		assertEquals(true, singleRefOp.getUnset() == UnsetType.IS_UNSET);
@@ -588,7 +588,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				singleRefOp.reverse().apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(favPlayer, fan.getFavouritePlayer());
 		assertEquals(true, fan.isSetFavouritePlayer());
@@ -609,7 +609,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				fan.setFavouritePlayer(favPlayer);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(favPlayer, fan.getFavouritePlayer());
 		assertEquals(true, fan.isSetFavouritePlayer());
@@ -621,21 +621,21 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				fan.unsetFavouritePlayer();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertFalse(favPlayer.equals(fan.getFavouritePlayer()));
 		assertEquals(null, fan.getFavouritePlayer());
 		assertTrue(getProject().getAllModelElements().contains(favPlayer));
 
-		Project secondProject = ModelUtil.clone(getProject());
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final Project secondProject = ModelUtil.clone(getProject());
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof SingleReferenceOperation);
 		final SingleReferenceOperation singleRefOp = (SingleReferenceOperation) operation;
 
-		ModelElementId playerId = ModelUtil.getProject(favPlayer).getModelElementId(favPlayer);
+		final ModelElementId playerId = ModelUtil.getProject(favPlayer).getModelElementId(favPlayer);
 		assertEquals(playerId, singleRefOp.getOldValue());
 		assertEquals(null, singleRefOp.getNewValue());
 		assertEquals(true, singleRefOp.getUnset() == UnsetType.IS_UNSET);
@@ -646,7 +646,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				singleRefOp.reverse().reverse().apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertFalse(favPlayer.equals(fan.getFavouritePlayer()));
 		assertEquals(null, fan.getFavouritePlayer());
@@ -666,32 +666,32 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				getProject().addModelElement(fan);
 				getProject().addModelElement(favPlayer);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(false, fan.isSetFavouritePlayer());
 
 		clearOperations();
-		Project secondProject = ModelUtil.clone(getProject());
+		final Project secondProject = ModelUtil.clone(getProject());
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				fan.setFavouritePlayer(favPlayer);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(favPlayer.equals(fan.getFavouritePlayer()));
 		assertEquals(favPlayer, fan.getFavouritePlayer());
 		assertTrue(getProject().getAllModelElements().contains(favPlayer));
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof SingleReferenceOperation);
 		final SingleReferenceOperation singleRefOp = (SingleReferenceOperation) operation;
 
-		ModelElementId playerId = ModelUtil.getProject(favPlayer).getModelElementId(favPlayer);
+		final ModelElementId playerId = ModelUtil.getProject(favPlayer).getModelElementId(favPlayer);
 		assertEquals(null, singleRefOp.getOldValue());
 		assertEquals(playerId, singleRefOp.getNewValue());
 		assertEquals("favouritePlayer", singleRefOp.getFeatureName());
@@ -701,7 +701,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				singleRefOp.reverse().apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(null, fan.getFavouritePlayer());
 		assertEquals(false, fan.isSetFavouritePlayer());
@@ -722,31 +722,31 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				fan.setFavouriteMerchandise(merch);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(merch, fan.getFavouriteMerchandise());
 		assertEquals(true, fan.isSetFavouriteMerchandise());
 
 		clearOperations();
-		Project secondProject = ModelUtil.clone(getProject());
+		final Project secondProject = ModelUtil.clone(getProject());
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				fan.unsetFavouriteMerchandise();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertFalse(merch.equals(fan.getFavouriteMerchandise()));
 		assertEquals(null, fan.getFavouriteMerchandise());
 		assertFalse(getProject().getAllModelElements().contains(merch));
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof CreateDeleteOperation);
-		CreateDeleteOperation creaDelOp = (CreateDeleteOperation) operation;
+		final CreateDeleteOperation creaDelOp = (CreateDeleteOperation) operation;
 
 		// apply operation to copy of initial project
 		creaDelOp.apply(secondProject);
@@ -766,7 +766,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				fan.setFavouriteMerchandise(merch);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(merch, fan.getFavouriteMerchandise());
 		assertEquals(true, fan.isSetFavouriteMerchandise());
@@ -778,17 +778,17 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				fan.unsetFavouriteMerchandise();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertFalse(merch.equals(fan.getFavouriteMerchandise()));
 		assertEquals(null, fan.getFavouriteMerchandise());
 		assertFalse(getProject().getAllModelElements().contains(merch));
 
-		Project secondProject = ModelUtil.clone(getProject());
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final Project secondProject = ModelUtil.clone(getProject());
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof CreateDeleteOperation);
 		final CreateDeleteOperation creaDelOp = (CreateDeleteOperation) operation;
 
@@ -797,7 +797,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				creaDelOp.reverse().reverse().apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertFalse(merch.equals(fan.getFavouriteMerchandise()));
 		assertEquals(null, fan.getFavouriteMerchandise());
@@ -818,29 +818,29 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				fan.setFavouriteMerchandise(merch);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(merch, fan.getFavouriteMerchandise());
 		assertEquals(true, fan.isSetFavouriteMerchandise());
 
 		clearOperations();
-		Project secondProject = ModelUtil.clone(getProject());
+		final Project secondProject = ModelUtil.clone(getProject());
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				fan.unsetFavouriteMerchandise();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertFalse(merch.equals(fan.getFavouriteMerchandise()));
 		assertEquals(null, fan.getFavouriteMerchandise());
 		assertFalse(getProject().getAllModelElements().contains(merch));
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof CreateDeleteOperation);
 		final CreateDeleteOperation creaDelOp = (CreateDeleteOperation) operation;
 
@@ -849,7 +849,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				creaDelOp.reverse().apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(merch.getName(), fan.getFavouriteMerchandise().getName());
 		assertEquals(merch.getPrice(), fan.getFavouriteMerchandise().getPrice());
@@ -871,10 +871,10 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				assertEquals(null, fan.getFavouriteMerchandise());
 				assertEquals(false, fan.isSetFavouriteMerchandise());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		clearOperations();
-		Project secondProject = ModelUtil.clone(getProject());
+		final Project secondProject = ModelUtil.clone(getProject());
 
 		new EMFStoreCommand() {
 			@Override
@@ -883,16 +883,16 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				assertEquals(merch, fan.getFavouriteMerchandise());
 				assertEquals(true, fan.isSetFavouriteMerchandise());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof SingleReferenceOperation);
 		final SingleReferenceOperation singleRefOp = (SingleReferenceOperation) operation;
 
-		ModelElementId merchId = ModelUtil.getProject(merch).getModelElementId(merch);
+		final ModelElementId merchId = ModelUtil.getProject(merch).getModelElementId(merch);
 		assertEquals(null, singleRefOp.getOldValue());
 		assertEquals(merchId, singleRefOp.getNewValue());
 		assertEquals("favouriteMerchandise", singleRefOp.getFeatureName());
@@ -902,7 +902,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				singleRefOp.reverse().apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(null, fan.getFavouriteMerchandise());
 		assertEquals(false, fan.isSetFavouriteMerchandise());
@@ -920,7 +920,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				assertEquals(null, fan.getFavouritePlayer());
 				assertTrue(!fan.isSetFavouritePlayer());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -932,12 +932,12 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 				assertEquals(null, fan.getFavouritePlayer());
 				assertTrue(fan.isSetFavouritePlayer());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof SingleReferenceOperation);
 		final SingleReferenceOperation singleRefOp = (SingleReferenceOperation) operation;
 
@@ -946,7 +946,7 @@ public class SingleReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				singleRefOp.apply(secondProject);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), secondProject));
 	}

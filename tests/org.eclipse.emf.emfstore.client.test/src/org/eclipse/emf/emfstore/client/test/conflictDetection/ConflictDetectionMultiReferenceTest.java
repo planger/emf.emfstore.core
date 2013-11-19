@@ -46,11 +46,11 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 	@Test
 	public void noConflictAddAddSameObjectSameIndex() {
 
-		ModelElementId actorId = createActor();
-		ModelElementId sectionId = createLeafSection(true);
+		final ModelElementId actorId = createActor();
+		final ModelElementId sectionId = createLeafSection(true);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor actor1 = (Actor) getProject().getModelElement(actorId);
 		final Actor actor2 = (Actor) clonedProject.getModelElement(actorId);
@@ -65,12 +65,12 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getModelElements().add(actor2);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
 				.size());
@@ -97,13 +97,13 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				getProject().addModelElement(actor);
 				clearOperations();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
-		ModelElementId actorId = getProject().getModelElementId(actor);
-		ModelElementId sectionId = getProject().getModelElementId(section);
+		final ModelElementId actorId = getProject().getModelElementId(actor);
+		final ModelElementId sectionId = getProject().getModelElementId(section);
 
 		final Actor actor1 = (Actor) getProject().getModelElement(actorId);
 		final Actor actor2 = (Actor) clonedProject.getModelElement(actorId);
@@ -118,12 +118,12 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getModelElements().add(actor2);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(), getConflicts(oclonedProjectSpace, ops1)
 			.size());
 		// same operations going on in both working copies, no conflicts expected
@@ -137,12 +137,12 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 	@Test
 	public void conflictAddAddDifferentObjectDifferentIndex() {
 
-		ModelElementId actorId = createActor();
-		ModelElementId dummyId = createActor();
-		ModelElementId sectionId = createLeafSection(true);
+		final ModelElementId actorId = createActor();
+		final ModelElementId dummyId = createActor();
+		final ModelElementId sectionId = createLeafSection(true);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor actor1 = (Actor) getProject().getModelElement(actorId);
 		final Actor dummy2 = (Actor) clonedProject.getModelElement(dummyId);
@@ -160,12 +160,12 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getModelElements().add(dummy2);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
 				.size());
@@ -180,11 +180,11 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 	@Test
 	public void conflictAddRemoveSameObject() {
 
-		ModelElementId actorId = createActor();
-		ModelElementId sectionId = createLeafSection(true);
+		final ModelElementId actorId = createActor();
+		final ModelElementId sectionId = createLeafSection(true);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor actor1 = (Actor) getProject().getModelElement(actorId);
 		final Actor actor2 = (Actor) clonedProject.getModelElement(actorId);
@@ -198,7 +198,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			protected void doRun() {
 				section1.getModelElements().add(actor1);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 
@@ -208,13 +208,13 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getModelElements().remove(actor2);
 
 			}
-		}.run(clonedProject, false);
+		}.run(clonedProjectSpace.getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		// hard conflict between add and remove, serialization matters
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(), getConflicts(oclonedProjectSpace, ops1)
 			.size());
 
@@ -228,12 +228,12 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 	@Test
 	public void conflictAddParentSetRemoveSameObject() {
 
-		ModelElementId actorId = createActor();
-		ModelElementId sectionId = createLeafSection();
-		ModelElementId otherSectionId = createLeafSection(true);
+		final ModelElementId actorId = createActor();
+		final ModelElementId sectionId = createLeafSection();
+		final ModelElementId otherSectionId = createLeafSection(true);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor actor1 = (Actor) getProject().getModelElement(actorId);
 		final Actor actor2 = (Actor) clonedProject.getModelElement(actorId);
@@ -251,13 +251,13 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				actor2.setLeafSection(otherSection2);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		// hard conflict between add and remove, serialization matters
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(), getConflicts(oclonedProjectSpace, ops1)
 			.size());
 
@@ -271,12 +271,12 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 	@Test
 	public void conflictAddRemoveIndirectlySameObject() {
 
-		ModelElementId actorId = createActor();
-		ModelElementId sectionId = createLeafSection();
-		ModelElementId otherSectionId = createLeafSection(true);
+		final ModelElementId actorId = createActor();
+		final ModelElementId sectionId = createLeafSection();
+		final ModelElementId otherSectionId = createLeafSection(true);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor actor1 = (Actor) getProject().getModelElement(actorId);
 		final Actor actor2 = (Actor) clonedProject.getModelElement(actorId);
@@ -294,13 +294,13 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				otherSection2.getModelElements().add(actor2);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		// hard conflict between add and remove, serialization matters
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(), getConflicts(oclonedProjectSpace, ops1)
 			.size());
 
@@ -314,12 +314,12 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 	@Test
 	public void conflictParentSetAddParentSetRemoveSameObject() {
 
-		ModelElementId sectionId = createLeafSection();
-		ModelElementId otherSectionId = createLeafSection();
-		ModelElementId actorId = createActor(true);
+		final ModelElementId sectionId = createLeafSection();
+		final ModelElementId otherSectionId = createLeafSection();
+		final ModelElementId actorId = createActor(true);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor actor1 = (Actor) getProject().getModelElement(actorId);
 		final Actor actor2 = (Actor) clonedProject.getModelElement(actorId);
@@ -332,11 +332,11 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 		setLeafSection(actor2, section2);
 		setLeafSection(actor2, otherSection2);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		// hard conflict between add and remove, serialization matters
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(), getConflicts(oclonedProjectSpace, ops1)
 			.size());
 
@@ -349,12 +349,12 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 	@Test
 	public void conflictParentSetAddRemoveIndirectlySameObject() {
 
-		ModelElementId actorId = createActor();
-		ModelElementId sectionId = createLeafSection();
-		ModelElementId otherSectionId = createLeafSection(true);
+		final ModelElementId actorId = createActor();
+		final ModelElementId sectionId = createLeafSection();
+		final ModelElementId otherSectionId = createLeafSection(true);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor actor1 = (Actor) getProject().getModelElement(actorId);
 		final Actor actor2 = (Actor) clonedProject.getModelElement(actorId);
@@ -372,13 +372,13 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				otherSection2.getModelElements().add(actor2);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		// hard conflict between add and remove, serialization matters
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(), getConflicts(oclonedProjectSpace, ops1)
 			.size());
 
@@ -392,11 +392,11 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 	@Test
 	public void conflictParentSetAddRemoveSameObject() {
 
-		ModelElementId actorId = createActor();
-		ModelElementId sectionId = createLeafSection(true);
+		final ModelElementId actorId = createActor();
+		final ModelElementId sectionId = createLeafSection(true);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor actor1 = (Actor) getProject().getModelElement(actorId);
 		final Actor actor2 = (Actor) clonedProject.getModelElement(actorId);
@@ -410,7 +410,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			protected void doRun() {
 				actor1.setLeafSection(section1);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 
@@ -419,12 +419,12 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				actor2.setLeafSection(section2);
 				section2.getModelElements().remove(actor2);
 			}
-		}.run(clonedProject, false);
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		}.run(clonedProjectSpace.getContentEditingDomain(), false);
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		// hard conflict between add and remove, serialization matters
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(), getConflicts(oclonedProjectSpace, ops1)
 			.size());
 
@@ -438,12 +438,12 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 	@Test
 	public void conflictParentSetAddIndirectRemoveSameObject() {
 
-		ModelElementId actorId = createActor();
-		ModelElementId sectionId = createLeafSection();
-		ModelElementId otherSectionId = createLeafSection(true);
+		final ModelElementId actorId = createActor();
+		final ModelElementId sectionId = createLeafSection();
+		final ModelElementId otherSectionId = createLeafSection(true);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor actor1 = (Actor) getProject().getModelElement(actorId);
 		final Actor actor2 = (Actor) clonedProject.getModelElement(actorId);
@@ -461,13 +461,13 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				otherSection2.getModelElements().add(actor2);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		// hard conflict between add and remove, serialization matters
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(), getConflicts(oclonedProjectSpace, ops1)
 			.size());
 
@@ -481,12 +481,12 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 	@Test
 	public void conflictAddIndirectRemoveSameObject() {
 
-		ModelElementId actorId = createActor();
-		ModelElementId sectionId = createLeafSection();
-		ModelElementId otherSectionId = createLeafSection(true);
+		final ModelElementId actorId = createActor();
+		final ModelElementId sectionId = createLeafSection();
+		final ModelElementId otherSectionId = createLeafSection(true);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor actor1 = (Actor) getProject().getModelElement(actorId);
 		final Actor actor2 = (Actor) clonedProject.getModelElement(actorId);
@@ -504,13 +504,13 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				otherSection2.getModelElements().add(actor2);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		// hard conflict between add and remove, serialization matters
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(), getConflicts(oclonedProjectSpace, ops1)
 			.size());
 
@@ -524,8 +524,8 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 	@Test
 	public void conflictRemoveRemoveSameObject() {
 
-		ModelElementId actorId = createActor();
-		ModelElementId sectionId = createLeafSection();
+		final ModelElementId actorId = createActor();
+		final ModelElementId sectionId = createLeafSection();
 
 		createLeafSection();
 
@@ -534,8 +534,8 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 
 		setLeafSection(actor1, section1, true);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor actor2 = (Actor) clonedProject.getModelElement(actorId);
 
@@ -548,7 +548,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section1.getModelElements().remove(actor1);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 
@@ -557,13 +557,13 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getModelElements().remove(actor2);
 
 			}
-		}.run(clonedProject, false);
+		}.run(clonedProjectSpace.getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		// no hard conflict
-		Set<AbstractOperation> hardConflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> hardConflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(), getConflicts(oclonedProjectSpace, ops1)
 			.size());
 
@@ -577,17 +577,17 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 	@Test
 	public void conflictParentSetRemoveRemoveIndirectlySameObject() {
 
-		ModelElementId sectionId = createLeafSection();
-		ModelElementId otherSectionId = createLeafSection();
-		ModelElementId actorId = createActor();
+		final ModelElementId sectionId = createLeafSection();
+		final ModelElementId otherSectionId = createLeafSection();
+		final ModelElementId actorId = createActor();
 
 		final Actor actor = (Actor) getProject().getModelElement(actorId);
 		final LeafSection section = (LeafSection) getProject().getModelElement(sectionId);
 
 		setLeafSection(actor, section, true);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor actor2 = (Actor) clonedProject.getModelElement(actorId);
 		final LeafSection otherSection2 = (LeafSection) clonedProject.getModelElement(otherSectionId);
@@ -598,13 +598,13 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				actor.setLeafSection(section);
 				otherSection2.getModelElements().add(actor2);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		// no index conflict
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(), getConflicts(oclonedProjectSpace, ops1)
 			.size());
 
@@ -630,10 +630,10 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 
 		setLeafSection(actor, section, true);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
-		ModelElementId anotherSection2Id = clonedProject.getModelElementId(anotherSection);
+		final ModelElementId anotherSection2Id = clonedProject.getModelElementId(anotherSection);
 		final Actor actor2 = (Actor) clonedProject.getModelElement(actorId);
 		final LeafSection anotherSection2 = (LeafSection) clonedProject.getModelElement(anotherSection2Id);
 
@@ -645,13 +645,13 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				actor2.setLeafSection(anotherSection2);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		// a hard conflict, though. serialization matters
-		Set<AbstractOperation> hardConflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> hardConflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(), getConflicts(oclonedProjectSpace, ops1)
 			.size());
 
@@ -665,17 +665,17 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 	@Test
 	public void conflictAddMoveSameObject() {
 
-		ModelElementId actorId = createActor();
-		ModelElementId dummyId = createActor();
-		ModelElementId sectionId = createLeafSection();
+		final ModelElementId actorId = createActor();
+		final ModelElementId dummyId = createActor();
+		final ModelElementId sectionId = createLeafSection();
 
 		final Actor dummy = (Actor) getProject().getModelElement(dummyId);
 		final LeafSection section = (LeafSection) getProject().getModelElement(sectionId);
 
 		addToSection(section, true, dummy);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor actor1 = (Actor) getProject().getModelElement(actorId);
 		final Actor actor2 = (Actor) clonedProject.getModelElement(actorId);
@@ -692,13 +692,13 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getModelElements().move(0, actor2);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		// no index conflict
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
 				.size());
@@ -715,9 +715,9 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 	@Test
 	public void conflictParentSetAddMoveSameObject() {
 
-		ModelElementId actorId = createActor();
-		ModelElementId dummyId = createActor();
-		ModelElementId sectionId = createLeafSection();
+		final ModelElementId actorId = createActor();
+		final ModelElementId dummyId = createActor();
+		final ModelElementId sectionId = createLeafSection();
 
 		final Actor actor = (Actor) getProject().getModelElement(actorId);
 		final Actor dummy = (Actor) getProject().getModelElement(dummyId);
@@ -725,8 +725,8 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 
 		addToSection(section, true, dummy);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor actor2 = (Actor) clonedProject.getModelElement(actorId);
 		final LeafSection section2 = (LeafSection) clonedProject.getModelElement(sectionId);
@@ -738,13 +738,13 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getModelElements().add(actor2);
 				section2.getModelElements().move(0, actor2);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		// no index conflict
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
 				.size());
@@ -774,8 +774,8 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 
 		assertEquals(section.getModelElements().get(2), actor);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor actor2 = (Actor) clonedProject.getModelElement(actorId);
 		final LeafSection section2 = (LeafSection) clonedProject.getModelElement(sectionId);
@@ -786,13 +786,13 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section.getModelElements().move(1, actor);
 				section2.getModelElements().move(0, actor2);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		// no index conflict
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
 				.size());
@@ -821,8 +821,8 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 
 		addToSection(section, true, otherDummy, dummy);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final LeafSection otherSection2 = getModelElement(clonedProject, otherSectionId);
 		final Actor dummy2 = getModelElement(clonedProject, dummyId);
@@ -833,12 +833,12 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section.getModelElements().add(1, actor);
 				dummy2.setLeafSection(otherSection2);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
 				.size());
@@ -863,8 +863,8 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 
 		addToSection(section, true, otherDummy, dummy);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor dummy2 = (Actor) clonedProject.getModelElement(dummyId);
 		final LeafSection otherSection2 = (LeafSection) clonedProject.getModelElement(otherSectionId);
@@ -875,12 +875,12 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section.getModelElements().add(1, actor);
 				dummy2.setLeafSection(otherSection2);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
 				.size());
@@ -905,10 +905,10 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 
 		addToSection(section, true, dummy);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
-		ModelElementId dummy2Id = clonedProject.getModelElementId(dummy);
+		final ModelElementId dummy2Id = clonedProject.getModelElementId(dummy);
 		final Actor dummy2 = (Actor) clonedProject.getModelElement(dummy2Id);
 		final LeafSection section2 = (LeafSection) clonedProject.getModelElement(sectionId);
 
@@ -920,12 +920,12 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getModelElements().remove(dummy2);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
 				.size());
@@ -951,8 +951,8 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 
 		addToSection(section, true, dummy);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor dummy2 = (Actor) clonedProject.getModelElement(dummyId);
 		final LeafSection otherSection2 = (LeafSection) clonedProject.getModelElement(otherSectionId);
@@ -964,12 +964,12 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				otherSection2.getModelElements().add(dummy2);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
 				.size());
@@ -994,8 +994,8 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 
 		addToSection(section, true, dummy);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor dummy2 = (Actor) clonedProject.getModelElement(dummyId);
 		final LeafSection otherSection2 = (LeafSection) clonedProject.getModelElement(sectionId);
@@ -1006,12 +1006,12 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				actor.setLeafSection(section);
 				dummy2.setLeafSection(otherSection2);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
 				.size());
@@ -1038,10 +1038,10 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 
 		addToSection(section, true, otherDummy, actor, dummy);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
-		ModelElementId dummy2Id = clonedProject.getModelElementId(dummy);
+		final ModelElementId dummy2Id = clonedProject.getModelElementId(dummy);
 		final Actor dummy2 = (Actor) clonedProject.getModelElement(dummy2Id);
 		final LeafSection section2 = (LeafSection) clonedProject.getModelElement(sectionId);
 
@@ -1052,12 +1052,12 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getModelElements().remove(dummy2);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
 				.size());
@@ -1085,8 +1085,8 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 
 		addToSection(section, true, otherDummy, actor, dummy);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor dummy2 = (Actor) clonedProject.getModelElement(dummyId);
 		final LeafSection otherSection2 = (LeafSection) clonedProject.getModelElement(otherSectionId);
@@ -1098,12 +1098,12 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				otherSection2.getModelElements().add(dummy2);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
 				.size());
@@ -1131,8 +1131,8 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 
 		addToSection(section, true, otherDummy, actor, dummy);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor dummy2 = (Actor) clonedProject.getModelElement(dummyId);
 		final LeafSection otherSection2 = (LeafSection) clonedProject.getModelElement(otherSectionId);
@@ -1145,12 +1145,12 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				otherSection2.getModelElements().add(dummy2);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
 				.size());
@@ -1180,8 +1180,8 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 
 		addToSection(section, true, otherDummy, actor, dummy);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor dummy2 = (Actor) clonedProject.getModelElement(dummyId);
 		final LeafSection otherSection2 = (LeafSection) clonedProject.getModelElement(otherSectionId);
@@ -1192,12 +1192,12 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				actor.setLeafSection(anotherSection);
 				otherSection2.getModelElements().add(dummy2);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
 				.size());
@@ -1227,8 +1227,8 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 
 		addToSection(section, true, otherDummy, actor, dummy);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor dummy2 = (Actor) clonedProject.getModelElement(dummyId);
 		final LeafSection otherSection2 = (LeafSection) clonedProject.getModelElement(otherSectionId);
@@ -1241,12 +1241,12 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				dummy2.setLeafSection(otherSection2);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
 				.size());
@@ -1276,8 +1276,8 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 
 		addToSection(section, true, otherDummy, actor, dummy);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor dummy2 = (Actor) clonedProject.getModelElement(dummyId);
 		final LeafSection otherSection2 = (LeafSection) clonedProject.getModelElement(otherSectionId);
@@ -1288,12 +1288,12 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				anotherSection.getModelElements().add(actor);
 				otherSection2.getModelElements().add(dummy2);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
 				.size());
@@ -1322,8 +1322,8 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 
 		addToSection(section, true, dummy, otherDummy, anotherDummy);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor anotherDummy2 = (Actor) clonedProject.getModelElement(anotherDummyId);
 		final LeafSection section2 = (LeafSection) clonedProject.getModelElement(sectionId);
@@ -1334,12 +1334,12 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section.getModelElements().add(0, actor);
 				section2.getModelElements().move(1, anotherDummy2);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
 				.size());
@@ -1367,8 +1367,8 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 
 		addToSection(section, true, actor, dummy, otherDummy, anotherDummy);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor anotherDummy2 = (Actor) clonedProject.getModelElement(anotherDummyId);
 		final LeafSection section2 = (LeafSection) clonedProject.getModelElement(sectionId);
@@ -1379,12 +1379,12 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section.getModelElements().remove(actor);
 				section2.getModelElements().move(0, anotherDummy2);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
 				.size());
@@ -1413,8 +1413,8 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 
 		addToSection(section, true, actor, dummy, otherDummy, anotherDummy);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor anotherDummy2 = (Actor) clonedProject.getModelElement(anotherDummyId);
 		final LeafSection section2 = (LeafSection) clonedProject.getModelElement(sectionId);
@@ -1425,12 +1425,12 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section.getModelElements().remove(dummy);
 				section2.getModelElements().move(1, anotherDummy2);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
 				.size());
@@ -1461,8 +1461,8 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 
 		addToSection(section, true, actor, dummy, otherDummy, anotherDummy);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor anotherDummy2 = (Actor) clonedProject.getModelElement(anotherDummyId);
 		final LeafSection section2 = (LeafSection) clonedProject.getModelElement(sectionId);
@@ -1473,12 +1473,12 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				dummy.setLeafSection(otherSection);
 				section2.getModelElements().move(1, anotherDummy2);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
 				.size());
@@ -1509,8 +1509,8 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 
 		addToSection(section, true, actor, dummy, otherDummy, anotherDummy);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor anotherDummy2 = (Actor) clonedProject.getModelElement(anotherDummyId);
 		final LeafSection section2 = (LeafSection) clonedProject.getModelElement(sectionId);
@@ -1521,11 +1521,11 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				otherSection.getModelElements().add(dummy);
 				section2.getModelElements().move(1, anotherDummy2);
 			}
-		}.run(getProject(), false);
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		}.run(getProjectSpace().getContentEditingDomain(), false);
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
 				.size());
@@ -1555,8 +1555,8 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 
 		addToSection(section, true, actor, dummy, otherDummy, anotherDummy);
 
-		ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		Project clonedProject = clonedProjectSpace.getProject();
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final Project clonedProject = clonedProjectSpace.getProject();
 
 		final Actor anotherDummy2 = (Actor) clonedProject.getModelElement(anotherDummyId);
 		final LeafSection section2 = (LeafSection) clonedProject.getModelElement(sectionId);
@@ -1567,12 +1567,12 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section.getModelElements().move(2, actor);
 				section2.getModelElements().move(0, anotherDummy2);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
-		List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
+		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
+		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
 		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
 			getConflicts(oclonedProjectSpace, ops1)
 				.size());
@@ -1605,7 +1605,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				}
 				return getProject().getModelElementId(eObject);
 			}
-		}, getProject());
+		}, getProjectSpace().getContentEditingDomain());
 	}
 
 	private ModelElementId createLeafSection() {
@@ -1637,7 +1637,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 
 		RunESCommand.run(new Callable<Void>() {
 			public Void call() throws Exception {
-				for (U child : children) {
+				for (final U child : children) {
 					section.getModelElements().add(child);
 				}
 				if (shouldClearOperations) {
@@ -1645,7 +1645,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				}
 				return null;
 			}
-		}, getProject());
+		}, getProjectSpace().getContentEditingDomain());
 	}
 
 	private <U extends UnicaseModelElement> void addToUseCase(
@@ -1655,7 +1655,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 
 		RunESCommand.run(new Callable<Void>() {
 			public Void call() throws Exception {
-				for (Actor child : actors) {
+				for (final Actor child : actors) {
 					useCase.getParticipatingActors().add(child);
 				}
 				if (shouldClearOperations) {
@@ -1663,7 +1663,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				}
 				return null;
 			}
-		}, getProject());
+		}, getProjectSpace().getContentEditingDomain());
 	}
 
 	private void setLeafSection(final Actor actor, final LeafSection leafSection) {
@@ -1679,7 +1679,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				}
 				return null;
 			}
-		}, getProject());
+		}, getProjectSpace().getContentEditingDomain());
 	}
 
 	@Override

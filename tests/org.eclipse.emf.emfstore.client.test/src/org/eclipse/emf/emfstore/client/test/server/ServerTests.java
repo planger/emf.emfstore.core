@@ -103,7 +103,7 @@ public abstract class ServerTests extends WorkspaceTest {
 	}
 
 	public ESRemoteProjectImpl getRemoteProject() throws ESException {
-		ESLocalProjectImpl apiImpl = getProjectSpace().toAPI();
+		final ESLocalProjectImpl apiImpl = getProjectSpace().toAPI();
 		return apiImpl.getRemoteProject();
 	}
 
@@ -112,7 +112,7 @@ public abstract class ServerTests extends WorkspaceTest {
 	}
 
 	public PrimaryVersionSpec getProjectVersion() throws ESException {
-		ESPrimaryVersionSpecImpl headVersion = (ESPrimaryVersionSpecImpl) getRemoteProject().getHeadVersion(
+		final ESPrimaryVersionSpecImpl headVersion = (ESPrimaryVersionSpecImpl) getRemoteProject().getHeadVersion(
 			new NullProgressMonitor());
 		return headVersion.toInternalAPI();
 	}
@@ -128,7 +128,7 @@ public abstract class ServerTests extends WorkspaceTest {
 	@After
 	public void teardown() throws IOException, SerializationException, ESException {
 		super.teardown();
-		for (ESRemoteProject project : getServer().getRemoteProjects()) {
+		for (final ESRemoteProject project : getServer().getRemoteProjects()) {
 			// TODO: monitor
 			project.delete(new NullProgressMonitor());
 		}
@@ -164,7 +164,7 @@ public abstract class ServerTests extends WorkspaceTest {
 	 * @throws ESException in case of failure
 	 */
 	protected static void login() throws ESException {
-		SessionId sessionId = login(server.toInternalAPI(), "super", "super").getSessionId();
+		final SessionId sessionId = login(server.toInternalAPI(), "super", "super").getSessionId();
 		ESWorkspaceProviderImpl.getInstance().getAdminConnectionManager()
 			.initConnection(server.toInternalAPI(), sessionId);
 		setSessionId(sessionId);
@@ -229,12 +229,12 @@ public abstract class ServerTests extends WorkspaceTest {
 			protected void doRun() {
 				try {
 					getProjectSpace().shareProject(new NullProgressMonitor());
-				} catch (ESException e) {
+				} catch (final ESException e) {
 					Assert.fail();
 				}
 			}
-		}.run(getProject(), false);
-		this.projectsOnServerBeforeTest = 1;
+		}.run(getProjectSpace().getContentEditingDomain(), false);
+		projectsOnServerBeforeTest = 1;
 	}
 
 	/**
@@ -250,15 +250,15 @@ public abstract class ServerTests extends WorkspaceTest {
 			@Override
 			protected void doRun() {
 				try {
-					for (ESRemoteProject remoteProject : getServer().getRemoteProjects()) {
+					for (final ESRemoteProject remoteProject : getServer().getRemoteProjects()) {
 						remoteProject.delete(new NullProgressMonitor());
 					}
-				} catch (ESException e) {
+				} catch (final ESException e) {
 				}
 
 				SetupHelper.cleanupServer();
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	/**
@@ -271,10 +271,10 @@ public abstract class ServerTests extends WorkspaceTest {
 
 	public ACOrgUnitId setupUsers(String name, EClass role) throws ESException {
 		try {
-			ACOrgUnitId orgUnitId = SetupHelper.createUserOnServer(name);
+			final ACOrgUnitId orgUnitId = SetupHelper.createUserOnServer(name);
 			SetupHelper.setUsersRole(orgUnitId, role, getProjectId());
 			return orgUnitId;
-		} catch (InvalidInputException e) {
+		} catch (final InvalidInputException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -287,7 +287,7 @@ public abstract class ServerTests extends WorkspaceTest {
 	 * @return established usersession
 	 */
 	public Usersession setUpUsersession(String username, String password) {
-		Usersession usersession = org.eclipse.emf.emfstore.internal.client.model.ModelFactory.eINSTANCE
+		final Usersession usersession = org.eclipse.emf.emfstore.internal.client.model.ModelFactory.eINSTANCE
 			.createUsersession();
 		usersession.setServerInfo(server.toInternalAPI());
 		usersession.setUsername(username);
@@ -330,6 +330,6 @@ public abstract class ServerTests extends WorkspaceTest {
 		if (clazz.equals(boolean.class)) {
 			return false;
 		}
-		return (b) ? arguments.get(clazz) : null;
+		return b ? arguments.get(clazz) : null;
 	}
 }

@@ -48,13 +48,13 @@ public class PropertiesTest extends TransmissionTests {
 					propertyManager1.synchronizeSharedProperties();
 					propertyManager2.synchronizeSharedProperties();
 					propertyManager1.synchronizeSharedProperties();
-				} catch (ESException e) {
+				} catch (final ESException e) {
 					throw new RuntimeException(e);
-				} catch (EMFStorePropertiesOutdatedException e) {
+				} catch (final EMFStorePropertiesOutdatedException e) {
 					throw new RuntimeException(e);
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		// 1. Test, ob transmit funktioniert
 		Assert.assertEquals("test1", propertyManager1.getSharedStringProperty("FirstPropKey"));
@@ -79,13 +79,13 @@ public class PropertiesTest extends TransmissionTests {
 					propertyManager1.synchronizeSharedProperties();
 					propertyManager2.synchronizeSharedProperties();
 					propertyManager1.synchronizeSharedProperties();
-				} catch (ESException e) {
+				} catch (final ESException e) {
 					throw new RuntimeException(e);
-				} catch (EMFStorePropertiesOutdatedException e) {
+				} catch (final EMFStorePropertiesOutdatedException e) {
 					throw new RuntimeException(e);
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		// 2. Funktioniert update
 		Assert.assertEquals("test5", propertyManager1.getSharedStringProperty("SecondTest"));
@@ -106,23 +106,23 @@ public class PropertiesTest extends TransmissionTests {
 
 				try {
 					propertyManager1.synchronizeSharedProperties();
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					junit.framework.Assert.fail();
 				}
 
 				try {
 					propertyManager2.synchronizeSharedProperties();
 					junit.framework.Assert.fail();
-				} catch (ESException e) {
+				} catch (final ESException e) {
 					junit.framework.Assert.fail();
-				} catch (EMFStorePropertiesOutdatedException e) {
+				} catch (final EMFStorePropertiesOutdatedException e) {
 					junit.framework.Assert.assertEquals(1, e.getOutdatedProperties().size());
 					Assert.assertEquals(propertyManager1.getSharedStringProperty("SecondTest"),
 						((PropertyStringValue) e.getOutdatedProperties().get(0).getValue()).getValue());
 
 				}
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		// check if rollback succeeded
 		Assert.assertEquals("test1", propertyManager1.getSharedStringProperty("SecondTest"));
@@ -137,10 +137,11 @@ public class PropertiesTest extends TransmissionTests {
 				getProjectSpace1().getPropertyManager().setLocalProperty("foo",
 					TestmodelFactory.eINSTANCE.createTestElement());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		((ProjectSpaceBase) getProjectSpace1()).save();
-		ProjectSpace loadedProjectSpace = ModelUtil.loadEObjectFromResource(ModelPackage.eINSTANCE.getProjectSpace(),
+		final ProjectSpace loadedProjectSpace = ModelUtil.loadEObjectFromResource(
+			ModelPackage.eINSTANCE.getProjectSpace(),
 			getProjectSpace1().eResource().getURI(), false);
 
 		assertNotNull(loadedProjectSpace.getPropertyManager().getLocalProperty("foo"));

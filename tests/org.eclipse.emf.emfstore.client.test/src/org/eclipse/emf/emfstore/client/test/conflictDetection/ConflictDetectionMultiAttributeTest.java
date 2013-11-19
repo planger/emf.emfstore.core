@@ -36,40 +36,40 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 	@Test
 	public void multiAttRemoveVsAdd() {
 
-		TestElement testElement = new EMFStoreCommandWithResult<TestElement>() {
+		final TestElement testElement = new EMFStoreCommandWithResult<TestElement>() {
 			@Override
 			protected TestElement doRun() {
-				TestElement testElement = createFilledTestElement(3);
+				final TestElement testElement = createFilledTestElement(3);
 				clearOperations();
 				testElement.getStrings().remove(0);
 				return testElement;
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		AbstractOperation removeOp = new EMFStoreCommandWithResult<AbstractOperation>() {
+		final AbstractOperation removeOp = new EMFStoreCommandWithResult<AbstractOperation>() {
 
 			@Override
 			protected AbstractOperation doRun() {
-				AbstractOperation removeOp = checkAndGetOperation(MultiAttributeOperation.class);
+				final AbstractOperation removeOp = checkAndGetOperation(MultiAttributeOperation.class);
 				return removeOp;
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommandWithParameter<TestElement>() {
 			@Override
 			public void doRun(TestElement testElement) {
 				testElement.getStrings().add(1, "inserted");
 			}
-		}.run(testElement, getProject(), false);
+		}.run(testElement, getProjectSpace().getContentEditingDomain(), false);
 
-		AbstractOperation addOp = new EMFStoreCommandWithResult<AbstractOperation>() {
+		final AbstractOperation addOp = new EMFStoreCommandWithResult<AbstractOperation>() {
 
 			@Override
 			protected AbstractOperation doRun() {
-				AbstractOperation addOp = checkAndGetOperation(MultiAttributeOperation.class);
+				final AbstractOperation addOp = checkAndGetOperation(MultiAttributeOperation.class);
 				return addOp;
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(true, doConflict(removeOp, addOp));
 		assertEquals(true, doConflict(addOp, removeOp));
@@ -89,9 +89,9 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().add(0, "inserted1");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		AbstractOperation add1 = myCheckAndGetOperation(MultiAttributeOperation.class);
+		final AbstractOperation add1 = myCheckAndGetOperation(MultiAttributeOperation.class);
 
 		new EMFStoreCommand() {
 
@@ -99,9 +99,9 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().add(1, "inserted2");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		AbstractOperation add2 = myCheckAndGetOperation(MultiAttributeOperation.class);
+		final AbstractOperation add2 = myCheckAndGetOperation(MultiAttributeOperation.class);
 
 		assertEquals(true, doConflict(add1, add2));
 		assertEquals(true, doConflict(add2, add1));
@@ -121,18 +121,18 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().remove(2);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		AbstractOperation remove1 = myCheckAndGetOperation(MultiAttributeOperation.class);
+		final AbstractOperation remove1 = myCheckAndGetOperation(MultiAttributeOperation.class);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				testElement.getStrings().remove(1);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		AbstractOperation remove2 = myCheckAndGetOperation(MultiAttributeOperation.class);
+		final AbstractOperation remove2 = myCheckAndGetOperation(MultiAttributeOperation.class);
 
 		assertEquals(true, doConflict(remove1, remove2));
 		assertEquals(true, doConflict(remove2, remove1));
@@ -152,18 +152,18 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().add(0, "inserted");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		AbstractOperation add = myCheckAndGetOperation(MultiAttributeOperation.class);
+		final AbstractOperation add = myCheckAndGetOperation(MultiAttributeOperation.class);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				testElement.getStrings().move(1, 2);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		AbstractOperation move = myCheckAndGetOperation(MultiAttributeMoveOperation.class);
+		final AbstractOperation move = myCheckAndGetOperation(MultiAttributeMoveOperation.class);
 
 		assertEquals(true, doConflict(add, move));
 		assertEquals(true, doConflict(move, add));
@@ -183,18 +183,18 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().move(2, 0);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		AbstractOperation move = myCheckAndGetOperation(MultiAttributeMoveOperation.class);
+		final AbstractOperation move = myCheckAndGetOperation(MultiAttributeMoveOperation.class);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				testElement.getStrings().remove(0);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		AbstractOperation add = myCheckAndGetOperation(MultiAttributeOperation.class);
+		final AbstractOperation add = myCheckAndGetOperation(MultiAttributeOperation.class);
 
 		assertEquals(true, doConflict(add, move));
 		assertEquals(true, doConflict(move, add));
@@ -221,7 +221,7 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 	// assertEquals(true, doConflict(move2, move1));
 	// assertEquals(true, doConflict(move1, move2));
 	// }
-	// }.run(getProject(), false);
+	// }.run(getProjectSpace().getContentEditingDomain(), false);
 	// }
 
 	/**
@@ -239,9 +239,9 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().move(0, 1);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		AbstractOperation move1 = myCheckAndGetOperation(MultiAttributeMoveOperation.class);
+		final AbstractOperation move1 = myCheckAndGetOperation(MultiAttributeMoveOperation.class);
 
 		new EMFStoreCommand() {
 
@@ -249,9 +249,9 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().move(2, 3);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		AbstractOperation move2 = myCheckAndGetOperation(MultiAttributeMoveOperation.class);
+		final AbstractOperation move2 = myCheckAndGetOperation(MultiAttributeMoveOperation.class);
 
 		assertEquals(true, doConflict(move2, move1));
 		assertEquals(true, doConflict(move1, move2));
@@ -270,18 +270,18 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().set(0, "set");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		AbstractOperation set = myCheckAndGetOperation(MultiAttributeSetOperation.class);
+		final AbstractOperation set = myCheckAndGetOperation(MultiAttributeSetOperation.class);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				testElement.getStrings().add(1, "added");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		AbstractOperation add = myCheckAndGetOperation(MultiAttributeOperation.class);
+		final AbstractOperation add = myCheckAndGetOperation(MultiAttributeOperation.class);
 
 		assertEquals(true, doConflict(set, add));
 		assertEquals(true, doConflict(add, set));
@@ -301,18 +301,18 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().set(1, "set");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		AbstractOperation set = myCheckAndGetOperation(MultiAttributeSetOperation.class);
+		final AbstractOperation set = myCheckAndGetOperation(MultiAttributeSetOperation.class);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				testElement.getStrings().add(0, "added");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		AbstractOperation add = myCheckAndGetOperation(MultiAttributeOperation.class);
+		final AbstractOperation add = myCheckAndGetOperation(MultiAttributeOperation.class);
 
 		assertEquals(true, doConflict(set, add));
 		assertEquals(true, doConflict(add, set));
@@ -332,9 +332,9 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().set(0, "set");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		AbstractOperation set = myCheckAndGetOperation(MultiAttributeSetOperation.class);
+		final AbstractOperation set = myCheckAndGetOperation(MultiAttributeSetOperation.class);
 
 		new EMFStoreCommand() {
 
@@ -342,9 +342,9 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().remove(1);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		AbstractOperation remove = myCheckAndGetOperation(MultiAttributeOperation.class);
+		final AbstractOperation remove = myCheckAndGetOperation(MultiAttributeOperation.class);
 
 		assertEquals(true, doConflict(set, remove));
 		assertEquals(true, doConflict(remove, set));
@@ -364,18 +364,18 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().set(1, "set");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		AbstractOperation set = myCheckAndGetOperation(MultiAttributeSetOperation.class);
+		final AbstractOperation set = myCheckAndGetOperation(MultiAttributeSetOperation.class);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				testElement.getStrings().remove(0);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		AbstractOperation remove = myCheckAndGetOperation(MultiAttributeOperation.class);
+		final AbstractOperation remove = myCheckAndGetOperation(MultiAttributeOperation.class);
 
 		assertEquals(true, doConflict(set, remove));
 		assertEquals(true, doConflict(remove, set));
@@ -395,18 +395,18 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().set(1, "set");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		AbstractOperation set = myCheckAndGetOperation(MultiAttributeSetOperation.class);
+		final AbstractOperation set = myCheckAndGetOperation(MultiAttributeSetOperation.class);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				testElement.getStrings().move(0, 2);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		AbstractOperation move = myCheckAndGetOperation(MultiAttributeMoveOperation.class);
+		final AbstractOperation move = myCheckAndGetOperation(MultiAttributeMoveOperation.class);
 
 		assertEquals(true, doConflict(set, move));
 		assertEquals(true, doConflict(move, set));
@@ -426,18 +426,18 @@ public class ConflictDetectionMultiAttributeTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getStrings().set(1, "set");
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		AbstractOperation set = myCheckAndGetOperation(MultiAttributeSetOperation.class);
+		final AbstractOperation set = myCheckAndGetOperation(MultiAttributeSetOperation.class);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				testElement.getStrings().move(2, 3);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		AbstractOperation move = myCheckAndGetOperation(MultiAttributeMoveOperation.class);
+		final AbstractOperation move = myCheckAndGetOperation(MultiAttributeMoveOperation.class);
 
 		assertEquals(true, doConflict(set, move));
 		assertEquals(true, doConflict(move, set));

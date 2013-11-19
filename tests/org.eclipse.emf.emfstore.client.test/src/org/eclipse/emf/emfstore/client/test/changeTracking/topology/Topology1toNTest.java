@@ -61,27 +61,27 @@ public class Topology1toNTest extends TopologyTest {
 	@Test
 	public void containmentAddUncontainedChildToEmpty() {
 
-		LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
-		Actor actor = RequirementFactory.eINSTANCE.createActor();
+		final LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
+		final Actor actor = RequirementFactory.eINSTANCE.createActor();
 
 		getProject().addModelElement(actor);
 		getProject().addModelElement(section);
-		ModelElementId actorId = getProject().getModelElementId(actor);
-		ModelElementId sectionId = getProject().getModelElementId(section);
+		final ModelElementId actorId = getProject().getModelElementId(actor);
+		final ModelElementId sectionId = getProject().getModelElementId(section);
 
 		clearOperations();
 
 		section.getModelElements().add(actor);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(1, operations.size());
-		CompositeOperation operation = checkAndCast(operations.get(0), CompositeOperation.class);
+		final CompositeOperation operation = checkAndCast(operations.get(0), CompositeOperation.class);
 
-		List<AbstractOperation> subOperations = operation.getSubOperations();
+		final List<AbstractOperation> subOperations = operation.getSubOperations();
 		assertEquals(2, subOperations.size());
 
-		SingleReferenceOperation op0 = checkAndCast(subOperations.get(0), SingleReferenceOperation.class);
-		MultiReferenceOperation op1 = checkAndCast(subOperations.get(1), MultiReferenceOperation.class);
+		final SingleReferenceOperation op0 = checkAndCast(subOperations.get(0), SingleReferenceOperation.class);
+		final MultiReferenceOperation op1 = checkAndCast(subOperations.get(1), MultiReferenceOperation.class);
 
 		assertEquals("leafSection", op0.getFeatureName());
 		assertEquals(actorId, op0.getModelElementId());
@@ -102,13 +102,13 @@ public class Topology1toNTest extends TopologyTest {
 	@Test
 	public void createContainmentOrphan() {
 
-		LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
-		Actor actor = RequirementFactory.eINSTANCE.createActor();
+		final LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
+		final Actor actor = RequirementFactory.eINSTANCE.createActor();
 
 		getProject().addModelElement(actor);
 		getProject().addModelElement(section);
-		ModelElementId actorId = getProject().getModelElementId(actor);
-		ModelElementId sectionId = getProject().getModelElementId(section);
+		final ModelElementId actorId = getProject().getModelElementId(actor);
+		final ModelElementId sectionId = getProject().getModelElementId(section);
 
 		section.getModelElements().add(actor);
 
@@ -116,19 +116,19 @@ public class Topology1toNTest extends TopologyTest {
 
 		getProject().addModelElement(actor);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(1, operations.size());
 
-		EList<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
+		final EList<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
 			.getSubOperations();
 		assertEquals(2, subOperations.size());
 
-		MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
+		final MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
 		assertEquals("modelElements", op0.getFeatureName());
 		assertEquals(sectionId, op0.getModelElementId());
 		assertEquals(actorId, op0.getReferencedModelElements().get(0));
 
-		SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
+		final SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
 		assertEquals("leafSection", op1.getFeatureName());
 		assertEquals(op1.getModelElementId(), actorId);
 
@@ -140,32 +140,32 @@ public class Topology1toNTest extends TopologyTest {
 	@Test
 	public void reverseContainmentOrphan() {
 
-		LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
-		Actor actor = RequirementFactory.eINSTANCE.createActor();
+		final LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
+		final Actor actor = RequirementFactory.eINSTANCE.createActor();
 
 		getProject().addModelElement(actor);
 		getProject().addModelElement(section);
-		ModelElementId actorId = getProject().getModelElementId(actor);
-		ModelElementId sectionId = getProject().getModelElementId(section);
+		final ModelElementId actorId = getProject().getModelElementId(actor);
+		final ModelElementId sectionId = getProject().getModelElementId(section);
 		section.getModelElements().add(actor);
 
-		Project expectedProject = ModelUtil.clone(getProject());
+		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
 		clearOperations();
 		// create orphan
 		getProject().addModelElement(actor);
 
-		List<AbstractOperation> operations2 = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations2 = getProjectSpace().getOperations();
 
 		assertEquals(1, operations2.size());
-		List<AbstractOperation> subOperations = checkAndCast(operations2.get(0), CompositeOperation.class)
+		final List<AbstractOperation> subOperations = checkAndCast(operations2.get(0), CompositeOperation.class)
 			.getSubOperations();
 
 		assertEquals(2, subOperations.size());
 
-		MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
-		SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
+		final MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
+		final SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
 
 		assertEquals("modelElements", op0.getFeatureName());
 		assertEquals(sectionId, op0.getModelElementId());
@@ -187,9 +187,9 @@ public class Topology1toNTest extends TopologyTest {
 	@Test
 	public void reverseContainmentOrphanIndexed() {
 
-		LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
-		Actor actor = RequirementFactory.eINSTANCE.createActor();
-		Actor actor2 = RequirementFactory.eINSTANCE.createActor();
+		final LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
+		final Actor actor = RequirementFactory.eINSTANCE.createActor();
+		final Actor actor2 = RequirementFactory.eINSTANCE.createActor();
 		actor.setName("actor");
 		actor2.setName("actor2");
 
@@ -197,25 +197,25 @@ public class Topology1toNTest extends TopologyTest {
 		section.getModelElements().add(actor);
 		section.getModelElements().add(actor2);
 
-		Project expectedProject = ModelUtil.clone(getProject());
+		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
 		clearOperations();
 		// create orphan
 		getProject().addModelElement(actor);
 
-		ModelElementId actorId = getProject().getModelElementId(actor);
-		ModelElementId sectionId = getProject().getModelElementId(section);
+		final ModelElementId actorId = getProject().getModelElementId(actor);
+		final ModelElementId sectionId = getProject().getModelElementId(section);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(1, operations.size());
 
-		List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
+		final List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
 			.getSubOperations();
 		assertEquals(2, subOperations.size());
 
-		MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
-		SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
+		final MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
+		final SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
 
 		assertEquals("modelElements", op0.getFeatureName());
 		assertEquals(sectionId, op0.getModelElementId());
@@ -238,31 +238,31 @@ public class Topology1toNTest extends TopologyTest {
 	@Test
 	public void containmentAddUncontainedChildToNonEmpty() {
 
-		LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
-		Actor actor = RequirementFactory.eINSTANCE.createActor();
-		Actor oldActor = RequirementFactory.eINSTANCE.createActor();
+		final LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
+		final Actor actor = RequirementFactory.eINSTANCE.createActor();
+		final Actor oldActor = RequirementFactory.eINSTANCE.createActor();
 
 		getProject().addModelElement(actor);
 		getProject().addModelElement(oldActor);
 		getProject().addModelElement(section);
 
-		ModelElementId actorId = getProject().getModelElementId(actor);
-		ModelElementId sectionId = getProject().getModelElementId(section);
+		final ModelElementId actorId = getProject().getModelElementId(actor);
+		final ModelElementId sectionId = getProject().getModelElementId(section);
 		section.getModelElements().add(oldActor);
 
 		clearOperations();
 
 		section.getModelElements().add(actor);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
+		final List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
 			.getSubOperations();
 
 		assertEquals(2, subOperations.size());
-		SingleReferenceOperation op0 = checkAndCast(subOperations.get(0), SingleReferenceOperation.class);
-		MultiReferenceOperation op1 = checkAndCast(subOperations.get(1), MultiReferenceOperation.class);
+		final SingleReferenceOperation op0 = checkAndCast(subOperations.get(0), SingleReferenceOperation.class);
+		final MultiReferenceOperation op1 = checkAndCast(subOperations.get(1), MultiReferenceOperation.class);
 
 		assertEquals("leafSection", op0.getFeatureName());
 		assertEquals(actorId, op0.getModelElementId());
@@ -285,33 +285,33 @@ public class Topology1toNTest extends TopologyTest {
 	@Test
 	public void containmentAddUncontainedChildrenToEmpty() {
 
-		LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
-		Actor actor1 = RequirementFactory.eINSTANCE.createActor();
-		Actor actor2 = RequirementFactory.eINSTANCE.createActor();
+		final LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
+		final Actor actor1 = RequirementFactory.eINSTANCE.createActor();
+		final Actor actor2 = RequirementFactory.eINSTANCE.createActor();
 
 		getProject().addModelElement(actor1);
 		getProject().addModelElement(actor2);
 		getProject().addModelElement(section);
-		ModelElementId actor1Id = getProject().getModelElementId(actor1);
-		ModelElementId actor2Id = getProject().getModelElementId(actor2);
-		ModelElementId sectionId = getProject().getModelElementId(section);
+		final ModelElementId actor1Id = getProject().getModelElementId(actor1);
+		final ModelElementId actor2Id = getProject().getModelElementId(actor2);
+		final ModelElementId sectionId = getProject().getModelElementId(section);
 
-		Actor[] actors = { actor1, actor2 };
+		final Actor[] actors = { actor1, actor2 };
 
 		clearOperations();
 
 		section.getModelElements().addAll(Arrays.asList(actors));
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(1, operations.size());
-		List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
+		final List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
 			.getSubOperations();
 
 		assertEquals(3, subOperations.size());
 
-		SingleReferenceOperation op0 = checkAndCast(subOperations.get(0), SingleReferenceOperation.class);
-		SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
-		MultiReferenceOperation op2 = checkAndCast(subOperations.get(2), MultiReferenceOperation.class);
+		final SingleReferenceOperation op0 = checkAndCast(subOperations.get(0), SingleReferenceOperation.class);
+		final SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
+		final MultiReferenceOperation op2 = checkAndCast(subOperations.get(2), MultiReferenceOperation.class);
 
 		assertEquals("leafSection", op0.getFeatureName());
 		assertEquals(actor1Id, op0.getModelElementId());
@@ -339,36 +339,36 @@ public class Topology1toNTest extends TopologyTest {
 	@Test
 	public void containmentAddUncontainedChildrenToNonEmpty() {
 
-		LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
-		Actor actor1 = RequirementFactory.eINSTANCE.createActor();
-		Actor actor2 = RequirementFactory.eINSTANCE.createActor();
-		Actor oldActor = RequirementFactory.eINSTANCE.createActor();
+		final LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
+		final Actor actor1 = RequirementFactory.eINSTANCE.createActor();
+		final Actor actor2 = RequirementFactory.eINSTANCE.createActor();
+		final Actor oldActor = RequirementFactory.eINSTANCE.createActor();
 
 		getProject().addModelElement(actor1);
 		getProject().addModelElement(actor2);
 		getProject().addModelElement(section);
 		getProject().addModelElement(oldActor);
 
-		ModelElementId actor1Id = getProject().getModelElementId(actor1);
-		ModelElementId actor2Id = getProject().getModelElementId(actor2);
-		ModelElementId sectionId = getProject().getModelElementId(section);
+		final ModelElementId actor1Id = getProject().getModelElementId(actor1);
+		final ModelElementId actor2Id = getProject().getModelElementId(actor2);
+		final ModelElementId sectionId = getProject().getModelElementId(section);
 
-		Actor[] actors = { actor1, actor2 };
+		final Actor[] actors = { actor1, actor2 };
 		section.getModelElements().add(oldActor);
 		clearOperations();
 
 		section.getModelElements().addAll(Arrays.asList(actors));
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
+		final List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
 			.getSubOperations();
 
 		assertEquals(3, subOperations.size());
-		SingleReferenceOperation op0 = checkAndCast(subOperations.get(0), SingleReferenceOperation.class);
-		SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
-		MultiReferenceOperation op2 = checkAndCast(subOperations.get(2), MultiReferenceOperation.class);
+		final SingleReferenceOperation op0 = checkAndCast(subOperations.get(0), SingleReferenceOperation.class);
+		final SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
+		final MultiReferenceOperation op2 = checkAndCast(subOperations.get(2), MultiReferenceOperation.class);
 
 		assertEquals("leafSection", op0.getFeatureName());
 		assertEquals(actor1Id, op0.getModelElementId());
@@ -397,32 +397,32 @@ public class Topology1toNTest extends TopologyTest {
 	public void containmentAddUncontainedChildrenFakeManyToNonEmpty() throws UnsupportedOperationException,
 		UnsupportedNotificationException {
 
-		LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
-		Actor actor1 = RequirementFactory.eINSTANCE.createActor();
-		Actor oldActor = RequirementFactory.eINSTANCE.createActor();
+		final LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
+		final Actor actor1 = RequirementFactory.eINSTANCE.createActor();
+		final Actor oldActor = RequirementFactory.eINSTANCE.createActor();
 
 		getProject().addModelElement(actor1);
 		getProject().addModelElement(oldActor);
 		getProject().addModelElement(section);
 
-		ModelElementId sectionId = getProject().getModelElementId(section);
-		ModelElementId actor1Id = getProject().getModelElementId(actor1);
+		final ModelElementId sectionId = getProject().getModelElementId(section);
+		final ModelElementId actor1Id = getProject().getModelElementId(actor1);
 
-		Actor[] actors = { actor1 };
+		final Actor[] actors = { actor1 };
 		section.getModelElements().add(oldActor);
 		clearOperations();
 
 		section.getModelElements().addAll(Arrays.asList(actors));
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
+		final List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
 			.getSubOperations();
 
 		assertEquals(2, subOperations.size());
-		SingleReferenceOperation op0 = checkAndCast(subOperations.get(0), SingleReferenceOperation.class);
-		MultiReferenceOperation op1 = checkAndCast(subOperations.get(1), MultiReferenceOperation.class);
+		final SingleReferenceOperation op0 = checkAndCast(subOperations.get(0), SingleReferenceOperation.class);
+		final MultiReferenceOperation op1 = checkAndCast(subOperations.get(1), MultiReferenceOperation.class);
 
 		assertEquals("leafSection", op0.getFeatureName());
 		assertEquals(actor1Id, op0.getModelElementId());
@@ -444,19 +444,19 @@ public class Topology1toNTest extends TopologyTest {
 	@Test
 	public void containmentAddSameFeatureContainedChildToNonEmpty() {
 
-		LeafSection section1 = DocumentFactory.eINSTANCE.createLeafSection();
-		LeafSection section2 = DocumentFactory.eINSTANCE.createLeafSection();
-		Actor actor1 = RequirementFactory.eINSTANCE.createActor();
-		Actor actor2 = RequirementFactory.eINSTANCE.createActor();
+		final LeafSection section1 = DocumentFactory.eINSTANCE.createLeafSection();
+		final LeafSection section2 = DocumentFactory.eINSTANCE.createLeafSection();
+		final Actor actor1 = RequirementFactory.eINSTANCE.createActor();
+		final Actor actor2 = RequirementFactory.eINSTANCE.createActor();
 
 		getProject().addModelElement(actor1);
 		getProject().addModelElement(actor2);
 		getProject().addModelElement(section1);
 		getProject().addModelElement(section2);
 
-		ModelElementId section1Id = getProject().getModelElementId(section1);
-		ModelElementId section2Id = getProject().getModelElementId(section2);
-		ModelElementId actor2Id = getProject().getModelElementId(actor2);
+		final ModelElementId section1Id = getProject().getModelElementId(section1);
+		final ModelElementId section2Id = getProject().getModelElementId(section2);
+		final ModelElementId actor2Id = getProject().getModelElementId(actor2);
 
 		section1.getModelElements().add(actor1);
 		section2.getModelElements().add(actor2);
@@ -467,10 +467,10 @@ public class Topology1toNTest extends TopologyTest {
 		assertFalse(section2.getModelElements().contains(actor2));
 		assertTrue(section1.getModelElements().contains(actor2));
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(1, operations.size());
 
-		List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
+		final List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
 			.getSubOperations();
 		assertEquals(3, subOperations.size());
 
@@ -478,9 +478,9 @@ public class Topology1toNTest extends TopologyTest {
 		// 2nd op: LeafSection change on actor2 (preserving old parent)
 		// 3rd op: Section2 welcomes its new child
 
-		MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
-		SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
-		MultiReferenceOperation op2 = checkAndCast(subOperations.get(2), MultiReferenceOperation.class);
+		final MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
+		final SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
+		final MultiReferenceOperation op2 = checkAndCast(subOperations.get(2), MultiReferenceOperation.class);
 
 		assertEquals("modelElements", op0.getFeatureName());
 		assertEquals(section2Id, op0.getModelElementId());
@@ -504,13 +504,13 @@ public class Topology1toNTest extends TopologyTest {
 	@Test
 	public void containmentAddSameFeatureContainedChildrenToEmpty() {
 
-		LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
-		LeafSection oldSection = DocumentFactory.eINSTANCE.createLeafSection();
-		LeafSection oldSection2 = DocumentFactory.eINSTANCE.createLeafSection();
-		Actor actor1 = RequirementFactory.eINSTANCE.createActor();
-		Actor actor2 = RequirementFactory.eINSTANCE.createActor();
-		Actor actor3 = RequirementFactory.eINSTANCE.createActor();
-		Actor actor4 = RequirementFactory.eINSTANCE.createActor();
+		final LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
+		final LeafSection oldSection = DocumentFactory.eINSTANCE.createLeafSection();
+		final LeafSection oldSection2 = DocumentFactory.eINSTANCE.createLeafSection();
+		final Actor actor1 = RequirementFactory.eINSTANCE.createActor();
+		final Actor actor2 = RequirementFactory.eINSTANCE.createActor();
+		final Actor actor3 = RequirementFactory.eINSTANCE.createActor();
+		final Actor actor4 = RequirementFactory.eINSTANCE.createActor();
 
 		getProject().addModelElement(actor1);
 		getProject().addModelElement(actor2);
@@ -520,15 +520,15 @@ public class Topology1toNTest extends TopologyTest {
 		getProject().addModelElement(oldSection);
 		getProject().addModelElement(oldSection2);
 
-		ModelElementId actor1Id = getProject().getModelElementId(actor1);
-		ModelElementId actor2Id = getProject().getModelElementId(actor2);
-		ModelElementId actor3Id = getProject().getModelElementId(actor3);
-		ModelElementId actor4Id = getProject().getModelElementId(actor4);
-		ModelElementId sectionId = getProject().getModelElementId(section);
-		ModelElementId oldSectionId = getProject().getModelElementId(oldSection);
-		ModelElementId oldSection2Id = getProject().getModelElementId(oldSection2);
+		final ModelElementId actor1Id = getProject().getModelElementId(actor1);
+		final ModelElementId actor2Id = getProject().getModelElementId(actor2);
+		final ModelElementId actor3Id = getProject().getModelElementId(actor3);
+		final ModelElementId actor4Id = getProject().getModelElementId(actor4);
+		final ModelElementId sectionId = getProject().getModelElementId(section);
+		final ModelElementId oldSectionId = getProject().getModelElementId(oldSection);
+		final ModelElementId oldSection2Id = getProject().getModelElementId(oldSection2);
 
-		Actor[] actors = { actor1, actor2, actor3, actor4 };
+		final Actor[] actors = { actor1, actor2, actor3, actor4 };
 		oldSection.getModelElements().addAll(Arrays.asList(actors));
 		oldSection2.getModelElements().add(actor4); // relocate to other section
 		assertTrue(oldSection.getModelElements().contains(actor1));
@@ -541,24 +541,24 @@ public class Topology1toNTest extends TopologyTest {
 
 		section.getModelElements().addAll(Arrays.asList(actors));
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		// expecting a composite operation here
 		assertEquals(1, operations.size());
-		List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
+		final List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
 			.getSubOperations();
 
 		// now expectation is: we get 4 messages preserving the info on former parents for the actors
 		// and one additional one, indicating the new parent for all of them
 		assertEquals(7, subOperations.size());
 
-		SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
-		SingleReferenceOperation op2 = checkAndCast(subOperations.get(2), SingleReferenceOperation.class);
-		SingleReferenceOperation op3 = checkAndCast(subOperations.get(3), SingleReferenceOperation.class);
-		SingleReferenceOperation op5 = checkAndCast(subOperations.get(5), SingleReferenceOperation.class);
+		final SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
+		final SingleReferenceOperation op2 = checkAndCast(subOperations.get(2), SingleReferenceOperation.class);
+		final SingleReferenceOperation op3 = checkAndCast(subOperations.get(3), SingleReferenceOperation.class);
+		final SingleReferenceOperation op5 = checkAndCast(subOperations.get(5), SingleReferenceOperation.class);
 
-		MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
-		MultiReferenceOperation op4 = checkAndCast(subOperations.get(4), MultiReferenceOperation.class);
-		MultiReferenceOperation op6 = checkAndCast(subOperations.get(6), MultiReferenceOperation.class);
+		final MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
+		final MultiReferenceOperation op4 = checkAndCast(subOperations.get(4), MultiReferenceOperation.class);
+		final MultiReferenceOperation op6 = checkAndCast(subOperations.get(6), MultiReferenceOperation.class);
 
 		assertEquals(actor1Id, op1.getModelElementId());
 		assertEquals(actor2Id, op2.getModelElementId());
@@ -613,14 +613,14 @@ public class Topology1toNTest extends TopologyTest {
 	@Test
 	public void containmentAddSameFeatureContainedChildrenToNonEmpty() {
 
-		LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
-		LeafSection oldSection = DocumentFactory.eINSTANCE.createLeafSection();
-		LeafSection oldSection2 = DocumentFactory.eINSTANCE.createLeafSection();
-		Actor actor1 = RequirementFactory.eINSTANCE.createActor();
-		Actor actor2 = RequirementFactory.eINSTANCE.createActor();
-		Actor actor3 = RequirementFactory.eINSTANCE.createActor();
-		Actor actor4 = RequirementFactory.eINSTANCE.createActor();
-		Actor oldActor = RequirementFactory.eINSTANCE.createActor();
+		final LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
+		final LeafSection oldSection = DocumentFactory.eINSTANCE.createLeafSection();
+		final LeafSection oldSection2 = DocumentFactory.eINSTANCE.createLeafSection();
+		final Actor actor1 = RequirementFactory.eINSTANCE.createActor();
+		final Actor actor2 = RequirementFactory.eINSTANCE.createActor();
+		final Actor actor3 = RequirementFactory.eINSTANCE.createActor();
+		final Actor actor4 = RequirementFactory.eINSTANCE.createActor();
+		final Actor oldActor = RequirementFactory.eINSTANCE.createActor();
 
 		getProject().addModelElement(actor1);
 		getProject().addModelElement(actor2);
@@ -631,7 +631,7 @@ public class Topology1toNTest extends TopologyTest {
 		getProject().addModelElement(oldSection);
 		getProject().addModelElement(oldSection2);
 
-		Actor[] actors = { actor1, actor2, actor3, actor4 };
+		final Actor[] actors = { actor1, actor2, actor3, actor4 };
 		section.getModelElements().add(oldActor);
 		oldSection.getModelElements().addAll(Arrays.asList(actors));
 		oldSection2.getModelElements().add(actor4); // relocate to other section
@@ -646,7 +646,7 @@ public class Topology1toNTest extends TopologyTest {
 
 		section.getModelElements().addAll(Arrays.asList(actors));
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		// expecting a composite operation here
 		assertEquals(1, operations.size());
 
@@ -654,26 +654,26 @@ public class Topology1toNTest extends TopologyTest {
 		// and one additional one, indicating the new parent for all of them
 		// refactoring: addional operations expected
 
-		List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
+		final List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
 			.getSubOperations();
 		assertEquals(7, subOperations.size());
 
-		SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
-		SingleReferenceOperation op2 = checkAndCast(subOperations.get(2), SingleReferenceOperation.class);
-		SingleReferenceOperation op3 = checkAndCast(subOperations.get(3), SingleReferenceOperation.class);
-		SingleReferenceOperation op5 = checkAndCast(subOperations.get(5), SingleReferenceOperation.class);
+		final SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
+		final SingleReferenceOperation op2 = checkAndCast(subOperations.get(2), SingleReferenceOperation.class);
+		final SingleReferenceOperation op3 = checkAndCast(subOperations.get(3), SingleReferenceOperation.class);
+		final SingleReferenceOperation op5 = checkAndCast(subOperations.get(5), SingleReferenceOperation.class);
 
-		MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
-		MultiReferenceOperation op4 = checkAndCast(subOperations.get(4), MultiReferenceOperation.class);
-		MultiReferenceOperation op6 = checkAndCast(subOperations.get(6), MultiReferenceOperation.class);
+		final MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
+		final MultiReferenceOperation op4 = checkAndCast(subOperations.get(4), MultiReferenceOperation.class);
+		final MultiReferenceOperation op6 = checkAndCast(subOperations.get(6), MultiReferenceOperation.class);
 
-		ModelElementId sectionId = getProject().getModelElementId(section);
-		ModelElementId oldSectionId = getProject().getModelElementId(oldSection);
-		ModelElementId oldSection2Id = getProject().getModelElementId(oldSection2);
-		ModelElementId actor1Id = getProject().getModelElementId(actor1);
-		ModelElementId actor2Id = getProject().getModelElementId(actor2);
-		ModelElementId actor3Id = getProject().getModelElementId(actor3);
-		ModelElementId actor4Id = getProject().getModelElementId(actor4);
+		final ModelElementId sectionId = getProject().getModelElementId(section);
+		final ModelElementId oldSectionId = getProject().getModelElementId(oldSection);
+		final ModelElementId oldSection2Id = getProject().getModelElementId(oldSection2);
+		final ModelElementId actor1Id = getProject().getModelElementId(actor1);
+		final ModelElementId actor2Id = getProject().getModelElementId(actor2);
+		final ModelElementId actor3Id = getProject().getModelElementId(actor3);
+		final ModelElementId actor4Id = getProject().getModelElementId(actor4);
 
 		assertEquals(actor1Id, op1.getModelElementId());
 		assertEquals(actor2Id, op2.getModelElementId());
@@ -730,17 +730,17 @@ public class Topology1toNTest extends TopologyTest {
 	@Test
 	public void containmentAddDifferentFeatureContainedNChildToNonEmpty() {
 
-		LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
-		WorkPackage workPackage = TaskFactory.eINSTANCE.createWorkPackage();
-		BugReport bugReport = BugFactory.eINSTANCE.createBugReport();
+		final LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
+		final WorkPackage workPackage = TaskFactory.eINSTANCE.createWorkPackage();
+		final BugReport bugReport = BugFactory.eINSTANCE.createBugReport();
 
 		getProject().addModelElement(section);
 		getProject().addModelElement(workPackage);
 		getProject().addModelElement(bugReport);
 
-		ModelElementId sectionId = getProject().getModelElementId(section);
-		ModelElementId workPackageId = getProject().getModelElementId(workPackage);
-		ModelElementId bugReportId = getProject().getModelElementId(bugReport);
+		final ModelElementId sectionId = getProject().getModelElementId(section);
+		final ModelElementId workPackageId = getProject().getModelElementId(workPackage);
+		final ModelElementId bugReportId = getProject().getModelElementId(bugReport);
 
 		bugReport.setLeafSection(section);
 
@@ -749,21 +749,21 @@ public class Topology1toNTest extends TopologyTest {
 		clearOperations();
 
 		workPackage.getContainedWorkItems().add(bugReport);
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertFalse(section.getModelElements().contains(bugReport));
 		assertTrue(workPackage.getContainedWorkItems().contains(bugReport));
 		assertEquals(1, operations.size());
 
-		EList<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
+		final EList<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
 			.getSubOperations();
 
 		assertEquals(4, subOperations.size());
 
-		MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
-		SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
-		SingleReferenceOperation op2 = checkAndCast(subOperations.get(2), SingleReferenceOperation.class);
-		MultiReferenceOperation op3 = checkAndCast(subOperations.get(3), MultiReferenceOperation.class);
+		final MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
+		final SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
+		final SingleReferenceOperation op2 = checkAndCast(subOperations.get(2), SingleReferenceOperation.class);
+		final MultiReferenceOperation op3 = checkAndCast(subOperations.get(3), MultiReferenceOperation.class);
 
 		assertEquals(sectionId, op0.getModelElementId());
 		assertEquals("modelElements", op0.getFeatureName());
@@ -792,16 +792,16 @@ public class Topology1toNTest extends TopologyTest {
 	@Test
 	public void containmentAddDifferentFeatureContained1ChildToNonEmpty() {
 
-		Issue issue = RationaleFactory.eINSTANCE.createIssue();
-		LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
-		Solution solution = RationaleFactory.eINSTANCE.createSolution();
+		final Issue issue = RationaleFactory.eINSTANCE.createIssue();
+		final LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
+		final Solution solution = RationaleFactory.eINSTANCE.createSolution();
 
 		getProject().addModelElement(issue);
 		getProject().addModelElement(section);
 		getProject().addModelElement(solution);
-		ModelElementId sectionId = getProject().getModelElementId(section);
-		ModelElementId issueId = getProject().getModelElementId(issue);
-		ModelElementId solutionId = getProject().getModelElementId(solution);
+		final ModelElementId sectionId = getProject().getModelElementId(section);
+		final ModelElementId issueId = getProject().getModelElementId(issue);
+		final ModelElementId solutionId = getProject().getModelElementId(solution);
 		issue.setSolution(solution);
 
 		clearOperations();
@@ -811,17 +811,17 @@ public class Topology1toNTest extends TopologyTest {
 		assertTrue(section.getModelElements().contains(solution));
 		assertNull(issue.getSolution());
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(1, operations.size());
 
-		List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
+		final List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
 			.getSubOperations();
 		assertEquals(4, subOperations.size());
 
-		SingleReferenceOperation op0 = checkAndCast(subOperations.get(0), SingleReferenceOperation.class);
-		SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
-		SingleReferenceOperation op2 = checkAndCast(subOperations.get(2), SingleReferenceOperation.class);
-		MultiReferenceOperation op3 = checkAndCast(subOperations.get(3), MultiReferenceOperation.class);
+		final SingleReferenceOperation op0 = checkAndCast(subOperations.get(0), SingleReferenceOperation.class);
+		final SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
+		final SingleReferenceOperation op2 = checkAndCast(subOperations.get(2), SingleReferenceOperation.class);
+		final MultiReferenceOperation op3 = checkAndCast(subOperations.get(3), MultiReferenceOperation.class);
 
 		assertEquals("solution", op0.getFeatureName());
 		assertEquals(issueId, op0.getModelElementId());
@@ -852,14 +852,14 @@ public class Topology1toNTest extends TopologyTest {
 	@Test
 	public void containmentAddDifferentFeatureContainedNChildrenToEmpty() {
 
-		LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
-		WorkPackage oldWorkPackage = TaskFactory.eINSTANCE.createWorkPackage();
-		WorkPackage oldWorkPackage2 = TaskFactory.eINSTANCE.createWorkPackage();
+		final LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
+		final WorkPackage oldWorkPackage = TaskFactory.eINSTANCE.createWorkPackage();
+		final WorkPackage oldWorkPackage2 = TaskFactory.eINSTANCE.createWorkPackage();
 
-		BugReport bugReport1 = BugFactory.eINSTANCE.createBugReport();
-		BugReport bugReport2 = BugFactory.eINSTANCE.createBugReport();
-		BugReport bugReport3 = BugFactory.eINSTANCE.createBugReport();
-		BugReport bugReport4 = BugFactory.eINSTANCE.createBugReport();
+		final BugReport bugReport1 = BugFactory.eINSTANCE.createBugReport();
+		final BugReport bugReport2 = BugFactory.eINSTANCE.createBugReport();
+		final BugReport bugReport3 = BugFactory.eINSTANCE.createBugReport();
+		final BugReport bugReport4 = BugFactory.eINSTANCE.createBugReport();
 
 		getProject().addModelElement(bugReport1);
 		getProject().addModelElement(bugReport2);
@@ -869,15 +869,15 @@ public class Topology1toNTest extends TopologyTest {
 		getProject().addModelElement(oldWorkPackage);
 		getProject().addModelElement(oldWorkPackage2);
 
-		ModelElementId bugReport1Id = getProject().getModelElementId(bugReport1);
-		ModelElementId bugReport2Id = getProject().getModelElementId(bugReport2);
-		ModelElementId bugReport3Id = getProject().getModelElementId(bugReport3);
-		ModelElementId bugReport4Id = getProject().getModelElementId(bugReport4);
-		ModelElementId sectionId = getProject().getModelElementId(section);
-		ModelElementId oldWorkPackageId = getProject().getModelElementId(oldWorkPackage);
-		ModelElementId oldWorkPackageId2 = getProject().getModelElementId(oldWorkPackage2);
+		final ModelElementId bugReport1Id = getProject().getModelElementId(bugReport1);
+		final ModelElementId bugReport2Id = getProject().getModelElementId(bugReport2);
+		final ModelElementId bugReport3Id = getProject().getModelElementId(bugReport3);
+		final ModelElementId bugReport4Id = getProject().getModelElementId(bugReport4);
+		final ModelElementId sectionId = getProject().getModelElementId(section);
+		final ModelElementId oldWorkPackageId = getProject().getModelElementId(oldWorkPackage);
+		final ModelElementId oldWorkPackageId2 = getProject().getModelElementId(oldWorkPackage2);
 
-		BugReport[] actors = { bugReport1, bugReport2, bugReport3, bugReport4 };
+		final BugReport[] actors = { bugReport1, bugReport2, bugReport3, bugReport4 };
 		oldWorkPackage.getContainedWorkItems().addAll(Arrays.asList(actors));
 		oldWorkPackage2.getContainedWorkItems().add(bugReport4); // relocate to other section
 
@@ -891,11 +891,11 @@ public class Topology1toNTest extends TopologyTest {
 
 		section.getModelElements().addAll(Arrays.asList(actors));
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		// expecting a composite operation here
 		assertEquals(1, operations.size());
 
-		EList<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
+		final EList<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
 			.getSubOperations();
 
 		// now expectation is: we get 4 messages preserving the info on former parents for the actors
@@ -903,17 +903,17 @@ public class Topology1toNTest extends TopologyTest {
 
 		assertEquals(11, subOperations.size());
 
-		SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
-		SingleReferenceOperation op2 = checkAndCast(subOperations.get(2), SingleReferenceOperation.class);
-		SingleReferenceOperation op3 = checkAndCast(subOperations.get(3), SingleReferenceOperation.class);
-		SingleReferenceOperation op4 = checkAndCast(subOperations.get(4), SingleReferenceOperation.class);
-		SingleReferenceOperation op5 = checkAndCast(subOperations.get(5), SingleReferenceOperation.class);
-		SingleReferenceOperation op6 = checkAndCast(subOperations.get(6), SingleReferenceOperation.class);
-		SingleReferenceOperation op8 = checkAndCast(subOperations.get(8), SingleReferenceOperation.class);
-		SingleReferenceOperation op9 = checkAndCast(subOperations.get(9), SingleReferenceOperation.class);
-		MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
-		MultiReferenceOperation op7 = checkAndCast(subOperations.get(7), MultiReferenceOperation.class);
-		MultiReferenceOperation op10 = checkAndCast(subOperations.get(10), MultiReferenceOperation.class);
+		final SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
+		final SingleReferenceOperation op2 = checkAndCast(subOperations.get(2), SingleReferenceOperation.class);
+		final SingleReferenceOperation op3 = checkAndCast(subOperations.get(3), SingleReferenceOperation.class);
+		final SingleReferenceOperation op4 = checkAndCast(subOperations.get(4), SingleReferenceOperation.class);
+		final SingleReferenceOperation op5 = checkAndCast(subOperations.get(5), SingleReferenceOperation.class);
+		final SingleReferenceOperation op6 = checkAndCast(subOperations.get(6), SingleReferenceOperation.class);
+		final SingleReferenceOperation op8 = checkAndCast(subOperations.get(8), SingleReferenceOperation.class);
+		final SingleReferenceOperation op9 = checkAndCast(subOperations.get(9), SingleReferenceOperation.class);
+		final MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
+		final MultiReferenceOperation op7 = checkAndCast(subOperations.get(7), MultiReferenceOperation.class);
+		final MultiReferenceOperation op10 = checkAndCast(subOperations.get(10), MultiReferenceOperation.class);
 
 		assertEquals(bugReport1Id, op1.getModelElementId());
 		assertEquals(bugReport2Id, op3.getModelElementId());
@@ -987,16 +987,16 @@ public class Topology1toNTest extends TopologyTest {
 	@Test
 	public void containmentAddDifferentFeatureContainedNChildrenToNonEmpty() {
 
-		LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
+		final LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
 		section.getModelElements().add(BugFactory.eINSTANCE.createBugReport());
 
-		WorkPackage oldWorkPackage = TaskFactory.eINSTANCE.createWorkPackage();
-		WorkPackage oldWorkPackage2 = TaskFactory.eINSTANCE.createWorkPackage();
+		final WorkPackage oldWorkPackage = TaskFactory.eINSTANCE.createWorkPackage();
+		final WorkPackage oldWorkPackage2 = TaskFactory.eINSTANCE.createWorkPackage();
 
-		BugReport bugReport1 = BugFactory.eINSTANCE.createBugReport();
-		BugReport bugReport2 = BugFactory.eINSTANCE.createBugReport();
-		BugReport bugReport3 = BugFactory.eINSTANCE.createBugReport();
-		BugReport bugReport4 = BugFactory.eINSTANCE.createBugReport();
+		final BugReport bugReport1 = BugFactory.eINSTANCE.createBugReport();
+		final BugReport bugReport2 = BugFactory.eINSTANCE.createBugReport();
+		final BugReport bugReport3 = BugFactory.eINSTANCE.createBugReport();
+		final BugReport bugReport4 = BugFactory.eINSTANCE.createBugReport();
 
 		getProject().addModelElement(bugReport1);
 		getProject().addModelElement(bugReport2);
@@ -1006,15 +1006,15 @@ public class Topology1toNTest extends TopologyTest {
 		getProject().addModelElement(oldWorkPackage);
 		getProject().addModelElement(oldWorkPackage2);
 
-		ModelElementId sectionId = getProject().getModelElementId(section);
-		ModelElementId oldWorkPackageId = getProject().getModelElementId(oldWorkPackage);
-		ModelElementId oldWorkPackage2Id = getProject().getModelElementId(oldWorkPackage2);
-		ModelElementId bugReport1Id = getProject().getModelElementId(bugReport1);
-		ModelElementId bugReport2Id = getProject().getModelElementId(bugReport2);
-		ModelElementId bugReport3Id = getProject().getModelElementId(bugReport3);
-		ModelElementId bugReport4Id = getProject().getModelElementId(bugReport4);
+		final ModelElementId sectionId = getProject().getModelElementId(section);
+		final ModelElementId oldWorkPackageId = getProject().getModelElementId(oldWorkPackage);
+		final ModelElementId oldWorkPackage2Id = getProject().getModelElementId(oldWorkPackage2);
+		final ModelElementId bugReport1Id = getProject().getModelElementId(bugReport1);
+		final ModelElementId bugReport2Id = getProject().getModelElementId(bugReport2);
+		final ModelElementId bugReport3Id = getProject().getModelElementId(bugReport3);
+		final ModelElementId bugReport4Id = getProject().getModelElementId(bugReport4);
 
-		BugReport[] bugreports = { bugReport1, bugReport2, bugReport3, bugReport4 };
+		final BugReport[] bugreports = { bugReport1, bugReport2, bugReport3, bugReport4 };
 		oldWorkPackage.getContainedWorkItems().addAll(Arrays.asList(bugreports));
 		oldWorkPackage2.getContainedWorkItems().add(bugReport4); // relocate to other section
 
@@ -1028,28 +1028,28 @@ public class Topology1toNTest extends TopologyTest {
 
 		section.getModelElements().addAll(Arrays.asList(bugreports));
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		// expecting a composite operation here
 		assertEquals(1, operations.size());
 
-		List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
+		final List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
 			.getSubOperations();
 		// now expectation is: we get 4 messages preserving the info on former parents for the actors
 		// and one additional one, indicating the new parent for all of them
 
 		assertEquals(11, subOperations.size());
 
-		SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
-		SingleReferenceOperation op2 = checkAndCast(subOperations.get(2), SingleReferenceOperation.class);
-		SingleReferenceOperation op3 = checkAndCast(subOperations.get(3), SingleReferenceOperation.class);
-		SingleReferenceOperation op4 = checkAndCast(subOperations.get(4), SingleReferenceOperation.class);
-		SingleReferenceOperation op5 = checkAndCast(subOperations.get(5), SingleReferenceOperation.class);
-		SingleReferenceOperation op6 = checkAndCast(subOperations.get(6), SingleReferenceOperation.class);
-		SingleReferenceOperation op8 = checkAndCast(subOperations.get(8), SingleReferenceOperation.class);
-		SingleReferenceOperation op9 = checkAndCast(subOperations.get(9), SingleReferenceOperation.class);
-		MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
-		MultiReferenceOperation op7 = checkAndCast(subOperations.get(7), MultiReferenceOperation.class);
-		MultiReferenceOperation op10 = checkAndCast(subOperations.get(10), MultiReferenceOperation.class);
+		final SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
+		final SingleReferenceOperation op2 = checkAndCast(subOperations.get(2), SingleReferenceOperation.class);
+		final SingleReferenceOperation op3 = checkAndCast(subOperations.get(3), SingleReferenceOperation.class);
+		final SingleReferenceOperation op4 = checkAndCast(subOperations.get(4), SingleReferenceOperation.class);
+		final SingleReferenceOperation op5 = checkAndCast(subOperations.get(5), SingleReferenceOperation.class);
+		final SingleReferenceOperation op6 = checkAndCast(subOperations.get(6), SingleReferenceOperation.class);
+		final SingleReferenceOperation op8 = checkAndCast(subOperations.get(8), SingleReferenceOperation.class);
+		final SingleReferenceOperation op9 = checkAndCast(subOperations.get(9), SingleReferenceOperation.class);
+		final MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
+		final MultiReferenceOperation op7 = checkAndCast(subOperations.get(7), MultiReferenceOperation.class);
+		final MultiReferenceOperation op10 = checkAndCast(subOperations.get(10), MultiReferenceOperation.class);
 
 		assertEquals(bugReport1Id, op1.getModelElementId());
 		assertEquals(bugReport2Id, op3.getModelElementId());
@@ -1122,11 +1122,11 @@ public class Topology1toNTest extends TopologyTest {
 	@Test
 	public void containmentAddDifferentFeatureContained1ChildrenToEmpty() {
 
-		LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
-		Solution solution1 = RationaleFactory.eINSTANCE.createSolution();
-		Solution solution2 = RationaleFactory.eINSTANCE.createSolution();
-		Issue issue1 = RationaleFactory.eINSTANCE.createIssue();
-		Issue issue2 = RationaleFactory.eINSTANCE.createIssue();
+		final LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
+		final Solution solution1 = RationaleFactory.eINSTANCE.createSolution();
+		final Solution solution2 = RationaleFactory.eINSTANCE.createSolution();
+		final Issue issue1 = RationaleFactory.eINSTANCE.createIssue();
+		final Issue issue2 = RationaleFactory.eINSTANCE.createIssue();
 
 		getProject().addModelElement(issue1);
 		getProject().addModelElement(issue2);
@@ -1134,11 +1134,11 @@ public class Topology1toNTest extends TopologyTest {
 		getProject().addModelElement(solution1);
 		getProject().addModelElement(solution2);
 
-		ModelElementId issue1Id = getProject().getModelElementId(issue1);
-		ModelElementId issue2Id = getProject().getModelElementId(issue2);
-		ModelElementId sectionId = getProject().getModelElementId(section);
-		ModelElementId solution1Id = getProject().getModelElementId(solution1);
-		ModelElementId solution2Id = getProject().getModelElementId(solution2);
+		final ModelElementId issue1Id = getProject().getModelElementId(issue1);
+		final ModelElementId issue2Id = getProject().getModelElementId(issue2);
+		final ModelElementId sectionId = getProject().getModelElementId(section);
+		final ModelElementId solution1Id = getProject().getModelElementId(solution1);
+		final ModelElementId solution2Id = getProject().getModelElementId(solution2);
 
 		issue1.setSolution(solution1);
 		issue2.setSolution(solution2);
@@ -1147,23 +1147,23 @@ public class Topology1toNTest extends TopologyTest {
 
 		section.getModelElements().addAll(Arrays.asList(new Solution[] { solution1, solution2 }));
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
+		final List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
 			.getSubOperations();
 		// now expectation is: we get 2 messages preserving the info on former parents for the solutions
 		// and one additional one, indicating the new parent for both of them
 
 		assertEquals(7, subOperations.size());
 
-		SingleReferenceOperation op0 = checkAndCast(subOperations.get(0), SingleReferenceOperation.class);
-		SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
-		SingleReferenceOperation op2 = checkAndCast(subOperations.get(2), SingleReferenceOperation.class);
-		SingleReferenceOperation op3 = checkAndCast(subOperations.get(3), SingleReferenceOperation.class);
-		SingleReferenceOperation op4 = checkAndCast(subOperations.get(4), SingleReferenceOperation.class);
-		SingleReferenceOperation op5 = checkAndCast(subOperations.get(5), SingleReferenceOperation.class);
-		MultiReferenceOperation op6 = checkAndCast(subOperations.get(6), MultiReferenceOperation.class);
+		final SingleReferenceOperation op0 = checkAndCast(subOperations.get(0), SingleReferenceOperation.class);
+		final SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
+		final SingleReferenceOperation op2 = checkAndCast(subOperations.get(2), SingleReferenceOperation.class);
+		final SingleReferenceOperation op3 = checkAndCast(subOperations.get(3), SingleReferenceOperation.class);
+		final SingleReferenceOperation op4 = checkAndCast(subOperations.get(4), SingleReferenceOperation.class);
+		final SingleReferenceOperation op5 = checkAndCast(subOperations.get(5), SingleReferenceOperation.class);
+		final MultiReferenceOperation op6 = checkAndCast(subOperations.get(6), MultiReferenceOperation.class);
 
 		assertEquals(solution1Id, op1.getModelElementId());
 		assertEquals(solution2Id, op4.getModelElementId());
@@ -1212,11 +1212,11 @@ public class Topology1toNTest extends TopologyTest {
 	public void containmentAddDifferentFeatureContained1ChildrenToNonEmpty() throws UnsupportedOperationException,
 		UnsupportedNotificationException {
 
-		LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
-		Issue issue1 = RationaleFactory.eINSTANCE.createIssue();
-		Issue issue2 = RationaleFactory.eINSTANCE.createIssue();
-		Solution solution1 = RationaleFactory.eINSTANCE.createSolution();
-		Solution solution2 = RationaleFactory.eINSTANCE.createSolution();
+		final LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
+		final Issue issue1 = RationaleFactory.eINSTANCE.createIssue();
+		final Issue issue2 = RationaleFactory.eINSTANCE.createIssue();
+		final Solution solution1 = RationaleFactory.eINSTANCE.createSolution();
+		final Solution solution2 = RationaleFactory.eINSTANCE.createSolution();
 		section.getModelElements().add(RationaleFactory.eINSTANCE.createSolution()); // prefill section
 
 		getProject().addModelElement(issue1);
@@ -1232,31 +1232,31 @@ public class Topology1toNTest extends TopologyTest {
 
 		section.getModelElements().addAll(Arrays.asList(new Solution[] { solution1, solution2 }));
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		// expecting a composite operation here
 		assertEquals(1, operations.size());
 
 		// now expectation is: we get 2 messages preserving the info on former parents for the solutions
 		// and one additional one, indicating the new parent for both of them
 
-		List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
+		final List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
 			.getSubOperations();
 
 		assertEquals(7, subOperations.size());
 
-		ModelElementId sectionId = ModelUtil.getProject(section).getModelElementId(section);
-		ModelElementId solution1Id = ModelUtil.getProject(solution1).getModelElementId(solution1);
-		ModelElementId solution2Id = ModelUtil.getProject(solution2).getModelElementId(solution2);
-		ModelElementId issue1Id = ModelUtil.getProject(issue1).getModelElementId(issue1);
-		ModelElementId issue2Id = ModelUtil.getProject(issue2).getModelElementId(issue2);
+		final ModelElementId sectionId = ModelUtil.getProject(section).getModelElementId(section);
+		final ModelElementId solution1Id = ModelUtil.getProject(solution1).getModelElementId(solution1);
+		final ModelElementId solution2Id = ModelUtil.getProject(solution2).getModelElementId(solution2);
+		final ModelElementId issue1Id = ModelUtil.getProject(issue1).getModelElementId(issue1);
+		final ModelElementId issue2Id = ModelUtil.getProject(issue2).getModelElementId(issue2);
 
-		SingleReferenceOperation op0 = checkAndCast(subOperations.get(0), SingleReferenceOperation.class);
-		SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
-		SingleReferenceOperation op2 = checkAndCast(subOperations.get(2), SingleReferenceOperation.class);
-		SingleReferenceOperation op3 = checkAndCast(subOperations.get(3), SingleReferenceOperation.class);
-		SingleReferenceOperation op4 = checkAndCast(subOperations.get(4), SingleReferenceOperation.class);
-		SingleReferenceOperation op5 = checkAndCast(subOperations.get(5), SingleReferenceOperation.class);
-		MultiReferenceOperation op6 = checkAndCast(subOperations.get(6), MultiReferenceOperation.class);
+		final SingleReferenceOperation op0 = checkAndCast(subOperations.get(0), SingleReferenceOperation.class);
+		final SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
+		final SingleReferenceOperation op2 = checkAndCast(subOperations.get(2), SingleReferenceOperation.class);
+		final SingleReferenceOperation op3 = checkAndCast(subOperations.get(3), SingleReferenceOperation.class);
+		final SingleReferenceOperation op4 = checkAndCast(subOperations.get(4), SingleReferenceOperation.class);
+		final SingleReferenceOperation op5 = checkAndCast(subOperations.get(5), SingleReferenceOperation.class);
+		final MultiReferenceOperation op6 = checkAndCast(subOperations.get(6), MultiReferenceOperation.class);
 
 		assertEquals(solution1Id, op1.getModelElementId());
 		assertEquals(solution2Id, op4.getModelElementId());
@@ -1301,19 +1301,19 @@ public class Topology1toNTest extends TopologyTest {
 	@Test
 	public void containmentAddMixedChildrenToEmpty() {
 
-		LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
-		LeafSection oldSection1 = DocumentFactory.eINSTANCE.createLeafSection();
-		LeafSection oldSection2 = DocumentFactory.eINSTANCE.createLeafSection();
-		Issue issue1 = RationaleFactory.eINSTANCE.createIssue();
-		Solution solution1 = RationaleFactory.eINSTANCE.createSolution();
-		Issue issue2 = RationaleFactory.eINSTANCE.createIssue();
-		Solution solution2 = RationaleFactory.eINSTANCE.createSolution();
-		Solution newSolution = RationaleFactory.eINSTANCE.createSolution();
-		Solution sectionSolution1 = RationaleFactory.eINSTANCE.createSolution();
-		Solution sectionSolution2 = RationaleFactory.eINSTANCE.createSolution();
-		Solution sectionSolution3 = RationaleFactory.eINSTANCE.createSolution();
-		WorkPackage workPackage = TaskFactory.eINSTANCE.createWorkPackage();
-		BugReport bugReport = BugFactory.eINSTANCE.createBugReport();
+		final LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
+		final LeafSection oldSection1 = DocumentFactory.eINSTANCE.createLeafSection();
+		final LeafSection oldSection2 = DocumentFactory.eINSTANCE.createLeafSection();
+		final Issue issue1 = RationaleFactory.eINSTANCE.createIssue();
+		final Solution solution1 = RationaleFactory.eINSTANCE.createSolution();
+		final Issue issue2 = RationaleFactory.eINSTANCE.createIssue();
+		final Solution solution2 = RationaleFactory.eINSTANCE.createSolution();
+		final Solution newSolution = RationaleFactory.eINSTANCE.createSolution();
+		final Solution sectionSolution1 = RationaleFactory.eINSTANCE.createSolution();
+		final Solution sectionSolution2 = RationaleFactory.eINSTANCE.createSolution();
+		final Solution sectionSolution3 = RationaleFactory.eINSTANCE.createSolution();
+		final WorkPackage workPackage = TaskFactory.eINSTANCE.createWorkPackage();
+		final BugReport bugReport = BugFactory.eINSTANCE.createBugReport();
 
 		getProject().addModelElement(issue1);
 		getProject().addModelElement(issue2);
@@ -1329,21 +1329,22 @@ public class Topology1toNTest extends TopologyTest {
 		getProject().addModelElement(workPackage);
 		getProject().addModelElement(bugReport);
 
-		ModelElementId sectionId = getProject().getModelElementId(section);
-		ModelElementId solution1Id = getProject().getModelElementId(solution1);
-		ModelElementId solution2Id = getProject().getModelElementId(solution2);
-		ModelElementId issue1Id = getProject().getModelElementId(issue1);
-		ModelElementId issue2Id = getProject().getModelElementId(issue2);
-		ModelElementId newSolutionId = getProject().getModelElementId(newSolution);
-		ModelElementId oldSection1Id = getProject().getModelElementId(oldSection1);
-		ModelElementId oldSection2Id = getProject().getModelElementId(oldSection2);
-		ModelElementId sectionSolution1Id = getProject().getModelElementId(sectionSolution1);
-		ModelElementId sectionSolution2Id = getProject().getModelElementId(sectionSolution2);
-		ModelElementId sectionSolution3Id = getProject().getModelElementId(sectionSolution3);
-		ModelElementId workPackageId = getProject().getModelElementId(workPackage);
-		ModelElementId bugReportId = getProject().getModelElementId(bugReport);
+		final ModelElementId sectionId = getProject().getModelElementId(section);
+		final ModelElementId solution1Id = getProject().getModelElementId(solution1);
+		final ModelElementId solution2Id = getProject().getModelElementId(solution2);
+		final ModelElementId issue1Id = getProject().getModelElementId(issue1);
+		final ModelElementId issue2Id = getProject().getModelElementId(issue2);
+		final ModelElementId newSolutionId = getProject().getModelElementId(newSolution);
+		final ModelElementId oldSection1Id = getProject().getModelElementId(oldSection1);
+		final ModelElementId oldSection2Id = getProject().getModelElementId(oldSection2);
+		final ModelElementId sectionSolution1Id = getProject().getModelElementId(sectionSolution1);
+		final ModelElementId sectionSolution2Id = getProject().getModelElementId(sectionSolution2);
+		final ModelElementId sectionSolution3Id = getProject().getModelElementId(sectionSolution3);
+		final ModelElementId workPackageId = getProject().getModelElementId(workPackage);
+		final ModelElementId bugReportId = getProject().getModelElementId(bugReport);
 
-		UnicaseModelElement[] addedElements = { solution1, solution2, newSolution, sectionSolution1, sectionSolution2,
+		final UnicaseModelElement[] addedElements = { solution1, solution2, newSolution, sectionSolution1,
+			sectionSolution2,
 			sectionSolution3, bugReport };
 		issue1.setSolution(solution1);
 		issue2.setSolution(solution2);
@@ -1361,10 +1362,10 @@ public class Topology1toNTest extends TopologyTest {
 
 		section.getModelElements().addAll(Arrays.asList(addedElements));
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		// expecting a composite operation here
 		assertEquals(1, operations.size());
-		List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
+		final List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
 			.getSubOperations();
 
 		// now expectation is: we get 6 messages preserving the info on former parents for the solutions
@@ -1372,22 +1373,22 @@ public class Topology1toNTest extends TopologyTest {
 
 		assertEquals(16, subOperations.size());
 
-		SingleReferenceOperation op0 = checkAndCast(subOperations.get(0), SingleReferenceOperation.class);
-		SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
-		SingleReferenceOperation op2 = checkAndCast(subOperations.get(2), SingleReferenceOperation.class);
-		SingleReferenceOperation op3 = checkAndCast(subOperations.get(3), SingleReferenceOperation.class);
-		SingleReferenceOperation op4 = checkAndCast(subOperations.get(4), SingleReferenceOperation.class);
-		SingleReferenceOperation op5 = checkAndCast(subOperations.get(5), SingleReferenceOperation.class);
-		SingleReferenceOperation op6 = checkAndCast(subOperations.get(6), SingleReferenceOperation.class);
-		MultiReferenceOperation op7 = checkAndCast(subOperations.get(7), MultiReferenceOperation.class);
-		SingleReferenceOperation op8 = checkAndCast(subOperations.get(8), SingleReferenceOperation.class);
-		SingleReferenceOperation op9 = checkAndCast(subOperations.get(9), SingleReferenceOperation.class);
-		MultiReferenceOperation op10 = checkAndCast(subOperations.get(10), MultiReferenceOperation.class);
-		SingleReferenceOperation op11 = checkAndCast(subOperations.get(11), SingleReferenceOperation.class);
-		MultiReferenceOperation op12 = checkAndCast(subOperations.get(12), MultiReferenceOperation.class);
-		SingleReferenceOperation op13 = checkAndCast(subOperations.get(13), SingleReferenceOperation.class);
-		SingleReferenceOperation op14 = checkAndCast(subOperations.get(14), SingleReferenceOperation.class);
-		MultiReferenceOperation op15 = checkAndCast(subOperations.get(15), MultiReferenceOperation.class);
+		final SingleReferenceOperation op0 = checkAndCast(subOperations.get(0), SingleReferenceOperation.class);
+		final SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
+		final SingleReferenceOperation op2 = checkAndCast(subOperations.get(2), SingleReferenceOperation.class);
+		final SingleReferenceOperation op3 = checkAndCast(subOperations.get(3), SingleReferenceOperation.class);
+		final SingleReferenceOperation op4 = checkAndCast(subOperations.get(4), SingleReferenceOperation.class);
+		final SingleReferenceOperation op5 = checkAndCast(subOperations.get(5), SingleReferenceOperation.class);
+		final SingleReferenceOperation op6 = checkAndCast(subOperations.get(6), SingleReferenceOperation.class);
+		final MultiReferenceOperation op7 = checkAndCast(subOperations.get(7), MultiReferenceOperation.class);
+		final SingleReferenceOperation op8 = checkAndCast(subOperations.get(8), SingleReferenceOperation.class);
+		final SingleReferenceOperation op9 = checkAndCast(subOperations.get(9), SingleReferenceOperation.class);
+		final MultiReferenceOperation op10 = checkAndCast(subOperations.get(10), MultiReferenceOperation.class);
+		final SingleReferenceOperation op11 = checkAndCast(subOperations.get(11), SingleReferenceOperation.class);
+		final MultiReferenceOperation op12 = checkAndCast(subOperations.get(12), MultiReferenceOperation.class);
+		final SingleReferenceOperation op13 = checkAndCast(subOperations.get(13), SingleReferenceOperation.class);
+		final SingleReferenceOperation op14 = checkAndCast(subOperations.get(14), SingleReferenceOperation.class);
+		final MultiReferenceOperation op15 = checkAndCast(subOperations.get(15), MultiReferenceOperation.class);
 
 		assertEquals("solution", op0.getFeatureName());
 		assertEquals(issue1Id, op0.getModelElementId());
@@ -1489,20 +1490,20 @@ public class Topology1toNTest extends TopologyTest {
 	@Test
 	public void containmentAddMixedChildrenToNonEmpty() {
 
-		LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
+		final LeafSection section = DocumentFactory.eINSTANCE.createLeafSection();
 		section.getModelElements().add(RationaleFactory.eINSTANCE.createIssue()); // prefill section
-		LeafSection oldSection1 = DocumentFactory.eINSTANCE.createLeafSection();
-		LeafSection oldSection2 = DocumentFactory.eINSTANCE.createLeafSection();
-		Issue issue1 = RationaleFactory.eINSTANCE.createIssue();
-		Solution solution1 = RationaleFactory.eINSTANCE.createSolution();
-		Issue issue2 = RationaleFactory.eINSTANCE.createIssue();
-		Solution solution2 = RationaleFactory.eINSTANCE.createSolution();
-		Solution newSolution = RationaleFactory.eINSTANCE.createSolution();
-		Solution sectionSolution1 = RationaleFactory.eINSTANCE.createSolution();
-		Solution sectionSolution2 = RationaleFactory.eINSTANCE.createSolution();
-		Solution sectionSolution3 = RationaleFactory.eINSTANCE.createSolution();
-		WorkPackage workPackage = TaskFactory.eINSTANCE.createWorkPackage();
-		BugReport bugReport = BugFactory.eINSTANCE.createBugReport();
+		final LeafSection oldSection1 = DocumentFactory.eINSTANCE.createLeafSection();
+		final LeafSection oldSection2 = DocumentFactory.eINSTANCE.createLeafSection();
+		final Issue issue1 = RationaleFactory.eINSTANCE.createIssue();
+		final Solution solution1 = RationaleFactory.eINSTANCE.createSolution();
+		final Issue issue2 = RationaleFactory.eINSTANCE.createIssue();
+		final Solution solution2 = RationaleFactory.eINSTANCE.createSolution();
+		final Solution newSolution = RationaleFactory.eINSTANCE.createSolution();
+		final Solution sectionSolution1 = RationaleFactory.eINSTANCE.createSolution();
+		final Solution sectionSolution2 = RationaleFactory.eINSTANCE.createSolution();
+		final Solution sectionSolution3 = RationaleFactory.eINSTANCE.createSolution();
+		final WorkPackage workPackage = TaskFactory.eINSTANCE.createWorkPackage();
+		final BugReport bugReport = BugFactory.eINSTANCE.createBugReport();
 
 		getProject().addModelElement(issue1);
 		getProject().addModelElement(issue2);
@@ -1518,21 +1519,22 @@ public class Topology1toNTest extends TopologyTest {
 		getProject().addModelElement(workPackage);
 		getProject().addModelElement(bugReport);
 
-		ModelElementId issue1Id = getProject().getModelElementId(issue1);
-		ModelElementId issue2Id = getProject().getModelElementId(issue2);
-		ModelElementId oldSection1Id = getProject().getModelElementId(oldSection1);
-		ModelElementId oldSection2Id = getProject().getModelElementId(oldSection2);
-		ModelElementId sectionSolution1Id = getProject().getModelElementId(sectionSolution1);
-		ModelElementId sectionSolution2Id = getProject().getModelElementId(sectionSolution2);
-		ModelElementId sectionSolution3Id = getProject().getModelElementId(sectionSolution3);
-		ModelElementId sectionId = getProject().getModelElementId(section);
-		ModelElementId newSolutionId = getProject().getModelElementId(newSolution);
-		ModelElementId solution1Id = getProject().getModelElementId(solution1);
-		ModelElementId solution2Id = getProject().getModelElementId(solution2);
-		ModelElementId bugReportId = getProject().getModelElementId(bugReport);
-		ModelElementId workPackageId = getProject().getModelElementId(workPackage);
+		final ModelElementId issue1Id = getProject().getModelElementId(issue1);
+		final ModelElementId issue2Id = getProject().getModelElementId(issue2);
+		final ModelElementId oldSection1Id = getProject().getModelElementId(oldSection1);
+		final ModelElementId oldSection2Id = getProject().getModelElementId(oldSection2);
+		final ModelElementId sectionSolution1Id = getProject().getModelElementId(sectionSolution1);
+		final ModelElementId sectionSolution2Id = getProject().getModelElementId(sectionSolution2);
+		final ModelElementId sectionSolution3Id = getProject().getModelElementId(sectionSolution3);
+		final ModelElementId sectionId = getProject().getModelElementId(section);
+		final ModelElementId newSolutionId = getProject().getModelElementId(newSolution);
+		final ModelElementId solution1Id = getProject().getModelElementId(solution1);
+		final ModelElementId solution2Id = getProject().getModelElementId(solution2);
+		final ModelElementId bugReportId = getProject().getModelElementId(bugReport);
+		final ModelElementId workPackageId = getProject().getModelElementId(workPackage);
 
-		UnicaseModelElement[] addedElements = { solution1, solution2, newSolution, sectionSolution1, sectionSolution2,
+		final UnicaseModelElement[] addedElements = { solution1, solution2, newSolution, sectionSolution1,
+			sectionSolution2,
 			sectionSolution3, bugReport };
 		issue1.setSolution(solution1);
 		issue2.setSolution(solution2);
@@ -1550,10 +1552,10 @@ public class Topology1toNTest extends TopologyTest {
 
 		section.getModelElements().addAll(Arrays.asList(addedElements));
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		// expecting a composite operation here
 		assertEquals(1, operations.size());
-		List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
+		final List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
 			.getSubOperations();
 
 		// now expectation is: we get 6 messages preserving the info on former parents for the solutions
@@ -1561,22 +1563,22 @@ public class Topology1toNTest extends TopologyTest {
 
 		assertEquals(16, subOperations.size());
 
-		SingleReferenceOperation op0 = checkAndCast(subOperations.get(0), SingleReferenceOperation.class);
-		SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
-		SingleReferenceOperation op2 = checkAndCast(subOperations.get(2), SingleReferenceOperation.class);
-		SingleReferenceOperation op3 = checkAndCast(subOperations.get(3), SingleReferenceOperation.class);
-		SingleReferenceOperation op4 = checkAndCast(subOperations.get(4), SingleReferenceOperation.class);
-		SingleReferenceOperation op5 = checkAndCast(subOperations.get(5), SingleReferenceOperation.class);
-		SingleReferenceOperation op6 = checkAndCast(subOperations.get(6), SingleReferenceOperation.class);
-		MultiReferenceOperation op7 = checkAndCast(subOperations.get(7), MultiReferenceOperation.class);
-		SingleReferenceOperation op8 = checkAndCast(subOperations.get(8), SingleReferenceOperation.class);
-		SingleReferenceOperation op9 = checkAndCast(subOperations.get(9), SingleReferenceOperation.class);
-		MultiReferenceOperation op10 = checkAndCast(subOperations.get(10), MultiReferenceOperation.class);
-		SingleReferenceOperation op11 = checkAndCast(subOperations.get(11), SingleReferenceOperation.class);
-		MultiReferenceOperation op12 = checkAndCast(subOperations.get(12), MultiReferenceOperation.class);
-		SingleReferenceOperation op13 = checkAndCast(subOperations.get(13), SingleReferenceOperation.class);
-		SingleReferenceOperation op14 = checkAndCast(subOperations.get(14), SingleReferenceOperation.class);
-		MultiReferenceOperation op15 = checkAndCast(subOperations.get(15), MultiReferenceOperation.class);
+		final SingleReferenceOperation op0 = checkAndCast(subOperations.get(0), SingleReferenceOperation.class);
+		final SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
+		final SingleReferenceOperation op2 = checkAndCast(subOperations.get(2), SingleReferenceOperation.class);
+		final SingleReferenceOperation op3 = checkAndCast(subOperations.get(3), SingleReferenceOperation.class);
+		final SingleReferenceOperation op4 = checkAndCast(subOperations.get(4), SingleReferenceOperation.class);
+		final SingleReferenceOperation op5 = checkAndCast(subOperations.get(5), SingleReferenceOperation.class);
+		final SingleReferenceOperation op6 = checkAndCast(subOperations.get(6), SingleReferenceOperation.class);
+		final MultiReferenceOperation op7 = checkAndCast(subOperations.get(7), MultiReferenceOperation.class);
+		final SingleReferenceOperation op8 = checkAndCast(subOperations.get(8), SingleReferenceOperation.class);
+		final SingleReferenceOperation op9 = checkAndCast(subOperations.get(9), SingleReferenceOperation.class);
+		final MultiReferenceOperation op10 = checkAndCast(subOperations.get(10), MultiReferenceOperation.class);
+		final SingleReferenceOperation op11 = checkAndCast(subOperations.get(11), SingleReferenceOperation.class);
+		final MultiReferenceOperation op12 = checkAndCast(subOperations.get(12), MultiReferenceOperation.class);
+		final SingleReferenceOperation op13 = checkAndCast(subOperations.get(13), SingleReferenceOperation.class);
+		final SingleReferenceOperation op14 = checkAndCast(subOperations.get(14), SingleReferenceOperation.class);
+		final MultiReferenceOperation op15 = checkAndCast(subOperations.get(15), MultiReferenceOperation.class);
 
 		assertEquals(op0.getModelElementId(), issue1Id);
 		assertEquals(op0.getFeatureName(), "solution");
@@ -1689,26 +1691,26 @@ public class Topology1toNTest extends TopologyTest {
 		section.getModelElements().add(actor);
 
 		clearOperations();
-		ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
+		final ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				section.getModelElements().remove(actor);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		List<ReferenceOperation> subOperations = checkAndCast(operations.get(0), CreateDeleteOperation.class)
+		final List<ReferenceOperation> subOperations = checkAndCast(operations.get(0), CreateDeleteOperation.class)
 			.getSubOperations();
 		assertEquals(2, subOperations.size());
 
-		ModelElementId sectionId = getProject().getModelElementId(section);
+		final ModelElementId sectionId = getProject().getModelElementId(section);
 
-		SingleReferenceOperation op0 = checkAndCast(subOperations.get(0), SingleReferenceOperation.class);
-		MultiReferenceOperation op1 = checkAndCast(subOperations.get(1), MultiReferenceOperation.class);
+		final SingleReferenceOperation op0 = checkAndCast(subOperations.get(0), SingleReferenceOperation.class);
+		final MultiReferenceOperation op1 = checkAndCast(subOperations.get(1), MultiReferenceOperation.class);
 
 		assertEquals(actorId, op0.getModelElementId());
 		assertEquals(sectionId, op0.getOldValue());
@@ -1747,30 +1749,30 @@ public class Topology1toNTest extends TopologyTest {
 
 		clearOperations();
 
-		ModelElementId actor1Id = getProject().getModelElementId(actor1);
-		ModelElementId actor2Id = getProject().getModelElementId(actor2);
+		final ModelElementId actor1Id = getProject().getModelElementId(actor1);
+		final ModelElementId actor2Id = getProject().getModelElementId(actor2);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				section.getModelElements().removeAll(Arrays.asList(actors));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(3, operations.size());
-		List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
+		final List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
 			.getSubOperations();
 		checkAndCast(operations.get(1), CreateDeleteOperation.class);
 		checkAndCast(operations.get(2), CreateDeleteOperation.class);
 		assertEquals(3, subOperations.size());
 
-		ModelElementId sectionId = getProject().getModelElementId(section);
+		final ModelElementId sectionId = getProject().getModelElementId(section);
 
-		SingleReferenceOperation op0 = checkAndCast(subOperations.get(0), SingleReferenceOperation.class);
-		SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
-		MultiReferenceOperation op2 = checkAndCast(subOperations.get(2), MultiReferenceOperation.class);
+		final SingleReferenceOperation op0 = checkAndCast(subOperations.get(0), SingleReferenceOperation.class);
+		final SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
+		final MultiReferenceOperation op2 = checkAndCast(subOperations.get(2), MultiReferenceOperation.class);
 
 		assertEquals(actor1Id, op0.getModelElementId());
 		assertEquals(sectionId, op0.getOldValue());
@@ -1812,25 +1814,25 @@ public class Topology1toNTest extends TopologyTest {
 		section.getModelElements().add(actor);
 
 		clearOperations();
-		ModelElementId actorId = getProject().getModelElementId(actor);
+		final ModelElementId actorId = getProject().getModelElementId(actor);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				section.getModelElements().remove(actor);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(1, operations.size());
-		List<ReferenceOperation> subOperations = checkAndCast(operations.get(0), CreateDeleteOperation.class)
+		final List<ReferenceOperation> subOperations = checkAndCast(operations.get(0), CreateDeleteOperation.class)
 			.getSubOperations();
 		assertEquals(2, subOperations.size());
 
-		ModelElementId sectionId = getProject().getModelElementId(section);
+		final ModelElementId sectionId = getProject().getModelElementId(section);
 
-		SingleReferenceOperation op0 = checkAndCast(subOperations.get(0), SingleReferenceOperation.class);
-		MultiReferenceOperation op1 = checkAndCast(subOperations.get(1), MultiReferenceOperation.class);
+		final SingleReferenceOperation op0 = checkAndCast(subOperations.get(0), SingleReferenceOperation.class);
+		final MultiReferenceOperation op1 = checkAndCast(subOperations.get(1), MultiReferenceOperation.class);
 
 		assertEquals(actorId, op0.getModelElementId());
 		assertEquals(sectionId, op0.getOldValue());
@@ -1855,8 +1857,8 @@ public class Topology1toNTest extends TopologyTest {
 	@Test
 	public void nonContainmentAddChildToEmpty() throws UnsupportedOperationException, UnsupportedNotificationException {
 
-		UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
-		Actor actor = RequirementFactory.eINSTANCE.createActor();
+		final UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
+		final Actor actor = RequirementFactory.eINSTANCE.createActor();
 
 		getProject().addModelElement(actor);
 		getProject().addModelElement(useCase);
@@ -1865,29 +1867,29 @@ public class Topology1toNTest extends TopologyTest {
 
 		useCase.getParticipatingActors().add(actor);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof CompositeOperation);
 
-		List<AbstractOperation> subOperations = ((CompositeOperation) operation).getSubOperations();
+		final List<AbstractOperation> subOperations = ((CompositeOperation) operation).getSubOperations();
 
 		assertEquals(2, subOperations.size());
 
 		assertTrue(subOperations.get(0) instanceof MultiReferenceOperation);
-		MultiReferenceOperation op0 = (MultiReferenceOperation) subOperations.get(0);
+		final MultiReferenceOperation op0 = (MultiReferenceOperation) subOperations.get(0);
 		assertTrue(op0.isAdd());
 		assertEquals("participatedUseCases", op0.getFeatureName());
 
-		ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
-		ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
+		final ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
+		final ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
 
 		assertEquals(actorId, op0.getModelElementId());
 		assertEquals(useCaseId, op0.getReferencedModelElements().get(0));
 
 		assertTrue(subOperations.get(1) instanceof MultiReferenceOperation);
-		MultiReferenceOperation op1 = (MultiReferenceOperation) subOperations.get(1);
+		final MultiReferenceOperation op1 = (MultiReferenceOperation) subOperations.get(1);
 		assertTrue(op1.isAdd());
 		assertEquals(1, op1.getReferencedModelElements().size());
 		assertEquals(actorId, op1.getReferencedModelElements().get(0));
@@ -1907,51 +1909,51 @@ public class Topology1toNTest extends TopologyTest {
 	public void nonContainmentAddChildrenToEmpty() throws UnsupportedOperationException,
 		UnsupportedNotificationException {
 
-		UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
-		Actor actor1 = RequirementFactory.eINSTANCE.createActor();
-		Actor actor2 = RequirementFactory.eINSTANCE.createActor();
+		final UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
+		final Actor actor1 = RequirementFactory.eINSTANCE.createActor();
+		final Actor actor2 = RequirementFactory.eINSTANCE.createActor();
 
 		getProject().addModelElement(actor1);
 		getProject().addModelElement(actor2);
 		getProject().addModelElement(useCase);
 
-		Actor[] actors = { actor1, actor2 };
+		final Actor[] actors = { actor1, actor2 };
 
 		clearOperations();
 
 		useCase.getParticipatingActors().addAll(Arrays.asList(actors));
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof CompositeOperation);
 
-		List<AbstractOperation> subOperations = ((CompositeOperation) operation).getSubOperations();
+		final List<AbstractOperation> subOperations = ((CompositeOperation) operation).getSubOperations();
 
 		assertEquals(3, subOperations.size());
 
 		assertTrue(subOperations.get(0) instanceof MultiReferenceOperation);
-		MultiReferenceOperation op0 = (MultiReferenceOperation) subOperations.get(0);
+		final MultiReferenceOperation op0 = (MultiReferenceOperation) subOperations.get(0);
 		assertTrue(op0.isAdd());
 		assertEquals("participatedUseCases", op0.getFeatureName());
 
-		ModelElementId actor1Id = ModelUtil.getProject(actor1).getModelElementId(actor1);
-		ModelElementId actor2Id = ModelUtil.getProject(actor2).getModelElementId(actor2);
-		ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
+		final ModelElementId actor1Id = ModelUtil.getProject(actor1).getModelElementId(actor1);
+		final ModelElementId actor2Id = ModelUtil.getProject(actor2).getModelElementId(actor2);
+		final ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
 
 		assertEquals(actor1Id, op0.getModelElementId());
 		assertEquals(useCaseId, op0.getReferencedModelElements().get(0));
 
 		assertTrue(subOperations.get(1) instanceof MultiReferenceOperation);
-		MultiReferenceOperation op1 = (MultiReferenceOperation) subOperations.get(1);
+		final MultiReferenceOperation op1 = (MultiReferenceOperation) subOperations.get(1);
 		assertTrue(op1.isAdd());
 		assertEquals("participatedUseCases", op1.getFeatureName());
 		assertEquals(actor2Id, op1.getModelElementId());
 		assertEquals(useCaseId, op1.getReferencedModelElements().get(0));
 
 		assertTrue(subOperations.get(2) instanceof MultiReferenceOperation);
-		MultiReferenceOperation op2 = (MultiReferenceOperation) subOperations.get(2);
+		final MultiReferenceOperation op2 = (MultiReferenceOperation) subOperations.get(2);
 		assertTrue(op2.isAdd());
 		assertEquals(2, op2.getReferencedModelElements().size());
 		assertEquals(actor1Id, op2.getReferencedModelElements().get(0));
@@ -1972,9 +1974,9 @@ public class Topology1toNTest extends TopologyTest {
 	public void nonContainmentAddChildToNonEmpty() throws UnsupportedOperationException,
 		UnsupportedNotificationException {
 
-		UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
-		Actor oldActor = RequirementFactory.eINSTANCE.createActor();
-		Actor actor = RequirementFactory.eINSTANCE.createActor();
+		final UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
+		final Actor oldActor = RequirementFactory.eINSTANCE.createActor();
+		final Actor actor = RequirementFactory.eINSTANCE.createActor();
 
 		getProject().addModelElement(actor);
 		getProject().addModelElement(oldActor);
@@ -1986,29 +1988,29 @@ public class Topology1toNTest extends TopologyTest {
 
 		useCase.getParticipatingActors().add(actor);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof CompositeOperation);
 
-		List<AbstractOperation> subOperations = ((CompositeOperation) operation).getSubOperations();
+		final List<AbstractOperation> subOperations = ((CompositeOperation) operation).getSubOperations();
 
 		assertEquals(2, subOperations.size());
 
 		assertTrue(subOperations.get(0) instanceof MultiReferenceOperation);
-		MultiReferenceOperation op0 = (MultiReferenceOperation) subOperations.get(0);
+		final MultiReferenceOperation op0 = (MultiReferenceOperation) subOperations.get(0);
 		assertTrue(op0.isAdd());
 		assertEquals("participatedUseCases", op0.getFeatureName());
 
-		ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
-		ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
+		final ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
+		final ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
 
 		assertEquals(actorId, op0.getModelElementId());
 		assertEquals(useCaseId, op0.getReferencedModelElements().get(0));
 
 		assertTrue(subOperations.get(1) instanceof MultiReferenceOperation);
-		MultiReferenceOperation op1 = (MultiReferenceOperation) subOperations.get(1);
+		final MultiReferenceOperation op1 = (MultiReferenceOperation) subOperations.get(1);
 		assertTrue(op1.isAdd());
 		assertEquals(1, op1.getReferencedModelElements().size());
 		assertEquals(actorId, op1.getReferencedModelElements().get(0));
@@ -2028,53 +2030,53 @@ public class Topology1toNTest extends TopologyTest {
 	public void nonContainmentAddChildrenToNonEmpty() throws UnsupportedOperationException,
 		UnsupportedNotificationException {
 
-		UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
-		Actor oldActor = RequirementFactory.eINSTANCE.createActor();
-		Actor actor1 = RequirementFactory.eINSTANCE.createActor();
-		Actor actor2 = RequirementFactory.eINSTANCE.createActor();
+		final UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
+		final Actor oldActor = RequirementFactory.eINSTANCE.createActor();
+		final Actor actor1 = RequirementFactory.eINSTANCE.createActor();
+		final Actor actor2 = RequirementFactory.eINSTANCE.createActor();
 
 		getProject().addModelElement(oldActor);
 		getProject().addModelElement(actor1);
 		getProject().addModelElement(actor2);
 		getProject().addModelElement(useCase);
 
-		Actor[] actors = { actor1, actor2 };
+		final Actor[] actors = { actor1, actor2 };
 		useCase.getParticipatingActors().add(oldActor);
 		clearOperations();
 
 		useCase.getParticipatingActors().addAll(Arrays.asList(actors));
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof CompositeOperation);
 
-		List<AbstractOperation> subOperations = ((CompositeOperation) operation).getSubOperations();
+		final List<AbstractOperation> subOperations = ((CompositeOperation) operation).getSubOperations();
 
 		assertEquals(3, subOperations.size());
 
 		assertTrue(subOperations.get(0) instanceof MultiReferenceOperation);
-		MultiReferenceOperation op0 = (MultiReferenceOperation) subOperations.get(0);
+		final MultiReferenceOperation op0 = (MultiReferenceOperation) subOperations.get(0);
 		assertTrue(op0.isAdd());
 		assertEquals("participatedUseCases", op0.getFeatureName());
 
-		ModelElementId actor1Id = ModelUtil.getProject(actor1).getModelElementId(actor1);
-		ModelElementId actor2Id = ModelUtil.getProject(actor2).getModelElementId(actor2);
-		ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
+		final ModelElementId actor1Id = ModelUtil.getProject(actor1).getModelElementId(actor1);
+		final ModelElementId actor2Id = ModelUtil.getProject(actor2).getModelElementId(actor2);
+		final ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
 
 		assertEquals(actor1Id, op0.getModelElementId());
 		assertEquals(useCaseId, op0.getReferencedModelElements().get(0));
 
 		assertTrue(subOperations.get(1) instanceof MultiReferenceOperation);
-		MultiReferenceOperation op1 = (MultiReferenceOperation) subOperations.get(1);
+		final MultiReferenceOperation op1 = (MultiReferenceOperation) subOperations.get(1);
 		assertTrue(op1.isAdd());
 		assertEquals("participatedUseCases", op1.getFeatureName());
 		assertEquals(actor2Id, op1.getModelElementId());
 		assertEquals(useCaseId, op1.getReferencedModelElements().get(0));
 
 		assertTrue(subOperations.get(2) instanceof MultiReferenceOperation);
-		MultiReferenceOperation op2 = (MultiReferenceOperation) subOperations.get(2);
+		final MultiReferenceOperation op2 = (MultiReferenceOperation) subOperations.get(2);
 		assertTrue(op2.isAdd());
 		assertEquals(2, op2.getReferencedModelElements().size());
 		assertEquals(actor1Id, op2.getReferencedModelElements().get(0));
@@ -2095,8 +2097,8 @@ public class Topology1toNTest extends TopologyTest {
 	public void nonContainmentRemoveChildAndEmpty() throws UnsupportedOperationException,
 		UnsupportedNotificationException {
 
-		UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
-		Actor actor = RequirementFactory.eINSTANCE.createActor();
+		final UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
+		final Actor actor = RequirementFactory.eINSTANCE.createActor();
 
 		getProject().addModelElement(actor);
 		getProject().addModelElement(useCase);
@@ -2119,12 +2121,12 @@ public class Topology1toNTest extends TopologyTest {
 		assertEquals(2, operations.size());
 
 		assertTrue(operations.get(0) instanceof MultiReferenceOperation);
-		MultiReferenceOperation op0 = (MultiReferenceOperation) operations.get(0);
+		final MultiReferenceOperation op0 = (MultiReferenceOperation) operations.get(0);
 		assertFalse(op0.isAdd());
 		assertEquals(1, op0.getReferencedModelElements().size());
 
-		ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
-		ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
+		final ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
+		final ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
 
 		assertEquals(useCaseId, op0.getReferencedModelElements().get(0));
 		assertEquals("participatedUseCases", op0.getFeatureName());
@@ -2132,7 +2134,7 @@ public class Topology1toNTest extends TopologyTest {
 		assertEquals(op0.getIndex(), 0);
 
 		assertTrue(operations.get(1) instanceof MultiReferenceOperation);
-		MultiReferenceOperation op1 = (MultiReferenceOperation) operations.get(1);
+		final MultiReferenceOperation op1 = (MultiReferenceOperation) operations.get(1);
 		assertFalse(op1.isAdd());
 		assertEquals(1, op1.getReferencedModelElements().size());
 		assertEquals(actorId, op1.getReferencedModelElements().get(0));
@@ -2148,16 +2150,16 @@ public class Topology1toNTest extends TopologyTest {
 	@Test
 	public void nonContainmentRemoveChildPart() {
 
-		UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
-		Actor actor = RequirementFactory.eINSTANCE.createActor();
-		Actor oldActor = RequirementFactory.eINSTANCE.createActor();
+		final UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
+		final Actor actor = RequirementFactory.eINSTANCE.createActor();
+		final Actor oldActor = RequirementFactory.eINSTANCE.createActor();
 
 		getProject().addModelElement(actor);
 		getProject().addModelElement(oldActor);
 		getProject().addModelElement(useCase);
 
-		ModelElementId actorId = getProject().getModelElementId(actor);
-		ModelElementId useCaseId = getProject().getModelElementId(useCase);
+		final ModelElementId actorId = getProject().getModelElementId(actor);
+		final ModelElementId useCaseId = getProject().getModelElementId(useCase);
 
 		useCase.getParticipatingActors().add(oldActor);
 		useCase.getParticipatingActors().add(actor);
@@ -2166,15 +2168,15 @@ public class Topology1toNTest extends TopologyTest {
 
 		useCase.getParticipatingActors().remove(actor);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(1, operations.size());
 
-		List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
+		final List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
 			.getSubOperations();
 		assertEquals(2, subOperations.size());
 
-		MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
-		MultiReferenceOperation op1 = checkAndCast(subOperations.get(1), MultiReferenceOperation.class);
+		final MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
+		final MultiReferenceOperation op1 = checkAndCast(subOperations.get(1), MultiReferenceOperation.class);
 
 		assertEquals(1, op0.getReferencedModelElements().size());
 		assertFalse(op0.isAdd());
@@ -2198,19 +2200,19 @@ public class Topology1toNTest extends TopologyTest {
 	@Test
 	public void nonContainmentRemoveChildrenAndEmpty() {
 
-		UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
-		Actor actor1 = RequirementFactory.eINSTANCE.createActor();
-		Actor actor2 = RequirementFactory.eINSTANCE.createActor();
+		final UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
+		final Actor actor1 = RequirementFactory.eINSTANCE.createActor();
+		final Actor actor2 = RequirementFactory.eINSTANCE.createActor();
 
 		getProject().addModelElement(actor1);
 		getProject().addModelElement(actor2);
 		getProject().addModelElement(useCase);
 
-		ModelElementId actor1Id = getProject().getModelElementId(actor1);
-		ModelElementId actor2Id = getProject().getModelElementId(actor2);
-		ModelElementId useCaseId = getProject().getModelElementId(useCase);
+		final ModelElementId actor1Id = getProject().getModelElementId(actor1);
+		final ModelElementId actor2Id = getProject().getModelElementId(actor2);
+		final ModelElementId useCaseId = getProject().getModelElementId(useCase);
 
-		Actor[] actors = { actor1, actor2 };
+		final Actor[] actors = { actor1, actor2 };
 
 		useCase.getParticipatingActors().addAll(Arrays.asList(actors));
 
@@ -2218,16 +2220,16 @@ public class Topology1toNTest extends TopologyTest {
 
 		useCase.getParticipatingActors().removeAll(Arrays.asList(actors));
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
+		final List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
 			.getSubOperations();
 		assertEquals(3, subOperations.size());
 
-		MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
-		MultiReferenceOperation op1 = checkAndCast(subOperations.get(1), MultiReferenceOperation.class);
-		MultiReferenceOperation op2 = checkAndCast(subOperations.get(2), MultiReferenceOperation.class);
+		final MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
+		final MultiReferenceOperation op1 = checkAndCast(subOperations.get(1), MultiReferenceOperation.class);
+		final MultiReferenceOperation op2 = checkAndCast(subOperations.get(2), MultiReferenceOperation.class);
 
 		assertEquals("participatedUseCases", op0.getFeatureName());
 		assertEquals(actor1Id, op0.getModelElementId());
@@ -2254,20 +2256,20 @@ public class Topology1toNTest extends TopologyTest {
 	@Test
 	public void nonContainmentRemoveChildrenPart() {
 
-		UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
-		Actor oldActor = RequirementFactory.eINSTANCE.createActor();
-		Actor actor1 = RequirementFactory.eINSTANCE.createActor();
-		Actor actor2 = RequirementFactory.eINSTANCE.createActor();
+		final UseCase useCase = RequirementFactory.eINSTANCE.createUseCase();
+		final Actor oldActor = RequirementFactory.eINSTANCE.createActor();
+		final Actor actor1 = RequirementFactory.eINSTANCE.createActor();
+		final Actor actor2 = RequirementFactory.eINSTANCE.createActor();
 
 		getProject().addModelElement(oldActor);
 		getProject().addModelElement(actor1);
 		getProject().addModelElement(actor2);
 		getProject().addModelElement(useCase);
 
-		ModelElementId actor1Id = getProject().getModelElementId(actor1);
-		ModelElementId actor2Id = getProject().getModelElementId(actor2);
-		ModelElementId useCaseId = getProject().getModelElementId(useCase);
-		Actor[] actors = { actor1, actor2 };
+		final ModelElementId actor1Id = getProject().getModelElementId(actor1);
+		final ModelElementId actor2Id = getProject().getModelElementId(actor2);
+		final ModelElementId useCaseId = getProject().getModelElementId(useCase);
+		final Actor[] actors = { actor1, actor2 };
 
 		useCase.getParticipatingActors().add(oldActor);
 		useCase.getParticipatingActors().addAll(Arrays.asList(actors));
@@ -2276,16 +2278,16 @@ public class Topology1toNTest extends TopologyTest {
 
 		useCase.getParticipatingActors().removeAll(Arrays.asList(actors));
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
+		final List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
 			.getSubOperations();
 		assertEquals(3, subOperations.size());
 
-		MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
-		MultiReferenceOperation op1 = checkAndCast(subOperations.get(1), MultiReferenceOperation.class);
-		MultiReferenceOperation op2 = checkAndCast(subOperations.get(2), MultiReferenceOperation.class);
+		final MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
+		final MultiReferenceOperation op1 = checkAndCast(subOperations.get(1), MultiReferenceOperation.class);
+		final MultiReferenceOperation op2 = checkAndCast(subOperations.get(2), MultiReferenceOperation.class);
 
 		assertEquals("participatedUseCases", op0.getFeatureName());
 		assertEquals(actor1Id, op0.getModelElementId());
@@ -2331,30 +2333,30 @@ public class Topology1toNTest extends TopologyTest {
 		section.getModelElements().addAll(Arrays.asList(actors));
 
 		clearOperations();
-		ModelElementId actor1Id = getProject().getModelElementId(actor1);
-		ModelElementId actor2Id = getProject().getModelElementId(actor2);
+		final ModelElementId actor1Id = getProject().getModelElementId(actor1);
+		final ModelElementId actor2Id = getProject().getModelElementId(actor2);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				section.getModelElements().removeAll(Arrays.asList(actors));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(3, operations.size());
-		List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
+		final List<AbstractOperation> subOperations = checkAndCast(operations.get(0), CompositeOperation.class)
 			.getSubOperations();
 		checkAndCast(operations.get(1), CreateDeleteOperation.class);
 		checkAndCast(operations.get(2), CreateDeleteOperation.class);
 		assertEquals(3, subOperations.size());
 
-		ModelElementId sectionId = ModelUtil.getProject(section).getModelElementId(section);
+		final ModelElementId sectionId = ModelUtil.getProject(section).getModelElementId(section);
 
-		SingleReferenceOperation op0 = checkAndCast(subOperations.get(0), SingleReferenceOperation.class);
-		SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
-		MultiReferenceOperation op2 = checkAndCast(subOperations.get(2), MultiReferenceOperation.class);
+		final SingleReferenceOperation op0 = checkAndCast(subOperations.get(0), SingleReferenceOperation.class);
+		final SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
+		final MultiReferenceOperation op2 = checkAndCast(subOperations.get(2), MultiReferenceOperation.class);
 
 		assertEquals("leafSection", op0.getFeatureName());
 		assertEquals(actor1Id, op0.getModelElementId());

@@ -101,7 +101,7 @@ public class MemoryLoadTest {
 
 	private void shareProjectsLoadTest(int minProjectSize, int projectCount) throws ESException {
 		for (int i = 0; i < projectCount; i++) {
-			final ESLocalProject project = this.generateRandomProject(minProjectSize);
+			final ESLocalProject project = generateRandomProject(minProjectSize);
 			long time = System.nanoTime();
 			project.shareProject(runningEMFStoreRule.defaultSession(), null);
 			time = System.nanoTime() - time;
@@ -124,11 +124,11 @@ public class MemoryLoadTest {
 	}
 
 	private void shareCheckoutProjectsLoadTest(int minProjectSize, int projectCount) throws ESException {
-		long start = currentProjectCount;
-		int[] sizes = new int[projectCount];
+		final long start = currentProjectCount;
+		final int[] sizes = new int[projectCount];
 
 		for (int i = 0; i < projectCount; i++) {
-			final ESLocalProject project = this.generateRandomProject(minProjectSize);
+			final ESLocalProject project = generateRandomProject(minProjectSize);
 
 			project.shareProject(runningEMFStoreRule.defaultSession(), null);
 			deleteLocallyIfNeeded(project);
@@ -138,7 +138,7 @@ public class MemoryLoadTest {
 		}
 
 		int i = 0;
-		for (ESRemoteProject remoteProject : runningEMFStoreRule.server().getRemoteProjects(
+		for (final ESRemoteProject remoteProject : runningEMFStoreRule.server().getRemoteProjects(
 			runningEMFStoreRule.defaultSession())) {
 			final ESLocalProject project = remoteProject.checkout("Generated project_" + (start + i), MONITOR);
 			Assert.assertEquals("Generated project_" + (start + i), project.getProjectName());
@@ -166,7 +166,7 @@ public class MemoryLoadTest {
 		throws ESException {
 		for (int i = 0; i < projectCount; i++) {
 
-			final ESLocalProject project = this.generateRandomProject(minProjectSize);
+			final ESLocalProject project = generateRandomProject(minProjectSize);
 			project.shareProject(runningEMFStoreRule.defaultSession(), null);
 
 			for (int z = 0; z < historySize; z++) {
@@ -198,10 +198,10 @@ public class MemoryLoadTest {
 
 		for (int i = 0; i < projectCount; i++) {
 
-			final ESLocalProject project = this.generateRandomProject(minProjectSize);
+			final ESLocalProject project = generateRandomProject(minProjectSize);
 			project.shareProject(runningEMFStoreRule.defaultSession(), null);
 
-			List<ESPrimaryVersionSpec> versions = new ArrayList<ESPrimaryVersionSpec>();
+			final List<ESPrimaryVersionSpec> versions = new ArrayList<ESPrimaryVersionSpec>();
 
 			for (int z = 0; z < historySize; z++) {
 				mutateProject(project, minChangeSize);
@@ -215,7 +215,7 @@ public class MemoryLoadTest {
 			for (int x = 0; x < versions.size(); x += checkoutStep) {
 				log("Checking out version: " + versions.get(x).getIdentifier());
 
-				ESLocalProject projectCopy = project.getRemoteProject().checkout(
+				final ESLocalProject projectCopy = project.getRemoteProject().checkout(
 					project.getProjectName() + "_Copy" + x,
 					runningEMFStoreRule.defaultSession(),
 					versions.get(x), MONITOR);
@@ -242,15 +242,15 @@ public class MemoryLoadTest {
 
 		for (int i = 0; i < projectCount; i++) {
 
-			final ESLocalProject project = this.generateRandomProject(minProjectSize);
+			final ESLocalProject project = generateRandomProject(minProjectSize);
 			project.shareProject(runningEMFStoreRule.defaultSession(), null);
 
-			ESLocalProject projectSecondCheckout = project.getRemoteProject().checkout(
+			final ESLocalProject projectSecondCheckout = project.getRemoteProject().checkout(
 				project.getProjectName() + "_SecondCheckout_" + i,
 				runningEMFStoreRule.defaultSession(),
 				project.getBaseVersion(), null);
 
-			List<ESVersionSpec> versions = new ArrayList<ESVersionSpec>();
+			final List<ESVersionSpec> versions = new ArrayList<ESVersionSpec>();
 
 			for (int z = 0; z < historySize; z++) {
 				mutateProject(project, minChangeSize);
@@ -285,10 +285,10 @@ public class MemoryLoadTest {
 
 		for (int i = 0; i < projectCount; i++) {
 
-			final ESLocalProject project = this.generateRandomProject(minProjectSize);
+			final ESLocalProject project = generateRandomProject(minProjectSize);
 			project.shareProject(runningEMFStoreRule.defaultSession(), null);
 
-			List<VersionSpec> versions = new ArrayList<VersionSpec>();
+			final List<VersionSpec> versions = new ArrayList<VersionSpec>();
 
 			for (int z = 0; z < historySize; z++) {
 				mutateProject(project, minChangeSize);
@@ -305,12 +305,12 @@ public class MemoryLoadTest {
 	}
 
 	private long usedMemoryInMib() {
-		return (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) >> 20;
+		return Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() >> 20;
 	}
 
 	private ESLocalProject generateRandomProject(int minProjectSize) {
-		String projectName = "Generated project_" + currentProjectCount;
-		Project project = org.eclipse.emf.emfstore.internal.common.model.ModelFactory.eINSTANCE.createProject();
+		final String projectName = "Generated project_" + currentProjectCount;
+		final Project project = org.eclipse.emf.emfstore.internal.common.model.ModelFactory.eINSTANCE.createProject();
 
 		final ModelMutatorConfiguration config = createModelMutatorConfigurationRandom(modelKey,
 			project,
@@ -324,7 +324,7 @@ public class MemoryLoadTest {
 			}
 		}.run(null, false);
 
-		ProjectSpace projectSpace = ((ESWorkspaceImpl) runningEMFStoreRule.connectedWorkspace()).toInternalAPI()
+		final ProjectSpace projectSpace = ((ESWorkspaceImpl) runningEMFStoreRule.connectedWorkspace()).toInternalAPI()
 			.importProject(
 				project,
 				projectName, "");
@@ -336,8 +336,8 @@ public class MemoryLoadTest {
 	private void mutateProject(final ESLocalProject project, int minChangeSize) {
 
 		if (currentProjectConfiguration == null
-			|| (currentProjectConfiguration.getRootEObject() != ((ESLocalProjectImpl) project).toInternalAPI()
-				.getProject())) {
+			|| currentProjectConfiguration.getRootEObject() != ((ESLocalProjectImpl) project).toInternalAPI()
+				.getProject()) {
 
 			currentProjectConfiguration = createModelMutatorConfigurationRandom(modelKey,
 				((ESLocalProjectImpl) project).toInternalAPI().getProject(),
@@ -351,23 +351,23 @@ public class MemoryLoadTest {
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				long time = System.currentTimeMillis();
+				final long time = System.currentTimeMillis();
 				ModelMutator.changeModel(mmc);
 				System.out.println("Changed model: " + (System.currentTimeMillis() - time) / 1000.0 + "sec");
 			}
-		}.run(((ESLocalProjectImpl) project).toInternalAPI().getProject(), false);
+		}.run(((ESLocalProjectImpl) project).toInternalAPI().getContentEditingDomain(), false);
 	}
 
 	private ModelMutatorConfiguration createModelMutatorConfigurationRandom(String modelKey, EObject rootObject,
 		int minObjectsCount, long seed) {
 
-		ModelMutatorConfiguration config = new ModelMutatorConfiguration(ModelMutatorUtil.getEPackage(modelKey),
+		final ModelMutatorConfiguration config = new ModelMutatorConfiguration(ModelMutatorUtil.getEPackage(modelKey),
 			rootObject, seed);
 
 		config.setIgnoreAndLog(false);
 		config.setMinObjectsCount(minObjectsCount);
 
-		List<EStructuralFeature> eStructuralFeaturesToIgnore = new ArrayList<EStructuralFeature>();
+		final List<EStructuralFeature> eStructuralFeaturesToIgnore = new ArrayList<EStructuralFeature>();
 
 		config.setEditingDomain(((ESWorkspaceImpl) runningEMFStoreRule.connectedWorkspace()).toInternalAPI()
 			.getEditingDomain());
@@ -381,21 +381,21 @@ public class MemoryLoadTest {
 			protected ESPrimaryVersionSpec doRun() {
 				try {
 					return project.commit(null);
-				} catch (ESException e) {
+				} catch (final ESException e) {
 					Assert.fail();
 					return null;
 				}
 			}
-		}.run(((ESLocalProjectImpl) project).toInternalAPI(), false);
+		}.run(((ESLocalProjectImpl) project).toInternalAPI().getContentEditingDomain(), false);
 	}
 
 	private void deleteLocallyIfNeeded(final ESLocalProject project) {
 		if (!keepLocalData) {
 			try {
 				project.delete(null);
-			} catch (ESException e) {
+			} catch (final ESException e) {
 				Assert.fail();
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				Assert.fail();
 			}
 		}

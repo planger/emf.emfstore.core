@@ -57,7 +57,7 @@ public class ServerCommunicationTest extends BaseLoggedInUserTest {
 					serverInfo.setLastUsersession(null);
 					return null;
 				}
-			}, serverInfo);
+			});
 		}
 		RunESCommand.run(new Callable<Void>() {
 			public Void call() throws Exception {
@@ -65,7 +65,7 @@ public class ServerCommunicationTest extends BaseLoggedInUserTest {
 				ESWorkspaceProviderImpl.getInstance().getWorkspace().toInternalAPI().save();
 				return null;
 			}
-		}, ESWorkspaceProviderImpl.getInstance().getWorkspace().toInternalAPI());
+		});
 	}
 
 	protected static void deleteRemoteProjects(ESUsersession usersession) throws IOException, FatalESException,

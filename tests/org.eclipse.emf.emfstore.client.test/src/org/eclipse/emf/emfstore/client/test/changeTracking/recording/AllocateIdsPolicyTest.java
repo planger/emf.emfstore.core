@@ -48,7 +48,7 @@ public class AllocateIdsPolicyTest extends ServerTests {
 	 */
 	@Before
 	public void initCollection() {
-		collection = ((IdEObjectCollectionImpl) getProject());
+		collection = (IdEObjectCollectionImpl) getProject();
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class AllocateIdsPolicyTest extends ServerTests {
 	@SuppressWarnings("restriction")
 	@Test
 	public void clearAfterServerAction() throws ESException {
-		TestElement element = getTestElement();
+		final TestElement element = getTestElement();
 
 		addRemoveObject(element);
 		getProjectSpace().commit(new NullProgressMonitor());
@@ -77,7 +77,7 @@ public class AllocateIdsPolicyTest extends ServerTests {
 				collection.deleteModelElement(object);
 				return null;
 			}
-		}, collection);
+		}, getProjectSpace().getContentEditingDomain());
 		assertNull(collection.getDeletedModelElementId(object));
 	}
 
@@ -107,16 +107,16 @@ public class AllocateIdsPolicyTest extends ServerTests {
 				collection.addModelElement(matchup);
 				return null;
 			}
-		}, collection);
-		ModelElementId matchupId1 = collection.getModelElementId(matchup);
+		}, getProjectSpace().getContentEditingDomain());
+		final ModelElementId matchupId1 = collection.getModelElementId(matchup);
 
 		RunESCommand.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				matchup.getGames().add(game);
 				return null;
 			}
-		}, matchup);
-		ModelElementId gameId1 = collection.getModelElementId(game);
+		}, getProjectSpace().getContentEditingDomain());
+		final ModelElementId gameId1 = collection.getModelElementId(game);
 
 		// remove and add matchup in different commands
 		RunESCommand.run(new Callable<Void>() {
@@ -126,7 +126,7 @@ public class AllocateIdsPolicyTest extends ServerTests {
 				collection.addModelElement(matchup);
 				return null;
 			}
-		}, collection);
+		}, getProjectSpace().getContentEditingDomain());
 
 		comparator.compare(matchupId1, collection.getModelElementId(matchup));
 		comparator.compare(gameId1, collection.getModelElementId(game));
@@ -145,17 +145,17 @@ public class AllocateIdsPolicyTest extends ServerTests {
 				collection.addModelElement(matchup);
 				return null;
 			}
-		}, collection);
-		ModelElementId matchupId1 = collection.getModelElementId(matchup);
+		}, getProjectSpace().getContentEditingDomain());
+		final ModelElementId matchupId1 = collection.getModelElementId(matchup);
 
 		RunESCommand.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				matchup.getGames().add(game);
 				return null;
 			}
-		}, collection);
+		}, getProjectSpace().getContentEditingDomain());
 
-		ModelElementId gameId1 = collection.getModelElementId(game);
+		final ModelElementId gameId1 = collection.getModelElementId(game);
 
 		// remove and add matchup in different commands
 		RunESCommand.run(new Callable<Void>() {
@@ -164,14 +164,14 @@ public class AllocateIdsPolicyTest extends ServerTests {
 				collection.deleteModelElement(matchup);
 				return null;
 			}
-		}, collection);
+		}, getProjectSpace().getContentEditingDomain());
 		RunESCommand.run(new Callable<Void>() {
 
 			public Void call() throws Exception {
 				collection.addModelElement(matchup);
 				return null;
 			}
-		}, collection);
+		}, getProjectSpace().getContentEditingDomain());
 
 		comparator.compare(matchupId1, collection.getModelElementId(matchup));
 		comparator.compare(gameId1, collection.getModelElementId(game));
@@ -186,11 +186,11 @@ public class AllocateIdsPolicyTest extends ServerTests {
 		final Matchup matchup = BowlingFactory.eINSTANCE.createMatchup();
 		final Game game = BowlingFactory.eINSTANCE.createGame();
 		collection.addModelElement(matchup);
-		ModelElementId matchupId1 = collection.getModelElementId(matchup);
+		final ModelElementId matchupId1 = collection.getModelElementId(matchup);
 
 		matchup.getGames().add(game);
 
-		ModelElementId gameId1 = collection.getModelElementId(game);
+		final ModelElementId gameId1 = collection.getModelElementId(game);
 
 		// remove and add matchup without command
 		collection.deleteModelElement(matchup);
@@ -206,11 +206,11 @@ public class AllocateIdsPolicyTest extends ServerTests {
 	 * @param comparator The {@link IdComparator} to compare ids.
 	 */
 	public void removeAddWithoutCommand2(IdComparator comparator) {
-		Matchup matchup = BowlingFactory.eINSTANCE.createMatchup();
-		Game game = BowlingFactory.eINSTANCE.createGame();
+		final Matchup matchup = BowlingFactory.eINSTANCE.createMatchup();
+		final Game game = BowlingFactory.eINSTANCE.createGame();
 		collection.addModelElement(matchup);
 		matchup.getGames().add(game);
-		ModelElementId gameId1 = collection.getModelElementId(game);
+		final ModelElementId gameId1 = collection.getModelElementId(game);
 
 		// remove and add matchup without command
 		game.setMatchup(null);

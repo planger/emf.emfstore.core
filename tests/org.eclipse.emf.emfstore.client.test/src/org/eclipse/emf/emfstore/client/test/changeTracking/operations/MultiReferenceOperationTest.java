@@ -70,27 +70,27 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				actor.getInitiatedUseCases().add(useCase);
 
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 		assertEquals(actor, useCase.getInitiatingActor());
-		EList<UseCase> initiatedUseCases = actor.getInitiatedUseCases();
+		final EList<UseCase> initiatedUseCases = actor.getInitiatedUseCases();
 		assertEquals(1, initiatedUseCases.size());
 		assertEquals(useCase, initiatedUseCases.get(0));
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
 		AbstractOperation operation = operations.get(0);
 		assertTrue(operation instanceof CompositeOperation);
-		CompositeOperation compositeOperation = (CompositeOperation) operation;
+		final CompositeOperation compositeOperation = (CompositeOperation) operation;
 
-		List<AbstractOperation> subOperations = compositeOperation.getSubOperations();
+		final List<AbstractOperation> subOperations = compositeOperation.getSubOperations();
 
 		operation = subOperations.get(0);
 		assertTrue(operation instanceof SingleReferenceOperation);
-		SingleReferenceOperation singleReferenceOperation = (SingleReferenceOperation) operation;
+		final SingleReferenceOperation singleReferenceOperation = (SingleReferenceOperation) operation;
 
-		ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
-		ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
+		final ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
+		final ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
 
 		assertEquals("initiatingActor", singleReferenceOperation.getFeatureName());
 		assertEquals("initiatedUseCases", singleReferenceOperation.getOppositeFeatureName());
@@ -101,7 +101,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 
 		operation = subOperations.get(1);
 		assertEquals(true, operation instanceof MultiReferenceOperation);
-		MultiReferenceOperation multiReferenceOperation = (MultiReferenceOperation) operation;
+		final MultiReferenceOperation multiReferenceOperation = (MultiReferenceOperation) operation;
 
 		assertEquals("initiatedUseCases", multiReferenceOperation.getFeatureName());
 		assertEquals(0, multiReferenceOperation.getIndex());
@@ -110,11 +110,11 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 		assertEquals(true, multiReferenceOperation.isAdd());
 		assertEquals(true, multiReferenceOperation.isBidirectional());
 
-		EList<ModelElementId> referencedModelElements = multiReferenceOperation.getReferencedModelElements();
+		final EList<ModelElementId> referencedModelElements = multiReferenceOperation.getReferencedModelElements();
 		assertEquals(1, referencedModelElements.size());
 		assertEquals(useCaseId, referencedModelElements.get(0));
 
-		Set<ModelElementId> otherInvolvedModelElements = multiReferenceOperation.getOtherInvolvedModelElements();
+		final Set<ModelElementId> otherInvolvedModelElements = multiReferenceOperation.getOtherInvolvedModelElements();
 		assertEquals(1, otherInvolvedModelElements.size());
 		assertEquals(true, otherInvolvedModelElements.contains(useCaseId));
 
@@ -144,32 +144,32 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				actor.getInitiatedUseCases().add(useCase);
 
 				assertEquals(actor, useCase.getInitiatingActor());
-				EList<UseCase> initiatedUseCases = actor.getInitiatedUseCases();
+				final EList<UseCase> initiatedUseCases = actor.getInitiatedUseCases();
 				assertEquals(1, initiatedUseCases.size());
 				assertEquals(useCase, initiatedUseCases.get(0));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		AbstractOperation comp = operations.get(0);
+		final AbstractOperation comp = operations.get(0);
 		assertEquals(true, comp instanceof CompositeOperation);
 
-		List<AbstractOperation> subOperations = ((CompositeOperation) comp).getSubOperations();
+		final List<AbstractOperation> subOperations = ((CompositeOperation) comp).getSubOperations();
 
 		assertEquals(2, subOperations.size());
 
 		// skipping singlereference op
-		AbstractOperation operation = subOperations.get(1);
+		final AbstractOperation operation = subOperations.get(1);
 		assertEquals(true, operation instanceof MultiReferenceOperation);
-		MultiReferenceOperation multiReferenceOperation = (MultiReferenceOperation) operation;
+		final MultiReferenceOperation multiReferenceOperation = (MultiReferenceOperation) operation;
 
-		AbstractOperation reverse = multiReferenceOperation.reverse();
+		final AbstractOperation reverse = multiReferenceOperation.reverse();
 		assertEquals(true, reverse instanceof MultiReferenceOperation);
 
-		ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
-		ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
+		final ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
+		final ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
 
 		final MultiReferenceOperation reversedMultiReferenceOperation = (MultiReferenceOperation) reverse;
 		assertEquals("initiatedUseCases", reversedMultiReferenceOperation.getFeatureName());
@@ -179,11 +179,12 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 		assertEquals(false, reversedMultiReferenceOperation.isAdd());
 		assertEquals(true, reversedMultiReferenceOperation.isBidirectional());
 
-		EList<ModelElementId> referencedModelElements = reversedMultiReferenceOperation.getReferencedModelElements();
+		final EList<ModelElementId> referencedModelElements = reversedMultiReferenceOperation
+			.getReferencedModelElements();
 		assertEquals(1, referencedModelElements.size());
 		assertEquals(useCaseId, referencedModelElements.get(0));
 
-		Set<ModelElementId> otherInvolvedModelElements = reversedMultiReferenceOperation
+		final Set<ModelElementId> otherInvolvedModelElements = reversedMultiReferenceOperation
 			.getOtherInvolvedModelElements();
 		assertEquals(1, otherInvolvedModelElements.size());
 		assertEquals(true, otherInvolvedModelElements.contains(useCaseId));
@@ -194,7 +195,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				reversedMultiReferenceOperation.apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(0, actor.getInitiatedUseCases().size());
 		assertEquals(null, useCase.getInitiatingActor());
@@ -235,34 +236,34 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertEquals(actor, useCase.getInitiatingActor());
 				assertEquals(actor, useCase2.getInitiatingActor());
 				assertEquals(actor, useCase3.getInitiatingActor());
-				EList<UseCase> initiatedUseCases = actor.getInitiatedUseCases();
+				final EList<UseCase> initiatedUseCases = actor.getInitiatedUseCases();
 				assertEquals(3, initiatedUseCases.size());
 				assertEquals(useCase, initiatedUseCases.get(0));
 				assertEquals(useCase2, initiatedUseCases.get(1));
 				assertEquals(useCase3, initiatedUseCases.get(2));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
 		AbstractOperation operation = operations.get(0);
 		assertTrue(operation instanceof CompositeOperation);
-		CompositeOperation compositeOperation = (CompositeOperation) operation;
+		final CompositeOperation compositeOperation = (CompositeOperation) operation;
 
-		List<AbstractOperation> subOperations = compositeOperation.getSubOperations();
+		final List<AbstractOperation> subOperations = compositeOperation.getSubOperations();
 
 		assertEquals(4, subOperations.size());
 
-		ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
-		ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
-		ModelElementId useCase2Id = ModelUtil.getProject(useCase2).getModelElementId(useCase2);
-		ModelElementId useCase3Id = ModelUtil.getProject(useCase3).getModelElementId(useCase3);
+		final ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
+		final ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
+		final ModelElementId useCase2Id = ModelUtil.getProject(useCase2).getModelElementId(useCase2);
+		final ModelElementId useCase3Id = ModelUtil.getProject(useCase3).getModelElementId(useCase3);
 
 		for (int i = 0; i < 3; i++) {
-			AbstractOperation opn = subOperations.get(i);
+			final AbstractOperation opn = subOperations.get(i);
 			assertTrue(opn instanceof SingleReferenceOperation);
-			SingleReferenceOperation singleReferenceOperation = (SingleReferenceOperation) opn;
+			final SingleReferenceOperation singleReferenceOperation = (SingleReferenceOperation) opn;
 
 			assertEquals("initiatingActor", singleReferenceOperation.getFeatureName());
 			assertEquals("initiatedUseCases", singleReferenceOperation.getOppositeFeatureName());
@@ -275,7 +276,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 
 		operation = subOperations.get(3);
 		assertEquals(true, operation instanceof MultiReferenceOperation);
-		MultiReferenceOperation multiReferenceOperation = (MultiReferenceOperation) operation;
+		final MultiReferenceOperation multiReferenceOperation = (MultiReferenceOperation) operation;
 
 		assertEquals("initiatedUseCases", multiReferenceOperation.getFeatureName());
 		assertEquals(0, multiReferenceOperation.getIndex());
@@ -284,13 +285,13 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 		assertEquals(true, multiReferenceOperation.isAdd());
 		assertEquals(true, multiReferenceOperation.isBidirectional());
 
-		EList<ModelElementId> referencedModelElements = multiReferenceOperation.getReferencedModelElements();
+		final EList<ModelElementId> referencedModelElements = multiReferenceOperation.getReferencedModelElements();
 		assertEquals(3, referencedModelElements.size());
 		assertEquals(useCaseId, referencedModelElements.get(0));
 		assertEquals(useCase2Id, referencedModelElements.get(1));
 		assertEquals(useCase3Id, referencedModelElements.get(2));
 
-		Set<ModelElementId> otherInvolvedModelElements = multiReferenceOperation.getOtherInvolvedModelElements();
+		final Set<ModelElementId> otherInvolvedModelElements = multiReferenceOperation.getOtherInvolvedModelElements();
 		assertEquals(3, otherInvolvedModelElements.size());
 		assertEquals(true, otherInvolvedModelElements.contains(useCaseId));
 		assertEquals(true, otherInvolvedModelElements.contains(useCase2Id));
@@ -332,47 +333,47 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertEquals(actor, useCase.getInitiatingActor());
 				assertEquals(actor, useCase2.getInitiatingActor());
 				assertEquals(actor, useCase3.getInitiatingActor());
-				EList<UseCase> initiatedUseCases = actor.getInitiatedUseCases();
+				final EList<UseCase> initiatedUseCases = actor.getInitiatedUseCases();
 				assertEquals(3, initiatedUseCases.size());
 				assertEquals(useCase, initiatedUseCases.get(0));
 				assertEquals(useCase2, initiatedUseCases.get(1));
 				assertEquals(useCase3, initiatedUseCases.get(2));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				actor.getInitiatedUseCases().removeAll(useCases);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(null, useCase.getInitiatingActor());
 		assertEquals(null, useCase2.getInitiatingActor());
 		assertEquals(null, useCase3.getInitiatingActor());
-		EList<UseCase> initiatedUseCases = actor.getInitiatedUseCases();
+		final EList<UseCase> initiatedUseCases = actor.getInitiatedUseCases();
 		assertEquals(0, initiatedUseCases.size());
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
 		AbstractOperation operation = operations.get(0);
 		assertTrue(operation instanceof CompositeOperation);
-		CompositeOperation compositeOperation = (CompositeOperation) operation;
+		final CompositeOperation compositeOperation = (CompositeOperation) operation;
 
-		List<AbstractOperation> subOperations = compositeOperation.getSubOperations();
+		final List<AbstractOperation> subOperations = compositeOperation.getSubOperations();
 
 		assertEquals(4, subOperations.size());
 
-		ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
-		ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
-		ModelElementId useCase2Id = ModelUtil.getProject(useCase2).getModelElementId(useCase2);
-		ModelElementId useCase3Id = ModelUtil.getProject(useCase3).getModelElementId(useCase3);
+		final ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
+		final ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
+		final ModelElementId useCase2Id = ModelUtil.getProject(useCase2).getModelElementId(useCase2);
+		final ModelElementId useCase3Id = ModelUtil.getProject(useCase3).getModelElementId(useCase3);
 
 		for (int i = 0; i < 3; i++) {
-			AbstractOperation opn = subOperations.get(i);
+			final AbstractOperation opn = subOperations.get(i);
 			assertTrue(opn instanceof SingleReferenceOperation);
-			SingleReferenceOperation singleReferenceOperation = (SingleReferenceOperation) opn;
+			final SingleReferenceOperation singleReferenceOperation = (SingleReferenceOperation) opn;
 
 			assertEquals("initiatingActor", singleReferenceOperation.getFeatureName());
 			assertEquals("initiatedUseCases", singleReferenceOperation.getOppositeFeatureName());
@@ -385,7 +386,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 
 		operation = subOperations.get(3);
 		assertEquals(true, operation instanceof MultiReferenceOperation);
-		MultiReferenceOperation multiReferenceOperation = (MultiReferenceOperation) operation;
+		final MultiReferenceOperation multiReferenceOperation = (MultiReferenceOperation) operation;
 
 		assertEquals("initiatedUseCases", multiReferenceOperation.getFeatureName());
 		assertEquals(0, multiReferenceOperation.getIndex());
@@ -394,13 +395,13 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 		assertEquals(false, multiReferenceOperation.isAdd());
 		assertEquals(true, multiReferenceOperation.isBidirectional());
 
-		EList<ModelElementId> referencedModelElements = multiReferenceOperation.getReferencedModelElements();
+		final EList<ModelElementId> referencedModelElements = multiReferenceOperation.getReferencedModelElements();
 		assertEquals(3, referencedModelElements.size());
 		assertEquals(useCaseId, referencedModelElements.get(0));
 		assertEquals(useCase2Id, referencedModelElements.get(1));
 		assertEquals(useCase3Id, referencedModelElements.get(2));
 
-		Set<ModelElementId> otherInvolvedModelElements = multiReferenceOperation.getOtherInvolvedModelElements();
+		final Set<ModelElementId> otherInvolvedModelElements = multiReferenceOperation.getOtherInvolvedModelElements();
 		assertEquals(3, otherInvolvedModelElements.size());
 		assertEquals(true, otherInvolvedModelElements.contains(useCaseId));
 		assertEquals(true, otherInvolvedModelElements.contains(useCase2Id));
@@ -428,7 +429,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertEquals(3, fan.getVisitedTournaments().size());
 				assertTrue(fan.isSetVisitedTournaments());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -443,21 +444,21 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertTrue(getProject().getAllModelElements().contains(tournament2));
 				assertTrue(getProject().getAllModelElements().contains(tournament3));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(2, operations.size());
 
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof MultiReferenceOperation);
 		final MultiReferenceOperation mrop1 = (MultiReferenceOperation) operation;
 
-		AbstractOperation operation2 = operations.get(1);
+		final AbstractOperation operation2 = operations.get(1);
 		assertEquals(true, operation2 instanceof MultiReferenceOperation);
 		final MultiReferenceOperation mrop2 = (MultiReferenceOperation) operation2;
 
-		ModelElementId fanId = ModelUtil.getProject(fan).getModelElementId(fan);
+		final ModelElementId fanId = ModelUtil.getProject(fan).getModelElementId(fan);
 		assertEquals(fanId, mrop1.getModelElementId());
 		assertEquals(fanId, mrop2.getModelElementId());
 
@@ -467,7 +468,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				operations.get(0).apply(secondProject);
 				operations.get(1).apply(secondProject);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(0, ((Fan) secondProject.getModelElements().get(0)).getVisitedTournaments().size());
 		assertTrue(!((Fan) secondProject.getModelElements().get(0)).isSetVisitedTournaments());
@@ -494,7 +495,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertEquals(3, fan.getVisitedTournaments().size());
 				assertTrue(fan.isSetVisitedTournaments());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -509,21 +510,21 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertTrue(getProject().getAllModelElements().contains(tournament2));
 				assertTrue(getProject().getAllModelElements().contains(tournament3));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(2, operations.size());
 
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof MultiReferenceOperation);
 		final MultiReferenceOperation mrop1 = (MultiReferenceOperation) operation;
 
-		AbstractOperation operation2 = operations.get(1);
+		final AbstractOperation operation2 = operations.get(1);
 		assertEquals(true, operation2 instanceof MultiReferenceOperation);
 		final MultiReferenceOperation mrop2 = (MultiReferenceOperation) operation2;
 
-		ModelElementId fanId = ModelUtil.getProject(fan).getModelElementId(fan);
+		final ModelElementId fanId = ModelUtil.getProject(fan).getModelElementId(fan);
 		assertEquals(fanId, mrop1.getModelElementId());
 		assertEquals(fanId, mrop2.getModelElementId());
 
@@ -533,7 +534,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				mrop2.reverse().apply(getProject());
 				mrop1.reverse().apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(3, fan.getVisitedTournaments().size());
 		assertTrue(fan.getVisitedTournaments().contains(tournament1));
@@ -563,7 +564,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertEquals(3, fan.getVisitedTournaments().size());
 				assertTrue(fan.isSetVisitedTournaments());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		clearOperations();
 
@@ -577,22 +578,22 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertTrue(getProject().getAllModelElements().contains(tournament2));
 				assertTrue(getProject().getAllModelElements().contains(tournament3));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final Project secondProject = ModelUtil.clone(getProject());
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(2, operations.size());
 
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof MultiReferenceOperation);
 		final MultiReferenceOperation mrop1 = (MultiReferenceOperation) operation;
 
-		AbstractOperation operation2 = operations.get(1);
+		final AbstractOperation operation2 = operations.get(1);
 		assertEquals(true, operation2 instanceof MultiReferenceOperation);
 		final MultiReferenceOperation mrop2 = (MultiReferenceOperation) operation2;
 
-		ModelElementId fanId = ModelUtil.getProject(fan).getModelElementId(fan);
+		final ModelElementId fanId = ModelUtil.getProject(fan).getModelElementId(fan);
 		assertEquals(fanId, mrop1.getModelElementId());
 		assertEquals(fanId, mrop2.getModelElementId());
 
@@ -602,7 +603,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				mrop1.reverse().reverse().apply(getProject());
 				mrop2.reverse().reverse().apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(0, fan.getVisitedTournaments().size());
 		assertTrue(!fan.isSetVisitedTournaments());
@@ -632,7 +633,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertTrue(getProject().getAllModelElements().contains(tournament2));
 				assertTrue(getProject().getAllModelElements().contains(tournament3));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -646,25 +647,25 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertEquals(3, fan.getVisitedTournaments().size());
 				assertTrue(fan.isSetVisitedTournaments());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(3, operations.size());
 
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof MultiReferenceOperation);
 		final MultiReferenceOperation mrop1 = (MultiReferenceOperation) operation;
 
-		AbstractOperation operation2 = operations.get(1);
+		final AbstractOperation operation2 = operations.get(1);
 		assertEquals(true, operation2 instanceof MultiReferenceOperation);
 		final MultiReferenceOperation mrop2 = (MultiReferenceOperation) operation2;
 
-		AbstractOperation operation3 = operations.get(2);
+		final AbstractOperation operation3 = operations.get(2);
 		assertEquals(true, operation3 instanceof MultiReferenceOperation);
 		final MultiReferenceOperation mrop3 = (MultiReferenceOperation) operation3;
 
-		ModelElementId fanId = ModelUtil.getProject(fan).getModelElementId(fan);
+		final ModelElementId fanId = ModelUtil.getProject(fan).getModelElementId(fan);
 		assertEquals(fanId, mrop1.getModelElementId());
 		assertEquals(fanId, mrop2.getModelElementId());
 		assertEquals(fanId, mrop3.getModelElementId());
@@ -676,7 +677,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				mrop2.reverse().apply(getProject());
 				mrop1.reverse().apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(0, fan.getVisitedTournaments().size());
 		assertTrue(!fan.isSetVisitedTournaments());
@@ -703,7 +704,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertEquals(3, fan.getFanMerchandise().size());
 				assertTrue(fan.isSetFanMerchandise());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -718,33 +719,33 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertTrue(!getProject().getAllModelElements().contains(merch2));
 				assertTrue(!getProject().getAllModelElements().contains(merch3));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(5, operations.size());
 
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof MultiReferenceOperation);
 		final MultiReferenceOperation mrop1 = (MultiReferenceOperation) operation;
 
-		AbstractOperation operation2 = operations.get(1);
+		final AbstractOperation operation2 = operations.get(1);
 		assertEquals(true, operation2 instanceof MultiReferenceOperation);
 		final MultiReferenceOperation mrop2 = (MultiReferenceOperation) operation2;
 
-		AbstractOperation operation3 = operations.get(2);
+		final AbstractOperation operation3 = operations.get(2);
 		assertEquals(true, operation3 instanceof CreateDeleteOperation);
 		final CreateDeleteOperation creaDelOp1 = (CreateDeleteOperation) operation3;
 
-		AbstractOperation operation4 = operations.get(3);
+		final AbstractOperation operation4 = operations.get(3);
 		assertEquals(true, operation4 instanceof CreateDeleteOperation);
 		final CreateDeleteOperation creaDelOp2 = (CreateDeleteOperation) operation4;
 
-		AbstractOperation operation5 = operations.get(4);
+		final AbstractOperation operation5 = operations.get(4);
 		assertEquals(true, operation5 instanceof CreateDeleteOperation);
 		final CreateDeleteOperation creaDelOp3 = (CreateDeleteOperation) operation5;
 
-		ModelElementId fanId = ModelUtil.getProject(fan).getModelElementId(fan);
+		final ModelElementId fanId = ModelUtil.getProject(fan).getModelElementId(fan);
 		assertEquals(fanId, mrop1.getModelElementId());
 		assertEquals(fanId, mrop2.getModelElementId());
 
@@ -757,7 +758,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				creaDelOp2.apply(secondProject);
 				creaDelOp3.apply(secondProject);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(0, ((Fan) secondProject.getModelElements().get(0)).getFanMerchandise().size());
 		assertTrue(!((Fan) secondProject.getModelElements().get(0)).isSetFanMerchandise());
@@ -784,7 +785,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertEquals(3, fan.getFanMerchandise().size());
 				assertTrue(fan.isSetFanMerchandise());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -799,33 +800,33 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertTrue(!getProject().getAllModelElements().contains(merch2));
 				assertTrue(!getProject().getAllModelElements().contains(merch3));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(5, operations.size());
 
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof MultiReferenceOperation);
 		final MultiReferenceOperation mrop1 = (MultiReferenceOperation) operation;
 
-		AbstractOperation operation2 = operations.get(1);
+		final AbstractOperation operation2 = operations.get(1);
 		assertEquals(true, operation2 instanceof MultiReferenceOperation);
 		final MultiReferenceOperation mrop2 = (MultiReferenceOperation) operation2;
 
-		AbstractOperation operation3 = operations.get(2);
+		final AbstractOperation operation3 = operations.get(2);
 		assertEquals(true, operation3 instanceof CreateDeleteOperation);
 		final CreateDeleteOperation creaDelOp1 = (CreateDeleteOperation) operation3;
 
-		AbstractOperation operation4 = operations.get(3);
+		final AbstractOperation operation4 = operations.get(3);
 		assertEquals(true, operation4 instanceof CreateDeleteOperation);
 		final CreateDeleteOperation creaDelOp2 = (CreateDeleteOperation) operation4;
 
-		AbstractOperation operation5 = operations.get(4);
+		final AbstractOperation operation5 = operations.get(4);
 		assertEquals(true, operation5 instanceof CreateDeleteOperation);
 		final CreateDeleteOperation creaDelOp3 = (CreateDeleteOperation) operation5;
 
-		ModelElementId fanId = ModelUtil.getProject(fan).getModelElementId(fan);
+		final ModelElementId fanId = ModelUtil.getProject(fan).getModelElementId(fan);
 		assertEquals(fanId, mrop1.getModelElementId());
 		assertEquals(fanId, mrop2.getModelElementId());
 
@@ -838,7 +839,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				mrop2.reverse().apply(getProject());
 				mrop1.reverse().apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(3, fan.getFanMerchandise().size());
 		assertTrue(fan.isSetFanMerchandise());
@@ -865,7 +866,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertEquals(3, fan.getFanMerchandise().size());
 				assertTrue(fan.isSetFanMerchandise());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		clearOperations();
 
@@ -879,7 +880,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertTrue(!getProject().getAllModelElements().contains(merch2));
 				assertTrue(!getProject().getAllModelElements().contains(merch3));
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final Project secondProject = ModelUtil.clone(getProject());
 
@@ -887,27 +888,27 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 
 		assertEquals(5, operations.size());
 
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof MultiReferenceOperation);
 		final MultiReferenceOperation mrop1 = (MultiReferenceOperation) operation;
 
-		AbstractOperation operation2 = operations.get(1);
+		final AbstractOperation operation2 = operations.get(1);
 		assertEquals(true, operation2 instanceof MultiReferenceOperation);
 		final MultiReferenceOperation mrop2 = (MultiReferenceOperation) operation2;
 
-		AbstractOperation operation3 = operations.get(2);
+		final AbstractOperation operation3 = operations.get(2);
 		assertEquals(true, operation3 instanceof CreateDeleteOperation);
 		final CreateDeleteOperation creaDelOp1 = (CreateDeleteOperation) operation3;
 
-		AbstractOperation operation4 = operations.get(3);
+		final AbstractOperation operation4 = operations.get(3);
 		assertEquals(true, operation4 instanceof CreateDeleteOperation);
 		final CreateDeleteOperation creaDelOp2 = (CreateDeleteOperation) operation4;
 
-		AbstractOperation operation5 = operations.get(4);
+		final AbstractOperation operation5 = operations.get(4);
 		assertEquals(true, operation5 instanceof CreateDeleteOperation);
 		final CreateDeleteOperation creaDelOp3 = (CreateDeleteOperation) operation5;
 
-		ModelElementId fanId = ModelUtil.getProject(fan).getModelElementId(fan);
+		final ModelElementId fanId = ModelUtil.getProject(fan).getModelElementId(fan);
 		assertEquals(fanId, mrop1.getModelElementId());
 		assertEquals(fanId, mrop2.getModelElementId());
 
@@ -920,7 +921,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				creaDelOp2.reverse().reverse().apply(getProject());
 				creaDelOp3.reverse().reverse().apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(0, fan.getFanMerchandise().size());
 		assertTrue(!fan.isSetFanMerchandise());
@@ -950,7 +951,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertEquals(0, fan.getFanMerchandise().size());
 				assertTrue(!fan.isSetFanMerchandise());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -964,25 +965,25 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertEquals(3, fan.getFanMerchandise().size());
 				assertTrue(fan.isSetFanMerchandise());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(3, operations.size());
 
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof MultiReferenceOperation);
 		final MultiReferenceOperation mrop1 = (MultiReferenceOperation) operation;
 
-		AbstractOperation operation2 = operations.get(1);
+		final AbstractOperation operation2 = operations.get(1);
 		assertEquals(true, operation2 instanceof MultiReferenceOperation);
 		final MultiReferenceOperation mrop2 = (MultiReferenceOperation) operation2;
 
-		AbstractOperation operation3 = operations.get(2);
+		final AbstractOperation operation3 = operations.get(2);
 		assertEquals(true, operation3 instanceof MultiReferenceOperation);
 		final MultiReferenceOperation mrop3 = (MultiReferenceOperation) operation3;
 
-		ModelElementId fanId = ModelUtil.getProject(fan).getModelElementId(fan);
+		final ModelElementId fanId = ModelUtil.getProject(fan).getModelElementId(fan);
 		assertEquals(fanId, mrop1.getModelElementId());
 		assertEquals(fanId, mrop2.getModelElementId());
 		assertEquals(fanId, mrop3.getModelElementId());
@@ -994,7 +995,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				mrop2.reverse().apply(getProject());
 				mrop1.reverse().apply(getProject());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(0, fan.getFanMerchandise().size());
 		assertTrue(!fan.isSetFanMerchandise());
@@ -1013,7 +1014,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertEquals(0, fan.getVisitedTournaments().size());
 				assertTrue(!fan.isSetVisitedTournaments());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -1025,12 +1026,12 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 				assertEquals(0, fan.getVisitedTournaments().size());
 				assertTrue(fan.isSetVisitedTournaments());
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
 		assertEquals(1, operations.size());
-		AbstractOperation operation = operations.get(0);
+		final AbstractOperation operation = operations.get(0);
 		assertEquals(true, operation instanceof MultiReferenceOperation);
 		final MultiReferenceOperation multRefOp = (MultiReferenceOperation) operation;
 
@@ -1039,7 +1040,7 @@ public class MultiReferenceOperationTest extends WorkspaceTest {
 			protected void doRun() {
 				multRefOp.apply(secondProject);
 			}
-		}.run(getProject(), false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), secondProject));
 	}
