@@ -190,7 +190,7 @@ public class CommitController extends ServerCall<PrimaryVersionSpec> {
 				getProjectSpace().updateDirtyState();
 				return null;
 			}
-		}, getProjectSpace());
+		}, getProjectSpace().getContentEditingDomain());
 
 		ESWorkspaceProviderImpl.getObserverBus().notify(ESCommitObserver.class)
 			.commitCompleted(getProjectSpace().toAPI(), newBaseVersion.toAPI(), getProgressMonitor());
@@ -247,7 +247,7 @@ public class CommitController extends ServerCall<PrimaryVersionSpec> {
 				changePackage.setLogMessage(logMessageObject);
 				return null;
 			}
-		}, changePackage);
+		}, getProjectSpace().getContentEditingDomain());
 	}
 
 	private boolean performChecksumCheck(PrimaryVersionSpec newBaseVersion, Project project)

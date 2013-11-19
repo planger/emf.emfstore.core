@@ -77,6 +77,6 @@ public class ApplyOperationsRunnable implements Runnable {
 					}
 				}
 			}
-		}.run(projectSpace.getProject(), false);
+		}.run(projectSpace.getContentEditingDomain(), false);
 	}
 }

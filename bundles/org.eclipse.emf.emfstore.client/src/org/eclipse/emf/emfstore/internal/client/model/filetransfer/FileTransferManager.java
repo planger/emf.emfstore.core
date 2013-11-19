@@ -135,7 +135,7 @@ public class FileTransferManager {
 				projectSpace.getWaitingUploads().add(identifier);
 				projectSpace.saveProjectSpaceOnly();
 			}
-		}.run(projectSpace, true);
+		}.run(projectSpace.getContentEditingDomain(), true);
 
 	}
 
@@ -166,7 +166,7 @@ public class FileTransferManager {
 							projectSpace.getWaitingUploads().remove(fi);
 							projectSpace.saveProjectSpaceOnly();
 						}
-					}.run(projectSpace, true);
+					}.run(projectSpace.getContentEditingDomain(), true);
 					continue;
 
 				}

@@ -163,7 +163,7 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 					((WorkspaceImpl) currentWorkspace).dispose();
 					return null;
 				}
-			}, currentWorkspace);
+			});
 			currentWorkspace = null;
 		}
 	}
@@ -225,7 +225,7 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 			protected void doRun() {
 				workspace.init();
 			}
-		}.run(workspace, true);
+		}.run(true);
 
 		currentWorkspace = workspace;
 
@@ -468,7 +468,7 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 			protected void doRun() {
 				resource.getContents().add(workspace);
 			}
-		}.run(workspace, true);
+		}.run(true);
 
 		try {
 			resource.save(ModelUtil.getResourceSaveOptions());

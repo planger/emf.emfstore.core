@@ -961,7 +961,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 					setMergedVersion(ModelUtil.clone(branchSpec));
 					return null;
 				}
-			}, this);
+			}, getContentEditingDomain());
 		}
 	}
 
