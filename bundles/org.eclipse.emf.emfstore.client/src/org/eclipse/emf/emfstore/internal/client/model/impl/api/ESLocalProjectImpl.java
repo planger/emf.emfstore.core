@@ -553,7 +553,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 
 				return null;
 			}
-		}, toInternalAPI().getContentEditingDomain());
+		});
 	}
 
 	/**
