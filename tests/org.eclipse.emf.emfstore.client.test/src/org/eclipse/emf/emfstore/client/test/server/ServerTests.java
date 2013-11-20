@@ -258,7 +258,7 @@ public abstract class ServerTests extends WorkspaceTest {
 
 				SetupHelper.cleanupServer();
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false);
 	}
 
 	/**

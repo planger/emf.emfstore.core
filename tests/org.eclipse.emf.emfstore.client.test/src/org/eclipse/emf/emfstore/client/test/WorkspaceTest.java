@@ -110,7 +110,7 @@ public abstract class WorkspaceTest {
 					Assert.assertTrue(ModelUtil.areEqual(projectSpace.getProject(), clonedProjectSpace.getProject()));
 				}
 			}
-		}.run(null, false);
+		}.run(false);
 	}
 
 	protected void configureCompareAtEnd() {
@@ -184,7 +184,7 @@ public abstract class WorkspaceTest {
 					// ignore
 				}
 			}
-		}.run(null, false);
+		}.run(false);
 	}
 
 	/**
