@@ -41,7 +41,7 @@ public final class RunESCommand {
 	public static class WithException {
 
 		/**
-		 * Executes the given @link Callable} and returns the result.
+		 * Executes the given {@link Callable} and returns the result.
 		 * 
 		 * @param callable
 		 *            the callable to be execued
@@ -85,7 +85,19 @@ public final class RunESCommand {
 		}
 
 		/**
-		 * Executes the given @link Callable} and returns the result.
+		 * 
+		 * Executes the given {@link Callable} on the editing domain and returns the result.
+		 * <p>
+		 * <b>Please note:</b>
+		 * <p>
+		 * If you want to execute the callable on the editing domain of the workspace it is more convenient to use
+		 * {@link RunESCommand.WithException#runWithResult(Class, Callable)}
+		 * <p>
+		 * If you want to change model elements in an {@link org.eclipse.emf.emfstore.client.ESLocalProject
+		 * ESLocalProject} you can use
+		 * {@link org.eclipse.emf.emfstore.client.ESLocalProject#runWithResult(Class, Callable)
+		 * ESLocalProject.runWithResult(Class, Callable)} which will run the callable on the project's editing domain
+		 * <p>
 		 * 
 		 * @param callable
 		 *            the callable to be execued
@@ -132,7 +144,7 @@ public final class RunESCommand {
 		}
 
 		/**
-		 * Executes the given {@link Callable} and returns the result.
+		 * Executes the given {@link Callable}.
 		 * 
 		 * @param callable
 		 *            the callable to be executed
@@ -170,7 +182,17 @@ public final class RunESCommand {
 		}
 
 		/**
-		 * Executes the given {@link Callable} and returns the result.
+		 * Executes the given {@link Callable} on the editing domain.
+		 * <p>
+		 * <b>Please note:</b>
+		 * <p>
+		 * If you want to execute the callable on the editing domain of the workspace it is more convenient to use
+		 * {@link RunESCommand.WithException#run(Class, Callable)}
+		 * <p>
+		 * If you want to change model elements in an {@link org.eclipse.emf.emfstore.client.ESLocalProject
+		 * ESLocalProject} you can use {@link org.eclipse.emf.emfstore.client.ESLocalProject#run(Class, Callable)
+		 * ESLocalProject.run(Class, Callable)} which will run the callable on the project's editing domain
+		 * <p>
 		 * 
 		 * @param callable
 		 *            the callable to be executed
@@ -212,7 +234,7 @@ public final class RunESCommand {
 	}
 
 	/**
-	 * Executes the given {@link Callable} and returns the result.
+	 * Executes the given {@link Callable}.
 	 * 
 	 * @param callable
 	 *            the callable to be executed
@@ -233,7 +255,17 @@ public final class RunESCommand {
 	}
 
 	/**
-	 * Executes the given {@link Callable} and returns the result.
+	 * Executes the given {@link Callable} on the editing domain.
+	 * <p>
+	 * <b>Please note:</b>
+	 * <p>
+	 * If you want to execute the callable on the editing domain of the workspace it is more convenient to use
+	 * {@link RunESCommand#run(Callable)}
+	 * <p>
+	 * If you want to change model elements in an {@link org.eclipse.emf.emfstore.client.ESLocalProject ESLocalProject}
+	 * you can use {@link org.eclipse.emf.emfstore.client.ESLocalProject#run(Callable) ESLocalProject.run(Callable)}
+	 * which will run the callable on the project's editing domain
+	 * <p>
 	 * 
 	 * @param callable
 	 *            the callable to be executed
@@ -281,7 +313,17 @@ public final class RunESCommand {
 	}
 
 	/**
-	 * Executes the given {@link Callable} and returns the result.
+	 * Executes the given {@link Callable} on the editing domain and returns the result.
+	 * <p>
+	 * <b>Please note:</b>
+	 * <p>
+	 * If you want to execute the callable on the editing domain of the workspace it is more convenient to use
+	 * {@link RunESCommand#runWithResult(Callable)}
+	 * <p>
+	 * If you want to change model elements in an {@link org.eclipse.emf.emfstore.client.ESLocalProject ESLocalProject}
+	 * you can use {@link org.eclipse.emf.emfstore.client.ESLocalProject#runWithResult(Callable)
+	 * ESLocalProject.runWithResult(Callable)} which will run the callable on the project's editing domain
+	 * <p>
 	 * 
 	 * @param callable
 	 *            the callable to be executed
