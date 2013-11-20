@@ -23,6 +23,7 @@ import org.eclipse.emf.emfstore.client.exceptions.ESServerNotFoundException;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
 import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
 import org.eclipse.emf.emfstore.internal.client.model.Workspace;
+import org.eclipse.emf.emfstore.internal.client.model.exceptions.UnkownProjectException;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommandWithResult;
 import org.eclipse.emf.emfstore.internal.common.APIUtil;
 import org.eclipse.emf.emfstore.internal.common.api.AbstractAPIImpl;
@@ -165,13 +166,17 @@ public class ESWorkspaceImpl extends AbstractAPIImpl<ESWorkspaceImpl, Workspace>
 	 * @see org.eclipse.emf.emfstore.client.ESWorkspace#getLocalProject(org.eclipse.emf.ecore.EObject)
 	 */
 	public ESLocalProject getLocalProject(final EObject modelElement) {
-		return RunESCommand.runWithResult(new Callable<ESLocalProject>() {
-			public ESLocalProject call() throws Exception {
-				final Project project = ModelUtil.getProject(modelElement);
-				final ProjectSpace projectSpace = toInternalAPI().getProjectSpace(project);
-				return projectSpace.toAPI();
-			}
-		});
+		try {
+			return RunESCommand.runWithResult(new Callable<ESLocalProject>() {
+				public ESLocalProject call() throws Exception {
+					final Project project = ModelUtil.getProject(modelElement);
+					final ProjectSpace projectSpace = toInternalAPI().getProjectSpace(project);
+					return projectSpace.toAPI();
+				}
+			}, toInternalAPI().getProjectSpace(ModelUtil.getProject(modelElement)).getContentEditingDomain());
+		} catch (final UnkownProjectException ex) {
+			return null;
+		}
 	}
 
 }
