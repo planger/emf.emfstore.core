@@ -28,7 +28,7 @@ public class LocalProjectNeedsToBeUpdatedCommitControllerTest extends AbstractUI
 				getCopy().getModelElements().add(BowlingFactory.eINSTANCE.createPlayer());
 				return null;
 			}
-		}, getCopy());
+		});
 
 		UIThreadRunnable.asyncExec(new VoidResult() {
 			public void run() {
@@ -44,7 +44,7 @@ public class LocalProjectNeedsToBeUpdatedCommitControllerTest extends AbstractUI
 		bot.button("OK").click();
 
 		// confirm commit dialog
-		final SWTBotButton buttonWithLabel = bot.button("OK");
+		SWTBotButton buttonWithLabel = bot.button("OK");
 		buttonWithLabel.click();
 
 		bot.waitUntil(new DefaultCondition() {
