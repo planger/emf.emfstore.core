@@ -44,7 +44,7 @@ public class SerializationTest extends FuzzyProjectTest {
 
 		// mutate already saved (through importing) projectSpace and save it
 		// again
-		final ProjectSpace projectSpace = getProjectSpace();
+		ProjectSpace projectSpace = getProjectSpace();
 		final ModelMutatorConfiguration mmc = getModelMutatorConfiguration(projectSpace
 			.getProject());
 		new EMFStoreCommand() {
@@ -52,16 +52,16 @@ public class SerializationTest extends FuzzyProjectTest {
 			protected void doRun() {
 				getUtil().mutate(mmc);
 			}
-		}.run(projectSpace.getProject(), false);
+		}.run(false);
 
 		projectSpace.save();
 
 		// dispose and reinit WorkspaceManager
 		((ESWorkspaceProviderImpl) ESWorkspaceProvider.INSTANCE).dispose();
-		ESWorkspaceProviderImpl.init();
+		((ESWorkspaceProviderImpl) ESWorkspaceProvider.INSTANCE).init();
 
 		// reload projectSpaces and check for valid state
-		final EList<ProjectSpace> projectSpaces = ((WorkspaceImpl) ESWorkspaceProvider.INSTANCE
+		EList<ProjectSpace> projectSpaces = ((WorkspaceImpl) ESWorkspaceProvider.INSTANCE
 			.getWorkspace()).getProjectSpaces();
 		if (projectSpaces.size() != 1) {
 			throw new IllegalStateException(
@@ -70,7 +70,7 @@ public class SerializationTest extends FuzzyProjectTest {
 		}
 
 		// compare
-		final ProjectSpace reloadedProjectSpace = projectSpaces.get(0);
+		ProjectSpace reloadedProjectSpace = projectSpaces.get(0);
 		try {
 			if (!ModelUtil.areEqual(reloadedProjectSpace.getProject(),
 				projectSpace.getProject())) {

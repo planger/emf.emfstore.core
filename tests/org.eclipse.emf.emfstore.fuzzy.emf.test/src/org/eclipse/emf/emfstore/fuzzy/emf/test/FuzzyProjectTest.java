@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.emf.emfstore.client.ESWorkspace;
 import org.eclipse.emf.emfstore.client.ESWorkspaceProvider;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
 import org.eclipse.emf.emfstore.fuzzy.Annotations.Data;
@@ -36,8 +37,6 @@ import org.eclipse.emf.emfstore.fuzzy.emf.MutateUtil;
 import org.eclipse.emf.emfstore.internal.client.model.Configuration;
 import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
 import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
-import org.eclipse.emf.emfstore.internal.client.model.impl.WorkspaceBase;
-import org.eclipse.emf.emfstore.internal.client.model.impl.WorkspaceImpl;
 import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESLocalProjectImpl;
 import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESWorkspaceImpl;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommand;
@@ -45,6 +44,8 @@ import org.eclipse.emf.emfstore.internal.common.CommonUtil;
 import org.eclipse.emf.emfstore.internal.common.model.ModelElementId;
 import org.eclipse.emf.emfstore.internal.common.model.Project;
 import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
+import org.eclipse.emf.emfstore.internal.client.model.impl.WorkspaceBase;
+import org.eclipse.emf.emfstore.internal.client.model.impl.WorkspaceImpl;
 import org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorConfiguration;
 import org.junit.After;
 import org.junit.Before;
@@ -69,7 +70,7 @@ public abstract class FuzzyProjectTest {
 
 	@SuppressWarnings({ "serial", "unused", "restriction" })
 	@Options
-	private final Map<String, Object> options = new HashMap<String, Object>() {
+	private Map<String, Object> options = new HashMap<String, Object>() {
 		{
 			put(EMFDataProvider.MUTATOR_EDITINGDOMAIN,
 				((ESWorkspaceProviderImpl) ESWorkspaceProvider.INSTANCE)
@@ -105,7 +106,7 @@ public abstract class FuzzyProjectTest {
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				final ESWorkspaceImpl esWorkspaceImpl = (ESWorkspaceImpl) ESWorkspaceProvider.INSTANCE
+				ESWorkspaceImpl esWorkspaceImpl = (ESWorkspaceImpl) ESWorkspaceProvider.INSTANCE
 					.getWorkspace();
 				projectSpace = ((ESLocalProjectImpl) esWorkspaceImpl
 					.createLocalProject("")).toInternalAPI();
@@ -115,7 +116,7 @@ public abstract class FuzzyProjectTest {
 						projectSpace.getProject());
 				}
 			}
-		}.run(projectSpace, false);
+		}.run(false);
 	}
 
 	/***/
@@ -125,9 +126,9 @@ public abstract class FuzzyProjectTest {
 		RunESCommand.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				try {
-					final WorkspaceImpl currentWorkspace = (WorkspaceImpl) ESWorkspaceProvider.INSTANCE
+					WorkspaceImpl currentWorkspace = (WorkspaceImpl) ESWorkspaceProvider.INSTANCE
 						.getWorkspace();
-					final EList<ProjectSpace> projectSpaces = currentWorkspace
+					EList<ProjectSpace> projectSpaces = currentWorkspace
 						.getProjectSpaces();
 					if (projectSpace != null
 						&& projectSpaces.contains(projectSpace)) {
@@ -137,15 +138,15 @@ public abstract class FuzzyProjectTest {
 						&& projectSpaces.contains(copyProjectSpace)) {
 						copyProjectSpace.delete(new NullProgressMonitor());
 					}
-				} catch (final FileNotFoundException e) {
+				} catch (FileNotFoundException e) {
 					// do nothing
-				} catch (final IOException e) {
+				} catch (IOException e) {
 					// do nothing
 				}
 
 				return null;
 			}
-		}, ESWorkspaceProviderImpl.getInstance().getInternalWorkspace());
+		});
 	}
 
 	/**
@@ -244,11 +245,11 @@ public abstract class FuzzyProjectTest {
 						util.getRunResourceURI("original"), options);
 					ModelUtil.saveEObjectToResource(Arrays.asList(project2),
 						util.getRunResourceURI("copy"), options);
-				} catch (final IOException e) {
+				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
 			}
-		}.run(project1, false);
+		}.run(false);
 	}
 
 	/**
@@ -283,10 +284,10 @@ public abstract class FuzzyProjectTest {
 		int index = 0;
 		// sort elements in modelElement reference of projects to avoid
 		// differences only in indices.
-		for (final EObject eObject1 : project1.getModelElements()) {
-			final ModelElementId modelElementId1 = project1
+		for (EObject eObject1 : project1.getModelElements()) {
+			ModelElementId modelElementId1 = project1
 				.getModelElementId(eObject1);
-			final EObject eObject2 = project2.getModelElement(modelElementId1);
+			EObject eObject2 = project2.getModelElement(modelElementId1);
 			if (eObject2 == null
 				|| !project2.getModelElements().contains(eObject2)) {
 				fail(project1, project2, util);

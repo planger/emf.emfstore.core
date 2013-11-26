@@ -42,7 +42,7 @@ public class OperationReverseTest extends FuzzyProjectTest {
 			protected void doRun() {
 				getUtil().mutate(mmc);
 			}
-		}.run(projectSpace.getProject(), false);
+		}.run(false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -50,7 +50,7 @@ public class OperationReverseTest extends FuzzyProjectTest {
 				projectSpace.getLocalChangePackage().reverse()
 					.apply(projectSpace.getProject());
 			}
-		}.run(projectSpace.getProject(), false);
+		}.run(false);
 
 		compareIgnoreOrder(getCopyProjectSpace().getProject(),
 			projectSpace.getProject());
