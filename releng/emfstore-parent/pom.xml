@@ -5,7 +5,7 @@
 
   <groupId>org.eclipse.emf.emfstore</groupId>
   <artifactId>emfstore-parent</artifactId>
-  <version>1.0.2-SNAPSHOT</version>
+  <version>1.0.4-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <properties>
@@ -13,7 +13,7 @@
     <junit-version>4.8.2</junit-version>
     <maven-checkstyle-version>2.10</maven-checkstyle-version>
     <jacoco-version>0.5.7.201204190339</jacoco-version>
-	<emfstore-version>1.0.2-SNAPSHOT</emfstore-version>
+	<emfstore-version>1.0.4-SNAPSHOT</emfstore-version>
 	<!-- Properties to enable jacoco code coverage analysis with sonar -->
 	<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
 	<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
@@ -144,6 +144,14 @@
     
     <module>../../bundles/org.eclipse.emf.emfstore.examplemodel</module>
     <module>../../bundles/org.eclipse.emf.emfstore.examplemodel.edit</module>
+	
+	<!-- EMFStore MongoDB -->
+    <module>../../features/org.eclipse.emf.emfstore.mongodb.client.feature</module>
+	<module>../../features/org.eclipse.emf.emfstore.mongodb.server.feature</module>
+    
+    <module>../../bundles/org.eclipse.emf.emfstore.mongodb</module>
+    <module>../../bundles/org.eclipse.emf.emfstore.mongodb.client</module>
+    <module>../../bundles/org.eclipse.emf.emfstore.mongodb.server</module>
 
     <!-- Update site and products -->
 	<module>../../features/org.eclipse.emf.emfstore.sdk.feature</module>

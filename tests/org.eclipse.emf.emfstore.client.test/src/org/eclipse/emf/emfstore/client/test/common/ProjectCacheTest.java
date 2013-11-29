@@ -8,17 +8,23 @@
  * 
  * Contributors:
  ******************************************************************************/
-package org.eclipse.emf.emfstore.client.test.persistence;
+package org.eclipse.emf.emfstore.client.test.common;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.emfstore.client.test.WorkspaceTest;
 import org.eclipse.emf.emfstore.client.test.testmodel.TestElement;
 import org.eclipse.emf.emfstore.client.test.testmodel.TestElementContainer;
 import org.eclipse.emf.emfstore.client.test.testmodel.TestmodelFactory;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommand;
+import org.eclipse.emf.emfstore.internal.common.model.IdEObjectCollection;
+import org.eclipse.emf.emfstore.internal.common.model.ModelElementId;
 import org.eclipse.emf.emfstore.internal.common.model.Project;
+import org.eclipse.emf.emfstore.internal.common.model.util.IdEObjectCollectionChangeObserver;
 import org.junit.Test;
 
 public class ProjectCacheTest extends WorkspaceTest {
@@ -44,13 +50,56 @@ public class ProjectCacheTest extends WorkspaceTest {
 	}
 
 	@Test
+	public void testAddingObserverMustNotOverwriteExistingIDsWhileExecutingCommand() {
+
+		final ModelElementId[] cutElementIWhileCommand = new ModelElementId[1];
+
+		final Project project = getProject();
+		final TestElement cutElement = getTestElement();
+		new EMFStoreCommand() {
+			@Override
+			protected void doRun() {
+				project.getCutElements().add(cutElement);
+				cutElementIWhileCommand[0] = project.getModelElementId(cutElement);
+				project.addIdEObjectCollectionChangeObserver(createDummyObserver());
+			}
+		}.run(false);
+
+		assertEquals(cutElementIWhileCommand[0], project.getModelElementId(cutElement));
+	}
+
+	private IdEObjectCollectionChangeObserver createDummyObserver() {
+		return new IdEObjectCollectionChangeObserver() {
+
+			public void notify(Notification notification, IdEObjectCollection collection, EObject modelElement) {
+				// TODO Auto-generated method stub
+
+			}
+
+			public void modelElementRemoved(IdEObjectCollection collection, EObject eObject) {
+				// TODO Auto-generated method stub
+
+			}
+
+			public void modelElementAdded(IdEObjectCollection collection, EObject eObject) {
+				// TODO Auto-generated method stub
+
+			}
+
+			public void collectionDeleted(IdEObjectCollection collection) {
+				// TODO Auto-generated method stub
+
+			}
+		};
+	}
+
+	@Test
 	public void testGetNoIdForDeletedElement() {
 
 		final Project project = getProject();
 		final TestElement element = getTestElement();
 
 		new EMFStoreCommand() {
-
 			@Override
 			protected void doRun() {
 				project.addModelElement(element);
@@ -194,4 +243,5 @@ public class ProjectCacheTest extends WorkspaceTest {
 			}
 		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
+
 }
