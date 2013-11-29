@@ -63,7 +63,7 @@ public class ProjectCacheTest extends WorkspaceTest {
 				cutElementIWhileCommand[0] = project.getModelElementId(cutElement);
 				project.addIdEObjectCollectionChangeObserver(createDummyObserver());
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(cutElementIWhileCommand[0], project.getModelElementId(cutElement));
 	}

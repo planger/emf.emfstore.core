@@ -9,7 +9,7 @@ Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Require-Bundle: org.eclipse.emf.edit;bundle-version="[2.5.0,3.0.0)";visibility:=reexport,
  org.eclipse.emf.emfstore.server;bundle-version="[1.0.4,2.0.0)";visibility:=reexport,
- org.eclipse.emf.emfstore.migration;bundle-version="[1.0.4,2.0.0)"
+ org.eclipse.emf.emfstore.migration;bundle-version="[1.0.4,2.0.0)",
  org.eclipse.emf.emfstore.common;bundle-version="[1.0.2,2.0.0)"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.eclipse.emf.emfstore.internal.client.model.Activator
