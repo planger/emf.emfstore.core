@@ -1460,6 +1460,17 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 		return contentEditingDomain;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#flushContentCommandStack()
+	 */
+	public void flushContentCommandStack() {
+		if (contentEditingDomain != null) {
+			contentEditingDomain.getCommandStack().flush();
+		}
+	}
+
 	private void notifyPreRevertMyChanges(final ChangePackage changePackage) {
 		ESWorkspaceProviderImpl.getObserverBus().notify(ESMergeObserver.class)
 			.preRevertMyChanges(toAPI(), changePackage.toAPI());

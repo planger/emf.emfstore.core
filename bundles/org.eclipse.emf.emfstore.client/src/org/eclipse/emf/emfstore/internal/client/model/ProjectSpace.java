@@ -1101,6 +1101,11 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	EditingDomain getContentEditingDomain();
 
 	/**
+	 * Clears the command stack tracking changes on the {@link Project} and local {@link ChangePackage}.
+	 */
+	void flushContentCommandStack();
+
+	/**
 	 * Return the local {@link ChangePackage} associated with this ProjectSpace.
 	 * 
 	 * @return the local ChangePackage

@@ -53,6 +53,7 @@ import org.eclipse.emf.emfstore.internal.client.model.connectionmanager.SessionM
 import org.eclipse.emf.emfstore.internal.client.model.connectionmanager.xmlrpc.XmlRpcAdminConnectionManager;
 import org.eclipse.emf.emfstore.internal.client.model.connectionmanager.xmlrpc.XmlRpcConnectionManager;
 import org.eclipse.emf.emfstore.internal.client.model.impl.WorkspaceImpl;
+import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESLocalProjectImpl;
 import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESWorkspaceImpl;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommand;
 import org.eclipse.emf.emfstore.internal.client.model.util.WorkspaceUtil;
@@ -663,7 +664,7 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 	 * @see org.eclipse.emf.emfstore.client.observer.ESCheckoutObserver#checkoutDone(org.eclipse.emf.emfstore.client.ESLocalProject)
 	 */
 	public void checkoutDone(ESLocalProject project) {
-		flushCommandStack();
+		((ESLocalProjectImpl) project).toInternalAPI().flushContentCommandStack();
 	}
 
 	/**
@@ -673,7 +674,7 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 	 * @see org.eclipse.emf.emfstore.client.observer.ESShareObserver#shareDone(org.eclipse.emf.emfstore.client.ESLocalProject)
 	 */
 	public void shareDone(ESLocalProject localProject) {
-		flushCommandStack();
+		((ESLocalProjectImpl) localProject).toInternalAPI().flushContentCommandStack();
 	}
 
 	/**
@@ -695,7 +696,7 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 	 *      org.eclipse.core.runtime.IProgressMonitor)
 	 */
 	public void updateCompleted(ESLocalProject project, IProgressMonitor monitor) {
-		flushCommandStack();
+		((ESLocalProjectImpl) project).toInternalAPI().flushContentCommandStack();
 	}
 
 	/**
@@ -718,6 +719,6 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 	 *      org.eclipse.core.runtime.IProgressMonitor)
 	 */
 	public void commitCompleted(ESLocalProject project, ESPrimaryVersionSpec newRevision, IProgressMonitor monitor) {
-		flushCommandStack();
+		((ESLocalProjectImpl) project).toInternalAPI().flushContentCommandStack();
 	}
 }
