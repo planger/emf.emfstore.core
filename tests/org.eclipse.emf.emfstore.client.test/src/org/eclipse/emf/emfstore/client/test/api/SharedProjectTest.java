@@ -19,10 +19,13 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.EventObject;
 import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.emf.common.command.CommandStack;
+import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -48,6 +51,7 @@ import org.eclipse.emf.emfstore.server.model.query.ESRangeQuery;
 import org.eclipse.emf.emfstore.server.model.versionspec.ESBranchVersionSpec;
 import org.eclipse.emf.emfstore.server.model.versionspec.ESPrimaryVersionSpec;
 import org.eclipse.emf.emfstore.server.model.versionspec.ESVersionSpec;
+import org.junit.Before;
 import org.junit.Test;
 
 public class SharedProjectTest extends BaseSharedProjectTest {
@@ -59,6 +63,14 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 
 	private boolean conflictOccurred;
 	private boolean noLocalChangesOccurred;
+	private boolean commandStackFlushed;
+
+	@Override
+	@Before
+	public void setUp() throws Exception {
+		super.setUp();
+		commandStackFlushed = false;
+	}
 
 	@Test
 	public void testShare() {
@@ -83,6 +95,28 @@ public class SharedProjectTest extends BaseSharedProjectTest {
 			log(e);
 			fail(e.getMessage());
 		}
+	}
+
+	@Test
+	public void testFlushCommandStackUponCommit() {
+		addPlayerToProject();
+		final CommandStack cs = ((ESLocalProjectImpl) localProject)
+			.toInternalAPI().getContentEditingDomain().getCommandStack();
+		assertNotNull(cs.getMostRecentCommand());
+		cs.addCommandStackListener(new CommandStackListener() {
+			public void commandStackChanged(EventObject event) {
+				if (cs.getMostRecentCommand() == null) {
+					commandStackFlushed = true;
+				}
+			}
+		});
+		try {
+			localProject.commit(new NullProgressMonitor());
+		} catch (final ESException e) {
+			log(e);
+			fail(e.getMessage());
+		}
+		assertTrue(commandStackFlushed);
 	}
 
 	public void testCommitWithoutChange() throws ESException {

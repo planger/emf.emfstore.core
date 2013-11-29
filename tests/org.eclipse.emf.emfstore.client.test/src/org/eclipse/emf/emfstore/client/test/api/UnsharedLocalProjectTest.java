@@ -18,9 +18,13 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Date;
+import java.util.EventObject;
 import java.util.concurrent.Callable;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.emf.common.command.CommandStack;
+import org.eclipse.emf.common.command.CommandStackListener;
+import org.eclipse.emf.emfstore.bowling.BowlingFactory;
 import org.eclipse.emf.emfstore.bowling.League;
 import org.eclipse.emf.emfstore.bowling.Player;
 import org.eclipse.emf.emfstore.client.ESLocalProject;
@@ -46,10 +50,12 @@ public class UnsharedLocalProjectTest extends BaseEmptyEmfstoreTest {
 
 	private final ESWorkspace workspace = ESWorkspaceProvider.INSTANCE.getWorkspace();
 	private ESLocalProject localProject;
+	private boolean commandStackFlushed;
 
 	@Before
 	public void setUp() throws Exception {
 		localProject = workspace.createLocalProject("TestProject");
+		commandStackFlushed = false;
 	}
 
 	@Override
@@ -303,6 +309,28 @@ public class UnsharedLocalProjectTest extends BaseEmptyEmfstoreTest {
 	}
 
 	@Test
+	public void testFlushCommandStackUponShare() {
+		ProjectChangeUtil.addPlayerToProject(localProject);
+		final CommandStack cs = ((ESLocalProjectImpl) localProject)
+			.toInternalAPI().getContentEditingDomain().getCommandStack();
+		assertNotNull(cs.getMostRecentCommand());
+		cs.addCommandStackListener(new CommandStackListener() {
+			public void commandStackChanged(EventObject event) {
+				if (cs.getMostRecentCommand() == null) {
+					commandStackFlushed = true;
+				}
+			}
+		});
+		try {
+			localProject.shareProject(new NullProgressMonitor());
+		} catch (final ESException ex) {
+			log(ex);
+			fail(ex.getMessage());
+		}
+		assertTrue(commandStackFlushed);
+	}
+
+	@Test
 	public void testShareSession() {
 		try {
 			final ESServer server = ESServer.FACTORY.createServer("localhost", port,
@@ -336,5 +364,46 @@ public class UnsharedLocalProjectTest extends BaseEmptyEmfstoreTest {
 		assertEquals(1, localProject.getModelElements().size());
 		assertEquals(2, localProject.getAllModelElementsByClass(Player.class).size());
 		assertEquals(1, localProject.getAllModelElementsByClass(League.class, true).size());
+	}
+
+	@Test
+	public void testUndoMultipleProjects() {
+		final ESLocalProject project1 = localProject;
+		final ESLocalProject project2 = workspace.createLocalProject("TestProject Nr. 2");
+		final Player player1 = BowlingFactory.eINSTANCE.createPlayer();
+		final Player player2 = BowlingFactory.eINSTANCE.createPlayer();
+		project1.run(new Callable<Void>() {
+			public Void call() throws Exception {
+				project1.getModelElements().add(player1);
+				return null;
+			}
+		});
+		project2.run(new Callable<Void>() {
+			public Void call() throws Exception {
+				project2.getModelElements().add(player2);
+				return null;
+			}
+		});
+		assertEquals(1, project1.getModelElements().size());
+		assertEquals(1, project2.getModelElements().size());
+		assertEquals(player1, project1.getModelElements().get(0));
+		assertEquals(player2, project2.getModelElements().get(0));
+		project2.run(new Callable<Void>() {
+			public Void call() throws Exception {
+				project2.undoLastOperation();
+				return null;
+			}
+		});
+		assertEquals(1, project1.getModelElements().size());
+		assertEquals(0, project2.getModelElements().size());
+		assertEquals(player1, project1.getModelElements().get(0));
+		project1.run(new Callable<Void>() {
+			public Void call() throws Exception {
+				project1.undoLastOperation();
+				return null;
+			}
+		});
+		assertEquals(0, project1.getModelElements().size());
+		assertEquals(0, project2.getModelElements().size());
 	}
 }
