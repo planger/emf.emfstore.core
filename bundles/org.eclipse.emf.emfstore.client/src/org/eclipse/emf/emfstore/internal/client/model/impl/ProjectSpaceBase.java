@@ -14,6 +14,7 @@ package org.eclipse.emf.emfstore.internal.client.model.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,6 +36,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature.Setting;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -48,6 +50,7 @@ import org.eclipse.emf.emfstore.client.ESUsersession;
 import org.eclipse.emf.emfstore.client.callbacks.ESCommitCallback;
 import org.eclipse.emf.emfstore.client.callbacks.ESUpdateCallback;
 import org.eclipse.emf.emfstore.client.changetracking.ESCommandStack;
+import org.eclipse.emf.emfstore.client.exceptions.ESProjectIsClosedException;
 import org.eclipse.emf.emfstore.client.handler.ESRunnableContext;
 import org.eclipse.emf.emfstore.client.observer.ESLoginObserver;
 import org.eclipse.emf.emfstore.client.observer.ESMergeObserver;
@@ -150,12 +153,107 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 	private ECrossReferenceAdapter crossReferenceAdapter;
 	private ESRunnableContext runnableContext;
 
+	private WeakReference<Project> projectReference;
+	private WeakReference<ChangePackage> localChangePackageReference;
+
 	/**
 	 * Constructor.
 	 */
 	public ProjectSpaceBase() {
 		propertyMap = new LinkedHashMap<String, OrgUnitProperty>();
 		initRunnableContext();
+	}
+
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getProject()
+	 */
+	public Project getProject()
+	{
+		if (isClosed()) {
+			throw new ESProjectIsClosedException();
+		}
+		Project project = null;
+		if (projectReference != null) {
+			project = projectReference.get();
+		}
+		if (project == null) {
+			final URI projectURI = ClientURIUtil.createProjectURI(this);
+			project = (Project) loadEObjectFromURI(projectURI);
+			projectReference = new WeakReference<Project>(project);
+		}
+		return project != null && project.eIsProxy() ? (Project) eResolveProxy((InternalEObject) project) : project;
+	}
+
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#setProject(org.eclipse.emf.emfstore.internal.common.model.Project)
+	 */
+	public void setProject(Project newProject)
+	{
+		projectReference = new WeakReference<Project>(newProject);
+	}
+
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getLocalChangePackage()
+	 */
+	public ChangePackage getLocalChangePackage()
+	{
+		if (isClosed()) {
+			throw new ESProjectIsClosedException();
+		}
+		ChangePackage lcp = null;
+		if (localChangePackageReference != null) {
+			lcp = localChangePackageReference.get();
+		}
+		if (lcp == null) {
+			final URI lcpURI = ClientURIUtil.createOperationsURI(this);
+			lcp = (ChangePackage) loadEObjectFromURI(lcpURI);
+			localChangePackageReference = new WeakReference<ChangePackage>(lcp);
+		}
+
+		return lcp;
+	}
+
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#setLocalChangePackage(org.eclipse.emf.emfstore.internal.server.model.versioning.ChangePackage)
+	 */
+	public void setLocalChangePackage(ChangePackage newLocalChangePackage)
+	{
+		localChangePackageReference = new WeakReference<ChangePackage>(newLocalChangePackage);
+	}
+
+	private EObject loadEObjectFromURI(URI uri) {
+		ResourceSet resourceSet = getResourceSet();
+
+		if (resourceSet == null) {
+			final ESExtensionPoint extensionPoint = new ESExtensionPoint(
+				"org.eclipse.emf.emfstore.client.resourceSetProvider", //$NON-NLS-1$
+				true);
+			extensionPoint.setComparator(new ESPriorityComparator("priority", true)); //$NON-NLS-1$
+			extensionPoint.reload();
+			final ESResourceSetProvider resourceSetProvider = extensionPoint.getElementWithHighestPriority().getClass(
+				"class", //$NON-NLS-1$
+				ESResourceSetProvider.class);
+			resourceSet = resourceSetProvider.getResourceSet();
+		}
+
+		if (resourceSet.getURIConverter().exists(uri, null)) {
+			final Resource resource = resourceSet.getResource(uri, true);
+			return resource.getContents().get(0);
+		}
+
+		return null;
 	}
 
 	/**
