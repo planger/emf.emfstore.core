@@ -12,6 +12,7 @@ package org.eclipse.emf.emfstore.client.test.persistence;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -87,7 +88,16 @@ public class ImportExportTest extends WorkspaceTest {
 
 	@Test
 	public void testDuplicateImportOfProjectSpace() throws IOException {
-		final File temp = File.createTempFile("projectSpace", ExportImportDataUnits.ProjectSpace.getExtension());
+		final String tmpDir = System.getProperty("java.io.tmpdir") + "ieTest" + System.currentTimeMillis();
+		final File tmpDirFile = new File(tmpDir);
+		final boolean bo = tmpDirFile.mkdir();
+
+		if (!bo) {
+			fail("Could not create temp folder for test");
+		}
+
+		final File temp = File.createTempFile("projectSpace", ExportImportDataUnits.ProjectSpace.getExtension(),
+			tmpDirFile);
 		new ExportImportControllerExecutor(temp, new NullProgressMonitor())
 			.execute(ExportImportControllerFactory.Export.getExportProjectSpaceController(getProjectSpace()));
 
@@ -109,9 +119,18 @@ public class ImportExportTest extends WorkspaceTest {
 		createTestElement("A");
 		Assert.assertTrue(getProjectSpace().getOperations().size() > 0);
 
+		final String tmpDir = System.getProperty("java.io.tmpdir") + "ieTest" + System.currentTimeMillis();
+		final File tmpDirFile = new File(tmpDir);
+		final boolean bo = tmpDirFile.mkdir();
+
+		if (!bo) {
+			fail("Could not create temp folder for test");
+		}
+
 		// TODO: assert file extension is correct
 
-		final File temp = File.createTempFile("projectSpace", ExportImportDataUnits.ProjectSpace.getExtension());
+		final File temp = File.createTempFile("projectSpace", ExportImportDataUnits.ProjectSpace.getExtension(),
+			tmpDirFile);
 		new ExportImportControllerExecutor(temp, new NullProgressMonitor())
 			.execute(ExportImportControllerFactory.Export.getExportProjectSpaceController(getProjectSpace()));
 

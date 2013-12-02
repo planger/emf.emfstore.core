@@ -14,6 +14,7 @@ package org.eclipse.emf.emfstore.internal.client.importexport.impl;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.io.FilenameUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
 import org.eclipse.emf.emfstore.internal.client.model.util.ResourceHelper;
@@ -109,10 +110,15 @@ public class ExportProjectSpaceController extends ProjectSpaceBasedExportControl
 		copiedProjectSpace.setUsersession(null);
 
 		final Project clonedProject = ModelUtil.clone(getProjectSpace().getProject());
-		copiedProjectSpace.setProject(clonedProject);
 
 		ResourceHelper.putElementIntoNewResourceWithProject(file.getAbsolutePath(), copiedProjectSpace,
 			copiedProjectSpace.getProject());
+
+		final String projectPath = FilenameUtils.removeExtension(file.getAbsolutePath())
+			+ ExportImportDataUnits.Project.getExtension();
+		final File projectFile = new File(projectPath);
+		projectFile.createNewFile();
+		ResourceHelper.putElementIntoNewResource(projectFile.getAbsolutePath(), clonedProject);
 	}
 
 	/**
