@@ -52,6 +52,7 @@ import org.eclipse.emf.emfstore.internal.client.model.connectionmanager.KeyStore
 import org.eclipse.emf.emfstore.internal.client.model.connectionmanager.SessionManager;
 import org.eclipse.emf.emfstore.internal.client.model.connectionmanager.xmlrpc.XmlRpcAdminConnectionManager;
 import org.eclipse.emf.emfstore.internal.client.model.connectionmanager.xmlrpc.XmlRpcConnectionManager;
+import org.eclipse.emf.emfstore.internal.client.model.exceptions.UnkownProjectException;
 import org.eclipse.emf.emfstore.internal.client.model.impl.WorkspaceImpl;
 import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESLocalProjectImpl;
 import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESWorkspaceImpl;
@@ -312,15 +313,11 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 	 * @return the project space
 	 */
 	public static ProjectSpace getProjectSpace(Project project) {
-		if (project == null) {
-			throw new IllegalArgumentException("The project is null");
+		try {
+			return getInstance().getInternalWorkspace().getProjectSpace(project);
+		} catch (final UnkownProjectException ex) {
+			throw new IllegalStateException("Project does not have a ProjectSpace");
 		}
-		// check if my container is a project space
-		if (ModelPackage.eINSTANCE.getProjectSpace().isInstance(project.eContainer())) {
-			return (ProjectSpace) project.eContainer();
-		}
-
-		throw new IllegalStateException("Project is not contained by any project space");
 	}
 
 	/**
