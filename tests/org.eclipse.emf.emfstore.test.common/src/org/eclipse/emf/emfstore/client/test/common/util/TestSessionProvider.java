@@ -19,7 +19,6 @@ public class TestSessionProvider extends ESAbstractSessionProvider {
 	private Usersession session;
 
 	public TestSessionProvider() {
-		System.out.println("I was instantiated");
 	}
 
 	private void initSession(ESServer server) {

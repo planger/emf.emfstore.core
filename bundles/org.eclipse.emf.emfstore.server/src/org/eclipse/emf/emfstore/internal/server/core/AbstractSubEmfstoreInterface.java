@@ -139,13 +139,13 @@ public abstract class AbstractSubEmfstoreInterface {
 			System.arraycopy(args, 1, argsWoSessionId, 0, args.length - 1);
 			return method.invoke(this, argsWoSessionId);
 		} catch (final IllegalArgumentException e) {
-			ModelUtil.logWarning("this must not happen, bad parameters", e);
+			ModelUtil.logWarning(Messages.AbstractSubEmfstoreInterface_Bad_Parameters, e);
 			throw new ESException(e);
 		} catch (final IllegalAccessException e) {
-			ModelUtil.logWarning("this must not happen, method is not accessible", e);
+			ModelUtil.logWarning(Messages.AbstractSubEmfstoreInterface_Method_Not_Accessible, e);
 			throw new ESException(e);
 		} catch (final InvocationTargetException e) {
-			ModelUtil.logInfo("Exception on execution: " + mkString(e));
+			ModelUtil.logInfo(Messages.AbstractSubEmfstoreInterface_Exception_On_Execution + mkString(e));
 			if (e.getTargetException() instanceof ESException) {
 				throw (ESException) e.getTargetException();
 			}

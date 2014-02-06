@@ -196,7 +196,7 @@ public class EMFStoreImpl extends AbstractEmfstoreInterface implements Invocatio
 				// BEGIN SUPRESS CATCH EXCEPTION
 			} catch (final RuntimeException runtimeException) {
 				// END SUPRESS CATCH EXCEPTION
-				ModelUtil.logWarning("Server Call Observer Notification failed with exception!", runtimeException);
+				ModelUtil.logWarning(Messages.EMFStoreImpl_ServerCallObserverNotifier_Failed, runtimeException);
 			}
 		}
 	}

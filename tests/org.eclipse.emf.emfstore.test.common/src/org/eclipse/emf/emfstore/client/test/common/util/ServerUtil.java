@@ -409,7 +409,7 @@ public final class ServerUtil {
 	private static ServerSpace initServerSpace() {
 		final ResourceSetImpl set = new ResourceSetImpl();
 		set.setResourceFactoryRegistry(new ResourceFactoryMock());
-		final Resource resource = set.createResource(URI.createURI("")); //$NON-NLS-1$
+		final Resource resource = set.createResource(URI.createURI(StringUtils.EMPTY));
 		final ServerSpace serverSpace = ModelFactory.eINSTANCE.createServerSpace();
 		resource.getContents().add(serverSpace);
 		return serverSpace;

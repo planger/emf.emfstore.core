@@ -7,23 +7,29 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Edgar - initial API and implementation
+ * Edgar Mueller - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.server.core;
 
 import org.eclipse.osgi.util.NLS;
 
 /**
- * @author Edgar
- *
+ * Server core related messages.
+ * 
+ * @author emueller
+ * 
  */
-public class Messages extends NLS {
+public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.emf.emfstore.internal.server.core.messages"; //$NON-NLS-1$
+	public static String AbstractSubEmfstoreInterface_Bad_Parameters;
+	public static String AbstractSubEmfstoreInterface_Exception_On_Execution;
+	public static String AbstractSubEmfstoreInterface_Method_Not_Accessible;
 	public static String AdminEmfStoreImpl_Could_Not_Find_OrgUnit;
 	public static String AdminEmfStoreImpl_Group_Already_Exists;
 	public static String AdminEmfStoreImpl_Group_Does_Not_Exist;
 	public static String AdminEmfStoreImpl_OrgUnit_Does_Not_Exist;
 	public static String AdminEmfStoreImpl_Unknown_ProjectID;
+	public static String EMFStoreImpl_ServerCallObserverNotifier_Failed;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

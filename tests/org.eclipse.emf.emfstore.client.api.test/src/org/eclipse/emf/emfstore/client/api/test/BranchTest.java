@@ -15,6 +15,7 @@ import static org.eclipse.emf.emfstore.client.api.test.ClientTestUtil.noCommitCa
 import static org.eclipse.emf.emfstore.client.api.test.ClientTestUtil.noLogMessage;
 import static org.eclipse.emf.emfstore.client.api.test.ClientTestUtil.noProgressMonitor;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.util.concurrent.Callable;
 
@@ -23,6 +24,7 @@ import org.eclipse.emf.emfstore.client.test.common.TestConflictResolver;
 import org.eclipse.emf.emfstore.client.test.common.cases.ESTestWithSharedProject;
 import org.eclipse.emf.emfstore.client.test.common.dsl.Add;
 import org.eclipse.emf.emfstore.client.test.common.dsl.Create;
+import org.eclipse.emf.emfstore.client.test.common.dsl.Delete;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
 import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESLocalProjectImpl;
 import org.eclipse.emf.emfstore.internal.server.exceptions.InvalidVersionSpecException;
@@ -31,7 +33,9 @@ import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.eclipse.emf.emfstore.server.exceptions.ESUpdateRequiredException;
 import org.eclipse.emf.emfstore.server.model.versionspec.ESPrimaryVersionSpec;
 import org.eclipse.emf.emfstore.server.model.versionspec.ESVersionSpec;
+import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -48,6 +52,23 @@ public class BranchTest extends ESTestWithSharedProject {
 	private final String playerName3 = "player 3"; //$NON-NLS-1$
 	private final String branchName = "mybranch"; //$NON-NLS-1$
 	private final String trunkName = "trunk"; //$NON-NLS-1$
+
+	@Override
+	@After
+	public void after() {
+		try {
+			Delete.allRemoteProjects(getServer(), getUsersession());
+		} catch (final ESException ex) {
+			fail(ex.getMessage());
+		}
+		super.after();
+	}
+
+	@Override
+	@Before
+	public void before() {
+		super.before();
+	}
 
 	@BeforeClass
 	public static void beforeClass() {
