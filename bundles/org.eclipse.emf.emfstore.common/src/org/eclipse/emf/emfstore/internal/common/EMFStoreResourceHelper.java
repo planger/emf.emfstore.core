@@ -15,7 +15,6 @@ import java.util.Locale;
 
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EFactory;
-import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.xmi.impl.XMIHelperImpl;
 
 /**
@@ -39,33 +38,24 @@ public class EMFStoreResourceHelper extends XMIHelperImpl {
 	}
 
 	@Override
-	public String convertToString(EFactory factory, EDataType dataType, Object value)
-	{
-		final int classifierID = dataType.getClassifierID();
-		if (isFloat(classifierID)) {
+	public String convertToString(EFactory factory, EDataType dataType, Object value) {
+		final Class<?> instanceClass = dataType.getInstanceClass();
+		if (instanceClass == float.class
+			|| instanceClass == Float.class) {
 			return format((Float) value);
-		} else if (isDouble(classifierID)) {
+		} else if (instanceClass == double.class
+			|| instanceClass == Double.class) {
 			return format((Double) value);
 		}
 
 		return super.convertToString(factory, dataType, value);
 	}
 
-	private static boolean isFloat(int classifierID) {
-		return classifierID == EcorePackage.EFLOAT
-			|| classifierID == EcorePackage.EFLOAT_OBJECT;
-	}
-
-	private static boolean isDouble(int classifierID) {
-		return classifierID == EcorePackage.EDOUBLE
-			|| classifierID == EcorePackage.EDOUBLE_OBJECT;
-	}
-
 	private String format(Float value) {
-		return String.format(Locale.US, "%f", value.floatValue());
+		return String.format(Locale.US, "%f", value.floatValue()); //$NON-NLS-1$
 	}
 
 	private String format(Double value) {
-		return String.format(Locale.US, "%f", value.doubleValue());
+		return String.format(Locale.US, "%f", value.doubleValue()); //$NON-NLS-1$
 	}
 }
