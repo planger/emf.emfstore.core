@@ -117,8 +117,8 @@ import org.eclipse.emf.emfstore.server.model.ESChangePackage;
  * @author jfaltermeier
  * 
  */
-public abstract class ProjectSpaceBase extends IdentifiableElementImpl implements ProjectSpace, ESLoginObserver,
-	ESDisposable {
+public abstract class ProjectSpaceBase extends IdentifiableElementImpl
+	implements ProjectSpace, ESLoginObserver, ESDisposable {
 
 	private ESLocalProjectImpl esLocalProjectImpl;
 
@@ -249,9 +249,9 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 	private void runChecksumTests(PrimaryVersionSpec baseSpec, List<ChangePackage> incoming,
 		IProgressMonitor progressMonitor)
 		throws ESException {
-		progressMonitor.subTask("Computing checksum");
+		progressMonitor.subTask(Messages.ProjectSpaceBase_Computing_Checksum);
 		if (!performChecksumCheck(baseSpec, getProject())) {
-			progressMonitor.subTask("Invalid checksum.  Activating checksum error handler.");
+			progressMonitor.subTask(Messages.ProjectSpaceBase_Activate_ChecksumErrorHandler_Invalid_Chekcum);
 			final boolean errorHandled = Configuration.getClientBehavior().getChecksumErrorHandler()
 				.execute(toAPI(), baseSpec.toAPI(),
 					progressMonitor);
@@ -262,7 +262,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 				}
 				applyChangePackage(getLocalChangePackage(), true);
 
-				throw new ESException("Update cancelled by checksum error handler due to invalid checksum.");
+				throw new ESException(Messages.ProjectSpaceBase_Update_Cancelled_Invalid_Checksum);
 			}
 		}
 	}
@@ -285,7 +285,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 				final long computedChecksum = ModelUtil.computeChecksum(project);
 				return expectedChecksum == computedChecksum;
 			} catch (final SerializationException e) {
-				WorkspaceUtil.logWarning("Could not compute checksum while applying changes.", e);
+				WorkspaceUtil.logWarning(Messages.ProjectSpaceBase_Cannot_Compute_Checksum, e);
 			}
 		}
 
@@ -464,7 +464,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 			logMessage.setAuthor(getUsersession().getUsername());
 		}
 		else {
-			logMessage.setAuthor("<Unkown>");
+			logMessage.setAuthor(Messages.ProjectSpaceBase_Unknown_Author);
 		}
 		logMessage.setClientDate(new Date());
 		changePackage.setLogMessage(logMessage);
@@ -545,7 +545,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 			}
 		}
 		throw new PropertyNotFoundException(MessageFormat.format(
-			"Property {0} not found.", name));
+			Messages.ProjectSpaceBase_Property_Not_Found, name));
 	}
 
 	/**
@@ -561,7 +561,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 		// sanity check
 
 		if (directContents.size() != 1 && !(directContents.get(0) instanceof ChangePackage)) {
-			throw new IOException("File is corrupt, does not contain Changes.");
+			throw new IOException(Messages.ProjectSpaceBase_Corrupt_File);
 		}
 
 		final ChangePackage changePackage = (ChangePackage) directContents.get(0);
@@ -632,9 +632,9 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 		boolean useCrossReferenceAdapter = true;
 
 		for (final ESExtensionElement element : new ESExtensionPoint(
-			"org.eclipse.emf.emfstore.client.inverseCrossReferenceCache")
+			"org.eclipse.emf.emfstore.client.inverseCrossReferenceCache") //$NON-NLS-1$
 			.getExtensionElements()) {
-			useCrossReferenceAdapter &= element.getBoolean("activated");
+			useCrossReferenceAdapter &= element.getBoolean("activated"); //$NON-NLS-1$
 		}
 
 		if (useCrossReferenceAdapter) {
@@ -708,7 +708,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 			try {
 				ModelUtil.saveResource(currentResource, WorkspaceUtil.getResourceLogger());
 			} catch (final IOException e) {
-				WorkspaceUtil.logException("Project Space resource init failed!", e);
+				WorkspaceUtil.logException(Messages.ProjectSpaceBase_Resource_Init_Failed, e);
 			}
 		}
 
@@ -818,7 +818,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 			// BEGIN SUPRESS CATCH EXCEPTION
 		} catch (final RuntimeException e) {
 			// END SUPRESS CATCH EXCEPTION
-			WorkspaceUtil.logException("Resuming file transfers or transmitting properties failed!", e);
+			WorkspaceUtil.logException(Messages.ProjectSpaceBase_Transmit_Properties_Failed, e);
 		}
 	}
 
@@ -829,7 +829,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 	 */
 	public void makeTransient() {
 		if (initCompleted) {
-			throw new IllegalAccessError("Project Space cannot be set to transient after init.");
+			throw new IllegalAccessError(Messages.ProjectSpaceBase_Make_Transient_Error);
 		}
 		isTransient = true;
 	}
@@ -842,11 +842,11 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 		throws ESException {
 
 		if (branchSpec == null || conflictResolver == null) {
-			throw new IllegalArgumentException("Arguments must not be null.");
+			throw new IllegalArgumentException(Messages.ProjectSpaceBase_Arguments_Must_Not_Be_Null);
 		}
 
 		if (Versions.isSameBranch(getBaseVersion(), branchSpec)) {
-			throw new InvalidVersionSpecException("Can't merge branch with itself.");
+			throw new InvalidVersionSpecException(Messages.ProjectSpaceBase_Cannot_Merge_Branch_With_Itself);
 		}
 
 		final PrimaryVersionSpec commonAncestor = new ServerCall<PrimaryVersionSpec>(this) {
@@ -893,7 +893,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 		for (final ConflictBucket conflict : conflictSet.getConflictBuckets()) {
 			if (!conflict.isResolved()) {
 				throw new ChangeConflictException(
-					"Conflict during update occured and callback failed to resolve all conflicts!",
+					Messages.ProjectSpaceBase_Conflict_During_Update_No_Resolution,
 					conflictSet);
 			}
 			accceptedMineSet.addAll(conflict.getAcceptedLocalOperations());
@@ -1060,15 +1060,15 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 		try {
 			if (resource == null) {
 				if (!isTransient) {
-					WorkspaceUtil.logException("Resources of project space are not properly initialized!",
-						new IllegalProjectSpaceStateException("Resource to save is null"));
+					WorkspaceUtil.logException(Messages.ProjectSpaceBase_Resource_Not_Initialized,
+						new IllegalProjectSpaceStateException(Messages.ProjectSpaceBase_Resource_Is_Null));
 				}
 				return;
 			}
 			ModelUtil.saveResource(resource, WorkspaceUtil.getResourceLogger());
 		} catch (final IOException e) {
-			WorkspaceUtil.logException("An error in the data was detected during save!"
-				+ " The safest way to deal with this problem is to delete this project and checkout again.", e);
+			WorkspaceUtil.logException(Messages.ProjectSpaceBase_Error_During_Save
+				+ Messages.ProjectSpaceBase_Delete_Project_And_Checkout_Again, e);
 		}
 	}
 
@@ -1171,7 +1171,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 						getProjectId());
 				iterator.remove();
 			} catch (final ESException e) {
-				WorkspaceUtil.logException("Transmission of properties failed with exception", e);
+				WorkspaceUtil.logException(Messages.ProjectSpaceBase_Transmission_Of_Properties_Failed, e);
 			}
 		}
 	}
@@ -1247,6 +1247,9 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl implement
 	 * Updates the dirty state of the project space.
 	 */
 	public void updateDirtyState() {
+		if (isDirty() == !getOperations().isEmpty()) {
+			return;
+		}
 		setDirty(!getOperations().isEmpty());
 	}
 
