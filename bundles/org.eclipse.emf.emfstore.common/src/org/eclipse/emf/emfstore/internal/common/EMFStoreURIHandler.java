@@ -28,7 +28,7 @@ public class EMFStoreURIHandler extends URIHandlerImpl {
 	 * 
 	 * @see org.eclipse.emf.ecore.resource.impl.URIHandlerImpl#getTimeout(java.util.Map)
 	 */
-	@Override
+
 	protected int getTimeout(Map<?, ?> options) {
 		return 1000;
 	}
