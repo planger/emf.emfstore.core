@@ -100,7 +100,7 @@ public class AdminConnectionManagerMock extends AbstractConnectionManager<Object
 	 */
 	public ACOrgUnit getOrgUnit(SessionId sessionId, ACOrgUnitId orgUnitId) throws ESException {
 		getConnectionProxy(sessionId);
-		return getOrgUnit(sessionId, orgUnitId);
+		return adminEmfStore.getOrgUnit(sessionId, orgUnitId);
 	}
 
 	/**
@@ -302,6 +302,20 @@ public class AdminConnectionManagerMock extends AbstractConnectionManager<Object
 	public void assignRole(SessionId sessionId, ACOrgUnitId orgUnitId, EClass roleClass) throws ESException {
 		getConnectionProxy(sessionId);
 		adminEmfStore.assignRole(sessionId, orgUnitId, roleClass);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.server.AdminEmfStore#addInitialParticipant(org.eclipse.emf.emfstore.internal.server.model.SessionId,
+	 *      org.eclipse.emf.emfstore.internal.server.model.ProjectId,
+	 *      org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnitId, org.eclipse.emf.ecore.EClass)
+	 */
+	public void addInitialParticipant(SessionId sessionId, ProjectId projectId, ACOrgUnitId participantId,
+		EClass roleClass) throws ESException {
+		getConnectionProxy(sessionId);
+		adminEmfStore.addInitialParticipant(sessionId, projectId, participantId, roleClass);
+
 	}
 
 }

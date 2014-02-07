@@ -71,7 +71,8 @@ public class AdminBrokerTests extends ESTestWithLoggedInUser {
 	public void after() {
 		ACUser user;
 		try {
-			user = ServerUtil.getUser(((ESUsersessionImpl) getUsersession()).toInternalAPI().getSessionId(),
+			user = ServerUtil.getUser(getServerInfo(), ((ESUsersessionImpl) getUsersession()).toInternalAPI()
+				.getSessionId(),
 				USER_NAME);
 			if (user != null) {
 				ESWorkspaceProviderImpl.getInstance().getAdminConnectionManager().deleteUser(

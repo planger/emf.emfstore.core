@@ -412,7 +412,7 @@ public class AccessControlImpl implements AccessControl {
 	 */
 	public void checkProjectAdminAccessForOrgUnit(SessionId sessionId, ACOrgUnitId orgUnitId)
 		throws AccessControlException {
-		final List<Role> allRoles = getAllRoles(orgUnitId, sessionId);
+		final List<Role> allRoles = getAllRoles(orgUnitId);
 		final Set<ProjectId> involvedProjects = new LinkedHashSet<ProjectId>();
 
 		for (final Role role : allRoles) {
@@ -438,7 +438,7 @@ public class AccessControlImpl implements AccessControl {
 		throw new AccessControlException();
 	}
 
-	private List<Role> getAllRoles(ACOrgUnitId orgUnitId, SessionId sessionId) throws AccessControlException {
+	private List<Role> getAllRoles(ACOrgUnitId orgUnitId) throws AccessControlException {
 		final ACOrgUnit orgUnit = getOrgUnit(orgUnitId);
 		final List<ACGroup> groups = getGroups(orgUnit);
 		final ArrayList<Role> roles = new ArrayList<Role>();

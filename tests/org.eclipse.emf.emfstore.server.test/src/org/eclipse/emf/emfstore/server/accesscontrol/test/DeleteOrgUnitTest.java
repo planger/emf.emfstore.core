@@ -97,9 +97,9 @@ public class DeleteOrgUnitTest extends ProjectAdminTest {
 	@Test
 	public void deleteGroup() throws ESException {
 		makeUserPA();
-		final ACOrgUnitId newUser = ServerUtil.createUser(getSuperUsersession(), getNewUsername());
-		final ACOrgUnitId group = ServerUtil.createGroup(getSuperUsersession(), getNewGroupName());
-		final ACOrgUnitId otherGroup = ServerUtil.createGroup(getSuperUsersession(), getNewOtherGroupName());
+		final ACOrgUnitId newUser = getSuperAdminBroker().createUser(getNewUsername());
+		final ACOrgUnitId group = getSuperAdminBroker().createGroup(getNewGroupName());
+		final ACOrgUnitId otherGroup = getSuperAdminBroker().createGroup(getNewOtherGroupName());
 		getAdminBroker().addMember(group, otherGroup);
 		getAdminBroker().addMember(otherGroup, newUser);
 

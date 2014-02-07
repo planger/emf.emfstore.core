@@ -23,6 +23,7 @@ import org.eclipse.emf.emfstore.internal.client.common.UnknownEMFStoreWorkloadCo
 import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
 import org.eclipse.emf.emfstore.internal.client.model.Usersession;
 import org.eclipse.emf.emfstore.internal.client.model.connectionmanager.ServerCall;
+import org.eclipse.emf.emfstore.internal.client.model.impl.AdminBrokerImpl;
 import org.eclipse.emf.emfstore.internal.client.model.impl.ProjectSpaceBase;
 import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectId;
@@ -130,7 +131,8 @@ public class ShareController extends ServerCall<ProjectInfo> {
 					.getConnectionManager()
 					.createProject(
 						getUsersession().getSessionId(),
-						getProjectSpace().getProjectName() == null ? MessageFormat.format(Messages.ShareController_Project_At, new Date())
+						getProjectSpace().getProjectName() == null ? MessageFormat.format(
+							Messages.ShareController_Project_At, new Date())
 							: getProjectSpace().getProjectName(),
 						StringUtils.EMPTY,
 						logMessage,
@@ -143,11 +145,10 @@ public class ShareController extends ServerCall<ProjectInfo> {
 		new UnknownEMFStoreWorkloadCommand<Void>(getProgressMonitor()) {
 			@Override
 			public Void run(IProgressMonitor monitor) throws ESException {
-				ESWorkspaceProviderImpl
-					.getInstance()
-					.getAdminConnectionManager()
-					.addParticipant(getSessionId(), projectId, getUsersession().getACUser().getId(),
-						RolesPackage.eINSTANCE.getProjectAdminRole());
+				new AdminBrokerImpl(getServer(), getSessionId()).addInitialParticipant(
+					projectId,
+					getUsersession().getACUser().getId(),
+					RolesPackage.eINSTANCE.getProjectAdminRole());
 				return null;
 			}
 		}.execute();

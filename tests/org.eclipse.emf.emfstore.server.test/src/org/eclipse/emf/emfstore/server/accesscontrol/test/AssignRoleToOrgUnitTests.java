@@ -23,9 +23,7 @@ import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACUser;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.roles.ReaderRole;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.roles.RolesPackage;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -48,18 +46,6 @@ public class AssignRoleToOrgUnitTests extends ProjectAdminTest {
 	@AfterClass
 	public static void afterClass() {
 		stopEMFStore();
-	}
-
-	@Override
-	@After
-	public void after() {
-		super.after();
-	}
-
-	@Override
-	@Before
-	public void before() {
-		super.before();
 	}
 
 	@Test

@@ -270,6 +270,22 @@ public interface AdminBroker {
 	/**
 	 * Delegates call to method in {@link org.eclipse.emf.emfstore.internal.server.AdminEmfStore}.
 	 * 
+	 * @see org.eclipse.emf.emfstore.internal.server.AdminEmfStore#addParticipant(org.eclipse.emf.emfstore.internal.server.model.SessionId,
+	 *      ProjectId, ACOrgUnitId, EClass)
+	 * @param projectId
+	 *            the {@link ProjectId}
+	 * @param participantId
+	 *            the {@link ACOrgUnitId} of the participant to be added
+	 * @param role
+	 *            the EClass of the role that should be assigned to the participant
+	 * @throws ESException
+	 *             if an exceptions occurs on the server or on transport
+	 */
+	void addInitialParticipant(ProjectId projectId, ACOrgUnitId participantId, EClass role) throws ESException;
+
+	/**
+	 * Delegates call to method in {@link org.eclipse.emf.emfstore.internal.server.AdminEmfStore}.
+	 * 
 	 * @see org.eclipse.emf.emfstore.internal.server.AdminEmfStore#removeParticipant(org.eclipse.emf.emfstore.internal.server.model.SessionId,
 	 *      ProjectId, ACOrgUnitId)
 	 * @param projectId

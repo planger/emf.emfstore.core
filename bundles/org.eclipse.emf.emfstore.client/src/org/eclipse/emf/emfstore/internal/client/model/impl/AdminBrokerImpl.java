@@ -292,4 +292,16 @@ public class AdminBrokerImpl implements AdminBroker {
 			.assignRole(getSessionId(), orgUnitId, role);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.AdminBroker#addInitialParticipant(org.eclipse.emf.emfstore.internal.server.model.ProjectId,
+	 *      org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnitId, org.eclipse.emf.ecore.EClass)
+	 */
+	public void addInitialParticipant(ProjectId projectId, ACOrgUnitId participantId, EClass role) throws ESException {
+		ESWorkspaceProviderImpl.getInstance().getAdminConnectionManager()
+			.addInitialParticipant(getSessionId(), projectId, participantId, role);
+
+	}
+
 }

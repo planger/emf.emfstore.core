@@ -119,7 +119,8 @@ public class ProjectAdminTest extends ESTestWithLoggedInUser {
 	public void after() {
 		ACUser user;
 		try {
-			user = ServerUtil.getUser(((ESUsersessionImpl) getSuperUsersession()).toInternalAPI().getSessionId(),
+			user = ServerUtil.getUser(getServerInfo(), ((ESUsersessionImpl) getSuperUsersession()).toInternalAPI()
+				.getSessionId(),
 				NEW_USER_NAME);
 			if (user != null) {
 				ESWorkspaceProviderImpl.getInstance().getAdminConnectionManager().deleteUser(
@@ -173,6 +174,8 @@ public class ProjectAdminTest extends ESTestWithLoggedInUser {
 			((ESServerImpl) getServer()).toInternalAPI(),
 			((ESUsersessionImpl) getSuperUsersession()).toInternalAPI().getSessionId());
 		broker.assignRole(user.getId(), RolesPackage.eINSTANCE.getServerAdmin());
+		getUsersession().logout();
+		getUsersession().refresh();
 	}
 
 	public static boolean hasProjectAdminRole(ACUser user) throws ESException {

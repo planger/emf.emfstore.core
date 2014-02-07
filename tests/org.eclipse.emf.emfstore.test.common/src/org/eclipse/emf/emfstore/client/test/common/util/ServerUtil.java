@@ -36,6 +36,8 @@ import org.eclipse.emf.emfstore.client.test.common.mocks.ServerMock;
 import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionElement;
 import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionPoint;
 import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
+import org.eclipse.emf.emfstore.internal.client.model.ServerInfo;
+import org.eclipse.emf.emfstore.internal.client.model.connectionmanager.AdminConnectionManager;
 import org.eclipse.emf.emfstore.internal.client.model.connectionmanager.KeyStoreManager;
 import org.eclipse.emf.emfstore.internal.common.CommonUtil;
 import org.eclipse.emf.emfstore.internal.common.model.util.FileUtil;
@@ -294,9 +296,11 @@ public final class ServerUtil {
 		return null;
 	}
 
-	public static ACUser getUser(SessionId sessionId, String name) throws ESException {
-		final List<ACUser> users = ESWorkspaceProviderImpl.getInstance().getAdminConnectionManager()
-			.getUsers(sessionId);
+	public static ACUser getUser(ServerInfo serverInfo, SessionId sessionId, String name) throws ESException {
+		final AdminConnectionManager adminConnectionManager = ESWorkspaceProviderImpl.getInstance()
+			.getAdminConnectionManager();
+		adminConnectionManager.initConnection(serverInfo, sessionId);
+		final List<ACUser> users = adminConnectionManager.getUsers(sessionId);
 		for (final ACUser acUser : users) {
 			if (acUser.getName().equals(name)) {
 				return acUser;

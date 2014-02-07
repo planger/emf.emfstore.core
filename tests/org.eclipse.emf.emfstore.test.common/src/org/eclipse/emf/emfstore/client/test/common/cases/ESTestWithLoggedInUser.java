@@ -19,8 +19,10 @@ import org.eclipse.emf.emfstore.client.ESServer;
 import org.eclipse.emf.emfstore.client.ESUsersession;
 import org.eclipse.emf.emfstore.client.ESWorkspaceProvider;
 import org.eclipse.emf.emfstore.client.exceptions.ESServerNotFoundException;
+import org.eclipse.emf.emfstore.client.test.common.dsl.Delete;
 import org.eclipse.emf.emfstore.client.test.common.util.ServerUtil;
 import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
+import org.eclipse.emf.emfstore.internal.client.model.ServerInfo;
 import org.eclipse.emf.emfstore.internal.client.model.Usersession;
 import org.eclipse.emf.emfstore.internal.client.model.connectionmanager.KeyStoreManager;
 import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESServerImpl;
@@ -54,6 +56,11 @@ public abstract class ESTestWithLoggedInUser extends ESTestWithMockServer {
 
 	public ESServer getServer() {
 		return server;
+	}
+
+	public ServerInfo getServerInfo() {
+		final ESServerImpl serverImpl = ESServerImpl.class.cast(server);
+		return serverImpl.toInternalAPI();
 	}
 
 	public ESUsersession getUsersession() {
@@ -94,8 +101,9 @@ public abstract class ESTestWithLoggedInUser extends ESTestWithMockServer {
 		try {
 			superSession = server.login(
 				ServerUtil.superUser(), ServerUtil.superUserPassword());
-			final SessionId sessionId = ESSessionIdImpl.class.cast(
+			final SessionId superSessionId = ESSessionIdImpl.class.cast(
 				superSession.getSessionId()).toInternalAPI();
+			Delete.allRemoteProjects(server, superSession);
 
 			if (isSuperUser()) {
 				usersession = superSession;
@@ -103,14 +111,15 @@ public abstract class ESTestWithLoggedInUser extends ESTestWithMockServer {
 			}
 
 			// if client requests other user, make sure that user exists
-			if (!userExists(sessionId, getUser())) {
-				userId = ServerUtil.createUser(sessionId, getUser());
-				ServerUtil.changeUser(sessionId, userId, getUser(), getPassword());
+			if (!userExists(getServerInfo(), superSessionId, getUser())) {
+				userId = ServerUtil.createUser(superSessionId, getUser());
+				ServerUtil.changeUser(superSessionId, userId, getUser(), getPassword());
 			}
 
 			usersession = server.login(
 				getUser(),
 				getPassword());
+
 		} catch (final ESException e) {
 			fail(e.getMessage());
 		}
@@ -124,15 +133,15 @@ public abstract class ESTestWithLoggedInUser extends ESTestWithMockServer {
 		return getUser().equals(ServerUtil.superUser());
 	}
 
-	public boolean userExists(SessionId sessionId, String name) throws ESException {
-		final ACUser user = ServerUtil.getUser(sessionId, name);
+	public boolean userExists(ServerInfo serverInfo, SessionId sessionId, String name) throws ESException {
+		final ACUser user = ServerUtil.getUser(serverInfo, sessionId, name);
 		return user != null;
 	}
 
 	@Override
 	@After
 	public void after() {
-
+		super.after();
 		if (!isSuperUser()) {
 			try {
 				ESWorkspaceProviderImpl.getInstance().getAdminConnectionManager().deleteUser(

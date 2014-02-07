@@ -298,10 +298,40 @@ public class AdminEmfStoreImpl extends AbstractEmfstoreInterface implements Admi
 				return;
 			}
 		}
-		// else create new reader role
 
 		final Role newRole = (Role) RolesPackage.eINSTANCE.getEFactoryInstance().create(
 			(EClass) RolesPackage.eINSTANCE.getEClassifier(roleClass.getName()));
+
+		newRole.getProjects().add(ModelUtil.clone(projectId));
+		orgUnit.getRoles().add(newRole);
+		save();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void addInitialParticipant(SessionId sessionId, ProjectId projectId, ACOrgUnitId participant,
+		EClass roleClass)
+		throws ESException {
+		if (sessionId == null || projectId == null || participant == null || roleClass == null) {
+			throw new InvalidInputException();
+		}
+		getAuthorizationControl()
+			.checkProjectAdminAccess(sessionId, projectId, PAPrivileges.AssignRoleToOrgUnit);
+		projectId = getProjectId(projectId);
+		final ACOrgUnit orgUnit = getOrgUnit(participant);
+
+		final Role newRole = (Role) RolesPackage.eINSTANCE.getEFactoryInstance().create(
+			(EClass) RolesPackage.eINSTANCE.getEClassifier(roleClass.getName()));
+
+		// check whether role exists
+		for (final Role role : orgUnit.getRoles()) {
+			if (areEqual(role, roleClass)) {
+				role.getProjects().add(ModelUtil.clone(projectId));
+				save();
+				return;
+			}
+		}
 
 		newRole.getProjects().add(ModelUtil.clone(projectId));
 		orgUnit.getRoles().add(newRole);
@@ -688,4 +718,5 @@ public class AdminEmfStoreImpl extends AbstractEmfstoreInterface implements Admi
 	@Override
 	protected void initSubInterfaces() throws FatalESException {
 	}
+
 }

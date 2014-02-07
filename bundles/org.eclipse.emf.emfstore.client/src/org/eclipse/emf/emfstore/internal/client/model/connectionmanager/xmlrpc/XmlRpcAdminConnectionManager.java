@@ -30,7 +30,7 @@ import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.roles.Role;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 
 /**
- * Connection manager for EMFStore that enables admin capabilities.
+ * Connection manager for EMFStore that enables administrator capabilities.
  * 
  * @author wesendon
  */
@@ -58,6 +58,7 @@ public class XmlRpcAdminConnectionManager extends AbstractConnectionManager<XmlR
 	private static final String CHANGE_ORG_UNIT = "changeOrgUnit"; //$NON-NLS-1$
 	private static final String ADD_MEMBER = "addMember"; //$NON-NLS-1$
 	private static final String ADD_PARTICIPANT = "addParticipant"; //$NON-NLS-1$
+	private static final String ADD_INITIAL_PARTICIPANT = "addInitialParticipant"; //$NON-NLS-1$
 
 	/**
 	 * {@inheritDoc}
@@ -229,6 +230,18 @@ public class XmlRpcAdminConnectionManager extends AbstractConnectionManager<XmlR
 	 */
 	public void assignRole(SessionId sessionId, ACOrgUnitId orgUnitId, EClass roleClass) throws ESException {
 		getConnectionProxy(sessionId).call(ASSIGN_ROLE, sessionId, orgUnitId, roleClass);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.server.AdminEmfStore#addInitialParticipant(org.eclipse.emf.emfstore.internal.server.model.SessionId,
+	 *      org.eclipse.emf.emfstore.internal.server.model.ProjectId,
+	 *      org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnitId, org.eclipse.emf.ecore.EClass)
+	 */
+	public void addInitialParticipant(SessionId sessionId, ProjectId projectId, ACOrgUnitId participantId,
+		EClass roleClass) throws ESException {
+		getConnectionProxy(sessionId).call(ADD_INITIAL_PARTICIPANT, sessionId, projectId, participantId, roleClass);
 	}
 
 }

@@ -221,6 +221,23 @@ public interface AdminEmfStore extends EMFStoreInterface {
 		throws ESException;
 
 	/**
+	 * Adds an organization unit to a project.
+	 * 
+	 * @param sessionId
+	 *            the {@link SessionId} for authentication
+	 * @param projectId
+	 *            the {@link ProjectId} of the project
+	 * @param participantId
+	 *            the {@link ACOrgUnitId} of the participant
+	 * @param roleClass
+	 *            the role to be assigned to the participant
+	 * @throws ESException if any error in the EmfStore occurs
+	 */
+	// TODO: hack
+	void addInitialParticipant(SessionId sessionId, ProjectId projectId, ACOrgUnitId participantId,
+		EClass roleClass) throws ESException;
+
+	/**
 	 * Removes an orgUnits from a project.
 	 * 
 	 * @param sessionId the session id for authentication
