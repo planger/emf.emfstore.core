@@ -19,9 +19,7 @@ import org.eclipse.emf.emfstore.internal.server.accesscontrol.PAPrivileges;
 import org.eclipse.emf.emfstore.internal.server.exceptions.AccessControlException;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACUser;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -36,26 +34,12 @@ public class CreateProjectTest extends ProjectAdminTest {
 
 	@BeforeClass
 	public static void beforeClass() {
-		startEMFStoreWithPAProperties(
-			PAPrivileges.ShareProject,
-			PAPrivileges.AssignRoleToOrgUnit);
+		startEMFStoreWithPAProperties(PAPrivileges.ShareProject);
 	}
 
 	@AfterClass
 	public static void afterClass() {
 		stopEMFStore();
-	}
-
-	@Override
-	@After
-	public void after() {
-		super.after();
-	}
-
-	@Override
-	@Before
-	public void before() {
-		super.before();
 	}
 
 	@Test(expected = AccessControlException.class)

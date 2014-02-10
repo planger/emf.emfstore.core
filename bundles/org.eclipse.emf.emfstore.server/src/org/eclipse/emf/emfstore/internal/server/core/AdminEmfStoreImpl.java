@@ -316,8 +316,7 @@ public class AdminEmfStoreImpl extends AbstractEmfstoreInterface implements Admi
 		if (sessionId == null || projectId == null || participant == null || roleClass == null) {
 			throw new InvalidInputException();
 		}
-		getAuthorizationControl()
-			.checkProjectAdminAccess(sessionId, projectId, PAPrivileges.AssignRoleToOrgUnit);
+
 		projectId = getProjectId(projectId);
 		final ACOrgUnit orgUnit = getOrgUnit(participant);
 
