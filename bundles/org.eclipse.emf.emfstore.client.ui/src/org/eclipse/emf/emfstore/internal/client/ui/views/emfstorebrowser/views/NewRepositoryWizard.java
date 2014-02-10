@@ -20,6 +20,7 @@ import org.eclipse.emf.emfstore.client.ESWorkspaceProvider;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
 import org.eclipse.emf.emfstore.internal.client.model.Usersession;
 import org.eclipse.emf.emfstore.internal.client.model.connectionmanager.KeyStoreManager;
+import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESServerImpl;
 import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESWorkspaceImpl;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -55,6 +56,12 @@ public class NewRepositoryWizard extends Wizard implements INewWizard {
 		super();
 	}
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param server
+	 *            the server that will be edited in case the wizard is called in edit mode
+	 */
 	public NewRepositoryWizard(ESServer server) {
 		this.server = server;
 		isEdit = true;
@@ -66,7 +73,7 @@ public class NewRepositoryWizard extends Wizard implements INewWizard {
 	@Override
 	public void addPages() {
 		mainPage = new NewRepositoryWizardPageOne();
-		setWindowTitle("Server Details");
+		setWindowTitle(Messages.NewRepositoryWizard_Server_Details);
 		addPage(mainPage);
 	}
 
@@ -79,8 +86,8 @@ public class NewRepositoryWizard extends Wizard implements INewWizard {
 	}
 
 	private void invalidateSessions(final ESWorkspaceImpl workspace) throws ESException {
-		for (Usersession session : workspace.toInternalAPI().getUsersessions()) {
-			if (session.getServerInfo() == server) {
+		for (final Usersession session : workspace.toInternalAPI().getUsersessions()) {
+			if (session.getServerInfo() == ESServerImpl.class.cast(server).toInternalAPI()) {
 				session.logout();
 			}
 		}
@@ -118,17 +125,18 @@ public class NewRepositoryWizard extends Wizard implements INewWizard {
 
 			} else {
 				if (workspace.serverExists(editedServer)) {
-					MessageDialog.openInformation(getShell(), "Server already exists",
-						MessageFormat.format("The server {0} you entered already exists.",
-							server.getName() + ":" + server.getPort()));
+					MessageDialog.openInformation(getShell(), Messages.NewRepositoryWizard_Server_Already_Exists_Title,
+						MessageFormat.format(Messages.NewRepositoryWizard_Server_Already_Exists_Message,
+							server.getName() + ":" + server.getPort())); //$NON-NLS-1$
 				} else {
 					workspace.addServer(editedServer);
 				}
 			}
 			dispose();
 		} else {
-			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Error",
-				"Field(s) were left blank!");
+			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+				Messages.NewRepositoryWizard_Blank_Fields_Title,
+				Messages.NewRepositoryWizard_Blank_Fields_Message);
 			return false;
 		}
 		return true;
@@ -142,7 +150,7 @@ public class NewRepositoryWizard extends Wizard implements INewWizard {
 	public ESServer getServer() {
 		if (server == null) {
 			// TODO: review or reuse client util
-			server = ESServer.FACTORY.createServer("localhost", 8080,
+			server = ESServer.FACTORY.createServer("localhost", 8080, //$NON-NLS-1$
 				KeyStoreManager.DEFAULT_CERTIFICATE);
 		}
 		return server;
