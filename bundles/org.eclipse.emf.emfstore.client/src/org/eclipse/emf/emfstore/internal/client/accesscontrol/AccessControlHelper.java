@@ -15,6 +15,7 @@ import org.eclipse.emf.emfstore.internal.client.model.Usersession;
 import org.eclipse.emf.emfstore.internal.server.exceptions.AccessControlException;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectId;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACUser;
+import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.roles.ProjectAdminRole;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.roles.Role;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.roles.ServerAdmin;
 
@@ -25,7 +26,7 @@ import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.roles.Server
  */
 public class AccessControlHelper {
 
-	private ACUser user;
+	private final ACUser user;
 
 	/**
 	 * Default constructor.
@@ -33,7 +34,7 @@ public class AccessControlHelper {
 	 * @param usersession the user session that needs to be checked
 	 */
 	public AccessControlHelper(Usersession usersession) {
-		this.user = usersession.getACUser();
+		user = usersession.getACUser();
 	}
 
 	/**
@@ -43,7 +44,7 @@ public class AccessControlHelper {
 	 * @throws AccessControlException if access is not permitted.
 	 */
 	public void checkReadAccess(ProjectId projectId) throws AccessControlException {
-		for (Role role : user.getRoles()) {
+		for (final Role role : user.getRoles()) {
 			if (role.canRead(projectId, null)) {
 				return;
 			}
@@ -60,7 +61,7 @@ public class AccessControlHelper {
 	 */
 	public void checkWriteAccess(ProjectId projectId) throws AccessControlException {
 
-		for (Role role : user.getRoles()) {
+		for (final Role role : user.getRoles()) {
 			if (role.canDelete(projectId, null) || role.canCreate(projectId, null) || role.canModify(projectId, null)) {
 				return;
 			}
@@ -70,13 +71,27 @@ public class AccessControlHelper {
 	}
 
 	/**
-	 * Check project admin access for the given project.
+	 * Check project administrator access for the given project.
+	 * 
+	 * @throws AccessControlException if access is denied.
+	 */
+	public void checkProjectAdminAccess() throws AccessControlException {
+		for (final Role role : user.getRoles()) {
+			if (ProjectAdminRole.class.isInstance(role)) {
+				return;
+			}
+		}
+		throw new AccessControlException();
+	}
+
+	/**
+	 * Check project administrator access for the given project.
 	 * 
 	 * @param projectId the project id
 	 * @throws AccessControlException if access is denied.
 	 */
 	public void checkProjectAdminAccess(ProjectId projectId) throws AccessControlException {
-		for (Role role : user.getRoles()) {
+		for (final Role role : user.getRoles()) {
 			if (role.canAdministrate(projectId)) {
 				return;
 			}
@@ -90,7 +105,7 @@ public class AccessControlHelper {
 	 * @throws AccessControlException if access is denied.
 	 */
 	public void checkServerAdminAccess() throws AccessControlException {
-		for (Role role : user.getRoles()) {
+		for (final Role role : user.getRoles()) {
 			if (role instanceof ServerAdmin) {
 				return;
 			}

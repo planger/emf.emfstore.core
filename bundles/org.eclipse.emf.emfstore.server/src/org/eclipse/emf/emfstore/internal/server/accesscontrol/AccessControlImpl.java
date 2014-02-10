@@ -12,7 +12,6 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.server.accesscontrol;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.LinkedHashMap;
@@ -238,7 +237,7 @@ public class AccessControlImpl implements AccessControl {
 		roles.addAll(getRolesFromGroups(user));
 		// MK: remove access control simplification
 		if (!canWrite(roles, projectId, null)) {
-			throw new AccessControlException();
+			throw new AccessControlException(Messages.AccessControlImpl_Insufficient_Rights);
 			// for (ModelElement modelElement : modelElements) {
 			// if (!canWrite(roles, projectId, modelElement)) {
 			// throw new AccessControlException();
@@ -359,7 +358,7 @@ public class AccessControlImpl implements AccessControl {
 		roles.addAll(getRolesFromGroups(user));
 		// MK: remove access control simplification
 		if (!canRead(roles, projectId, null)) {
-			throw new AccessControlException();
+			throw new AccessControlException(Messages.AccessControlImpl_Insufficient_Rights);
 			// for (ModelElement modelElement : modelElements) {
 			// if (!canRead(roles, projectId, modelElement)) {
 			// throw new AccessControlException();
@@ -373,7 +372,7 @@ public class AccessControlImpl implements AccessControl {
 	 * @see org.eclipse.emf.emfstore.internal.server.accesscontrol.AuthorizationControl#checkProjectAdminAccess(org.eclipse.emf.emfstore.internal.server.model.SessionId,
 	 *      org.eclipse.emf.emfstore.internal.server.model.ProjectId)
 	 */
-	// TODO: seond parameter is optional
+	// TODO: second parameter is optional
 	public boolean checkProjectAdminAccess(SessionId sessionId, ProjectId projectId, PAPrivileges privileg)
 		throws AccessControlException {
 		checkSession(sessionId);
@@ -387,20 +386,24 @@ public class AccessControlImpl implements AccessControl {
 				return true;
 			}
 			if (isProjectAdminRole(role)) {
+
 				if (!ServerConfiguration.isProjectAdminPrivileg(privileg)) {
-					throw new AccessControlException(
-						MessageFormat.format(Messages.AccessControlImpl_PARole_Missing_Privilege,
-							privileg.toString()));
+					throw new AccessControlException(Messages.AccessControlImpl_PARole_Missing_Privilege);
+				}
+
+				if (projectId == null) {
+					return false;
+				}
+
+				final ProjectAdminRole paRole = ProjectAdminRole.class.cast(role);
+				if (!paRole.canAdministrate(projectId)) {
+					throw new AccessControlException(Messages.AccessControlImpl_PARole_Missing_Privilege);
 				}
 
 				return false;
 			}
-			// TODO: does this case ever apply?
-			if (role.canAdministrate(projectId)) {
-				return false;
-			}
 		}
-		throw new AccessControlException();
+		throw new AccessControlException(Messages.AccessControlImpl_Insufficient_Rights);
 	}
 
 	/**
@@ -435,7 +438,7 @@ public class AccessControlImpl implements AccessControl {
 			return;
 		}
 
-		throw new AccessControlException();
+		throw new AccessControlException(Messages.AccessControlImpl_Insufficient_Rights);
 	}
 
 	private List<Role> getAllRoles(ACOrgUnitId orgUnitId) throws AccessControlException {
@@ -465,7 +468,7 @@ public class AccessControlImpl implements AccessControl {
 		roles.addAll(user.getRoles());
 		roles.addAll(getRolesFromGroups(user));
 		for (final Role role : roles) {
-			if (isProjectAdminRole(role)) {
+			if (projectId == null && isProjectAdminRole(role)) {
 				return;
 			}
 			// TODO: does this case ever apply?
@@ -473,7 +476,7 @@ public class AccessControlImpl implements AccessControl {
 				return;
 			}
 		}
-		throw new AccessControlException();
+		throw new AccessControlException(Messages.AccessControlImpl_Insufficient_Rights);
 	}
 
 	private boolean isServerAdminRole(Role role) {
@@ -500,7 +503,7 @@ public class AccessControlImpl implements AccessControl {
 				return;
 			}
 		}
-		throw new AccessControlException();
+		throw new AccessControlException(Messages.AccessControlImpl_Insufficient_Rights);
 	}
 
 	/**

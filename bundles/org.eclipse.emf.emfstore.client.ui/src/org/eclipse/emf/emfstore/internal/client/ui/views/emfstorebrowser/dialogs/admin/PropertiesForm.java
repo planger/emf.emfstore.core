@@ -11,6 +11,7 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.views.emfstorebrowser.dialogs.admin;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.emfstore.internal.client.model.AdminBroker;
 import org.eclipse.emf.emfstore.internal.client.ui.dialogs.EMFStoreMessageDialog;
@@ -32,11 +33,11 @@ import org.eclipse.ui.forms.widgets.Form;
 public class PropertiesForm extends Form {
 
 	private EObject input;
-	private StackLayout stackLayout;
+	private final StackLayout stackLayout;
 	private ProjectComposite projectComposite;
 	private GroupComposite groupComposite;
 	private UserComposite userComposite;
-	private AdminBroker adminBroker;
+	private final AdminBroker adminBroker;
 
 	/**
 	 * This is a place holder for object being dragged. Actually we should have used the Transfer class to extract drag
@@ -47,7 +48,7 @@ public class PropertiesForm extends Form {
 	/**
 	 * This is a string variable indicating from where drag and drop operation started.
 	 */
-	private static String dragSource = "";
+	private static String dragSource = StringUtils.EMPTY;
 
 	/**
 	 * Constructor.
@@ -84,14 +85,14 @@ public class PropertiesForm extends Form {
 	 * @param input input
 	 */
 	public void setInput(EObject input) {
-		String title = "";
-		if (input != null && !(getBody().isVisible())) {
+		String title = StringUtils.EMPTY;
+		if (input != null && !getBody().isVisible()) {
 			getBody().setVisible(true);
 		}
 
 		if (input instanceof ProjectInfo) {
-			ProjectInfo projectInfo = (ProjectInfo) input;
-			title = "Project: " + projectInfo.getName();
+			final ProjectInfo projectInfo = (ProjectInfo) input;
+			title = Messages.PropertiesForm_Project + projectInfo.getName();
 			stackLayout.topControl = projectComposite;
 			projectComposite.updateControls(projectInfo);
 
@@ -99,10 +100,10 @@ public class PropertiesForm extends Form {
 			ACGroup group;
 			try {
 				group = (ACGroup) adminBroker.getOrgUnit(((ACGroup) input).getId());
-				title = "Group: " + group.getName();
+				title = Messages.PropertiesForm_Group + group.getName();
 				stackLayout.topControl = groupComposite;
 				groupComposite.updateControls(group);
-			} catch (ESException e) {
+			} catch (final ESException e) {
 				EMFStoreMessageDialog.showExceptionDialog(e);
 			}
 
@@ -110,10 +111,10 @@ public class PropertiesForm extends Form {
 			ACUser user;
 			try {
 				user = (ACUser) adminBroker.getOrgUnit(((ACUser) input).getId());
-				title = "User: " + user.getName();
+				title = Messages.PropertiesForm_User + user.getName();
 				stackLayout.topControl = userComposite;
 				userComposite.updateControls(user);
-			} catch (ESException e) {
+			} catch (final ESException e) {
 				EMFStoreMessageDialog.showExceptionDialog(e);
 			}
 		}
@@ -124,7 +125,7 @@ public class PropertiesForm extends Form {
 
 		}
 		getBody().layout();
-		this.setText(title);
+		setText(title);
 		this.input = input;
 
 	}

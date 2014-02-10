@@ -353,7 +353,7 @@ public class AdminEmfStoreImpl extends AbstractEmfstoreInterface implements Admi
 		throws ESException {
 		checkForNulls(sessionId, projectId, participantId);
 		getAuthorizationControl().checkProjectAdminAccess(sessionId, projectId,
-			PAPrivileges.ChangeAssignmentsOfOrgUnits);
+			PAPrivileges.AssignRoleToOrgUnit);
 
 		projectId = getProjectId(projectId);
 		final ACOrgUnit orgUnit = getOrgUnit(participantId);

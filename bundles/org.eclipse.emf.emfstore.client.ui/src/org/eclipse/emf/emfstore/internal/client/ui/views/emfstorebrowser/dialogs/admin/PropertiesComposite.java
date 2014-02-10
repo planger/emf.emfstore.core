@@ -15,6 +15,7 @@ package org.eclipse.emf.emfstore.internal.client.ui.views.emfstorebrowser.dialog
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.emfstore.internal.client.model.AdminBroker;
@@ -24,6 +25,7 @@ import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACGroup;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnit;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACUser;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
@@ -102,11 +104,11 @@ public abstract class PropertiesComposite extends Composite {
 	protected void createSimpleAttributes() {
 		grpAttributes = new Group(this, SWT.V_SCROLL);
 		grpAttributes.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		grpAttributes.setText("Properties");
+		grpAttributes.setText(Messages.PropertiesComposite_Properties);
 		grpAttributes.setLayout(new GridLayout(2, false));
 
 		lblName = new Label(grpAttributes, SWT.NONE);
-		lblName.setText("Name: ");
+		lblName.setText(Messages.PropertiesComposite_Name);
 		txtName = new Text(grpAttributes, SWT.BORDER);
 
 		txtName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -121,7 +123,7 @@ public abstract class PropertiesComposite extends Composite {
 		});
 
 		lblDescription = new Label(grpAttributes, SWT.NONE);
-		lblDescription.setText("Description: ");
+		lblDescription.setText(Messages.PropertiesComposite_Description);
 		txtDescription = new Text(grpAttributes, SWT.BORDER);
 		txtDescription.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txtDescription.addFocusListener(new FocusListener() {
@@ -182,15 +184,15 @@ public abstract class PropertiesComposite extends Composite {
 
 		// 1st column with image
 		TableColumn column = new TableColumn(table, SWT.CENTER, 0);
-		column.setText("(/*\\)");
+		column.setText("(/*\\)"); //$NON-NLS-1$
 		column.setWidth(20);
 
 		column = new TableColumn(table, SWT.LEFT, 1);
-		column.setText("Name");
+		column.setText("Name"); //$NON-NLS-1$
 		column.setWidth(100);
 
 		column = new TableColumn(table, SWT.LEFT, 2);
-		column.setText("Description");
+		column.setText("Description"); //$NON-NLS-1$
 		column.setWidth(200);
 
 		tableViewer = new TableViewer(table);
@@ -209,7 +211,7 @@ public abstract class PropertiesComposite extends Composite {
 	protected void createButtons(Composite parent) {
 		// Create and configure the "Add" button
 		final Button add = new Button(parent, SWT.PUSH | SWT.CENTER);
-		add.setText("Add...");
+		add.setText(Messages.PropertiesComposite_Add);
 
 		GridData gridData = new GridData();
 		gridData.widthHint = 80;
@@ -227,7 +229,7 @@ public abstract class PropertiesComposite extends Composite {
 
 		// Create and configure the "Delete" button
 		final Button remove = new Button(parent, SWT.PUSH | SWT.CENTER);
-		remove.setText("Remove");
+		remove.setText(Messages.PropertiesComposite_Remove);
 		gridData = new GridData(SWT.END);
 		gridData.widthHint = 80;
 		remove.setLayoutData(gridData);
@@ -395,11 +397,14 @@ public abstract class PropertiesComposite extends Composite {
 	 * @author koegel
 	 */
 	private final class ILabelProviderImplementation implements ILabelProvider {
+		private static final String USER_ICON = "icons/user.png"; //$NON-NLS-1$
+		private static final String GROUP_ICON = "icons/Group.gif"; //$NON-NLS-1$
+
 		public Image getImage(Object element) {
 			if (element instanceof ACGroup) {
-				return Activator.getImageDescriptor("icons/Group.gif").createImage();
+				return Activator.getImageDescriptor(GROUP_ICON).createImage();
 			}
-			return Activator.getImageDescriptor("icons/user.png").createImage();
+			return Activator.getImageDescriptor(USER_ICON).createImage();
 		}
 
 		public String getText(Object element) {
@@ -429,27 +434,38 @@ public abstract class PropertiesComposite extends Composite {
 
 		public Object[] getElements(Object inputElement) {
 			Object[] result = new Object[0];
-			try {
-				if (inputElement instanceof ACUser) {
-					List<ACGroup> groups;
 
+			if (inputElement instanceof ACUser) {
+				List<ACGroup> groups;
+
+				try {
 					groups = adminBroker.getGroups(((ACUser) inputElement).getId());
 					result = groups.toArray(new ACOrgUnit[groups.size()]);
+				} catch (final ESException ex) {
+					MessageDialog.openWarning(getShell(), Messages.PropertiesComposite_Could_Not_Fetch_Groups, ex.getMessage());
+				}
 
-				} else if (inputElement instanceof ACGroup) {
-					final List<ACOrgUnit> members = adminBroker.getMembers(((ACGroup) inputElement).getId());
+			} else if (inputElement instanceof ACGroup) {
+				List<ACOrgUnit> members;
+				try {
+					members = adminBroker.getMembers(((ACGroup) inputElement).getId());
 					result = members.toArray(new ACOrgUnit[members.size()]);
+				} catch (final ESException ex) {
+					MessageDialog.openWarning(getShell(), Messages.PropertiesComposite_Could_Not_Fetch_Group_Members, ex.getMessage());
+				}
 
-				} else if (inputElement instanceof ProjectInfo) {
-					final List<ACOrgUnit> participants = adminBroker.getParticipants(((ProjectInfo) inputElement)
+			} else if (inputElement instanceof ProjectInfo) {
+				List<ACOrgUnit> participants;
+				try {
+					participants = adminBroker.getParticipants(((ProjectInfo) inputElement)
 						.getProjectId());
 					result = participants.toArray(new ACOrgUnit[participants.size()]);
-
+				} catch (final ESException ex) {
+					MessageDialog.openWarning(getShell(), Messages.PropertiesComposite_Could_Not_Fetch_Participants, ex.getMessage());
 				}
-			} catch (final ESException e) {
-				// ZH Auto-generated catch block
-				e.printStackTrace();
+
 			}
+
 			return result;
 		}
 
@@ -476,16 +492,14 @@ public abstract class PropertiesComposite extends Composite {
 		public Image getColumnImage(Object element, int columnIndex) {
 			if (columnIndex == 0) {
 				return super.getImage(element);
-			} else {
-				return null;
 			}
-
+			return null;
 		}
 
 		@Override
 		public String getColumnText(Object element, int columnIndex) {
 			final ACOrgUnit orgUnit = (ACOrgUnit) element;
-			String result = "";
+			String result = StringUtils.EMPTY;
 
 			switch (columnIndex) {
 			case 0:

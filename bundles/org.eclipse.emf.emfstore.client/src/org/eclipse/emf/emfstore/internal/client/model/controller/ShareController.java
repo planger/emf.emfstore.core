@@ -145,7 +145,7 @@ public class ShareController extends ServerCall<ProjectInfo> {
 		new UnknownEMFStoreWorkloadCommand<Void>(getProgressMonitor()) {
 			@Override
 			public Void run(IProgressMonitor monitor) throws ESException {
-				new AdminBrokerImpl(getServer(), getSessionId()).addInitialParticipant(
+				new AdminBrokerImpl(getUsersession().getServerInfo(), getSessionId()).addInitialParticipant(
 					projectId,
 					getUsersession().getACUser().getId(),
 					RolesPackage.eINSTANCE.getProjectAdminRole());
