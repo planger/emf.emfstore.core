@@ -7,14 +7,14 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Otto von Wesendonk
- * Edgar Mueller
+ * Otto von Wesendonk, Edgar Mueller - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.dialogs.login;
 
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.emfstore.client.ESUsersession;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
 import org.eclipse.emf.emfstore.internal.client.model.ModelFactory;
@@ -23,9 +23,7 @@ import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESServerImpl;
 import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESUsersessionImpl;
 import org.eclipse.emf.emfstore.internal.common.APIUtil;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.IDialogLabelKeys;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelection;
@@ -58,15 +56,17 @@ import org.eclipse.wb.swt.ResourceManager;
  */
 public class LoginDialog extends TitleAreaDialog {
 
+	private static final String CLIENT_UI_BUNDLE = "org.eclipse.emf.emfstore.client.ui"; //$NON-NLS-1$
+	private static final String LOGIN_ICON = "icons/login_icon.png"; //$NON-NLS-1$
 	private Text passwordField;
 	private Button savePassword;
 	private ComboViewer usernameCombo;
 
 	private final ILoginDialogController controller;
 	private Usersession selectedUsersession;
-	private boolean passwordModified;
 	private List<Usersession> knownUsersessions;
 	private String password;
+	private boolean passwordModified;
 	private boolean isSavePassword;
 
 	/**
@@ -92,11 +92,10 @@ public class LoginDialog extends TitleAreaDialog {
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		setTitleImage(ResourceManager.getPluginImage(
-			"org.eclipse.emf.emfstore.client.ui", "icons/login_icon.png"));
-		setTitle("Log in to " + controller.getServer().getName());
-		setMessage("Please enter your username and password");
-		getShell().setText("Authentication required");
+		setTitleImage(ResourceManager.getPluginImage(CLIENT_UI_BUNDLE, LOGIN_ICON));
+		setTitle(Messages.LoginDialog_Login_To + controller.getServer().getName());
+		setMessage(Messages.LoginDialog_Enter_Name_And_Password);
+		getShell().setText(Messages.LoginDialog_Auth_Required);
 		final Composite area = (Composite) super.createDialogArea(parent);
 		final Composite container = new Composite(area, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
@@ -108,46 +107,12 @@ public class LoginDialog extends TitleAreaDialog {
 			true, 1, 1));
 		loginContainer.setBounds(0, 0, 64, 64);
 
-		final Label usernameLabel = new Label(loginContainer, SWT.NONE);
-		GridData gridData = new GridData(SWT.RIGHT, SWT.CENTER, false, false,
-			1, 1);
-		gridData.widthHint = 95;
-		usernameLabel.setLayoutData(gridData);
-		usernameLabel.setText("Username");
-
-		usernameCombo = new ComboViewer(loginContainer, SWT.NONE);
-		final ComboListener comboListener = new ComboListener();
-		usernameCombo.addPostSelectionChangedListener(comboListener);
-		final Combo combo = usernameCombo.getCombo();
-		combo.addModifyListener(comboListener);
-		gridData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gridData.widthHint = 235;
-		combo.setLayoutData(gridData);
-		new Label(loginContainer, SWT.NONE);
-
-		final Label passwordLabel = new Label(loginContainer, SWT.NONE);
-		gridData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gridData.widthHint = 80;
-		passwordLabel.setLayoutData(gridData);
-		passwordLabel.setText("Password");
-
-		passwordField = new Text(loginContainer, SWT.BORDER | SWT.PASSWORD);
-		gridData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gridData.widthHint = 250;
-		passwordField.setLayoutData(gridData);
-		passwordField.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent e) {
-				passwordModified = true;
-				flushErrorMessage();
-			}
-		});
-		new Label(loginContainer, SWT.NONE);
-
-		final Label savePasswordLabel = new Label(loginContainer, SWT.NONE);
-		savePasswordLabel.setText("Save Password");
-
-		savePassword = new Button(loginContainer, SWT.CHECK);
-		new Label(loginContainer, SWT.NONE);
+		createUsernameLabel(loginContainer);
+		createUsernameCombo(loginContainer);
+		createPasswordLabel(loginContainer);
+		createPasswordField(loginContainer);
+		createSavePasswordLabel(loginContainer);
+		createSavePassword(loginContainer);
 
 		initData();
 		if (controller.getUsersession() == null) {
@@ -162,6 +127,60 @@ public class LoginDialog extends TitleAreaDialog {
 			loadUsersession(((ESUsersessionImpl) usersession).toInternalAPI());
 		}
 		return area;
+	}
+
+	private void createSavePassword(Composite parent) {
+		savePassword = new Button(parent, SWT.CHECK);
+		new Label(parent, SWT.NONE);
+	}
+
+	private void createSavePasswordLabel(Composite parent) {
+		final Label savePasswordLabel = new Label(parent, SWT.NONE);
+		savePasswordLabel.setText(Messages.LoginDialog_Save_Password);
+	}
+
+	private void createPasswordField(Composite parent) {
+		passwordField = new Text(parent, SWT.BORDER | SWT.PASSWORD);
+		final GridData gridData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gridData.widthHint = 250;
+		passwordField.setLayoutData(gridData);
+		passwordField.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				passwordModified = true;
+				flushErrorMessage();
+			}
+		});
+		new Label(parent, SWT.NONE);
+	}
+
+	private void createPasswordLabel(Composite parent) {
+		final Label passwordLabel = new Label(parent, SWT.NONE);
+		final GridData gridData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gridData.widthHint = 80;
+		passwordLabel.setLayoutData(gridData);
+		passwordLabel.setText(Messages.LoginDialog_Password);
+	}
+
+	private void createUsernameLabel(Composite parent) {
+
+		final Label usernameLabel = new Label(parent, SWT.NONE);
+		final GridData gridData = new GridData(SWT.RIGHT, SWT.CENTER, false, false,
+			1, 1);
+		gridData.widthHint = 95;
+		usernameLabel.setLayoutData(gridData);
+		usernameLabel.setText(Messages.LoginDialog_Username);
+	}
+
+	private void createUsernameCombo(Composite parent) {
+		usernameCombo = new ComboViewer(parent, SWT.NONE);
+		final ComboListener comboListener = new ComboListener();
+		usernameCombo.addPostSelectionChangedListener(comboListener);
+		final Combo combo = usernameCombo.getCombo();
+		combo.addModifyListener(comboListener);
+		final GridData gridData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gridData.widthHint = 235;
+		combo.setLayoutData(gridData);
+		new Label(parent, SWT.NONE);
 	}
 
 	private void initData() {
@@ -195,7 +214,7 @@ public class LoginDialog extends TitleAreaDialog {
 		selectedUsersession = usersession;
 
 		// reset fields
-		passwordField.setMessage("");
+		passwordField.setMessage(StringUtils.EMPTY);
 		savePassword.setSelection(false);
 
 		if (getSelectedUsersession() != null) {
@@ -210,8 +229,8 @@ public class LoginDialog extends TitleAreaDialog {
 			if (getSelectedUsersession().isSavePassword()
 				&& getSelectedUsersession().getPassword() != null) {
 				passwordField
-					.setMessage("<password is saved, reenter to change>");
-				passwordField.setText("");
+					.setMessage(Messages.LoginDialog_Password_Saved_Reenter_To_Change);
+				passwordField.setText(StringUtils.EMPTY);
 				savePassword.setSelection(true);
 			}
 			// reset password modified. modified password is only relevant when
@@ -245,7 +264,7 @@ public class LoginDialog extends TitleAreaDialog {
 			candidateSession = ModelFactory.eINSTANCE.createUsersession();
 			final Usersession session = candidateSession;
 			selectedUsersession = candidateSession;
-			// TODO
+
 			RunESCommand.run(new Callable<Void>() {
 				public Void call() throws Exception {
 					session.setServerInfo(serverImpl.toInternalAPI());
@@ -283,10 +302,14 @@ public class LoginDialog extends TitleAreaDialog {
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.OK_ID, JFaceResources.getString(IDialogLabelKeys.OK_LABEL_KEY),
+		createButton(parent,
+			IDialogConstants.OK_ID,
+			Messages.LoginDialog_Ok,
 			true);
-		createButton(parent, IDialogConstants.CANCEL_ID,
-			JFaceResources.getString(IDialogLabelKeys.CANCEL_LABEL_KEY), false);
+		createButton(parent,
+			IDialogConstants.CANCEL_ID,
+			Messages.LoginDialog_Cancel,
+			false);
 	}
 
 	/**
@@ -307,6 +330,11 @@ public class LoginDialog extends TitleAreaDialog {
 		setErrorMessage(null);
 	}
 
+	/**
+	 * Returns the selected {@link Usersession}.
+	 * 
+	 * @return the selected {@link Usersession}
+	 */
 	public Usersession getSelectedUsersession() {
 		return selectedUsersession;
 	}
@@ -321,7 +349,7 @@ public class LoginDialog extends TitleAreaDialog {
 	 */
 	private final class ComboListener implements ISelectionChangedListener,
 		ModifyListener {
-		private String lastText = "";
+		private String lastText = StringUtils.EMPTY;
 
 		public void selectionChanged(SelectionChangedEvent event) {
 			final ISelection selection = event.getSelection();
@@ -336,7 +364,7 @@ public class LoginDialog extends TitleAreaDialog {
 
 		public void modifyText(ModifyEvent e) {
 			final String text = usernameCombo.getCombo().getText();
-			if (text != null && !text.equals("") && !text.equals(lastText)) {
+			if (StringUtils.isNotBlank(text) && !text.equals(lastText)) {
 				loadUsersession(getUsersessionIfKnown(text));
 				lastText = text;
 			}
@@ -344,14 +372,29 @@ public class LoginDialog extends TitleAreaDialog {
 		}
 	}
 
+	/**
+	 * Returns the password as entered by the user.
+	 * 
+	 * @return the entered password
+	 */
 	public String getPassword() {
 		return password;
 	}
 
+	/**
+	 * Whether the password should be saved.
+	 * 
+	 * @return {@code true}, if the password should be saved, {@code false} otherwise
+	 */
 	public boolean isSavePassword() {
 		return isSavePassword;
 	}
 
+	/**
+	 * Whether the password has been modified.
+	 * 
+	 * @return {@code true}, if the password has been modified, {@code false} otherwise
+	 */
 	public boolean isPasswordModified() {
 		return passwordModified;
 	}

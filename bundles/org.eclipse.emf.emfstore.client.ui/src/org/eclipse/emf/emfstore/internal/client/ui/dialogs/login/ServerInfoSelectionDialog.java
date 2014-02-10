@@ -16,9 +16,7 @@ import org.eclipse.emf.emfstore.internal.client.model.ServerInfo;
 import org.eclipse.emf.emfstore.internal.client.ui.Activator;
 import org.eclipse.emf.emfstore.internal.common.ESDisposable;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.IDialogLabelKeys;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -61,7 +59,7 @@ public class ServerInfoSelectionDialog extends TitleAreaDialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Please select a server");
+		newShell.setText(Messages.ServerInfoSelectionDialog_Please_Select_Server);
 	}
 
 	/**
@@ -72,8 +70,8 @@ public class ServerInfoSelectionDialog extends TitleAreaDialog {
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		setMessage("In order to execute your requested operation, you have to select a server.");
-		setTitle("Please select a Server");
+		setMessage(Messages.ServerInfoSelectionDialog_Select_Server_First);
+		setTitle(Messages.ServerInfoSelectionDialog_Please_Select_Server);
 		final Composite area = (Composite) super.createDialogArea(parent);
 		final Composite container = new Composite(area, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
@@ -126,8 +124,13 @@ public class ServerInfoSelectionDialog extends TitleAreaDialog {
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.OK_ID, JFaceResources.getString(IDialogLabelKeys.OK_LABEL_KEY), true);
-		createButton(parent, IDialogConstants.CANCEL_ID, JFaceResources.getString(IDialogLabelKeys.CANCEL_LABEL_KEY),
+		createButton(parent,
+			IDialogConstants.OK_ID,
+			Messages.ServerInfoSelectionDialog_Ok,
+			true);
+		createButton(parent,
+			IDialogConstants.CANCEL_ID,
+			Messages.ServerInfoSelectionDialog_Cancel,
 			false);
 	}
 
@@ -155,7 +158,7 @@ public class ServerInfoSelectionDialog extends TitleAreaDialog {
 		public String getText(Object object) {
 			if (object instanceof ServerInfo) {
 				final ServerInfo server = (ServerInfo) object;
-				return server.getName() + " [" + server.getUrl() + " : " + server.getPort() + "]";
+				return server.getName() + " [" + server.getUrl() + " : " + server.getPort() + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			}
 
 			return super.getText(object);

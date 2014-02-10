@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Otto von Wesendonk
+ * Otto von Wesendonk - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.dialogs;
 
@@ -16,9 +16,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.BranchInfo;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.IDialogLabelKeys;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
@@ -64,8 +62,6 @@ public class BranchSelectionDialog extends TitleAreaDialog {
 	 * 
 	 * @param parentShell
 	 *            parent shell
-	 * @param baseVersion
-	 *            base version
 	 * @param branches
 	 *            list of branches
 	 */
@@ -104,9 +100,9 @@ public class BranchSelectionDialog extends TitleAreaDialog {
 				final Object element = cell.getElement();
 				if (element instanceof BranchInfo) {
 					final BranchInfo branch = (BranchInfo) element;
-					final String styledString = "Branch:  "
-						+ branch.getName() + "  " + "[Version: "
-						+ branch.getHead().getIdentifier() + "]";
+					final String styledString = "Branch:  " //$NON-NLS-1$
+						+ branch.getName() + "  " + "[Version: " //$NON-NLS-1$ //$NON-NLS-2$
+						+ branch.getHead().getIdentifier() + "]"; //$NON-NLS-1$
 					cell.setText(styledString);
 				}
 			}
@@ -148,9 +144,9 @@ public class BranchSelectionDialog extends TitleAreaDialog {
 	 * Hook to set header texts.
 	 */
 	protected void setHeaderTexts() {
-		getShell().setText("Branch Selection");
-		setTitle("Branch Selection");
-		setMessage("Please select which Branch you want to merge into your local copy of the project.");
+		getShell().setText(Messages.BranchSelectionDialog_BranchSelection);
+		setTitle(Messages.BranchSelectionDialog_BranchSelection);
+		setMessage(Messages.BranchSelectionDialog_Select_Branch_To_Merge_With);
 	}
 
 	/**
@@ -170,10 +166,14 @@ public class BranchSelectionDialog extends TitleAreaDialog {
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.OK_ID, JFaceResources.getString(IDialogLabelKeys.OK_LABEL_KEY),
+		createButton(parent,
+			IDialogConstants.OK_ID,
+			Messages.BranchSelectionDialog_OK,
 			true);
-		createButton(parent, IDialogConstants.CANCEL_ID,
-			JFaceResources.getString(IDialogLabelKeys.CANCEL_LABEL_KEY), false);
+		createButton(parent,
+			IDialogConstants.CANCEL_ID,
+			Messages.BranchSelectionDialog_Cancel,
+			false);
 	}
 
 	/**
@@ -244,9 +244,9 @@ public class BranchSelectionDialog extends TitleAreaDialog {
 
 		@Override
 		protected void setHeaderTexts() {
-			getShell().setText("Checkout Branch");
-			setTitle("Checkout Branch");
-			setMessage("Please choose which Branch should be checked out.");
+			getShell().setText(Messages.BranchSelectionDialog_Checkout_Branch);
+			setTitle("Checkout Branch"); //$NON-NLS-1$
+			setMessage(Messages.BranchSelectionDialog_Select_Checkout_Branch);
 
 		}
 
@@ -270,8 +270,6 @@ public class BranchSelectionDialog extends TitleAreaDialog {
 		 * 
 		 * @param parentShell
 		 *            parent
-		 * @param baseVersion
-		 *            baseversion
 		 * @param branches
 		 *            list of branches
 		 */
@@ -282,9 +280,9 @@ public class BranchSelectionDialog extends TitleAreaDialog {
 
 		@Override
 		protected void setHeaderTexts() {
-			getShell().setText("Create Branch");
-			setTitle("Create Branch");
-			setMessage("Please specify a name for the new Branch.");
+			getShell().setText(Messages.BranchSelectionDialog_Create_Branch);
+			setTitle(Messages.BranchSelectionDialog_Create_Branch);
+			setMessage(Messages.BranchSelectionDialog_Name_For_New_Branch);
 		}
 
 		/**
@@ -321,7 +319,7 @@ public class BranchSelectionDialog extends TitleAreaDialog {
 			final Label lblNewBranch = new Label(creationContainer, SWT.NONE);
 			lblNewBranch.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,
 				false, false, 1, 1));
-			lblNewBranch.setText("New Branch:");
+			lblNewBranch.setText(Messages.BranchSelectionDialog_New_Branch);
 
 			text = new Text(creationContainer, SWT.BORDER);
 			text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
