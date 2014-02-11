@@ -321,8 +321,8 @@ public class ServerSpaceImpl extends EObjectImpl implements ServerSpace {
 	 * 
 	 * @see org.eclipse.emf.emfstore.internal.server.model.dao.ACUserDAO#remove(org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACUser)
 	 */
-	public void remove(ACUser group) {
-		getUsers().remove(group);
+	public void remove(ACUser user) {
+		getUsers().remove(user);
 	}
 
 	/**

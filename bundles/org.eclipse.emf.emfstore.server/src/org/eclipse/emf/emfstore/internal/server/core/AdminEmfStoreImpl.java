@@ -167,7 +167,11 @@ public class AdminEmfStoreImpl extends AbstractEmfstoreInterface implements Admi
 		getAuthorizationControl().checkProjectAdminAccess(sessionId, null, PAPrivileges.DeleteOrgUnit);
 		for (final Iterator<ACGroup> iter = daoFacade.getGroups().iterator(); iter.hasNext();) {
 			final ACGroup next = iter.next();
+			final List<ACGroup> groups = getGroups(sessionId, groupId);
 			if (next.getId().equals(groupId)) {
+				for (final ACGroup acGroup : groups) {
+					removeMember(sessionId, acGroup.getId(), next.getId());
+				}
 				daoFacade.remove(next);
 				EcoreUtil.delete(next);
 				save();
@@ -553,11 +557,15 @@ public class AdminEmfStoreImpl extends AbstractEmfstoreInterface implements Admi
 		getAuthorizationControl()
 			.checkProjectAdminAccess(sessionId, null, PAPrivileges.DeleteOrgUnit);
 		for (final Iterator<ACUser> iter = daoFacade.getUsers().iterator(); iter.hasNext();) {
-			final ACUser next = iter.next();
-			if (next.getId().equals(userId)) {
-				daoFacade.remove(next);
+			final ACUser user = iter.next();
+			final List<ACGroup> groups = getGroups(sessionId, userId);
+			if (user.getId().equals(userId)) {
+				for (final ACGroup acGroup : groups) {
+					removeMember(sessionId, acGroup.getId(), userId);
+				}
+				daoFacade.remove(user);
 				// TODO: move ecore delete into ServerSpace#deleteUser implementation
-				EcoreUtil.delete(next);
+				EcoreUtil.delete(user);
 				save();
 				return;
 			}
