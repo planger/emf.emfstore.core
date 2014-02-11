@@ -184,15 +184,15 @@ public abstract class PropertiesComposite extends Composite {
 
 		// 1st column with image
 		TableColumn column = new TableColumn(table, SWT.CENTER, 0);
-		column.setText("(/*\\)"); //$NON-NLS-1$
+		column.setText(StringUtils.EMPTY);
 		column.setWidth(20);
 
 		column = new TableColumn(table, SWT.LEFT, 1);
-		column.setText("Name"); //$NON-NLS-1$
+		column.setText(Messages.PropertiesComposite_Name);
 		column.setWidth(100);
 
 		column = new TableColumn(table, SWT.LEFT, 2);
-		column.setText("Description"); //$NON-NLS-1$
+		column.setText(Messages.PropertiesComposite_Description);
 		column.setWidth(200);
 
 		tableViewer = new TableViewer(table);
@@ -442,7 +442,8 @@ public abstract class PropertiesComposite extends Composite {
 					groups = adminBroker.getGroups(((ACUser) inputElement).getId());
 					result = groups.toArray(new ACOrgUnit[groups.size()]);
 				} catch (final ESException ex) {
-					MessageDialog.openWarning(getShell(), Messages.PropertiesComposite_Could_Not_Fetch_Groups, ex.getMessage());
+					MessageDialog.openWarning(getShell(), Messages.PropertiesComposite_Could_Not_Fetch_Groups,
+						ex.getMessage());
 				}
 
 			} else if (inputElement instanceof ACGroup) {
@@ -451,7 +452,8 @@ public abstract class PropertiesComposite extends Composite {
 					members = adminBroker.getMembers(((ACGroup) inputElement).getId());
 					result = members.toArray(new ACOrgUnit[members.size()]);
 				} catch (final ESException ex) {
-					MessageDialog.openWarning(getShell(), Messages.PropertiesComposite_Could_Not_Fetch_Group_Members, ex.getMessage());
+					MessageDialog.openWarning(getShell(), Messages.PropertiesComposite_Could_Not_Fetch_Group_Members,
+						ex.getMessage());
 				}
 
 			} else if (inputElement instanceof ProjectInfo) {
@@ -461,9 +463,10 @@ public abstract class PropertiesComposite extends Composite {
 						.getProjectId());
 					result = participants.toArray(new ACOrgUnit[participants.size()]);
 				} catch (final ESException ex) {
-					MessageDialog.openWarning(getShell(), Messages.PropertiesComposite_Could_Not_Fetch_Participants, ex.getMessage());
-				}
+					MessageDialog.openWarning(getShell(), ex.getMessage(),
+						Messages.PropertiesComposite_Could_Not_Fetch_Participants);
 
+				}
 			}
 
 			return result;

@@ -17,11 +17,13 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.emfstore.internal.client.model.AdminBroker;
 import org.eclipse.emf.emfstore.internal.client.ui.Activator;
 import org.eclipse.emf.emfstore.internal.client.ui.dialogs.EMFStoreMessageDialog;
 import org.eclipse.emf.emfstore.internal.client.ui.views.emfstorebrowser.dialogs.admin.acimport.wizard.AcUserImportAction;
 import org.eclipse.emf.emfstore.internal.server.ServerConfiguration;
+import org.eclipse.emf.emfstore.internal.server.exceptions.AccessControlException;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnit;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACUser;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.roles.Role;
@@ -41,6 +43,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * User tab content in the manage users dialog.
@@ -49,7 +52,10 @@ import org.eclipse.swt.widgets.Shell;
  */
 public class UserTabContent extends TabContent implements IPropertyChangeListener {
 
-	private static final String NEW_USER_NAME = "New User";
+	private static final String DELETE_ICON = "icons/delete.gif"; //$NON-NLS-1$
+	private static final String LOCK_ICON = "icons/lock.png"; //$NON-NLS-1$
+	private static final String USER_ICON = "icons/user.png"; //$NON-NLS-1$
+	private static final String NEW_USER_NAME = "New User"; //$NON-NLS-1$
 
 	/**
 	 * Action to delete a user.
@@ -72,27 +78,32 @@ public class UserTabContent extends TabContent implements IPropertyChangeListene
 					return;
 				}
 
-				try {
-					final String superUser = ServerConfiguration.getProperties().getProperty(
-						ServerConfiguration.SUPER_USER,
-						ServerConfiguration.SUPER_USER_DEFAULT);
-					boolean isAdmin = false;
-					for (final Iterator<Role> it = ou.getRoles().iterator(); it.hasNext();) {
-						final Role userRole = it.next();
-						if (ou.getName().compareTo(superUser) == 0 && userRole instanceof ServerAdmin) {
-							isAdmin = true;
-							break;
-						}
+				final String superUser = ServerConfiguration.getProperties().getProperty(
+					ServerConfiguration.SUPER_USER,
+					ServerConfiguration.SUPER_USER_DEFAULT);
+				boolean isAdmin = false;
+				for (final Iterator<Role> it = ou.getRoles().iterator(); it.hasNext();) {
+					final Role userRole = it.next();
+					if (ou.getName().compareTo(superUser) == 0 && userRole instanceof ServerAdmin) {
+						isAdmin = true;
+						break;
 					}
-					if (isAdmin) {
-						final Display display = Display.getCurrent();
-						MessageDialog.openInformation(display.getActiveShell(), "Illegal deletion attempt",
-							"It is not allowed to delete the super user!");
-					} else {
+				}
+				final Display display = Display.getCurrent();
+				if (isAdmin) {
+					MessageDialog.openInformation(display.getActiveShell(),
+						Messages.UserTabContent_Illegal_Deletion_Attempt,
+						Messages.UserTabContent_Not_Allowed_To_Delete_SuperUser);
+				} else {
+					try {
 						getAdminBroker().deleteUser(ou.getId());
+					} catch (final AccessControlException ex) {
+						MessageDialog.openWarning(display.getActiveShell(),
+							Messages.UserTabContent_Insufficient_Access_Rights,
+							Messages.UserTabContent_Not_Allowed_To_Delete_User);
+					} catch (final ESException ex) {
+						EMFStoreMessageDialog.showExceptionDialog(ex);
 					}
-				} catch (final ESException e) {
-					EMFStoreMessageDialog.showExceptionDialog(e);
 				}
 
 				if (getForm().getCurrentInput() instanceof ACOrgUnit && getForm().getCurrentInput().equals(ou)) {
@@ -125,33 +136,43 @@ public class UserTabContent extends TabContent implements IPropertyChangeListene
 					return;
 				}
 
-				try {
-					final String superUser = ServerConfiguration.getProperties().getProperty(
-						ServerConfiguration.SUPER_USER,
-						ServerConfiguration.SUPER_USER_DEFAULT);
-					boolean isAdmin = false;
-					for (final Iterator<Role> it = user.getRoles().iterator(); it.hasNext();) {
-						final Role userRole = it.next();
-						if (user.getName().compareTo(superUser) == 0 && userRole instanceof ServerAdmin) {
-							isAdmin = true;
-							break;
-						}
+				// try {
+				final String superUser = ServerConfiguration.getProperties().getProperty(
+					ServerConfiguration.SUPER_USER,
+					ServerConfiguration.SUPER_USER_DEFAULT);
+				boolean isAdmin = false;
+				for (final Iterator<Role> it = user.getRoles().iterator(); it.hasNext();) {
+					final Role userRole = it.next();
+					if (user.getName().compareTo(superUser) == 0 && userRole instanceof ServerAdmin) {
+						isAdmin = true;
+						break;
 					}
-					final Display display = Display.getCurrent();
-					final Shell activeShell = display.getActiveShell();
-					if (isAdmin) {
-						MessageDialog.openInformation(activeShell, "Illegal deletion attempt",
-							"It is not allowed to delete the super user!");
-					} else {
-						final InputDialog inputDialog = new InputDialog(activeShell,
-							"Enter new password for user '" + user.getName() + "'", "Enter the new password", "", null);
-						if (inputDialog.open() == Window.OK) {
-							final String newPassword = inputDialog.getValue();
+				}
+				final Display display = Display.getCurrent();
+				final Shell activeShell = display.getActiveShell();
+				if (isAdmin) {
+					MessageDialog.openInformation(activeShell,
+						Messages.UserTabContent_Illegal_Deletion_Attempt,
+						Messages.UserTabContent_Not_Allowed_To_Delete_SuperUser);
+				} else {
+					final InputDialog inputDialog = new InputDialog(
+						activeShell,
+						Messages.UserTabContent_Enter_New_Password_For_User
+							+ "'" + user.getName() + "'", //$NON-NLS-1$//$NON-NLS-2$ 
+						Messages.UserTabContent_Enter_New_Password,
+						StringUtils.EMPTY, null);
+					if (inputDialog.open() == Window.OK) {
+						final String newPassword = inputDialog.getValue();
+						try {
 							getAdminBroker().changeUser(user.getId(), user.getName(), newPassword);
+						} catch (final AccessControlException ex) {
+							MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+								Messages.UserTabContent_Insufficient_Access_Rights,
+								Messages.UserTabContent_Not_Allowed_To_Delete_User);
+						} catch (final ESException ex) {
+							EMFStoreMessageDialog.showExceptionDialog(ex);
 						}
 					}
-				} catch (final ESException e) {
-					EMFStoreMessageDialog.showExceptionDialog(e);
 				}
 
 				if (getForm().getCurrentInput() instanceof ACOrgUnit && getForm().getCurrentInput().equals(user)) {
@@ -179,15 +200,16 @@ public class UserTabContent extends TabContent implements IPropertyChangeListene
 	 */
 	@Override
 	protected List<Action> initActions() {
-		final Action createNewUser = new Action("Create new user") {
+		final Action createNewUser = new Action(Messages.UserTabContent_Create_New_User) {
 			@Override
 			public void run() {
 				try {
 					if (userExists(NEW_USER_NAME)) {
 						MessageDialog
 							.openInformation(Display.getCurrent().getActiveShell(),
-								"User already exists", "A user with the given name '" + NEW_USER_NAME
-									+ "' already exists.");
+								Messages.UserTabContent_User_Exists, Messages.UserTabContent_User_With_Given_Name
+									+ "'" + NEW_USER_NAME + "'" //$NON-NLS-1$ //$NON-NLS-2$
+									+ Messages.UserTabContent_Already_Exists);
 					} else {
 						getAdminBroker().createUser(NEW_USER_NAME);
 					}
@@ -199,19 +221,19 @@ public class UserTabContent extends TabContent implements IPropertyChangeListene
 
 			}
 		};
-		createNewUser.setImageDescriptor(Activator.getImageDescriptor("icons/user.png"));
-		createNewUser.setToolTipText("Create new user");
+		createNewUser.setImageDescriptor(Activator.getImageDescriptor(USER_ICON));
+		createNewUser.setToolTipText(Messages.UserTabContent_Create_New_User);
 
-		final Action deleteUser = new DeleteUserAction("Delete user");
-		deleteUser.setImageDescriptor(Activator.getImageDescriptor("icons/delete.gif"));
-		deleteUser.setToolTipText("Delete user");
+		final Action deleteUser = new DeleteUserAction(Messages.UserTabContent_Delete_User);
+		deleteUser.setImageDescriptor(Activator.getImageDescriptor(DELETE_ICON));
+		deleteUser.setToolTipText(Messages.UserTabContent_Delete_User);
 
 		final Action importOrgUnit = new AcUserImportAction(getAdminBroker());
 		importOrgUnit.addPropertyChangeListener(this);
 
-		final Action changePassword = new ChangePasswordAction("Change password of selected user");
-		changePassword.setImageDescriptor(Activator.getImageDescriptor("icons/lock.png"));
-		changePassword.setToolTipText("Change password of selected user");
+		final Action changePassword = new ChangePasswordAction(Messages.UserTabContent_Change_Password);
+		changePassword.setImageDescriptor(Activator.getImageDescriptor(LOCK_ICON));
+		changePassword.setToolTipText(Messages.UserTabContent_Change_Password);
 
 		return Arrays.asList(createNewUser, deleteUser, importOrgUnit, changePassword);
 	}
@@ -237,7 +259,7 @@ public class UserTabContent extends TabContent implements IPropertyChangeListene
 			}
 
 			public Image getColumnImage(Object element, int columnIndex) {
-				return Activator.getImageDescriptor("icons/user.png").createImage();
+				return Activator.getImageDescriptor(USER_ICON).createImage();
 			}
 
 			public String getColumnText(Object element, int columnIndex) {
@@ -273,8 +295,12 @@ public class UserTabContent extends TabContent implements IPropertyChangeListene
 				final List<ACUser> users = new ArrayList<ACUser>();
 				try {
 					users.addAll(getAdminBroker().getUsers());
-				} catch (final ESException e) {
-					EMFStoreMessageDialog.showExceptionDialog(e);
+				} catch (final AccessControlException ex) {
+					MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+						Messages.UserTabContent_Insufficient_Access_Rights,
+						Messages.UserTabContent_Not_Allowed_To_List_Users);
+				} catch (final ESException ex) {
+					EMFStoreMessageDialog.showExceptionDialog(ex);
 				}
 				return users.toArray(new ACUser[users.size()]);
 			}

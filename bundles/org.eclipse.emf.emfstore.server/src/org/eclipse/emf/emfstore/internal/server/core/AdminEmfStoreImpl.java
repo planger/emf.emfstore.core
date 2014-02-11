@@ -159,6 +159,11 @@ public class AdminEmfStoreImpl extends AbstractEmfstoreInterface implements Admi
 	public void deleteGroup(SessionId sessionId, ACOrgUnitId groupId) throws ESException {
 		checkForNulls(sessionId, groupId);
 		getAuthorizationControl().checkProjectAdminAccessForOrgUnit(sessionId, groupId);
+		// check also for all members
+		final ACGroup group = getGroup(groupId);
+		for (final ACOrgUnit member : group.getMembers()) {
+			getAuthorizationControl().checkProjectAdminAccessForOrgUnit(sessionId, member.getId());
+		}
 		getAuthorizationControl().checkProjectAdminAccess(sessionId, null, PAPrivileges.DeleteOrgUnit);
 		for (final Iterator<ACGroup> iter = daoFacade.getGroups().iterator(); iter.hasNext();) {
 			final ACGroup next = iter.next();

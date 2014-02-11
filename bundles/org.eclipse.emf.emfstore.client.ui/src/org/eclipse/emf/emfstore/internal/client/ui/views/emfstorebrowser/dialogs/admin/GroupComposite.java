@@ -7,20 +7,23 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Hodaie
+ * Zardosht Hodaie - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.views.emfstorebrowser.dialogs.admin;
 
 import java.util.Collection;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.emfstore.internal.client.model.AdminBroker;
 import org.eclipse.emf.emfstore.internal.client.ui.dialogs.EMFStoreMessageDialog;
+import org.eclipse.emf.emfstore.internal.server.exceptions.AccessControlException;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACGroup;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnit;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetAdapter;
@@ -28,12 +31,13 @@ import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.Form;
 
 /**
  * This shows attributes of a ACGroup (name, description) and show a list of its
  * member OrgUnits. You can use drag and drop to drop a group or a user on
- * memebers list, and it will be added to memebers.
+ * members list, and it will be added to members.
  * 
  * @author Hodaie
  */
@@ -66,14 +70,20 @@ public class GroupComposite extends PropertiesComposite {
 	 */
 	@Override
 	protected void removeOrgUnit(ACOrgUnit orgUnit) {
-
+		boolean isDoRefresh = false;
 		try {
 			getAdminBroker().removeMember(group.getId(), orgUnit.getId());
-
-		} catch (final ESException e) {
-			EMFStoreMessageDialog.showExceptionDialog(e);
+			isDoRefresh = true;
+		} catch (final AccessControlException ex) {
+			MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+				Messages.GroupComposite_Insufficient_Access_Rights,
+				Messages.GroupComposite_Not_Allowed_To_Remove_Member_From_Selected_Group);
+		} catch (final ESException ex) {
+			EMFStoreMessageDialog.showExceptionDialog(ex);
 		}
-		getTableViewer().refresh();
+		if (isDoRefresh) {
+			getTableViewer().refresh();
+		}
 	}
 
 	/**
@@ -81,20 +91,22 @@ public class GroupComposite extends PropertiesComposite {
 	 */
 	@Override
 	protected void addExistingOrgUnit(ACOrgUnit orgUnit) {
-
-		if (orgUnit != null) {
-			if (!orgUnit.equals(group)) {
-				try {
-					getAdminBroker().addMember(group.getId(), orgUnit.getId());
-
-				} catch (final ESException e) {
-					EMFStoreMessageDialog.showExceptionDialog(e);
-				}
+		boolean isDoRefresh = false;
+		if (orgUnit != null && !orgUnit.equals(group)) {
+			try {
+				getAdminBroker().addMember(group.getId(), orgUnit.getId());
+				isDoRefresh = true;
+			} catch (final AccessControlException e) {
+				MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+					Messages.GroupComposite_Insufficient_Access_Rights,
+					Messages.GroupComposite_Not_Allowed_To_Add_Member_To_Selected_Group);
+			} catch (final ESException ex) {
+				EMFStoreMessageDialog.showExceptionDialog(ex);
 			}
-
 		}
-		getTableViewer().refresh();
-
+		if (isDoRefresh) {
+			getTableViewer().refresh();
+		}
 	}
 
 	/**
@@ -102,17 +114,21 @@ public class GroupComposite extends PropertiesComposite {
 	 */
 	@Override
 	protected void addNewOrgUnit() {
-		final EList<ACOrgUnit> members = getNewMembers();
-		for (final ACOrgUnit ou : members) {
+		final boolean isDoRefresh = false;
+		for (final ACOrgUnit newMember : getNewMembers()) {
 			try {
-				getAdminBroker().addMember(group.getId(), ou.getId());
-
-			} catch (final ESException e) {
-				EMFStoreMessageDialog.showExceptionDialog(e);
+				getAdminBroker().addMember(group.getId(), newMember.getId());
+			} catch (final AccessControlException e) {
+				MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+					Messages.GroupComposite_Insufficient_Access_Rights,
+					Messages.GroupComposite_Not_Allowed_To_Add_Member_To_Selected_Group);
+			} catch (final ESException ex) {
+				EMFStoreMessageDialog.showExceptionDialog(ex);
 			}
 		}
-
-		getTableViewer().refresh();
+		if (isDoRefresh) {
+			getTableViewer().refresh();
+		}
 	}
 
 	/**
@@ -135,7 +151,7 @@ public class GroupComposite extends PropertiesComposite {
 				allOrgUnits.remove(group);
 			}
 
-			final Object[] result = showDialog(allOrgUnits, "Select a member");
+			final Object[] result = showDialog(allOrgUnits, Messages.GroupComposite_Select_Member);
 
 			for (int i = 0; i < result.length; i++) {
 				if (result[i] instanceof ACOrgUnit) {
@@ -156,7 +172,7 @@ public class GroupComposite extends PropertiesComposite {
 	 */
 	@Override
 	protected String getTabTitle() {
-		return "Members";
+		return Messages.GroupComposite_Members;
 	}
 
 	/**
@@ -164,17 +180,14 @@ public class GroupComposite extends PropertiesComposite {
 	 */
 	@Override
 	public void updateControls(EObject input) {
-
-		if (input != null && input instanceof ACGroup) {
-
+		if (input instanceof ACGroup) {
 			group = (ACGroup) input;
-
-			getTxtName().setText(group.getName());
-			getTxtDescription().setText(group.getDescription() == null ? "" : group.getDescription());
+			getTxtName().setText(
+				group.getName());
+			getTxtDescription().setText(
+				group.getDescription() == null ? StringUtils.EMPTY : group.getDescription());
 			getTableViewer().setInput(group);
-
 		}
-
 	}
 
 	/**
@@ -192,7 +205,7 @@ public class GroupComposite extends PropertiesComposite {
 			getTxtDescription().getText()))) {
 			try {
 				getAdminBroker().changeOrgUnit(group.getId(), getTxtName().getText(), getTxtDescription().getText());
-				((Form) getParent().getParent()).setText("Group: " + getTxtName().getText());
+				((Form) getParent().getParent()).setText(Messages.GroupComposite_Group + getTxtName().getText());
 				orgUnitMgmtGUI.getActiveTabContent().getTableViewer().refresh();
 			} catch (final ESException e) {
 				EMFStoreMessageDialog.showExceptionDialog(e);
@@ -216,7 +229,7 @@ public class GroupComposite extends PropertiesComposite {
 		final DropTargetListener dropListener = new DropTargetAdapter() {
 			@Override
 			public void dragEnter(DropTargetEvent event) {
-				if (PropertiesForm.getDragSource().equals("Projects")) {
+				if (PropertiesForm.getDragSource().equals(Messages.GroupComposite_Projects)) {
 					event.detail = DND.DROP_NONE;
 				} else {
 					event.detail = DND.DROP_COPY;

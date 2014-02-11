@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * gurcankarakoc,deser
+ * gurcankarakoc, deser - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.views.emfstorebrowser.dialogs.admin;
 
@@ -20,10 +20,12 @@ import org.eclipse.emf.emfstore.internal.client.model.AdminBroker;
 import org.eclipse.emf.emfstore.internal.client.ui.Activator;
 import org.eclipse.emf.emfstore.internal.client.ui.dialogs.EMFStoreMessageDialog;
 import org.eclipse.emf.emfstore.internal.client.ui.views.emfstorebrowser.dialogs.admin.acimport.wizard.AcUserImportAction;
+import org.eclipse.emf.emfstore.internal.server.exceptions.AccessControlException;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACGroup;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnit;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ILabelProviderListener;
@@ -32,20 +34,30 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * @author gurcankarakoc, deser
  */
 public class GroupTabContent extends TabContent implements IPropertyChangeListener {
 
+	private static final String GROUP_ICON = "icons/Group.gif"; //$NON-NLS-1$
+	private static final String DELETE_ICON = "icons/delete.gif"; //$NON-NLS-1$
+
 	/**
-	 * @param string the name of tab.
-	 * @param adminBroker AdminBroker is needed to communicate with server.
-	 * @param frm used to set input to properties form and update its table viewer upon. deletion of OrgUnits.
+	 * Constructor.
+	 * 
+	 * @param string
+	 *            name of tab
+	 * @param adminBroker
+	 *            the {@link AdminBroker} that is needed to communicate with the server
+	 * @param form
+	 *            the form that is used to set input to properties form and update its table viewer
+	 *            upon deletion of OrgUnits
 	 */
-	public GroupTabContent(String string, AdminBroker adminBroker, PropertiesForm frm) {
-		super(string, adminBroker, frm);
-		this.setTab(this);
+	public GroupTabContent(String string, AdminBroker adminBroker, PropertiesForm form) {
+		super(string, adminBroker, form);
+		setTab(this);
 	}
 
 	/**
@@ -56,36 +68,42 @@ public class GroupTabContent extends TabContent implements IPropertyChangeListen
 	@Override
 	protected List<Action> initActions() {
 
-		Action createNewGroup = new Action("Create new group") {
+		final Action createNewGroup = new Action(Messages.GroupTabContent_Create_New_Group) {
 			@Override
 			public void run() {
 				try {
-					getAdminBroker().createGroup("New Group");
-				} catch (ESException e) {
-					EMFStoreMessageDialog.showExceptionDialog(e);
+					getAdminBroker().createGroup(Messages.GroupTabContent_New_Group);
+				} catch (final ESException e) {
+					MessageDialog.openWarning(
+						PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+						Messages.GroupTabContent_Insufficient_Access_Rights,
+						Messages.GroupTabContent_Not_Allowed_To_Create_New_Group);
 				}
 				getTableViewer().refresh();
 				getForm().getTableViewer().refresh();
 			}
 		};
 
-		createNewGroup.setImageDescriptor(Activator.getImageDescriptor("icons/Group.gif"));
-		createNewGroup.setToolTipText("Create new group");
+		createNewGroup.setImageDescriptor(Activator.getImageDescriptor(GROUP_ICON));
+		createNewGroup.setToolTipText(Messages.GroupTabContent_Create_New_Group);
 
-		Action deleteGroup = new Action("Delete group") {
+		final Action deleteGroup = new Action(Messages.GroupTabContent_Delete_Group) {
 			@Override
 			public void run() {
-				IStructuredSelection selection = (IStructuredSelection) getTableViewer().getSelection();
-				Iterator<?> iterator = selection.iterator();
+				final IStructuredSelection selection = (IStructuredSelection) getTableViewer().getSelection();
+				final Iterator<?> iterator = selection.iterator();
 				while (iterator.hasNext()) {
-					ACGroup ou = (ACGroup) iterator.next();
+					final ACGroup ou = (ACGroup) iterator.next();
 					if (ou == null) {
 						return;
 					}
 					try {
 						getAdminBroker().deleteGroup(ou.getId());
-					} catch (ESException e) {
-						EMFStoreMessageDialog.showExceptionDialog(e);
+					} catch (final ESException e) {
+						MessageDialog.openWarning(
+							PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+							Messages.GroupTabContent_Insufficient_Access_Rights,
+							Messages.GroupTabContent_Not_Allowed_To_Delete_Selected_Group);
 					}
 
 					if (getForm().getCurrentInput() instanceof ACOrgUnit && getForm().getCurrentInput().equals(ou)) {
@@ -96,10 +114,10 @@ public class GroupTabContent extends TabContent implements IPropertyChangeListen
 			}
 		};
 
-		deleteGroup.setImageDescriptor(Activator.getImageDescriptor("icons/delete.gif"));
-		deleteGroup.setToolTipText("Delete group");
+		deleteGroup.setImageDescriptor(Activator.getImageDescriptor(DELETE_ICON));
+		deleteGroup.setToolTipText(Messages.GroupTabContent_Delete_Group);
 
-		Action importOrgUnit = new AcUserImportAction(getAdminBroker());
+		final Action importOrgUnit = new AcUserImportAction(getAdminBroker());
 		importOrgUnit.addPropertyChangeListener(this);
 
 		return Arrays.asList(createNewGroup, deleteGroup, importOrgUnit);
@@ -126,7 +144,7 @@ public class GroupTabContent extends TabContent implements IPropertyChangeListen
 			}
 
 			public Image getColumnImage(Object element, int columnIndex) {
-				return Activator.getImageDescriptor("icons/Group.gif").createImage();
+				return Activator.getImageDescriptor(GROUP_ICON).createImage();
 			}
 
 			public String getColumnText(Object element, int columnIndex) {
@@ -142,14 +160,17 @@ public class GroupTabContent extends TabContent implements IPropertyChangeListen
 	@Override
 	public IStructuredContentProvider getContentProvider() {
 		return new IStructuredContentProvider() {
-
 			public Object[] getElements(Object inputElement) {
 				// return a list of Groups in project space
-				List<ACGroup> groups = new ArrayList<ACGroup>();
+				final List<ACGroup> groups = new ArrayList<ACGroup>();
 				try {
 					groups.addAll(getAdminBroker().getGroups());
-				} catch (ESException e) {
-					EMFStoreMessageDialog.showExceptionDialog(e);
+				} catch (final AccessControlException ex) {
+					MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+						Messages.GroupTabContent_Insufficient_Access_Rights,
+						Messages.GroupTabContent_Not_Allowed_To_List_Groups);
+				} catch (final ESException ex) {
+					EMFStoreMessageDialog.showExceptionDialog(ex);
 				}
 				return groups.toArray(new ACGroup[groups.size()]);
 			}

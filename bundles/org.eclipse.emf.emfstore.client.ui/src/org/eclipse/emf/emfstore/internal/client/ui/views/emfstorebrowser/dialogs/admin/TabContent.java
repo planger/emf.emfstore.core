@@ -7,16 +7,17 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * deser
- * Hodaie,gurcankarakoc,deser
+ * Zardosht Hodaie, gurcankarakoc, deser - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.views.emfstorebrowser.dialogs.admin;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.emfstore.internal.client.model.AdminBroker;
 import org.eclipse.emf.emfstore.internal.client.ui.dialogs.EMFStoreMessageDialog;
+import org.eclipse.emf.emfstore.internal.server.exceptions.AccessControlException;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectInfo;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACGroup;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnit;
@@ -24,6 +25,7 @@ import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACUser;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.util.LocalSelectionTransfer;
@@ -53,6 +55,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * This class sets the contents of tabs on the left side of OrgUnitManagmentGUI.
@@ -77,22 +80,22 @@ public abstract class TabContent {
 		public int compare(Viewer viewer, Object e1, Object e2) {
 			int returnValue = 0;
 			if (e1 instanceof ProjectInfo) {
-				ProjectInfo pi1 = (ProjectInfo) e1;
-				ProjectInfo pi2 = (ProjectInfo) e2;
+				final ProjectInfo pi1 = (ProjectInfo) e1;
+				final ProjectInfo pi2 = (ProjectInfo) e2;
 				returnValue = pi1.getName().compareTo(pi2.getName());
 			}
 			if (e1 instanceof ACUser) {
-				ACUser u1 = (ACUser) e1;
-				ACUser u2 = (ACUser) e2;
+				final ACUser u1 = (ACUser) e1;
+				final ACUser u2 = (ACUser) e2;
 				returnValue = u1.getName().compareTo(u2.getName());
 			}
 
 			if (e1 instanceof ACGroup) {
-				ACGroup g1 = (ACGroup) e1;
-				ACGroup g2 = (ACGroup) e2;
+				final ACGroup g1 = (ACGroup) e1;
+				final ACGroup g2 = (ACGroup) e2;
 				returnValue = g1.getName().compareTo(g2.getName());
 			}
-			if (this.dir == SWT.DOWN) {
+			if (dir == SWT.DOWN) {
 				returnValue = returnValue * -1;
 			}
 			return returnValue;
@@ -127,7 +130,7 @@ public abstract class TabContent {
 	public TabContent(String tabName, AdminBroker adminBroker, PropertiesForm frm) {
 		this.tabName = tabName;
 		this.adminBroker = adminBroker;
-		this.form = frm;
+		form = frm;
 	}
 
 	/**
@@ -137,18 +140,18 @@ public abstract class TabContent {
 	 * @return contents composite
 	 */
 	protected Composite createContents(TabFolder tabFolder) {
-		Composite tabContent = new Composite(tabFolder, SWT.NONE);
+		final Composite tabContent = new Composite(tabFolder, SWT.NONE);
 		tabContent.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		tabContent.setLayout(new GridLayout(1, false));
 
 		// add actions
-		List<Action> actions = initActions();
+		final List<Action> actions = initActions();
 		if (actions.size() > 0) {
-			ToolBar toolBar = new ToolBar(tabContent, SWT.FLAT | SWT.RIGHT);
+			final ToolBar toolBar = new ToolBar(tabContent, SWT.FLAT | SWT.RIGHT);
 			GridDataFactory.fillDefaults().grab(true, false).applyTo(toolBar);
-			ToolBarManager toolBarManager = new ToolBarManager(toolBar);
+			final ToolBarManager toolBarManager = new ToolBarManager(toolBar);
 
-			for (Action action : actions) {
+			for (final Action action : actions) {
 				toolBarManager.add(action);
 			}
 			toolBarManager.update(true);
@@ -172,10 +175,10 @@ public abstract class TabContent {
 	 */
 	protected void initList(Composite parent) {
 
-		Composite container = new Composite(parent, SWT.NONE);
+		final Composite container = new Composite(parent, SWT.NONE);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(container);
 
-		TableColumnLayout tableColumnLayout = new TableColumnLayout();
+		final TableColumnLayout tableColumnLayout = new TableColumnLayout();
 		container.setLayout(tableColumnLayout);
 
 		// tableColumnLayout.setColumnData(singleColumn, new ColumnWeightData(100));
@@ -186,11 +189,11 @@ public abstract class TabContent {
 		// gridData.horizontalSpan = 2;
 		// tableViewer.getTable().setLayoutData(gridData);
 
-		Table table = tableViewer.getTable();
+		final Table table = tableViewer.getTable();
 		table.setHeaderVisible(false);
 		table.setLinesVisible(true);
 
-		TableViewerColumn column = new TableViewerColumn(tableViewer, SWT.NONE);
+		final TableViewerColumn column = new TableViewerColumn(tableViewer, SWT.NONE);
 
 		tableColumnLayout.setColumnData(column.getColumn(), new ColumnWeightData(100));
 		column.getColumn().setResizable(false);
@@ -207,7 +210,7 @@ public abstract class TabContent {
 		tableViewer.getTable().setSortColumn(tableViewer.getTable().getColumn(0));
 		tableViewer.getTable().setSortDirection(SWT.UP);
 
-		Listener sortListener = new Listener() {
+		final Listener sortListener = new Listener() {
 			public void handleEvent(Event e) {
 				int dir = tableViewer.getTable().getSortDirection();
 				dir = dir == SWT.UP ? SWT.DOWN : SWT.UP;
@@ -253,12 +256,12 @@ public abstract class TabContent {
 
 	private void addDragNDropSupport() {
 		int ops = DND.DROP_COPY;
-		Transfer[] transfers = new Transfer[] { LocalSelectionTransfer.getTransfer() };
+		final Transfer[] transfers = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 
-		DragSourceListener dragListener = new DragSourceListener() {
+		final DragSourceListener dragListener = new DragSourceListener() {
 			public void dragFinished(DragSourceEvent event) {
 				PropertiesForm.setDragNDropObject(null);
-				PropertiesForm.setDragSource("");
+				PropertiesForm.setDragSource(StringUtils.EMPTY);
 			}
 
 			public void dragStart(DragSourceEvent event) {
@@ -266,10 +269,10 @@ public abstract class TabContent {
 			}
 
 			public void dragSetData(DragSourceEvent event) {
-				EObject eObject = getSelectedItem(null);
+				final EObject eObject = getSelectedItem(null);
 				if (eObject != null) {
 					if (eObject instanceof ACOrgUnit) {
-						ACOrgUnit orgUnit = (ACOrgUnit) eObject;
+						final ACOrgUnit orgUnit = (ACOrgUnit) eObject;
 						PropertiesForm.setDragNDropObject(orgUnit);
 					}
 				}
@@ -278,7 +281,7 @@ public abstract class TabContent {
 		tableViewer.addDragSupport(ops, transfers, dragListener);
 
 		ops = DND.DROP_MOVE;
-		DropTargetListener dropListener = new DropTargetListener() {
+		final DropTargetListener dropListener = new DropTargetListener() {
 			public void drop(DropTargetEvent event) {
 				if (PropertiesForm.getDragNDropObject() instanceof ACOrgUnit) {
 					doDrop((ACOrgUnit) PropertiesForm.getDragNDropObject());
@@ -307,26 +310,30 @@ public abstract class TabContent {
 	}
 
 	private void doDrop(ACOrgUnit orgUnit) {
-		EObject currentInput = form.getCurrentInput();
+		final EObject currentInput = form.getCurrentInput();
 		if (currentInput == null) {
 			return;
 		}
 		try {
 			if (currentInput instanceof ProjectInfo) {
-				ProjectInfo projectInfo = (ProjectInfo) currentInput;
+				final ProjectInfo projectInfo = (ProjectInfo) currentInput;
 
 				adminBroker.removeParticipant(projectInfo.getProjectId(), orgUnit.getId());
 
 			} else if (currentInput instanceof ACGroup) {
-				ACGroup group = (ACGroup) currentInput;
+				final ACGroup group = (ACGroup) currentInput;
 				adminBroker.removeMember(group.getId(), orgUnit.getId());
 
 			} else if (currentInput instanceof ACUser) {
-				ACUser user = (ACUser) currentInput;
+				final ACUser user = (ACUser) currentInput;
 				adminBroker.removeGroup(user.getId(), ((ACGroup) orgUnit).getId());
 			}
-		} catch (ESException e) {
-			EMFStoreMessageDialog.showExceptionDialog(e);
+		} catch (final AccessControlException ex) {
+			MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+				Messages.TabContent_Insufficient_Access_Rights,
+				Messages.TabContent_Not_Allowed_To_Remove_OrgUnit);
+		} catch (final ESException ex) {
+			EMFStoreMessageDialog.showExceptionDialog(ex);
 		}
 	}
 
@@ -344,7 +351,7 @@ public abstract class TabContent {
 	 * @return tableViewer
 	 */
 	public TableViewer getTableViewer() {
-		return this.tableViewer;
+		return tableViewer;
 	}
 
 	/**
@@ -365,7 +372,7 @@ public abstract class TabContent {
 		}
 
 		if (ssel != null) {
-			Object obj = ssel.getFirstElement();
+			final Object obj = ssel.getFirstElement();
 			if (obj instanceof ProjectInfo) {
 				result = (ProjectInfo) obj;
 			} else if (obj instanceof ACOrgUnit) {

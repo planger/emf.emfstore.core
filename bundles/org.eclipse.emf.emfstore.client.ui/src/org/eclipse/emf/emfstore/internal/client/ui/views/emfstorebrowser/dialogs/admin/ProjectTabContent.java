@@ -7,8 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * gurcankarakoc,deser
- * koegel
+ * gurcankarakoc, deser, Maximilian koegel - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.views.emfstorebrowser.dialogs.admin;
 
@@ -17,14 +16,17 @@ import java.util.List;
 
 import org.eclipse.emf.emfstore.internal.client.model.AdminBroker;
 import org.eclipse.emf.emfstore.internal.client.ui.dialogs.EMFStoreMessageDialog;
+import org.eclipse.emf.emfstore.internal.server.exceptions.AccessControlException;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectInfo;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * @author gurcankarakoc, deser
@@ -55,8 +57,8 @@ public class ProjectTabContent extends TabContent {
 		}
 
 		public String getColumnText(Object element, int columnIndex) {
-			return ((ProjectInfo) element).getName() + " [" + ((ProjectInfo) element).getVersion().getIdentifier()
-				+ "]";
+			return ((ProjectInfo) element).getName() + " [" + ((ProjectInfo) element).getVersion().getIdentifier() //$NON-NLS-1$
+				+ "]"; //$NON-NLS-1$
 		}
 	}
 
@@ -67,7 +69,7 @@ public class ProjectTabContent extends TabContent {
 	 */
 	public ProjectTabContent(String string, AdminBroker adminBroker, PropertiesForm frm) {
 		super(string, adminBroker, frm);
-		this.setTab(this);
+		setTab(this);
 	}
 
 	/**
@@ -97,11 +99,16 @@ public class ProjectTabContent extends TabContent {
 
 			public Object[] getElements(Object inputElement) {
 				// return a list of Projects in project space
-				List<ProjectInfo> projectInfos = new ArrayList<ProjectInfo>();
+				final List<ProjectInfo> projectInfos = new ArrayList<ProjectInfo>();
 				try {
 					projectInfos.addAll(getAdminBroker().getProjectInfos());
-				} catch (ESException e) {
-					EMFStoreMessageDialog.showExceptionDialog(e);
+				} catch (final AccessControlException ex) {
+					MessageDialog.openWarning(
+						PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+						Messages.ProjectTabContent_Insufficient_Access_Rights,
+						Messages.ProjectTabContent_Not_Allowed_To_List_ProjectInfos);
+				} catch (final ESException ex) {
+					EMFStoreMessageDialog.showExceptionDialog(ex);
 				}
 				return projectInfos.toArray(new ProjectInfo[projectInfos.size()]);
 			}

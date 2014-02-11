@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Hodaie
+ * Zardosht Hodaie - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.views.emfstorebrowser.dialogs.admin;
 
@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Shell;
  */
 public class ManageOrgUnitsDialog extends Dialog {
 
-	private AdminBroker adminBroker;
+	private final AdminBroker adminBroker;
 
 	/**
 	 * Constructor.
@@ -41,9 +41,8 @@ public class ManageOrgUnitsDialog extends Dialog {
 
 		super(parentShell);
 
-		this.setShellStyle(this.getShellStyle() | SWT.RESIZE);
+		setShellStyle(getShellStyle() | SWT.RESIZE);
 		this.adminBroker = adminBroker;
-
 	}
 
 	/**
@@ -51,8 +50,8 @@ public class ManageOrgUnitsDialog extends Dialog {
 	 */
 	@Override
 	public int open() {
-		this.getButton(OK).setVisible(false);
-		this.getButton(CANCEL).setText("Close");
+		getButton(OK).setVisible(false);
+		getButton(CANCEL).setText(Messages.ManageOrgUnitsDialog_Close);
 		return super.open();
 	}
 
@@ -61,27 +60,8 @@ public class ManageOrgUnitsDialog extends Dialog {
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		Composite composite = (Composite) super.createDialogArea(parent);
+		final Composite composite = (Composite) super.createDialogArea(parent);
 		new OrgUnitManagementGUI(composite, adminBroker);
 		return composite;
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected void cancelPressed() {
-
-		super.cancelPressed();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected void okPressed() {
-
-		super.okPressed();
-	}
-
 }

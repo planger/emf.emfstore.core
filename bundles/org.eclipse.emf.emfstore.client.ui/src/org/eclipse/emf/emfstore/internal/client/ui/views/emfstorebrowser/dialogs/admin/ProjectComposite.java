@@ -18,11 +18,13 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.emfstore.internal.client.model.AdminBroker;
 import org.eclipse.emf.emfstore.internal.client.ui.dialogs.EMFStoreMessageDialog;
+import org.eclipse.emf.emfstore.internal.server.exceptions.AccessControlException;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectInfo;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnit;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.roles.Role;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.roles.RolesPackage;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -40,6 +42,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * This is shows the properties of a project (name, ...) and a list of its participants. The user can change the role of
@@ -55,7 +58,8 @@ public class ProjectComposite extends PropertiesComposite {
 	private static final int SERVER_ADMIN_ROLE = 3;
 
 	// Set column names
-	private final String[] roleNames = new String[] { Messages.ProjectComposite_Reader, Messages.ProjectComposite_Writer, Messages.ProjectComposite_ProjectAdmin, Messages.ProjectComposite_ServerAdmin };
+	private final String[] roleNames = new String[] { Messages.ProjectComposite_Reader,
+		Messages.ProjectComposite_Writer, Messages.ProjectComposite_ProjectAdmin, Messages.ProjectComposite_ServerAdmin };
 
 	private Label lblVersion;
 	private Text txtVersion;
@@ -79,12 +83,20 @@ public class ProjectComposite extends PropertiesComposite {
 	 */
 	@Override
 	protected void removeOrgUnit(ACOrgUnit orgUnit) {
+		boolean isDoRefresh = false;
 		try {
 			getAdminBroker().removeParticipant(projectInfo.getProjectId(), orgUnit.getId());
-		} catch (final ESException e) {
-			EMFStoreMessageDialog.showExceptionDialog(e);
+			isDoRefresh = true;
+		} catch (final AccessControlException ex) {
+			MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+				Messages.ProjectComposite_Insufficient_Access_Rights,
+				Messages.ProjectComposite_Not_Allowed_To_Remove_Participant_From_Project);
+		} catch (final ESException ex) {
+			EMFStoreMessageDialog.showExceptionDialog(ex);
 		}
-		getTableViewer().refresh();
+		if (isDoRefresh) {
+			getTableViewer().refresh();
+		}
 	}
 
 	/**
@@ -92,15 +104,25 @@ public class ProjectComposite extends PropertiesComposite {
 	 */
 	@Override
 	protected void addExistingOrgUnit(ACOrgUnit participant) {
+		boolean isDoRefresh = false;
 		try {
 			if (participant != null) {
-				getAdminBroker().addParticipant(projectInfo.getProjectId(), participant.getId(),
+				getAdminBroker().addParticipant(projectInfo.getProjectId(),
+					participant.getId(),
 					RolesPackage.eINSTANCE.getReaderRole());
+				isDoRefresh = true;
 			}
-		} catch (final ESException e) {
-			EMFStoreMessageDialog.showExceptionDialog(e);
+		} catch (final AccessControlException ex) {
+			MessageDialog.openWarning(
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+				Messages.ProjectComposite_Insufficient_Access_Rights,
+				Messages.ProjectComposite_Not_Allowed_To_Add_Participant_To_Project);
+		} catch (final ESException ex) {
+			EMFStoreMessageDialog.showExceptionDialog(ex);
 		}
-		getTableViewer().refresh();
+		if (isDoRefresh) {
+			getTableViewer().refresh();
+		}
 	}
 
 	/**
@@ -108,19 +130,24 @@ public class ProjectComposite extends PropertiesComposite {
 	 */
 	@Override
 	protected void addNewOrgUnit() {
+		boolean isDoRefresh = false;
 		try {
 			final EList<ACOrgUnit> participants = getParticipants();
+			isDoRefresh = participants.size() > 0;
 			for (final ACOrgUnit orgUnit : participants) {
-
 				getAdminBroker().addParticipant(projectInfo.getProjectId(), orgUnit.getId(),
 					RolesPackage.eINSTANCE.getReaderRole());
-
 			}
-
-		} catch (final ESException e) {
-			EMFStoreMessageDialog.showExceptionDialog(e);
+		} catch (final AccessControlException ex) {
+			MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+				Messages.ProjectComposite_Insufficient_Access_Rights,
+				Messages.ProjectComposite_Not_Allowed_To_Add_Participant_To_Project);
+		} catch (final ESException ex) {
+			EMFStoreMessageDialog.showExceptionDialog(ex);
 		}
-		getTableViewer().refresh();
+		if (isDoRefresh) {
+			getTableViewer().refresh();
+		}
 	}
 
 	/**
@@ -136,9 +163,16 @@ public class ProjectComposite extends PropertiesComposite {
 		final EList<ACOrgUnit> participants = new BasicEList<ACOrgUnit>();
 
 		try {
-
 			allOrgUnits.addAll(getAdminBroker().getOrgUnits());
+		} catch (final AccessControlException ex) {
+			MessageDialog.openWarning(getShell(),
+				Messages.ProjectComposite_Insufficient_Access_Rights,
+				Messages.ProjectComposite_Not_Allowed_To_List_OrgUnits);
+		} catch (final ESException ex) {
+			EMFStoreMessageDialog.showExceptionDialog(ex);
+		}
 
+		try {
 			if (projectInfo != null) {
 				allOrgUnits.removeAll(getAdminBroker().getParticipants(projectInfo.getProjectId()));
 			}
@@ -150,8 +184,12 @@ public class ProjectComposite extends PropertiesComposite {
 					participants.add((ACOrgUnit) result[i]);
 				}
 			}
-		} catch (final ESException e) {
-			EMFStoreMessageDialog.showExceptionDialog(e);
+		} catch (final AccessControlException e) {
+			MessageDialog.openWarning(getShell(),
+				Messages.ProjectComposite_Insufficient_Access_Rights,
+				Messages.ProjectComposite_Not_Allowed_To_List_Participants);
+		} catch (final ESException ex) {
+			EMFStoreMessageDialog.showExceptionDialog(ex);
 		}
 
 		return participants;
@@ -239,36 +277,43 @@ public class ProjectComposite extends PropertiesComposite {
 	 * @param role new role
 	 */
 	public void changeRole(ACOrgUnit orgUnit, int role) {
+		boolean isDoRefresh = false;
 		try {
 			switch (role) {
 			case READER_ROLE:
 				getAdminBroker().changeRole(projectInfo.getProjectId(), orgUnit.getId(),
 					RolesPackage.eINSTANCE.getReaderRole());
-
+				isDoRefresh = true;
 				break;
-
 			case WRITER_ROLE:
 				getAdminBroker().changeRole(projectInfo.getProjectId(), orgUnit.getId(),
 					RolesPackage.eINSTANCE.getWriterRole());
+				isDoRefresh = true;
 				break;
-
 			case PROJECT_ADMIN_ROLE:
 				getAdminBroker().changeRole(projectInfo.getProjectId(), orgUnit.getId(),
 					RolesPackage.eINSTANCE.getProjectAdminRole());
+				isDoRefresh = true;
 				break;
-
 			case SERVER_ADMIN_ROLE:
 				getAdminBroker().changeRole(projectInfo.getProjectId(), orgUnit.getId(),
 					RolesPackage.eINSTANCE.getServerAdmin());
+				isDoRefresh = true;
 				break;
 			default:
 				break;
-
 			}
-		} catch (final ESException e) {
-			EMFStoreMessageDialog.showExceptionDialog(e);
+		} catch (final AccessControlException ex) {
+			MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+				Messages.ProjectComposite_Insufficient_Access_Rights,
+				Messages.ProjectComposite_Not_Allowed_To_Change_Role_Of_OrgUnit);
+		} catch (final ESException ex) {
+			EMFStoreMessageDialog.showExceptionDialog(ex);
 		}
-		getTableViewer().refresh();
+
+		if (isDoRefresh) {
+			getTableViewer().refresh();
+		}
 	}
 
 	/**
@@ -330,8 +375,12 @@ public class ProjectComposite extends PropertiesComposite {
 			} else if (role.eClass().equals(RolesPackage.eINSTANCE.getServerAdmin())) {
 				result = SERVER_ADMIN_ROLE;
 			}
-		} catch (final ESException e) {
-			EMFStoreMessageDialog.showExceptionDialog(e);
+		} catch (final AccessControlException ex) {
+			MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+				Messages.ProjectComposite_Insufficient_Access_Rights,
+				Messages.ProjectComposite_Not_Allowed_To_Get_Role_Of_OrgUnit);
+		} catch (final ESException ex) {
+			EMFStoreMessageDialog.showExceptionDialog(ex);
 		}
 		return result;
 	}

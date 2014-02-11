@@ -14,10 +14,12 @@ package org.eclipse.emf.emfstore.internal.client.ui.views.emfstorebrowser.dialog
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.emfstore.internal.client.model.AdminBroker;
 import org.eclipse.emf.emfstore.internal.client.ui.dialogs.EMFStoreMessageDialog;
 import org.eclipse.emf.emfstore.internal.server.ServerConfiguration;
+import org.eclipse.emf.emfstore.internal.server.exceptions.AccessControlException;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACGroup;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnit;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACUser;
@@ -30,6 +32,7 @@ import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.Form;
 
 /**
@@ -62,12 +65,20 @@ public class UserComposite extends PropertiesComposite {
 	 */
 	@Override
 	protected void removeOrgUnit(ACOrgUnit group) {
+		boolean isDoRefresh = false;
 		try {
 			getAdminBroker().removeGroup(user.getId(), ((ACGroup) group).getId());
-		} catch (final ESException e) {
-			EMFStoreMessageDialog.showExceptionDialog(e);
+			isDoRefresh = true;
+		} catch (final AccessControlException ex) {
+			MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+				Messages.UserComposite_Insufficient_Access_Rights,
+				Messages.UserComposite_Not_Allowed_To_Remove_Member_From_Group);
+		} catch (final ESException ex) {
+			EMFStoreMessageDialog.showExceptionDialog(ex);
 		}
-		getTableViewer().refresh();
+		if (isDoRefresh) {
+			getTableViewer().refresh();
+		}
 	}
 
 	/**
@@ -75,16 +86,23 @@ public class UserComposite extends PropertiesComposite {
 	 */
 	@Override
 	protected void addExistingOrgUnit(ACOrgUnit group) {
-
+		boolean isDoRefresh = false;
 		try {
 			if (group != null) {
 				getAdminBroker().addMember(((ACGroup) group).getId(), user.getId());
-
+				isDoRefresh = true;
 			}
-		} catch (final ESException e) {
-			EMFStoreMessageDialog.showExceptionDialog(e);
+		} catch (final AccessControlException ex) {
+			MessageDialog.openWarning(
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+				Messages.UserComposite_Insufficient_Access_Rights,
+				Messages.UserComposite_Not_Allowed_To_Add_Member_To_Group);
+		} catch (final ESException ex) {
+			EMFStoreMessageDialog.showExceptionDialog(ex);
 		}
-		getTableViewer().refresh();
+		if (isDoRefresh) {
+			getTableViewer().refresh();
+		}
 	}
 
 	/**
@@ -92,19 +110,23 @@ public class UserComposite extends PropertiesComposite {
 	 */
 	@Override
 	protected void addNewOrgUnit() {
-
+		boolean isDoRefresh = false;
 		try {
 			final List<ACGroup> groups = getGroups();
+			isDoRefresh = groups.size() > 0;
 			for (final ACGroup newGroup : groups) {
-
 				getAdminBroker().addMember(newGroup.getId(), user.getId());
-
 			}
-
-		} catch (final ESException e) {
-			EMFStoreMessageDialog.showExceptionDialog(e);
+		} catch (final AccessControlException ex) {
+			MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+				Messages.UserComposite_Insufficient_Access_Rights,
+				Messages.UserComposite_Not_Allowed_To_Add_Member_To_Group);
+		} catch (final ESException ex) {
+			EMFStoreMessageDialog.showExceptionDialog(ex);
 		}
-		getTableViewer().refresh();
+		if (isDoRefresh) {
+			getTableViewer().refresh();
+		}
 	}
 
 	/**
@@ -124,15 +146,19 @@ public class UserComposite extends PropertiesComposite {
 
 			allGroups.removeAll(groupsToRemove);
 
-			final Object[] result = showDialog(allGroups, "Select a group");
+			final Object[] result = showDialog(allGroups, Messages.UserComposite_Select_Group);
 
 			for (int i = 0; i < result.length; i++) {
 				if (result[i] instanceof ACGroup) {
 					groups.add((ACGroup) result[i]);
 				}
 			}
-		} catch (final ESException e) {
-			EMFStoreMessageDialog.showExceptionDialog(e);
+		} catch (final AccessControlException ex) {
+			MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+				Messages.UserComposite_Insufficient_Access_Rights,
+				Messages.UserComposite_Not_Allowed_To_List_Groups);
+		} catch (final ESException ex) {
+			EMFStoreMessageDialog.showExceptionDialog(ex);
 		}
 		return groups;
 	}
@@ -145,7 +171,7 @@ public class UserComposite extends PropertiesComposite {
 	 */
 	@Override
 	protected String getTabTitle() {
-		return "Groups";
+		return Messages.UserComposite_Groups;
 	}
 
 	/**
@@ -158,7 +184,7 @@ public class UserComposite extends PropertiesComposite {
 			user = (ACUser) input;
 
 			getTxtName().setText(user.getName());
-			getTxtDescription().setText(user.getDescription() == null ? "" : user.getDescription());
+			getTxtDescription().setText(user.getDescription() == null ? StringUtils.EMPTY : user.getDescription());
 			getTableViewer().setInput(user);
 
 			// disable the text fields for editing name and description when displaying the super user
@@ -191,9 +217,9 @@ public class UserComposite extends PropertiesComposite {
 		final DropTargetListener dropListener = new DropTargetAdapter() {
 			@Override
 			public void dragEnter(DropTargetEvent event) {
-				if (PropertiesForm.getDragSource().equals("Projects") || PropertiesForm.getDragSource().equals("Users")) {
+				if (PropertiesForm.getDragSource().equals(Messages.UserComposite_Projects)
+					|| PropertiesForm.getDragSource().equals(Messages.UserComposite_Users)) {
 					event.detail = DND.DROP_NONE;
-
 				} else {
 					event.detail = DND.DROP_COPY;
 				}
@@ -229,15 +255,15 @@ public class UserComposite extends PropertiesComposite {
 		final String superUserName = ServerConfiguration.getProperties().getProperty(ServerConfiguration.SUPER_USER,
 			ServerConfiguration.SUPER_USER_DEFAULT);
 		if (getTxtName().getText().compareToIgnoreCase(superUserName) == 0) {
-			getTxtName().setText("New User");
-			MessageDialog.openInformation(getShell(), "Illegal User Name!!!",
-				"The username \"super\" is not allowed! It was set to a default value. ");
+			getTxtName().setText(Messages.UserComposite_New_User);
+			MessageDialog.openInformation(getShell(), Messages.UserComposite_Illegal_Username,
+				Messages.UserComposite_Username_Super_Not_Allowed);
 			return;
 		}
-		if (getTxtName().getText().equals("")) {
-			getTxtName().setText("New User");
-			MessageDialog.openInformation(getShell(), "Empty User Name!!!",
-				"Empty usernames are not allowed! It was set to a default value.");
+		if (getTxtName().getText().equals(StringUtils.EMPTY)) {
+			getTxtName().setText(Messages.UserComposite_New_User);
+			MessageDialog.openInformation(getShell(), Messages.UserComposite_Empty_Username,
+				Messages.UserComposite_Empty_Username_Not_Allowed);
 			return;
 		}
 
@@ -245,7 +271,7 @@ public class UserComposite extends PropertiesComposite {
 			getTxtDescription().getText()))) {
 			try {
 				getAdminBroker().changeOrgUnit(user.getId(), getTxtName().getText(), getTxtDescription().getText());
-				((Form) getParent().getParent()).setText("User: " + getTxtName().getText());
+				((Form) getParent().getParent()).setText(Messages.UserComposite_User + getTxtName().getText());
 				orgUnitMgmtGUI.getActiveTabContent().getTableViewer().refresh();
 
 			} catch (final ESException e) {
