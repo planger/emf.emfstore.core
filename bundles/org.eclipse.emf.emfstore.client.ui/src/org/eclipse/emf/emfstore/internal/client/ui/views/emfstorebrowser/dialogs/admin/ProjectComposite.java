@@ -55,7 +55,7 @@ public class ProjectComposite extends PropertiesComposite {
 	private static final int SERVER_ADMIN_ROLE = 3;
 
 	// Set column names
-	private final String[] roleNames = new String[] { "Reader", "Writer", "Project Admin", "Server Admin" };
+	private final String[] roleNames = new String[] { Messages.ProjectComposite_Reader, Messages.ProjectComposite_Writer, Messages.ProjectComposite_ProjectAdmin, Messages.ProjectComposite_ServerAdmin };
 
 	private Label lblVersion;
 	private Text txtVersion;
@@ -143,7 +143,7 @@ public class ProjectComposite extends PropertiesComposite {
 				allOrgUnits.removeAll(getAdminBroker().getParticipants(projectInfo.getProjectId()));
 			}
 
-			final Object[] result = showDialog(allOrgUnits, "Select a participant");
+			final Object[] result = showDialog(allOrgUnits, Messages.ProjectComposite_Select_Participant);
 
 			for (int i = 0; i < result.length; i++) {
 				if (result[i] instanceof ACOrgUnit) {
@@ -165,7 +165,7 @@ public class ProjectComposite extends PropertiesComposite {
 	 */
 	@Override
 	protected String getTabTitle() {
-		return "Participants";
+		return Messages.ProjectComposite_Participants;
 	}
 
 	/**
@@ -179,7 +179,7 @@ public class ProjectComposite extends PropertiesComposite {
 		super.createTableViewer(parent);
 
 		final TableViewerColumn roleColumnViewer = new TableViewerColumn(getTableViewer(), SWT.NONE);
-		roleColumnViewer.getColumn().setText("Role");
+		roleColumnViewer.getColumn().setText(Messages.ProjectComposite_Role);
 		roleColumnViewer.getColumn().setWidth(120);
 		roleColumnViewer.setLabelProvider(new ColumnLabelProvider() {
 			@Override
@@ -208,7 +208,7 @@ public class ProjectComposite extends PropertiesComposite {
 		final DropTargetListener dropListener = new DropTargetAdapter() {
 			@Override
 			public void dragEnter(DropTargetEvent event) {
-				if (PropertiesForm.getDragSource().equals("Projects")) {
+				if (PropertiesForm.getDragSource().equals(Messages.ProjectComposite_Projects)) {
 					event.detail = DND.DROP_NONE;
 
 				} else {
@@ -283,7 +283,7 @@ public class ProjectComposite extends PropertiesComposite {
 		getTxtDescription().setEnabled(false);
 
 		lblVersion = new Label(getAttributesGroup(), SWT.NONE);
-		lblVersion.setText("Version: ");
+		lblVersion.setText(Messages.ProjectComposite_Version);
 		txtVersion = new Text(getAttributesGroup(), SWT.BORDER);
 		txtVersion.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txtVersion.setEnabled(false);
@@ -292,7 +292,8 @@ public class ProjectComposite extends PropertiesComposite {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @param projectInfo
+	 * @param input
+	 *            must be a {@link ProjectInfo} instance
 	 */
 	@Override
 	public void updateControls(EObject input) {

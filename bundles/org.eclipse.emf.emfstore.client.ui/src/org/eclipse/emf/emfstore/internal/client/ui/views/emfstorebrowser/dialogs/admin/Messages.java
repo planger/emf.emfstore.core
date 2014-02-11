@@ -21,6 +21,15 @@ import org.eclipse.osgi.util.NLS;
  */
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.emf.emfstore.internal.client.ui.views.emfstorebrowser.dialogs.admin.messages"; //$NON-NLS-1$
+	public static String ProjectComposite_Participants;
+	public static String ProjectComposite_ProjectAdmin;
+	public static String ProjectComposite_Projects;
+	public static String ProjectComposite_Reader;
+	public static String ProjectComposite_Role;
+	public static String ProjectComposite_Select_Participant;
+	public static String ProjectComposite_ServerAdmin;
+	public static String ProjectComposite_Version;
+	public static String ProjectComposite_Writer;
 	public static String PropertiesComposite_Add;
 	public static String PropertiesComposite_Could_Not_Fetch_Group_Members;
 	public static String PropertiesComposite_Could_Not_Fetch_Groups;
