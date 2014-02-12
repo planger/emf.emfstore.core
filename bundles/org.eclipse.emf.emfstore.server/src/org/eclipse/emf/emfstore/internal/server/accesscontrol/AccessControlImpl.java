@@ -385,6 +385,9 @@ public class AccessControlImpl implements AccessControl {
 			if (isServerAdminRole(role)) {
 				return true;
 			}
+		}
+
+		for (final Role role : roles) {
 			if (isProjectAdminRole(role)) {
 
 				if (!ServerConfiguration.isProjectAdminPrivileg(privileg)) {
@@ -413,21 +416,28 @@ public class AccessControlImpl implements AccessControl {
 	 * @see org.eclipse.emf.emfstore.internal.server.accesscontrol.AuthorizationControl#checkProjectAdminAccessForOrgUnit(org.eclipse.emf.emfstore.internal.server.model.SessionId,
 	 *      org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnitId)
 	 */
-	public void checkProjectAdminAccessForOrgUnit(SessionId sessionId, ACOrgUnitId orgUnitId)
+	public boolean checkProjectAdminAccessForOrgUnit(SessionId sessionId, ACOrgUnitId orgUnitId)
 		throws AccessControlException {
+
 		final List<Role> allRoles = getAllRoles(orgUnitId);
 		final Set<ProjectId> involvedProjects = new LinkedHashSet<ProjectId>();
+		final ACUser user = getUser(sessionId);
+		final boolean hasServerAdminRole = hasServerAdminRole(user);
 
 		for (final Role role : allRoles) {
+			if ((isServerAdminRole(role) || isProjectAdminRole(role)) && !hasServerAdminRole) {
+				throw new AccessControlException(Messages.AccessControlImpl_Not_Allowed_To_Remove_Other_Admin);
+			}
 			involvedProjects.addAll(role.getProjects());
 		}
 
+		if (hasServerAdminRole) {
+			return true;
+		}
+
 		ProjectAdminRole paRole = null;
-		final ACUser user = getUser(sessionId);
 		for (final Role role : user.getRoles()) {
-			if (isServerAdminRole(role)) {
-				return;
-			} else if (isProjectAdminRole(role)) {
+			if (isProjectAdminRole(role)) {
 				paRole = (ProjectAdminRole) role;
 				break;
 			}
@@ -435,10 +445,19 @@ public class AccessControlImpl implements AccessControl {
 
 		// TODO: paRole should never be null here
 		if (paRole.getProjects().containsAll(involvedProjects)) {
-			return;
+			return false;
 		}
 
 		throw new AccessControlException(Messages.AccessControlImpl_Insufficient_Rights);
+	}
+
+	private boolean hasServerAdminRole(ACOrgUnit orgUnit) {
+		for (final Role role : orgUnit.getRoles()) {
+			if (isServerAdminRole(role)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private List<Role> getAllRoles(ACOrgUnitId orgUnitId) throws AccessControlException {
@@ -459,7 +478,7 @@ public class AccessControlImpl implements AccessControl {
 	 * @see org.eclipse.emf.emfstore.internal.server.accesscontrol.AuthorizationControl#checkProjectAdminAccess(org.eclipse.emf.emfstore.internal.server.model.SessionId,
 	 *      org.eclipse.emf.emfstore.internal.server.model.ProjectId)
 	 */
-	public void checkProjectAdminAccess(SessionId sessionId, ProjectId projectId)
+	public boolean checkProjectAdminAccess(SessionId sessionId, ProjectId projectId)
 		throws AccessControlException {
 		checkSession(sessionId);
 
@@ -467,13 +486,20 @@ public class AccessControlImpl implements AccessControl {
 		final List<Role> roles = new ArrayList<Role>();
 		roles.addAll(user.getRoles());
 		roles.addAll(getRolesFromGroups(user));
+
+		for (final Role role : roles) {
+			if (isServerAdminRole(role)) {
+				return true;
+			}
+		}
+
 		for (final Role role : roles) {
 			if (projectId == null && isProjectAdminRole(role)) {
-				return;
+				return false;
 			}
-			// TODO: does this case ever apply?
+
 			if (role.canAdministrate(projectId)) {
-				return;
+				return false;
 			}
 		}
 		throw new AccessControlException(Messages.AccessControlImpl_Insufficient_Rights);

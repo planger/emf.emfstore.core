@@ -136,42 +136,25 @@ public class UserTabContent extends TabContent implements IPropertyChangeListene
 					return;
 				}
 
-				// try {
-				final String superUser = ServerConfiguration.getProperties().getProperty(
-					ServerConfiguration.SUPER_USER,
-					ServerConfiguration.SUPER_USER_DEFAULT);
-				boolean isAdmin = false;
-				for (final Iterator<Role> it = user.getRoles().iterator(); it.hasNext();) {
-					final Role userRole = it.next();
-					if (user.getName().compareTo(superUser) == 0 && userRole instanceof ServerAdmin) {
-						isAdmin = true;
-						break;
-					}
-				}
 				final Display display = Display.getCurrent();
 				final Shell activeShell = display.getActiveShell();
-				if (isAdmin) {
-					MessageDialog.openInformation(activeShell,
-						Messages.UserTabContent_Illegal_Deletion_Attempt,
-						Messages.UserTabContent_Not_Allowed_To_Delete_SuperUser);
-				} else {
-					final InputDialog inputDialog = new InputDialog(
-						activeShell,
-						Messages.UserTabContent_Enter_New_Password_For_User
-							+ "'" + user.getName() + "'", //$NON-NLS-1$//$NON-NLS-2$ 
-						Messages.UserTabContent_Enter_New_Password,
-						StringUtils.EMPTY, null);
-					if (inputDialog.open() == Window.OK) {
-						final String newPassword = inputDialog.getValue();
-						try {
-							getAdminBroker().changeUser(user.getId(), user.getName(), newPassword);
-						} catch (final AccessControlException ex) {
-							MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-								Messages.UserTabContent_Insufficient_Access_Rights,
-								Messages.UserTabContent_Not_Allowed_To_Delete_User);
-						} catch (final ESException ex) {
-							EMFStoreMessageDialog.showExceptionDialog(ex);
-						}
+				final InputDialog inputDialog = new InputDialog(
+					activeShell,
+					Messages.UserTabContent_Enter_New_Password_For_User
+						+ "'" + user.getName() + "'", //$NON-NLS-1$//$NON-NLS-2$ 
+					Messages.UserTabContent_Enter_New_Password,
+					StringUtils.EMPTY, null);
+
+				if (inputDialog.open() == Window.OK) {
+					final String newPassword = inputDialog.getValue();
+					try {
+						getAdminBroker().changeUser(user.getId(), user.getName(), newPassword);
+					} catch (final AccessControlException ex) {
+						MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+							Messages.UserTabContent_Insufficient_Access_Rights,
+							Messages.UserTabContent_Not_Allowed_To_Change_Password);
+					} catch (final ESException ex) {
+						EMFStoreMessageDialog.showExceptionDialog(ex);
 					}
 				}
 

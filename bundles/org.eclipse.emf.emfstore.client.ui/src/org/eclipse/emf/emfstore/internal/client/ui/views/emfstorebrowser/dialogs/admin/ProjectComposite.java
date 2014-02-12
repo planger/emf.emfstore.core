@@ -83,10 +83,8 @@ public class ProjectComposite extends PropertiesComposite {
 	 */
 	@Override
 	protected void removeOrgUnit(ACOrgUnit orgUnit) {
-		boolean isDoRefresh = false;
 		try {
 			getAdminBroker().removeParticipant(projectInfo.getProjectId(), orgUnit.getId());
-			isDoRefresh = true;
 		} catch (final AccessControlException ex) {
 			MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
 				Messages.ProjectComposite_Insufficient_Access_Rights,
@@ -94,9 +92,8 @@ public class ProjectComposite extends PropertiesComposite {
 		} catch (final ESException ex) {
 			EMFStoreMessageDialog.showExceptionDialog(ex);
 		}
-		if (isDoRefresh) {
-			getTableViewer().refresh();
-		}
+
+		getTableViewer().refresh();
 	}
 
 	/**
@@ -104,13 +101,11 @@ public class ProjectComposite extends PropertiesComposite {
 	 */
 	@Override
 	protected void addExistingOrgUnit(ACOrgUnit participant) {
-		boolean isDoRefresh = false;
 		try {
 			if (participant != null) {
 				getAdminBroker().addParticipant(projectInfo.getProjectId(),
 					participant.getId(),
 					RolesPackage.eINSTANCE.getReaderRole());
-				isDoRefresh = true;
 			}
 		} catch (final AccessControlException ex) {
 			MessageDialog.openWarning(
@@ -120,9 +115,8 @@ public class ProjectComposite extends PropertiesComposite {
 		} catch (final ESException ex) {
 			EMFStoreMessageDialog.showExceptionDialog(ex);
 		}
-		if (isDoRefresh) {
-			getTableViewer().refresh();
-		}
+
+		getTableViewer().refresh();
 	}
 
 	/**
@@ -130,10 +124,8 @@ public class ProjectComposite extends PropertiesComposite {
 	 */
 	@Override
 	protected void addNewOrgUnit() {
-		boolean isDoRefresh = false;
 		try {
 			final EList<ACOrgUnit> participants = getParticipants();
-			isDoRefresh = participants.size() > 0;
 			for (final ACOrgUnit orgUnit : participants) {
 				getAdminBroker().addParticipant(projectInfo.getProjectId(), orgUnit.getId(),
 					RolesPackage.eINSTANCE.getReaderRole());
@@ -145,9 +137,8 @@ public class ProjectComposite extends PropertiesComposite {
 		} catch (final ESException ex) {
 			EMFStoreMessageDialog.showExceptionDialog(ex);
 		}
-		if (isDoRefresh) {
-			getTableViewer().refresh();
-		}
+		getTableViewer().refresh();
+
 	}
 
 	/**
@@ -277,28 +268,23 @@ public class ProjectComposite extends PropertiesComposite {
 	 * @param role new role
 	 */
 	public void changeRole(ACOrgUnit orgUnit, int role) {
-		boolean isDoRefresh = false;
 		try {
 			switch (role) {
 			case READER_ROLE:
 				getAdminBroker().changeRole(projectInfo.getProjectId(), orgUnit.getId(),
 					RolesPackage.eINSTANCE.getReaderRole());
-				isDoRefresh = true;
 				break;
 			case WRITER_ROLE:
 				getAdminBroker().changeRole(projectInfo.getProjectId(), orgUnit.getId(),
 					RolesPackage.eINSTANCE.getWriterRole());
-				isDoRefresh = true;
 				break;
 			case PROJECT_ADMIN_ROLE:
 				getAdminBroker().changeRole(projectInfo.getProjectId(), orgUnit.getId(),
 					RolesPackage.eINSTANCE.getProjectAdminRole());
-				isDoRefresh = true;
 				break;
 			case SERVER_ADMIN_ROLE:
 				getAdminBroker().changeRole(projectInfo.getProjectId(), orgUnit.getId(),
 					RolesPackage.eINSTANCE.getServerAdmin());
-				isDoRefresh = true;
 				break;
 			default:
 				break;
@@ -311,9 +297,8 @@ public class ProjectComposite extends PropertiesComposite {
 			EMFStoreMessageDialog.showExceptionDialog(ex);
 		}
 
-		if (isDoRefresh) {
-			getTableViewer().refresh();
-		}
+		getTableViewer().refresh();
+
 	}
 
 	/**

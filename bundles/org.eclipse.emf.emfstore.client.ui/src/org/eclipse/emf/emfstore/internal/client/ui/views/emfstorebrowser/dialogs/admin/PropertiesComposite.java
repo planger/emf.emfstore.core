@@ -442,8 +442,9 @@ public abstract class PropertiesComposite extends Composite {
 					groups = adminBroker.getGroups(((ACUser) inputElement).getId());
 					result = groups.toArray(new ACOrgUnit[groups.size()]);
 				} catch (final ESException ex) {
-					MessageDialog.openWarning(getShell(), Messages.PropertiesComposite_Could_Not_Fetch_Groups,
-						ex.getMessage());
+					MessageDialog.openWarning(getShell(),
+						Messages.ProjectComposite_Insufficient_Access_Rights,
+						Messages.PropertiesComposite_Could_Not_Fetch_Groups_Of_User);
 				}
 
 			} else if (inputElement instanceof ACGroup) {

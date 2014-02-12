@@ -31,6 +31,7 @@ public final class Messages extends NLS {
 	public static String GroupTabContent_Not_Allowed_To_Create_New_Group;
 	public static String GroupTabContent_Create_New_Group;
 	public static String GroupTabContent_Delete_Group;
+	public static String GroupTabContent_Error;
 	public static String GroupTabContent_Insufficient_Access_Rights;
 	public static String GroupTabContent_New_Group;
 	public static String GroupTabContent_Not_Allowed_To_Delete_Selected_Group;
@@ -56,7 +57,7 @@ public final class Messages extends NLS {
 	public static String ProjectTabContent_Not_Allowed_To_List_ProjectInfos;
 	public static String PropertiesComposite_Add;
 	public static String PropertiesComposite_Could_Not_Fetch_Group_Members;
-	public static String PropertiesComposite_Could_Not_Fetch_Groups;
+	public static String PropertiesComposite_Could_Not_Fetch_Groups_Of_User;
 	public static String PropertiesComposite_Could_Not_Fetch_Participants;
 	public static String PropertiesComposite_Description;
 	public static String PropertiesComposite_Name;
@@ -89,6 +90,7 @@ public final class Messages extends NLS {
 	public static String UserTabContent_Enter_New_Password_For_User;
 	public static String UserTabContent_Illegal_Deletion_Attempt;
 	public static String UserTabContent_Insufficient_Access_Rights;
+	public static String UserTabContent_Not_Allowed_To_Change_Password;
 	public static String UserTabContent_Not_Allowed_To_Delete_SuperUser;
 	public static String UserTabContent_Not_Allowed_To_Delete_User;
 	public static String UserTabContent_Not_Allowed_To_List_Users;

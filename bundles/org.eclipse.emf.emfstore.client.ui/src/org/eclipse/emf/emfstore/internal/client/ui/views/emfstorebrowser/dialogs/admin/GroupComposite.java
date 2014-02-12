@@ -70,10 +70,8 @@ public class GroupComposite extends PropertiesComposite {
 	 */
 	@Override
 	protected void removeOrgUnit(ACOrgUnit orgUnit) {
-		boolean isDoRefresh = false;
 		try {
 			getAdminBroker().removeMember(group.getId(), orgUnit.getId());
-			isDoRefresh = true;
 		} catch (final AccessControlException ex) {
 			MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
 				Messages.GroupComposite_Insufficient_Access_Rights,
@@ -81,9 +79,8 @@ public class GroupComposite extends PropertiesComposite {
 		} catch (final ESException ex) {
 			EMFStoreMessageDialog.showExceptionDialog(ex);
 		}
-		if (isDoRefresh) {
-			getTableViewer().refresh();
-		}
+		getTableViewer().refresh();
+
 	}
 
 	/**
@@ -91,11 +88,9 @@ public class GroupComposite extends PropertiesComposite {
 	 */
 	@Override
 	protected void addExistingOrgUnit(ACOrgUnit orgUnit) {
-		boolean isDoRefresh = false;
 		if (orgUnit != null && !orgUnit.equals(group)) {
 			try {
 				getAdminBroker().addMember(group.getId(), orgUnit.getId());
-				isDoRefresh = true;
 			} catch (final AccessControlException e) {
 				MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
 					Messages.GroupComposite_Insufficient_Access_Rights,
@@ -104,9 +99,8 @@ public class GroupComposite extends PropertiesComposite {
 				EMFStoreMessageDialog.showExceptionDialog(ex);
 			}
 		}
-		if (isDoRefresh) {
-			getTableViewer().refresh();
-		}
+
+		getTableViewer().refresh();
 	}
 
 	/**
@@ -114,7 +108,6 @@ public class GroupComposite extends PropertiesComposite {
 	 */
 	@Override
 	protected void addNewOrgUnit() {
-		final boolean isDoRefresh = false;
 		for (final ACOrgUnit newMember : getNewMembers()) {
 			try {
 				getAdminBroker().addMember(group.getId(), newMember.getId());
@@ -126,9 +119,8 @@ public class GroupComposite extends PropertiesComposite {
 				EMFStoreMessageDialog.showExceptionDialog(ex);
 			}
 		}
-		if (isDoRefresh) {
-			getTableViewer().refresh();
-		}
+
+		getTableViewer().refresh();
 	}
 
 	/**

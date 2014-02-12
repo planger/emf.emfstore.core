@@ -65,10 +65,8 @@ public class UserComposite extends PropertiesComposite {
 	 */
 	@Override
 	protected void removeOrgUnit(ACOrgUnit group) {
-		boolean isDoRefresh = false;
 		try {
 			getAdminBroker().removeGroup(user.getId(), ((ACGroup) group).getId());
-			isDoRefresh = true;
 		} catch (final AccessControlException ex) {
 			MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
 				Messages.UserComposite_Insufficient_Access_Rights,
@@ -76,9 +74,8 @@ public class UserComposite extends PropertiesComposite {
 		} catch (final ESException ex) {
 			EMFStoreMessageDialog.showExceptionDialog(ex);
 		}
-		if (isDoRefresh) {
-			getTableViewer().refresh();
-		}
+		getTableViewer().refresh();
+
 	}
 
 	/**
@@ -86,11 +83,9 @@ public class UserComposite extends PropertiesComposite {
 	 */
 	@Override
 	protected void addExistingOrgUnit(ACOrgUnit group) {
-		boolean isDoRefresh = false;
 		try {
 			if (group != null) {
 				getAdminBroker().addMember(((ACGroup) group).getId(), user.getId());
-				isDoRefresh = true;
 			}
 		} catch (final AccessControlException ex) {
 			MessageDialog.openWarning(
@@ -100,9 +95,7 @@ public class UserComposite extends PropertiesComposite {
 		} catch (final ESException ex) {
 			EMFStoreMessageDialog.showExceptionDialog(ex);
 		}
-		if (isDoRefresh) {
-			getTableViewer().refresh();
-		}
+		getTableViewer().refresh();
 	}
 
 	/**
@@ -110,10 +103,8 @@ public class UserComposite extends PropertiesComposite {
 	 */
 	@Override
 	protected void addNewOrgUnit() {
-		boolean isDoRefresh = false;
 		try {
 			final List<ACGroup> groups = getGroups();
-			isDoRefresh = groups.size() > 0;
 			for (final ACGroup newGroup : groups) {
 				getAdminBroker().addMember(newGroup.getId(), user.getId());
 			}
@@ -124,9 +115,7 @@ public class UserComposite extends PropertiesComposite {
 		} catch (final ESException ex) {
 			EMFStoreMessageDialog.showExceptionDialog(ex);
 		}
-		if (isDoRefresh) {
-			getTableViewer().refresh();
-		}
+		getTableViewer().refresh();
 	}
 
 	/**

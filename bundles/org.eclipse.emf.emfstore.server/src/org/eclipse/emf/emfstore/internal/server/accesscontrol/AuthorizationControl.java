@@ -61,9 +61,11 @@ public interface AuthorizationControl {
 	 * @param orgUnitId
 	 *            the ID of an organizational unit
 	 * 
+	 * @return {@code true}, if permission is granted via the server admin role, {@code false} otherwise
+	 * 
 	 * @throws AccessControlException if the session is invalid for admin access
 	 */
-	void checkProjectAdminAccessForOrgUnit(SessionId sessionId, ACOrgUnitId orgUnitId) throws AccessControlException;
+	boolean checkProjectAdminAccessForOrgUnit(SessionId sessionId, ACOrgUnitId orgUnitId) throws AccessControlException;
 
 	/**
 	 * Check if the session is valid for admin access to the given project.
@@ -72,9 +74,12 @@ public interface AuthorizationControl {
 	 *            the session id
 	 * @param projectId
 	 *            the project id. May be {@code null}
+	 * 
+	 * @return {@code true}, if permission is granted via the server admin role, {@code false} otherwise
+	 * 
 	 * @throws AccessControlException if the session is invalid for admin access
 	 */
-	void checkProjectAdminAccess(SessionId sessionId, ProjectId projectId)
+	boolean checkProjectAdminAccess(SessionId sessionId, ProjectId projectId)
 		throws AccessControlException;
 
 	/**

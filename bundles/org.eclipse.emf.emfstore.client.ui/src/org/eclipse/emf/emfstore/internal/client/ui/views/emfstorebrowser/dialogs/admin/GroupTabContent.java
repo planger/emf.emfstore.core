@@ -34,6 +34,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
 /**
@@ -73,11 +74,16 @@ public class GroupTabContent extends TabContent implements IPropertyChangeListen
 			public void run() {
 				try {
 					getAdminBroker().createGroup(Messages.GroupTabContent_New_Group);
-				} catch (final ESException e) {
+				} catch (final AccessControlException e) {
 					MessageDialog.openWarning(
-						PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+						Display.getDefault().getActiveShell(),
 						Messages.GroupTabContent_Insufficient_Access_Rights,
 						Messages.GroupTabContent_Not_Allowed_To_Create_New_Group);
+				} catch (final ESException ex) {
+					EMFStoreMessageDialog.showExceptionDialog(
+						Display.getDefault().getActiveShell(),
+						Messages.GroupTabContent_Error,
+						ex);
 				}
 				getTableViewer().refresh();
 				getForm().getTableViewer().refresh();

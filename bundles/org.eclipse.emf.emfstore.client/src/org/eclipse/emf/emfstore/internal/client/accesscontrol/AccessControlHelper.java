@@ -62,7 +62,9 @@ public class AccessControlHelper {
 	public void checkWriteAccess(ProjectId projectId) throws AccessControlException {
 
 		for (final Role role : user.getRoles()) {
-			if (role.canDelete(projectId, null) || role.canCreate(projectId, null) || role.canModify(projectId, null)) {
+			if (role.canDelete(projectId, null)
+				|| role.canCreate(projectId, null)
+				|| role.canModify(projectId, null)) {
 				return;
 			}
 		}
@@ -77,7 +79,7 @@ public class AccessControlHelper {
 	 */
 	public void checkProjectAdminAccess() throws AccessControlException {
 		for (final Role role : user.getRoles()) {
-			if (ProjectAdminRole.class.isInstance(role)) {
+			if (ServerAdmin.class.isInstance(role) || ProjectAdminRole.class.isInstance(role)) {
 				return;
 			}
 		}

@@ -24,9 +24,12 @@ public final class Messages extends NLS {
 	public static String AbstractSubEmfstoreInterface_Bad_Parameters;
 	public static String AbstractSubEmfstoreInterface_Exception_On_Execution;
 	public static String AbstractSubEmfstoreInterface_Method_Not_Accessible;
+	public static String AdminEmfStoreImpl_Assign_Role_Privilege_Not_Set;
 	public static String AdminEmfStoreImpl_Could_Not_Find_OrgUnit;
 	public static String AdminEmfStoreImpl_Group_Already_Exists;
 	public static String AdminEmfStoreImpl_Group_Does_Not_Exist;
+	public static String AdminEmfStoreImpl_Not_Allowed_To_Assign_ServerAdminRole;
+	public static String AdminEmfStoreImpl_Not_Allowed_To_Create_Participant_With_ServerAdminRole;
 	public static String AdminEmfStoreImpl_OrgUnit_Does_Not_Exist;
 	public static String AdminEmfStoreImpl_Unknown_ProjectID;
 	public static String EMFStoreImpl_ServerCallObserverNotifier_Failed;

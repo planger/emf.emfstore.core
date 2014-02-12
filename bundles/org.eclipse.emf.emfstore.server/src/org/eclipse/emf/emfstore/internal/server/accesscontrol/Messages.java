@@ -26,6 +26,7 @@ public final class Messages extends NLS {
 	public static String AccessControlImpl_Given_User_Does_Not_Exist;
 	public static String AccessControlImpl_Insufficient_Rights;
 	public static String AccessControlImpl_No_Access;
+	public static String AccessControlImpl_Not_Allowed_To_Remove_Other_Admin;
 	public static String AccessControlImpl_PARole_Missing_Privilege;
 	public static String AccessControlImpl_SessionID_Is_Null;
 	public static String AccessControlImpl_SessionID_Unknown;
