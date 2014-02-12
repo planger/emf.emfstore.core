@@ -11,11 +11,17 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.server.accesscontrol.test;
 
+import static org.eclipse.emf.emfstore.client.test.common.util.ProjectUtil.share;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.eclipse.emf.emfstore.client.ESLocalProject;
 import org.eclipse.emf.emfstore.client.test.common.dsl.Roles;
 import org.eclipse.emf.emfstore.client.test.common.util.ProjectUtil;
 import org.eclipse.emf.emfstore.client.test.common.util.ServerUtil;
+import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
+import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESLocalProjectImpl;
 import org.eclipse.emf.emfstore.internal.server.accesscontrol.PAPrivileges;
 import org.eclipse.emf.emfstore.internal.server.exceptions.AccessControlException;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnitId;
@@ -106,7 +112,7 @@ public class AssignRoleToOrgUnitTests extends ProjectAdminTest {
 	}
 
 	@Test
-	public void assignRoleProjectAdminPA() throws ESException {
+	public void assignPAAsPA() throws ESException {
 		final ACOrgUnitId newUser = ServerUtil.createUser(getSuperUsersession(), getNewUsername());
 		makeUserPA();
 		getAdminBroker().assignRole(newUser, Roles.projectAdmin());
@@ -114,14 +120,69 @@ public class AssignRoleToOrgUnitTests extends ProjectAdminTest {
 		assertTrue(hasProjectAdminRole(user));
 	}
 
+	@Test(expected = AccessControlException.class)
+	public void assignRoleServerAdminPA() throws ESException {
+		final ACOrgUnitId newUser = ServerUtil.createUser(getSuperUsersession(), getNewUsername());
+		makeUserPA();
+		getAdminBroker().assignRole(newUser, Roles.serverAdmin());
+	}
+
 	@Test
-	public void assignRoleWriterPA() throws ESException {
+	public void changeRoleToWriterAsPA() throws ESException {
+		final ACOrgUnitId newUser = ServerUtil.createUser(getSuperUsersession(), getNewUsername());
+		makeUserPA();
+		ProjectUtil.share(getUsersession(), getLocalProject());
+		getAdminBroker().changeRole(getProjectSpace().getProjectId(), newUser, Roles.writer());
+		final ACUser user = ServerUtil.getUser(getUsersession(), getNewUsername());
+		assertTrue(hasRole(user, Roles.writer()));
+	}
+
+	@Test
+	public void changeRoleToSAAsSA() throws ESException {
+		final ACOrgUnitId newUser = ServerUtil.createUser(getSuperUsersession(), getNewUsername());
+		makeUserSA();
+		ProjectUtil.share(getUsersession(), getLocalProject());
+		getAdminBroker().changeRole(getProjectSpace().getProjectId(), newUser, Roles.serverAdmin());
+		final ACUser user = ServerUtil.getUser(getUsersession(), getNewUsername());
+		assertTrue(hasRole(user, Roles.serverAdmin()));
+	}
+
+	@Test
+	public void changeRoleToWriterOnDifferentProjectsAsPA() throws ESException {
+		final ACOrgUnitId newUser = ServerUtil.createUser(getSuperUsersession(), getNewUsername());
+		makeUserPA();
+		ProjectUtil.share(getUsersession(), getLocalProject());
+
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		final ESLocalProject share2 = share(getUsersession(), clonedProjectSpace.toAPI());
+
+		getAdminBroker().changeRole(getProjectSpace().getProjectId(), newUser, Roles.writer());
+		getAdminBroker().changeRole(
+			ESLocalProjectImpl.class.cast(share2).toInternalAPI().getProjectId(),
+			newUser,
+			Roles.writer());
+		final ACUser user = ServerUtil.getUser(getUsersession(), getNewUsername());
+		assertEquals(2, user.getRoles().get(0).getProjects().size());
+	}
+
+	@Test
+	public void changeRoleToWriterAndThenToPAAsPA() throws ESException {
 		final ACOrgUnitId newUser = ServerUtil.createUser(getSuperUsersession(), getNewUsername());
 		makeUserPA();
 		ProjectUtil.share(getUsersession(), getLocalProject());
 		getAdminBroker().changeRole(getProjectSpace().getProjectId(), newUser, RolesPackage.eINSTANCE.getWriterRole());
+		getAdminBroker().changeRole(getProjectSpace().getProjectId(), newUser,
+			RolesPackage.eINSTANCE.getProjectAdminRole());
 		final ACUser user = ServerUtil.getUser(getUsersession(), getNewUsername());
-		assertTrue(hasRole(user, Roles.writer()));
+		assertFalse(hasRole(user, Roles.writer()));
+	}
+
+	@Test(expected = AccessControlException.class)
+	public void changeRoleToSAAsPA() throws ESException {
+		final ACOrgUnitId newUser = ServerUtil.createUser(getSuperUsersession(), getNewUsername());
+		makeUserPA();
+		ProjectUtil.share(getUsersession(), getLocalProject());
+		getAdminBroker().changeRole(getProjectSpace().getProjectId(), newUser, Roles.serverAdmin());
 	}
 
 	@Test(expected = AccessControlException.class)

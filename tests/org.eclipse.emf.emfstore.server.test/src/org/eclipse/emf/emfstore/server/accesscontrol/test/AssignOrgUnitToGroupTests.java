@@ -129,12 +129,48 @@ public class AssignOrgUnitToGroupTests extends ProjectAdminTest {
 	}
 
 	@Test
-	public void addParticipantPA() throws ESException {
+	public void addParticipantAsPA() throws ESException {
 		makeUserPA();
 		final ACOrgUnitId newUserId = ServerUtil.createUser(getSuperUsersession(), getNewUsername());
 		share(getUsersession(), getLocalProject());
 		final int oldSize = getAdminBroker().getParticipants(getProjectSpace().getProjectId()).size();
 		getAdminBroker().addParticipant(getProjectSpace().getProjectId(), newUserId, Roles.reader());
+		assertEquals(oldSize + 1, getAdminBroker().getParticipants(getProjectSpace().getProjectId()).size());
+	}
+
+	@Test
+	public void addReaderToDifferentProjectsAsPA() throws ESException {
+		makeUserPA();
+		final ACOrgUnitId newUserId = ServerUtil.createUser(getSuperUsersession(), getNewUsername());
+		share(getUsersession(), getLocalProject());
+		final int oldSize = getAdminBroker().getParticipants(getProjectSpace().getProjectId()).size();
+
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		share(getUsersession(), clonedProjectSpace.toAPI());
+
+		getAdminBroker().addParticipant(getProjectSpace().getProjectId(), newUserId, Roles.reader());
+		getAdminBroker().addParticipant(clonedProjectSpace.getProjectId(), newUserId, Roles.reader());
+		assertEquals(oldSize + 1, getAdminBroker().getParticipants(getProjectSpace().getProjectId()).size());
+	}
+
+	@Test
+	public void addParticipantTwiceAsPA() throws ESException {
+		makeUserPA();
+		final ACOrgUnitId newUserId = ServerUtil.createUser(getSuperUsersession(), getNewUsername());
+		share(getUsersession(), getLocalProject());
+		final int oldSize = getAdminBroker().getParticipants(getProjectSpace().getProjectId()).size();
+		getAdminBroker().addParticipant(getProjectSpace().getProjectId(), newUserId, Roles.reader());
+		getAdminBroker().addParticipant(getProjectSpace().getProjectId(), newUserId, Roles.reader());
+		assertEquals(oldSize + 1, getAdminBroker().getParticipants(getProjectSpace().getProjectId()).size());
+	}
+
+	@Test(expected = AccessControlException.class)
+	public void addParticipantSAasPA() throws ESException {
+		makeUserPA();
+		final ACOrgUnitId newUserId = ServerUtil.createUser(getSuperUsersession(), getNewUsername());
+		share(getUsersession(), getLocalProject());
+		final int oldSize = getAdminBroker().getParticipants(getProjectSpace().getProjectId()).size();
+		getAdminBroker().addParticipant(getProjectSpace().getProjectId(), newUserId, Roles.serverAdmin());
 		assertEquals(oldSize + 1, getAdminBroker().getParticipants(getProjectSpace().getProjectId()).size());
 	}
 

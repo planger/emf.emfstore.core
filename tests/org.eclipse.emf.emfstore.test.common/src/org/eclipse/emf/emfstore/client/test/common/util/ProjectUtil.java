@@ -14,6 +14,7 @@ package org.eclipse.emf.emfstore.client.test.common.util;
 import java.io.IOException;
 import java.util.concurrent.Callable;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
@@ -47,6 +48,8 @@ import org.eclipse.emf.emfstore.test.model.TestElement;
 // TODO: can we have common util?
 public class ProjectUtil {
 
+	private static final String NONAME = "NONAME"; //$NON-NLS-1$
+	private static final String LOGMESSAGE = "LOGMESSAGE"; //$NON-NLS-1$
 	private static final String DEFAULT_NAME = "TestProject"; //$NON-NLS-1$
 
 	public static IProgressMonitor nullProgressMonitor() {
@@ -219,7 +222,7 @@ public class ProjectUtil {
 	public static ESLocalProject checkout(final ESLocalProject localProject) throws ESException {
 		return RunESCommand.WithException.runWithResult(ESException.class, new Callable<ESLocalProject>() {
 			public ESLocalProject call() throws Exception {
-				return localProject.getRemoteProject().checkout("NONAME", localProject.getUsersession(),
+				return localProject.getRemoteProject().checkout(NONAME, localProject.getUsersession(),
 					localProject.getBaseVersion(), new NullProgressMonitor());
 			}
 		});
@@ -228,7 +231,7 @@ public class ProjectUtil {
 	public static ESLocalProject checkout(final ESLocalProject localProject, final ESPrimaryVersionSpec versionSpec) {
 		return RunESCommand.runWithResult(new Callable<ESLocalProject>() {
 			public ESLocalProject call() throws Exception {
-				return localProject.getRemoteProject().checkout("NONAME",
+				return localProject.getRemoteProject().checkout(NONAME,
 					localProject.getUsersession(),
 					versionSpec,
 					new NullProgressMonitor());
@@ -239,7 +242,7 @@ public class ProjectUtil {
 	public static ESLocalProject commitToBranch(ESLocalProject localProject, String branch)
 		throws InvalidVersionSpecException, ESUpdateRequiredException, ESException {
 		localProject.commitToBranch(CreateAPI.branchVersionSpec(branch),
-			"", null, nullProgressMonitor());
+			StringUtils.EMPTY, null, nullProgressMonitor());
 		return localProject;
 	}
 
@@ -251,6 +254,17 @@ public class ProjectUtil {
 		return localProject;
 	}
 
+	/**
+	 * Shares the given project and returns it.
+	 * 
+	 * @param session
+	 *            the session that is used to share the project
+	 * @param localProject
+	 *            the project to be shared
+	 * @return the shared project
+	 * @throws ESException
+	 *             in case anything goes wrong during the share
+	 */
 	public static ESLocalProject share(ESUsersession session, ESLocalProject localProject) throws ESException {
 		localProject.shareProject(session, new NullProgressMonitor());
 		return localProject;
@@ -260,7 +274,6 @@ public class ProjectUtil {
 		final int expectedConflicts) {
 
 		return RunESCommand.runWithResult(new Callable<ESLocalProject>() {
-			@SuppressWarnings("restriction")
 			public ESLocalProject call() throws Exception {
 				((ESLocalProjectImpl) trunk).toInternalAPI().mergeBranch(
 					((ESPrimaryVersionSpecImpl) latestOnBranch).toInternalAPI(),
@@ -286,7 +299,7 @@ public class ProjectUtil {
 	public static ESLocalProject branch(final ESLocalProject localProject, final String branchName) {
 		return RunESCommand.runWithResult(new Callable<ESLocalProject>() {
 			public ESLocalProject call() throws Exception {
-				localProject.commitToBranch(ESVersionSpec.FACTORY.createBRANCH(branchName), "LOGMESSAGE",
+				localProject.commitToBranch(ESVersionSpec.FACTORY.createBRANCH(branchName), LOGMESSAGE,
 					ESCommitCallback.NOCALLBACK, new NullProgressMonitor());
 				return localProject;
 			}

@@ -147,4 +147,15 @@ public class AdminEMFStoreTests extends ProjectAdminTest {
 		assertEquals(0,
 			getAdminBroker().getMembers(group).size());
 	}
+
+	@Test
+	public void removeGroupAsSA() throws ESException {
+		makeUserSA();
+		final ACOrgUnitId group = getAdminBroker().createGroup(getNewGroupName());
+		final ACOrgUnitId member = getAdminBroker().createUser(getNewUsername());
+		getAdminBroker().addMember(group, member);
+		getAdminBroker().removeGroup(member, group);
+		assertEquals(0,
+			getAdminBroker().getMembers(group).size());
+	}
 }

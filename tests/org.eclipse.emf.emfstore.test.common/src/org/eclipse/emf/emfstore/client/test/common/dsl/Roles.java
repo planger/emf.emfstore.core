@@ -55,4 +55,14 @@ public final class Roles {
 		return RolesPackage.eINSTANCE.getProjectAdminRole();
 	}
 
+	/**
+	 * Returns the {@link EClass} of a
+	 * {@link org.eclipse.emf.emfstore.internal.server.model.accesscontrol.roles.ServerAdmin ServerAdmin}.
+	 * 
+	 * @return the ServerAdmin EClass
+	 */
+	public static EClass serverAdmin() {
+		return RolesPackage.eINSTANCE.getServerAdmin();
+	}
+
 }

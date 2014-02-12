@@ -16,6 +16,7 @@ import static org.junit.Assert.assertNotNull;
 import org.eclipse.emf.emfstore.client.test.common.util.ServerUtil;
 import org.eclipse.emf.emfstore.internal.server.accesscontrol.PAPrivileges;
 import org.eclipse.emf.emfstore.internal.server.exceptions.AccessControlException;
+import org.eclipse.emf.emfstore.internal.server.exceptions.InvalidInputException;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnitId;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.junit.After;
@@ -58,6 +59,13 @@ public class CreateUserTests extends ProjectAdminTest {
 		makeUserPA();
 		final ACOrgUnitId newUser = ServerUtil.createUser(getUsersession(), getNewUsername());
 		assertNotNull(getAdminBroker().getOrgUnit(newUser));
+	}
+
+	@Test(expected = InvalidInputException.class)
+	public void createUserTwice() throws ESException {
+		makeUserPA();
+		ServerUtil.createUser(getUsersession(), getNewUsername());
+		ServerUtil.createUser(getUsersession(), getNewUsername());
 	}
 
 	@Test(expected = AccessControlException.class)

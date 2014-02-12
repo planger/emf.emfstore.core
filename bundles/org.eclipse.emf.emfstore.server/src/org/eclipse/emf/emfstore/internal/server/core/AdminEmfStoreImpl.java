@@ -451,7 +451,7 @@ public class AdminEmfStoreImpl extends AbstractEmfstoreInterface implements Admi
 		}
 
 		// if server admin
-		if (roleClass.getName().equals(RolesPackage.Literals.SERVER_ADMIN.getName())) {
+		if (isServerAdminRole(roleClass)) {
 			orgUnit.getRoles().add(RolesFactory.eINSTANCE.createServerAdmin());
 			save();
 			return;
@@ -486,8 +486,7 @@ public class AdminEmfStoreImpl extends AbstractEmfstoreInterface implements Admi
 			sessionId, orgUnitId);
 
 		if (!isServerAdmin && isServerAdminRole(roleClass)) {
-			throw new AccessControlException(
-				"A project admin is not allowed to assign a server admin role"); //$NON-NLS-1$
+			throw new AccessControlException("A project admin is not allowed to assign a server admin role"); //$NON-NLS-1$
 		}
 
 		final ACOrgUnit orgUnit = getOrgUnit(orgUnitId);

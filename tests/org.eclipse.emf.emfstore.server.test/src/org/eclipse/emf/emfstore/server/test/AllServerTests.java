@@ -22,18 +22,18 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	AllAccessControlTests.class,
-	BranchTests.class,
-	ServerInterfaceTest.class,
-	HistoryAPITests.class,
-	ChangeCertificationTest.class,
-	ChecksumTest.class,
-	FileManagerTest.class,
-	InvalidArgumentsTest.class,
-	PropertiesTest.class,
-	AllServerAPITests.class,
-	VersionSpecTests.class,
-	VersionVerifierTest.class
+	AllAccessControlTests.class
+// BranchTests.class,
+// ServerInterfaceTest.class,
+// HistoryAPITests.class,
+// ChangeCertificationTest.class,
+// ChecksumTest.class,
+// FileManagerTest.class,
+// InvalidArgumentsTest.class,
+// PropertiesTest.class,
+// AllServerAPITests.class,
+// VersionSpecTests.class,
+// VersionVerifierTest.class
 })
 public class AllServerTests {
 
