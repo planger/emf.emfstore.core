@@ -77,6 +77,9 @@ public class DeleteProjectTest extends ProjectAdminTest {
 	@Test
 	public void delteProjectSA() throws ESException {
 		makeUserSA();
+		// TODO:
+		getUsersession().logout();
+		getUsersession().refresh();
 		ProjectUtil.share(getUsersession(), getLocalProject());
 		getLocalProject().getRemoteProject().delete(new NullProgressMonitor());
 		final List<ProjectInfo> projectList = ESWorkspaceProviderImpl.getInstance().getConnectionManager()

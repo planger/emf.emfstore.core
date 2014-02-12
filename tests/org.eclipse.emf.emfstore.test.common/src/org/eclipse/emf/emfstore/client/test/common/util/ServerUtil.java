@@ -36,9 +36,9 @@ import org.eclipse.emf.emfstore.client.test.common.mocks.ServerMock;
 import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionElement;
 import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionPoint;
 import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
-import org.eclipse.emf.emfstore.internal.client.model.ServerInfo;
-import org.eclipse.emf.emfstore.internal.client.model.connectionmanager.AdminConnectionManager;
 import org.eclipse.emf.emfstore.internal.client.model.connectionmanager.KeyStoreManager;
+import org.eclipse.emf.emfstore.internal.client.model.impl.AdminBrokerImpl;
+import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESUsersessionImpl;
 import org.eclipse.emf.emfstore.internal.common.CommonUtil;
 import org.eclipse.emf.emfstore.internal.common.model.util.FileUtil;
 import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
@@ -49,6 +49,7 @@ import org.eclipse.emf.emfstore.internal.server.accesscontrol.AccessControlImpl;
 import org.eclipse.emf.emfstore.internal.server.accesscontrol.authentication.AuthenticationControlType;
 import org.eclipse.emf.emfstore.internal.server.accesscontrol.authentication.factory.AuthenticationControlFactory;
 import org.eclipse.emf.emfstore.internal.server.core.EMFStoreImpl;
+import org.eclipse.emf.emfstore.internal.server.exceptions.ConnectionException;
 import org.eclipse.emf.emfstore.internal.server.exceptions.FatalESException;
 import org.eclipse.emf.emfstore.internal.server.model.ModelFactory;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectId;
@@ -227,40 +228,37 @@ public final class ServerUtil {
 	}
 
 	public static ACOrgUnitId createUser(ESUsersession session, String name) throws ESException {
-		final ESSessionIdImpl sessionId = ESSessionIdImpl.class.cast(session.getSessionId());
-		return ESWorkspaceProviderImpl.getInstance().getAdminConnectionManager()
-			.createUser(sessionId.toInternalAPI(), name);
+		final ESUsersessionImpl sessionImpl = ESUsersessionImpl.class.cast(session);
+		final AdminBrokerImpl broker = createAdminBroker(sessionImpl);
+		return broker.createUser(name);
 	}
 
 	public static ACOrgUnitId createGroup(ESUsersession session, String name) throws ESException {
-		final ESSessionIdImpl sessionId = ESSessionIdImpl.class.cast(session.getSessionId());
-		return ESWorkspaceProviderImpl.getInstance().getAdminConnectionManager()
-			.createGroup(sessionId.toInternalAPI(), name);
+		final ESUsersessionImpl sessionImpl = ESUsersessionImpl.class.cast(session);
+		final AdminBrokerImpl broker = createAdminBroker(sessionImpl);
+		return broker.createGroup(name);
 	}
 
 	// TODO: user parameter is not needed
 	public static void changePassword(ESUsersession session, ACOrgUnitId userId, String user, String password)
 		throws ESException {
-		final ESSessionIdImpl sessionId = ESSessionIdImpl.class.cast(session.getSessionId());
-		ESWorkspaceProviderImpl.getInstance().getAdminConnectionManager()
-			.changeUser(sessionId.toInternalAPI(), userId, user, password);
+		final ESUsersessionImpl sessionImpl = ESUsersessionImpl.class.cast(session);
+		final AdminBrokerImpl broker = createAdminBroker(sessionImpl);
+		broker.changeUser(userId, user, password);
 	}
 
-	public static ACOrgUnitId createUser(SessionId sessionId, String name) throws ESException {
-		return ESWorkspaceProviderImpl.getInstance().getAdminConnectionManager().createUser(sessionId, name);
-	}
-
-	public static void changeUser(SessionId sessionId, ACOrgUnitId userId, String userName, String password)
+	public static void changeUser(ESUsersession session, ACOrgUnitId userId, String userName, String password)
 		throws ESException {
-		ESWorkspaceProviderImpl.getInstance().getAdminConnectionManager()
-			.changeUser(sessionId, userId, userName, password);
+		final ESUsersessionImpl sessionImpl = ESUsersessionImpl.class.cast(session);
+		final AdminBrokerImpl broker = createAdminBroker(sessionImpl);
+		broker.changeUser(userId, userName, password);
 	}
 
 	public static ACUser getUser(ESUsersession session, String name) throws ESException {
-		final ESSessionIdImpl sessionId = ESSessionIdImpl.class.cast(session.getSessionId());
-		final List<ACUser> users = ESWorkspaceProviderImpl.getInstance().getAdminConnectionManager()
-			.getUsers(sessionId.toInternalAPI());
-		for (final ACUser acUser : users) {
+		final ESUsersessionImpl sessionImpl = ESUsersessionImpl.class.cast(session);
+		final AdminBrokerImpl broker = createAdminBroker(sessionImpl);
+
+		for (final ACUser acUser : broker.getUsers()) {
 			if (acUser.getName().equals(name)) {
 				return acUser;
 			}
@@ -270,10 +268,11 @@ public final class ServerUtil {
 	}
 
 	public static ACUser getUser(ESUsersession session, ACOrgUnitId userId) throws ESException {
-		final ESSessionIdImpl sessionId = ESSessionIdImpl.class.cast(session.getSessionId());
-		final List<ACUser> users = ESWorkspaceProviderImpl.getInstance().getAdminConnectionManager()
-			.getUsers(sessionId.toInternalAPI());
-		for (final ACUser acUser : users) {
+
+		final ESUsersessionImpl sessionImpl = ESUsersessionImpl.class.cast(session);
+		final AdminBrokerImpl broker = createAdminBroker(sessionImpl);
+
+		for (final ACUser acUser : broker.getUsers()) {
 			if (acUser.getId().getId().equals(userId.getId())) {
 				return acUser;
 			}
@@ -282,28 +281,25 @@ public final class ServerUtil {
 		return null;
 	}
 
-	public static ACUser getParticipant(ESUsersession session, ProjectId projectId, ACOrgUnitId userId)
-		throws ESException {
-		final ESSessionIdImpl sessionId = ESSessionIdImpl.class.cast(session.getSessionId());
-		final List<ACOrgUnit> users = ESWorkspaceProviderImpl.getInstance().getAdminConnectionManager()
-			.getParticipants(sessionId.toInternalAPI(), projectId);
-		for (final ACOrgUnit acUser : users) {
-			if (acUser.getId().getId().equals(userId.getId()) && acUser instanceof ACUser) {
-				return (ACUser) acUser;
-			}
-		}
-
-		return null;
+	/**
+	 * @param sessionImpl
+	 * @return
+	 * @throws ConnectionException
+	 */
+	private static AdminBrokerImpl createAdminBroker(final ESUsersessionImpl sessionImpl) throws ConnectionException {
+		return new AdminBrokerImpl(sessionImpl.toInternalAPI().getServerInfo(),
+			sessionImpl.toInternalAPI().getSessionId());
 	}
 
-	public static ACUser getUser(ServerInfo serverInfo, SessionId sessionId, String name) throws ESException {
-		final AdminConnectionManager adminConnectionManager = ESWorkspaceProviderImpl.getInstance()
-			.getAdminConnectionManager();
-		adminConnectionManager.initConnection(serverInfo, sessionId);
-		final List<ACUser> users = adminConnectionManager.getUsers(sessionId);
-		for (final ACUser acUser : users) {
-			if (acUser.getName().equals(name)) {
-				return acUser;
+	public static ACUser getParticipant(ESUsersession session, ProjectId projectId, ACOrgUnitId userId)
+		throws ESException {
+
+		final ESUsersessionImpl sessionImpl = ESUsersessionImpl.class.cast(session);
+		final AdminBrokerImpl broker = createAdminBroker(sessionImpl);
+
+		for (final ACOrgUnit acUser : broker.getParticipants(projectId)) {
+			if (acUser.getId().getId().equals(userId.getId()) && acUser instanceof ACUser) {
+				return (ACUser) acUser;
 			}
 		}
 

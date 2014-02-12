@@ -28,10 +28,8 @@ import org.eclipse.emf.emfstore.internal.client.model.connectionmanager.KeyStore
 import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESServerImpl;
 import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESUsersessionImpl;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommandWithException;
-import org.eclipse.emf.emfstore.internal.server.model.SessionId;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnitId;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACUser;
-import org.eclipse.emf.emfstore.internal.server.model.impl.api.ESSessionIdImpl;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.junit.After;
 import org.junit.Before;
@@ -101,8 +99,6 @@ public abstract class ESTestWithLoggedInUser extends ESTestWithMockServer {
 		try {
 			superSession = server.login(
 				ServerUtil.superUser(), ServerUtil.superUserPassword());
-			final SessionId superSessionId = ESSessionIdImpl.class.cast(
-				superSession.getSessionId()).toInternalAPI();
 			Delete.allRemoteProjects(server, superSession);
 
 			if (isSuperUser()) {
@@ -111,9 +107,9 @@ public abstract class ESTestWithLoggedInUser extends ESTestWithMockServer {
 			}
 
 			// if client requests other user, make sure that user exists
-			if (!userExists(getServerInfo(), superSessionId, getUser())) {
-				userId = ServerUtil.createUser(superSessionId, getUser());
-				ServerUtil.changeUser(superSessionId, userId, getUser(), getPassword());
+			if (!userExists(getServerInfo(), superSession, getUser())) {
+				userId = ServerUtil.createUser(superSession, getUser());
+				ServerUtil.changeUser(superSession, userId, getUser(), getPassword());
 			}
 
 			usersession = server.login(
@@ -133,8 +129,8 @@ public abstract class ESTestWithLoggedInUser extends ESTestWithMockServer {
 		return getUser().equals(ServerUtil.superUser());
 	}
 
-	public boolean userExists(ServerInfo serverInfo, SessionId sessionId, String name) throws ESException {
-		final ACUser user = ServerUtil.getUser(serverInfo, sessionId, name);
+	public boolean userExists(ServerInfo serverInfo, ESUsersession session, String name) throws ESException {
+		final ACUser user = ServerUtil.getUser(session, name);
 		return user != null;
 	}
 

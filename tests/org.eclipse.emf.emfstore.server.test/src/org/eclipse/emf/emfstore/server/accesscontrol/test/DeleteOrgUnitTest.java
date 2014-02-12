@@ -173,12 +173,47 @@ public class DeleteOrgUnitTest extends ProjectAdminTest {
 		getAdminBroker().deleteUser(newUser);
 	}
 
+	@Test
+	public void deleteUserSucceedsUserIsInTransitiveGroup() throws ESException {
+		makeUserSA();
+		final ACOrgUnitId newUser = ServerUtil.createUser(getSuperUsersession(), getNewUsername());
+		final ACOrgUnitId group = ServerUtil.createGroup(getSuperUsersession(), getNewGroupName());
+		final ACOrgUnitId otherGroup = ServerUtil.createGroup(getSuperUsersession(), getNewOtherGroupName());
+		getAdminBroker().addMember(group, otherGroup);
+		getAdminBroker().addMember(otherGroup, newUser);
+
+		ProjectUtil.share(getUsersession(), getLocalProject());
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		ProjectUtil.share(getSuperUsersession(), clonedProjectSpace.toAPI());
+
+		getSuperAdminBroker().changeRole(clonedProjectSpace.getProjectId(), group, Roles.writer());
+		getAdminBroker().deleteUser(newUser);
+	}
+
 	@Test(expected = AccessControlException.class)
 	public void deleteGroupFailsIsInTransitiveGroup() throws ESException {
 		makeUserPA();
 		final ACOrgUnitId newUser = ServerUtil.createUser(getSuperUsersession(), getNewUsername());
 		final ACOrgUnitId group = ServerUtil.createGroup(getSuperUsersession(), getNewGroupName());
 		final ACOrgUnitId otherGroup = ServerUtil.createGroup(getSuperUsersession(), getNewOtherGroupName());
+		getAdminBroker().addMember(group, otherGroup);
+		getAdminBroker().addMember(otherGroup, newUser);
+
+		ProjectUtil.share(getUsersession(), getLocalProject());
+		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
+		ProjectUtil.share(getSuperUsersession(), clonedProjectSpace.toAPI());
+
+		getSuperAdminBroker().changeRole(clonedProjectSpace.getProjectId(), group, Roles.writer());
+
+		getAdminBroker().deleteGroup(otherGroup);
+	}
+
+	@Test
+	public void deleteGroupSucceedsIsInTransitiveGroup() throws ESException {
+		makeUserSA();
+		final ACOrgUnitId newUser = ServerUtil.createUser(getUsersession(), getNewUsername());
+		final ACOrgUnitId group = ServerUtil.createGroup(getUsersession(), getNewGroupName());
+		final ACOrgUnitId otherGroup = ServerUtil.createGroup(getUsersession(), getNewOtherGroupName());
 		getAdminBroker().addMember(group, otherGroup);
 		getAdminBroker().addMember(otherGroup, newUser);
 
