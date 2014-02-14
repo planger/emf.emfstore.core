@@ -50,6 +50,7 @@ import org.eclipse.emf.emfstore.server.model.versionspec.ESPrimaryVersionSpec;
 import org.eclipse.emf.emfstore.test.model.TestElement;
 import org.eclipse.emf.emfstore.test.model.TestmodelFactory;
 
+// TODO: class returns internal as well as external types
 public final class Create {
 
 	private Create() {

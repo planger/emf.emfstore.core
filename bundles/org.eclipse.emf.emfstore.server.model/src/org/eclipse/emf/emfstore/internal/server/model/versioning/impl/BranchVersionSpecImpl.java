@@ -69,18 +69,6 @@ public class BranchVersionSpecImpl extends VersionSpecImpl implements BranchVers
 	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see org.eclipse.emf.emfstore.internal.common.api.APIDelegate#setAPIImpl(java.lang.Object)
-	 * 
-	 * @generated NOT
-	 */
-	public void setAPIImpl(ESBranchVersionSpecImpl esBranchVersionSpecImpl) {
-		apiImpl = esBranchVersionSpecImpl;
-	}
-
-	/**
-	 * 
-	 * {@inheritDoc}
-	 * 
 	 * @see org.eclipse.emf.emfstore.internal.common.api.APIDelegate#createAPI()
 	 * 
 	 * @generated NOT
