@@ -15,9 +15,15 @@
    </extension>
    <extension
          point="org.eclipse.emf.emfstore.client.workspaceLocationProvider">
+      <LocationProvider
+            providerClass="org.eclipse.emf.emfstore.client.test.common.config.ClientLocationProvider">
+      </LocationProvider>
    </extension>
    <extension
          point="org.eclipse.emf.emfstore.server.locationProvider">
+      <LocationProvider
+            providerClass="org.eclipse.emf.emfstore.client.test.common.config.ServerLocationProvider">
+      </LocationProvider>
    </extension>
 
 </plugin>

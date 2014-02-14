@@ -17,8 +17,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 
-import junit.framework.Assert;
-
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.emfstore.client.ESLocalProject;
 import org.eclipse.emf.emfstore.client.ESProject;
@@ -54,7 +52,7 @@ public class ImportExportTest extends ESTest {
 		new ExportImportControllerExecutor(temp, new NullProgressMonitor())
 			.execute(ExportImportControllerFactory.Import.getImportChangesController(clonedProjectSpace));
 
-		Assert.assertTrue(ModelUtil.areEqual(getProjectSpace().getProject(), clonedProjectSpace.getProject()));
+		assertTrue(ModelUtil.areEqual(getProjectSpace().getProject(), clonedProjectSpace.getProject()));
 	}
 
 	@Test
@@ -118,6 +116,7 @@ public class ImportExportTest extends ESTest {
 			.execute(ExportImportControllerFactory.Export.getExportProjectSpaceController(getProjectSpace()));
 
 		// TODO: assert file was written
+		assertEquals(1, ESWorkspaceProviderImpl.getInstance().getWorkspace().getLocalProjects().size());
 
 		new ExportImportControllerExecutor(temp, new NullProgressMonitor())
 			.execute(ExportImportControllerFactory.Import.getImportProjectSpaceController());
@@ -127,7 +126,6 @@ public class ImportExportTest extends ESTest {
 		final ESLocalProject a = ESWorkspaceProviderImpl.getInstance().getWorkspace().getLocalProjects().get(0);
 		final ESLocalProject b = ESWorkspaceProviderImpl.getInstance().getWorkspace().getLocalProjects().get(1);
 
-		// TODO: are the imported IDs supposed to be the same as in the original project?
-		// Assert.assertTrue(ModelUtil.areEqual(a.getProject(), b.getProject()));
+		assertEquals(a.getModelElements().size(), b.getModelElements().size());
 	}
 }

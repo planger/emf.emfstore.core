@@ -44,7 +44,7 @@ public class OneToOneContainmentTest extends ESTest {
 
 		assertTrue(getProject().contains(solution));
 		assertEquals(getProject(), ModelUtil.getProject(solution));
-		assertEquals(issue, solution.getContainer());
+		assertEquals(issue, solution.getSrefContainer());
 		assertEquals(solution, issue.getContainedElement());
 	}
 }
