@@ -8,9 +8,9 @@ Bundle-Activator: org.eclipse.emf.emfstore.test.model.provider.TestmodelEditPlug
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Export-Package: org.eclipse.emf.emfstore.test.model.provider,
- org.eclipse.emf.emfstore.test.provider
-Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.emf.emfstore.test.model;visibility:=reexport,
- org.eclipse.emf.edit;visibility:=reexport
+Export-Package: org.eclipse.emf.emfstore.test.model.provider;version="1.2.0",
+ org.eclipse.emf.emfstore.test.provider;version="1.2.0"
+Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.8.0,4.0.0)",
+ org.eclipse.emf.emfstore.test.model;bundle-version="[1.2.0,2.0.0)";visibility:=reexport,
+ org.eclipse.emf.edit;bundle-version="[2.9.0,3.0.0)";visibility:=reexport
 Bundle-ActivationPolicy: lazy
