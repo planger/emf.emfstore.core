@@ -59,7 +59,7 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 				clearOperations();
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		final Project project2 = ps2.getProject();
 
@@ -76,16 +76,27 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				actor1.setContainer((TestElement) getProject().getModelElement(section1Id));
+
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+
+			@Override
+			protected void doRun() {
 				actor2.setContainer((TestElement) project2.getModelElement(section2Id));
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, ps2.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = ps2.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
-		assertEquals(getConflicts(ops1, ops2).size(), getConflicts(ops2, ops1).size());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			ps2.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2, ps2.getContentEditingDomain()).size(),
+			getConflicts(ops2, ps2.getContentEditingDomain(), ops1, getProjectSpace().getContentEditingDomain()).size());
 
 		assertEquals(conflicts.size(), 1);
 
@@ -112,7 +123,7 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 				clearOperations();
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		final Project project2 = ps2.getProject();
 
@@ -130,16 +141,27 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				actor1.setContainer((TestElement) getProject().getModelElement(section1Id));
+
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+
+			@Override
+			protected void doRun() {
 				actor2.setContainer((TestElement) project2.getModelElement(section2Id));
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, ps2.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = ps2.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
-		assertEquals(getConflicts(ops1, ops2).size(), getConflicts(ops2, ops1).size());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			ps2.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2, ps2.getContentEditingDomain()).size(),
+			getConflicts(ops2, ps2.getContentEditingDomain(), ops1, getProjectSpace().getContentEditingDomain()).size());
 
 		assertEquals(1, conflicts.size());
 
@@ -167,7 +189,7 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 				clearOperations();
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		final Project project2 = ps2.getProject();
@@ -184,15 +206,24 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				actor1.setContainer((TestElement) getProject().getModelElement(section1Id));
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+			@Override
+			protected void doRun() {
 				actor2.setReference((TestElement) project2.getModelElement(task2Id));
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, ps2.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = ps2.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
-		assertEquals(getConflicts(ops1, ops2).size(), getConflicts(ops2, ops1).size());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			ps2.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2, ps2.getContentEditingDomain()).size(),
+			getConflicts(ops2, ps2.getContentEditingDomain(), ops1, getProjectSpace().getContentEditingDomain()).size());
 
 		assertEquals(conflicts.size(), 0);
 
@@ -219,7 +250,7 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 				clearOperations();
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		final Project project2 = ps2.getProject();
 
@@ -236,15 +267,27 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				issue1.setContainedElement((TestElement) getProject().getModelElement(solution1Id));
+
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+
+			@Override
+			protected void doRun() {
 				solution22.setSrefContainer(issue2);
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, ps2.getContentEditingDomain());
+
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = ps2.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
-		assertEquals(getConflicts(ops1, ops2).size(), getConflicts(ops2, ops1).size());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			ps2.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2, ps2.getContentEditingDomain()).size(),
+			getConflicts(ops2, ps2.getContentEditingDomain(), ops1, getProjectSpace().getContentEditingDomain()).size());
 
 		assertEquals(1, conflicts.size());
 
@@ -269,7 +312,7 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 				clearOperations();
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		final Project project2 = ps2.getProject();
 
@@ -285,15 +328,24 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				issue1.setContainedElement(solution1);
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+			@Override
+			protected void doRun() {
 				solution2.setSrefContainer(issue2);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, ps2.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = ps2.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
-		assertEquals(getConflicts(ops1, ops2).size(), getConflicts(ops2, ops1).size());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			ps2.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2, ps2.getContentEditingDomain()).size(),
+			getConflicts(ops2, ps2.getContentEditingDomain(), ops1, getProjectSpace().getContentEditingDomain()).size());
 
 		assertEquals(1, conflicts.size());
 
@@ -320,7 +372,7 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 				clearOperations();
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		final Project project2 = ps2.getProject();
 
@@ -338,15 +390,25 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				issue1.setReference(solution1);
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+
+			@Override
+			protected void doRun() {
 				issue2.setContainedElement(section2);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, ps2.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = ps2.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
-		assertEquals(getConflicts(ops1, ops2).size(), getConflicts(ops2, ops1).size());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			ps2.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2, ps2.getContentEditingDomain()).size(),
+			getConflicts(ops2, ps2.getContentEditingDomain(), ops1, getProjectSpace().getContentEditingDomain()).size());
 
 		assertEquals(0, conflicts.size());
 
@@ -380,16 +442,27 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				actor1.setContainer((TestElement) getProject().getModelElement(section1Id));
+
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+
+			@Override
+			protected void doRun() {
 				section22.getContainedElements().add(actor2);
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, ps2.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = ps2.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
-		assertEquals(getConflicts(ops1, ops2).size(), getConflicts(ops2, ops1).size());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			ps2.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2, ps2.getContentEditingDomain()).size(),
+			getConflicts(ops2, ps2.getContentEditingDomain(), ops1, getProjectSpace().getContentEditingDomain()).size());
 
 		assertEquals(1, conflicts.size());
 
@@ -416,7 +489,7 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 				clearOperations();
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		final Project project2 = ps2.getProject();
 
@@ -434,16 +507,28 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 			protected void doRun() {
 
 				actor1.setContainer((TestElement) getProject().getModelElement(section1Id));
+
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+
+			@Override
+			protected void doRun() {
+
 				section12.getContainedElements().add(actor2);
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, ps2.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = ps2.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
-		assertEquals(getConflicts(ops1, ops2).size(), getConflicts(ops2, ops1).size());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			ps2.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2, ps2.getContentEditingDomain()).size(),
+			getConflicts(ops2, ps2.getContentEditingDomain(), ops1, getProjectSpace().getContentEditingDomain()).size());
 
 		assertEquals(1, conflicts.size());
 
@@ -470,7 +555,7 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 				clearOperations();
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		final Project project2 = ps2.getProject();
 
@@ -486,16 +571,27 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				actor1.setContainer((TestElement) getProject().getModelElement(section1Id));
+
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+
+			@Override
+			protected void doRun() {
 				actor2.getReferences().add((TestElement) project2.getModelElement(useCaseId));
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, ps2.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = ps2.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
-		assertEquals(getConflicts(ops1, ops2).size(), getConflicts(ops2, ops1).size());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			ps2.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2, ps2.getContentEditingDomain()).size(),
+			getConflicts(ops2, ps2.getContentEditingDomain(), ops1, getProjectSpace().getContentEditingDomain()).size());
 
 		assertEquals(conflicts.size(), 0);
 
@@ -522,7 +618,7 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 				clearOperations();
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		final Project project2 = ps2.getProject();
 
@@ -540,16 +636,27 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				solution1inProject1.setContainedElement(issue1);
+
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+
+			@Override
+			protected void doRun() {
 				solution2inProject22.setContainedElement(issue2);
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, ps2.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = ps2.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
-		assertEquals(getConflicts(ops1, ops2).size(), getConflicts(ops2, ops1).size());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			ps2.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2, ps2.getContentEditingDomain()).size(),
+			getConflicts(ops2, ps2.getContentEditingDomain(), ops1, getProjectSpace().getContentEditingDomain()).size());
 
 		assertEquals(1, conflicts.size());
 
@@ -576,7 +683,7 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 				clearOperations();
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		final Project project2 = ps2.getProject();
 
@@ -593,16 +700,27 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				solution1inProject1.setContainedElement(issue1);
+
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+
+			@Override
+			protected void doRun() {
 				solution2inProject2.setContainedElement(issue2);
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, ps2.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = ps2.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
-		assertEquals(getConflicts(ops1, ops2).size(), getConflicts(ops2, ops1).size());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			ps2.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2, ps2.getContentEditingDomain()).size(),
+			getConflicts(ops2, ps2.getContentEditingDomain(), ops1, getProjectSpace().getContentEditingDomain()).size());
 
 		assertEquals(1, conflicts.size());
 
@@ -631,7 +749,7 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 				clearOperations();
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		final Project project2 = ps2.getProject();
 
@@ -649,15 +767,24 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				solution1inProject1.setContainedElement(issue11);
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+			@Override
+			protected void doRun() {
 				solution2inProject2.setContainedElement(issue22);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, ps2.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = ps2.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
-		assertEquals(getConflicts(ops1, ops2).size(), getConflicts(ops2, ops1).size());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			ps2.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2, ps2.getContentEditingDomain()).size(),
+			getConflicts(ops2, ps2.getContentEditingDomain(), ops1, getProjectSpace().getContentEditingDomain()).size());
 
 		assertEquals(0, conflicts.size());
 
@@ -684,7 +811,7 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 				clearOperations();
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		final Project project2 = ps2.getProject();
 
@@ -702,16 +829,27 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				section11.getContainedElements().add(actor1);
+
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+
+			@Override
+			protected void doRun() {
 				section22.getContainedElements().add(actor2);
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, ps2.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = ps2.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
-		assertEquals(getConflicts(ops1, ops2).size(), getConflicts(ops2, ops1).size());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			ps2.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2, ps2.getContentEditingDomain()).size(),
+			getConflicts(ops2, ps2.getContentEditingDomain(), ops1, getProjectSpace().getContentEditingDomain()).size());
 
 		assertEquals(1, conflicts.size());
 
@@ -738,7 +876,7 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 				clearOperations();
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		final Project project2 = ps2.getProject();
 
@@ -755,16 +893,27 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				section1inProject1.getContainedElements().add(actor1);
+
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+
+			@Override
+			protected void doRun() {
 				section1inProject2.getContainedElements().add(actor2);
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, ps2.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = ps2.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
-		assertEquals(getConflicts(ops1, ops2).size(), getConflicts(ops2, ops1).size());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			ps2.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2, ps2.getContentEditingDomain()).size(),
+			getConflicts(ops2, ps2.getContentEditingDomain(), ops1, getProjectSpace().getContentEditingDomain()).size());
 
 		assertEquals(1, conflicts.size());
 
@@ -791,7 +940,7 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 				clearOperations();
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		final Project project2 = ps2.getProject();
 
@@ -809,16 +958,27 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				section1.getContainedElements().add(actor1);
+
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+
+			@Override
+			protected void doRun() {
 				actor2.getReferences().add((TestElement) project2.getModelElement(useCaseId));
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, ps2.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = ps2.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
-		assertEquals(getConflicts(ops1, ops2).size(), getConflicts(ops2, ops1).size());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			ps2.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2, ps2.getContentEditingDomain()).size(),
+			getConflicts(ops2, ps2.getContentEditingDomain(), ops1, getProjectSpace().getContentEditingDomain()).size());
 
 		assertEquals(conflicts.size(), 0);
 	}
@@ -842,7 +1002,7 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 				clearOperations();
 				testElement.getReferences().set(1, inserted);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final AbstractOperation set = myCheckAndGetOperation(MultiReferenceSetOperation.class);
 
@@ -851,7 +1011,7 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getReferences().add(added);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final AbstractOperation add = myCheckAndGetOperation(MultiReferenceOperation.class);
 
@@ -886,7 +1046,7 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 				clearOperations();
 				testElement.getReferences().remove(first);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final AbstractOperation remove = myCheckAndGetOperation(MultiReferenceOperation.class);
 
@@ -895,7 +1055,7 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 			protected void doRun() {
 				testElement.getReferences().set(testElement.getReferences().indexOf(second), inserted);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final AbstractOperation set = myCheckAndGetOperation(MultiReferenceSetOperation.class);
 
@@ -920,7 +1080,7 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 				clearOperations();
 				testElement.getReferences().remove(second);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final AbstractOperation remove = myCheckAndGetOperation(MultiReferenceOperation.class);
 
@@ -931,7 +1091,7 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 				clearOperations();
 				testElement.getReferences().set(testElement.getReferences().indexOf(second), inserted);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final AbstractOperation set = myCheckAndGetOperation(MultiReferenceSetOperation.class);
 

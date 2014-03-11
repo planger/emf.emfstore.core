@@ -74,13 +74,13 @@ public abstract class EMFStoreCommandWithParameterAndResult<T, U> extends Abstra
 	 * Executes the command on the given editing domain.
 	 * 
 	 * @param parameter the parameter
-	 * @param editingDomain the editing domain
 	 * @param ignoreExceptions true if any thrown exception in the execution of the command should be ignored.
+	 * @param editingDomain the editing domain
 	 * @return the result
 	 */
-	public T run(U parameter, EditingDomain editingDomain, boolean ignoreExceptions) {
+	public T run(U parameter, boolean ignoreExceptions, EditingDomain editingDomain) {
 		this.parameter = parameter;
-		super.aRun(editingDomain, ignoreExceptions);
+		super.aRun(ignoreExceptions, editingDomain);
 		return this.result;
 	}
 

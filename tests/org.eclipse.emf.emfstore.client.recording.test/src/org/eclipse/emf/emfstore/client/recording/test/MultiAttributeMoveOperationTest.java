@@ -65,7 +65,7 @@ public class MultiAttributeMoveOperationTest extends ESTest {
 				assertTrue(testElement.getStrings().get(1).equals(FIRST));
 				assertTrue(testElement.getStrings().get(2).equals(SECOND));
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 	}
 
 	/**
@@ -101,7 +101,7 @@ public class MultiAttributeMoveOperationTest extends ESTest {
 				getProject().addModelElement(testElementc13);
 				clearOperations();
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		new EMFStoreCommand() {
 			@Override
@@ -111,7 +111,7 @@ public class MultiAttributeMoveOperationTest extends ESTest {
 				testElement13.getReferences().add(testElementc11);
 				testElement1.getContainedElements().addAll(list);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(true, getProject().contains(testElement1));
 		assertEquals(true, getProject().contains(testElement11));
@@ -152,7 +152,7 @@ public class MultiAttributeMoveOperationTest extends ESTest {
 			protected void doRun() {
 				getProject().addModelElement(testElement1);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		new EMFStoreCommand() {
 			@Override
@@ -237,7 +237,7 @@ public class MultiAttributeMoveOperationTest extends ESTest {
 						.get(operation.getModelElement().eContents().get(1).eContents().get(1)));
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 	}
 
@@ -262,7 +262,7 @@ public class MultiAttributeMoveOperationTest extends ESTest {
 				assertTrue(testElement.getStrings().get(1).equals(FIRST));
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(1, getProjectSpace().getOperations().size());
 		final AbstractOperation tmp = getProjectSpace().getOperations().get(0);
@@ -298,7 +298,7 @@ public class MultiAttributeMoveOperationTest extends ESTest {
 				assertTrue(testElement.getStrings().get(0).equals(SECOND));
 				assertTrue(testElement.getStrings().get(1).equals(FIRST));
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		new EMFStoreCommand() {
 			@Override
@@ -309,6 +309,6 @@ public class MultiAttributeMoveOperationTest extends ESTest {
 				assertTrue(testElement.getStrings().get(0).equals(FIRST));
 				assertTrue(testElement.getStrings().get(1).equals(SECOND));
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 	}
 }

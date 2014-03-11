@@ -51,7 +51,7 @@ public abstract class AbstractEMFStoreHandlerWithResult<T> extends AbstractHandl
 			protected T doRun() {
 				return handleWithResult();
 			}
-		}.run(null, false);
+		}.run(false, null);
 
 		this.event = null;
 		return null;

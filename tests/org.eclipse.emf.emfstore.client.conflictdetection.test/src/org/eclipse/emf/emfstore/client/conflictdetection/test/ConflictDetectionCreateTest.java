@@ -86,7 +86,8 @@ public class ConflictDetectionCreateTest extends ConflictDetectionTest {
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = secondProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			secondProjectSpace.getContentEditingDomain());
 
 		assertTrue(conflicts.size() > 0);
 	}
@@ -126,7 +127,8 @@ public class ConflictDetectionCreateTest extends ConflictDetectionTest {
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = secondProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			secondProjectSpace.getContentEditingDomain());
 
 		assertTrue(conflicts.size() > 0);
 	}

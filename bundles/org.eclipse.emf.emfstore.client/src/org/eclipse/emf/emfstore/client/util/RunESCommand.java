@@ -135,7 +135,7 @@ public final class RunESCommand {
 				}
 			};
 
-			final T result = cmd.run(editingDomain, false);
+			final T result = cmd.run(false, editingDomain);
 
 			if (cmd.hasException()) {
 				throw cmd.getException();
@@ -226,7 +226,7 @@ public final class RunESCommand {
 				}
 			};
 
-			cmd.run(editingDomain, false);
+			cmd.run(false, editingDomain);
 
 			if (cmd.hasException()) {
 				throw cmd.getException();
@@ -285,7 +285,7 @@ public final class RunESCommand {
 					// ignore
 				}
 			}
-		}.run(editingDomain, false);
+		}.run(false, editingDomain);
 	}
 
 	/**
@@ -347,6 +347,6 @@ public final class RunESCommand {
 				}
 				return null;
 			}
-		}.run(editingDomain, false);
+		}.run(false, editingDomain);
 	}
 }

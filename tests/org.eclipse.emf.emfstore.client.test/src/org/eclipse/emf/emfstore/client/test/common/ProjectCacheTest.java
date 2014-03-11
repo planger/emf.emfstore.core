@@ -42,7 +42,7 @@ public class ProjectCacheTest extends ESTest {
 				project.addModelElement(element);
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertNotNull(project.getModelElementId(element));
 		assertNotNull(project.getModelElementId(cutElement));
@@ -62,7 +62,7 @@ public class ProjectCacheTest extends ESTest {
 				cutElementIWhileCommand[0] = project.getModelElementId(cutElement);
 				project.addIdEObjectCollectionChangeObserver(createDummyObserver());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(cutElementIWhileCommand[0], project.getModelElementId(cutElement));
 	}
@@ -103,7 +103,7 @@ public class ProjectCacheTest extends ESTest {
 			protected void doRun() {
 				project.addModelElement(element);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		new EMFStoreCommand() {
 
@@ -111,7 +111,7 @@ public class ProjectCacheTest extends ESTest {
 			protected void doRun() {
 				project.deleteModelElement(element);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertNull(project.getModelElementId(element));
 	}
@@ -130,21 +130,21 @@ public class ProjectCacheTest extends ESTest {
 				project.addModelElement(container);
 				clearOperations();
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				element.setContainer(null);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				container.getContainedElements().add(element);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 	}
 
@@ -164,14 +164,14 @@ public class ProjectCacheTest extends ESTest {
 				project.addModelElement(container2);
 				clearOperations();
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				element.setContainer(container2);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 	}
 
@@ -191,7 +191,7 @@ public class ProjectCacheTest extends ESTest {
 				project.addModelElement(container2);
 				clearOperations();
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		new EMFStoreCommand() {
 			@Override
@@ -199,7 +199,7 @@ public class ProjectCacheTest extends ESTest {
 				container.getContainedElements().remove(element);
 				container2.getContainedElements().add(element);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 	}
 
 	@Test
@@ -216,21 +216,21 @@ public class ProjectCacheTest extends ESTest {
 				project.addModelElement(container);
 				clearOperations();
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				container.getContainedElements().add(element);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				element.setContainer(container);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		new EMFStoreCommand() {
 			@Override
@@ -238,7 +238,7 @@ public class ProjectCacheTest extends ESTest {
 				container.getContainedElements().remove(element);
 				element.setContainer(null);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 	}
 
 }

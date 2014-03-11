@@ -91,7 +91,7 @@ public class AttributeTest extends ComparingESTest {
 				getProject().addModelElement(useCase);
 				useCase.setName(OLD_NAME);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -106,7 +106,7 @@ public class AttributeTest extends ComparingESTest {
 				useCase.setName(C_NAME);
 				useCase.setName(NEW_NAME);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(NEW_NAME, useCase.getName());
 		assertEquals(4, getProjectSpace().getOperations().size());
@@ -119,7 +119,7 @@ public class AttributeTest extends ComparingESTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(operations.size(), 1);
 
@@ -131,7 +131,7 @@ public class AttributeTest extends ComparingESTest {
 			protected void doRun() {
 				reverse.apply(getProject());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 	}
@@ -151,7 +151,7 @@ public class AttributeTest extends ComparingESTest {
 				getProject().addModelElement(useCase);
 				useCase.setName(OLD_NAME);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -167,7 +167,7 @@ public class AttributeTest extends ComparingESTest {
 				useCase.setName(C_NAME);
 				useCase.setName(null);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(null, useCase.getName());
 
@@ -178,7 +178,7 @@ public class AttributeTest extends ComparingESTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(operations.size(), 1);
 
@@ -188,7 +188,7 @@ public class AttributeTest extends ComparingESTest {
 			protected void doRun() {
 				reverse.apply(getProject());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
@@ -209,7 +209,7 @@ public class AttributeTest extends ComparingESTest {
 				getProject().addModelElement(useCase);
 				useCase.setName(null);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -223,7 +223,7 @@ public class AttributeTest extends ComparingESTest {
 				useCase.setName(B_NAME);
 				useCase.setName(C_NAME);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(C_NAME, useCase.getName());
 
@@ -235,7 +235,7 @@ public class AttributeTest extends ComparingESTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(operations.size(), 1);
 
@@ -246,7 +246,7 @@ public class AttributeTest extends ComparingESTest {
 			protected void doRun() {
 				reverse.apply(getProject());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 	}
@@ -266,7 +266,7 @@ public class AttributeTest extends ComparingESTest {
 				getProject().addModelElement(useCase);
 				useCase.setName(OLD_NAME);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -281,7 +281,7 @@ public class AttributeTest extends ComparingESTest {
 				useCase.setName(C_NAME);
 				useCase.setName(OLD_NAME);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(OLD_NAME, useCase.getName());
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
@@ -311,7 +311,7 @@ public class AttributeTest extends ComparingESTest {
 				getProject().addModelElement(useCase);
 				useCase.setName(null);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -326,7 +326,7 @@ public class AttributeTest extends ComparingESTest {
 				useCase.setName(C_NAME);
 				useCase.setName(null);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(null, useCase.getName());
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
@@ -339,7 +339,7 @@ public class AttributeTest extends ComparingESTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		// should not have created any operations, we were just resetting the name to its original value
 		assertEquals(operations.size(), 0);
@@ -361,7 +361,7 @@ public class AttributeTest extends ComparingESTest {
 				useCase.setName(OLD_NAME);
 				useCase.setDescription(OLD_DESCRIPTION);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -380,7 +380,7 @@ public class AttributeTest extends ComparingESTest {
 				useCase.setDescription(OLD_DESCRIPTION);
 				useCase.setName(OLD_NAME);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
@@ -407,7 +407,7 @@ public class AttributeTest extends ComparingESTest {
 				getProject().addModelElement(useCase);
 				useCase.setName(OLD_NAME);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -424,7 +424,7 @@ public class AttributeTest extends ComparingESTest {
 				useCase.setDescription(NEW_DESCRIPTION);
 				useCase.setName(NEW_NAME);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(NEW_NAME, useCase.getName());
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
@@ -435,7 +435,7 @@ public class AttributeTest extends ComparingESTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(operations.size(), 2);
 
@@ -447,7 +447,7 @@ public class AttributeTest extends ComparingESTest {
 					reverse.apply(getProject());
 				}
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
@@ -483,7 +483,7 @@ public class AttributeTest extends ComparingESTest {
 				section.setName(SOME_SECTION);
 				actor.setName(HOMER);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -501,7 +501,7 @@ public class AttributeTest extends ComparingESTest {
 				section.setName(HOME);
 				useCase.setName(NEW_NAME);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(7, operations.size());
@@ -511,7 +511,7 @@ public class AttributeTest extends ComparingESTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		new EMFStoreCommand() {
 			@Override
@@ -521,7 +521,7 @@ public class AttributeTest extends ComparingESTest {
 					reverse.apply(getProject());
 				}
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 	}
@@ -555,7 +555,7 @@ public class AttributeTest extends ComparingESTest {
 				section.setName(SOME_SECTION);
 				actor.setName(HOMER);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -576,7 +576,7 @@ public class AttributeTest extends ComparingESTest {
 				useCase.setName(NEW_NAME);
 				useCase.setDescription(FINAL_DESC);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(NEW_NAME, useCase.getName());
@@ -589,7 +589,7 @@ public class AttributeTest extends ComparingESTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		new EMFStoreCommand() {
 			@Override
@@ -599,7 +599,7 @@ public class AttributeTest extends ComparingESTest {
 					reverse.apply(getProject());
 				}
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 	}
@@ -621,7 +621,7 @@ public class AttributeTest extends ComparingESTest {
 				section.setName(NAME);
 				section.setDescription(OLD_DESCRIPTION);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -645,7 +645,7 @@ public class AttributeTest extends ComparingESTest {
 				}
 				section.setDescription(DESC_2);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(DESC_2, section.getDescription());
@@ -656,7 +656,7 @@ public class AttributeTest extends ComparingESTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		new EMFStoreCommand() {
 			@Override
@@ -666,7 +666,7 @@ public class AttributeTest extends ComparingESTest {
 					reverse.apply(getProject());
 				}
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 	}
@@ -689,7 +689,7 @@ public class AttributeTest extends ComparingESTest {
 				section.setName(NAME);
 				section.setDescription(OLD_DESCRIPTION);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -712,7 +712,7 @@ public class AttributeTest extends ComparingESTest {
 					fail();
 				}
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(2, operations.size());
@@ -723,7 +723,7 @@ public class AttributeTest extends ComparingESTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		new EMFStoreCommand() {
 			@Override
@@ -733,7 +733,7 @@ public class AttributeTest extends ComparingESTest {
 					reverse.apply(getProject());
 				}
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 	}
@@ -755,7 +755,7 @@ public class AttributeTest extends ComparingESTest {
 				section.setName(NAME);
 				section.setDescription(OLD_DESCRIPTION);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -778,7 +778,7 @@ public class AttributeTest extends ComparingESTest {
 
 				section.setDescription(DESC_2);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(2, operations.size());
@@ -788,7 +788,7 @@ public class AttributeTest extends ComparingESTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		new EMFStoreCommand() {
 			@Override
@@ -798,7 +798,7 @@ public class AttributeTest extends ComparingESTest {
 					reverse.apply(getProject());
 				}
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 	}
@@ -821,7 +821,7 @@ public class AttributeTest extends ComparingESTest {
 				useCase.setName(NAME_OF_TEST_ELEMENT);
 				useCase.setDescription(DESCRIPTION_OF_TEST_ELEMENT);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(NAME_OF_TEST_ELEMENT, useCase.getName());
 
@@ -834,7 +834,7 @@ public class AttributeTest extends ComparingESTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		// now expecting only the create with folded in attributes
 		assertEquals(operations.size(), 1);
@@ -852,7 +852,7 @@ public class AttributeTest extends ComparingESTest {
 			protected void doRun() {
 				op.reverse().apply(getProject());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(ModelUtil.areEqual(getProject(), originalProject));
 
@@ -861,7 +861,7 @@ public class AttributeTest extends ComparingESTest {
 			protected void doRun() {
 				op.reverse().reverse().apply(getProject());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 	}
@@ -891,7 +891,7 @@ public class AttributeTest extends ComparingESTest {
 				useCase2.setName(NAME_OF_TEST_ELEMENT2);
 				useCase2.setDescription(DESCRIPTION_OF_TEST_ELEMENT2);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(NAME_OF_TEST_ELEMENT, useCase.getName());
 		assertEquals(NAME_OF_TEST_ELEMENT2, useCase2.getName());
@@ -904,7 +904,7 @@ public class AttributeTest extends ComparingESTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		// now expecting only the creates with folded in attributes
 		assertEquals(2, operations.size());
@@ -930,7 +930,7 @@ public class AttributeTest extends ComparingESTest {
 				op2.reverse().apply(getProject());
 				op.reverse().apply(getProject());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(ModelUtil.areEqual(getProject(), originalProject));
 	}
@@ -968,7 +968,7 @@ public class AttributeTest extends ComparingESTest {
 
 				section.setDescription(DESC_2);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -985,7 +985,7 @@ public class AttributeTest extends ComparingESTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		// expect create, the composite and 1 attribute op
 		assertEquals(3, operations.size());
@@ -1005,7 +1005,7 @@ public class AttributeTest extends ComparingESTest {
 					reverse.apply(getProject());
 				}
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(ModelUtil.areEqual(getProject(), originalProject));
 
@@ -1017,7 +1017,7 @@ public class AttributeTest extends ComparingESTest {
 				operations.get(1).apply(getProject());
 				operations.get(2).apply(getProject());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 	}
@@ -1039,7 +1039,7 @@ public class AttributeTest extends ComparingESTest {
 				useCase.setDescription(ORIGINAL_DESCRIPTION);
 				clearOperations();
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final Project originalProject = ModelUtil.clone(getProject());
 
@@ -1050,7 +1050,7 @@ public class AttributeTest extends ComparingESTest {
 				useCase.setDescription(DESCRIPTION_OF_TEST_ELEMENT);
 				getProject().deleteModelElement(useCase);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -1062,7 +1062,7 @@ public class AttributeTest extends ComparingESTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		// now expecting only the delete with folded in attributes
 		assertEquals(1, operations.size());
@@ -1081,7 +1081,7 @@ public class AttributeTest extends ComparingESTest {
 			protected void doRun() {
 				op.reverse().apply(getProject());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(ModelUtil.areEqual(getProject(), originalProject));
 
@@ -1090,7 +1090,7 @@ public class AttributeTest extends ComparingESTest {
 			protected void doRun() {
 				op.reverse().reverse().apply(getProject());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 	}
@@ -1121,7 +1121,7 @@ public class AttributeTest extends ComparingESTest {
 				useCase2.setDescription(ORIGINAL_DESCRIPTION2);
 				clearOperations();
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final Project originalProject = ModelUtil.clone(getProject());
 
@@ -1140,14 +1140,14 @@ public class AttributeTest extends ComparingESTest {
 
 				getProject().deleteModelElement(useCase);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				getProject().deleteModelElement(useCase2);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -1159,7 +1159,7 @@ public class AttributeTest extends ComparingESTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		// now expecting only the deletes with folded in attributes
 		assertEquals(2, operations.size());
@@ -1184,7 +1184,7 @@ public class AttributeTest extends ComparingESTest {
 				op2.reverse().apply(getProject());
 				op.reverse().apply(getProject());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(ModelUtil.areEqual(getProject(), originalProject));
 	}
@@ -1262,7 +1262,6 @@ public class AttributeTest extends ComparingESTest {
 	 */
 	@Test
 	public void attributeChangesACAAndDelete() throws InvalidHandleException, IOException {
-
 		final TestElement section = Create.testElement();
 		new EMFStoreCommand() {
 			@Override
@@ -1271,7 +1270,7 @@ public class AttributeTest extends ComparingESTest {
 				section.setName(ORIGINAL_NAME);
 				section.setDescription(ORIGINAL_DESCRIPTION);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final Project originalProject = ModelUtil.clone(getProject());
 
@@ -1296,7 +1295,7 @@ public class AttributeTest extends ComparingESTest {
 
 				getProject().deleteModelElement(section);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -1312,7 +1311,7 @@ public class AttributeTest extends ComparingESTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		// expect 1 attribute op, the composite and the delete with folded in attribute
 		assertEquals(3, operations.size());
@@ -1339,7 +1338,7 @@ public class AttributeTest extends ComparingESTest {
 					reverse.apply(getProject());
 				}
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(ModelUtil.areEqual(getProject(), originalProject));
 
@@ -1351,7 +1350,7 @@ public class AttributeTest extends ComparingESTest {
 				operations.get(1).apply(getProject());
 				operations.get(2).apply(getProject());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 	}
@@ -1376,7 +1375,7 @@ public class AttributeTest extends ComparingESTest {
 				useCase.setName(NEW_NAME);
 				getProject().deleteModelElement(useCase);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		// expect create, 2 attribute ops, delete
@@ -1387,7 +1386,7 @@ public class AttributeTest extends ComparingESTest {
 			protected void doRun() {
 				OperationsCanonizer.canonize(operations);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		// expect attributes folding into create, and create and delete removed,
 		// as they would be directly adjacent to each other
@@ -1410,7 +1409,7 @@ public class AttributeTest extends ComparingESTest {
 			protected void doRun() {
 				getProject().addModelElement(useCase2);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final Project originalProject = ModelUtil.clone(getProject());
 
@@ -1425,7 +1424,7 @@ public class AttributeTest extends ComparingESTest {
 				useCase.getReferences().add(useCase2);
 				getProject().deleteModelElement(useCase);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		// expect create, 1 attribute ops, 1 multiref op, the delete
@@ -1451,7 +1450,7 @@ public class AttributeTest extends ComparingESTest {
 				operations.get(1).reverse().apply(getProject());
 				operations.get(0).reverse().apply(getProject());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(ModelUtil.areEqual(getProject(), originalProject));
 	}

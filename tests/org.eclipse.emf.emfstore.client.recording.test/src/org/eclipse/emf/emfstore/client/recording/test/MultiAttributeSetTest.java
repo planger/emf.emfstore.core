@@ -68,7 +68,7 @@ public class MultiAttributeSetTest extends ESTest {
 				element.getStrings().add(OLD_VALUE);
 				clearOperations();
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(element.getStrings().size() == 1);
 
@@ -77,7 +77,7 @@ public class MultiAttributeSetTest extends ESTest {
 			protected void doRun() {
 				element.getStrings().set(0, SETTED_VALUE);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(element.getStrings().size() == 1);
 		assertTrue(element.getStrings().get(0).equals(SETTED_VALUE));
@@ -113,7 +113,7 @@ public class MultiAttributeSetTest extends ESTest {
 				assertEquals(1, testElement.getStrings().size());
 				assertTrue(testElement.getStrings().get(0).equals(INSERTED));
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 	}
 
 	/**
@@ -142,7 +142,7 @@ public class MultiAttributeSetTest extends ESTest {
 				assertTrue(testElement.getStrings().size() == 1);
 				assertTrue(testElement.getStrings().get(0).equals(OLD_VALUE));
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 	}
 
 	/**
@@ -174,7 +174,7 @@ public class MultiAttributeSetTest extends ESTest {
 				assertTrue(testElement.getStrings().get(1).equals(INSERTED));
 				assertTrue(testElement.getStrings().get(2).equals(THIRD));
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 	}
 
 	/**
@@ -190,7 +190,7 @@ public class MultiAttributeSetTest extends ESTest {
 				element.getStrings().add(OLD_VALUE);
 				clearOperations();
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(element.getStrings().size() == 1);
 		assertTrue(element.getStrings().get(0).equals(OLD_VALUE));
@@ -202,7 +202,7 @@ public class MultiAttributeSetTest extends ESTest {
 				assertTrue(element.getStrings().size() == 1);
 				assertTrue(element.getStrings().get(0).equals(NEW_VALUE));
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		new EMFStoreCommand() {
 			@Override
@@ -210,7 +210,7 @@ public class MultiAttributeSetTest extends ESTest {
 				final AbstractOperation operation = getProjectSpace().getOperations().get(0).reverse();
 				operation.apply(getProject());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(element.getStrings().size() == 1);
 		assertTrue(element.getStrings().get(0).equals(OLD_VALUE));
@@ -230,7 +230,7 @@ public class MultiAttributeSetTest extends ESTest {
 				assertEquals(3, fan.getEMails().size());
 				assertTrue(fan.isSetEMails());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -242,7 +242,7 @@ public class MultiAttributeSetTest extends ESTest {
 				assertEquals(0, fan.getEMails().size());
 				assertTrue(!fan.isSetEMails());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -265,7 +265,7 @@ public class MultiAttributeSetTest extends ESTest {
 				multAttOp.apply(secondProject);
 				multAttSetOp.apply(secondProject);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 		assertEquals(0, ((Fan) secondProject.getModelElements().get(0)).getEMails().size());
 		assertTrue(!((Fan) secondProject.getModelElements().get(0)).isSetEMails());
 		assertTrue(ModelUtil.areEqual(getProject(), secondProject));
@@ -286,7 +286,7 @@ public class MultiAttributeSetTest extends ESTest {
 				assertEquals(3, fan.getEMails().size());
 				assertTrue(fan.isSetEMails());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -298,7 +298,7 @@ public class MultiAttributeSetTest extends ESTest {
 				assertEquals(0, fan.getEMails().size());
 				assertTrue(!fan.isSetEMails());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -322,7 +322,7 @@ public class MultiAttributeSetTest extends ESTest {
 				multAttOp.reverse().apply(getProject());
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(3, fan.getEMails().size());
 		assertTrue(fan.isSetEMails());
@@ -343,7 +343,7 @@ public class MultiAttributeSetTest extends ESTest {
 				assertEquals(3, fan.getEMails().size());
 				assertTrue(fan.isSetEMails());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		clearOperations();
 
@@ -354,7 +354,7 @@ public class MultiAttributeSetTest extends ESTest {
 				assertEquals(0, fan.getEMails().size());
 				assertTrue(!fan.isSetEMails());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final Project secondProject = ModelUtil.clone(getProject());
 
@@ -379,7 +379,7 @@ public class MultiAttributeSetTest extends ESTest {
 				multAttOp.reverse().reverse().apply(getProject());
 				multAttSetOp.reverse().reverse().apply(getProject());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(0, fan.getEMails().size());
 		assertTrue(!fan.isSetEMails());
@@ -397,7 +397,7 @@ public class MultiAttributeSetTest extends ESTest {
 				assertEquals(0, fan.getEMails().size());
 				assertTrue(!fan.isSetEMails());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -411,7 +411,7 @@ public class MultiAttributeSetTest extends ESTest {
 				assertEquals(3, fan.getEMails().size());
 				assertTrue(fan.isSetEMails());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -436,7 +436,7 @@ public class MultiAttributeSetTest extends ESTest {
 				multAttOp2.reverse().apply(getProject());
 				multAttOp1.reverse().apply(getProject());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(0, fan.getEMails().size());
 		assertTrue(!fan.isSetEMails());
@@ -454,7 +454,7 @@ public class MultiAttributeSetTest extends ESTest {
 				assertEquals(0, fan.getEMails().size());
 				assertTrue(!fan.isSetEMails());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -466,7 +466,7 @@ public class MultiAttributeSetTest extends ESTest {
 				assertEquals(0, fan.getEMails().size());
 				assertTrue(fan.isSetEMails());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -482,7 +482,7 @@ public class MultiAttributeSetTest extends ESTest {
 				assertEquals(0, fan.getEMails().size());
 				assertTrue(fan.isSetEMails());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(ModelUtil.areEqual(getProject(), secondProject));
 	}

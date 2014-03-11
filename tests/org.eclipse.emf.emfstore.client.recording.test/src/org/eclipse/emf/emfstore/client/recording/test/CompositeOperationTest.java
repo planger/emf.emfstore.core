@@ -71,7 +71,7 @@ public class CompositeOperationTest extends ESTest {
 
 				return section;
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 	}
 
 	/**
@@ -106,7 +106,7 @@ public class CompositeOperationTest extends ESTest {
 					fail();
 				}
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(true, getProject().contains(useCase));
 		assertEquals(getProject(), ModelUtil.getProject(useCase));
@@ -146,7 +146,7 @@ public class CompositeOperationTest extends ESTest {
 
 				return handle;
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final ModelElementId sectionId = ModelUtil.getProject(section).getModelElementId(section);
 		final ProjectSpace projectSpace = getProjectSpace();
@@ -162,7 +162,7 @@ public class CompositeOperationTest extends ESTest {
 					fail();
 				}
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(true, getProject().contains(useCase));
 		assertEquals(getProject(), ModelUtil.getProject(useCase));
@@ -210,7 +210,7 @@ public class CompositeOperationTest extends ESTest {
 
 				return handle;
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final ModelElementId sectionId = ModelUtil.getProject(section).getModelElementId(section);
 		final ProjectSpace projectSpace = getProjectSpace();
@@ -226,7 +226,7 @@ public class CompositeOperationTest extends ESTest {
 					fail();
 				}
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(true, getProject().contains(useCase));
 		assertEquals(getProject(), ModelUtil.getProject(useCase));
@@ -278,7 +278,7 @@ public class CompositeOperationTest extends ESTest {
 					fail();
 				}
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(true, getProject().contains(section));
 		assertEquals(NAME, section.getName());
@@ -327,7 +327,7 @@ public class CompositeOperationTest extends ESTest {
 				assertEquals(workPackage, actionItem.getContainer());
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 	}
 
 	/**
@@ -350,7 +350,7 @@ public class CompositeOperationTest extends ESTest {
 					fail();
 				}
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 	}
 
 	/**
@@ -366,7 +366,7 @@ public class CompositeOperationTest extends ESTest {
 				getProject().addModelElement(Create.testElement());
 				getProject().addModelElement(Create.testElement());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		new EMFStoreCommand() {
 			@Override
@@ -374,7 +374,7 @@ public class CompositeOperationTest extends ESTest {
 				getProject().addModelElement(Create.testElement());
 				getProject().addModelElement(Create.testElement());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		RunESCommand.run(new Callable<Void>() {
 			public Void call() throws Exception {
@@ -393,7 +393,7 @@ public class CompositeOperationTest extends ESTest {
 				getProject().addModelElement(Create.testElement());
 				getProject().addModelElement(Create.testElement());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		new EMFStoreCommand() {
 			@Override
@@ -401,7 +401,7 @@ public class CompositeOperationTest extends ESTest {
 				getProject().addModelElement(Create.testElement());
 				getProject().addModelElement(Create.testElement());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		RunESCommand.run(new Callable<Void>() {
 			public Void call() throws Exception {

@@ -39,12 +39,12 @@ public abstract class EMFStoreCommandWithParameter<T> extends AbstractEMFStoreCo
 	 * Executes the command on the given editing domain.
 	 * 
 	 * @param parameter the parameter
-	 * @param editingDomain the editing domain
 	 * @param ignoreExceptions true if any thrown exception in the execution of the command should be ignored.
+	 * @param editingDomain the editing domain
 	 */
-	public void run(T parameter, EditingDomain editingDomain, boolean ignoreExceptions) {
+	public void run(T parameter, boolean ignoreExceptions, EditingDomain editingDomain) {
 		this.parameter = parameter;
-		super.aRun(editingDomain, ignoreExceptions);
+		super.aRun(ignoreExceptions, editingDomain);
 	}
 
 	/**

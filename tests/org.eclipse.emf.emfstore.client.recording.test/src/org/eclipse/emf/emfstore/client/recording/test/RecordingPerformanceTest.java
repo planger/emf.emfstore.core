@@ -175,7 +175,7 @@ public class RecordingPerformanceTest extends ESTest {
 			protected void doRun() {
 				getProject().addModelElement(parentTestElement);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 		insertWatch.stop();
 		assertEquals(COUNT, parentTestElement.getContainedElements().size());
 	}

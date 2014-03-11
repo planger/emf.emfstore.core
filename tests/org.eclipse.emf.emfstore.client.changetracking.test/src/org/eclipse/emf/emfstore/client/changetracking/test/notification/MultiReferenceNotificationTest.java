@@ -73,7 +73,7 @@ public class MultiReferenceNotificationTest extends ESTest {
 				// notifications from this operations are tested
 				actor.getNonContained_1ToN().addAll(Arrays.asList(useCases));
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<NotificationInfo> rec = getRecording().asMutableList();
 
@@ -131,7 +131,7 @@ public class MultiReferenceNotificationTest extends ESTest {
 				// notifications from this operations are tested
 				actor.getNonContained_NToM().addAll(Arrays.asList(useCases));
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<NotificationInfo> rec = getRecording().asMutableList();
 
@@ -191,7 +191,7 @@ public class MultiReferenceNotificationTest extends ESTest {
 				actor.getNonContained_1ToN().addAll(Arrays.asList(useCasesIn));
 				actor.getNonContained_1ToN().removeAll(Arrays.asList(useCasesOut));
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<NotificationInfo> rec = getRecording().asMutableList();
 
@@ -253,7 +253,7 @@ public class MultiReferenceNotificationTest extends ESTest {
 				actor.getNonContained_NToM().removeAll(Arrays.asList(useCasesOut));
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<NotificationInfo> rec = getRecording().asMutableList();
 

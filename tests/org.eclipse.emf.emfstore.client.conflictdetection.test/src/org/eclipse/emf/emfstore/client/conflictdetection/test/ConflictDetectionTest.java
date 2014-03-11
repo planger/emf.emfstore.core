@@ -16,6 +16,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.emfstore.client.test.common.cases.ESTest;
 import org.eclipse.emf.emfstore.client.util.ESVoidCallable;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
@@ -56,7 +57,8 @@ public abstract class ConflictDetectionTest extends ESTest {
 		return conflictSet.getConflictBuckets().size() > 0;
 	}
 
-	public Set<AbstractOperation> getConflicts(final List<AbstractOperation> ops1, final List<AbstractOperation> ops2,
+	public Set<AbstractOperation> getConflicts(final List<AbstractOperation> ops1, EditingDomain domain1,
+		final List<AbstractOperation> ops2, EditingDomain domain2,
 		Project project) {
 
 		final ChangePackage changePackage1 = VersioningFactory.eINSTANCE.createChangePackage();
@@ -66,9 +68,15 @@ public abstract class ConflictDetectionTest extends ESTest {
 			@Override
 			public void run() {
 				changePackage1.getOperations().addAll(ops1);
+			}
+		}, domain1);
+
+		RunESCommand.run(new ESVoidCallable() {
+			@Override
+			public void run() {
 				changePackage2.getOperations().addAll(ops2);
 			}
-		}, getProjectSpace().getContentEditingDomain());
+		}, domain2);
 
 		final ChangeConflictSet conflicts = new ConflictDetector().calculateConflicts(Arrays.asList(changePackage1),
 			Arrays.asList(changePackage2), project);
@@ -80,8 +88,9 @@ public abstract class ConflictDetectionTest extends ESTest {
 		return result;
 	}
 
-	public Set<AbstractOperation> getConflicts(List<AbstractOperation> ops1, List<AbstractOperation> ops2) {
-		return getConflicts(ops1, ops2, ModelFactory.eINSTANCE.createProject());
+	public Set<AbstractOperation> getConflicts(List<AbstractOperation> ops1, EditingDomain domain1,
+		List<AbstractOperation> ops2, EditingDomain domain2) {
+		return getConflicts(ops1, domain1, ops2, domain2, ModelFactory.eINSTANCE.createProject());
 	}
 
 	public <T extends AbstractOperation> AbstractOperation myCheckAndGetOperation(
@@ -91,7 +100,7 @@ public abstract class ConflictDetectionTest extends ESTest {
 			protected AbstractOperation doRun() {
 				return checkAndGetOperation(clazz);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 	}
 
 }

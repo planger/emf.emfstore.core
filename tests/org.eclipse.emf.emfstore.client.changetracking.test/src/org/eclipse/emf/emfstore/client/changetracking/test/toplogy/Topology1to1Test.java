@@ -613,7 +613,7 @@ public class Topology1to1Test extends ESTest {
 				leafSection.getContainedElements().add(solution2);
 				issue.setContainedElement(solution1);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(issue.getContainedElement(), solution1);
 		assertTrue(leafSection.getContainedElements().contains(solution2));
@@ -626,7 +626,7 @@ public class Topology1to1Test extends ESTest {
 			protected void doRun() {
 				issue.setContainedElement(solution2);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertSame(solution2, issue.getContainedElement());
 		assertTrue(leafSection.getContainedElements().isEmpty());

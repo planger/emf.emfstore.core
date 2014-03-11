@@ -288,12 +288,12 @@ public class SharedProjectTest extends ESTestWithSharedProject {
 
 		getLocalProject().commit(monitor);
 
-		RunESCommand.run(new Callable<Void>() {
+		checkedoutCopy.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				checkedoutPlayer.setName("B"); //$NON-NLS-1$
 				return null;
 			}
-		}, getProjectSpace().getContentEditingDomain());
+		});
 
 		checkedoutCopy.commit(monitor);
 	}
@@ -317,13 +317,13 @@ public class SharedProjectTest extends ESTestWithSharedProject {
 
 		// tournament does not contain players
 		final Tournament tournament = Create.tournament(false);
-		RunESCommand.run(new Callable<Void>() {
+		secondProject.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				secondProject.getModelElements().add(tournament);
 				tournament.getPlayers().add(player);
 				return null;
 			}
-		}, getProjectSpace().getContentEditingDomain());
+		});
 
 		getLocalProject().save();
 		secondProject.save();

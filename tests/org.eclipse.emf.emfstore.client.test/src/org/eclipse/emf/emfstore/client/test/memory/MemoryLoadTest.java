@@ -322,7 +322,7 @@ public class MemoryLoadTest {
 			protected void doRun() {
 				ModelMutator.generateModel(config);
 			}
-		}.run(null, false);
+		}.run(false, null);
 
 		final ProjectSpace projectSpace = ((ESWorkspaceImpl) runningEMFStoreRule.connectedWorkspace()).toInternalAPI()
 			.importProject(
@@ -355,7 +355,7 @@ public class MemoryLoadTest {
 				ModelMutator.changeModel(mmc);
 				System.out.println("Changed model: " + (System.currentTimeMillis() - time) / 1000.0 + "sec");
 			}
-		}.run(((ESLocalProjectImpl) project).toInternalAPI().getContentEditingDomain(), false);
+		}.run(false, ((ESLocalProjectImpl) project).toInternalAPI().getContentEditingDomain());
 	}
 
 	private ModelMutatorConfiguration createModelMutatorConfigurationRandom(String modelKey, EObject rootObject,
@@ -386,7 +386,7 @@ public class MemoryLoadTest {
 					return null;
 				}
 			}
-		}.run(((ESLocalProjectImpl) project).toInternalAPI().getContentEditingDomain(), false);
+		}.run(false, ((ESLocalProjectImpl) project).toInternalAPI().getContentEditingDomain());
 	}
 
 	private void deleteLocallyIfNeeded(final ESLocalProject project) {

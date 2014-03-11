@@ -156,7 +156,7 @@ public class AttributeOperationTest extends ESTest {
 				testElement.setName(NEW_NAME);
 				assertEquals(NEW_NAME, testElement.getName());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -187,7 +187,7 @@ public class AttributeOperationTest extends ESTest {
 				final ModelElementId testElementId = ModelUtil.getProject(testElement).getModelElementId(testElement);
 				assertEquals(testElementId, reversedAttributeOperation.getModelElementId());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(OLD_NAME, testElement.getName());
 	}
@@ -209,7 +209,7 @@ public class AttributeOperationTest extends ESTest {
 				testElement.setName(NEW_NAME);
 				assertEquals(NEW_NAME, testElement.getName());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -240,7 +240,7 @@ public class AttributeOperationTest extends ESTest {
 				r.apply(getProject());
 				rr.apply(getProject());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 
@@ -251,7 +251,7 @@ public class AttributeOperationTest extends ESTest {
 				attributeOperation.reverse().apply(getProject());
 				attributeOperation.reverse().reverse().apply(getProject());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 		getProjectSpace().save();
@@ -277,7 +277,7 @@ public class AttributeOperationTest extends ESTest {
 				fan.setName(FAN);
 				clearOperations();
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final Project secondProject = ModelUtil.clone(getProject());
 
@@ -290,7 +290,7 @@ public class AttributeOperationTest extends ESTest {
 			protected void doRun() {
 				fan.unsetName();
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(false, fan.isSetName());
 		assertEquals(null, fan.getName());
@@ -318,7 +318,7 @@ public class AttributeOperationTest extends ESTest {
 			protected void doRun() {
 				fan.setName(null);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(true, fan.isSetName());
 		assertEquals(null, fan.getName());
@@ -347,7 +347,7 @@ public class AttributeOperationTest extends ESTest {
 				fan.setName(FAN);
 				clearOperations();
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(FAN, fan.getName());
 		assertEquals(true, fan.isSetName());
@@ -359,7 +359,7 @@ public class AttributeOperationTest extends ESTest {
 			protected void doRun() {
 				fan.unsetName();
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(false, fan.isSetName());
 		assertEquals(null, fan.getName());
@@ -381,7 +381,7 @@ public class AttributeOperationTest extends ESTest {
 			protected void doRun() {
 				attributeOperation.reverse().apply(getProject());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(FAN, fan.getName());
 		assertEquals(true, fan.isSetName());
@@ -400,7 +400,7 @@ public class AttributeOperationTest extends ESTest {
 				fan.setName(FAN);
 				clearOperations();
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(FAN, fan.getName());
 		assertEquals(true, fan.isSetName());
@@ -410,7 +410,7 @@ public class AttributeOperationTest extends ESTest {
 			protected void doRun() {
 				fan.unsetName();
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final Project secondProject = ModelUtil.clone(getProject());
 
@@ -434,7 +434,7 @@ public class AttributeOperationTest extends ESTest {
 			protected void doRun() {
 				attributeOperation.reverse().reverse().apply(getProject());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(null, fan.getName());
 		assertEquals(false, fan.isSetName());
@@ -452,7 +452,7 @@ public class AttributeOperationTest extends ESTest {
 				getProject().addModelElement(fan);
 				clearOperations();
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(null, fan.getName());
 		assertEquals(false, fan.isSetName());
@@ -464,7 +464,7 @@ public class AttributeOperationTest extends ESTest {
 			protected void doRun() {
 				fan.setName(FAN);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(true, fan.isSetName());
 		assertEquals(FAN, fan.getName());
@@ -485,7 +485,7 @@ public class AttributeOperationTest extends ESTest {
 			protected void doRun() {
 				attributeOperation.reverse().apply(getProject());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(null, fan.getName());
 		assertEquals(false, fan.isSetName());

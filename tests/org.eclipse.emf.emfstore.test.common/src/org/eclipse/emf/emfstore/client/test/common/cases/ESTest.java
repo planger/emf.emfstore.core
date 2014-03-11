@@ -27,13 +27,12 @@ import org.eclipse.emf.emfstore.client.util.ESVoidCallable;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
 import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
 import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
-import org.eclipse.emf.emfstore.internal.client.model.Workspace;
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.notification.recording.NotificationRecording;
 import org.eclipse.emf.emfstore.internal.client.model.impl.ProjectSpaceImpl;
+import org.eclipse.emf.emfstore.internal.client.model.impl.WorkspaceBase;
 import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESLocalProjectImpl;
 import org.eclipse.emf.emfstore.internal.common.CommonUtil;
 import org.eclipse.emf.emfstore.internal.common.model.Project;
-import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.util.OperationsCanonizer;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
@@ -68,17 +67,22 @@ public abstract class ESTest {
 	 */
 	public ProjectSpace cloneProjectSpace(final ProjectSpace projectSpace) {
 
-		final Workspace workspace = ESWorkspaceProviderImpl.getInstance()
-			.getWorkspace().toInternalAPI();
+		final WorkspaceBase workspace = (WorkspaceBase) ESWorkspaceProviderImpl
+			.getInstance().getWorkspace().toInternalAPI();
 
-		return RunESCommand.runWithResult(new Callable<ProjectSpace>() {
+		final ProjectSpace clonedProjectSpace = RunESCommand.runWithResult(new Callable<ProjectSpace>() {
 			public ProjectSpace call() throws Exception {
-				final Project clonedProject = ModelUtil.clone(projectSpace
-					.getProject());
-				return workspace.importProject(clonedProject,
-					CLONED_PROJECT_NAME, CLONED_PROJECT_DESCRIPTION);
+				return workspace.cloneProject(
+					CLONED_PROJECT_NAME, getProject());
 			}
 		});
+		RunESCommand.run(new ESVoidCallable() {
+			@Override
+			public void run() {
+				clonedProjectSpace.initContentResources();
+			}
+		}, clonedProjectSpace.getContentEditingDomain());
+		return clonedProjectSpace;
 	}
 
 	@Before

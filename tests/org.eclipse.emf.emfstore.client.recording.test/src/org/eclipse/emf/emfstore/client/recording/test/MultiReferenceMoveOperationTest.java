@@ -69,7 +69,7 @@ public class MultiReferenceMoveOperationTest extends ESTest {
 				actor.getNonContained_1ToN().add(useCase2);
 				actor.getNonContained_1ToN().add(useCase3);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(actor, useCase1.getNonContained_NTo1());
 		assertEquals(actor, useCase2.getNonContained_NTo1());
@@ -87,7 +87,7 @@ public class MultiReferenceMoveOperationTest extends ESTest {
 				clearOperations();
 				actor.getNonContained_1ToN().move(2, 1);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -145,7 +145,7 @@ public class MultiReferenceMoveOperationTest extends ESTest {
 				actor.getNonContained_1ToN().add(useCase3);
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		new EMFStoreCommand() {
 			@Override
@@ -162,7 +162,7 @@ public class MultiReferenceMoveOperationTest extends ESTest {
 
 				actor.getNonContained_1ToN().move(2, 1);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -188,7 +188,7 @@ public class MultiReferenceMoveOperationTest extends ESTest {
 			protected void doRun() {
 				reverse.apply(getProject());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final EList<TestElement> initiatedTestElements = actor.getNonContained_1ToN();
 		assertEquals(actor, useCase1.getNonContained_NTo1());
@@ -223,7 +223,7 @@ public class MultiReferenceMoveOperationTest extends ESTest {
 				actor.getNonContained_1ToN().add(useCase2);
 				actor.getNonContained_1ToN().add(useCase3);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(actor, useCase1.getNonContained_NTo1());
 		assertEquals(actor, useCase2.getNonContained_NTo1());

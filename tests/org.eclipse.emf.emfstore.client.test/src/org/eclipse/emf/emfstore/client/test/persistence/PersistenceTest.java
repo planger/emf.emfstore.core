@@ -44,7 +44,7 @@ public class PersistenceTest extends ESTest {
 			protected void doRun() {
 				getProject().addModelElement(TestmodelFactory.eINSTANCE.createTestElement());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(
 			ESWorkspaceProviderImpl.getInstance().getWorkspace().getLocalProjects().get(0).getModelElements().size(), 1);

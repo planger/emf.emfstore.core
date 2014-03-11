@@ -55,12 +55,11 @@ public abstract class EMFStoreCommand extends AbstractEMFStoreCommand {
 
 	/**
 	 * Executes the command on the given editing domain.
-	 * 
-	 * @param editingDomain the editing domain
 	 * @param ignoreExceptions true if any thrown exception in the execution of the command should be ignored.
+	 * @param editingDomain the editing domain
 	 */
-	public void run(EditingDomain editingDomain, boolean ignoreExceptions) {
-		super.aRun(editingDomain, ignoreExceptions);
+	public void run(boolean ignoreExceptions, EditingDomain editingDomain) {
+		super.aRun(ignoreExceptions, editingDomain);
 	}
 
 	/**

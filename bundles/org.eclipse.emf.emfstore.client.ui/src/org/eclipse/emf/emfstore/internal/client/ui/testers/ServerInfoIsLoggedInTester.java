@@ -40,7 +40,7 @@ public class ServerInfoIsLoggedInTester extends PropertyTester {
 					return ret.equals(expectedValue);
 				}
 			};
-			Boolean result = command.run(null, false);
+			Boolean result = command.run(false, null);
 			return result;
 		}
 		return false;

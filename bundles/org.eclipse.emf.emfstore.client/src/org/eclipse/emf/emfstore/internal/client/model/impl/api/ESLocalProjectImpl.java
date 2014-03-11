@@ -116,7 +116,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 			public String call() throws Exception {
 				return toInternalAPI().getProjectName();
 			}
-		}, toInternalAPI().getContentEditingDomain());
+		});
 	}
 
 	/**

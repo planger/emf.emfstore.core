@@ -75,7 +75,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				clearOperations();
 				actor.getNonContained_1ToN().add(useCase);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 		assertEquals(actor, useCase.getNonContained_NTo1());
 		final EList<TestElement> initiatedTestElements = actor.getNonContained_1ToN();
 		assertEquals(1, initiatedTestElements.size());
@@ -155,7 +155,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				assertEquals(1, initiatedTestElements.size());
 				assertEquals(useCase, initiatedTestElements.get(0));
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -203,7 +203,7 @@ public class MultiReferenceOperationTest extends ESTest {
 			protected void doRun() {
 				reversedMultiReferenceOperation.apply(getProject());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(0, actor.getNonContained_1ToN().size());
 		assertNull(useCase.getNonContained_NTo1());
@@ -250,7 +250,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				assertEquals(useCase2, initiatedTestElements.get(1));
 				assertEquals(useCase3, initiatedTestElements.get(2));
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -345,7 +345,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				assertEquals(useCase2, initiatedTestElements.get(1));
 				assertEquals(useCase3, initiatedTestElements.get(2));
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		Delete.fromNonContained1ToN(getLocalProject(), actor, useCases);
 
@@ -425,7 +425,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				assertEquals(3, fan.getVisitedTournaments().size());
 				assertTrue(fan.isSetVisitedTournaments());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -440,7 +440,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				assertTrue(getProject().getAllModelElements().contains(tournament2));
 				assertTrue(getProject().getAllModelElements().contains(tournament3));
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -464,7 +464,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				operations.get(0).apply(secondProject);
 				operations.get(1).apply(secondProject);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(0, ((Fan) secondProject.getModelElements().get(0)).getVisitedTournaments().size());
 		assertTrue(!((Fan) secondProject.getModelElements().get(0)).isSetVisitedTournaments());
@@ -491,7 +491,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				assertEquals(3, fan.getVisitedTournaments().size());
 				assertTrue(fan.isSetVisitedTournaments());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -506,7 +506,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				assertTrue(getProject().getAllModelElements().contains(tournament2));
 				assertTrue(getProject().getAllModelElements().contains(tournament3));
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -530,7 +530,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				mrop2.reverse().apply(getProject());
 				mrop1.reverse().apply(getProject());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(3, fan.getVisitedTournaments().size());
 		assertTrue(fan.getVisitedTournaments().contains(tournament1));
@@ -560,7 +560,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				assertEquals(3, fan.getVisitedTournaments().size());
 				assertTrue(fan.isSetVisitedTournaments());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		clearOperations();
 
@@ -574,7 +574,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				assertTrue(getProject().getAllModelElements().contains(tournament2));
 				assertTrue(getProject().getAllModelElements().contains(tournament3));
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final Project secondProject = ModelUtil.clone(getProject());
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
@@ -599,7 +599,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				mrop1.reverse().reverse().apply(getProject());
 				mrop2.reverse().reverse().apply(getProject());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(0, fan.getVisitedTournaments().size());
 		assertTrue(!fan.isSetVisitedTournaments());
@@ -629,7 +629,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				assertTrue(getProject().getAllModelElements().contains(tournament2));
 				assertTrue(getProject().getAllModelElements().contains(tournament3));
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -643,7 +643,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				assertEquals(3, fan.getVisitedTournaments().size());
 				assertTrue(fan.isSetVisitedTournaments());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -673,7 +673,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				mrop2.reverse().apply(getProject());
 				mrop1.reverse().apply(getProject());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(0, fan.getVisitedTournaments().size());
 		assertTrue(!fan.isSetVisitedTournaments());
@@ -700,7 +700,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				assertEquals(3, fan.getFanMerchandise().size());
 				assertTrue(fan.isSetFanMerchandise());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -715,7 +715,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				assertTrue(!getProject().getAllModelElements().contains(merch2));
 				assertTrue(!getProject().getAllModelElements().contains(merch3));
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -754,7 +754,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				creaDelOp2.apply(secondProject);
 				creaDelOp3.apply(secondProject);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(0, ((Fan) secondProject.getModelElements().get(0)).getFanMerchandise().size());
 		assertTrue(!((Fan) secondProject.getModelElements().get(0)).isSetFanMerchandise());
@@ -781,7 +781,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				assertEquals(3, fan.getFanMerchandise().size());
 				assertTrue(fan.isSetFanMerchandise());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -796,7 +796,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				assertTrue(!getProject().getAllModelElements().contains(merch2));
 				assertTrue(!getProject().getAllModelElements().contains(merch3));
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -835,7 +835,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				mrop2.reverse().apply(getProject());
 				mrop1.reverse().apply(getProject());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(3, fan.getFanMerchandise().size());
 		assertTrue(fan.isSetFanMerchandise());
@@ -862,7 +862,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				assertEquals(3, fan.getFanMerchandise().size());
 				assertTrue(fan.isSetFanMerchandise());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		clearOperations();
 
@@ -876,7 +876,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				assertTrue(!getProject().getAllModelElements().contains(merch2));
 				assertTrue(!getProject().getAllModelElements().contains(merch3));
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final Project secondProject = ModelUtil.clone(getProject());
 
@@ -917,7 +917,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				creaDelOp2.reverse().reverse().apply(getProject());
 				creaDelOp3.reverse().reverse().apply(getProject());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(0, fan.getFanMerchandise().size());
 		assertTrue(!fan.isSetFanMerchandise());
@@ -947,7 +947,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				assertEquals(0, fan.getFanMerchandise().size());
 				assertFalse(fan.isSetFanMerchandise());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -961,7 +961,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				assertEquals(3, fan.getFanMerchandise().size());
 				assertTrue(fan.isSetFanMerchandise());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -991,7 +991,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				mrop2.reverse().apply(getProject());
 				mrop1.reverse().apply(getProject());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(0, fan.getFanMerchandise().size());
 		assertTrue(!fan.isSetFanMerchandise());
@@ -1010,7 +1010,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				assertEquals(0, fan.getVisitedTournaments().size());
 				assertTrue(!fan.isSetVisitedTournaments());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -1022,7 +1022,7 @@ public class MultiReferenceOperationTest extends ESTest {
 				assertEquals(0, fan.getVisitedTournaments().size());
 				assertTrue(fan.isSetVisitedTournaments());
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -1036,7 +1036,7 @@ public class MultiReferenceOperationTest extends ESTest {
 			protected void doRun() {
 				multRefOp.apply(secondProject);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(ModelUtil.areEqual(getProject(), secondProject));
 	}

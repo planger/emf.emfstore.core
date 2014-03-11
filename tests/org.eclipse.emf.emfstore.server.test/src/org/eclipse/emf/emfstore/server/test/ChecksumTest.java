@@ -39,6 +39,7 @@ import org.eclipse.emf.emfstore.client.test.common.dsl.Create;
 import org.eclipse.emf.emfstore.client.test.common.dsl.Delete;
 import org.eclipse.emf.emfstore.client.test.common.dsl.TestElementFeatures;
 import org.eclipse.emf.emfstore.client.test.common.dsl.Update;
+import org.eclipse.emf.emfstore.client.util.ESVoidCallable;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
 import org.eclipse.emf.emfstore.common.model.ESModelElementIdToEObjectMapping;
 import org.eclipse.emf.emfstore.internal.client.model.Configuration;
@@ -109,8 +110,13 @@ public class ChecksumTest extends ESTestWithLoggedInUser {
 		Add.toProject(getLocalProject(), attributeName);
 		Add.toProject(getLocalProject(), attribute);
 
-		attribute.getContainedElements().add(value);
-		table.getElementMap().put(attributeName, value);
+		Add.toContainedElements(getLocalProject(), attribute, value);
+		getLocalProject().run(new ESVoidCallable() {
+			@Override
+			public void run() {
+				table.getElementMap().put(attributeName, value);
+			}
+		});
 
 		final long checksum = computeChecksum(getLocalProject());
 

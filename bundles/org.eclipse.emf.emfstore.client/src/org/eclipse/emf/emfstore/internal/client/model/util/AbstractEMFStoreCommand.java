@@ -115,19 +115,19 @@ public abstract class AbstractEMFStoreCommand extends AbstractCommand {
 	 *            ignored
 	 */
 	protected void aRun(boolean ignoreExceptions) {
-		aRun(ESWorkspaceProviderImpl.getInstance().getEditingDomain(), ignoreExceptions);
+		aRun(ignoreExceptions, ESWorkspaceProviderImpl.getInstance().getEditingDomain());
 
 	}
 
 	/**
 	 * Executes the command on the given editing domain.
 	 * 
-	 * @param editingDomain the editing domain
 	 * @param ignoreExceptions
 	 *            should be set to {@code true} if any thrown exception in the execution of the command should be
 	 *            ignored
+	 * @param editingDomain the editing domain
 	 */
-	protected void aRun(EditingDomain editingDomain, boolean ignoreExceptions) {
+	protected void aRun(boolean ignoreExceptions, EditingDomain editingDomain) {
 		this.editingDomain = editingDomain;
 		this.ignoreExceptions = ignoreExceptions;
 		editingDomain.getCommandStack().execute(this);

@@ -40,7 +40,7 @@ public class ProjectIsSharedTester extends PropertyTester {
 					return isShared.equals(expectedValue);
 				}
 			};
-			return command.run(null, false);
+			return command.run(false, null);
 		}
 		return false;
 	}

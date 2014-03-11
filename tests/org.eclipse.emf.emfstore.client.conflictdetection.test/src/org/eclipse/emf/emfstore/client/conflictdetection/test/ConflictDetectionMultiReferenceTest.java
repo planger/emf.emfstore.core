@@ -64,17 +64,29 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				section1.getContainedElements().add(actor1);
+
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+
+			@Override
+			protected void doRun() {
 				section2.getContainedElements().add(actor2);
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
-			getConflicts(oclonedProjectSpace, ops1)
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
 				.size());
 		// same operations going on in both working copies, no conflicts expected
 		assertEquals(1, conflicts.size());
@@ -99,7 +111,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				getProject().addModelElement(actor);
 				clearOperations();
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
 		final Project clonedProject = clonedProjectSpace.getProject();
@@ -117,17 +129,30 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				section1.getContainedElements().add(actor1);
+
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+
+			@Override
+			protected void doRun() {
 				section2.getContainedElements().add(actor2);
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(), getConflicts(oclonedProjectSpace, ops1)
-			.size());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
+				.size());
 		// same operations going on in both working copies, no conflicts expected
 		assertEquals(1, conflicts.size());
 
@@ -158,18 +183,30 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				section1.getContainedElements().add(actor1);
+
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+
+			@Override
+			protected void doRun() {
 				section2.getContainedElements().add(actor2);
 				section2.getContainedElements().add(dummy2);
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
-			getConflicts(oclonedProjectSpace, ops1)
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
 				.size());
 		// obviously an index-integrity conflict
 		assertEquals(conflicts.size(), 1);
@@ -200,7 +237,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section1.getContainedElements().add(actor1);
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		new EMFStoreCommand() {
 			@Override
@@ -209,15 +246,20 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getContainedElements().remove(actor2);
 
 			}
-		}.run(clonedProjectSpace.getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		// hard conflict between add and remove, serialization matters
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(), getConflicts(oclonedProjectSpace, ops1)
-			.size());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
+				.size());
 
 		assertEquals(conflicts.size(), 1);
 
@@ -248,18 +290,30 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				section1.getContainedElements().add(actor1);
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+
+			@Override
+			protected void doRun() {
 				section2.getContainedElements().add(actor2);
 				actor2.setContainer(otherSection2);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		// hard conflict between add and remove, serialization matters
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(), getConflicts(oclonedProjectSpace, ops1)
-			.size());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
+				.size());
 
 		assertEquals(conflicts.size(), 1);
 
@@ -290,18 +344,30 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				section1.getContainedElements().add(actor1);
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+
+			@Override
+			protected void doRun() {
 				section2.getContainedElements().add(actor2);
 				otherSection2.getContainedElements().add(actor2);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		// hard conflict between add and remove, serialization matters
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(), getConflicts(oclonedProjectSpace, ops1)
-			.size());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
+				.size());
 
 		assertEquals(conflicts.size(), 1);
 
@@ -335,9 +401,14 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		// hard conflict between add and remove, serialization matters
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(), getConflicts(oclonedProjectSpace, ops1)
-			.size());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
+				.size());
 
 		assertEquals(conflicts.size(), 1);
 	}
@@ -367,19 +438,32 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				actor1.setContainer(section1);
+
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+
+			@Override
+			protected void doRun() {
 				actor2.setContainer(section2);
 				otherSection2.getContainedElements().add(actor2);
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		// hard conflict between add and remove, serialization matters
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(), getConflicts(oclonedProjectSpace, ops1)
-			.size());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
+				.size());
 
 		assertEquals(conflicts.size(), 1);
 
@@ -409,7 +493,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			protected void doRun() {
 				actor1.setContainer(section1);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 		new EMFStoreCommand() {
 
 			@Override
@@ -417,14 +501,19 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				actor2.setContainer(section2);
 				section2.getContainedElements().remove(actor2);
 			}
-		}.run(clonedProjectSpace.getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		// hard conflict between add and remove, serialization matters
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(), getConflicts(oclonedProjectSpace, ops1)
-			.size());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
+				.size());
 
 		assertEquals(conflicts.size(), 1);
 
@@ -455,19 +544,32 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				actor1.setContainer(section1);
+
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+
+			@Override
+			protected void doRun() {
 				actor2.setContainer(section2);
 				otherSection2.getContainedElements().add(actor2);
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		// hard conflict between add and remove, serialization matters
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(), getConflicts(oclonedProjectSpace, ops1)
-			.size());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
+				.size());
 
 		assertEquals(conflicts.size(), 1);
 
@@ -498,19 +600,32 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				section1.getContainedElements().add(actor1);
+
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+
+			@Override
+			protected void doRun() {
 				section2.getContainedElements().add(actor2);
 				otherSection2.getContainedElements().add(actor2);
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		// hard conflict between add and remove, serialization matters
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(), getConflicts(oclonedProjectSpace, ops1)
-			.size());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
+				.size());
 
 		assertEquals(conflicts.size(), 1);
 
@@ -544,7 +659,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			protected void doRun() {
 				section1.getContainedElements().remove(actor1);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		new EMFStoreCommand() {
 			@Override
@@ -552,15 +667,20 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getContainedElements().remove(actor2);
 
 			}
-		}.run(clonedProjectSpace.getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		// no hard conflict
-		final Set<AbstractOperation> hardConflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(), getConflicts(oclonedProjectSpace, ops1)
-			.size());
+		final Set<AbstractOperation> hardConflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
+				.size());
 
 		assertEquals(1, hardConflicts.size());
 
@@ -591,17 +711,28 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				actor.setContainer(section);
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+			@Override
+			protected void doRun() {
 				otherSection2.getContainedElements().add(actor2);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		// no index conflict
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(), getConflicts(oclonedProjectSpace, ops1)
-			.size());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
+				.size());
 
 		assertEquals(conflicts.size(), 0);
 
@@ -637,18 +768,31 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				actor.setContainer(otherSection);
+
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+
+			@Override
+			protected void doRun() {
 				actor2.setContainer(anotherSection2);
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		// a hard conflict, though. serialization matters
-		final Set<AbstractOperation> hardConflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(), getConflicts(oclonedProjectSpace, ops1)
-			.size());
+		final Set<AbstractOperation> hardConflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
+				.size());
 
 		assertEquals(hardConflicts.size(), 1);
 
@@ -691,9 +835,13 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		// no index conflict
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
-			getConflicts(oclonedProjectSpace, ops1)
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
 				.size());
 
 		// index conflict arises: if the add happens before the move, the move will work
@@ -728,18 +876,28 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				actor.setContainer(section);
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+			@Override
+			protected void doRun() {
 				section2.getContainedElements().add(actor2);
 				section2.getContainedElements().move(0, actor2);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		// no index conflict
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
-			getConflicts(oclonedProjectSpace, ops1)
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
 				.size());
 
 		// index conflict arises: if the add happens before the move, the move will work
@@ -777,17 +935,27 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				section.getContainedElements().move(1, actor);
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+			@Override
+			protected void doRun() {
 				section2.getContainedElements().move(0, actor2);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
 		// no index conflict
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
-			getConflicts(oclonedProjectSpace, ops1)
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
 				.size());
 
 		// an index conflict arises: result depends on which move comes last
@@ -824,16 +992,26 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				section.getContainedElements().add(1, actor);
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+			@Override
+			protected void doRun() {
 				dummy2.setContainer(otherSection2);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
-			getConflicts(oclonedProjectSpace, ops1)
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
 				.size());
 		assertEquals(conflicts.size(), 0);
 	}
@@ -866,16 +1044,26 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				section.getContainedElements().add(1, actor);
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+			@Override
+			protected void doRun() {
 				dummy2.setContainer(otherSection2);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
-			getConflicts(oclonedProjectSpace, ops1)
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
 				.size());
 		// no index-integrity conflict (the change happens at the boundary)
 		assertEquals(conflicts.size(), 0);
@@ -913,14 +1101,18 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getContainedElements().remove(dummy2);
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
-			getConflicts(oclonedProjectSpace, ops1)
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
 				.size());
 		// no index-integrity conflict (outcome does not depend on serialization)
 		assertEquals(conflicts.size(), 0);
@@ -954,17 +1146,28 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				actor.setContainer(section);
+
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+			@Override
+			protected void doRun() {
 				otherSection2.getContainedElements().add(dummy2);
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
-			getConflicts(oclonedProjectSpace, ops1)
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
 				.size());
 		// no index-integrity conflict (outcome does not depend on serialization)
 		assertEquals(conflicts.size(), 0);
@@ -999,14 +1202,18 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				actor.setContainer(section);
 				dummy2.setContainer(otherSection2);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
-			getConflicts(oclonedProjectSpace, ops1)
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
 				.size());
 		// no index-integrity conflict (outcome does not depend on serialization)
 		assertEquals(0, conflicts.size());
@@ -1045,14 +1252,18 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getContainedElements().remove(dummy2);
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
-			getConflicts(oclonedProjectSpace, ops1)
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
 				.size());
 		// no index-integrity conflict: result independent of serialization
 		assertEquals(conflicts.size(), 0);
@@ -1088,17 +1299,28 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				section.getContainedElements().remove(actor);
+
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+			@Override
+			protected void doRun() {
 				otherSection2.getContainedElements().add(dummy2);
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
-			getConflicts(oclonedProjectSpace, ops1)
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
 				.size());
 		// no index-integrity conflict: result independent of serialization
 		assertEquals(conflicts.size(), 0);
@@ -1135,17 +1357,29 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				section.getContainedElements().remove(actor);
+
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+
+			@Override
+			protected void doRun() {
 				otherSection2.getContainedElements().add(dummy2);
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
-			getConflicts(oclonedProjectSpace, ops1)
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
 				.size());
 		// no index-integrity conflict: result independent of serialization
 		assertEquals(conflicts.size(), 0);
@@ -1183,16 +1417,26 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				actor.setContainer(anotherSection);
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+			@Override
+			protected void doRun() {
 				otherSection2.getContainedElements().add(dummy2);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
-			getConflicts(oclonedProjectSpace, ops1)
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
 				.size());
 		// no index-integrity conflict: result independent of serialization
 		assertEquals(conflicts.size(), 0);
@@ -1231,17 +1475,29 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				actor.setContainer(anotherSection);
+
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+
+			@Override
+			protected void doRun() {
 				dummy2.setContainer(otherSection2);
 
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
-			getConflicts(oclonedProjectSpace, ops1)
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
 				.size());
 		// no index-integrity conflict: result independent of serialization
 		assertEquals(conflicts.size(), 0);
@@ -1279,16 +1535,26 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				anotherSection.getContainedElements().add(actor);
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+			@Override
+			protected void doRun() {
 				otherSection2.getContainedElements().add(dummy2);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
-			getConflicts(oclonedProjectSpace, ops1)
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
 				.size());
 		// no index-integrity conflict: result independent of serialization
 		assertEquals(conflicts.size(), 0);
@@ -1325,16 +1591,26 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				section.getContainedElements().add(0, actor);
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+			@Override
+			protected void doRun() {
 				section2.getContainedElements().move(1, anotherDummy2);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
-			getConflicts(oclonedProjectSpace, ops1)
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
 				.size());
 		// no index-integrity conflict: result independent of serialization
 		assertEquals(conflicts.size(), 0);
@@ -1370,16 +1646,26 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				section.getContainedElements().remove(actor);
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+			@Override
+			protected void doRun() {
 				section2.getContainedElements().move(0, anotherDummy2);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
-			getConflicts(oclonedProjectSpace, ops1)
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
 				.size());
 		// no index-integrity conflict: result independent of serialization
 		assertEquals(conflicts.size(), 0);
@@ -1416,16 +1702,26 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				section.getContainedElements().remove(dummy);
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+			@Override
+			protected void doRun() {
 				section2.getContainedElements().move(1, anotherDummy2);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
-			getConflicts(oclonedProjectSpace, ops1)
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
 				.size());
 		// no index-integrity conflict: result independent of serialization
 		assertEquals(conflicts.size(), 0);
@@ -1464,16 +1760,26 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				dummy.setContainer(otherSection);
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+			@Override
+			protected void doRun() {
 				section2.getContainedElements().move(1, anotherDummy2);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
-			getConflicts(oclonedProjectSpace, ops1)
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
 				.size());
 		// no index-integrity conflict: result independent of serialization
 		assertEquals(conflicts.size(), 0);
@@ -1512,15 +1818,26 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				otherSection.getContainedElements().add(dummy);
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+			@Override
+			protected void doRun() {
 				section2.getContainedElements().move(1, anotherDummy2);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
+
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
-			getConflicts(oclonedProjectSpace, ops1)
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
 				.size());
 		// no index-integrity conflict: result independent of serialization
 		assertEquals(conflicts.size(), 0);
@@ -1558,16 +1875,26 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				section.getContainedElements().move(2, actor);
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+
+		new EMFStoreCommand() {
+			@Override
+			protected void doRun() {
 				section2.getContainedElements().move(0, anotherDummy2);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, clonedProjectSpace.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, oclonedProjectSpace);
-		assertEquals(getConflicts(ops1, oclonedProjectSpace).size(),
-			getConflicts(oclonedProjectSpace, ops1)
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(),
+			oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), oclonedProjectSpace,
+				clonedProjectSpace.getContentEditingDomain()).size(),
+			getConflicts(oclonedProjectSpace, clonedProjectSpace.getContentEditingDomain(), ops1,
+				getProjectSpace().getContentEditingDomain())
 				.size());
 		// no index-integrity conflict: result independent of serialization
 		assertEquals(0, conflicts.size());

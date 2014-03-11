@@ -77,8 +77,9 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 		updateMapEntryNonContainedKey(clonedTestElement, clonedKey, QUUX);
 
 		final Set<AbstractOperation> conflicts = getConflicts(
-			getProjectSpace().getLocalChangePackage().getOperations(),
-			clonedProjectSpace.getLocalChangePackage().getOperations(), getProject());
+			getProjectSpace().getLocalChangePackage().getOperations(), getProjectSpace().getContentEditingDomain(),
+			clonedProjectSpace.getLocalChangePackage().getOperations(), clonedProjectSpace.getContentEditingDomain(),
+			getProject());
 
 		assertTrue(conflicts.size() > 0);
 
@@ -134,8 +135,9 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 		}, clonedProjectSpace.getContentEditingDomain());
 
 		final Set<AbstractOperation> conflicts = getConflicts(
-			getProjectSpace().getLocalChangePackage().getOperations(),
-			clonedProjectSpace.getLocalChangePackage().getOperations(), getProject());
+			getProjectSpace().getLocalChangePackage().getOperations(), getProjectSpace().getContentEditingDomain(),
+			clonedProjectSpace.getLocalChangePackage().getOperations(), clonedProjectSpace.getContentEditingDomain(),
+			getProject());
 
 		assertTrue(conflicts.size() > 0);
 
@@ -179,8 +181,9 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 			.getBundle(ORG_ECLIPSE_EMF_EMFSTORE_COMMON_MODEL)).addLogListener(logListener);
 
 		getConflicts(
-			getProjectSpace().getLocalChangePackage().getOperations(),
-			clonedProjectSpace.getLocalChangePackage().getOperations(), getProject());
+			getProjectSpace().getLocalChangePackage().getOperations(), getProjectSpace().getContentEditingDomain(),
+			clonedProjectSpace.getLocalChangePackage().getOperations(), clonedProjectSpace.getContentEditingDomain(),
+			getProject());
 
 		assertTrue(logListener.didReceive());
 	}
@@ -240,7 +243,8 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 		Platform.getLog(Platform
 			.getBundle(ORG_ECLIPSE_EMF_EMFSTORE_COMMON_MODEL)).addLogListener(logListener);
 
-		getConflicts(operations, operations2, getProject());
+		getConflicts(operations, getProjectSpace().getContentEditingDomain(), operations2,
+			clonedProjectSpace.getContentEditingDomain(), getProject());
 
 		assertTrue(logListener.didReceive());
 	}
@@ -268,7 +272,8 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2, getProject());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			clonedProjectSpace.getContentEditingDomain(), getProject());
 
 		assertEquals(0, conflicts.size());
 	}
@@ -312,7 +317,8 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2, getProject());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			clonedProjectSpace.getContentEditingDomain(), getProject());
 
 		assertEquals(0, conflicts.size());
 	}
@@ -341,7 +347,8 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2, getProject());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			clonedProjectSpace.getContentEditingDomain(), getProject());
 
 		assertTrue(conflicts.size() > 0);
 	}
@@ -371,7 +378,8 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2, getProject());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			clonedProjectSpace.getContentEditingDomain(), getProject());
 
 		assertTrue(conflicts.size() > 0);
 	}
@@ -401,7 +409,8 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2, getProject());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			clonedProjectSpace.getContentEditingDomain(), getProject());
 
 		assertTrue(conflicts.size() > 0);
 	}
@@ -431,7 +440,8 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2, getProject());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			clonedProjectSpace.getContentEditingDomain(), getProject());
 
 		assertEquals(1, conflicts.size());
 	}
@@ -456,8 +466,8 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 		updateMapEntry(clonedTestElement, FOO, QUUX);
 
 		final Set<AbstractOperation> conflicts = getConflicts(
-			getProjectSpace().getLocalChangePackage().getOperations(),
-			clonedProjectSpace.getLocalChangePackage().getOperations());
+			getProjectSpace().getLocalChangePackage().getOperations(), getProjectSpace().getContentEditingDomain(),
+			clonedProjectSpace.getLocalChangePackage().getOperations(), clonedProjectSpace.getContentEditingDomain());
 
 		assertTrue(conflicts.size() > 0);
 
@@ -483,7 +493,8 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			clonedProjectSpace.getContentEditingDomain());
 
 		assertTrue(conflicts.size() > 0);
 	}
@@ -508,7 +519,8 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			clonedProjectSpace.getContentEditingDomain());
 
 		assertTrue(conflicts.size() > 0);
 	}
@@ -533,7 +545,8 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			clonedProjectSpace.getContentEditingDomain());
 
 		assertTrue(conflicts.size() > 0);
 	}
@@ -558,7 +571,8 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = clonedProjectSpace.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			clonedProjectSpace.getContentEditingDomain());
 
 		assertEquals(1, conflicts.size());
 	}

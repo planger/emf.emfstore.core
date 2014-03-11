@@ -75,14 +75,21 @@ public class ComparingESTest extends ESTest {
 	 */
 	@Override
 	public void clearOperations() {
-		RunESCommand.run(new Callable<Void>() {
-			public Void call() throws Exception {
-				if (isCompareAtEnd) {
+		if (isCompareAtEnd) {
+			RunESCommand.run(new Callable<Void>() {
+				public Void call() throws Exception {
 					clonedProjectSpace.applyOperations(getProjectSpace()
 						.getOperations(), false);
 					clonedProjectSpace.applyOperations(getProjectSpace()
 						.getOperationManager().clearOperations(), false);
-				} else {
+					return null;
+				}
+			}, clonedProjectSpace.getContentEditingDomain());
+		}
+
+		RunESCommand.run(new Callable<Void>() {
+			public Void call() throws Exception {
+				if (!isCompareAtEnd) {
 					getProjectSpace().getOperationManager().clearOperations();
 				}
 				getProjectSpace().getOperations().clear();
@@ -102,8 +109,13 @@ public class ComparingESTest extends ESTest {
 		String clonedProjectString = StringUtils.EMPTY;
 
 		if (isCompareAtEnd) {
-			clonedProjectSpace.applyOperations(getProjectSpace()
-				.getOperations(), true);
+			RunESCommand.run(new ESVoidCallable() {
+				@Override
+				public void run() {
+					clonedProjectSpace.applyOperations(getProjectSpace()
+						.getOperations(), true);
+				}
+			}, clonedProjectSpace.getContentEditingDomain());
 
 			try {
 				projectString = ModelUtil.eObjectToString(getProjectSpace()

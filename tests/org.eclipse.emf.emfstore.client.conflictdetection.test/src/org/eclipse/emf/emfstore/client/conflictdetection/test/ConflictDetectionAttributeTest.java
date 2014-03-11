@@ -70,8 +70,11 @@ public class ConflictDetectionAttributeTest extends ConflictDetectionTest {
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = ps2.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
-		assertEquals(getConflicts(ops1, ops2).size(), getConflicts(ops2, ops1).size());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			ps2.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2, ps2.getContentEditingDomain()).size(),
+			getConflicts(ops2, ps2.getContentEditingDomain(), ops1, getProjectSpace().getContentEditingDomain()).size());
 
 		assertEquals(conflicts.size(), 1);
 
@@ -94,7 +97,7 @@ public class ConflictDetectionAttributeTest extends ConflictDetectionTest {
 				testElement.getContainedElements().add(containedElement);
 				clearOperations();
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, getProjectSpace().getContentEditingDomain());
 
 		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		final Project project2 = ps2.getProject();
@@ -109,15 +112,24 @@ public class ConflictDetectionAttributeTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				testElement1.setName(CHANGE_1);
+			}
+		}.run(false, getProjectSpace().getContentEditingDomain());
+		new EMFStoreCommand() {
+
+			@Override
+			protected void doRun() {
 				testElement2.setName(CHANGE_1);
 			}
-		}.run(getProjectSpace().getContentEditingDomain(), false);
+		}.run(false, ps2.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = ps2.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
-		assertEquals(getConflicts(ops1, ops2).size(), getConflicts(ops2, ops1).size());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			ps2.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2, ps2.getContentEditingDomain()).size(),
+			getConflicts(ops2, ps2.getContentEditingDomain(), ops1, getProjectSpace().getContentEditingDomain()).size());
 		// should not conflict, the same change happens on both sides
 		assertEquals(1, conflicts.size());
 
@@ -150,8 +162,11 @@ public class ConflictDetectionAttributeTest extends ConflictDetectionTest {
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = ps2.getOperations();
 
-		final Set<AbstractOperation> conflicts = getConflicts(ops1, ops2);
-		assertEquals(getConflicts(ops1, ops2).size(), getConflicts(ops2, ops1).size());
+		final Set<AbstractOperation> conflicts = getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2,
+			ps2.getContentEditingDomain());
+		assertEquals(
+			getConflicts(ops1, getProjectSpace().getContentEditingDomain(), ops2, ps2.getContentEditingDomain()).size(),
+			getConflicts(ops2, ps2.getContentEditingDomain(), ops1, getProjectSpace().getContentEditingDomain()).size());
 
 		assertEquals(conflicts.size(), 0);
 
