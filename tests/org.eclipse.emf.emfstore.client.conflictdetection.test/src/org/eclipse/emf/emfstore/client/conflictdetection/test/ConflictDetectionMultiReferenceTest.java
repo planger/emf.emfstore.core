@@ -67,7 +67,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getContainedElements().add(actor2);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -99,7 +99,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				getProject().addModelElement(actor);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
 		final Project clonedProject = clonedProjectSpace.getProject();
@@ -120,7 +120,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getContainedElements().add(actor2);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -162,7 +162,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getContainedElements().add(dummy2);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -195,15 +195,21 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 		final TestElement section2 = (TestElement) clonedProject.getModelElement(sectionId);
 
 		new EMFStoreCommand() {
-
 			@Override
 			protected void doRun() {
 				section1.getContainedElements().add(actor1);
+
+			}
+		}.run(getProjectSpace().getContentEditingDomain(), false);
+
+		new EMFStoreCommand() {
+			@Override
+			protected void doRun() {
 				section2.getContainedElements().add(actor2);
 				section2.getContainedElements().remove(actor2);
 
 			}
-		}.run(false);
+		}.run(clonedProjectSpace.getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -245,7 +251,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getContainedElements().add(actor2);
 				actor2.setContainer(otherSection2);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -287,7 +293,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getContainedElements().add(actor2);
 				otherSection2.getContainedElements().add(actor2);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -365,7 +371,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				otherSection2.getContainedElements().add(actor2);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -402,10 +408,16 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 			@Override
 			protected void doRun() {
 				actor1.setContainer(section1);
+			}
+		}.run(getProjectSpace().getContentEditingDomain(), false);
+		new EMFStoreCommand() {
+
+			@Override
+			protected void doRun() {
 				actor2.setContainer(section2);
 				section2.getContainedElements().remove(actor2);
 			}
-		}.run(false);
+		}.run(clonedProjectSpace.getContentEditingDomain(), false);
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
@@ -447,7 +459,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				otherSection2.getContainedElements().add(actor2);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -490,7 +502,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				otherSection2.getContainedElements().add(actor2);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -528,14 +540,19 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 		final TestElement section2 = (TestElement) clonedProject.getModelElement(sectionId);
 
 		new EMFStoreCommand() {
-
 			@Override
 			protected void doRun() {
 				section1.getContainedElements().remove(actor1);
+			}
+		}.run(getProjectSpace().getContentEditingDomain(), false);
+
+		new EMFStoreCommand() {
+			@Override
+			protected void doRun() {
 				section2.getContainedElements().remove(actor2);
 
 			}
-		}.run(false);
+		}.run(clonedProjectSpace.getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -576,7 +593,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				actor.setContainer(section);
 				otherSection2.getContainedElements().add(actor2);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -623,7 +640,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				actor2.setContainer(anotherSection2);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -668,7 +685,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getContainedElements().add(actor2);
 				section2.getContainedElements().move(0, actor2);
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -714,7 +731,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getContainedElements().add(actor2);
 				section2.getContainedElements().move(0, actor2);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -762,7 +779,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section.getContainedElements().move(1, actor);
 				section2.getContainedElements().move(0, actor2);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -809,7 +826,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section.getContainedElements().add(1, actor);
 				dummy2.setContainer(otherSection2);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -851,7 +868,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section.getContainedElements().add(1, actor);
 				dummy2.setContainer(otherSection2);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -896,7 +913,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getContainedElements().remove(dummy2);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -940,7 +957,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				otherSection2.getContainedElements().add(dummy2);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -982,7 +999,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				actor.setContainer(section);
 				dummy2.setContainer(otherSection2);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -1028,7 +1045,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section2.getContainedElements().remove(dummy2);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -1074,7 +1091,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				otherSection2.getContainedElements().add(dummy2);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -1121,7 +1138,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				otherSection2.getContainedElements().add(dummy2);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -1168,7 +1185,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				actor.setContainer(anotherSection);
 				otherSection2.getContainedElements().add(dummy2);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -1217,7 +1234,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				dummy2.setContainer(otherSection2);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -1264,7 +1281,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				anotherSection.getContainedElements().add(actor);
 				otherSection2.getContainedElements().add(dummy2);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -1310,7 +1327,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section.getContainedElements().add(0, actor);
 				section2.getContainedElements().move(1, anotherDummy2);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -1355,7 +1372,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section.getContainedElements().remove(actor);
 				section2.getContainedElements().move(0, anotherDummy2);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -1401,7 +1418,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section.getContainedElements().remove(dummy);
 				section2.getContainedElements().move(1, anotherDummy2);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -1449,7 +1466,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				dummy.setContainer(otherSection);
 				section2.getContainedElements().move(1, anotherDummy2);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -1497,7 +1514,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				otherSection.getContainedElements().add(dummy);
 				section2.getContainedElements().move(1, anotherDummy2);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
 
@@ -1543,7 +1560,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				section.getContainedElements().move(2, actor);
 				section2.getContainedElements().move(0, anotherDummy2);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> oclonedProjectSpace = clonedProjectSpace.getOperations();
@@ -1583,7 +1600,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				}
 				return getProject().getModelElementId(eObject);
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 	}
 
 	private ModelElementId createTestElement() {
@@ -1613,7 +1630,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				}
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 	}
 
 	private void setTestElement(final TestElement actor, final TestElement leafSection) {
@@ -1630,7 +1647,7 @@ public class ConflictDetectionMultiReferenceTest extends ConflictDetectionTest {
 				}
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 	}
 
 }

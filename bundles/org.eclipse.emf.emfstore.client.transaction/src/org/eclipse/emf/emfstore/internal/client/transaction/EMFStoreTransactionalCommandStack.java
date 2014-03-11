@@ -17,7 +17,6 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.emfstore.client.changetracking.ESCommandObserver;
 import org.eclipse.emf.emfstore.client.changetracking.ESCommandStack;
-import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.commands.EMFStoreCommandNotifier;
 import org.eclipse.emf.emfstore.internal.client.model.util.AbstractEMFStoreCommand;
 import org.eclipse.emf.transaction.RecordingCommand;
@@ -55,7 +54,7 @@ public class EMFStoreTransactionalCommandStack extends AbstractEMFStoreTransacti
 	private void runEMFStoreCommand(final AbstractEMFStoreCommand cmd) {
 		// wrap EMFStoreCommands in RecordingCommands
 		final RecordingCommand recordingCommand = new RecordingCommand(
-			(TransactionalEditingDomain) ESWorkspaceProviderImpl.getInstance().getEditingDomain()) {
+			(TransactionalEditingDomain) cmd.getEditingDomain()) {
 			@Override
 			protected void doExecute() {
 				cmd.execute();

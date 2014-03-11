@@ -27,12 +27,12 @@ import org.junit.Test;
  * 
  */
 public class APIUsedInExampleTest extends ESTestWithLoggedInUser {
-	
+
 	@BeforeClass
 	public static void beforeClass() {
 		startEMFStore();
 	}
-	
+
 	@AfterClass
 	public static void afterClass() {
 		stopEMFStore();
@@ -46,7 +46,7 @@ public class APIUsedInExampleTest extends ESTestWithLoggedInUser {
 				org.eclipse.emf.emfstore.example.helloworld.Application.runClient(getServer());
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 	}
 
 	@Test
@@ -57,7 +57,7 @@ public class APIUsedInExampleTest extends ESTestWithLoggedInUser {
 				org.eclipse.emf.emfstore.example.merging.Application.runClient(getServer());
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 	}
 
 }

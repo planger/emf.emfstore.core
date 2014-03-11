@@ -53,7 +53,8 @@ public abstract class ESTest {
 
 	private ProjectSpace projectSpace;
 
-	public <T extends AbstractOperation> T checkAndCast(AbstractOperation op, Class<T> clazz) {
+	public <T extends AbstractOperation> T checkAndCast(AbstractOperation op,
+		Class<T> clazz) {
 		assertTrue(clazz.isInstance(op));
 		return clazz.cast(op);
 	}
@@ -67,12 +68,15 @@ public abstract class ESTest {
 	 */
 	public ProjectSpace cloneProjectSpace(final ProjectSpace projectSpace) {
 
-		final Workspace workspace = ESWorkspaceProviderImpl.getInstance().getWorkspace().toInternalAPI();
+		final Workspace workspace = ESWorkspaceProviderImpl.getInstance()
+			.getWorkspace().toInternalAPI();
 
 		return RunESCommand.runWithResult(new Callable<ProjectSpace>() {
 			public ProjectSpace call() throws Exception {
-				final Project clonedProject = ModelUtil.clone(projectSpace.getProject());
-				return workspace.importProject(clonedProject, CLONED_PROJECT_NAME, CLONED_PROJECT_DESCRIPTION);
+				final Project clonedProject = ModelUtil.clone(projectSpace
+					.getProject());
+				return workspace.importProject(clonedProject,
+					CLONED_PROJECT_NAME, CLONED_PROJECT_DESCRIPTION);
 			}
 		});
 	}
@@ -106,13 +110,16 @@ public abstract class ESTest {
 	/**
 	 * Convenience to get an operation by type.
 	 * 
-	 * @param clazz class of operation
+	 * @param clazz
+	 *            class of operation
 	 * @return operation
 	 */
-	protected AbstractOperation checkAndGetOperation(Class<? extends AbstractOperation> clazz) {
+	protected AbstractOperation checkAndGetOperation(
+		Class<? extends AbstractOperation> clazz) {
 		assertEquals(1, getProjectSpace().getOperations().size());
 		assertTrue(clazz.isInstance(getProjectSpace().getOperations().get(0)));
-		final AbstractOperation operation = getProjectSpace().getOperations().get(0);
+		final AbstractOperation operation = getProjectSpace().getOperations()
+			.get(0);
 		clearOperations();
 		assertEquals(getProjectSpace().getOperations().size(), 0);
 		return operation;
@@ -137,11 +144,12 @@ public abstract class ESTest {
 				getProjectSpace().getOperations().clear();
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 	}
 
 	public NotificationRecording getRecording() {
-		return ((ProjectSpaceImpl) getProjectSpace()).getNotificationRecorder().getRecording();
+		return ((ProjectSpaceImpl) getProjectSpace()).getNotificationRecorder()
+			.getRecording();
 	}
 
 	public void canonize(final List<AbstractOperation> operations) {
@@ -150,7 +158,7 @@ public abstract class ESTest {
 			public void run() {
 				OperationsCanonizer.canonize(operations);
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 	}
 
 }

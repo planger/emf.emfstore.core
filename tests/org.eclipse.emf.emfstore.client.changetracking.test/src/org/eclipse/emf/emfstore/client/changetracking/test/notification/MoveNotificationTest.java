@@ -77,7 +77,7 @@ public class MoveNotificationTest extends ESTest {
 				// now move actor 2 to top of the list
 				useCase.getNonContained_NToM().move(0, actor2);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final NotificationRecording recording = ((ProjectSpaceImpl) getProjectSpace()).getNotificationRecorder()
 			.getRecording();
@@ -116,7 +116,7 @@ public class MoveNotificationTest extends ESTest {
 			protected void doRun() {
 				project.addModelElement(tournament1);
 			}
-		}.run(false);
+		}.run(projectSpace.getContentEditingDomain(), false);
 		assertTrue(project.contains(tournament1));
 		assertTrue(UNEXPECTED_NOTIFICATIONS,
 			observer.resetNotifyCalled() && observer.resetAddedCalled() && !observer.resetRemovedCalled()
@@ -128,7 +128,7 @@ public class MoveNotificationTest extends ESTest {
 			protected void doRun() {
 				tournament1.getContainedElements().add(matchup);
 			}
-		}.run(false);
+		}.run(projectSpace.getContentEditingDomain(), false);
 		assertTrue(project.contains(matchup));
 		assertTrue(tournament1.getContainedElements().contains(matchup));
 		assertTrue(UNEXPECTED_NOTIFICATIONS,
@@ -141,7 +141,7 @@ public class MoveNotificationTest extends ESTest {
 			protected void doRun() {
 				project.addModelElement(tournament2);
 			}
-		}.run(false);
+		}.run(projectSpace.getContentEditingDomain(), false);
 		assertTrue(project.contains(tournament2));
 		assertTrue(UNEXPECTED_NOTIFICATIONS,
 			observer.resetNotifyCalled() && observer.resetAddedCalled() && !observer.resetRemovedCalled()
@@ -162,7 +162,7 @@ public class MoveNotificationTest extends ESTest {
 				tournament1.getContainedElements().remove(matchup);
 				tournament2.getContainedElements().add(matchup);
 			}
-		}.run(false);
+		}.run(projectSpace.getContentEditingDomain(), false);
 		assertTrue(!tournament1.getContainedElements().contains(matchup));
 		assertTrue(tournament2.getContainedElements().contains(matchup));
 		assertTrue(UNEXPECTED_NOTIFICATIONS,
@@ -175,7 +175,7 @@ public class MoveNotificationTest extends ESTest {
 			protected void doRun() {
 				projectSpace.undoLastOperation();
 			}
-		}.run(false);
+		}.run(projectSpace.getContentEditingDomain(), false);
 		assertTrue(!tournament1.getContainedElements().contains(matchup));
 		assertTrue(!tournament2.getContainedElements().contains(matchup));
 		assertTrue(project.contains(matchup));
@@ -189,7 +189,7 @@ public class MoveNotificationTest extends ESTest {
 			protected void doRun() {
 				projectSpace.undoLastOperation();
 			}
-		}.run(false);
+		}.run(projectSpace.getContentEditingDomain(), false);
 		assertTrue(tournament1.getContainedElements().contains(matchup));
 		assertTrue(!tournament2.getContainedElements().contains(matchup));
 		assertTrue(UNEXPECTED_NOTIFICATIONS,

@@ -102,7 +102,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 			public ESGlobalProjectId call() throws Exception {
 				return toInternalAPI().getProjectId().toAPI();
 			}
-		});
+		}, toInternalAPI().getContentEditingDomain());
 	}
 
 	/**
@@ -116,7 +116,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 			public String call() throws Exception {
 				return toInternalAPI().getProjectName();
 			}
-		});
+		}, toInternalAPI().getContentEditingDomain());
 	}
 
 	/**
@@ -131,7 +131,8 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 				toInternalAPI().delete(monitor);
 				return null;
 			}
-		});
+		}, toInternalAPI().getContentEditingDomain());
+		// dispose();
 	}
 
 	/**
@@ -161,10 +162,16 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 						}
 					}.execute();
 				}
-			});
+			}, toInternalAPI().getContentEditingDomain());
 
-		return resolvedVersionSpec.toAPI();
+		return RunESCommand.runWithResult(new Callable<ESPrimaryVersionSpec>() {
+			public ESPrimaryVersionSpec call() throws Exception {
+				return resolvedVersionSpec.toAPI();
+			}
+		}, toInternalAPI().getContentEditingDomain());
 	}
+
+	// TODO: ab hier weiter
 
 	/**
 	 * 
@@ -219,7 +226,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 				}.execute();
 				return null;
 			}
-		});
+		}, toInternalAPI().getContentEditingDomain());
 	}
 
 	/**
@@ -253,7 +260,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 				}.execute();
 				return null;
 			}
-		});
+		}, toInternalAPI().getContentEditingDomain());
 	}
 
 	/**
@@ -380,7 +387,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 					return toInternalAPI()
 						.commit(monitor);
 				}
-			});
+			}, toInternalAPI().getContentEditingDomain());
 		return versionSpec.toAPI();
 	}
 
@@ -407,7 +414,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 							callback,
 							monitor);
 				}
-			});
+			}, toInternalAPI().getContentEditingDomain());
 
 		return versionSpec.toAPI();
 	}
@@ -442,7 +449,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 							callback,
 							monitor);
 				}
-			});
+			}, toInternalAPI().getContentEditingDomain());
 
 		return versionSpec.toAPI();
 	}
@@ -459,7 +466,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 				final PrimaryVersionSpec versionSpec = toInternalAPI().update(monitor);
 				return versionSpec.toAPI();
 			}
-		});
+		}, toInternalAPI().getContentEditingDomain());
 	}
 
 	/**
@@ -491,7 +498,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 					monitor);
 				return primaryVersionSpec.toAPI();
 			}
-		});
+		}, toInternalAPI().getContentEditingDomain());
 	}
 
 	/**
@@ -568,6 +575,13 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 				return null;
 			}
 		});
+
+		RunESCommand.run(new Callable<Void>() {
+			public Void call() throws Exception {
+				ESLocalProjectImpl.this.toInternalAPI().initContentResources();
+				return null;
+			}
+		}, toInternalAPI().getContentEditingDomain());
 	}
 
 	/**
@@ -582,7 +596,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 				toInternalAPI().shareProject(monitor);
 				return null;
 			}
-		});
+		}, toInternalAPI().getContentEditingDomain());
 	}
 
 	/**
@@ -604,7 +618,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 				return new ESRemoteProjectImpl(getUsersession().toInternalAPI().getServerInfo(), projectInfo);
 
 			}
-		});
+		}, toInternalAPI().getContentEditingDomain());
 	}
 
 	/**
@@ -683,7 +697,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 			public void run() {
 				toInternalAPI().undoLastOperation();
 			}
-		});
+		}, toInternalAPI().getContentEditingDomain());
 	}
 
 	/**
@@ -698,7 +712,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 			public void run() {
 				toInternalAPI().undoLastOperations(nrOperations);
 			}
-		});
+		}, toInternalAPI().getContentEditingDomain());
 	}
 
 	/**
@@ -724,7 +738,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 				toInternalAPI().revert();
 				return null;
 			}
-		});
+		}, toInternalAPI().getContentEditingDomain());
 	}
 
 	/**
@@ -739,7 +753,7 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 				toInternalAPI().save();
 				return null;
 			}
-		});
+		}, toInternalAPI().getContentEditingDomain());
 	}
 
 	/**
@@ -812,6 +826,70 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 	public List<ESHistoryInfo> getHistoryInfos(ESHistoryQuery<? extends ESHistoryQuery<?>> query,
 		IProgressMonitor monitor) throws ESException {
 		return copy(getRemoteProject().getHistoryInfos(getUsersession(), query, monitor));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.client.ESLocalProject#isClosed()
+	 */
+	public boolean isClosed() {
+		return toInternalAPI().isClosed();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.client.ESLocalProject#close(boolean)
+	 */
+	public void close(boolean saveBeforeClose) {
+		toInternalAPI().close(saveBeforeClose);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.client.ESLocalProject#open()
+	 */
+	public void open() {
+		toInternalAPI().open();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.client.ESLocalProject#runWithResult(java.util.concurrent.Callable)
+	 */
+	public <T> T runWithResult(Callable<T> callable) {
+		return RunESCommand.runWithResult(callable, toInternalAPI().getContentEditingDomain());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.client.ESLocalProject#runWithResult(java.lang.Class, java.util.concurrent.Callable)
+	 */
+	public <T, E extends Exception> T runWithResult(Class<E> exceptionType, Callable<T> callable) throws E {
+		return RunESCommand.WithException.runWithResult(exceptionType, callable, toInternalAPI()
+			.getContentEditingDomain());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.client.ESLocalProject#run(java.util.concurrent.Callable)
+	 */
+	public void run(Callable<Void> callable) {
+		RunESCommand.run(callable, toInternalAPI().getContentEditingDomain());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.client.ESLocalProject#run(java.lang.Class, java.util.concurrent.Callable)
+	 */
+	public <E extends Exception> void run(Class<E> exceptionType, Callable<Void> callable) throws E {
+		RunESCommand.WithException.run(exceptionType, callable, toInternalAPI().getContentEditingDomain());
 	}
 
 }

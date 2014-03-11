@@ -69,7 +69,7 @@ public class Topology1toNTest extends ESTest {
 
 		clearOperations();
 
-		Add.toContainedElements(section, actor);
+		Add.toContainedElements(getLocalProject(), section, actor);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(1, operations.size());
@@ -108,7 +108,7 @@ public class Topology1toNTest extends ESTest {
 		final ModelElementId actorId = getProject().getModelElementId(actor);
 		final ModelElementId sectionId = getProject().getModelElementId(section);
 
-		Add.toContainedElements(section, actor);
+		Add.toContainedElements(getLocalProject(), section, actor);
 
 		clearOperations();
 
@@ -147,7 +147,7 @@ public class Topology1toNTest extends ESTest {
 		final ModelElementId actorId = getProject().getModelElementId(actor);
 		final ModelElementId sectionId = getProject().getModelElementId(section);
 
-		Add.toContainedElements(section, actor);
+		Add.toContainedElements(getLocalProject(), section, actor);
 
 		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -182,7 +182,7 @@ public class Topology1toNTest extends ESTest {
 				op1.reverse().apply(getProject());
 				op0.reverse().apply(getProject());
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 	}
@@ -202,8 +202,8 @@ public class Topology1toNTest extends ESTest {
 
 		Add.toProject(getLocalProject(), section);
 
-		Add.toContainedElements(section, actor);
-		Add.toContainedElements(section, actor2);
+		Add.toContainedElements(getLocalProject(), section, actor);
+		Add.toContainedElements(getLocalProject(), section, actor2);
 
 		final Project expectedProject = ModelUtil.clone(getProject());
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
@@ -239,7 +239,7 @@ public class Topology1toNTest extends ESTest {
 				op1.reverse().apply(getProject());
 				op0.reverse().apply(getProject());
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 	}
@@ -262,11 +262,11 @@ public class Topology1toNTest extends ESTest {
 		final ModelElementId actorId = getProject().getModelElementId(actor);
 		final ModelElementId sectionId = getProject().getModelElementId(section);
 
-		Add.toContainedElements(section, oldTestElement);
+		Add.toContainedElements(getLocalProject(), section, oldTestElement);
 
 		clearOperations();
 
-		Add.toContainedElements(section, actor);
+		Add.toContainedElements(getLocalProject(), section, actor);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -314,7 +314,7 @@ public class Topology1toNTest extends ESTest {
 
 		clearOperations();
 
-		Add.toContainedElements(section, Arrays.asList(actors));
+		Add.toContainedElements(getLocalProject(), section, Arrays.asList(actors));
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(1, operations.size());
@@ -369,11 +369,11 @@ public class Topology1toNTest extends ESTest {
 
 		final TestElement[] actors = { actor1, actor2 };
 
-		Add.toContainedElements(section, oldTestElement);
+		Add.toContainedElements(getLocalProject(), section, oldTestElement);
 
 		clearOperations();
 
-		Add.toContainedElements(section, Arrays.asList(actors));
+		Add.toContainedElements(getLocalProject(), section, Arrays.asList(actors));
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -426,11 +426,11 @@ public class Topology1toNTest extends ESTest {
 
 		final TestElement[] actors = { actor1 };
 
-		Add.toContainedElements(section, oldTestElement);
+		Add.toContainedElements(getLocalProject(), section, oldTestElement);
 
 		clearOperations();
 
-		Add.toContainedElements(section, Arrays.asList(actors));
+		Add.toContainedElements(getLocalProject(), section, Arrays.asList(actors));
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -476,12 +476,12 @@ public class Topology1toNTest extends ESTest {
 		final ModelElementId section2Id = getProject().getModelElementId(section2);
 		final ModelElementId actor2Id = getProject().getModelElementId(actor2);
 
-		Add.toContainedElements(section1, actor1);
-		Add.toContainedElements(section2, actor2);
+		Add.toContainedElements(getLocalProject(), section1, actor1);
+		Add.toContainedElements(getLocalProject(), section2, actor2);
 
 		clearOperations();
 
-		Add.toContainedElements(section1, actor2);
+		Add.toContainedElements(getLocalProject(), section1, actor2);
 
 		assertFalse(section2.getContainedElements().contains(actor2));
 		assertTrue(section1.getContainedElements().contains(actor2));
@@ -549,8 +549,8 @@ public class Topology1toNTest extends ESTest {
 
 		final TestElement[] actors = { actor1, actor2, actor3, actor4 };
 
-		Add.toContainedElements(oldSection, Arrays.asList(actors));
-		Add.toContainedElements(oldSection2, actor4);
+		Add.toContainedElements(getLocalProject(), oldSection, Arrays.asList(actors));
+		Add.toContainedElements(getLocalProject(), oldSection2, actor4);
 
 		assertTrue(oldSection.getContainedElements().contains(actor1));
 		assertTrue(oldSection.getContainedElements().contains(actor2));
@@ -560,7 +560,7 @@ public class Topology1toNTest extends ESTest {
 
 		clearOperations();
 
-		Add.toContainedElements(section, Arrays.asList(actors));
+		Add.toContainedElements(getLocalProject(), section, Arrays.asList(actors));
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		// expecting a composite operation here
@@ -654,9 +654,9 @@ public class Topology1toNTest extends ESTest {
 
 		final TestElement[] actors = { actor1, actor2, actor3, actor4 };
 
-		Add.toContainedElements(section, oldTestElement);
-		Add.toContainedElements(oldSection, Arrays.asList(actors));
-		Add.toContainedElements(oldSection2, actor4);// relocate to other section
+		Add.toContainedElements(getLocalProject(), section, oldTestElement);
+		Add.toContainedElements(getLocalProject(), oldSection, Arrays.asList(actors));
+		Add.toContainedElements(getLocalProject(), oldSection2, actor4);// relocate to other section
 
 		assertTrue(oldSection.getContainedElements().contains(actor1));
 		assertTrue(oldSection.getContainedElements().contains(actor2));
@@ -666,7 +666,7 @@ public class Topology1toNTest extends ESTest {
 
 		clearOperations();
 
-		Add.toContainedElements(section, Arrays.asList(actors));
+		Add.toContainedElements(getLocalProject(), section, Arrays.asList(actors));
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		// expecting a composite operation here
@@ -764,13 +764,13 @@ public class Topology1toNTest extends ESTest {
 		final ModelElementId workPackageId = getProject().getModelElementId(workPackage);
 		final ModelElementId bugReportId = getProject().getModelElementId(bugReport);
 
-		Update.testElement(TestElementFeatures.container(), bugReport, section);
+		Update.testElement(getLocalProject(), TestElementFeatures.container(), bugReport, section);
 
 		assertTrue(section.getContainedElements().contains(bugReport));
 
 		clearOperations();
 
-		Add.toContainedElements2(workPackage, bugReport);
+		Add.toContainedElements2(getLocalProject(), workPackage, bugReport);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -826,11 +826,11 @@ public class Topology1toNTest extends ESTest {
 		final ModelElementId sectionId = getProject().getModelElementId(section);
 		final ModelElementId issueId = getProject().getModelElementId(issue);
 		final ModelElementId solutionId = getProject().getModelElementId(solution);
-		Update.testElement(TestElementFeatures.containedElement(), issue, solution);
+		Update.testElement(getLocalProject(), TestElementFeatures.containedElement(), issue, solution);
 
 		clearOperations();
 
-		Add.toContainedElements(section, solution);
+		Add.toContainedElements(getLocalProject(), section, solution);
 
 		assertTrue(section.getContainedElements().contains(solution));
 		assertNull(issue.getContainer());
@@ -903,8 +903,8 @@ public class Topology1toNTest extends ESTest {
 
 		final TestElement[] actors = { bugReport1, bugReport2, bugReport3, bugReport4 };
 
-		Add.toContainedElements2(oldWorkPackage, Arrays.asList(actors));
-		Add.toContainedElements2(oldWorkPackage2, bugReport4); // relocate to other section
+		Add.toContainedElements2(getLocalProject(), oldWorkPackage, Arrays.asList(actors));
+		Add.toContainedElements2(getLocalProject(), oldWorkPackage2, bugReport4); // relocate to other section
 
 		assertTrue(oldWorkPackage.getContainedElements2().contains(bugReport1));
 		assertTrue(oldWorkPackage.getContainedElements2().contains(bugReport2));
@@ -914,7 +914,7 @@ public class Topology1toNTest extends ESTest {
 
 		clearOperations();
 
-		Add.toContainedElements(section, Arrays.asList(actors));
+		Add.toContainedElements(getLocalProject(), section, Arrays.asList(actors));
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		// expecting a composite operation here
@@ -1041,8 +1041,8 @@ public class Topology1toNTest extends ESTest {
 
 		final TestElement[] bugreports = { bugReport1, bugReport2, bugReport3, bugReport4 };
 
-		Add.toContainedElements2(oldWorkPackage, Arrays.asList(bugreports));
-		Add.toContainedElements2(oldWorkPackage2, bugReport4);
+		Add.toContainedElements2(getLocalProject(), oldWorkPackage, Arrays.asList(bugreports));
+		Add.toContainedElements2(getLocalProject(), oldWorkPackage2, bugReport4);
 
 		assertTrue(oldWorkPackage.getContainedElements2().contains(bugReport1));
 		assertTrue(oldWorkPackage.getContainedElements2().contains(bugReport2));
@@ -1052,7 +1052,7 @@ public class Topology1toNTest extends ESTest {
 
 		clearOperations();
 
-		Add.toContainedElements(section, Arrays.asList(bugreports));
+		Add.toContainedElements(getLocalProject(), section, Arrays.asList(bugreports));
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		// expecting a composite operation here
@@ -1166,12 +1166,12 @@ public class Topology1toNTest extends ESTest {
 		final ModelElementId solution1Id = getProject().getModelElementId(solution1);
 		final ModelElementId solution2Id = getProject().getModelElementId(solution2);
 
-		Update.testElement(TestElementFeatures.containedElement(), issue1, solution1);
-		Update.testElement(TestElementFeatures.containedElement(), issue2, solution2);
+		Update.testElement(getLocalProject(), TestElementFeatures.containedElement(), issue1, solution1);
+		Update.testElement(getLocalProject(), TestElementFeatures.containedElement(), issue2, solution2);
 
 		clearOperations();
 
-		Add.toContainedElements(section, Arrays.asList(new TestElement[] { solution1, solution2 }));
+		Add.toContainedElements(getLocalProject(), section, Arrays.asList(new TestElement[] { solution1, solution2 }));
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -1251,12 +1251,12 @@ public class Topology1toNTest extends ESTest {
 		Add.toProject(getLocalProject(), solution1);
 		Add.toProject(getLocalProject(), solution2);
 
-		Update.testElement(TestElementFeatures.containedElement(), issue1, solution1);
-		Update.testElement(TestElementFeatures.containedElement(), issue2, solution2);
+		Update.testElement(getLocalProject(), TestElementFeatures.containedElement(), issue1, solution1);
+		Update.testElement(getLocalProject(), TestElementFeatures.containedElement(), issue2, solution2);
 
 		clearOperations();
 
-		Add.toContainedElements(section, Arrays.asList(new TestElement[] { solution1, solution2 }));
+		Add.toContainedElements(getLocalProject(), section, Arrays.asList(new TestElement[] { solution1, solution2 }));
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		// expecting a composite operation here
@@ -1373,13 +1373,13 @@ public class Topology1toNTest extends ESTest {
 			sectionTestElement2,
 			sectionTestElement3, bugReport };
 
-		Update.testElement(TestElementFeatures.containedElement(), issue1, solution1);
-		Update.testElement(TestElementFeatures.containedElement(), issue2, solution2);
+		Update.testElement(getLocalProject(), TestElementFeatures.containedElement(), issue1, solution1);
+		Update.testElement(getLocalProject(), TestElementFeatures.containedElement(), issue2, solution2);
 
-		Add.toContainedElements2(workPackage, bugReport);
-		Add.toContainedElements(oldSection1, sectionTestElement1);
-		Add.toContainedElements(oldSection1, sectionTestElement2);
-		Add.toContainedElements(oldSection2, sectionTestElement3);
+		Add.toContainedElements2(getLocalProject(), workPackage, bugReport);
+		Add.toContainedElements(getLocalProject(), oldSection1, sectionTestElement1);
+		Add.toContainedElements(getLocalProject(), oldSection1, sectionTestElement2);
+		Add.toContainedElements(getLocalProject(), oldSection2, sectionTestElement3);
 
 		assertTrue(oldSection1.getContainedElements().contains(sectionTestElement1));
 		assertTrue(oldSection1.getContainedElements().contains(sectionTestElement2));
@@ -1388,7 +1388,7 @@ public class Topology1toNTest extends ESTest {
 
 		clearOperations();
 
-		Add.toContainedElements(section, Arrays.asList(addedElements));
+		Add.toContainedElements(getLocalProject(), section, Arrays.asList(addedElements));
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		// expecting a composite operation here
@@ -1565,13 +1565,13 @@ public class Topology1toNTest extends ESTest {
 			sectionTestElement2,
 			sectionTestElement3, bugReport };
 
-		Update.testElement(TestElementFeatures.containedElement(), issue1, solution1);
-		Update.testElement(TestElementFeatures.containedElement(), issue2, solution2);
+		Update.testElement(getLocalProject(), TestElementFeatures.containedElement(), issue1, solution1);
+		Update.testElement(getLocalProject(), TestElementFeatures.containedElement(), issue2, solution2);
 
-		Add.toContainedElements2(workPackage, bugReport);
-		Add.toContainedElements(oldSection1, sectionTestElement1);
-		Add.toContainedElements(oldSection1, sectionTestElement2);
-		Add.toContainedElements(oldSection2, sectionTestElement3);
+		Add.toContainedElements2(getLocalProject(), workPackage, bugReport);
+		Add.toContainedElements(getLocalProject(), oldSection1, sectionTestElement1);
+		Add.toContainedElements(getLocalProject(), oldSection1, sectionTestElement2);
+		Add.toContainedElements(getLocalProject(), oldSection2, sectionTestElement3);
 
 		assertTrue(oldSection1.getContainedElements().contains(sectionTestElement1));
 		assertTrue(oldSection1.getContainedElements().contains(sectionTestElement2));
@@ -1580,7 +1580,7 @@ public class Topology1toNTest extends ESTest {
 
 		clearOperations();
 
-		Add.toContainedElements(section, Arrays.asList(addedElements));
+		Add.toContainedElements(getLocalProject(), section, Arrays.asList(addedElements));
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		// expecting a composite operation here
@@ -1718,12 +1718,12 @@ public class Topology1toNTest extends ESTest {
 
 		Add.toProject(getLocalProject(), actor);
 		Add.toProject(getLocalProject(), section);
-		Add.toContainedElements(section, actor);
+		Add.toContainedElements(getLocalProject(), section, actor);
 
 		clearOperations();
 		final ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
 
-		Delete.fromContainedElements(section, actor);
+		Delete.fromContainedElements(getLocalProject(), section, actor);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -1770,14 +1770,14 @@ public class Topology1toNTest extends ESTest {
 		Add.toProject(getLocalProject(), actor2);
 		Add.toProject(getLocalProject(), section);
 
-		Add.toContainedElements(section, Arrays.asList(actors));
+		Add.toContainedElements(getLocalProject(), section, Arrays.asList(actors));
 
 		clearOperations();
 
 		final ModelElementId actor1Id = getProject().getModelElementId(actor1);
 		final ModelElementId actor2Id = getProject().getModelElementId(actor2);
 
-		Delete.fromContainedElements(section, Arrays.asList(actors));
+		Delete.fromContainedElements(getLocalProject(), section, Arrays.asList(actors));
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -1830,13 +1830,13 @@ public class Topology1toNTest extends ESTest {
 		Add.toProject(getLocalProject(), oldTestElement);
 		Add.toProject(getLocalProject(), section);
 
-		Add.toContainedElements(section, oldTestElement);
-		Add.toContainedElements(section, actor);
+		Add.toContainedElements(getLocalProject(), section, oldTestElement);
+		Add.toContainedElements(getLocalProject(), section, actor);
 
 		clearOperations();
 		final ModelElementId actorId = getProject().getModelElementId(actor);
 
-		Delete.fromContainedElements(section, actor);
+		Delete.fromContainedElements(getLocalProject(), section, actor);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(1, operations.size());
@@ -1880,7 +1880,7 @@ public class Topology1toNTest extends ESTest {
 
 		clearOperations();
 
-		Add.toNonContainedNToM(useCase, actor);
+		Add.toNonContainedNToM(getLocalProject(), useCase, actor);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -1936,7 +1936,7 @@ public class Topology1toNTest extends ESTest {
 
 		clearOperations();
 
-		Add.toNonContainedNToM(useCase, Arrays.asList(actors));
+		Add.toNonContainedNToM(getLocalProject(), useCase, Arrays.asList(actors));
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -1997,11 +1997,11 @@ public class Topology1toNTest extends ESTest {
 		Add.toProject(getLocalProject(), oldTestElement);
 		Add.toProject(getLocalProject(), useCase);
 
-		Add.toNonContainedNToM(useCase, oldTestElement);
+		Add.toNonContainedNToM(getLocalProject(), useCase, oldTestElement);
 
 		clearOperations();
 
-		Add.toNonContainedNToM(useCase, actor);
+		Add.toNonContainedNToM(getLocalProject(), useCase, actor);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -2056,10 +2056,10 @@ public class Topology1toNTest extends ESTest {
 		Add.toProject(getLocalProject(), useCase);
 
 		final TestElement[] actors = { actor1, actor2 };
-		Add.toNonContainedNToM(useCase, oldTestElement);
+		Add.toNonContainedNToM(getLocalProject(), useCase, oldTestElement);
 		clearOperations();
 
-		Add.toNonContainedNToM(useCase, Arrays.asList(actors));
+		Add.toNonContainedNToM(getLocalProject(), useCase, Arrays.asList(actors));
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -2118,11 +2118,11 @@ public class Topology1toNTest extends ESTest {
 		Add.toProject(getLocalProject(), actor);
 		Add.toProject(getLocalProject(), useCase);
 
-		Add.toNonContainedNToM(useCase, actor);
+		Add.toNonContainedNToM(getLocalProject(), useCase, actor);
 
 		clearOperations();
 
-		Delete.fromNonContainedNToM(useCase, actor);
+		Delete.fromNonContainedNToM(getLocalProject(), useCase, actor);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -2177,12 +2177,12 @@ public class Topology1toNTest extends ESTest {
 		final ModelElementId actorId = getProject().getModelElementId(actor);
 		final ModelElementId useCaseId = getProject().getModelElementId(useCase);
 
-		Add.toNonContainedNToM(useCase, oldTestElement);
-		Add.toNonContainedNToM(useCase, actor);
+		Add.toNonContainedNToM(getLocalProject(), useCase, oldTestElement);
+		Add.toNonContainedNToM(getLocalProject(), useCase, actor);
 
 		clearOperations();
 
-		Delete.fromNonContainedNToM(useCase, actor);
+		Delete.fromNonContainedNToM(getLocalProject(), useCase, actor);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(1, operations.size());
@@ -2230,11 +2230,11 @@ public class Topology1toNTest extends ESTest {
 
 		final TestElement[] actors = { actor1, actor2 };
 
-		Add.toNonContainedNToM(useCase, Arrays.asList(actors));
+		Add.toNonContainedNToM(getLocalProject(), useCase, Arrays.asList(actors));
 
 		clearOperations();
 
-		Delete.fromNonContainedNToM(useCase, Arrays.asList(actors));
+		Delete.fromNonContainedNToM(getLocalProject(), useCase, Arrays.asList(actors));
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -2287,12 +2287,12 @@ public class Topology1toNTest extends ESTest {
 		final ModelElementId useCaseId = getProject().getModelElementId(useCase);
 		final TestElement[] actors = { actor1, actor2 };
 
-		Add.toNonContainedNToM(useCase, oldTestElement);
-		Add.toNonContainedNToM(useCase, Arrays.asList(actors));
+		Add.toNonContainedNToM(getLocalProject(), useCase, oldTestElement);
+		Add.toNonContainedNToM(getLocalProject(), useCase, Arrays.asList(actors));
 
 		clearOperations();
 
-		Delete.fromNonContainedNToM(useCase, Arrays.asList(actors));
+		Delete.fromNonContainedNToM(getLocalProject(), useCase, Arrays.asList(actors));
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -2345,14 +2345,14 @@ public class Topology1toNTest extends ESTest {
 		Add.toProject(getLocalProject(), actor2);
 		Add.toProject(getLocalProject(), section);
 
-		Add.toContainedElements(section, oldTestElement);
-		Add.toContainedElements(section, Arrays.asList(actors));
+		Add.toContainedElements(getLocalProject(), section, oldTestElement);
+		Add.toContainedElements(getLocalProject(), section, Arrays.asList(actors));
 
 		clearOperations();
 		final ModelElementId actor1Id = getProject().getModelElementId(actor1);
 		final ModelElementId actor2Id = getProject().getModelElementId(actor2);
 
-		Delete.fromContainedElements(section, Arrays.asList(actors));
+		Delete.fromContainedElements(getLocalProject(), section, Arrays.asList(actors));
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 

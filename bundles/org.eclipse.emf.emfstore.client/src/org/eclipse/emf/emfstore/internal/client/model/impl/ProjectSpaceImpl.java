@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Otto von Wesendonk, Edgar Mueller, Maximilian Koegel - initial API and implementation
+ * Johannes Faltermeier - Project and LocalChangePackage set to volatile
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model.impl;
 
@@ -16,14 +17,21 @@ import java.util.Date;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EDataTypeEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipse.emf.emfstore.common.ESResourceSetProvider;
+import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionPoint;
+import org.eclipse.emf.emfstore.common.extensionpoint.ESPriorityComparator;
 import org.eclipse.emf.emfstore.internal.client.model.ModelPackage;
 import org.eclipse.emf.emfstore.internal.client.model.Usersession;
 import org.eclipse.emf.emfstore.internal.client.model.Workspace;
@@ -31,7 +39,6 @@ import org.eclipse.emf.emfstore.internal.common.model.EMFStoreProperty;
 import org.eclipse.emf.emfstore.internal.common.model.Project;
 import org.eclipse.emf.emfstore.internal.server.model.FileIdentifier;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectId;
-import org.eclipse.emf.emfstore.internal.server.model.versioning.ChangePackage;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.PrimaryVersionSpec;
 
 /**
@@ -70,16 +77,6 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.PrimaryVersionS
  * 
  */
 public class ProjectSpaceImpl extends ProjectSpaceBase {
-
-	/**
-	 * The cached value of the '{@link #getProject() <em>Project</em>}' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @see #getProject()
-	 * @generated
-	 * @ordered
-	 */
-	protected Project project;
 
 	/**
 	 * The cached value of the '{@link #getProjectId() <em>Project Id</em>}' containment reference.
@@ -262,17 +259,6 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	protected EList<EMFStoreProperty> changedSharedProperties;
 
 	/**
-	 * The cached value of the '{@link #getLocalChangePackage() <em>Local Change Package</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * 
-	 * @see #getLocalChangePackage()
-	 * @generated
-	 * @ordered
-	 */
-	protected ChangePackage localChangePackage;
-
-	/**
 	 * The cached value of the '{@link #getMergedVersion() <em>Merged Version</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -299,15 +285,6 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	 */
 	public PrimaryVersionSpec basicGetBaseVersion() {
 		return baseVersion;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	public Project basicGetProject() {
-		return project;
 	}
 
 	/**
@@ -352,26 +329,6 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 		{
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
 				ModelPackage.PROJECT_SPACE__BASE_VERSION, oldBaseVersion, newBaseVersion);
-			if (msgs == null)
-				msgs = notification;
-			else
-				msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	public NotificationChain basicSetProject(Project newProject, NotificationChain msgs) {
-		Project oldProject = project;
-		project = newProject;
-		if (eNotificationRequired())
-		{
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
-				ModelPackage.PROJECT_SPACE__PROJECT, oldProject, newProject);
 			if (msgs == null)
 				msgs = notification;
 			else
@@ -437,10 +394,6 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID)
 		{
-		case ModelPackage.PROJECT_SPACE__PROJECT:
-			if (resolve)
-				return getProject();
-			return basicGetProject();
 		case ModelPackage.PROJECT_SPACE__PROJECT_ID:
 			if (resolve)
 				return getProjectId();
@@ -475,10 +428,6 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 			if (resolve)
 				return getWorkspace();
 			return basicGetWorkspace();
-		case ModelPackage.PROJECT_SPACE__LOCAL_CHANGE_PACKAGE:
-			if (resolve)
-				return getLocalChangePackage();
-			return basicGetLocalChangePackage();
 		case ModelPackage.PROJECT_SPACE__MERGED_VERSION:
 			if (resolve)
 				return getMergedVersion();
@@ -514,8 +463,6 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID)
 		{
-		case ModelPackage.PROJECT_SPACE__PROJECT:
-			return basicSetProject(null, msgs);
 		case ModelPackage.PROJECT_SPACE__PROJECT_ID:
 			return basicSetProjectId(null, msgs);
 		case ModelPackage.PROJECT_SPACE__BASE_VERSION:
@@ -526,8 +473,6 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 			return ((InternalEList<?>) getProperties()).basicRemove(otherEnd, msgs);
 		case ModelPackage.PROJECT_SPACE__WORKSPACE:
 			return basicSetWorkspace(null, msgs);
-		case ModelPackage.PROJECT_SPACE__LOCAL_CHANGE_PACKAGE:
-			return basicSetLocalChangePackage(null, msgs);
 		case ModelPackage.PROJECT_SPACE__MERGED_VERSION:
 			return basicSetMergedVersion(null, msgs);
 		}
@@ -543,8 +488,6 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	public boolean eIsSet(int featureID) {
 		switch (featureID)
 		{
-		case ModelPackage.PROJECT_SPACE__PROJECT:
-			return project != null;
 		case ModelPackage.PROJECT_SPACE__PROJECT_ID:
 			return projectId != null;
 		case ModelPackage.PROJECT_SPACE__PROJECT_NAME:
@@ -572,8 +515,6 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 			return changedSharedProperties != null && !changedSharedProperties.isEmpty();
 		case ModelPackage.PROJECT_SPACE__WORKSPACE:
 			return basicGetWorkspace() != null;
-		case ModelPackage.PROJECT_SPACE__LOCAL_CHANGE_PACKAGE:
-			return localChangePackage != null;
 		case ModelPackage.PROJECT_SPACE__MERGED_VERSION:
 			return mergedVersion != null;
 		}
@@ -590,9 +531,6 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID)
 		{
-		case ModelPackage.PROJECT_SPACE__PROJECT:
-			setProject((Project) newValue);
-			return;
 		case ModelPackage.PROJECT_SPACE__PROJECT_ID:
 			setProjectId((ProjectId) newValue);
 			return;
@@ -636,9 +574,6 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 		case ModelPackage.PROJECT_SPACE__WORKSPACE:
 			setWorkspace((Workspace) newValue);
 			return;
-		case ModelPackage.PROJECT_SPACE__LOCAL_CHANGE_PACKAGE:
-			setLocalChangePackage((ChangePackage) newValue);
-			return;
 		case ModelPackage.PROJECT_SPACE__MERGED_VERSION:
 			setMergedVersion((PrimaryVersionSpec) newValue);
 			return;
@@ -665,9 +600,6 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	public void eUnset(int featureID) {
 		switch (featureID)
 		{
-		case ModelPackage.PROJECT_SPACE__PROJECT:
-			setProject((Project) null);
-			return;
 		case ModelPackage.PROJECT_SPACE__PROJECT_ID:
 			setProjectId((ProjectId) null);
 			return;
@@ -706,9 +638,6 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 			return;
 		case ModelPackage.PROJECT_SPACE__WORKSPACE:
 			setWorkspace((Workspace) null);
-			return;
-		case ModelPackage.PROJECT_SPACE__LOCAL_CHANGE_PACKAGE:
-			setLocalChangePackage((ChangePackage) null);
 			return;
 		case ModelPackage.PROJECT_SPACE__MERGED_VERSION:
 			setMergedVersion((PrimaryVersionSpec) null);
@@ -782,36 +711,6 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 				ModelPackage.PROJECT_SPACE__OLD_LOG_MESSAGES);
 		}
 		return oldLogMessages;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	public Project getProject() {
-		if (project != null && project.eIsProxy())
-		{
-			InternalEObject oldProject = (InternalEObject) project;
-			project = (Project) eResolveProxy(oldProject);
-			if (project != oldProject)
-			{
-				InternalEObject newProject = (InternalEObject) project;
-				NotificationChain msgs = oldProject.eInverseRemove(this, EOPPOSITE_FEATURE_BASE
-					- ModelPackage.PROJECT_SPACE__PROJECT, null, null);
-				if (newProject.eInternalContainer() == null)
-				{
-					msgs = newProject.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ModelPackage.PROJECT_SPACE__PROJECT,
-						null, msgs);
-				}
-				if (msgs != null)
-					msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ModelPackage.PROJECT_SPACE__PROJECT,
-						oldProject, project));
-			}
-		}
-		return project;
 	}
 
 	/**
@@ -994,30 +893,6 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 	 * 
 	 * @generated
 	 */
-	public void setProject(Project newProject) {
-		if (newProject != project)
-		{
-			NotificationChain msgs = null;
-			if (project != null)
-				msgs = ((InternalEObject) project).eInverseRemove(this, EOPPOSITE_FEATURE_BASE
-					- ModelPackage.PROJECT_SPACE__PROJECT, null, msgs);
-			if (newProject != null)
-				msgs = ((InternalEObject) newProject).eInverseAdd(this, EOPPOSITE_FEATURE_BASE
-					- ModelPackage.PROJECT_SPACE__PROJECT, null, msgs);
-			msgs = basicSetProject(newProject, msgs);
-			if (msgs != null)
-				msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.PROJECT_SPACE__PROJECT, newProject,
-				newProject));
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
 	public void setProjectDescription(String newProjectDescription) {
 		String oldProjectDescription = projectDescription;
 		projectDescription = newProjectDescription;
@@ -1114,93 +989,6 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 		else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.PROJECT_SPACE__WORKSPACE, newWorkspace,
 				newWorkspace));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	public ChangePackage getLocalChangePackage() {
-		if (localChangePackage != null && localChangePackage.eIsProxy())
-		{
-			InternalEObject oldLocalChangePackage = (InternalEObject) localChangePackage;
-			localChangePackage = (ChangePackage) eResolveProxy(oldLocalChangePackage);
-			if (localChangePackage != oldLocalChangePackage)
-			{
-				InternalEObject newLocalChangePackage = (InternalEObject) localChangePackage;
-				NotificationChain msgs = oldLocalChangePackage.eInverseRemove(this, EOPPOSITE_FEATURE_BASE
-					- ModelPackage.PROJECT_SPACE__LOCAL_CHANGE_PACKAGE, null, null);
-				if (newLocalChangePackage.eInternalContainer() == null)
-				{
-					msgs = newLocalChangePackage.eInverseAdd(this, EOPPOSITE_FEATURE_BASE
-						- ModelPackage.PROJECT_SPACE__LOCAL_CHANGE_PACKAGE, null, msgs);
-				}
-				if (msgs != null)
-					msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-						ModelPackage.PROJECT_SPACE__LOCAL_CHANGE_PACKAGE, oldLocalChangePackage, localChangePackage));
-			}
-		}
-		return localChangePackage;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	public ChangePackage basicGetLocalChangePackage() {
-		return localChangePackage;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	public NotificationChain basicSetLocalChangePackage(ChangePackage newLocalChangePackage, NotificationChain msgs) {
-		ChangePackage oldLocalChangePackage = localChangePackage;
-		localChangePackage = newLocalChangePackage;
-		if (eNotificationRequired())
-		{
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
-				ModelPackage.PROJECT_SPACE__LOCAL_CHANGE_PACKAGE, oldLocalChangePackage, newLocalChangePackage);
-			if (msgs == null)
-				msgs = notification;
-			else
-				msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	public void setLocalChangePackage(ChangePackage newLocalChangePackage) {
-		if (newLocalChangePackage != localChangePackage)
-		{
-			NotificationChain msgs = null;
-			if (localChangePackage != null)
-				msgs = ((InternalEObject) localChangePackage).eInverseRemove(this, EOPPOSITE_FEATURE_BASE
-					- ModelPackage.PROJECT_SPACE__LOCAL_CHANGE_PACKAGE, null, msgs);
-			if (newLocalChangePackage != null)
-				msgs = ((InternalEObject) newLocalChangePackage).eInverseAdd(this, EOPPOSITE_FEATURE_BASE
-					- ModelPackage.PROJECT_SPACE__LOCAL_CHANGE_PACKAGE, null, msgs);
-			msgs = basicSetLocalChangePackage(newLocalChangePackage, msgs);
-			if (msgs != null)
-				msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.PROJECT_SPACE__LOCAL_CHANGE_PACKAGE,
-				newLocalChangePackage, newLocalChangePackage));
 	}
 
 	/**
@@ -1316,5 +1104,28 @@ public class ProjectSpaceImpl extends ProjectSpaceBase {
 		result.append(oldLogMessages);
 		result.append(')');
 		return result.toString();
+	}
+
+	private EObject loadEObjectFromURI(URI uri) {
+		ResourceSet resourceSet = getResourceSet();
+
+		if (resourceSet == null) {
+			final ESExtensionPoint extensionPoint = new ESExtensionPoint(
+				"org.eclipse.emf.emfstore.client.resourceSetProvider", //$NON-NLS-1$
+				true);
+			extensionPoint.setComparator(new ESPriorityComparator("priority", true)); //$NON-NLS-1$
+			extensionPoint.reload();
+			final ESResourceSetProvider resourceSetProvider = extensionPoint.getElementWithHighestPriority().getClass(
+				"class", //$NON-NLS-1$
+				ESResourceSetProvider.class);
+			resourceSet = resourceSetProvider.getResourceSet();
+		}
+
+		if (resourceSet.getURIConverter().exists(uri, null)) {
+			final Resource resource = resourceSet.getResource(uri, true);
+			return resource.getContents().get(0);
+		}
+
+		return null;
 	}
 }

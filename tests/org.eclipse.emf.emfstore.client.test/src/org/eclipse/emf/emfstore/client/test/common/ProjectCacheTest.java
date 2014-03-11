@@ -42,7 +42,7 @@ public class ProjectCacheTest extends ESTest {
 				project.addModelElement(element);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertNotNull(project.getModelElementId(element));
 		assertNotNull(project.getModelElementId(cutElement));
@@ -62,7 +62,7 @@ public class ProjectCacheTest extends ESTest {
 				cutElementIWhileCommand[0] = project.getModelElementId(cutElement);
 				project.addIdEObjectCollectionChangeObserver(createDummyObserver());
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(cutElementIWhileCommand[0], project.getModelElementId(cutElement));
 	}
@@ -103,7 +103,7 @@ public class ProjectCacheTest extends ESTest {
 			protected void doRun() {
 				project.addModelElement(element);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 
@@ -111,7 +111,7 @@ public class ProjectCacheTest extends ESTest {
 			protected void doRun() {
 				project.deleteModelElement(element);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertNull(project.getModelElementId(element));
 	}
@@ -130,21 +130,21 @@ public class ProjectCacheTest extends ESTest {
 				project.addModelElement(container);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				element.setContainer(null);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				container.getContainedElements().add(element);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 	}
 
@@ -164,14 +164,14 @@ public class ProjectCacheTest extends ESTest {
 				project.addModelElement(container2);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				element.setContainer(container2);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 	}
 
@@ -191,7 +191,7 @@ public class ProjectCacheTest extends ESTest {
 				project.addModelElement(container2);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -199,7 +199,7 @@ public class ProjectCacheTest extends ESTest {
 				container.getContainedElements().remove(element);
 				container2.getContainedElements().add(element);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	@Test
@@ -216,21 +216,21 @@ public class ProjectCacheTest extends ESTest {
 				project.addModelElement(container);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				container.getContainedElements().add(element);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				element.setContainer(container);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -238,7 +238,7 @@ public class ProjectCacheTest extends ESTest {
 				container.getContainedElements().remove(element);
 				element.setContainer(null);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 }

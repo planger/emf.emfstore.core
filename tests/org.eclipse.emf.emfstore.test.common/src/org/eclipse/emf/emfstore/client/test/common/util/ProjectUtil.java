@@ -73,8 +73,7 @@ public class ProjectUtil {
 	}
 
 	public static ESLocalProject clearModelElements(final ESLocalProject localProject) {
-		return RunESCommand.runWithResult(new Callable<ESLocalProject>() {
-
+		return localProject.runWithResult(new Callable<ESLocalProject>() {
 			public ESLocalProject call() throws Exception {
 				localProject.getModelElements().clear();
 				return localProject;
@@ -85,7 +84,7 @@ public class ProjectUtil {
 	public static ESLocalProject clearOperations(ESLocalProject localProject) {
 		final ProjectSpace projectSpace = ((ESLocalProjectImpl) localProject).toInternalAPI();
 
-		RunESCommand.run(new Callable<Void>() {
+		localProject.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				projectSpace.getLocalChangePackage().getOperations().clear();
 				projectSpace.getOperationManager().clearOperations();
@@ -99,7 +98,7 @@ public class ProjectUtil {
 
 	public static int getOperationSize(ESLocalProject localProject) {
 		final ESLocalProjectImpl cast = ESLocalProjectImpl.class.cast(localProject);
-		return RunESCommand.runWithResult(new Callable<Integer>() {
+		return localProject.runWithResult(new Callable<Integer>() {
 			public Integer call() throws Exception {
 				return cast.toInternalAPI().getOperations().size();
 			}
@@ -119,7 +118,7 @@ public class ProjectUtil {
 	}
 
 	public static void rename(final ESLocalProject localProject, final String name) {
-		RunESCommand.run(new Callable<Void>() {
+		localProject.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				final TestElement testElement = (TestElement) localProject.getModelElements().get(0);
 				testElement.setName(name);
@@ -135,7 +134,7 @@ public class ProjectUtil {
 	}
 
 	public static ESLocalProject addElement(final ESLocalProject localProject, final EObject modelElement) {
-		return RunESCommand.runWithResult(new Callable<ESLocalProject>() {
+		return localProject.runWithResult(new Callable<ESLocalProject>() {
 			public ESLocalProject call() throws Exception {
 				localProject.getModelElements().add(modelElement);
 				return localProject;
@@ -144,7 +143,7 @@ public class ProjectUtil {
 	}
 
 	public static ESLocalProject removeModelElement(final ESLocalProject localProject, final EObject modelElement) {
-		return RunESCommand.runWithResult(new Callable<ESLocalProject>() {
+		return localProject.runWithResult(new Callable<ESLocalProject>() {
 			public ESLocalProject call() throws Exception {
 				localProject.getModelElements().remove(modelElement);
 				return localProject;
@@ -153,7 +152,7 @@ public class ProjectUtil {
 	}
 
 	public static ESLocalProject revert(final ESLocalProject localProject) {
-		return RunESCommand.runWithResult(new Callable<ESLocalProject>() {
+		return localProject.runWithResult(new Callable<ESLocalProject>() {
 			public ESLocalProject call() throws Exception {
 				localProject.revert();
 				return localProject;
@@ -187,7 +186,7 @@ public class ProjectUtil {
 
 	protected ESLocalProject reCheckout(final ESLocalProject localProject) {
 
-		return RunESCommand.runWithResult(new Callable<ESLocalProject>() {
+		return localProject.runWithResult(new Callable<ESLocalProject>() {
 			public ESLocalProject call() throws Exception {
 
 				return null;
@@ -220,7 +219,7 @@ public class ProjectUtil {
 	}
 
 	public static ESLocalProject checkout(final ESLocalProject localProject) throws ESException {
-		return RunESCommand.WithException.runWithResult(ESException.class, new Callable<ESLocalProject>() {
+		return localProject.runWithResult(ESException.class, new Callable<ESLocalProject>() {
 			public ESLocalProject call() throws Exception {
 				return localProject.getRemoteProject().checkout(NONAME, localProject.getUsersession(),
 					localProject.getBaseVersion(), new NullProgressMonitor());
@@ -229,7 +228,7 @@ public class ProjectUtil {
 	}
 
 	public static ESLocalProject checkout(final ESLocalProject localProject, final ESPrimaryVersionSpec versionSpec) {
-		return RunESCommand.runWithResult(new Callable<ESLocalProject>() {
+		return localProject.runWithResult(new Callable<ESLocalProject>() {
 			public ESLocalProject call() throws Exception {
 				return localProject.getRemoteProject().checkout(NONAME,
 					localProject.getUsersession(),
@@ -272,8 +271,7 @@ public class ProjectUtil {
 
 	public static ESLocalProject mergeWithBranch(final ESLocalProject trunk, final ESPrimaryVersionSpec latestOnBranch,
 		final int expectedConflicts) {
-
-		return RunESCommand.runWithResult(new Callable<ESLocalProject>() {
+		return trunk.runWithResult(new Callable<ESLocalProject>() {
 			public ESLocalProject call() throws Exception {
 				((ESLocalProjectImpl) trunk).toInternalAPI().mergeBranch(
 					((ESPrimaryVersionSpecImpl) latestOnBranch).toInternalAPI(),
@@ -297,7 +295,7 @@ public class ProjectUtil {
 	}
 
 	public static ESLocalProject branch(final ESLocalProject localProject, final String branchName) {
-		return RunESCommand.runWithResult(new Callable<ESLocalProject>() {
+		return localProject.runWithResult(new Callable<ESLocalProject>() {
 			public ESLocalProject call() throws Exception {
 				localProject.commitToBranch(ESVersionSpec.FACTORY.createBRANCH(branchName), LOGMESSAGE,
 					ESCommitCallback.NOCALLBACK, new NullProgressMonitor());
@@ -307,7 +305,7 @@ public class ProjectUtil {
 	}
 
 	public static ESLocalProject stopRecording(final ESLocalProject localProject) {
-		return RunESCommand.runWithResult(new Callable<ESLocalProject>() {
+		return localProject.runWithResult(new Callable<ESLocalProject>() {
 			public ESLocalProject call() throws Exception {
 				final ProjectSpace projectSpace = ((ESLocalProjectImpl) localProject).toInternalAPI();
 				projectSpace.getOperationManager().stopChangeRecording();
@@ -317,7 +315,7 @@ public class ProjectUtil {
 	}
 
 	public static ESLocalProject startRecording(final ESLocalProject localProject) {
-		return RunESCommand.runWithResult(new Callable<ESLocalProject>() {
+		return localProject.runWithResult(new Callable<ESLocalProject>() {
 			public ESLocalProject call() throws Exception {
 				final ProjectSpace projectSpace = ((ESLocalProjectImpl) localProject).toInternalAPI();
 				projectSpace.getOperationManager().startChangeRecording();

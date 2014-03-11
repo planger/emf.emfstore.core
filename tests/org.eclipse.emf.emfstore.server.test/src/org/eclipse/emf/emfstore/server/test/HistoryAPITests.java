@@ -23,6 +23,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -33,11 +34,9 @@ import org.eclipse.emf.emfstore.client.ESUsersession;
 import org.eclipse.emf.emfstore.client.exceptions.ESServerStartFailedException;
 import org.eclipse.emf.emfstore.client.test.common.dsl.Create;
 import org.eclipse.emf.emfstore.client.test.common.dsl.CreateAPI;
+import org.eclipse.emf.emfstore.client.test.common.dsl.Delete;
 import org.eclipse.emf.emfstore.client.test.common.util.ServerUtil;
 import org.eclipse.emf.emfstore.common.model.ESModelElementId;
-import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
-import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESLocalProjectImpl;
-import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
 import org.eclipse.emf.emfstore.internal.server.exceptions.FatalESException;
 import org.eclipse.emf.emfstore.internal.server.exceptions.InvalidVersionSpecException;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
@@ -49,7 +48,9 @@ import org.eclipse.emf.emfstore.server.model.query.ESRangeQuery;
 import org.eclipse.emf.emfstore.server.model.versionspec.ESPrimaryVersionSpec;
 import org.eclipse.emf.emfstore.server.model.versionspec.ESVersionSpec;
 import org.eclipse.emf.emfstore.test.model.TestElement;
+import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -92,7 +93,7 @@ public class HistoryAPITests {
 
 	private static ESServer server;
 	private static ESUsersession session;
-	private static ESLocalProject readOnlyProject;
+	private static ESLocalProject project;
 
 	@BeforeClass
 	public static void beforeClass() {
@@ -101,12 +102,32 @@ public class HistoryAPITests {
 			session = server.login(
 				ServerUtil.superUser(),
 				ServerUtil.superUserPassword());
-			readOnlyProject = createHistory();
 		} catch (final IllegalArgumentException ex) {
 			fail(ex.getMessage());
 		} catch (final ESServerStartFailedException ex) {
 			fail(ex.getMessage());
 		} catch (final FatalESException ex) {
+			fail(ex.getMessage());
+		} catch (final ESException ex) {
+			fail(ex.getMessage());
+		}
+	}
+
+	@Before
+	public void before() {
+		try {
+			project = createHistory();
+		} catch (final ESException ex) {
+			fail(ex.getMessage());
+		}
+	}
+
+	@After
+	public void after() {
+		try {
+			Delete.allLocalProjects();
+			Delete.allRemoteProjects(server, session);
+		} catch (final IOException ex) {
 			fail(ex.getMessage());
 		} catch (final ESException ex) {
 			fail(ex.getMessage());
@@ -119,9 +140,7 @@ public class HistoryAPITests {
 	}
 
 	public static ESLocalProject getProject() {
-		final ProjectSpace clone = ModelUtil.clone(((ESLocalProjectImpl) readOnlyProject).toInternalAPI());
-		clone.setProject(ModelUtil.clone(((ESLocalProjectImpl) readOnlyProject).toInternalAPI().getProject()));
-		return clone.toAPI();
+		return project;
 	}
 
 	public static ESLocalProject createHistory() throws ESException {

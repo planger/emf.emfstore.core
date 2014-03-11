@@ -12,6 +12,7 @@
 package org.eclipse.emf.emfstore.internal.client.model.util;
 
 import org.eclipse.emf.common.command.AbstractCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
 
 /**
@@ -32,6 +33,7 @@ public abstract class AbstractEMFStoreCommand extends AbstractCommand {
 		return runtimeException;
 	}
 
+	private EditingDomain editingDomain;
 	private boolean ignoreExceptions;
 
 	/**
@@ -41,6 +43,15 @@ public abstract class AbstractEMFStoreCommand extends AbstractCommand {
 	 */
 	public boolean shouldIgnoreExceptions() {
 		return ignoreExceptions;
+	}
+
+	/**
+	 * Returns the editing domain of this command.
+	 * 
+	 * @return the editing domain
+	 */
+	public EditingDomain getEditingDomain() {
+		return editingDomain;
 	}
 
 	/**
@@ -63,7 +74,7 @@ public abstract class AbstractEMFStoreCommand extends AbstractCommand {
 		try {
 			commandBody();
 			// BEGIN SUPRESS CATCH EXCEPTION
-		} catch (RuntimeException e) {
+		} catch (final RuntimeException e) {
 			// END SUPRESS CATCH EXCEPTION
 			// record exception
 			runtimeException = e;
@@ -104,8 +115,21 @@ public abstract class AbstractEMFStoreCommand extends AbstractCommand {
 	 *            ignored
 	 */
 	protected void aRun(boolean ignoreExceptions) {
-		this.ignoreExceptions = ignoreExceptions;
-		ESWorkspaceProviderImpl.getInstance().getEditingDomain().getCommandStack().execute(this);
+		aRun(ESWorkspaceProviderImpl.getInstance().getEditingDomain(), ignoreExceptions);
 
+	}
+
+	/**
+	 * Executes the command on the given editing domain.
+	 * 
+	 * @param editingDomain the editing domain
+	 * @param ignoreExceptions
+	 *            should be set to {@code true} if any thrown exception in the execution of the command should be
+	 *            ignored
+	 */
+	protected void aRun(EditingDomain editingDomain, boolean ignoreExceptions) {
+		this.editingDomain = editingDomain;
+		this.ignoreExceptions = ignoreExceptions;
+		editingDomain.getCommandStack().execute(this);
 	}
 }

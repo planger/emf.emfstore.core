@@ -29,7 +29,6 @@ import org.eclipse.emf.emfstore.client.test.common.dsl.Add;
 import org.eclipse.emf.emfstore.client.test.common.dsl.Create;
 import org.eclipse.emf.emfstore.client.test.common.dsl.TestElementFeatures;
 import org.eclipse.emf.emfstore.client.test.common.dsl.Update;
-import org.eclipse.emf.emfstore.client.util.RunESCommand;
 import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESLocalProjectImpl;
 import org.eclipse.emf.emfstore.internal.server.exceptions.InvalidVersionSpecException;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.PagedUpdateVersionSpec;
@@ -80,7 +79,7 @@ public class VersionSpecTests extends ESTestWithLoggedInUser {
 	static final String[] BRANCHES = { B1, B2, B3 };
 
 	private static void rename(final ESLocalProject localProject, final int nameIndex) {
-		RunESCommand.run(new Callable<Void>() {
+		localProject.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				final TestElement element = (TestElement) localProject.getModelElements().get(0);
 				element.setName(ELEMENT_NAMES[nameIndex]);
@@ -243,12 +242,12 @@ public class VersionSpecTests extends ESTestWithLoggedInUser {
 		final TestElement testElement = Create.testElement(ELEMENT);
 		Add.toProject(history, testElement);
 
-		Update.testElement(TestElementFeatures.name(),
+		Update.testElement(getLocalProject(), TestElementFeatures.name(),
 			testElement, OTHER_NAME);
 
 		final TestElement testElement2 = Create.testElement(ELEMENT_2);
-		Update.testElement(TestElementFeatures.name(), testElement2, YET_ANOTHER_ELEMENT);
-		Update.testElement(TestElementFeatures.description(), testElement2, THIS_IS_A_DESCRIPTION);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), testElement2, YET_ANOTHER_ELEMENT);
+		Update.testElement(getLocalProject(), TestElementFeatures.description(), testElement2, THIS_IS_A_DESCRIPTION);
 
 		Add.toProject(history, testElement2);
 		commit(history);

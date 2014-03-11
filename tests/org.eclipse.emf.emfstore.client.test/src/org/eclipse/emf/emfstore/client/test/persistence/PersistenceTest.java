@@ -44,7 +44,7 @@ public class PersistenceTest extends ESTest {
 			protected void doRun() {
 				getProject().addModelElement(TestmodelFactory.eINSTANCE.createTestElement());
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(
 			ESWorkspaceProviderImpl.getInstance().getWorkspace().getLocalProjects().get(0).getModelElements().size(), 1);
@@ -53,6 +53,9 @@ public class PersistenceTest extends ESTest {
 		final Workspace internalWorkspace = ESWorkspaceProviderImpl.getInstance().getWorkspace().toInternalAPI();
 		final Project project = internalWorkspace.getProjectSpaces().get(0).getProject();
 		assertTrue(ModelUtil.areEqual(project, originalProject));
+		// set new projectspace since old one got disposed but WorkspaceTest still holds a reference and tries to save
+		// it in teardown
+		// setProjectSpace(internalWorkspace.getProjectSpaces().get(0));
 	}
 
 	/**

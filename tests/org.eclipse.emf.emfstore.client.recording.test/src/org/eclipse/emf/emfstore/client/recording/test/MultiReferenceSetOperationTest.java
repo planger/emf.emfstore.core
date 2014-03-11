@@ -59,7 +59,7 @@ public class MultiReferenceSetOperationTest extends ESTest {
 				element.getReferences().add(oldValue);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(element.getReferences().size() == 1);
 		assertTrue(element.getReferences().get(0).equals(oldValue));
@@ -69,7 +69,7 @@ public class MultiReferenceSetOperationTest extends ESTest {
 			protected void doRun() {
 				element.getReferences().set(0, newValue);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(1, element.getReferences().size());
 		assertEquals(newValue, element.getReferences().get(0));
@@ -112,7 +112,7 @@ public class MultiReferenceSetOperationTest extends ESTest {
 				assertTrue(testElement.getReferences().size() == 1);
 				assertTrue(testElement.getReferences().get(0).equals(newValue));
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	/**
@@ -149,7 +149,7 @@ public class MultiReferenceSetOperationTest extends ESTest {
 				assertTrue(testElement.getReferences().size() == 1);
 				assertTrue(testElement.getReferences().get(0).equals(newValue));
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	/**
@@ -189,7 +189,7 @@ public class MultiReferenceSetOperationTest extends ESTest {
 				assertTrue(testElement.getReferences().get(1).equals(newValue));
 				assertTrue(testElement.getReferences().get(2).equals(third));
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	/**
@@ -215,7 +215,7 @@ public class MultiReferenceSetOperationTest extends ESTest {
 			protected void doRun() {
 				element.getReferences().set(0, newValue);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(element.getReferences().size() == 1);
 		assertTrue(element.getReferences().get(0).equals(newValue));
@@ -226,7 +226,7 @@ public class MultiReferenceSetOperationTest extends ESTest {
 				final AbstractOperation operation = getProjectSpace().getOperations().get(0).reverse();
 				operation.apply(getProject());
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(element.getReferences().size() == 1);
 		assertTrue(element.getReferences().get(0).equals(oldValue));

@@ -78,7 +78,7 @@ public class OperationRecorderTest extends ComparingESTest {
 				Assert.assertNotNull(((IdEObjectCollectionImpl) project).getDeletedModelElementId(element2));
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 	}
 
 	/**
@@ -108,7 +108,7 @@ public class OperationRecorderTest extends ComparingESTest {
 					project.addModelElement(source);
 					return null;
 				}
-			});
+			}, getProjectSpace().getContentEditingDomain());
 
 			getClonedProjectSpace().getOperationManager().stopChangeRecording();
 			ChangePackage cp = RunESCommand.runWithResult(new Callable<ChangePackage>() {
@@ -119,7 +119,7 @@ public class OperationRecorderTest extends ComparingESTest {
 					cp.apply(getClonedProjectSpace().getProject());
 					return cp;
 				}
-			});
+			}, getProjectSpace().getContentEditingDomain());
 
 			// do not use commands since we only have them on client side
 			// FIXME: if not wrapped in command fails with transactional editing domain, if wrapped in command assert

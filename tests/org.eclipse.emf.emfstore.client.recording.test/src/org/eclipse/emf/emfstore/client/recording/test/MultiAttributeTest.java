@@ -66,7 +66,7 @@ public class MultiAttributeTest extends ESTest {
 				assertTrue(testElement.getStrings().size() == 1);
 				assertTrue(testElement.getStrings().get(0).equals(INSERTED));
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class MultiAttributeTest extends ESTest {
 				assertTrue(testElement.getStrings().get(0).equals(INSERTED));
 				assertTrue(testElement.getStrings().get(1).equals(FIRST));
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	/**
@@ -129,7 +129,7 @@ public class MultiAttributeTest extends ESTest {
 				assertTrue(testElement.getStrings().get(1).equals(FIRST));
 				assertTrue(testElement.getStrings().get(2).equals(INSERTED2));
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	/**
@@ -157,7 +157,7 @@ public class MultiAttributeTest extends ESTest {
 
 				assertTrue(testElement.getStrings().size() == 0);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 
 	/**
@@ -175,7 +175,7 @@ public class MultiAttributeTest extends ESTest {
 				testElement.getStrings().add(FIRST);
 				testElement.getStrings().addAll(Arrays.asList(SECOND, THIRD));
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		AbstractOperation abstractOperation = getProjectSpace().getOperations().get(0);
 		assertTrue(abstractOperation instanceof MultiAttributeOperation);
@@ -213,7 +213,7 @@ public class MultiAttributeTest extends ESTest {
 				clearOperations();
 				testElement.getStrings().removeAll(Arrays.asList(SECOND, THIRD));
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(getProjectSpace().getOperations().size() == 1);
 		final AbstractOperation abstractOperation = getProjectSpace().getOperations().get(0);
@@ -244,7 +244,7 @@ public class MultiAttributeTest extends ESTest {
 				assertTrue(testElement.getStrings().get(1).equals(SECOND));
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -253,7 +253,7 @@ public class MultiAttributeTest extends ESTest {
 				assertTrue(testElement.getStrings().size() == 1);
 				assertTrue(testElement.getStrings().get(0).equals(FIRST));
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -261,7 +261,7 @@ public class MultiAttributeTest extends ESTest {
 				final AbstractOperation ao = getProjectSpace().getOperations().get(0).reverse();
 				ao.apply(getProject());
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(testElement.getStrings().size() == 2);
 		assertTrue(testElement.getStrings().get(0).equals(FIRST));

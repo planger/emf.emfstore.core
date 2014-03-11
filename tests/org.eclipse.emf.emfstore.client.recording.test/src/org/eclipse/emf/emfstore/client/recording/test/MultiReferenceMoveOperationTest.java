@@ -69,7 +69,7 @@ public class MultiReferenceMoveOperationTest extends ESTest {
 				actor.getNonContained_1ToN().add(useCase2);
 				actor.getNonContained_1ToN().add(useCase3);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(actor, useCase1.getNonContained_NTo1());
 		assertEquals(actor, useCase2.getNonContained_NTo1());
@@ -87,7 +87,7 @@ public class MultiReferenceMoveOperationTest extends ESTest {
 				clearOperations();
 				actor.getNonContained_1ToN().move(2, 1);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -145,7 +145,7 @@ public class MultiReferenceMoveOperationTest extends ESTest {
 				actor.getNonContained_1ToN().add(useCase3);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		new EMFStoreCommand() {
 			@Override
@@ -162,7 +162,7 @@ public class MultiReferenceMoveOperationTest extends ESTest {
 
 				actor.getNonContained_1ToN().move(2, 1);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -188,7 +188,7 @@ public class MultiReferenceMoveOperationTest extends ESTest {
 			protected void doRun() {
 				reverse.apply(getProject());
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final EList<TestElement> initiatedTestElements = actor.getNonContained_1ToN();
 		assertEquals(actor, useCase1.getNonContained_NTo1());
@@ -223,7 +223,7 @@ public class MultiReferenceMoveOperationTest extends ESTest {
 				actor.getNonContained_1ToN().add(useCase2);
 				actor.getNonContained_1ToN().add(useCase3);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(actor, useCase1.getNonContained_NTo1());
 		assertEquals(actor, useCase2.getNonContained_NTo1());
@@ -265,7 +265,7 @@ public class MultiReferenceMoveOperationTest extends ESTest {
 
 				clearOperations();
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 
 		final MultiReferenceMoveOperation multiReferenceMoveOperation2 = OperationsFactory.eINSTANCE
 			.createMultiReferenceMoveOperation();

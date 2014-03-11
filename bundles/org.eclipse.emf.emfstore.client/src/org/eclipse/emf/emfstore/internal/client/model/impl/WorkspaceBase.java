@@ -12,6 +12,8 @@
 package org.eclipse.emf.emfstore.internal.client.model.impl;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -20,11 +22,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.io.FilenameUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.emfstore.internal.client.importexport.impl.ExportImportDataUnits;
 import org.eclipse.emf.emfstore.internal.client.importexport.impl.ExportProjectSpaceController;
 import org.eclipse.emf.emfstore.internal.client.importexport.impl.ExportWorkspaceController;
 import org.eclipse.emf.emfstore.internal.client.model.AdminBroker;
@@ -124,6 +128,26 @@ public abstract class WorkspaceBase extends EObjectImpl implements Workspace, ES
 	 * 
 	 * {@inheritDoc}
 	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.Workspace#removeProjectToProjectSpaceEntry(org.eclipse.emf.emfstore.internal.client.model.ProjectSpace)
+	 */
+	public void removeProjectToProjectSpaceEntry(ProjectSpace projectSpace) {
+		projectToProjectSpaceMap.remove(projectSpace.getProject());
+	}
+
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.Workspace#addProjectToProjectSpaceEntry(org.eclipse.emf.emfstore.internal.client.model.ProjectSpace)
+	 */
+	public void addProjectToProjectSpaceEntry(ProjectSpace projectSpace) {
+		projectToProjectSpaceMap.put(projectSpace.getProject(), projectSpace);
+	}
+
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
 	 * @see org.eclipse.emf.emfstore.internal.client.model.Workspace#init()
 	 */
 	@SuppressWarnings("unchecked")
@@ -132,6 +156,7 @@ public abstract class WorkspaceBase extends EObjectImpl implements Workspace, ES
 		// initialize all projectSpaces
 		for (final ProjectSpace projectSpace : getProjectSpaces()) {
 			projectSpace.init();
+			projectSpace.initContents();
 			projectToProjectSpaceMap.put(projectSpace.getProject(), projectSpace);
 		}
 
@@ -216,6 +241,7 @@ public abstract class WorkspaceBase extends EObjectImpl implements Workspace, ES
 		projectSpace.setProjectName(name);
 		projectSpace.setProjectDescription(description);
 		projectSpace.initResources(workspaceResourceSet);
+		projectSpace.initContentResources();
 
 		addProjectSpace(projectSpace);
 		save();
@@ -244,8 +270,27 @@ public abstract class WorkspaceBase extends EObjectImpl implements Workspace, ES
 		final ProjectSpace projectSpace = ResourceHelper
 			.getElementFromResource(absoluteFileName, ProjectSpace.class, 0);
 
+		final String parent = FilenameUtils.getFullPath(absoluteFileName);
+		final File parentFolder = new File(parent);
+		final File[] projects = parentFolder.listFiles(new FilenameFilter() {
+			public boolean accept(File dir, String name) {
+				return name.endsWith(ExportImportDataUnits.Project.getExtension());
+			}
+		});
+
+		if (projects.length == 0) {
+			throw new FileNotFoundException("Project was not found.");
+		}
+		if (projects.length > 1) {
+			throw new FileNotFoundException("Cannot find project because multiple files were found.");
+		}
+
+		final Project project = ResourceHelper.getElementFromResource(projects[0].getAbsolutePath(), Project.class, 0);
+		projectSpace.setProject(project);
+
 		projectSpace.setIdentifier(ModelFactory.eINSTANCE.createProjectSpace().getIdentifier());
 		projectSpace.initResources(workspaceResourceSet);
+		projectSpace.initContentResources();
 
 		addProjectSpace(projectSpace);
 		save();

@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Otto von Wesendonk, Edgar Mueller, Maximilian Koegel - initial API and implementation
- * Johannes Faltermeier - adaptions for independent storage
+ * Johannes Faltermeier - Pluggable storage, Decoupled Projects
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model.impl;
 
@@ -30,6 +30,7 @@ import java.util.concurrent.Callable;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -39,18 +40,25 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.ECrossReferenceAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil.UsageCrossReferencer;
-import org.eclipse.emf.ecore.xmi.XMIResource;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.emfstore.client.ESUsersession;
 import org.eclipse.emf.emfstore.client.callbacks.ESCommitCallback;
 import org.eclipse.emf.emfstore.client.callbacks.ESUpdateCallback;
 import org.eclipse.emf.emfstore.client.changetracking.ESCommandStack;
+import org.eclipse.emf.emfstore.client.exceptions.ESProjectIsClosedException;
 import org.eclipse.emf.emfstore.client.handler.ESRunnableContext;
 import org.eclipse.emf.emfstore.client.observer.ESLoginObserver;
 import org.eclipse.emf.emfstore.client.observer.ESMergeObserver;
+import org.eclipse.emf.emfstore.client.provider.ESEditingDomainProvider;
 import org.eclipse.emf.emfstore.client.util.ESClientURIUtil;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
+import org.eclipse.emf.emfstore.common.ESResourceSetProvider;
 import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionElement;
 import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionPoint;
+import org.eclipse.emf.emfstore.common.extensionpoint.ESPriorityComparator;
 import org.eclipse.emf.emfstore.internal.client.importexport.impl.ExportChangesController;
 import org.eclipse.emf.emfstore.internal.client.importexport.impl.ExportProjectController;
 import org.eclipse.emf.emfstore.internal.client.model.CompositeOperationHandle;
@@ -58,6 +66,7 @@ import org.eclipse.emf.emfstore.internal.client.model.Configuration;
 import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
 import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
 import org.eclipse.emf.emfstore.internal.client.model.Usersession;
+import org.eclipse.emf.emfstore.internal.client.model.changeTracking.commands.EMFStoreBasicCommandStack;
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.ConflictResolver;
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.notification.recording.NotificationRecorder;
 import org.eclipse.emf.emfstore.internal.client.model.connectionmanager.ConnectionManager;
@@ -77,6 +86,7 @@ import org.eclipse.emf.emfstore.internal.client.model.util.WorkspaceUtil;
 import org.eclipse.emf.emfstore.internal.client.observers.DeleteProjectSpaceObserver;
 import org.eclipse.emf.emfstore.internal.client.properties.PropertyManager;
 import org.eclipse.emf.emfstore.internal.common.APIUtil;
+import org.eclipse.emf.emfstore.internal.common.EMFStoreResource;
 import org.eclipse.emf.emfstore.internal.common.ESDisposable;
 import org.eclipse.emf.emfstore.internal.common.ExtensionRegistry;
 import org.eclipse.emf.emfstore.internal.common.model.ModelElementId;
@@ -125,6 +135,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl
 	private boolean initCompleted;
 	private boolean isTransient;
 	private boolean disposed;
+	private boolean closed;
 
 	private FileTransferManager fileTransferManager;
 	private OperationManager operationManager;
@@ -133,10 +144,15 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl
 	private final Map<String, OrgUnitProperty> propertyMap;
 
 	private ResourceSet resourceSet;
+	private ResourceSet contentResourceSet;
+	private EditingDomain contentEditingDomain;
 	private ResourcePersister resourcePersister;
 
 	private ECrossReferenceAdapter crossReferenceAdapter;
 	private ESRunnableContext runnableContext;
+
+	private Project project;
+	private ChangePackage localChangePackage;
 
 	/**
 	 * Constructor.
@@ -144,6 +160,88 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl
 	public ProjectSpaceBase() {
 		propertyMap = new LinkedHashMap<String, OrgUnitProperty>();
 		initRunnableContext();
+	}
+
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getProject()
+	 */
+	public Project getProject()
+	{
+		if (isClosed()) {
+			throw new ESProjectIsClosedException();
+		}
+		if (project == null) {
+			final URI projectURI = ESClientURIUtil.createProjectURI(this);
+			project = (Project) loadEObjectFromURI(projectURI);
+		}
+		return project;
+	}
+
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#setProject(org.eclipse.emf.emfstore.internal.common.model.Project)
+	 */
+	public void setProject(Project newProject)
+	{
+		project = newProject;
+	}
+
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getLocalChangePackage()
+	 */
+	public ChangePackage getLocalChangePackage()
+	{
+		if (isClosed()) {
+			throw new ESProjectIsClosedException();
+		}
+		if (localChangePackage == null) {
+			final URI lcpURI = ESClientURIUtil.createOperationsURI(this);
+			localChangePackage = (ChangePackage) loadEObjectFromURI(lcpURI);
+		}
+
+		return localChangePackage;
+	}
+
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#setLocalChangePackage(org.eclipse.emf.emfstore.internal.server.model.versioning.ChangePackage)
+	 */
+	public void setLocalChangePackage(ChangePackage newLocalChangePackage)
+	{
+		localChangePackage = newLocalChangePackage;
+	}
+
+	private EObject loadEObjectFromURI(URI uri) {
+		ResourceSet resourceSet = getResourceSetForContents();
+
+		if (resourceSet == null) {
+			final ESExtensionPoint extensionPoint = new ESExtensionPoint(
+				"org.eclipse.emf.emfstore.client.resourceSetProvider", //$NON-NLS-1$
+				true);
+			extensionPoint.setComparator(new ESPriorityComparator("priority", true)); //$NON-NLS-1$
+			extensionPoint.reload();
+			final ESResourceSetProvider resourceSetProvider = extensionPoint.getElementWithHighestPriority().getClass(
+				"class", //$NON-NLS-1$
+				ESResourceSetProvider.class);
+			resourceSet = resourceSetProvider.getResourceSet();
+		}
+
+		if (resourceSet.getURIConverter().exists(uri, null)) {
+			final Resource resource = resourceSet.getResource(uri, true);
+			return resource.getContents().get(0);
+		}
+
+		return null;
 	}
 
 	/**
@@ -568,6 +666,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl
 
 		if (!initCompleted) {
 			init();
+			initContents();
 		}
 
 		applyOperations(changePackage.getOperations(), true);
@@ -580,15 +679,35 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl
 	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#init()
 	 */
 	public void init() {
+		initResourcePersister();
+		initPropertyMap();
+		getResourceSetForContents();
+	}
+
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#initContents()
+	 */
+	public void initContents() {
+		// since project and local change package are decoupled from the project space, they may not have been loaded
+		// yet. simply calling the getters during initialize will make sure the project and change package have been
+		// loaded and added to a resourceset with the correct editing domain.
+		getProject();
+		getOperations();
+
+		// continue normal init
 		initCrossReferenceAdapter();
 
 		final ESCommandStack commandStack = (ESCommandStack)
-			ESWorkspaceProviderImpl.getInstance().getEditingDomain().getCommandStack();
+			contentEditingDomain.getCommandStack();
 
 		fileTransferManager = new FileTransferManager(this);
 		operationManager = new OperationManager(this);
 
-		initResourcePersister();
+		resourcePersister.addResource(getLocalChangePackage().eResource());
+		resourcePersister.addResource(getProject().eResource());
 
 		commandStack.addCommandStackObserver(operationManager);
 		commandStack.addCommandStackObserver(resourcePersister);
@@ -602,12 +721,69 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl
 			((ProjectImpl) getProject()).setUndetachable(resourcePersister);
 		}
 
-		initPropertyMap();
-
 		startChangeRecording();
 		cleanCutElements();
 
 		initCompleted = true;
+	}
+
+	/**
+	 * Returns the {@link ResourceSet} for the project and the local change package of this project space. If the
+	 * resource set was null, it will be created. Adds the editing domain.
+	 * 
+	 * @return the resource set
+	 */
+	private ResourceSet getResourceSetForContents() {
+		if (contentResourceSet == null) {
+			final ESExtensionPoint extensionPoint = new ESExtensionPoint(
+				"org.eclipse.emf.emfstore.client.resourceSetProvider", //$NON-NLS-1$
+				true);
+			extensionPoint.setComparator(new ESPriorityComparator("priority", true)); //$NON-NLS-1$
+			extensionPoint.reload();
+
+			final ESResourceSetProvider resourceSetProvider = extensionPoint.getElementWithHighestPriority().getClass(
+				"class", //$NON-NLS-1$
+				ESResourceSetProvider.class);
+
+			contentResourceSet = resourceSetProvider.getResourceSet();
+
+			if (contentEditingDomain == null) {
+				contentEditingDomain = getEditingDomainForContents(contentResourceSet);
+			}
+		}
+
+		return contentResourceSet;
+	}
+
+	/**
+	 * Returns the {@link EditingDomain} for this project space's project and local change package.
+	 * 
+	 * @param resourceSet the {@link ResourceSet} of the project and local change package
+	 * @return
+	 */
+	private EditingDomain getEditingDomainForContents(ResourceSet resourceSet) {
+		final ESEditingDomainProvider domainProvider = getDomainProvider();
+		if (domainProvider != null) {
+			return domainProvider.getEditingDomain(resourceSet);
+		}
+
+		AdapterFactory adapterFactory = new ComposedAdapterFactory(
+			ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+
+		adapterFactory = new ComposedAdapterFactory(new AdapterFactory[] { adapterFactory,
+			new ReflectiveItemProviderAdapterFactory() });
+
+		final AdapterFactoryEditingDomain domain = new AdapterFactoryEditingDomain(adapterFactory,
+			new EMFStoreBasicCommandStack(), resourceSet);
+		resourceSet.eAdapters().add(new AdapterFactoryEditingDomain.EditingDomainProvider(domain));
+		return domain;
+	}
+
+	private ESEditingDomainProvider getDomainProvider() {
+		// TODO EXPT PRIO
+		return new ESExtensionPoint("org.eclipse.emf.emfstore.client.editingDomainProvider")
+			.getClass("class",
+				ESEditingDomainProvider.class);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -649,8 +825,6 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl
 
 		if (!isTransient) {
 			resourcePersister.addResource(eResource());
-			resourcePersister.addResource(getLocalChangePackage().eResource());
-			resourcePersister.addResource(getProject().eResource());
 			resourcePersister.addDirtyStateChangeLister(new ESLocalProjectSaveStateNotifier(toAPI()));
 			ESWorkspaceProviderImpl.getObserverBus().register(resourcePersister);
 		}
@@ -673,35 +847,49 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl
 	 */
 	public void initResources(ResourceSet resourceSet) {
 		this.resourceSet = resourceSet;
+		final URI projectSpaceURI = ESClientURIUtil.createProjectSpaceURI(this);
+		setResourceCount(0);
+		final Resource projectSpaceResource = resourceSet.createResource(projectSpaceURI);
+		projectSpaceResource.getContents().add(this);
+		try {
+			ModelUtil.saveResource(projectSpaceResource, WorkspaceUtil.getResourceLogger());
+		} catch (final IOException e) {
+			WorkspaceUtil.logException("Project Space resource init failed!", e);
+		}
+		init();
+	}
+
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#initContentResources()
+	 */
+	public void initContentResources() {
 		initCompleted = true;
 
-		final URI projectSpaceURI = ESClientURIUtil.createProjectSpaceURI(this);
 		final URI operationsURI = ESClientURIUtil.createOperationsURI(this);
 		final URI projectURI = ESClientURIUtil.createProjectURI(this);
 
-		setResourceCount(0);
+		final ResourceSet contentResourceSet = getResourceSetForContents();
 
 		final List<Resource> resources = new ArrayList<Resource>();
-		final Resource resource = resourceSet.createResource(projectURI);
-		// if resource splitting fails, we need a reference to the old resource
+		final Resource resource = contentResourceSet.createResource(projectURI);
 		resource.getContents().add(getProject());
+		// if resource splitting fails, we need a reference to the old resource
 		resources.add(resource);
 		setResourceCount(getResourceCount() + 1);
 
 		for (final EObject modelElement : getProject().getAllModelElements()) {
-			((XMIResource) resource).setID(modelElement, getProject().getModelElementId(modelElement).getId());
+			((EMFStoreResource) resource).setID(modelElement, getProject().getModelElementId(modelElement).getId());
 		}
 
-		final Resource localChangePackageResource = resourceSet.createResource(operationsURI);
 		if (this.getLocalChangePackage() == null) {
 			setLocalChangePackage(VersioningFactory.eINSTANCE.createChangePackage());
 		}
-		localChangePackageResource.getContents().add(this.getLocalChangePackage());
+		final Resource localChangePackageResource = contentResourceSet.createResource(operationsURI);
+		localChangePackageResource.getContents().add(getLocalChangePackage());
 		resources.add(localChangePackageResource);
-
-		final Resource projectSpaceResource = resourceSet.createResource(projectSpaceURI);
-		projectSpaceResource.getContents().add(this);
-		resources.add(projectSpaceResource);
 
 		// save all resources that have been created
 		for (final Resource currentResource : resources) {
@@ -712,7 +900,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl
 			}
 		}
 
-		init();
+		initContents();
 	}
 
 	/**
@@ -872,7 +1060,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl
 					setMergedVersion(ModelUtil.clone(branchSpec));
 					return null;
 				}
-			});
+			}, getContentEditingDomain());
 		}
 	}
 
@@ -1272,8 +1460,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl
 			getProject().eAdapters().remove(crossReferenceAdapter);
 		}
 
-		final ESCommandStack commandStack = (ESCommandStack)
-			ESWorkspaceProviderImpl.getInstance().getEditingDomain().getCommandStack();
+		final ESCommandStack commandStack = (ESCommandStack) contentEditingDomain.getCommandStack();
 		commandStack.removeCommandStackObserver(operationManager);
 		commandStack.removeCommandStackObserver(resourcePersister);
 
@@ -1286,6 +1473,36 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl
 
 		operationManager.dispose();
 		resourcePersister.dispose();
+
+		operationManager = null;
+		resourcePersister = null;
+
+		if (getProject().eResource() != null) {
+			getProject().eResource().getResourceSet().getResources().remove(getProject().eResource());
+		}
+		if (getLocalChangePackage().eResource() != null) {
+			getLocalChangePackage().eResource().getResourceSet().getResources()
+				.remove(getLocalChangePackage().eResource());
+		}
+
+		if (eResource() instanceof EMFStoreResource) {
+			final EMFStoreResource emfStoreResource = (EMFStoreResource) eResource();
+			emfStoreResource.getEObjectToIDMap().clear();
+			emfStoreResource.getIDToEObjectMap().clear();
+		}
+		if (getProject().eResource() instanceof EMFStoreResource) {
+			final EMFStoreResource emfStoreResource = (EMFStoreResource) getProject().eResource();
+			emfStoreResource.getEObjectToIDMap().clear();
+			emfStoreResource.getIDToEObjectMap().clear();
+		}
+		if (getLocalChangePackage().eResource() instanceof EMFStoreResource) {
+			final EMFStoreResource emfStoreResource = (EMFStoreResource) getLocalChangePackage().eResource();
+			emfStoreResource.getEObjectToIDMap().clear();
+			emfStoreResource.getIDToEObjectMap().clear();
+		}
+
+		contentEditingDomain.getCommandStack().flush();
+
 		disposed = true;
 	}
 
@@ -1297,6 +1514,66 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl
 	 */
 	public boolean isShared() {
 		return getUsersession() != null;
+	}
+
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#isClosed()
+	 */
+	public boolean isClosed() {
+		return closed;
+	}
+
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#close(boolean)
+	 */
+	public void close(boolean saveBeforeClose) {
+		if (saveBeforeClose) {
+			save();
+		}
+		getWorkspace().removeProjectToProjectSpaceEntry(this);
+		dispose();
+		project = null;
+		localChangePackage = null;
+		closed = true;
+	}
+
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#open()
+	 */
+	public void open() {
+		closed = false;
+		init();
+		initContents();
+		getWorkspace().addProjectToProjectSpaceEntry(this);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getContentEditingDomain()
+	 */
+	public EditingDomain getContentEditingDomain() {
+		return contentEditingDomain;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#flushContentCommandStack()
+	 */
+	public void flushContentCommandStack() {
+		if (contentEditingDomain != null) {
+			contentEditingDomain.getCommandStack().flush();
+		}
 	}
 
 	private void notifyPreRevertMyChanges(final ChangePackage changePackage) {

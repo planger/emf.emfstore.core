@@ -16,6 +16,7 @@ import java.util.concurrent.Callable;
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.emf.emfstore.client.ESLocalProject;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
+import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESLocalProjectImpl;
 
 /**
  * Property tester to test if a project space has local changes.
@@ -39,10 +40,10 @@ public class ProjectHasLocalChangesTester extends PropertyTester {
 
 			return RunESCommand.runWithResult(new Callable<Boolean>() {
 				public Boolean call() throws Exception {
-					Boolean hasLocalChanges = new Boolean(localProject.hasUncommitedChanges());
+					final Boolean hasLocalChanges = new Boolean(localProject.hasUncommitedChanges());
 					return hasLocalChanges.equals(expectedValue);
 				}
-			});
+			}, ((ESLocalProjectImpl) localProject).toInternalAPI().getContentEditingDomain());
 		}
 
 		return false;

@@ -21,7 +21,6 @@ import org.eclipse.emf.emfstore.bowling.Tournament;
 import org.eclipse.emf.emfstore.client.ESLocalProject;
 import org.eclipse.emf.emfstore.client.ESWorkspaceProvider;
 import org.eclipse.emf.emfstore.client.test.common.dsl.Create;
-import org.eclipse.emf.emfstore.client.util.RunESCommand;
 
 /**
  * Utility class to easily create bowling model instances.
@@ -72,7 +71,7 @@ public final class ProjectChangeUtil {
 		tournamentA.getMatchups().add(matchupA);
 		tournamentA.getMatchups().add(matchupB);
 
-		RunESCommand.run(new Callable<Void>() {
+		localProject.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				localProject.getModelElements().add(leagueA);
 				localProject.getModelElements().add(leagueB);

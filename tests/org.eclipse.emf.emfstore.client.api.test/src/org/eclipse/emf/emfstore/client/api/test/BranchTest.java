@@ -107,7 +107,7 @@ public class BranchTest extends ESTestWithSharedProject {
 					noProgressMonitor());
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 
 		trunk.commit(noProgressMonitor());
 
@@ -142,7 +142,7 @@ public class BranchTest extends ESTestWithSharedProject {
 					noProgressMonitor());
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 
 		getLocalProject().commit(noProgressMonitor());
 

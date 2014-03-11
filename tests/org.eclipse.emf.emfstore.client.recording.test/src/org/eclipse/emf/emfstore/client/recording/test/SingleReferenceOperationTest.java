@@ -86,7 +86,7 @@ public class SingleReferenceOperationTest extends ESTest {
 				assertEquals(1, initiatedTestElements.size());
 				assertEquals(useCase, initiatedTestElements.get(0));
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -192,14 +192,14 @@ public class SingleReferenceOperationTest extends ESTest {
 		Add.toProject(getLocalProject(), useCase);
 		Add.toProject(getLocalProject(), oldActor);
 		Add.toProject(getLocalProject(), newActor);
-		Update.testElement(TestElementFeatures.nonContainedNTo1(), useCase, oldActor);
+		Update.testElement(getLocalProject(), TestElementFeatures.nonContainedNTo1(), useCase, oldActor);
 		assertEquals(oldActor, useCase.getNonContained_NTo1());
 
 		assertEquals(1, oldActor.getNonContained_1ToN().size());
 		assertEquals(useCase, oldActor.getNonContained_1ToN().get(0));
 		clearOperations();
 
-		Update.testElement(TestElementFeatures.nonContainedNTo1(), useCase, newActor);
+		Update.testElement(getLocalProject(), TestElementFeatures.nonContainedNTo1(), useCase, newActor);
 
 		assertEquals(newActor, useCase.getNonContained_NTo1());
 		assertEquals(1, newActor.getNonContained_1ToN().size());
@@ -239,7 +239,7 @@ public class SingleReferenceOperationTest extends ESTest {
 			protected void doRun() {
 				reversedSingleReferenceOperation.apply(getProject());
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(oldActor, useCase.getNonContained_NTo1());
 
@@ -285,7 +285,7 @@ public class SingleReferenceOperationTest extends ESTest {
 				clearOperations();
 				useCase.setContainer(section);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		// composite operation containing a multiref operation and a singleref operation expected
@@ -298,7 +298,7 @@ public class SingleReferenceOperationTest extends ESTest {
 				final AbstractOperation reverse = operations.get(0).reverse();
 				reverse.apply(getProject());
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), expectedProject));
 	}
@@ -337,7 +337,7 @@ public class SingleReferenceOperationTest extends ESTest {
 				assertEquals(proposal, newIssue.getContainedElements().get(0));
 				assertEquals(newIssue, proposal.getContainer());
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(1, getProjectSpace().getOperations().size());
 
@@ -404,7 +404,7 @@ public class SingleReferenceOperationTest extends ESTest {
 				proposal.setContainer(issue);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(1, issue.getContainedElements().size());
 		assertEquals(proposal, issue.getContainedElements().get(0));
@@ -416,7 +416,7 @@ public class SingleReferenceOperationTest extends ESTest {
 		assertEquals(issue, proposal.eContainer());
 
 		final ModelElementId proposalId = getProject().getModelElementId(proposal);
-		Update.testElement(TestElementFeatures.container(), proposal, null);
+		Update.testElement(getLocalProject(), TestElementFeatures.container(), proposal, null);
 
 		assertTrue(getProject().contains(issue));
 		assertFalse(getProject().contains(proposal));
@@ -472,7 +472,7 @@ public class SingleReferenceOperationTest extends ESTest {
 				fan.setFavouritePlayer(favPlayer);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(favPlayer, fan.getFavouritePlayer());
 		assertTrue(fan.isSetFavouritePlayer());
@@ -485,7 +485,7 @@ public class SingleReferenceOperationTest extends ESTest {
 			protected void doRun() {
 				fan.unsetFavouritePlayer();
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertFalse(favPlayer.equals(fan.getFavouritePlayer()));
 		assertEquals(null, fan.getFavouritePlayer());
@@ -522,7 +522,7 @@ public class SingleReferenceOperationTest extends ESTest {
 				fan.setFavouritePlayer(favPlayer);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(favPlayer, fan.getFavouritePlayer());
 		assertTrue(fan.isSetFavouritePlayer());
@@ -535,7 +535,7 @@ public class SingleReferenceOperationTest extends ESTest {
 			protected void doRun() {
 				fan.unsetFavouritePlayer();
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertFalse(favPlayer.equals(fan.getFavouritePlayer()));
 		assertEquals(null, fan.getFavouritePlayer());
@@ -559,7 +559,7 @@ public class SingleReferenceOperationTest extends ESTest {
 			protected void doRun() {
 				singleRefOp.reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(favPlayer, fan.getFavouritePlayer());
 		assertTrue(fan.isSetFavouritePlayer());
@@ -580,7 +580,7 @@ public class SingleReferenceOperationTest extends ESTest {
 				fan.setFavouritePlayer(favPlayer);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(favPlayer, fan.getFavouritePlayer());
 		assertTrue(fan.isSetFavouritePlayer());
@@ -592,7 +592,7 @@ public class SingleReferenceOperationTest extends ESTest {
 			protected void doRun() {
 				fan.unsetFavouritePlayer();
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertFalse(favPlayer.equals(fan.getFavouritePlayer()));
 		assertEquals(null, fan.getFavouritePlayer());
@@ -617,7 +617,7 @@ public class SingleReferenceOperationTest extends ESTest {
 			protected void doRun() {
 				singleRefOp.reverse().reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertFalse(favPlayer.equals(fan.getFavouritePlayer()));
 		assertEquals(null, fan.getFavouritePlayer());
@@ -637,7 +637,7 @@ public class SingleReferenceOperationTest extends ESTest {
 				getProject().addModelElement(fan);
 				getProject().addModelElement(favPlayer);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(false, fan.isSetFavouritePlayer());
 
@@ -649,7 +649,7 @@ public class SingleReferenceOperationTest extends ESTest {
 			protected void doRun() {
 				fan.setFavouritePlayer(favPlayer);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(favPlayer.equals(fan.getFavouritePlayer()));
 		assertEquals(favPlayer, fan.getFavouritePlayer());
@@ -672,7 +672,7 @@ public class SingleReferenceOperationTest extends ESTest {
 			protected void doRun() {
 				singleRefOp.reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(null, fan.getFavouritePlayer());
 		assertEquals(false, fan.isSetFavouritePlayer());
@@ -693,7 +693,7 @@ public class SingleReferenceOperationTest extends ESTest {
 				fan.setFavouriteMerchandise(merch);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(merch, fan.getFavouriteMerchandise());
 		assertTrue(fan.isSetFavouriteMerchandise());
@@ -706,7 +706,7 @@ public class SingleReferenceOperationTest extends ESTest {
 			protected void doRun() {
 				fan.unsetFavouriteMerchandise();
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertFalse(merch.equals(fan.getFavouriteMerchandise()));
 		assertEquals(null, fan.getFavouriteMerchandise());
@@ -737,7 +737,7 @@ public class SingleReferenceOperationTest extends ESTest {
 				fan.setFavouriteMerchandise(merch);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(merch, fan.getFavouriteMerchandise());
 		assertTrue(fan.isSetFavouriteMerchandise());
@@ -749,7 +749,7 @@ public class SingleReferenceOperationTest extends ESTest {
 			protected void doRun() {
 				fan.unsetFavouriteMerchandise();
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertFalse(merch.equals(fan.getFavouriteMerchandise()));
 		assertEquals(null, fan.getFavouriteMerchandise());
@@ -768,7 +768,7 @@ public class SingleReferenceOperationTest extends ESTest {
 			protected void doRun() {
 				creaDelOp.reverse().reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertFalse(merch.equals(fan.getFavouriteMerchandise()));
 		assertEquals(null, fan.getFavouriteMerchandise());
@@ -789,7 +789,7 @@ public class SingleReferenceOperationTest extends ESTest {
 				fan.setFavouriteMerchandise(merch);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(merch, fan.getFavouriteMerchandise());
 		assertTrue(fan.isSetFavouriteMerchandise());
@@ -802,7 +802,7 @@ public class SingleReferenceOperationTest extends ESTest {
 			protected void doRun() {
 				fan.unsetFavouriteMerchandise();
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertFalse(merch.equals(fan.getFavouriteMerchandise()));
 		assertEquals(null, fan.getFavouriteMerchandise());
@@ -820,7 +820,7 @@ public class SingleReferenceOperationTest extends ESTest {
 			protected void doRun() {
 				creaDelOp.reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(merch.getName(), fan.getFavouriteMerchandise().getName());
 		assertEquals(merch.getPrice(), fan.getFavouriteMerchandise().getPrice());
@@ -842,7 +842,7 @@ public class SingleReferenceOperationTest extends ESTest {
 				assertEquals(null, fan.getFavouriteMerchandise());
 				assertEquals(false, fan.isSetFavouriteMerchandise());
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -854,7 +854,7 @@ public class SingleReferenceOperationTest extends ESTest {
 				assertEquals(merch, fan.getFavouriteMerchandise());
 				assertTrue(fan.isSetFavouriteMerchandise());
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -873,7 +873,7 @@ public class SingleReferenceOperationTest extends ESTest {
 			protected void doRun() {
 				singleRefOp.reverse().apply(getProject());
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertNull(fan.getFavouriteMerchandise());
 		assertFalse(fan.isSetFavouriteMerchandise());
@@ -891,7 +891,7 @@ public class SingleReferenceOperationTest extends ESTest {
 				assertEquals(null, fan.getFavouritePlayer());
 				assertTrue(!fan.isSetFavouritePlayer());
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		clearOperations();
 		final Project secondProject = ModelUtil.clone(getProject());
@@ -903,7 +903,7 @@ public class SingleReferenceOperationTest extends ESTest {
 				assertEquals(null, fan.getFavouritePlayer());
 				assertTrue(fan.isSetFavouritePlayer());
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -915,7 +915,7 @@ public class SingleReferenceOperationTest extends ESTest {
 			protected void doRun() {
 				singleRefOp.apply(secondProject);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertTrue(ModelUtil.areEqual(getProject(), secondProject));
 	}

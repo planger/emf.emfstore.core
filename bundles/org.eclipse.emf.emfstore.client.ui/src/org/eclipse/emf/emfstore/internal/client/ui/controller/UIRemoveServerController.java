@@ -50,7 +50,7 @@ public class UIRemoveServerController extends
 	 */
 	public UIRemoveServerController(Shell shell, ESServer server) {
 		super(shell);
-		this.serverInfo = ((ESServerImpl) server).toInternalAPI();
+		serverInfo = ((ESServerImpl) server).toInternalAPI();
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class UIRemoveServerController extends
 	@Override
 	public Void doRun(IProgressMonitor monitor) throws ESException {
 
-		boolean shouldDelete = MessageDialog.openQuestion(getShell(),
+		final boolean shouldDelete = MessageDialog.openQuestion(getShell(),
 			"Confirm deletion", String.format(
 				"Are you sure you want to delete the server \'%s\'",
 				serverInfo.getName()));
@@ -72,13 +72,13 @@ public class UIRemoveServerController extends
 		}
 
 		// TODO OTS
-		ESWorkspaceImpl workspace = ESWorkspaceProviderImpl.getInstance()
+		final ESWorkspaceImpl workspace = ESWorkspaceProviderImpl.getInstance()
 			.getWorkspace();
-		EList<ProjectSpace> projectSpaces = workspace.toInternalAPI()
+		final EList<ProjectSpace> projectSpaces = workspace.toInternalAPI()
 			.getProjectSpaces();
-		ArrayList<ProjectSpace> usedSpaces = new ArrayList<ProjectSpace>();
+		final ArrayList<ProjectSpace> usedSpaces = new ArrayList<ProjectSpace>();
 
-		for (ProjectSpace projectSpace : projectSpaces) {
+		for (final ProjectSpace projectSpace : projectSpaces) {
 			if (projectSpace.getUsersession() != null
 				&& projectSpace.getUsersession().getServerInfo()
 					.equals(serverInfo)) {
@@ -110,7 +110,7 @@ public class UIRemoveServerController extends
 
 		final StringBuilder message = new StringBuilder();
 
-		for (ProjectSpace pSpace : usedSpaces) {
+		for (final ProjectSpace pSpace : usedSpaces) {
 			message.append("\n" + pSpace.getProjectName());
 		}
 

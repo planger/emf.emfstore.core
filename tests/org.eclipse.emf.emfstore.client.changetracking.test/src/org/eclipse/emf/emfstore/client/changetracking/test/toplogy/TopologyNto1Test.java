@@ -64,7 +64,7 @@ public class TopologyNto1Test extends ESTest {
 
 		clearOperations();
 
-		Update.testElement(TestElementFeatures.container(), useCase, section);
+		Update.testElement(getLocalProject(), TestElementFeatures.container(), useCase, section);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -112,14 +112,14 @@ public class TopologyNto1Test extends ESTest {
 		Add.toProject(getLocalProject(), section);
 		Add.toProject(getLocalProject(), useCase);
 
-		Update.testElement(TestElementFeatures.container(), useCase, section);
+		Update.testElement(getLocalProject(), TestElementFeatures.container(), useCase, section);
 
 		assertTrue(section.getContainedElements().contains(useCase));
 
 		clearOperations();
 		final ModelElementId useCaseId = ModelUtil.getProject(useCase).getModelElementId(useCase);
 
-		Update.testElement(TestElementFeatures.container(), useCase, null);
+		Update.testElement(getLocalProject(), TestElementFeatures.container(), useCase, null);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(1, operations.size());
@@ -163,7 +163,7 @@ public class TopologyNto1Test extends ESTest {
 
 		clearOperations();
 
-		Update.testElement(TestElementFeatures.nonContainedNTo1(), useCase, actor);
+		Update.testElement(getLocalProject(), TestElementFeatures.nonContainedNTo1(), useCase, actor);
 
 		assertSame(useCase.getNonContained_NTo1(), actor);
 
@@ -214,13 +214,13 @@ public class TopologyNto1Test extends ESTest {
 		Add.toProject(getLocalProject(), actor);
 		Add.toProject(getLocalProject(), useCase);
 
-		Update.testElement(TestElementFeatures.nonContainedNTo1(), useCase, actor);
+		Update.testElement(getLocalProject(), TestElementFeatures.nonContainedNTo1(), useCase, actor);
 
 		assertSame(useCase.getNonContained_NTo1(), actor);
 
 		clearOperations();
 
-		Update.testElement(TestElementFeatures.nonContainedNTo1(), useCase, null);
+		Update.testElement(getLocalProject(), TestElementFeatures.nonContainedNTo1(), useCase, null);
 
 		assertNull(useCase.getNonContained_NTo1());
 
@@ -272,13 +272,13 @@ public class TopologyNto1Test extends ESTest {
 		Add.toProject(getLocalProject(), otherTestElement);
 		Add.toProject(getLocalProject(), useCase);
 
-		Update.testElement(TestElementFeatures.nonContainedNTo1(), useCase, actor);
+		Update.testElement(getLocalProject(), TestElementFeatures.nonContainedNTo1(), useCase, actor);
 
 		assertSame(useCase.getNonContained_NTo1(), actor);
 
 		clearOperations();
 
-		Update.testElement(TestElementFeatures.nonContainedNTo1(), useCase, otherTestElement);
+		Update.testElement(getLocalProject(), TestElementFeatures.nonContainedNTo1(), useCase, otherTestElement);
 
 		assertSame(otherTestElement, useCase.getNonContained_NTo1());
 
@@ -341,13 +341,13 @@ public class TopologyNto1Test extends ESTest {
 		Add.toProject(getLocalProject(), section2);
 		Add.toProject(getLocalProject(), useCase);
 
-		Update.testElement(TestElementFeatures.container(), useCase, section1);
+		Update.testElement(getLocalProject(), TestElementFeatures.container(), useCase, section1);
 
 		assertTrue(section1.getContainedElements().contains(useCase));
 
 		clearOperations();
 
-		Update.testElement(TestElementFeatures.container(), useCase, section2);
+		Update.testElement(getLocalProject(), TestElementFeatures.container(), useCase, section2);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -408,13 +408,13 @@ public class TopologyNto1Test extends ESTest {
 		Add.toProject(getLocalProject(), pack);
 		Add.toProject(getLocalProject(), br);
 
-		Update.testElement(TestElementFeatures.container(), br, section);
+		Update.testElement(getLocalProject(), TestElementFeatures.container(), br, section);
 
 		assertTrue(section.getContainedElements().contains(br));
 
 		clearOperations();
 
-		Update.testElement(TestElementFeatures.container2(), br, pack);
+		Update.testElement(getLocalProject(), TestElementFeatures.container2(), br, pack);
 
 		assertFalse(section.getContainedElements().contains(br));
 		assertTrue(pack.getContainedElements2().contains(br));
@@ -481,11 +481,11 @@ public class TopologyNto1Test extends ESTest {
 		Add.toProject(getLocalProject(), section);
 		Add.toProject(getLocalProject(), solution);
 
-		Update.testElement(TestElementFeatures.containedElement(), issue, solution);
+		Update.testElement(getLocalProject(), TestElementFeatures.containedElement(), issue, solution);
 
 		clearOperations();
 
-		Update.testElement(TestElementFeatures.container(), solution, section);
+		Update.testElement(getLocalProject(), TestElementFeatures.container(), solution, section);
 
 		assertTrue(section.getContainedElements().contains(solution));
 		assertNull(issue.getContainedElement());

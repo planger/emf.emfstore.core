@@ -11,6 +11,8 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model.util;
 
+import org.eclipse.emf.edit.domain.EditingDomain;
+
 /**
  * Command that can buffer a result for later retrieval.
  * 
@@ -57,6 +59,18 @@ public abstract class EMFStoreCommandWithResult<T> extends AbstractEMFStoreComma
 	 */
 	public T run(boolean ignoreExceptions) {
 		super.aRun(ignoreExceptions);
+		return this.result;
+	}
+
+	/**
+	 * Executes the command on the given editing domain.
+	 * 
+	 * @param editingDomain the editing domain
+	 * @param ignoreExceptions true if any thrown exception in the execution of the command should be ignored.
+	 * @return the result
+	 */
+	public T run(EditingDomain editingDomain, boolean ignoreExceptions) {
+		super.aRun(editingDomain, ignoreExceptions);
 		return this.result;
 	}
 

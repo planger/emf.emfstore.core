@@ -8,11 +8,13 @@
  * 
  * Contributors:
  * Edgar Mueller - initial API and implementation
+ * Johannes Faltermeier - added run methods with editing domain
  ******************************************************************************/
 package org.eclipse.emf.emfstore.client.util;
 
 import java.util.concurrent.Callable;
 
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommand;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommandWithException;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommandWithResult;
@@ -40,7 +42,7 @@ public final class RunESCommand {
 	public static class WithException {
 
 		/**
-		 * Executes the given @link Callable} and returns the result.
+		 * Executes the given {@link Callable} and returns the result.
 		 * 
 		 * @param callable
 		 *            the callable to be execued
@@ -84,7 +86,66 @@ public final class RunESCommand {
 		}
 
 		/**
-		 * Executes the given {@link Callable} and returns the result.
+		 * 
+		 * Executes the given {@link Callable} on the editing domain and returns the result.
+		 * <p>
+		 * <b>Please note:</b>
+		 * <p>
+		 * If you want to execute the callable on the editing domain of the workspace it is more convenient to use
+		 * {@link RunESCommand.WithException#runWithResult(Class, Callable)}
+		 * <p>
+		 * If you want to change model elements in an {@link org.eclipse.emf.emfstore.client.ESLocalProject
+		 * ESLocalProject} you can use
+		 * {@link org.eclipse.emf.emfstore.client.ESLocalProject#runWithResult(Class, Callable)
+		 * ESLocalProject.runWithResult(Class, Callable)} which will run the callable on the project's editing domain
+		 * <p>
+		 * 
+		 * @param callable
+		 *            the callable to be execued
+		 * @param exceptionType the type of the exception that might be thrown during execution
+		 * @param editingDomain the editing domain to execute the command on
+		 * @return the return value of the Callable
+		 * 
+		 * @param <E> Exception in case an error occurs during execution of the Callable
+		 * @param <T> the return type of the Callable
+		 * @throws E on execution failure
+		 * @since 1.2
+		 */
+		public static <T, E extends Exception> T runWithResult(final Class<E> exceptionType,
+			final Callable<T> callable, EditingDomain editingDomain)
+			throws E {
+			final EMFStoreCommandWithResultAndException<T, E> cmd = new EMFStoreCommandWithResultAndException<T, E>() {
+				@Override
+				protected T doRun() {
+					try {
+						return callable.call();
+						// BEGIN SUPRESS CATCH EXCEPTION
+					} catch (final Exception e) {
+						// END SUPRESS CATCH EXCEPTION
+						if (exceptionType.isInstance(e)) {
+							setException(exceptionType.cast(e));
+						} else if (e instanceof RuntimeException) {
+							throw (RuntimeException) e;
+						} else {
+							throw new RuntimeException(e);
+						}
+					}
+
+					return null;
+				}
+			};
+
+			final T result = cmd.run(editingDomain, false);
+
+			if (cmd.hasException()) {
+				throw cmd.getException();
+			}
+
+			return result;
+		}
+
+		/**
+		 * Executes the given {@link Callable}.
 		 * 
 		 * @param callable
 		 *            the callable to be executed
@@ -120,10 +181,61 @@ public final class RunESCommand {
 				throw cmd.getException();
 			}
 		}
+
+		/**
+		 * Executes the given {@link Callable} on the editing domain.
+		 * <p>
+		 * <b>Please note:</b>
+		 * <p>
+		 * If you want to execute the callable on the editing domain of the workspace it is more convenient to use
+		 * {@link RunESCommand.WithException#run(Class, Callable)}
+		 * <p>
+		 * If you want to change model elements in an {@link org.eclipse.emf.emfstore.client.ESLocalProject
+		 * ESLocalProject} you can use {@link org.eclipse.emf.emfstore.client.ESLocalProject#run(Class, Callable)
+		 * ESLocalProject.run(Class, Callable)} which will run the callable on the project's editing domain
+		 * <p>
+		 * 
+		 * @param callable
+		 *            the callable to be executed
+		 * @param exceptionType the type of the exception
+		 * @param editingDomain the editing domain to execute the command on
+		 * @param <T> the exception type
+		 * @throws T in case an error occurs during execution of the callable
+		 * @since 1.2
+		 */
+		public static <T extends Exception> void run(final Class<T> exceptionType, final Callable<Void> callable,
+			EditingDomain editingDomain)
+			throws T {
+
+			final EMFStoreCommandWithException<T> cmd = new EMFStoreCommandWithException<T>() {
+				@Override
+				protected void doRun() {
+					try {
+						callable.call();
+						// BEGIN SUPRESS CATCH EXCEPTION
+					} catch (final Exception e) {
+						// END SUPRESS CATCH EXCEPTION
+						if (exceptionType.isInstance(e)) {
+							setException(exceptionType.cast(e));
+						} else if (e instanceof RuntimeException) {
+							throw (RuntimeException) e;
+						} else {
+							throw new RuntimeException(e);
+						}
+					}
+				}
+			};
+
+			cmd.run(editingDomain, false);
+
+			if (cmd.hasException()) {
+				throw cmd.getException();
+			}
+		}
 	}
 
 	/**
-	 * Executes the given {@link Callable} and returns the result.
+	 * Executes the given {@link Callable}.
 	 * 
 	 * @param callable
 	 *            the callable to be executed
@@ -141,6 +253,39 @@ public final class RunESCommand {
 				}
 			}
 		}.run(false);
+	}
+
+	/**
+	 * Executes the given {@link Callable} on the editing domain.
+	 * <p>
+	 * <b>Please note:</b>
+	 * <p>
+	 * If you want to execute the callable on the editing domain of the workspace it is more convenient to use
+	 * {@link RunESCommand#run(Callable)}
+	 * <p>
+	 * If you want to change model elements in an {@link org.eclipse.emf.emfstore.client.ESLocalProject ESLocalProject}
+	 * you can use {@link org.eclipse.emf.emfstore.client.ESLocalProject#run(Callable) ESLocalProject.run(Callable)}
+	 * which will run the callable on the project's editing domain
+	 * <p>
+	 * 
+	 * @param callable
+	 *            the callable to be executed
+	 * @param editingDomain the editing domain to execute the command on
+	 * @since 1.2
+	 */
+	public static void run(final Callable<Void> callable, EditingDomain editingDomain) {
+		new EMFStoreCommand() {
+			@Override
+			protected void doRun() {
+				try {
+					callable.call();
+					// BEGIN SUPRESS CATCH EXCEPTION
+				} catch (final Exception e) {
+					// END SUPRESS CATCH EXCEPTION
+					// ignore
+				}
+			}
+		}.run(editingDomain, false);
 	}
 
 	/**
@@ -166,5 +311,42 @@ public final class RunESCommand {
 				return null;
 			}
 		}.run(false);
+	}
+
+	/**
+	 * Executes the given {@link Callable} on the editing domain and returns the result.
+	 * <p>
+	 * <b>Please note:</b>
+	 * <p>
+	 * If you want to execute the callable on the editing domain of the workspace it is more convenient to use
+	 * {@link RunESCommand#runWithResult(Callable)}
+	 * <p>
+	 * If you want to change model elements in an {@link org.eclipse.emf.emfstore.client.ESLocalProject ESLocalProject}
+	 * you can use {@link org.eclipse.emf.emfstore.client.ESLocalProject#runWithResult(Callable)
+	 * ESLocalProject.runWithResult(Callable)} which will run the callable on the project's editing domain
+	 * <p>
+	 * 
+	 * @param callable
+	 *            the callable to be executed
+	 * @param editingDomain the editing domain to execute the command on
+	 * @return the return value of the callable
+	 * 
+	 * @param <T> the return type of the callable
+	 * @since 1.2
+	 */
+	public static <T> T runWithResult(final Callable<T> callable, EditingDomain editingDomain) {
+		return new EMFStoreCommandWithResult<T>() {
+			@Override
+			protected T doRun() {
+				try {
+					return callable.call();
+					// BEGIN SUPRESS CATCH EXCEPTION
+				} catch (final Exception e) {
+					// END SUPRESS CATCH EXCEPTION
+					// ignore
+				}
+				return null;
+			}
+		}.run(editingDomain, false);
 	}
 }

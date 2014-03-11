@@ -54,13 +54,20 @@ public class ComparingESTest extends ESTest {
 		RunESCommand.run(new ESVoidCallable() {
 			@Override
 			public void run() {
-				final WorkspaceBase workspace = (WorkspaceBase) ESWorkspaceProviderImpl.getInstance().getWorkspace()
-					.toInternalAPI();
-				workspace.cloneProject(CLONED_PROJECT_NAME, getProject());
-				clonedProjectSpace = (ProjectSpaceBase) workspace.cloneProject(CLONED_PROJECT_NAME, getProject());
-				assertTrue(ModelUtil.areEqual(getProject(), clonedProjectSpace.getProject()));
+				final WorkspaceBase workspace = (WorkspaceBase) ESWorkspaceProviderImpl
+					.getInstance().getWorkspace().toInternalAPI();
+				clonedProjectSpace = (ProjectSpaceBase) workspace.cloneProject(
+					CLONED_PROJECT_NAME, getProject());
+				assertTrue(ModelUtil.areEqual(getProject(),
+					clonedProjectSpace.getProject()));
 			}
 		});
+		RunESCommand.run(new ESVoidCallable() {
+			@Override
+			public void run() {
+				clonedProjectSpace.initContentResources();
+			}
+		}, clonedProjectSpace.getContentEditingDomain());
 	}
 
 	/**
@@ -71,16 +78,17 @@ public class ComparingESTest extends ESTest {
 		RunESCommand.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				if (isCompareAtEnd) {
-					clonedProjectSpace.applyOperations(getProjectSpace().getOperations(), false);
-					clonedProjectSpace
-						.applyOperations(getProjectSpace().getOperationManager().clearOperations(), false);
+					clonedProjectSpace.applyOperations(getProjectSpace()
+						.getOperations(), false);
+					clonedProjectSpace.applyOperations(getProjectSpace()
+						.getOperationManager().clearOperations(), false);
 				} else {
 					getProjectSpace().getOperationManager().clearOperations();
 				}
 				getProjectSpace().getOperations().clear();
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 
 	}
 
@@ -94,19 +102,24 @@ public class ComparingESTest extends ESTest {
 		String clonedProjectString = StringUtils.EMPTY;
 
 		if (isCompareAtEnd) {
-			clonedProjectSpace.applyOperations(getProjectSpace().getOperations(), true);
+			clonedProjectSpace.applyOperations(getProjectSpace()
+				.getOperations(), true);
 
 			try {
-				projectString = ModelUtil.eObjectToString(getProjectSpace().getProject());
-				clonedProjectString = ModelUtil.eObjectToString(clonedProjectSpace.getProject());
-				areEqual = ModelUtil.areEqual(getProject(), clonedProjectSpace.getProject());
+				projectString = ModelUtil.eObjectToString(getProjectSpace()
+					.getProject());
+				clonedProjectString = ModelUtil
+					.eObjectToString(clonedProjectSpace.getProject());
+				areEqual = ModelUtil.areEqual(getProject(),
+					clonedProjectSpace.getProject());
 			} catch (final SerializationException ex) {
 				fail(ex.getMessage());
 			}
 			clonedProjectSpace.save();
 
 			assertTrue(
-				MessageFormat.format("Projects are not equal.\n\n{0}\n\n{1}", projectString, clonedProjectString), areEqual); //$NON-NLS-1$
+				MessageFormat
+					.format("Projects are not equal.\n\n{0}\n\n{1}", projectString, clonedProjectString), areEqual); //$NON-NLS-1$
 		}
 		super.after();
 	}

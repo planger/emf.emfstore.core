@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Otto von Wesendonk, Edgar Mueller, Maximilian Koegel - initial API and implementation
+ * Johannes Faltermeier - Decoupling ProjectSpace from Project and ChangePackage
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model;
 
@@ -20,6 +21,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.emfstore.client.callbacks.ESCommitCallback;
 import org.eclipse.emf.emfstore.client.callbacks.ESUpdateCallback;
 import org.eclipse.emf.emfstore.client.handler.ESRunnableContext;
@@ -107,7 +109,7 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 * 
 	 * @generated NOT
 	 */
-	String RUNNABLE_CONTEXT_ID = "org.eclipse.emf.emfstore.client.runnableChangeContext";
+	String RUNNABLE_CONTEXT_ID = "org.eclipse.emf.emfstore.client.runnableChangeContext"; //$NON-NLS-1$
 
 	/**
 	 * <p>
@@ -394,36 +396,6 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	void setWorkspace(Workspace value);
 
 	/**
-	 * Returns the value of the '<em><b>Local Change Package</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Local Change Package</em>' containment reference isn't clear, there really should be
-	 * more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * 
-	 * @return the value of the '<em>Local Change Package</em>' containment reference.
-	 * @see #setLocalChangePackage(ChangePackage)
-	 * @see org.eclipse.emf.emfstore.internal.client.model.ModelPackage#getProjectSpace_LocalChangePackage()
-	 * @model containment="true" resolveProxies="true"
-	 * @generated
-	 */
-	ChangePackage getLocalChangePackage();
-
-	/**
-	 * Sets the value of the ' {@link org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getLocalChangePackage
-	 * <em>Local Change Package</em>}' containment reference. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Local Change Package</em>'
-	 *            containment reference.
-	 * @see #getLocalChangePackage()
-	 * @generated
-	 */
-	void setLocalChangePackage(ChangePackage value);
-
-	/**
 	 * Returns the value of the '<em><b>Merged Version</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -582,23 +554,6 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	List<AbstractOperation> getOperations();
 
 	/**
-	 * Returns the value of the '<em><b>Project</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Project</em>' reference isn't clear, there really should be more of a description
-	 * here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * 
-	 * @return the value of the '<em>Project</em>' containment reference.
-	 * @see #setProject(Project)
-	 * @see org.eclipse.emf.emfstore.internal.client.model.ModelPackage#getProjectSpace_Project()
-	 * @model containment="true" resolveProxies="true"
-	 * @generated
-	 */
-	Project getProject();
-
-	/**
 	 * Returns the value of the '<em><b>Project Description</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -733,11 +688,18 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	void importLocalChanges(String fileName) throws IOException;
 
 	/**
-	 * Initialize the project space and its resources.
+	 * Initialize the project space and its resource.
 	 * 
 	 * @generated NOT
 	 */
 	void init();
+
+	/**
+	 * Initialize the project, local change package and their resources.
+	 * 
+	 * @generated NOT
+	 */
+	void initContents();
 
 	/**
 	 * Initialize the resources of the project space.
@@ -747,6 +709,13 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 * @generated NOT
 	 */
 	void initResources(ResourceSet resourceSet);
+
+	/**
+	 * Initialize the project and projectspace resource.
+	 * 
+	 * @generated NOT
+	 */
+	void initContentResources();
 
 	/**
 	 * Deletes the project space.
@@ -940,18 +909,6 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	void setLastUpdated(Date value);
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getProject
-	 * <em>Project</em>}' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 * 
-	 * @param value the new value of the '<em>Project</em>' containment reference.
-	 * @see #getProject()
-	 * @generated
-	 */
-	void setProject(Project value);
-
-	/**
 	 * Sets the value of the '{@link org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#getProjectDescription
 	 * <em>Project Description</em>}' attribute.
 	 * <!-- begin-user-doc --> <!--
@@ -1128,5 +1085,66 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 * @generated NOt
 	 */
 	boolean isShared();
+
+	/**
+	 * Whether this project space has been closed.
+	 * 
+	 * @return <code>true</code> if the project space has been closed, <code>false</code> otherwise
+	 */
+	boolean isClosed();
+
+	/**
+	 * Closes the project space.
+	 * 
+	 * @param saveBeforeClose <code>true</code> if the project space shall be saved before closing, <code>false</code>
+	 *            otherwise. Unsaved changes will be lost.
+	 */
+	void close(boolean saveBeforeClose);
+
+	/**
+	 * Opens the project space.
+	 */
+	void open();
+
+	/**
+	 * Return the editing domain which tracks changes on the projects space's {@link Project} and local
+	 * {@link ChangePackage}.
+	 * 
+	 * @return the editing domain of the contents
+	 */
+	EditingDomain getContentEditingDomain();
+
+	/**
+	 * Clears the command stack tracking changes on the {@link Project} and local {@link ChangePackage}.
+	 */
+	void flushContentCommandStack();
+
+	/**
+	 * Return the local {@link ChangePackage} associated with this ProjectSpace.
+	 * 
+	 * @return the local ChangePackage
+	 */
+	ChangePackage getLocalChangePackage();
+
+	/**
+	 * Setter for the local {@link ChangePackage}.
+	 * 
+	 * @param newLocalChangePackage the new local ChangePackage
+	 */
+	void setLocalChangePackage(ChangePackage newLocalChangePackage);
+
+	/**
+	 * Setter for the {@link Project}.
+	 * 
+	 * @param newProject the new project
+	 */
+	void setProject(Project newProject);
+
+	/**
+	 * Returns the {@link Project} associated with this ProjectSpace.
+	 * 
+	 * @return the project
+	 */
+	Project getProject();
 
 } // ProjectContainer

@@ -74,7 +74,7 @@ public class SimpleOperationObserverTest extends ESTest {
 				getProjectSpace().revert();
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 
 		assertTrue(operationPerformed);
 	}

@@ -11,6 +11,8 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model.util;
 
+import org.eclipse.emf.edit.domain.EditingDomain;
+
 /**
  * Recording command that can buffer a result for later retrieval.
  * 
@@ -49,6 +51,16 @@ public abstract class EMFStoreCommand extends AbstractEMFStoreCommand {
 	@Override
 	protected void commandBody() {
 		doRun();
+	}
+
+	/**
+	 * Executes the command on the given editing domain.
+	 * 
+	 * @param editingDomain the editing domain
+	 * @param ignoreExceptions true if any thrown exception in the execution of the command should be ignored.
+	 */
+	public void run(EditingDomain editingDomain, boolean ignoreExceptions) {
+		super.aRun(editingDomain, ignoreExceptions);
 	}
 
 	/**

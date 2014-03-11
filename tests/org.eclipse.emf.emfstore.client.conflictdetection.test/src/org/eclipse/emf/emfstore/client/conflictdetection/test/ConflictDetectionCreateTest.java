@@ -62,7 +62,7 @@ public class ConflictDetectionCreateTest extends ConflictDetectionTest {
 				clearOperations();
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 
 		final ModelElementId modelElementId = getProjectSpace().getProject().getModelElementId(testElement);
 		final ProjectSpace secondProjectSpace = cloneProjectSpace(getProjectSpace());
@@ -74,14 +74,14 @@ public class ConflictDetectionCreateTest extends ConflictDetectionTest {
 				testElement.getStringToStringMap().put(FOO, BAR);
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 
 		RunESCommand.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				clonedTestElement.getStringToStringMap().put(FOO, QUUX);
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = secondProjectSpace.getOperations();
@@ -102,7 +102,7 @@ public class ConflictDetectionCreateTest extends ConflictDetectionTest {
 				clearOperations();
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 
 		final ModelElementId modelElementId = getProjectSpace().getProject().getModelElementId(testElement);
 		final ProjectSpace secondProjectSpace = cloneProjectSpace(getProjectSpace());
@@ -114,14 +114,14 @@ public class ConflictDetectionCreateTest extends ConflictDetectionTest {
 				testElement.setName(FOO);
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 
 		RunESCommand.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				clonedTestElement.setName(FOO);
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = secondProjectSpace.getOperations();

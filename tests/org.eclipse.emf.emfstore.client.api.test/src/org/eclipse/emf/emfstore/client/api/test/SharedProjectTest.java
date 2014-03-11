@@ -99,6 +99,29 @@ public class SharedProjectTest extends ESTestWithSharedProject {
 		}
 	}
 
+	// TODO
+	// @Test
+	// public void testFlushCommandStackUponCommit() {
+	// addPlayerToProject();
+	// final CommandStack cs = ((ESLocalProjectImpl) localProject)
+	// .toInternalAPI().getContentEditingDomain().getCommandStack();
+	// assertNotNull(cs.getMostRecentCommand());
+	// cs.addCommandStackListener(new CommandStackListener() {
+	// public void commandStackChanged(EventObject event) {
+	// if (cs.getMostRecentCommand() == null) {
+	// commandStackFlushed = true;
+	// }
+	// }
+	// });
+	// try {
+	// localProject.commit(new NullProgressMonitor());
+	// } catch (final ESException e) {
+	// log(e);
+	// fail(e.getMessage());
+	// }
+	// assertTrue(commandStackFlushed);
+	// }
+
 	public void testCommitWithoutChange() throws ESException {
 		getLocalProject().commit(null, new CommitCallbackAdapter() {
 			@Override
@@ -261,7 +284,7 @@ public class SharedProjectTest extends ESTestWithSharedProject {
 				player.setName("A"); //$NON-NLS-1$
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 
 		getLocalProject().commit(monitor);
 
@@ -270,7 +293,7 @@ public class SharedProjectTest extends ESTestWithSharedProject {
 				checkedoutPlayer.setName("B"); //$NON-NLS-1$
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 
 		checkedoutCopy.commit(monitor);
 	}
@@ -286,7 +309,7 @@ public class SharedProjectTest extends ESTestWithSharedProject {
 				getLocalProject().getModelElements().add(league);
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 		assertTrue(getLocalProject().contains(league));
 
 		final ESLocalProject secondProject = getWorkspace().createLocalProject(SECOND_TEST_PROJECT_NAME);
@@ -300,7 +323,7 @@ public class SharedProjectTest extends ESTestWithSharedProject {
 				tournament.getPlayers().add(player);
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 
 		getLocalProject().save();
 		secondProject.save();

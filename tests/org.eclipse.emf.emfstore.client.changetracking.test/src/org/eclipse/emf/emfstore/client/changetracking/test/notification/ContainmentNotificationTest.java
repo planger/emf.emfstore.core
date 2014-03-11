@@ -65,7 +65,7 @@ public class ContainmentNotificationTest extends ESTest {
 				// section2.getModelElements().add(useCase);
 				useCase.setContainer(section2);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final NotificationRecording recording = ((ProjectSpaceImpl) getProjectSpace()).getNotificationRecorder()
 			.getRecording();
@@ -120,7 +120,7 @@ public class ContainmentNotificationTest extends ESTest {
 				// req.getRefiningRequirements().add(child);
 				child.setContainer2(req);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<NotificationInfo> rec = getRecording().asMutableList();
 

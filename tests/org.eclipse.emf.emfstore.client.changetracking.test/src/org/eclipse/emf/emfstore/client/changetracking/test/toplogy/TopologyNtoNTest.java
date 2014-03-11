@@ -56,7 +56,7 @@ public class TopologyNtoNTest extends ESTest {
 
 		clearOperations();
 
-		Add.toNonContainedNToM(useCase, mileStone);
+		Add.toNonContainedNToM(getLocalProject(), useCase, mileStone);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -112,7 +112,7 @@ public class TopologyNtoNTest extends ESTest {
 
 		clearOperations();
 
-		Add.toNonContainedNToM(useCase, Arrays.asList(stones));
+		Add.toNonContainedNToM(getLocalProject(), useCase, Arrays.asList(stones));
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -165,11 +165,11 @@ public class TopologyNtoNTest extends ESTest {
 		Add.toProject(getLocalProject(), mileStone);
 		Add.toProject(getLocalProject(), otherMileStone);
 
-		Add.toNonContainedNToM(useCase, otherMileStone);
+		Add.toNonContainedNToM(getLocalProject(), useCase, otherMileStone);
 
 		clearOperations();
 
-		Add.toNonContainedNToM(useCase, mileStone);
+		Add.toNonContainedNToM(getLocalProject(), useCase, mileStone);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -225,11 +225,11 @@ public class TopologyNtoNTest extends ESTest {
 
 		final TestElement[] stones = { mileStone1, mileStone2 };
 
-		Add.toNonContainedNToM(useCase, otherMileStone);
+		Add.toNonContainedNToM(getLocalProject(), useCase, otherMileStone);
 
 		clearOperations();
 
-		Add.toNonContainedNToM(useCase, Arrays.asList(stones));
+		Add.toNonContainedNToM(getLocalProject(), useCase, Arrays.asList(stones));
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -280,11 +280,11 @@ public class TopologyNtoNTest extends ESTest {
 
 		Add.toProject(getLocalProject(), useCase);
 		Add.toProject(getLocalProject(), mileStone);
-		Add.toNonContainedNToM(useCase, mileStone);
+		Add.toNonContainedNToM(getLocalProject(), useCase, mileStone);
 
 		clearOperations();
 
-		Delete.fromNonContainedNToM(useCase, mileStone);
+		Delete.fromNonContainedNToM(getLocalProject(), useCase, mileStone);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(1, operations.size());
@@ -333,12 +333,12 @@ public class TopologyNtoNTest extends ESTest {
 		Add.toProject(getLocalProject(), mileStone);
 		Add.toProject(getLocalProject(), otherMileStone);
 
-		Add.toNonContainedNToM(useCase, mileStone);
-		Add.toNonContainedNToM(useCase, otherMileStone);
+		Add.toNonContainedNToM(getLocalProject(), useCase, mileStone);
+		Add.toNonContainedNToM(getLocalProject(), useCase, otherMileStone);
 
 		clearOperations();
 
-		Delete.fromNonContainedNToM(useCase, mileStone);
+		Delete.fromNonContainedNToM(getLocalProject(), useCase, mileStone);
 
 		List<AbstractOperation> operations = getProjectSpace().getOperations();
 
@@ -388,13 +388,13 @@ public class TopologyNtoNTest extends ESTest {
 		Add.toProject(getLocalProject(), mileStone);
 		Add.toProject(getLocalProject(), otherMileStone);
 
-		Add.toNonContainedNToM(useCase, mileStone);
-		Add.toNonContainedNToM(useCase, otherMileStone);
+		Add.toNonContainedNToM(getLocalProject(), useCase, mileStone);
+		Add.toNonContainedNToM(getLocalProject(), useCase, otherMileStone);
 
 		final TestElement[] stones = { mileStone, otherMileStone };
 		clearOperations();
 
-		Delete.fromNonContainedNToM(useCase, Arrays.asList(stones));
+		Delete.fromNonContainedNToM(getLocalProject(), useCase, Arrays.asList(stones));
 
 		// if you use clear instead of explicit removal, op.getIndex() will be -1
 		// useCase.getNonContained_NToM().clear();
@@ -461,14 +461,14 @@ public class TopologyNtoNTest extends ESTest {
 		Add.toProject(getLocalProject(), mileStone2);
 		Add.toProject(getLocalProject(), mileStone3);
 
-		Add.toNonContainedNToM(useCase, mileStone1);
-		Add.toNonContainedNToM(useCase, mileStone2);
-		Add.toNonContainedNToM(useCase, mileStone3);
+		Add.toNonContainedNToM(getLocalProject(), useCase, mileStone1);
+		Add.toNonContainedNToM(getLocalProject(), useCase, mileStone2);
+		Add.toNonContainedNToM(getLocalProject(), useCase, mileStone3);
 
 		final TestElement[] stones = { mileStone1, mileStone2 };
 		clearOperations();
 
-		Delete.fromNonContainedNToM(useCase, Arrays.asList(stones));
+		Delete.fromNonContainedNToM(getLocalProject(), useCase, Arrays.asList(stones));
 
 		// if you use clear instead of explicit removal, op.getIndex() will be -1
 		// useCase.getNonContained_NToM().clear();

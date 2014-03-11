@@ -49,7 +49,7 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 		actor.setName(OLD_NAME);
 
 		Add.toProject(getLocalProject(), section);
-		Add.toContainedElements(section, actor);
+		Add.toContainedElements(getLocalProject(), section, actor);
 		clearOperations();
 
 		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
@@ -67,7 +67,7 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				getProject().deleteModelElement(actor1);
 				actor2.setName(CHANGE_TO_THE_DELETED_OBJECT_ON_ANOTHER_WORKING_COPY);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = ps2.getOperations();
@@ -97,7 +97,7 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				clearOperations();
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		final Project project2 = ps2.getProject();
@@ -115,7 +115,7 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				actor2.setName(CHANGE_TO_OBJECT_INSIDE_DELTREE_ON_ANOTHER_WORKING_COPY);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = ps2.getOperations();
@@ -142,7 +142,7 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				clearOperations();
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		final Project project2 = ps2.getProject();
@@ -159,7 +159,7 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				section2.setName(CHANGE_TO_OBJECT_INSIDE_DELTREE_ON_ANOTHER_WORKING_COPY);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = ps2.getOperations();
@@ -188,7 +188,7 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				clearOperations();
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		final Project project2 = ps2.getProject();
@@ -206,7 +206,7 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				project2.deleteModelElement(section2);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = ps2.getOperations();
@@ -237,7 +237,7 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				section.getContainedElements().add(pack);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		final Project project2 = ps2.getProject();
@@ -257,7 +257,7 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				project2.deleteModelElement(section2);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = ps2.getOperations();
@@ -288,7 +288,7 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				section.getContainedElements().add(useCase);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		final Project project2 = ps2.getProject();
@@ -308,7 +308,7 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				project2.deleteModelElement(section2);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = ps2.getOperations();
@@ -345,7 +345,7 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				br2.setContainer(pack);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(pack.getContainedElements().get(0), br1);
 		assertEquals(pack.getContainedElements().get(1), br2);
@@ -356,7 +356,7 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				section.getContainedElements().add(pack);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		final Project project2 = ps2.getProject();
@@ -375,7 +375,7 @@ public class ConflictDetectionDeleteTest extends ConflictDetectionTest {
 				project2.deleteModelElement(section2);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = ps2.getOperations();

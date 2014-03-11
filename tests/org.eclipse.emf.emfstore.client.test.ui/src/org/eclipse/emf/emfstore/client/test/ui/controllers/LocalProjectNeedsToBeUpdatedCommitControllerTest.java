@@ -16,7 +16,6 @@ import java.util.concurrent.Callable;
 import org.eclipse.emf.emfstore.bowling.BowlingFactory;
 import org.eclipse.emf.emfstore.client.test.ui.AllUITests;
 import org.eclipse.emf.emfstore.client.ui.ESUIControllerFactory;
-import org.eclipse.emf.emfstore.client.util.RunESCommand;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
@@ -34,7 +33,7 @@ public class LocalProjectNeedsToBeUpdatedCommitControllerTest extends AbstractUI
 		createLeagueAndCommit();
 		createPlayerAndCommit();
 
-		RunESCommand.run(new Callable<Void>() {
+		getCopy().run(new Callable<Void>() {
 			public Void call() throws Exception {
 				getCopy().getModelElements().add(BowlingFactory.eINSTANCE.createPlayer());
 				return null;

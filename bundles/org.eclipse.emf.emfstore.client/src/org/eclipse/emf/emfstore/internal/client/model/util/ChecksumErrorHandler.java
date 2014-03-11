@@ -115,6 +115,7 @@ public enum ChecksumErrorHandler implements ESChecksumErrorHandler {
 			}
 			projectSpace.setProject(fetchedProject);
 			projectSpace.init();
+			projectSpace.initContents();
 
 			return true;
 		}

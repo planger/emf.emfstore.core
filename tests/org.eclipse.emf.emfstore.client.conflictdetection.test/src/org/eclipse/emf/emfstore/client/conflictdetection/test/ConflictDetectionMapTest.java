@@ -104,7 +104,7 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 				clearOperations();
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 
 		final ModelElementId modelElementId = getProjectSpace().getProject().getModelElementId(testElement);
 		final ModelElementId keyId = getProjectSpace().getProject().getModelElementId(key);
@@ -123,7 +123,7 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 				testElement.getElementToStringMap().add(newEntry);
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 
 		RunESCommand.run(new Callable<Void>() {
 			public Void call() throws Exception {
@@ -131,7 +131,7 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 				clonedTestElement.getElementToStringMap().add(clonedNewEntry);
 				return null;
 			}
-		});
+		}, clonedProjectSpace.getContentEditingDomain());
 
 		final Set<AbstractOperation> conflicts = getConflicts(
 			getProjectSpace().getLocalChangePackage().getOperations(),
@@ -171,7 +171,7 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 			public void run() {
 				createDeleteOperation.getSubOperations().clear();
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 
 		// expect part of the log message
 		final TestLogListener logListener = new TestLogListener(SINGLE_REFERENCE_SUB_OPERATION_OF_CREATE_OPERATION);
@@ -224,10 +224,16 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 		RunESCommand.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				getProject().getModelElements().remove(key);
+				return null;
+			}
+		}, getProjectSpace().getContentEditingDomain());
+
+		RunESCommand.run(new Callable<Void>() {
+			public Void call() throws Exception {
 				clonedProjectSpace.getProject().getModelElements().remove(clonedKey);
 				return null;
 			}
-		});
+		}, clonedProjectSpace.getContentEditingDomain());
 
 		// expect part of the log message
 		final TestLogListener logListener = new TestLogListener(KEY_IS_NULL_CAN_NOT_BE_USED_FOR_CONFLICT_DETECTION);
@@ -292,10 +298,16 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 		RunESCommand.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				testElement.getElementToStringMap().clear();
+				return null;
+			}
+		}, getProjectSpace().getContentEditingDomain());
+
+		RunESCommand.run(new Callable<Void>() {
+			public Void call() throws Exception {
 				clonedTestElement.getElementToStringMap().clear();
 				return null;
 			}
-		});
+		}, clonedProjectSpace.getContentEditingDomain());
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = clonedProjectSpace.getOperations();
@@ -557,7 +569,7 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 				testElement.getStringToStringMap().remove(key);
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 	}
 
 	private void deleteMapEntryNonContainedKey(final TestElement testElement, final TestElement key) {
@@ -566,7 +578,7 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 				testElement.getElementToStringMap().remove(key);
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 	}
 
 	private void updateMapEntry(final TestElement testElement, final String key, final String value) {
@@ -575,7 +587,7 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 				testElement.getStringToStringMap().put(key, value);
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 	}
 
 	private void updateMapEntryNonContainedKey(final TestElement testElement, final TestElement key, final String value) {
@@ -584,7 +596,7 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 				testElement.getElementToStringMap().put(key, value);
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 	}
 
 	private void addTestElement(final TestElement testElement) {
@@ -594,6 +606,6 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 				clearOperations();
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 	}
 }

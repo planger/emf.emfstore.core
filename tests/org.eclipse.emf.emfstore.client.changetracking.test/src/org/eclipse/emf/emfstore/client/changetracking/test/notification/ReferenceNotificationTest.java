@@ -60,7 +60,7 @@ public class ReferenceNotificationTest extends ESTest {
 				// notifications from this operations are tested
 				useCase.setNonContained_NTo1(actor);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<NotificationInfo> rec = getRecording().asMutableList();
 
@@ -123,7 +123,7 @@ public class ReferenceNotificationTest extends ESTest {
 				actor.getNonContained_1ToN().add(useCase);
 
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<NotificationInfo> rec = getRecording().asMutableList();
 
@@ -172,7 +172,7 @@ public class ReferenceNotificationTest extends ESTest {
 				// notifications from this operations are tested
 				useCase.getNonContained_NToM().add(actor);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<NotificationInfo> rec = getRecording().asMutableList();
 
@@ -220,7 +220,7 @@ public class ReferenceNotificationTest extends ESTest {
 				actor.getNonContained_1ToN().add(useCase);
 				actor.getNonContained_1ToN().remove(useCase);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<NotificationInfo> rec = getRecording().asMutableList();
 
@@ -269,7 +269,7 @@ public class ReferenceNotificationTest extends ESTest {
 				useCase.getNonContained_NToM().add(actor);
 				useCase.getNonContained_NToM().remove(actor);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<NotificationInfo> rec = getRecording().asMutableList();
 

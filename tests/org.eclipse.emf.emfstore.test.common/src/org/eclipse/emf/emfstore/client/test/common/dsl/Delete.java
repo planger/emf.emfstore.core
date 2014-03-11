@@ -25,7 +25,6 @@ import org.eclipse.emf.emfstore.client.ESWorkspace;
 import org.eclipse.emf.emfstore.client.ESWorkspaceProvider;
 import org.eclipse.emf.emfstore.client.test.common.TestSessionProvider2;
 import org.eclipse.emf.emfstore.client.util.ESVoidCallable;
-import org.eclipse.emf.emfstore.client.util.RunESCommand;
 import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
 import org.eclipse.emf.emfstore.internal.client.model.connectionmanager.AdminConnectionManager;
 import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESLocalProjectImpl;
@@ -42,8 +41,9 @@ public final class Delete {
 
 	}
 
-	public static void fromNonContained1ToN(final TestElement testElement, final List<TestElement> references) {
-		RunESCommand.run(new Callable<Void>() {
+	public static void fromNonContained1ToN(ESLocalProject localProject, final TestElement testElement,
+		final List<TestElement> references) {
+		localProject.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				testElement.getNonContained_1ToN().removeAll(references);
 				return null;
@@ -51,8 +51,9 @@ public final class Delete {
 		});
 	}
 
-	public static void fromNonContained1ToN(final TestElement testElement, final TestElement reference) {
-		RunESCommand.run(new Callable<Void>() {
+	public static void fromNonContained1ToN(ESLocalProject localProject, final TestElement testElement,
+		final TestElement reference) {
+		localProject.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				testElement.getNonContained_1ToN().remove(reference);
 				return null;
@@ -60,8 +61,9 @@ public final class Delete {
 		});
 	}
 
-	public static void fromNonContainedNToM(final TestElement testElement, final TestElement reference) {
-		RunESCommand.run(new Callable<Void>() {
+	public static void fromNonContainedNToM(ESLocalProject localProject, final TestElement testElement,
+		final TestElement reference) {
+		localProject.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				testElement.getNonContained_NToM().remove(reference);
 				return null;
@@ -69,8 +71,9 @@ public final class Delete {
 		});
 	}
 
-	public static void fromNonContainedNToM(final TestElement testElement, final List<TestElement> reference) {
-		RunESCommand.run(new Callable<Void>() {
+	public static void fromNonContainedNToM(ESLocalProject localProject, final TestElement testElement,
+		final List<TestElement> reference) {
+		localProject.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				testElement.getNonContained_NToM().removeAll(reference);
 				return null;
@@ -78,8 +81,9 @@ public final class Delete {
 		});
 	}
 
-	public static void fromContainedElements(final TestElement testElement, final TestElement containee) {
-		RunESCommand.run(new Callable<Void>() {
+	public static void fromContainedElements(ESLocalProject localProject, final TestElement testElement,
+		final TestElement containee) {
+		localProject.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				testElement.getContainedElements().remove(containee);
 				return null;
@@ -87,8 +91,9 @@ public final class Delete {
 		});
 	}
 
-	public static void fromContainedElements(final TestElement testElement, final List<TestElement> containees) {
-		RunESCommand.run(new Callable<Void>() {
+	public static void fromContainedElements(ESLocalProject localProject, final TestElement testElement,
+		final List<TestElement> containees) {
+		localProject.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				testElement.getContainedElements().removeAll(containees);
 				return null;
@@ -106,7 +111,7 @@ public final class Delete {
 	}
 
 	public static void fromProject(final ESLocalProject localProject, final EObject eObject) {
-		RunESCommand.run(new ESVoidCallable() {
+		localProject.run(new ESVoidCallable() {
 			@Override
 			public void run() {
 				final Project project = ((ESLocalProjectImpl) localProject).toInternalAPI().getProject();

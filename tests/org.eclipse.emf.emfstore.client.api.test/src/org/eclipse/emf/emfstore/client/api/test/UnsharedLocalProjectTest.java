@@ -349,7 +349,7 @@ public class UnsharedLocalProjectTest extends ESTest {
 				getLocalProject().getModelElements().add(league);
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 
 		assertEquals(3, getLocalProject().getAllModelElements().size());
 		assertEquals(1, getLocalProject().getModelElements().size());

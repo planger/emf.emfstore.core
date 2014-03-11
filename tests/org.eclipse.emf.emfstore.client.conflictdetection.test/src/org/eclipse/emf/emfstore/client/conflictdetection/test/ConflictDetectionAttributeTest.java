@@ -51,7 +51,7 @@ public class ConflictDetectionAttributeTest extends ConflictDetectionTest {
 		actor.setName(OLD_NAME);
 
 		Add.toProject(getLocalProject(), section);
-		Add.toContainedElements(section, actor);
+		Add.toContainedElements(getLocalProject(), section, actor);
 
 		clearOperations();
 
@@ -64,8 +64,8 @@ public class ConflictDetectionAttributeTest extends ConflictDetectionTest {
 		final TestElement actor1 = (TestElement) getProject().getModelElement(actor1Id);
 		final TestElement actor2 = (TestElement) project2.getModelElement(actor2Id);
 
-		Update.testElement(TestElementFeatures.name(), actor1, CHANGE_1);
-		Update.testElement(TestElementFeatures.name(), actor2, CHANGE_2);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), actor1, CHANGE_1);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), actor2, CHANGE_2);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = ps2.getOperations();
@@ -94,7 +94,7 @@ public class ConflictDetectionAttributeTest extends ConflictDetectionTest {
 				testElement.getContainedElements().add(containedElement);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
 		final Project project2 = ps2.getProject();
@@ -111,7 +111,7 @@ public class ConflictDetectionAttributeTest extends ConflictDetectionTest {
 				testElement1.setName(CHANGE_1);
 				testElement2.setName(CHANGE_1);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = ps2.getOperations();
@@ -133,7 +133,7 @@ public class ConflictDetectionAttributeTest extends ConflictDetectionTest {
 		final TestElement actor = Create.testElement(OLD_NAME);
 
 		Add.toProject(getLocalProject(), section);
-		Add.toContainedElements(section, actor);
+		Add.toContainedElements(getLocalProject(), section, actor);
 		clearOperations();
 
 		final ProjectSpace ps2 = cloneProjectSpace(getProjectSpace());
@@ -144,8 +144,8 @@ public class ConflictDetectionAttributeTest extends ConflictDetectionTest {
 		final TestElement actor1 = (TestElement) getProject().getModelElement(actorId);
 		final TestElement actor2 = (TestElement) project2.getModelElement(actorId);
 
-		Update.testElement(TestElementFeatures.name(), actor1, CHANGE_1);
-		Update.testElement(TestElementFeatures.description(), actor2, UNRELATED_CHANGE);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), actor1, CHANGE_1);
+		Update.testElement(getLocalProject(), TestElementFeatures.description(), actor2, UNRELATED_CHANGE);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = ps2.getOperations();

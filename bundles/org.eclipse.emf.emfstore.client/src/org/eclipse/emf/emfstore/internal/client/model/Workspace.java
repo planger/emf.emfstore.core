@@ -66,6 +66,20 @@ public interface Workspace extends EObject, IAdaptable, APIDelegate<ESWorkspaceI
 	ProjectSpace createLocalProject(String projectName);
 
 	/**
+	 * Removes a project to project space mapping from the workspace's map.
+	 * 
+	 * @param projectSpace the project space
+	 */
+	void removeProjectToProjectSpaceEntry(ProjectSpace projectSpace);
+
+	/**
+	 * Adds a project to project space mapping to the workspace's map.
+	 * 
+	 * @param projectSpace the project space
+	 */
+	void addProjectToProjectSpaceEntry(ProjectSpace projectSpace);
+
+	/**
 	 * Exports a project space to a file.
 	 * 
 	 * @param projectSpace

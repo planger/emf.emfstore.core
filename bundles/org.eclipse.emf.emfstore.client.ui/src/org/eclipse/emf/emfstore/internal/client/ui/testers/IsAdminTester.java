@@ -54,7 +54,7 @@ public class IsAdminTester extends PropertyTester {
 					return new Boolean(isAdmin).equals(expectedValue);
 				}
 			};
-			return command.run(false);
+			return command.run(null, false);
 		}
 		return false;
 	}

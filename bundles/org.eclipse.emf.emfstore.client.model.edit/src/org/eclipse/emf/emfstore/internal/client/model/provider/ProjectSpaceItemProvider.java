@@ -23,7 +23,12 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
+import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
+import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.IItemPropertySource;
+import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
+import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.emf.emfstore.internal.client.model.ModelPackage;
@@ -40,7 +45,9 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.VersioningFacto
  * 
  * @generated
  */
-public class ProjectSpaceItemProvider extends IdentifiableElementItemProvider {
+public class ProjectSpaceItemProvider extends IdentifiableElementItemProvider implements IEditingDomainItemProvider,
+	IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource
+{
 
 	private Map<Project, ProjectSpace> projectToProjectSpaceMap;
 
@@ -65,7 +72,8 @@ public class ProjectSpaceItemProvider extends IdentifiableElementItemProvider {
 	 */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
-		if (itemPropertyDescriptors == null) {
+		if (itemPropertyDescriptors == null)
+		{
 			super.getPropertyDescriptors(object);
 
 			addProjectNamePropertyDescriptor(object);
@@ -285,12 +293,10 @@ public class ProjectSpaceItemProvider extends IdentifiableElementItemProvider {
 		if (childrenFeatures == null)
 		{
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(ModelPackage.Literals.PROJECT_SPACE__PROJECT);
 			childrenFeatures.add(ModelPackage.Literals.PROJECT_SPACE__PROJECT_ID);
 			childrenFeatures.add(ModelPackage.Literals.PROJECT_SPACE__BASE_VERSION);
 			childrenFeatures.add(ModelPackage.Literals.PROJECT_SPACE__WAITING_UPLOADS);
 			childrenFeatures.add(ModelPackage.Literals.PROJECT_SPACE__PROPERTIES);
-			childrenFeatures.add(ModelPackage.Literals.PROJECT_SPACE__LOCAL_CHANGE_PACKAGE);
 			childrenFeatures.add(ModelPackage.Literals.PROJECT_SPACE__MERGED_VERSION);
 		}
 		return childrenFeatures;
@@ -378,12 +384,10 @@ public class ProjectSpaceItemProvider extends IdentifiableElementItemProvider {
 		case ModelPackage.PROJECT_SPACE__OLD_LOG_MESSAGES:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
-		case ModelPackage.PROJECT_SPACE__PROJECT:
 		case ModelPackage.PROJECT_SPACE__PROJECT_ID:
 		case ModelPackage.PROJECT_SPACE__BASE_VERSION:
 		case ModelPackage.PROJECT_SPACE__WAITING_UPLOADS:
 		case ModelPackage.PROJECT_SPACE__PROPERTIES:
-		case ModelPackage.PROJECT_SPACE__LOCAL_CHANGE_PACKAGE:
 		case ModelPackage.PROJECT_SPACE__MERGED_VERSION:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
@@ -401,11 +405,6 @@ public class ProjectSpaceItemProvider extends IdentifiableElementItemProvider {
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-			(ModelPackage.Literals.PROJECT_SPACE__PROJECT,
-				ModelFactory.eINSTANCE.createProject()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -429,11 +428,6 @@ public class ProjectSpaceItemProvider extends IdentifiableElementItemProvider {
 
 		newChildDescriptors.add
 			(createChildParameter
-			(ModelPackage.Literals.PROJECT_SPACE__LOCAL_CHANGE_PACKAGE,
-				VersioningFactory.eINSTANCE.createChangePackage()));
-
-		newChildDescriptors.add
-			(createChildParameter
 			(ModelPackage.Literals.PROJECT_SPACE__MERGED_VERSION,
 				VersioningFactory.eINSTANCE.createPrimaryVersionSpec()));
 	}
@@ -447,10 +441,10 @@ public class ProjectSpaceItemProvider extends IdentifiableElementItemProvider {
 	 */
 	@Override
 	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
-		final Object childFeature = feature;
-		final Object childObject = child;
+		Object childFeature = feature;
+		Object childObject = child;
 
-		final boolean qualify =
+		boolean qualify =
 			childFeature == ModelPackage.Literals.PROJECT_SPACE__BASE_VERSION ||
 				childFeature == ModelPackage.Literals.PROJECT_SPACE__MERGED_VERSION;
 

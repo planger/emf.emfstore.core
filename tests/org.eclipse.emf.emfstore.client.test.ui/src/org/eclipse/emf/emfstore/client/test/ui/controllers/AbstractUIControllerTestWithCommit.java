@@ -25,7 +25,6 @@ import org.eclipse.emf.emfstore.client.ESLocalProject;
 import org.eclipse.emf.emfstore.client.observer.ESUpdateObserver;
 import org.eclipse.emf.emfstore.client.test.ui.AllUITests;
 import org.eclipse.emf.emfstore.client.ui.ESUIControllerFactory;
-import org.eclipse.emf.emfstore.client.util.RunESCommand;
 import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
 import org.eclipse.emf.emfstore.internal.client.ui.controller.UICheckoutController;
 import org.eclipse.emf.emfstore.internal.client.ui.controller.UIUpdateProjectController;
@@ -49,7 +48,7 @@ public abstract class AbstractUIControllerTestWithCommit extends AbstractUIContr
 
 	protected void createTournamentAndCommit() {
 		final Tournament tournament = BowlingFactory.eINSTANCE.createTournament();
-		RunESCommand.run(new Callable<Void>() {
+		localProject.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				localProject.getModelElements().add(tournament);
 				return null;
@@ -69,7 +68,7 @@ public abstract class AbstractUIControllerTestWithCommit extends AbstractUIContr
 	protected Player createPlayerAndCommit(final ESLocalProject localProject) {
 		final Player player = BowlingFactory.eINSTANCE.createPlayer();
 		player.setName(PLAYER_NAME);
-		RunESCommand.run(new Callable<Void>() {
+		localProject.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				localProject.getModelElements().add(player);
 				return null;
@@ -82,7 +81,7 @@ public abstract class AbstractUIControllerTestWithCommit extends AbstractUIContr
 	protected void createLeagueAndCommit(final ESLocalProject localProject) {
 		final League league = BowlingFactory.eINSTANCE.createLeague();
 		league.setName("L");
-		RunESCommand.run(new Callable<Void>() {
+		localProject.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				localProject.getModelElements().add(league);
 				return null;

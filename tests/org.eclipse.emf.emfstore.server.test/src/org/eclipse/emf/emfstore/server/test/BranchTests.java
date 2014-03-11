@@ -116,7 +116,7 @@ public class BranchTests extends ESTestWithLoggedInUser {
 		addElement(getLocalProject(), testElement);
 		share(getUsersession(), getLocalProject());
 
-		Update.testElement(TestElementFeatures.name(), testElement, JUERGEN);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), testElement, JUERGEN);
 
 		branch(getLocalProject(), B1);
 
@@ -172,7 +172,7 @@ public class BranchTests extends ESTestWithLoggedInUser {
 				testElement.setName(JUERGEN);
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 
 		commit(getLocalProject());
 
@@ -202,7 +202,7 @@ public class BranchTests extends ESTestWithLoggedInUser {
 
 		branch(project, B1);
 
-		Update.testElement(TestElementFeatures.name(), testElement, JUERGEN);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), testElement, JUERGEN);
 
 		commit(project);
 
@@ -234,7 +234,7 @@ public class BranchTests extends ESTestWithLoggedInUser {
 		addElement(getLocalProject(), testElement);
 		share(getUsersession(), getLocalProject());
 
-		Update.testElement(TestElementFeatures.name(), testElement, JUERGEN);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), testElement, JUERGEN);
 
 		final ESPrimaryVersionSpec branch = branch(getLocalProject(), B1).getBaseVersion();
 
@@ -260,7 +260,7 @@ public class BranchTests extends ESTestWithLoggedInUser {
 		final TestElement testElement = Create.testElement(HORST);
 		share(getUsersession(), getLocalProject());
 
-		Update.testElement(TestElementFeatures.name(), testElement, JUERGEN);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), testElement, JUERGEN);
 
 		final ESLocalProject branch = branch(getLocalProject(), B1);
 
@@ -291,7 +291,7 @@ public class BranchTests extends ESTestWithLoggedInUser {
 		final ESLocalProject trunk = checkout(getLocalProject());
 		branch(getLocalProject(), B1);
 
-		Update.testElement(TestElementFeatures.name(), testElement, JUERGEN);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), testElement, JUERGEN);
 
 		final ESPrimaryVersionSpec latestOnBranch = commit(getLocalProject()).getBaseVersion();
 
@@ -323,11 +323,11 @@ public class BranchTests extends ESTestWithLoggedInUser {
 
 		branch(getLocalProject(), B1);
 
-		Update.testElement(TestElementFeatures.name(), testElement, JUERGEN);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), testElement, JUERGEN);
 
 		commit(getLocalProject());
 
-		Update.testElement(TestElementFeatures.name(), testElement, TOM);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), testElement, TOM);
 
 		final ESPrimaryVersionSpec latestOnBranch = commit(getLocalProject()).getBaseVersion();
 
@@ -360,11 +360,11 @@ public class BranchTests extends ESTestWithLoggedInUser {
 		final TestElement trunkElement = (TestElement) trunk.getModelElement(
 			getLocalProject().getModelElementId(branchElement));
 
-		Update.testElement(TestElementFeatures.name(), branchElement, JUERGEN);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), branchElement, JUERGEN);
 
 		ESPrimaryVersionSpec latestOnBranch = branch(getLocalProject(), B1).getBaseVersion();
 
-		Update.testElement(TestElementFeatures.name(), trunkElement, GUENTHER);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), trunkElement, GUENTHER);
 
 		commit(trunk);
 
@@ -382,7 +382,7 @@ public class BranchTests extends ESTestWithLoggedInUser {
 		assertEquals(1, version.getMergedFromVersion().size());
 
 		assertTrue(getMergedVersion(trunk) == null);
-		Update.testElement(TestElementFeatures.name(), branchElement, TOM);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), branchElement, TOM);
 
 		latestOnBranch = commit(getLocalProject()).getBaseVersion();
 
@@ -406,11 +406,11 @@ public class BranchTests extends ESTestWithLoggedInUser {
 		final TestElement trunkElement = (TestElement) trunk.getModelElement(
 			branch.getModelElementId(branchElement));
 
-		Update.testElement(TestElementFeatures.name(), branchElement, JUERGEN);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), branchElement, JUERGEN);
 
 		ESPrimaryVersionSpec latestOnBranch = branch(branch, B1).getBaseVersion();
 
-		Update.testElement(TestElementFeatures.name(), trunkElement, GUENTHER);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), trunkElement, GUENTHER);
 
 		commit(trunk);
 
@@ -419,11 +419,11 @@ public class BranchTests extends ESTestWithLoggedInUser {
 		// commit merge
 		commit(trunk);
 
-		Update.testElement(TestElementFeatures.name(), branchElement, JERRY);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), branchElement, JERRY);
 
 		latestOnBranch = commit(branch).getBaseVersion();
 
-		Update.testElement(TestElementFeatures.name(), branchElement, TOM);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), branchElement, TOM);
 
 		latestOnBranch = commit(branch).getBaseVersion();
 
@@ -450,11 +450,11 @@ public class BranchTests extends ESTestWithLoggedInUser {
 		final TestElement innerBranchElement = (TestElement) innerBranch.getModelElement(
 			outterBranch.getModelElementId(outterBranchElement));
 
-		Update.testElement(TestElementFeatures.name(), outterBranchElement, JUERGEN);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), outterBranchElement, JUERGEN);
 
 		final ESPrimaryVersionSpec latestOnBranch = branch(outterBranch, B2).getBaseVersion();
 
-		Update.testElement(TestElementFeatures.name(), innerBranchElement, JERRY);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), innerBranchElement, JERRY);
 
 		commit(innerBranch);
 
@@ -473,7 +473,7 @@ public class BranchTests extends ESTestWithLoggedInUser {
 
 		branch(getLocalProject(), B1);
 
-		Update.testElement(TestElementFeatures.name(), testElement, JUERGEN);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), testElement, JUERGEN);
 		final ESLocalProject lastFromBranch = commit(getLocalProject());
 
 		final ESLocalProject secondProjectSpace = checkout(getLocalProject());

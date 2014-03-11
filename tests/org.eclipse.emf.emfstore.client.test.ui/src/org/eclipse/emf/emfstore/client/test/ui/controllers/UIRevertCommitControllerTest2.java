@@ -22,7 +22,6 @@ import org.eclipse.emf.emfstore.bowling.Tournament;
 import org.eclipse.emf.emfstore.client.ESLocalProject;
 import org.eclipse.emf.emfstore.client.ESWorkspaceProvider;
 import org.eclipse.emf.emfstore.client.callbacks.ESUpdateCallback;
-import org.eclipse.emf.emfstore.client.util.RunESCommand;
 import org.eclipse.emf.emfstore.common.model.ESModelElementIdToEObjectMapping;
 import org.eclipse.emf.emfstore.internal.client.ui.controller.UIRevertCommitController;
 import org.eclipse.emf.emfstore.server.ESConflictSet;
@@ -83,7 +82,7 @@ public class UIRevertCommitControllerTest2 extends AbstractUIControllerTestWithC
 		final Tournament tournament = BowlingFactory.eINSTANCE.createTournament();
 		tournament.getPlayerPoints().put(player, 32);
 
-		RunESCommand.run(new Callable<Void>() {
+		localProject.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				localProject.getModelElements().add(player);
 				localProject.getModelElements().add(tournament);
@@ -132,7 +131,7 @@ public class UIRevertCommitControllerTest2 extends AbstractUIControllerTestWithC
 
 	protected void deleteTournamentAndCommit() {
 		assertEquals(2, localProject.getModelElements().size());
-		RunESCommand.run(new Callable<Void>() {
+		localProject.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				final Tournament tournament = localProject.getAllModelElementsByClass(Tournament.class).iterator()
 					.next();

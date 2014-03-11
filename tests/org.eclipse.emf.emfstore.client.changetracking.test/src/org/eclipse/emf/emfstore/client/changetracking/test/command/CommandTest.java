@@ -14,6 +14,7 @@ package org.eclipse.emf.emfstore.client.changetracking.test.command;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -94,37 +95,45 @@ public class CommandTest extends ESTest {
 			protected void doRun() {
 				getProject().addModelElement(leafSection);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
+		final EditingDomain editingDomain = ESWorkspaceProviderImpl
+				.getInstance().getEditingDomain();
 
 		// copy to clipboard
 		final Collection<EObject> toCopy = new ArrayList<EObject>();
 		toCopy.add(actor);
-		final Command copyCommand = editingDomain.createCommand(CopyToClipboardCommand.class, new CommandParameter(
-			null,
-			null, toCopy));
+		final Command copyCommand = editingDomain.createCommand(
+				CopyToClipboardCommand.class, new CommandParameter(null, null,
+						toCopy));
 		editingDomain.getCommandStack().execute(copyCommand);
 
 		// paste from clipboard
-		final Command pasteCommand = editingDomain.createCommand(PasteFromClipboardCommand.class, new CommandParameter(
-			leafSection, TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS, Collections.emptyList(),
-			CommandParameter.NO_INDEX));
+		final Command pasteCommand = editingDomain
+				.createCommand(
+						PasteFromClipboardCommand.class,
+						new CommandParameter(
+								leafSection,
+								TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS,
+								Collections.emptyList(),
+								CommandParameter.NO_INDEX));
 
 		editingDomain.getCommandStack().execute(pasteCommand);
 
-		final EObject copyOfTestElement = leafSection.getContainedElements().get(1);
-		final ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
-		final ModelElementId copyOfTestElementId = ModelUtil.getProject(copyOfTestElement).getModelElementId(
-			copyOfTestElement);
+		final EObject copyOfTestElement = leafSection.getContainedElements()
+				.get(1);
+		final ModelElementId actorId = ModelUtil.getProject(actor)
+				.getModelElementId(actor);
+		final ModelElementId copyOfTestElementId = ModelUtil.getProject(
+				copyOfTestElement).getModelElementId(copyOfTestElement);
 
 		assertTrue(actorId.equals(actorId));
 		assertTrue(!copyOfTestElementId.equals(actorId));
 	}
 
 	/**
-	 * Tests to delete a workpackage with a containec command with a recipient. This test also the removal o
-	 * unicdirectional cross references
+	 * Tests to delete a workpackage with a containec command with a recipient.
+	 * This test also the removal o unicdirectional cross references
 	 */
 	@Test
 	public void testDeleteWithUnidirectionalCrossReference() {
@@ -139,7 +148,8 @@ public class CommandTest extends ESTest {
 			@Override
 			protected void doRun() {
 				getProject().addModelElement(createCompositeSection);
-				createCompositeSection.getContainedElements().add(createTestElement);
+				createCompositeSection.getContainedElements().add(
+						createTestElement);
 				createTestElement.getContainedElements().add(workPackage);
 				createTestElement.getContainedElements().add(createUser);
 				workPackage.getContainedElements2().add(createActionItem);
@@ -147,11 +157,12 @@ public class CommandTest extends ESTest {
 				createComment.getReferences().add(createUser);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		final Command delete = DeleteCommand.create(
-			ESWorkspaceProviderImpl.getInstance().getEditingDomain(), workPackage);
-		ESWorkspaceProviderImpl.getInstance().getEditingDomain().getCommandStack().execute(delete);
+		final Command delete = DeleteCommand.create(ESWorkspaceProviderImpl
+				.getInstance().getEditingDomain(), workPackage);
+		getProjectSpace().getContentEditingDomain().getCommandStack()
+				.execute(delete);
 
 		assertEquals(0, createComment.getContainedElements().size());
 		assertEquals(1, getProjectSpace().getOperations().size());
@@ -173,15 +184,15 @@ public class CommandTest extends ESTest {
 			protected void doRun() {
 				getProject().addModelElement(leafSection);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
+		final EditingDomain editingDomain = ESWorkspaceProviderImpl
+				.getInstance().getEditingDomain();
 
 		// copy
 		final CopyCommand.Helper helper = new CopyCommand.Helper();
-		final CopyCommand command = (CopyCommand) editingDomain.createCommand(CopyCommand.class, new CommandParameter(
-			actor,
-			null, helper));
+		final CopyCommand command = (CopyCommand) editingDomain.createCommand(
+				CopyCommand.class, new CommandParameter(actor, null, helper));
 		editingDomain.getCommandStack().execute(command);
 
 		// paste
@@ -190,16 +201,23 @@ public class CommandTest extends ESTest {
 		final Collection<TestElement> toPaste = new ArrayList<TestElement>();
 		toPaste.add(copyOfTestElement);
 
-		final Command pasteCommand = editingDomain.createCommand(AddCommand.class, new CommandParameter(leafSection,
-			TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS, toPaste, CommandParameter.NO_INDEX));
+		final Command pasteCommand = editingDomain
+				.createCommand(
+						AddCommand.class,
+						new CommandParameter(
+								leafSection,
+								TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS,
+								toPaste, CommandParameter.NO_INDEX));
 
 		editingDomain.getCommandStack().execute(pasteCommand);
 
-		final EObject copyOfTestElementRead = leafSection.getContainedElements().get(1);
+		final EObject copyOfTestElementRead = leafSection
+				.getContainedElements().get(1);
 
-		final ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
-		final ModelElementId copyOfTestElementReadId = ModelUtil.getProject(copyOfTestElementRead).getModelElementId(
-			copyOfTestElementRead);
+		final ModelElementId actorId = ModelUtil.getProject(actor)
+				.getModelElementId(actor);
+		final ModelElementId copyOfTestElementReadId = ModelUtil.getProject(
+				copyOfTestElementRead).getModelElementId(copyOfTestElementRead);
 		assertFalse(actorId.equals(copyOfTestElementReadId));
 
 	}
@@ -219,24 +237,30 @@ public class CommandTest extends ESTest {
 			protected void doRun() {
 				getProject().addModelElement(leafSection);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
+		final EditingDomain editingDomain = ESWorkspaceProviderImpl
+				.getInstance().getEditingDomain();
 
 		// copy
-		final Command command = CopyToClipboardCommand.create(editingDomain, actor);
+		final Command command = CopyToClipboardCommand.create(editingDomain,
+				actor);
 		editingDomain.getCommandStack().execute(command);
 
 		// paste
-		final Command pasteCommand = PasteFromClipboardCommand.create(editingDomain, leafSection,
-			TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS, CommandParameter.NO_INDEX);
+		final Command pasteCommand = PasteFromClipboardCommand.create(
+				editingDomain, leafSection,
+				TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS,
+				CommandParameter.NO_INDEX);
 		editingDomain.getCommandStack().execute(pasteCommand);
 
-		final EObject copyOfTestElementRead = leafSection.getContainedElements().get(1);
+		final EObject copyOfTestElementRead = leafSection
+				.getContainedElements().get(1);
 
-		final ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
-		final ModelElementId copyOfTestElementReadId = ModelUtil.getProject(copyOfTestElementRead).getModelElementId(
-			copyOfTestElementRead);
+		final ModelElementId actorId = ModelUtil.getProject(actor)
+				.getModelElementId(actor);
+		final ModelElementId copyOfTestElementReadId = ModelUtil.getProject(
+				copyOfTestElementRead).getModelElementId(copyOfTestElementRead);
 		assertFalse(actorId.equals(copyOfTestElementReadId));
 	}
 
@@ -255,58 +279,70 @@ public class CommandTest extends ESTest {
 			protected void doRun() {
 				getProject().addModelElement(leafSection);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
+		final EditingDomain editingDomain = ESWorkspaceProviderImpl
+				.getInstance().getEditingDomain();
 
 		// copy
 		final Command command = CopyCommand.create(editingDomain, actor);
 		editingDomain.getCommandStack().execute(command);
 
 		// paste
-		final TestElement copyOfTestElement = (TestElement) command.getResult().toArray()[0];
+		final TestElement copyOfTestElement = (TestElement) command.getResult()
+				.toArray()[0];
 
 		final Collection<TestElement> toPaste = new ArrayList<TestElement>();
 		toPaste.add(copyOfTestElement);
 
-		final Command pasteCommand = AddCommand.create(editingDomain, leafSection,
-			TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS, toPaste, CommandParameter.NO_INDEX);
+		final Command pasteCommand = AddCommand.create(editingDomain,
+				leafSection,
+				TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS,
+				toPaste, CommandParameter.NO_INDEX);
 
 		editingDomain.getCommandStack().execute(pasteCommand);
 
-		final EObject copyOfTestElementRead = leafSection.getContainedElements().get(1);
+		final EObject copyOfTestElementRead = leafSection
+				.getContainedElements().get(1);
 
-		final ModelElementId actorId = ModelUtil.getProject(actor).getModelElementId(actor);
-		final ModelElementId copyOfTestElementReadId = ModelUtil.getProject(copyOfTestElementRead).getModelElementId(
-			copyOfTestElementRead);
+		final ModelElementId actorId = ModelUtil.getProject(actor)
+				.getModelElementId(actor);
+		final ModelElementId copyOfTestElementReadId = ModelUtil.getProject(
+				copyOfTestElementRead).getModelElementId(copyOfTestElementRead);
 		assertFalse(actorId.equals(copyOfTestElementReadId));
 	}
 
 	/**
 	 * check element deletion tracking.
 	 * 
-	 * @throws UnsupportedOperationException on test fail
-	 * @throws UnsupportedNotificationException on test fail
+	 * @throws UnsupportedOperationException
+	 *             on test fail
+	 * @throws UnsupportedNotificationException
+	 *             on test fail
 	 */
 	@Test
-	public void deleteCommandTest() throws UnsupportedOperationException, UnsupportedNotificationException {
+	public void deleteCommandTest() throws UnsupportedOperationException,
+			UnsupportedNotificationException {
 
 		final TestElement useCase = Create.testElement();
 		Add.toProject(getLocalProject(), useCase);
 		clearOperations();
-		final ModelElementId useCaseId = getProject().getModelElementId(useCase);
+		final ModelElementId useCaseId = getProject()
+				.getModelElementId(useCase);
 
 		final Command deleteCommand = DeleteCommand.create(
-			ESWorkspaceProviderImpl.getInstance().getEditingDomain(),
-			useCase);
-		final CommandStack commandStack = ESWorkspaceProviderImpl.getInstance().getEditingDomain().getCommandStack();
+				ESWorkspaceProviderImpl.getInstance().getEditingDomain(),
+				useCase);
+		final CommandStack commandStack = ESWorkspaceProviderImpl.getInstance()
+				.getEditingDomain().getCommandStack();
 		if (deleteCommand.canExecute()) {
 			commandStack.execute(deleteCommand);
 		} else {
 			fail(COMMAND_NOT_EXECUTABLE);
 		}
 
-		final List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace()
+				.getOperations();
 
 		assertEquals(1, operations.size());
 		final AbstractOperation operation = operations.get(0);
@@ -321,12 +357,16 @@ public class CommandTest extends ESTest {
 	/**
 	 * check complex element deletion tracking.
 	 * 
-	 * @throws UnsupportedOperationException on test fail
-	 * @throws UnsupportedNotificationException on test fail
+	 * @throws UnsupportedOperationException
+	 *             on test fail
+	 * @throws UnsupportedNotificationException
+	 *             on test fail
 	 */
 	@Test
 	// BEGIN COMPLEX CODE
-	public void complexDeleteCommandTest() throws UnsupportedOperationException, UnsupportedNotificationException {
+	public void complexDeleteCommandTest()
+			throws UnsupportedOperationException,
+			UnsupportedNotificationException {
 
 		final TestElement section = Create.testElement();
 		final TestElement useCase = Create.testElement();
@@ -353,19 +393,20 @@ public class CommandTest extends ESTest {
 				assertEquals(getProject(), ModelUtil.getProject(useCase));
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		final Project project = ModelUtil.getProject(useCase);
 		final ModelElementId useCaseId = project.getModelElementId(useCase);
 
-		final Command deleteCommand = DeleteCommand.create(
-			ESWorkspaceProviderImpl.getInstance().getEditingDomain(),
-			useCase);
-		ESWorkspaceProviderImpl.getInstance().getEditingDomain().getCommandStack().execute(deleteCommand);
+		final Command deleteCommand = DeleteCommand.create(getProjectSpace()
+				.getContentEditingDomain(), useCase);
+		getProjectSpace().getContentEditingDomain().getCommandStack()
+				.execute(deleteCommand);
 
 		assertFalse(getProject().contains(useCase));
 
-		final List<AbstractOperation> operations = getProjectSpace().getOperations();
+		final List<AbstractOperation> operations = getProjectSpace()
+				.getOperations();
 
 		assertEquals(1, operations.size());
 		final AbstractOperation operation = operations.get(0);
@@ -374,7 +415,8 @@ public class CommandTest extends ESTest {
 		assertTrue(createDeleteOperation.isDelete());
 
 		assertEquals(useCaseId, createDeleteOperation.getModelElementId());
-		final EList<ReferenceOperation> subOperations = createDeleteOperation.getSubOperations();
+		final EList<ReferenceOperation> subOperations = createDeleteOperation
+				.getSubOperations();
 
 		assertEquals(8, subOperations.size());
 		final AbstractOperation suboperation0 = subOperations.get(0);
@@ -404,7 +446,8 @@ public class CommandTest extends ESTest {
 		final MultiReferenceOperation mrSuboperation6 = (MultiReferenceOperation) suboperation6;
 		final MultiReferenceOperation mrSuboperation7 = (MultiReferenceOperation) suboperation7;
 
-		final ModelElementId sectionId = ModelUtil.getProject(section).getModelElementId(section);
+		final ModelElementId sectionId = ModelUtil.getProject(section)
+				.getModelElementId(section);
 
 		assertEquals(useCaseId, mrSuboperation0.getModelElementId());
 		assertEquals(CONTAINER, mrSuboperation0.getFeatureName());
@@ -417,47 +460,60 @@ public class CommandTest extends ESTest {
 		assertEquals(CONTAINER, mrSuboperation1.getOppositeFeatureName());
 		assertFalse(mrSuboperation1.isAdd());
 		assertTrue(mrSuboperation1.isBidirectional());
-		final Set<ModelElementId> otherInvolvedModelElements3 = mrSuboperation1.getOtherInvolvedModelElements();
+		final Set<ModelElementId> otherInvolvedModelElements3 = mrSuboperation1
+				.getOtherInvolvedModelElements();
 		assertEquals(1, otherInvolvedModelElements3.size());
-		final EList<ModelElementId> referencedModelElements3 = mrSuboperation1.getReferencedModelElements();
+		final EList<ModelElementId> referencedModelElements3 = mrSuboperation1
+				.getReferencedModelElements();
 		assertEquals(1, referencedModelElements3.size());
 		assertEquals(useCaseId, referencedModelElements3.get(0));
 
-		final ModelElementId oldTestElementId = ModelUtil.getProject(oldTestElement).getModelElementId(oldTestElement);
+		final ModelElementId oldTestElementId = ModelUtil.getProject(
+				oldTestElement).getModelElementId(oldTestElement);
 
 		assertEquals(oldTestElementId, mrSuboperation2.getOldValue());
 		assertEquals(null, mrSuboperation2.getNewValue());
 		assertEquals(NON_CONTAINED_N_TO1, mrSuboperation2.getFeatureName());
 		assertEquals(useCaseId, mrSuboperation2.getModelElementId());
-		assertEquals(NON_CONTAINED_1_TO_N, mrSuboperation2.getOppositeFeatureName());
+		assertEquals(NON_CONTAINED_1_TO_N,
+				mrSuboperation2.getOppositeFeatureName());
 		assertTrue(mrSuboperation2.isBidirectional());
-		final Set<ModelElementId> otherInvolvedModelElements = mrSuboperation2.getOtherInvolvedModelElements();
+		final Set<ModelElementId> otherInvolvedModelElements = mrSuboperation2
+				.getOtherInvolvedModelElements();
 		assertEquals(1, otherInvolvedModelElements.size());
-		assertEquals(oldTestElementId, otherInvolvedModelElements.iterator().next());
+		assertEquals(oldTestElementId, otherInvolvedModelElements.iterator()
+				.next());
 
 		assertEquals(NON_CONTAINED_1_TO_N, mrSuboperation3.getFeatureName());
 		assertEquals(0, mrSuboperation3.getIndex());
 		assertEquals(oldTestElementId, mrSuboperation3.getModelElementId());
-		assertEquals(NON_CONTAINED_N_TO1, mrSuboperation3.getOppositeFeatureName());
+		assertEquals(NON_CONTAINED_N_TO1,
+				mrSuboperation3.getOppositeFeatureName());
 		assertFalse(mrSuboperation3.isAdd());
 		assertTrue(mrSuboperation3.isBidirectional());
-		final Set<ModelElementId> otherInvolvedModelElements0 = mrSuboperation3.getOtherInvolvedModelElements();
+		final Set<ModelElementId> otherInvolvedModelElements0 = mrSuboperation3
+				.getOtherInvolvedModelElements();
 		assertEquals(1, otherInvolvedModelElements0.size());
-		final EList<ModelElementId> referencedModelElements0 = mrSuboperation3.getReferencedModelElements();
+		final EList<ModelElementId> referencedModelElements0 = mrSuboperation3
+				.getReferencedModelElements();
 		assertEquals(1, referencedModelElements0.size());
 		assertEquals(useCaseId, referencedModelElements0.get(0));
 
-		final ModelElementId newTestElementId = ModelUtil.getProject(newTestElement).getModelElementId(newTestElement);
+		final ModelElementId newTestElementId = ModelUtil.getProject(
+				newTestElement).getModelElementId(newTestElement);
 
 		assertEquals(NON_CONTAINED_N_TO_M, mrSuboperation4.getFeatureName());
 		assertEquals(0, mrSuboperation4.getIndex());
 		assertEquals(useCaseId, mrSuboperation4.getModelElementId());
-		assertEquals(NON_CONTAINED_M_TO_N, mrSuboperation4.getOppositeFeatureName());
+		assertEquals(NON_CONTAINED_M_TO_N,
+				mrSuboperation4.getOppositeFeatureName());
 		assertFalse(mrSuboperation4.isAdd());
 		assertTrue(mrSuboperation4.isBidirectional());
-		final Set<ModelElementId> otherInvolvedModelElements2 = mrSuboperation4.getOtherInvolvedModelElements();
+		final Set<ModelElementId> otherInvolvedModelElements2 = mrSuboperation4
+				.getOtherInvolvedModelElements();
 		assertEquals(1, otherInvolvedModelElements2.size());
-		final EList<ModelElementId> referencedModelElements = mrSuboperation4.getReferencedModelElements();
+		final EList<ModelElementId> referencedModelElements = mrSuboperation4
+				.getReferencedModelElements();
 		assertEquals(1, referencedModelElements.size());
 		assertEquals(newTestElementId, referencedModelElements.get(0));
 
@@ -465,27 +521,32 @@ public class CommandTest extends ESTest {
 		assertEquals(NON_CONTAINED_M_TO_N, mrSuboperation5.getFeatureName());
 		assertEquals(false, mrSuboperation5.isAdd());
 		assertEquals(1, mrSuboperation5.getReferencedModelElements().size());
-		assertEquals(useCaseId, mrSuboperation5.getReferencedModelElements().get(0));
+		assertEquals(useCaseId, mrSuboperation5.getReferencedModelElements()
+				.get(0));
 
 		assertEquals(NON_CONTAINED_N_TO_M, mrSuboperation6.getFeatureName());
 		assertEquals(0, mrSuboperation6.getIndex());
 		assertEquals(useCaseId, mrSuboperation6.getModelElementId());
-		assertEquals(NON_CONTAINED_M_TO_N, mrSuboperation6.getOppositeFeatureName());
+		assertEquals(NON_CONTAINED_M_TO_N,
+				mrSuboperation6.getOppositeFeatureName());
 		assertEquals(false, mrSuboperation6.isAdd());
 		assertEquals(true, mrSuboperation6.isBidirectional());
-		final Set<ModelElementId> otherInvolvedModelElements6 = mrSuboperation6.getOtherInvolvedModelElements();
+		final Set<ModelElementId> otherInvolvedModelElements6 = mrSuboperation6
+				.getOtherInvolvedModelElements();
 		assertEquals(1, otherInvolvedModelElements6.size());
-		final EList<ModelElementId> referencedModelElements6 = mrSuboperation6.getReferencedModelElements();
+		final EList<ModelElementId> referencedModelElements6 = mrSuboperation6
+				.getReferencedModelElements();
 		assertEquals(1, referencedModelElements6.size());
-		final ModelElementId otherTestElementId = ModelUtil.getProject(otherTestElement).getModelElementId(
-			otherTestElement);
+		final ModelElementId otherTestElementId = ModelUtil.getProject(
+				otherTestElement).getModelElementId(otherTestElement);
 		assertEquals(otherTestElementId, referencedModelElements6.get(0));
 
 		assertEquals(otherTestElementId, mrSuboperation7.getModelElementId());
 		assertEquals(NON_CONTAINED_M_TO_N, mrSuboperation7.getFeatureName());
 		assertEquals(false, mrSuboperation7.isAdd());
 		assertEquals(1, mrSuboperation7.getReferencedModelElements().size());
-		assertEquals(useCaseId, mrSuboperation7.getReferencedModelElements().get(0));
+		assertEquals(useCaseId, mrSuboperation7.getReferencedModelElements()
+				.get(0));
 
 	}
 
@@ -501,13 +562,19 @@ public class CommandTest extends ESTest {
 
 		ProjectUtil.addElement(getProjectSpace().toAPI(), leafSection);
 
-		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
+		final EditingDomain editingDomain = getProjectSpace()
+				.getContentEditingDomain();
 
 		// cut to clipboard
 		final Collection<TestElement> toCut = new ArrayList<TestElement>();
 		toCut.add(actor);
-		final Command copyCommand = editingDomain.createCommand(CutToClipboardCommand.class, new CommandParameter(
-			leafSection, TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS, toCut));
+		final Command copyCommand = editingDomain
+				.createCommand(
+						CutToClipboardCommand.class,
+						new CommandParameter(
+								leafSection,
+								TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS,
+								toCut));
 
 		editingDomain.getCommandStack().execute(copyCommand);
 
@@ -526,10 +593,14 @@ public class CommandTest extends ESTest {
 		assertEquals(0, leafSection.getContainedElements().size());
 
 		// paste from clipboard
-		final Command pasteCommand = editingDomain.createCommand(PasteFromClipboardCommand.class, new CommandParameter(
-			leafSection,
-			TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS, Collections.emptyList(),
-			CommandParameter.NO_INDEX));
+		final Command pasteCommand = editingDomain
+				.createCommand(
+						PasteFromClipboardCommand.class,
+						new CommandParameter(
+								leafSection,
+								TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS,
+								Collections.emptyList(),
+								CommandParameter.NO_INDEX));
 
 		editingDomain.getCommandStack().execute(pasteCommand);
 
@@ -562,13 +633,16 @@ public class CommandTest extends ESTest {
 			protected void doRun() {
 				getProject().addModelElement(leafSection);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
+		final EditingDomain editingDomain = getProjectSpace()
+				.getContentEditingDomain();
 
 		// copy to clipboard
-		final Command cutCommand = CutToClipboardCommand.create(editingDomain, leafSection,
-			TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS, actor);
+		final Command cutCommand = CutToClipboardCommand.create(editingDomain,
+				leafSection,
+				TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS,
+				actor);
 
 		if (cutCommand.canExecute()) {
 			editingDomain.getCommandStack().execute(cutCommand);
@@ -588,9 +662,10 @@ public class CommandTest extends ESTest {
 		assertEquals(0, leafSection.getContainedElements().size());
 
 		// paste from clipboard
-		final Command pasteCommand = PasteFromClipboardCommand.create(editingDomain, leafSection,
-			TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS,
-			CommandParameter.NO_INDEX);
+		final Command pasteCommand = PasteFromClipboardCommand.create(
+				editingDomain, leafSection,
+				TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS,
+				CommandParameter.NO_INDEX);
 
 		if (pasteCommand.canExecute()) {
 			editingDomain.getCommandStack().execute(pasteCommand);
@@ -624,14 +699,16 @@ public class CommandTest extends ESTest {
 			protected void doRun() {
 				getProject().addModelElement(leafSection);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
+		final EditingDomain editingDomain = getProjectSpace()
+				.getContentEditingDomain();
 
 		// cut to clipboard
-		final Command cutCommand = CutToClipboardCommand.create(editingDomain, leafSection,
-			TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS
-			, actor);
+		final Command cutCommand = CutToClipboardCommand.create(editingDomain,
+				leafSection,
+				TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS,
+				actor);
 
 		if (cutCommand.canExecute()) {
 			editingDomain.getCommandStack().execute(cutCommand);
@@ -647,7 +724,7 @@ public class CommandTest extends ESTest {
 			protected void doRun() {
 				editingDomain.getCommandStack().undo();
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 		// does not work but is strange anyway
 		// assertTrue(editingDomain.getCommandStack().canRedo());
 		assertEquals(1, leafSection.getContainedElements().size());
@@ -669,13 +746,16 @@ public class CommandTest extends ESTest {
 			protected void doRun() {
 				getProject().addModelElement(leafSection);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
+		final EditingDomain editingDomain = getProjectSpace()
+				.getContentEditingDomain();
 
 		// remove
-		final Command removeCommand = RemoveCommand.create(editingDomain, leafSection,
-			TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS, actor);
+		final Command removeCommand = RemoveCommand.create(editingDomain,
+				leafSection,
+				TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS,
+				actor);
 		if (removeCommand.canExecute()) {
 			editingDomain.getCommandStack().execute(removeCommand);
 		} else {
@@ -709,15 +789,21 @@ public class CommandTest extends ESTest {
 			protected void doRun() {
 				getProject().addModelElement(leafSection);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
-		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
+		final EditingDomain editingDomain = getProjectSpace()
+				.getContentEditingDomain();
 
 		// remove
 		final Collection<TestElement> toRemove = new ArrayList<TestElement>();
 		toRemove.add(actor);
-		final Command copyCommand = editingDomain.createCommand(RemoveCommand.class, new CommandParameter(leafSection,
-			TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS, toRemove));
+		final Command copyCommand = editingDomain
+				.createCommand(
+						RemoveCommand.class,
+						new CommandParameter(
+								leafSection,
+								TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS,
+								toRemove));
 		if (copyCommand.canExecute()) {
 			editingDomain.getCommandStack().execute(copyCommand);
 		} else {
@@ -749,7 +835,8 @@ public class CommandTest extends ESTest {
 
 		Add.toProject(getLocalProject(), leafSection);
 
-		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
+		final EditingDomain editingDomain = getProjectSpace()
+				.getContentEditingDomain();
 
 		// delete
 		final Collection<TestElement> toDelete = new ArrayList<TestElement>();
@@ -787,15 +874,21 @@ public class CommandTest extends ESTest {
 		clearOperations();
 
 		assertEquals(0, getProjectSpace().getOperations().size());
-		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
+		final EditingDomain editingDomain = getProjectSpace()
+				.getContentEditingDomain();
 
 		// delete
 		final Collection<TestElement> toDelete = new ArrayList<TestElement>();
 		toDelete.add(actor);
 
 		// delete actor from model elements feature
-		final Command command = editingDomain.createCommand(DeleteCommand.class, new CommandParameter(leafSection,
-			TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS, toDelete));
+		final Command command = editingDomain
+				.createCommand(
+						DeleteCommand.class,
+						new CommandParameter(
+								leafSection,
+								TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS,
+								toDelete));
 		if (command.canExecute()) {
 			editingDomain.getCommandStack().execute(command);
 		} else {
@@ -821,7 +914,8 @@ public class CommandTest extends ESTest {
 		assertEquals(0, leafSection.getContainedElements().size());
 	}
 
-	// @Test: disabled for Bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=357464
+	// @Test: disabled for Bug
+	// https://bugs.eclipse.org/bugs/show_bug.cgi?id=357464
 	public void cutAndPasteFromClipboardCommandComplex() {
 
 		final TestElement leafSection = Create.testElement();
@@ -845,25 +939,35 @@ public class CommandTest extends ESTest {
 				getProject().addModelElement(leafSection);
 				clearOperations();
 			}
-		}.run(false);
-		final ModelElementId workPackageId = getProject().getModelElementId(workPackage);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
+		final ModelElementId workPackageId = getProject().getModelElementId(
+				workPackage);
 
-		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
+		final EditingDomain editingDomain = ESWorkspaceProviderImpl
+				.getInstance().getEditingDomain();
 
 		// cut the element
-		final Command command = CutToClipboardCommand.create(editingDomain, workPackage);
+		final Command command = CutToClipboardCommand.create(editingDomain,
+				workPackage);
 		editingDomain.getCommandStack().execute(command);
 
-		assertTrue(ESWorkspaceProviderImpl.getInstance().getEditingDomain().getClipboard().contains(workPackage));
-		assertEquals(1, ModelUtil.getAllContainedModelElements(leafSection, false).size());
+		assertTrue(ESWorkspaceProviderImpl.getInstance().getEditingDomain()
+				.getClipboard().contains(workPackage));
+		assertEquals(1,
+				ModelUtil.getAllContainedModelElements(leafSection, false)
+						.size());
 
 		assertTrue(getProject().contains(workPackageId));
 
-		final Command pasteCommand = PasteFromClipboardCommand.create(editingDomain, leafSection,
-			TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS, CommandParameter.NO_INDEX);
+		final Command pasteCommand = PasteFromClipboardCommand.create(
+				editingDomain, leafSection,
+				TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS,
+				CommandParameter.NO_INDEX);
 		editingDomain.getCommandStack().execute(pasteCommand);
 
-		assertEquals(4, ModelUtil.getAllContainedModelElements(leafSection, false).size());
+		assertEquals(4,
+				ModelUtil.getAllContainedModelElements(leafSection, false)
+						.size());
 		assertTrue(getProject().contains(workPackageId));
 
 		assertEquals(2, getProjectSpace().getOperations().size());
@@ -882,16 +986,24 @@ public class CommandTest extends ESTest {
 				getProject().addModelElement(leafSection);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(0, getProjectSpace().getOperations().size());
 
-		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
+		final EditingDomain editingDomain = ESWorkspaceProviderImpl
+				.getInstance().getEditingDomain();
 
-		final EditingDomain domain1 = AdapterFactoryEditingDomain.getEditingDomainFor(actor);
-		assertSame(editingDomain, domain1);
+		final EditingDomain domain1 = AdapterFactoryEditingDomain
+				.getEditingDomainFor(actor);
+		assertNotSame(editingDomain, domain1);
+
+		final EditingDomain contentEditingDomain = getProjectSpace()
+				.getContentEditingDomain();
+		assertSame(contentEditingDomain, domain1);
+
 		assertNotNull(domain1);
 		assertNotNull(editingDomain);
+		assertNotNull(contentEditingDomain);
 	}
 
 	/**
@@ -909,13 +1021,15 @@ public class CommandTest extends ESTest {
 				getProject().addModelElement(leafSection);
 				clearOperations();
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(0, getProjectSpace().getOperations().size());
-		final EditingDomain editingDomain = ESWorkspaceProviderImpl.getInstance().getEditingDomain();
+		final EditingDomain editingDomain = getProjectSpace()
+				.getContentEditingDomain();
 
 		// delete
-		editingDomain.getCommandStack().execute(DeleteCommand.create(editingDomain, actor));
+		editingDomain.getCommandStack().execute(
+				DeleteCommand.create(editingDomain, actor));
 
 		assertEquals(0, leafSection.getContainedElements().size());
 		assertTrue(editingDomain.getCommandStack().canUndo());
@@ -945,7 +1059,7 @@ public class CommandTest extends ESTest {
 				// provoke NPE
 				col.getModelElements();
 			}
-		}.run(true);
+		}.run(getProjectSpace().getContentEditingDomain(), true);
 	}
 
 	@Test(expected = NullPointerException.class)
@@ -958,6 +1072,6 @@ public class CommandTest extends ESTest {
 				// provoke NPE
 				col.getModelElements();
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 	}
 }

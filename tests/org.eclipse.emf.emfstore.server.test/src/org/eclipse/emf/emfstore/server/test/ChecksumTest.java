@@ -145,7 +145,7 @@ public class ChecksumTest extends ESTestWithLoggedInUser {
 				getLocalProject().getModelElements().add(a);
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 
 		final long checksum = computeChecksum(getLocalProject());
 		assertEquals(computeChecksum, checksum);
@@ -161,7 +161,7 @@ public class ChecksumTest extends ESTestWithLoggedInUser {
 		final TestElement testElement = Create.testElement();
 		share(getUsersession(), addElement(getLocalProject(), testElement));
 
-		Update.testElement(TestElementFeatures.name(),
+		Update.testElement(getLocalProject(), TestElementFeatures.name(),
 			testElement, A);
 
 		final long expectedChecksum = computeChecksum(getLocalProject());
@@ -169,7 +169,7 @@ public class ChecksumTest extends ESTestWithLoggedInUser {
 
 		stopRecording(getLocalProject());
 
-		Update.testElement(TestElementFeatures.name(),
+		Update.testElement(getLocalProject(), TestElementFeatures.name(),
 			testElement, BOOL);
 
 		startRecording(getLocalProject());
@@ -206,7 +206,7 @@ public class ChecksumTest extends ESTestWithLoggedInUser {
 
 		final ESLocalProject checkout = checkout(getLocalProject());
 		addElement(getLocalProject(), testElement);
-		Update.testElement(TestElementFeatures.name(),
+		Update.testElement(getLocalProject(), TestElementFeatures.name(),
 			testElement, A);
 
 		commitWithoutCommand(getLocalProject());
@@ -214,7 +214,7 @@ public class ChecksumTest extends ESTestWithLoggedInUser {
 		assertEquals(0, getOperationSize(getLocalProject()));
 
 		addElement(checkout,
-			Update.testElement(TestElementFeatures.name(),
+			Update.testElement(getLocalProject(), TestElementFeatures.name(),
 				Create.testElement(), BOOL));
 
 		update(checkout);
@@ -223,11 +223,11 @@ public class ChecksumTest extends ESTestWithLoggedInUser {
 		assertEquals(0, getOperationSize(checkout));
 		assertEquals(0, getOperationSize(getLocalProject()));
 
-		Update.testElement(TestElementFeatures.name(),
+		Update.testElement(getLocalProject(), TestElementFeatures.name(),
 			testElement, BOOL);
 
 		stopRecording(getLocalProject());
-		Update.testElement(TestElementFeatures.name(),
+		Update.testElement(getLocalProject(), TestElementFeatures.name(),
 			testElement, C);
 
 		startRecording(getLocalProject());
@@ -251,10 +251,10 @@ public class ChecksumTest extends ESTestWithLoggedInUser {
 		share(getUsersession(), getLocalProject());
 
 		addElement(getLocalProject(), testElement);
-		Update.testElement(TestElementFeatures.name(), testElement, A);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), testElement, A);
 
 		stopRecording(getLocalProject());
-		Update.testElement(TestElementFeatures.name(), testElement, BOOL);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), testElement, BOOL);
 		startRecording(getLocalProject());
 
 		// cancel should be triggered
@@ -273,7 +273,7 @@ public class ChecksumTest extends ESTestWithLoggedInUser {
 
 		final ESLocalProject checkout = checkout(getLocalProject());
 		addElement(getLocalProject(), testElement);
-		Update.testElement(TestElementFeatures.name(), testElement, A);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), testElement, A);
 
 		commitWithoutCommand(getLocalProject());
 
@@ -283,7 +283,7 @@ public class ChecksumTest extends ESTestWithLoggedInUser {
 
 		commitWithoutCommand(checkout);
 		stopRecording(getLocalProject());
-		Update.testElement(TestElementFeatures.name(), testElement, BOOL);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), testElement, BOOL);
 		startRecording(getLocalProject());
 
 		// cancel should be triggered via exception
@@ -304,7 +304,7 @@ public class ChecksumTest extends ESTestWithLoggedInUser {
 		final ESLocalProject checkout = checkout(getLocalProject(), getLocalProject().getBaseVersion());
 
 		addElement(getLocalProject(), testElement);
-		Update.testElement(TestElementFeatures.name(), testElement, A);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), testElement, A);
 
 		commitWithoutCommand(getLocalProject());
 
@@ -337,7 +337,7 @@ public class ChecksumTest extends ESTestWithLoggedInUser {
 		final ESLocalProject checkout = checkout(getLocalProject());
 		addElement(getLocalProject(), testElement);
 
-		Update.testElement(TestElementFeatures.name(), testElement, A);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), testElement, A);
 
 		commitWithoutCommand(getLocalProject());
 		addElement(checkout, Create.testElement());
@@ -345,10 +345,10 @@ public class ChecksumTest extends ESTestWithLoggedInUser {
 		update(checkout);
 		commitWithoutCommand(checkout);
 
-		Update.testElement(TestElementFeatures.name(), testElement, BOOL);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), testElement, BOOL);
 
 		stopRecording(getLocalProject());
-		Update.testElement(TestElementFeatures.name(), testElement, C);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), testElement, C);
 		startRecording(getLocalProject());
 
 		assertEquals(1, getOperationSize(getLocalProject()));

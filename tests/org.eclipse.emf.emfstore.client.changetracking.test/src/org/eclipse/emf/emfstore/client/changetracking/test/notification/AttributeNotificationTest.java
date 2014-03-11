@@ -47,7 +47,7 @@ public class AttributeNotificationTest extends ESTest {
 	public void changeAttribute() throws UnsupportedOperationException, UnsupportedNotificationException {
 		final TestElement useCase = Create.testElement();
 		ProjectUtil.addElement(getProjectSpace().toAPI(), useCase);
-		Update.testElement(TestElementFeatures.name(), useCase, NEW_NAME);
+		Update.testElement(getLocalProject(), TestElementFeatures.name(), useCase, NEW_NAME);
 
 		assertEquals(NEW_NAME, useCase.getName());
 

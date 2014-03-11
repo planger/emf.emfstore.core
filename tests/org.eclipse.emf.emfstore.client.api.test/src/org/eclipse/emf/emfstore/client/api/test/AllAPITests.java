@@ -20,18 +20,11 @@ import org.junit.runners.Suite;
  * @author koegel
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({
-	BranchTest.class,
-	ServerCreationTest.class,
-	ModelElementTest.class,
-	ServerCommunicationTest.class,
-	UnsharedLocalProjectTest.class,
-	SharedProjectTest.class,
-	UsersessionTest.class,
-	WorkspaceTest.class,
-	RemoteProjectTest.class,
-	RunESCommandTest.class
-})
+@Suite.SuiteClasses({ BranchTest.class, ServerCreationTest.class,
+		ModelElementTest.class, ServerCommunicationTest.class,
+		UnsharedLocalProjectTest.class, SharedProjectTest.class,
+		UsersessionTest.class, WorkspaceTest.class, RemoteProjectTest.class,
+		RunESCommandTest.class, LocalProjectOpenClose.class })
 public class AllAPITests {
 
 }

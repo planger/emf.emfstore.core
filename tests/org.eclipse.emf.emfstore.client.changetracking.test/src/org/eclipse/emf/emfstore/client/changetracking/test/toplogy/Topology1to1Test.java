@@ -71,7 +71,7 @@ public class Topology1to1Test extends ESTest {
 
 		clearOperations();
 
-		Update.testElement(TestElementFeatures.containedElement(), issue, solution);
+		Update.testElement(getLocalProject(), TestElementFeatures.containedElement(), issue, solution);
 		assertSame(solution, issue.getContainedElement());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
@@ -121,7 +121,7 @@ public class Topology1to1Test extends ESTest {
 
 		clearOperations();
 
-		Update.testElement(TestElementFeatures.srefContainer(), solution, issue);
+		Update.testElement(getLocalProject(), TestElementFeatures.srefContainer(), solution, issue);
 
 		assertSame(solution, issue.getContainedElement());
 
@@ -173,7 +173,7 @@ public class Topology1to1Test extends ESTest {
 		Add.toProject(getLocalProject(), solutionOld);
 		Add.toProject(getLocalProject(), solutionNew);
 
-		Update.testElement(
+		Update.testElement(getLocalProject(),
 			TestElementFeatures.containedElement(),
 			issue, solutionOld);
 
@@ -184,7 +184,7 @@ public class Topology1to1Test extends ESTest {
 		// fetch id here, before oldTestElement is removed from project
 		final ModelElementId solutionOldId = ModelUtil.getProject(solutionOld).getModelElementId(solutionOld);
 
-		Update.testElement(TestElementFeatures.containedElement(), issue, solutionNew);
+		Update.testElement(getLocalProject(), TestElementFeatures.containedElement(), issue, solutionNew);
 
 		assertSame(solutionNew, issue.getContainedElement());
 
@@ -244,13 +244,13 @@ public class Topology1to1Test extends ESTest {
 
 		final ModelElementId solutionOldId = ModelUtil.getProject(solutionOld).getModelElementId(solutionOld);
 
-		Update.testElement(TestElementFeatures.containedElement(), issue, solutionOld);
+		Update.testElement(getLocalProject(), TestElementFeatures.containedElement(), issue, solutionOld);
 
 		assertEquals(issue.getContainedElement(), solutionOld);
 
 		clearOperations();
 
-		Update.testElement(TestElementFeatures.srefContainer(), solutionNew, issue);
+		Update.testElement(getLocalProject(), TestElementFeatures.srefContainer(), solutionNew, issue);
 		assertSame(solutionNew, issue.getContainedElement());
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
@@ -320,8 +320,8 @@ public class Topology1to1Test extends ESTest {
 		Add.toProject(getLocalProject(), solution1);
 		Add.toProject(getLocalProject(), solution2);
 
-		Update.testElement(TestElementFeatures.containedElement(), issue1, solution1);
-		Update.testElement(TestElementFeatures.containedElement(), issue2, solution2);
+		Update.testElement(getLocalProject(), TestElementFeatures.containedElement(), issue1, solution1);
+		Update.testElement(getLocalProject(), TestElementFeatures.containedElement(), issue2, solution2);
 
 		assertEquals(issue1.getContainedElement(), solution1);
 		assertEquals(issue2.getContainedElement(), solution2);
@@ -330,7 +330,7 @@ public class Topology1to1Test extends ESTest {
 
 		clearOperations();
 
-		Update.testElement(TestElementFeatures.containedElement(), issue1, solution2);
+		Update.testElement(getLocalProject(), TestElementFeatures.containedElement(), issue1, solution2);
 
 		assertSame(solution2, issue1.getContainedElement());
 		assertNull(issue2.getContainedElement());
@@ -396,8 +396,8 @@ public class Topology1to1Test extends ESTest {
 		Add.toProject(getLocalProject(), solution1);
 		Add.toProject(getLocalProject(), solution2);
 
-		Update.testElement(TestElementFeatures.containedElement(), issue1, solution1);
-		Update.testElement(TestElementFeatures.containedElement(), issue2, solution2);
+		Update.testElement(getLocalProject(), TestElementFeatures.containedElement(), issue1, solution1);
+		Update.testElement(getLocalProject(), TestElementFeatures.containedElement(), issue2, solution2);
 
 		assertEquals(issue1.getContainedElement(), solution1);
 		assertEquals(issue2.getContainedElement(), solution2);
@@ -406,7 +406,7 @@ public class Topology1to1Test extends ESTest {
 
 		final ModelElementId solution1Id = ModelUtil.getProject(solution1).getModelElementId(solution1);
 
-		Update.testElement(TestElementFeatures.srefContainer(), solution2, issue1);
+		Update.testElement(getLocalProject(), TestElementFeatures.srefContainer(), solution2, issue1);
 
 		assertSame(solution2, issue1.getContainedElement());
 		assertNull(issue2.getContainedElement());
@@ -470,12 +470,12 @@ public class Topology1to1Test extends ESTest {
 		Add.toProject(getLocalProject(), issue2);
 		Add.toProject(getLocalProject(), solution);
 
-		Update.testElement(TestElementFeatures.containedElement(), issue1, solution);
+		Update.testElement(getLocalProject(), TestElementFeatures.containedElement(), issue1, solution);
 		assertEquals(issue1.getContainedElement(), solution);
 
 		clearOperations();
 
-		Update.testElement(TestElementFeatures.srefContainer(), solution, issue2);
+		Update.testElement(getLocalProject(), TestElementFeatures.srefContainer(), solution, issue2);
 
 		assertNull(issue1.getContainedElement());
 		assertSame(issue2.getContainedElement(), solution);
@@ -535,12 +535,12 @@ public class Topology1to1Test extends ESTest {
 		Add.toProject(getLocalProject(), issue2);
 		Add.toProject(getLocalProject(), solution);
 
-		Update.testElement(TestElementFeatures.containedElement(), issue1, solution);
+		Update.testElement(getLocalProject(), TestElementFeatures.containedElement(), issue1, solution);
 
 		assertEquals(issue1.getContainedElement(), solution);
 
 		clearOperations();
-		Update.testElement(TestElementFeatures.containedElement(), issue2, solution);
+		Update.testElement(getLocalProject(), TestElementFeatures.containedElement(), issue2, solution);
 
 		assertNull(issue1.getContainedElement());
 		assertSame(issue2.getContainedElement(), solution);
@@ -613,7 +613,7 @@ public class Topology1to1Test extends ESTest {
 				leafSection.getContainedElements().add(solution2);
 				issue.setContainedElement(solution1);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertEquals(issue.getContainedElement(), solution1);
 		assertTrue(leafSection.getContainedElements().contains(solution2));
@@ -626,7 +626,7 @@ public class Topology1to1Test extends ESTest {
 			protected void doRun() {
 				issue.setContainedElement(solution2);
 			}
-		}.run(false);
+		}.run(getProjectSpace().getContentEditingDomain(), false);
 
 		assertSame(solution2, issue.getContainedElement());
 		assertTrue(leafSection.getContainedElements().isEmpty());
@@ -700,9 +700,9 @@ public class Topology1to1Test extends ESTest {
 		Add.toProject(getLocalProject(), solution1);
 		Add.toProject(getLocalProject(), solution2);
 
-		Add.toContainedElements(leafSection, solution2);
+		Add.toContainedElements(getLocalProject(), leafSection, solution2);
 
-		Update.testElement(TestElementFeatures.containedElement(), issue, solution1);
+		Update.testElement(getLocalProject(), TestElementFeatures.containedElement(), issue, solution1);
 
 		assertEquals(issue.getContainedElement(), solution1);
 		assertTrue(leafSection.getContainedElements().contains(solution2));
@@ -711,7 +711,7 @@ public class Topology1to1Test extends ESTest {
 
 		final ModelElementId solution1Id = ModelUtil.getProject(solution1).getModelElementId(solution1);
 
-		Update.testElement(TestElementFeatures.srefContainer(), solution2, issue);
+		Update.testElement(getLocalProject(), TestElementFeatures.srefContainer(), solution2, issue);
 
 		assertSame(solution2, issue.getContainedElement());
 		assertTrue(leafSection.getContainedElements().isEmpty());
@@ -788,12 +788,12 @@ public class Topology1to1Test extends ESTest {
 		Add.toProject(getLocalProject(), leafSection);
 		Add.toProject(getLocalProject(), solution);
 
-		Add.toContainedElements(leafSection, solution);
+		Add.toContainedElements(getLocalProject(), leafSection, solution);
 		assertTrue(leafSection.getContainedElements().contains(solution));
 
 		clearOperations();
 
-		Update.testElement(TestElementFeatures.containedElement(), issue, solution);
+		Update.testElement(getLocalProject(), TestElementFeatures.containedElement(), issue, solution);
 
 		assertSame(solution, issue.getContainedElement());
 		assertTrue(leafSection.getContainedElements().isEmpty());
@@ -867,13 +867,13 @@ public class Topology1to1Test extends ESTest {
 		Add.toProject(getLocalProject(), leafSection);
 		Add.toProject(getLocalProject(), solution);
 
-		Add.toContainedElements(leafSection, solution);
+		Add.toContainedElements(getLocalProject(), leafSection, solution);
 
 		assertTrue(leafSection.getContainedElements().contains(solution));
 
 		clearOperations();
 
-		Update.testElement(TestElementFeatures.srefContainer(), solution, issue);
+		Update.testElement(getLocalProject(), TestElementFeatures.srefContainer(), solution, issue);
 
 		assertSame(solution, issue.getContainedElement());
 		assertTrue(leafSection.getContainedElements().isEmpty());
@@ -950,13 +950,13 @@ public class Topology1to1Test extends ESTest {
 		Add.toProject(getLocalProject(), issue);
 		Add.toProject(getLocalProject(), solution);
 
-		Update.testElement(TestElementFeatures.containedElement(), issue, solution);
+		Update.testElement(getLocalProject(), TestElementFeatures.containedElement(), issue, solution);
 		clearOperations();
 
 		assertSame(solution, issue.getContainedElement());
 		final ModelElementId solutionId = ModelUtil.getProject(solution).getModelElementId(solution);
 
-		Update.testElement(TestElementFeatures.containedElement(), issue, null);
+		Update.testElement(getLocalProject(), TestElementFeatures.containedElement(), issue, null);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(1, operations.size());
@@ -998,14 +998,14 @@ public class Topology1to1Test extends ESTest {
 		Add.toProject(getLocalProject(), issue);
 		Add.toProject(getLocalProject(), solution);
 
-		Update.testElement(TestElementFeatures.containedElement(), issue, solution);
+		Update.testElement(getLocalProject(), TestElementFeatures.containedElement(), issue, solution);
 
 		clearOperations();
 
 		assertSame(solution, issue.getContainedElement());
 		final ModelElementId solutionId = ModelUtil.getProject(solution).getModelElementId(solution);
 
-		Update.testElement(TestElementFeatures.srefContainer(), solution, null);
+		Update.testElement(getLocalProject(), TestElementFeatures.srefContainer(), solution, null);
 
 		final List<AbstractOperation> operations = getProjectSpace().getOperations();
 		assertEquals(1, operations.size());

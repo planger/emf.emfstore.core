@@ -14,7 +14,7 @@ package org.eclipse.emf.emfstore.client.test.common.dsl;
 import java.util.concurrent.Callable;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.emfstore.client.util.RunESCommand;
+import org.eclipse.emf.emfstore.client.ESLocalProject;
 import org.eclipse.emf.emfstore.test.model.TestElement;
 
 /**
@@ -29,9 +29,9 @@ public final class Update {
 
 	}
 
-	public static TestElement testElement(final EStructuralFeature feature,
+	public static TestElement testElement(ESLocalProject localProject, final EStructuralFeature feature,
 		final TestElement testElement, final Object newValue) {
-		return RunESCommand.runWithResult(new Callable<TestElement>() {
+		return localProject.runWithResult(new Callable<TestElement>() {
 			public TestElement call() throws Exception {
 				testElement.eSet(feature, newValue);
 				return testElement;

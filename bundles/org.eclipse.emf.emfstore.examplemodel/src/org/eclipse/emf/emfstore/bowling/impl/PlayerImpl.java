@@ -452,6 +452,7 @@ public class PlayerImpl extends EObjectImpl implements Player {
 	 *         <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
+	 * @since 1.1
 	 */
 	public boolean validate(DiagnosticChain chain, Map<?, ?> context) {
 		if (getHeight() > 10) {

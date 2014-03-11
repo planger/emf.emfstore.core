@@ -94,7 +94,7 @@ public class AllocateIdsPolicyTest extends ESTestWithLoggedInUser {
 				getProject().deleteModelElement(object);
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 		assertNull(((IdEObjectCollectionImpl) getProject()).getDeletedModelElementId(object));
 	}
 
@@ -124,7 +124,7 @@ public class AllocateIdsPolicyTest extends ESTestWithLoggedInUser {
 				getProject().addModelElement(matchup);
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 		final ModelElementId matchupId1 = getProject().getModelElementId(matchup);
 
 		RunESCommand.run(new Callable<Void>() {
@@ -132,7 +132,7 @@ public class AllocateIdsPolicyTest extends ESTestWithLoggedInUser {
 				matchup.getGames().add(game);
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 		final ModelElementId gameId1 = getProject().getModelElementId(game);
 
 		// remove and add matchup in different commands
@@ -143,7 +143,7 @@ public class AllocateIdsPolicyTest extends ESTestWithLoggedInUser {
 				getProject().addModelElement(matchup);
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 
 		comparator.compare(matchupId1, getProject().getModelElementId(matchup));
 		comparator.compare(gameId1, getProject().getModelElementId(game));
@@ -162,7 +162,7 @@ public class AllocateIdsPolicyTest extends ESTestWithLoggedInUser {
 				getProject().addModelElement(matchup);
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 		final ModelElementId matchupId1 = getProject().getModelElementId(matchup);
 
 		RunESCommand.run(new Callable<Void>() {
@@ -170,7 +170,7 @@ public class AllocateIdsPolicyTest extends ESTestWithLoggedInUser {
 				matchup.getGames().add(game);
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 
 		final ModelElementId gameId1 = getProject().getModelElementId(game);
 
@@ -181,14 +181,14 @@ public class AllocateIdsPolicyTest extends ESTestWithLoggedInUser {
 				getProject().deleteModelElement(matchup);
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 		RunESCommand.run(new Callable<Void>() {
 
 			public Void call() throws Exception {
 				getProject().addModelElement(matchup);
 				return null;
 			}
-		});
+		}, getProjectSpace().getContentEditingDomain());
 
 		comparator.compare(matchupId1, getProject().getModelElementId(matchup));
 		comparator.compare(gameId1, getProject().getModelElementId(game));
