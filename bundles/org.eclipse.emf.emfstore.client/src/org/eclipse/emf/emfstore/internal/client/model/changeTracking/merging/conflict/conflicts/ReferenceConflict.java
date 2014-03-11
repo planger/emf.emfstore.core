@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Otto von Wesendonk - initial API and implementation
+ * Maximilian Koegel, Edgar Mueller - bugfix 421361
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.conflict.conflicts;
 
@@ -20,8 +21,8 @@ import org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.con
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.conflict.ConflictOption.OptionType;
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.conflict.VisualConflict;
 import org.eclipse.emf.emfstore.internal.server.conflictDetection.ConflictBucket;
-import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.MultiReferenceOperation;
+import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.SingleReferenceOperation;
 
 /**
  * Container for {@link MultiReferenceConflict} and {@link SingleReferenceConflict}.
@@ -32,42 +33,150 @@ public class ReferenceConflict extends VisualConflict {
 
 	private final VisualConflict conflict;
 
+	/*
+	 * Applies to --
+	 * left: CS, right: CS
+	 * left: CS, right: S
+	 * left: S, right: CS
+	 */
 	/**
-	 * Default constructor.
+	 * Constructor for a reference conflict where two {@link SingleReferenceOperation} conflict with each other. This
+	 * may be the case, if:
+	 * <ul>
+	 * <li>the left and rights operations are main operations of conflicting
+	 * {@link org.eclipse.emf.emfstore.internal.server.model.versioning.operations.CompositeOperation
+	 * CompositeOperation}s</li>
+	 * <li>the left operation is the main operation of a conflicting
+	 * {@link org.eclipse.emf.emfstore.internal.server.model.versioning.operations.CompositeOperation
+	 * CompositeOperation}s while the right operation is a stand-alone {@link SingleReferenceOperation}</li>
+	 * <li>the right operation is the main operation of a conflicting
+	 * {@link org.eclipse.emf.emfstore.internal.server.model.versioning.operations.CompositeOperation
+	 * CompositeOperation}s while the left operation is a stand-alone {@link SingleReferenceOperation}</li>
+	 * </ul>
 	 * 
-	 * @param underlyingSingleConflict
-	 *            the underlying conflict, {@link MultiReferenceConflict} or {@link SingleReferenceConflict}
+	 * @param leftSingleRef
+	 *            a {@link SingleReferenceOperation}
+	 * @param rightSingleRef
+	 *            the {@link SingleReferenceOperation} conflicting with <code>leftSingleRef</code>
 	 * @param conflictBucket
 	 *            the conflict bucket
 	 * @param decisionManager
 	 *            the decision manager
 	 */
-	public ReferenceConflict(boolean underlyingSingleConflict, ConflictBucket conflictBucket,
+	public ReferenceConflict(SingleReferenceOperation leftSingleRef,
+		SingleReferenceOperation rightSingleRef, ConflictBucket conflictBucket,
 		DecisionManager decisionManager) {
-		super(conflictBucket, decisionManager, true, false);
-		if (underlyingSingleConflict) {
-			conflict = new SingleReferenceConflict(conflictBucket, conflictBucket.getMyOperation(),
-				conflictBucket.getTheirOperation(),
-				decisionManager);
-		}
-		else {
-			conflict = createMultiMultiConflict(conflictBucket, conflictBucket.getMyOperation(),
-				conflictBucket.getTheirOperation(),
-				decisionManager);
-			setLeftIsMy(((MultiReferenceOperation) conflictBucket.getMyOperation()).isAdd());
-
-		}
+		super(conflictBucket, leftSingleRef, rightSingleRef, decisionManager, true, false);
+		conflict = new SingleReferenceConflict(conflictBucket, leftSingleRef,
+			rightSingleRef, decisionManager);
 		init();
 	}
 
-	private VisualConflict createMultiMultiConflict(ConflictBucket conflictBucket, AbstractOperation my,
-		AbstractOperation their, DecisionManager decisionManager) {
+	// left: CM, right: CM
+	// left: CM, right: M
+	// left: M, right: CM
+	/**
+	 * Constructor for a reference conflict where two {@link MultiReferenceOperation} conflict with each other. This
+	 * may be the case, if:
+	 * <ul>
+	 * <li>the left and rights operations are main operations of conflicting
+	 * {@link org.eclipse.emf.emfstore.internal.server.model.versioning.operations.CompositeOperation
+	 * CompositeOperation}s</li>
+	 * <li>the left operation is the main operation of a conflicting
+	 * {@link org.eclipse.emf.emfstore.internal.server.model.versioning.operations.CompositeOperation
+	 * CompositeOperation}s while the right operation is a stand-alone {@link MultiReferenceOperation}</li>
+	 * <li>the right operation is the main operation of a conflicting
+	 * {@link org.eclipse.emf.emfstore.internal.server.model.versioning.operations.CompositeOperation
+	 * CompositeOperation}s while the left operation is a stand-alone {@link MultiReferenceOperation}</li>
+	 * </ul>
+	 * 
+	 * @param leftMultiRef
+	 *            a {@link MultiReferenceOperation}
+	 * @param rightMultiRef
+	 *            the {@link MultiReferenceOperation} conflicting with <code>leftMultiRef</code>
+	 * @param conflictBucket
+	 *            the conflict bucket
+	 * @param decisionManager
+	 *            the decision manager
+	 */
+	public ReferenceConflict(MultiReferenceOperation leftMultiRef,
+		MultiReferenceOperation rightMultiRef, ConflictBucket conflictBucket,
+		DecisionManager decisionManager) {
+		super(conflictBucket, leftMultiRef, rightMultiRef, decisionManager, true, false);
+		conflict = new MultiReferenceConflict(conflictBucket, leftMultiRef, rightMultiRef, decisionManager, true);
+		init();
+	}
 
-		if (((MultiReferenceOperation) my).isAdd()) {
-			return new MultiReferenceConflict(conflictBucket, my, their, decisionManager, true);
-		}
+	// left: CM, right: CS
+	// left: CM, right: S
+	// left: M, right: CS
+	/**
+	 * Constructor for a reference conflict where a {@link MultiReferenceOperation} conflicts with a
+	 * {@link SingleReferenceOperation}. This may be the case, if:
+	 * <ul>
+	 * <li>the left and rights operations are main operations of conflicting
+	 * {@link org.eclipse.emf.emfstore.internal.server.model.versioning.operations.CompositeOperation
+	 * CompositeOperation}s</li>
+	 * <li>the left operation is the main operation of a conflicting
+	 * {@link org.eclipse.emf.emfstore.internal.server.model.versioning.operations.CompositeOperation
+	 * CompositeOperation}s while the right operation is a stand-alone {@link SingleReferenceOperation}</li>
+	 * <li>the right operation is the main operation of a conflicting
+	 * {@link org.eclipse.emf.emfstore.internal.server.model.versioning.operations.CompositeOperation
+	 * CompositeOperation}s while the left operation is a stand-alone {@link MultiReferenceOperation}</li>
+	 * </ul>
+	 * 
+	 * @param leftMultiRef
+	 *            a {@link SingleReferenceOperation}
+	 * @param rightSingleRef
+	 *            the {@link SingleReferenceOperation} conflicting with <code>leftSingleRef</code>
+	 * @param conflictBucket
+	 *            the conflict bucket
+	 * @param decisionManager
+	 *            the decision manager
+	 */
+	public ReferenceConflict(MultiReferenceOperation leftMultiRef,
+		SingleReferenceOperation rightSingleRef, ConflictBucket conflictBucket,
+		DecisionManager decisionManager) {
+		super(conflictBucket, leftMultiRef, rightSingleRef, decisionManager, true, false);
+		conflict = new MultiReferenceSingleConflict(leftMultiRef,
+			rightSingleRef, conflictBucket, decisionManager);
+		init();
+	}
 
-		return new MultiReferenceConflict(conflictBucket, their, my, decisionManager, false);
+	// left: CS, right: CM
+	// left: S, right: CM
+	// left: CS, right: M
+	/**
+	 * Constructor for a reference conflict where a {@link SingleReferenceOperation} conflicts with a
+	 * {@link MultiReferenceOperation}. This may be the case, if:
+	 * <ul>
+	 * <li>the left and rights operations are main operations of conflicting
+	 * {@link org.eclipse.emf.emfstore.internal.server.model.versioning.operations.CompositeOperation
+	 * CompositeOperation}s</li>
+	 * <li>the right operation is the main operation of a conflicting
+	 * {@link org.eclipse.emf.emfstore.internal.server.model.versioning.operations.CompositeOperation
+	 * CompositeOperation}s while the left operation is a stand-alone {@link SingleReferenceOperation}</li>
+	 * <li>the left operation is the main operation of a conflicting
+	 * {@link org.eclipse.emf.emfstore.internal.server.model.versioning.operations.CompositeOperation
+	 * CompositeOperation}s while the right operation is a stand-alone {@link MultiReferenceOperation}</li>
+	 * </ul>
+	 * 
+	 * @param leftSingleRef
+	 *            a {@link SingleReferenceOperation}
+	 * @param rightMultiRef
+	 *            the {@link SingleReferenceOperation} conflicting with <code>leftSingleRef</code>
+	 * @param conflictBucket
+	 *            the conflict bucket
+	 * @param decisionManager
+	 *            the decision manager
+	 */
+	public ReferenceConflict(SingleReferenceOperation leftSingleRef,
+		MultiReferenceOperation rightMultiRef, ConflictBucket conflictBucket,
+		DecisionManager decisionManager) {
+		super(conflictBucket, leftSingleRef, rightMultiRef, decisionManager, true, false);
+		conflict = new MultiReferenceSingleConflict(rightMultiRef,
+			leftSingleRef, conflictBucket, decisionManager);
+		init();
 	}
 
 	/**
@@ -93,9 +202,11 @@ public class ReferenceConflict extends VisualConflict {
 	protected void initConflictOptions(List<ConflictOption> options) {
 		for (final ConflictOption option : conflict.getOptions()) {
 			if (option.getType() == OptionType.MyOperation) {
-				option.addOperations(getLeftOperations());
+				option.getOperations().clear();
+				option.addOperations(getConflictBucket().getMyOperations());
 			} else if (option.getType() == OptionType.TheirOperation) {
-				option.addOperations(getRightOperations());
+				option.getOperations().clear();
+				option.addOperations(getConflictBucket().getTheirOperations());
 			}
 			options.add(option);
 		}

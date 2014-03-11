@@ -9,25 +9,20 @@
  * Contributors:
  * Edgar Mueller - initial API and implementation
  ******************************************************************************/
-package org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.conflict.conflicts;
+package org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.conflict;
 
 import org.eclipse.osgi.util.NLS;
 
 /**
- * Reference operations related messages.
+ * Conflict options related messages.
  * 
  * @author emueller
  * 
  */
 public final class Messages extends NLS {
-	private static final String BUNDLE_NAME = "org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.conflict.conflicts.messages"; //$NON-NLS-1$
-	public static String MultiReference_Move_To;
-	public static String MultiReferenceConflict_Add;
-	public static String MultiReferenceConflict_MoveTo;
-	public static String MultiReferenceConflict_Remove;
-	public static String MultiReferenceSetConflict_Remove;
-	public static String MultiReferenceSetConflict_Set;
-	public static String SingleReferenceConflict_Unset;
+	private static final String BUNDLE_NAME = "org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.conflict.messages"; //$NON-NLS-1$
+	public static String VisualConflict_Conflict_Not_Resolved;
+	public static String VisualConflict_No_TheirOps;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

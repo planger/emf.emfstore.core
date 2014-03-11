@@ -7,14 +7,17 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * wesendon
+ * Otto von Wesendonk - initial API and implementation
+ * Maximilian Koegel, Edgar Mueller - Bugfix 421361
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.conflict.conflicts;
 
 import static org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.util.DecisionUtil.getClassAndName;
 
+import java.text.MessageFormat;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.DecisionManager;
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.conflict.ConflictDescription;
@@ -23,7 +26,6 @@ import org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.con
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.conflict.VisualConflict;
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.util.DecisionUtil;
 import org.eclipse.emf.emfstore.internal.server.conflictDetection.ConflictBucket;
-import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.MultiReferenceOperation;
 
 /**
@@ -33,14 +35,17 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.Mult
  */
 public class MultiReferenceConflict extends VisualConflict {
 
-	private boolean containmentConflict;
+	private final boolean containmentConflict;
 
 	/**
 	 * Default constructor.
 	 * 
-	 * @param conflictBucket the conflict
-	 * @param decisionManager decisionmanager
-	 * @param meAdding true, if merging user has adding multiref
+	 * @param conflictBucket
+	 *            the conflict bucket
+	 * @param decisionManager
+	 *            the decision manager
+	 * @param meAdding
+	 *            true, if merging user has adding multiref
 	 */
 	public MultiReferenceConflict(ConflictBucket conflictBucket, DecisionManager decisionManager,
 		boolean meAdding) {
@@ -60,9 +65,8 @@ public class MultiReferenceConflict extends VisualConflict {
 	 * @param decisionManager decisionmanager
 	 * @param meAdding true, if merging user has adding multiref
 	 */
-	public MultiReferenceConflict(ConflictBucket conflictBucket, AbstractOperation leftOperation,
-		AbstractOperation rightOperation,
-		DecisionManager decisionManager,
+	public MultiReferenceConflict(ConflictBucket conflictBucket, MultiReferenceOperation leftOperation,
+		MultiReferenceOperation rightOperation, DecisionManager decisionManager,
 		boolean meAdding) {
 		super(conflictBucket, leftOperation, rightOperation, decisionManager, meAdding, false);
 		containmentConflict = getMyOperation(MultiReferenceOperation.class).isAdd()
@@ -81,19 +85,25 @@ public class MultiReferenceConflict extends VisualConflict {
 	protected ConflictDescription initConflictDescription(ConflictDescription description) {
 
 		if (containmentConflict) {
-			description.setDescription(DecisionUtil.getDescription("multireferenceconflict.containment",
-				getDecisionManager().isBranchMerge()));
+			description.setDescription(
+				DecisionUtil.getDescription("multireferenceconflict.containment", //$NON-NLS-1$
+					getDecisionManager().isBranchMerge()));
 		} else if (isLeftMy()) {
-			description.setDescription(DecisionUtil.getDescription("multireferenceconflict.my", getDecisionManager()
-				.isBranchMerge()));
+			description.setDescription(
+				DecisionUtil.getDescription("multireferenceconflict.my", //$NON-NLS-1$
+					getDecisionManager().isBranchMerge()));
 		} else {
-			description.setDescription(DecisionUtil.getDescription("multireferenceconflict.their", getDecisionManager()
-				.isBranchMerge()));
+			description.setDescription(
+				DecisionUtil.getDescription("multireferenceconflict.their", //$NON-NLS-1$
+					getDecisionManager().isBranchMerge()));
 		}
-		description.add("target", getMyOperation(MultiReferenceOperation.class).getReferencedModelElements().get(0));
-		description.add("othercontainer", getTheirOperation(MultiReferenceOperation.class).getModelElementId());
+		description.add("target", //$NON-NLS-1$
+			getMyOperation(MultiReferenceOperation.class)
+				.getReferencedModelElements().get(0));
+		description.add("othercontainer", //$NON-NLS-1$
+			getTheirOperation(MultiReferenceOperation.class).getModelElementId());
 
-		description.setImage("multiref.gif");
+		description.setImage("multiref.gif"); //$NON-NLS-1$
 		return description;
 	}
 
@@ -102,22 +112,35 @@ public class MultiReferenceConflict extends VisualConflict {
 	 */
 	@Override
 	protected void initConflictOptions(List<ConflictOption> options) {
-		ConflictOption myOption = new ConflictOption("", OptionType.MyOperation);
+		final ConflictOption myOption = new ConflictOption(StringUtils.EMPTY, OptionType.MyOperation);
 		myOption.addOperations(getMyOperations());
-		ConflictOption theirOption = new ConflictOption("", OptionType.TheirOperation);
+		final ConflictOption theirOption = new ConflictOption(StringUtils.EMPTY, OptionType.TheirOperation);
 		theirOption.addOperations(getTheirOperations());
 
-		EObject target = getDecisionManager().getModelElement(
+		final EObject target = getDecisionManager().getModelElement(
 			getMyOperation(MultiReferenceOperation.class).getReferencedModelElements().get(0));
 
 		if (containmentConflict) {
-			myOption.setOptionLabel("Move " + getClassAndName(target) + "to"
-				+ getClassAndName(getDecisionManager().getModelElement(getMyOperation().getModelElementId())));
-			theirOption.setOptionLabel("Move " + getClassAndName(target) + " to"
-				+ getClassAndName(getDecisionManager().getModelElement(getTheirOperation().getModelElementId())));
+			myOption.setOptionLabel(
+				MessageFormat.format(
+					Messages.MultiReferenceConflict_MoveTo,
+					getClassAndName(target),
+					getClassAndName(getDecisionManager()
+						.getModelElement(getMyOperation().getModelElementId()))));
+			theirOption.setOptionLabel(
+				MessageFormat.format(
+					Messages.MultiReferenceConflict_MoveTo,
+					getClassAndName(target),
+					getClassAndName(getDecisionManager()
+						.getModelElement(getTheirOperation().getModelElementId()))));
 		} else {
-			myOption.setOptionLabel((isLeftMy()) ? "Add" : "Remove" + " " + getClassAndName(target));
-			theirOption.setOptionLabel((!isLeftMy()) ? "Add" : "Remove" + " " + getClassAndName(target));
+			myOption.setOptionLabel(isLeftMy() ?
+				Messages.MultiReferenceConflict_Add
+				: Messages.MultiReferenceConflict_Remove
+					+ " " + getClassAndName(target)); //$NON-NLS-1$
+			theirOption.setOptionLabel(!isLeftMy() ?
+				Messages.MultiReferenceConflict_Add : Messages.MultiReferenceConflict_Remove
+					+ " " + getClassAndName(target)); //$NON-NLS-1$
 		}
 
 		options.add(myOption);

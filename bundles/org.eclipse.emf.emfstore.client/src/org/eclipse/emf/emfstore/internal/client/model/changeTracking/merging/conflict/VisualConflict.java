@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.DecisionManager;
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.conflict.ConflictOption.OptionType;
@@ -85,6 +86,13 @@ public abstract class VisualConflict extends Observable {
 			leftIsMy ? conflictBucket.getTheirOperation() : conflictBucket.getMyOperation(),
 			decisionManager, leftIsMy, init);
 		this.conflictBucket = conflictBucket;
+	}
+
+	/**
+	 * @return the conflictBucket
+	 */
+	protected ConflictBucket getConflictBucket() {
+		return conflictBucket;
 	}
 
 	/**
@@ -175,14 +183,14 @@ public abstract class VisualConflict extends Observable {
 	protected abstract ConflictDescription initConflictDescription(ConflictDescription description);
 
 	private ConflictDescription initConflictDescription() {
-		final ConflictDescription description = new ConflictDescription("");
-		description.setImage("notset.gif");
+		final ConflictDescription description = new ConflictDescription(StringUtils.EMPTY);
+		description.setImage("notset.gif"); //$NON-NLS-1$
 		final EObject modelElement = getDecisionManager().getModelElement(getMyOperation().getModelElementId());
 		if (modelElement != null) {
-			description.add("modelelement", modelElement);
+			description.add("modelelement", modelElement); //$NON-NLS-1$
 		}
 		if (getMyOperation() instanceof FeatureOperation) {
-			description.add("feature", ((FeatureOperation) getMyOperation()).getFeatureName());
+			description.add("feature", ((FeatureOperation) getMyOperation()).getFeatureName()); //$NON-NLS-1$
 		}
 		description.setDecisionManager(getDecisionManager());
 		return initConflictDescription(description);
@@ -286,7 +294,7 @@ public abstract class VisualConflict extends Observable {
 	public Set<AbstractOperation> getRejectedTheirs() {
 
 		if (!isResolved()) {
-			throw new IllegalStateException("Can't call this method, unless conflict is resolved.");
+			throw new IllegalStateException(Messages.VisualConflict_Conflict_Not_Resolved);
 		}
 
 		if (solution.getType() == OptionType.TheirOperation) {
@@ -299,7 +307,7 @@ public abstract class VisualConflict extends Observable {
 			}
 		}
 
-		throw new IllegalStateException("No TheirOperations found.");
+		throw new IllegalStateException(Messages.VisualConflict_No_TheirOps);
 	}
 
 	/**
@@ -311,7 +319,7 @@ public abstract class VisualConflict extends Observable {
 	public Set<AbstractOperation> getAcceptedMine() {
 
 		if (!isResolved()) {
-			throw new IllegalStateException("Can't call this method, unless conflict is resolved.");
+			throw new IllegalStateException(Messages.VisualConflict_Conflict_Not_Resolved);
 		}
 
 		if (solution.getType() == OptionType.TheirOperation) {

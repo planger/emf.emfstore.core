@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Otto von Wesendonk - initial API and implementation
+ * Maximilian Koegel, Edgar Mueller - bugfix 421361
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.conflict.conflicts;
 
@@ -23,7 +24,6 @@ import org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.con
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.util.DecisionUtil;
 import org.eclipse.emf.emfstore.internal.common.model.ModelElementId;
 import org.eclipse.emf.emfstore.internal.server.conflictDetection.ConflictBucket;
-import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.SingleReferenceOperation;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.UnkownFeatureException;
 
@@ -59,8 +59,8 @@ public class SingleReferenceConflict extends VisualConflict {
 	 * @param rightOperation the right operation
 	 * @param decisionManager decisionmanager
 	 */
-	public SingleReferenceConflict(ConflictBucket conflictBucket, AbstractOperation leftOperation,
-		AbstractOperation rightOperation,
+	public SingleReferenceConflict(ConflictBucket conflictBucket, SingleReferenceOperation leftOperation,
+		SingleReferenceOperation rightOperation,
 		DecisionManager decisionManager) {
 		super(conflictBucket, leftOperation, rightOperation, decisionManager, true, true);
 	}

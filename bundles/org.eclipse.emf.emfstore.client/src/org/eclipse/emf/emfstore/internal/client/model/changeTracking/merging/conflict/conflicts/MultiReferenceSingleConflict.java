@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Otto von Wesendonk - initial API and implementation
+ * Maximilian Koegel, Edgar Mueller - bugfix 421361
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.conflict.conflicts;
 
@@ -26,6 +27,7 @@ import org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.con
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.util.DecisionUtil;
 import org.eclipse.emf.emfstore.internal.server.conflictDetection.ConflictBucket;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.MultiReferenceOperation;
+import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.SingleReferenceOperation;
 
 /**
  * @author wesendon
@@ -52,8 +54,21 @@ public class MultiReferenceSingleConflict extends VisualConflict {
 	}
 
 	/**
-	 * LEFT: MultiReference, RIGHT: SingleReference
+	 * Constructor.
+	 * 
+	 * @param multiReferenceOp
+	 *            a {@link MultiReferenceOperation}
+	 * @param singleReferenceOp
+	 *            a conflicting {@link SingleReferenceOperation}
+	 * @param conflictBucket
+	 *            the conflict bucket
+	 * @param decisionManager
+	 *            the decision manager
 	 */
+	public MultiReferenceSingleConflict(MultiReferenceOperation multiReferenceOp,
+		SingleReferenceOperation singleReferenceOp, ConflictBucket conflictBucket, DecisionManager decisionManager) {
+		super(conflictBucket, multiReferenceOp, singleReferenceOp, decisionManager, true, false);
+	}
 
 	/**
 	 * {@inheritDoc}

@@ -13,6 +13,8 @@ package org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging;
 
 import static org.eclipse.emf.emfstore.internal.server.model.versioning.operations.util.OperationUtil.isAttribute;
 import static org.eclipse.emf.emfstore.internal.server.model.versioning.operations.util.OperationUtil.isComposite;
+import static org.eclipse.emf.emfstore.internal.server.model.versioning.operations.util.OperationUtil.isCompositeMultiRef;
+import static org.eclipse.emf.emfstore.internal.server.model.versioning.operations.util.OperationUtil.isCompositeSingleRef;
 import static org.eclipse.emf.emfstore.internal.server.model.versioning.operations.util.OperationUtil.isCompositeWithMain;
 import static org.eclipse.emf.emfstore.internal.server.model.versioning.operations.util.OperationUtil.isDelete;
 import static org.eclipse.emf.emfstore.internal.server.model.versioning.operations.util.OperationUtil.isMultiAtt;
@@ -43,6 +45,7 @@ import org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.con
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.conflict.conflicts.MultiReferenceSetSetConflict;
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.conflict.conflicts.MultiReferenceSetSingleConflict;
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.conflict.conflicts.MultiReferenceSingleConflict;
+import org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.conflict.conflicts.ReferenceConflict;
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.conflict.conflicts.SingleReferenceConflict;
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.util.DecisionUtil;
 import org.eclipse.emf.emfstore.internal.client.model.util.WorkspaceUtil;
@@ -55,8 +58,10 @@ import org.eclipse.emf.emfstore.internal.server.conflictDetection.ConflictBucket
 import org.eclipse.emf.emfstore.internal.server.conflictDetection.ConflictDetector;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.impl.ChangePackageImpl;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation;
+import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.CompositeOperation;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.MultiAttributeOperation;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.MultiReferenceOperation;
+import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.SingleReferenceOperation;
 
 /**
  * DecisionManager is the controller for the merge dialog and therefore it's
@@ -152,12 +157,95 @@ public class DecisionManager {
 			} else if (isMultiRef(my) && isSingleRef(their) || isMultiRef(their) && isSingleRef(my)) {
 				conflict = createMultiSingle(conf);
 
-				// } else if (isCompositeRef(my) && isCompositeRef(their)) {
-				// conflict = createReferenceConflict(conf);
-				//
-				// } else if (isCompositeRef(my) && (isMultiRef(their) || isSingleRef(their))
-				// || (isMultiRef(my) || isSingleRef(my)) && isCompositeRef(their)) {
-				// conflict = createReferenceCompVSSingleMulti(conf);
+				// left: CS, right: CS
+				// left: CS, right: S
+				// left: S, right: CS
+			} else if (isCompositeSingleRef(my) && isSingleRef(their)) {
+				conflict = new ReferenceConflict(
+					(SingleReferenceOperation) CompositeOperation.class.cast(my).getMainOperation(),
+					SingleReferenceOperation.class.cast(their),
+					conf, this);
+			} else if (isCompositeSingleRef(my) && isCompositeSingleRef(their)) {
+				conflict = new ReferenceConflict(
+					(SingleReferenceOperation) CompositeOperation.class.cast(my).getMainOperation(),
+					(SingleReferenceOperation) CompositeOperation.class.cast(their).getMainOperation(),
+					conf, this);
+			} else if (isSingleRef(my) && isCompositeSingleRef(their)) {
+				conflict = new ReferenceConflict(
+					SingleReferenceOperation.class.cast(my),
+					(SingleReferenceOperation) CompositeOperation.class.cast(their).getMainOperation(),
+					conf, this);
+
+				// left: CM, right: CM
+				// left: CM, right: M
+				// left: M, right: CM
+			} else if (isCompositeMultiRef(my) && isCompositeMultiRef(their)) {
+				conflict = new ReferenceConflict(
+					MultiReferenceOperation.class.cast(
+						CompositeOperation.class.cast(my).getMainOperation()),
+					MultiReferenceOperation.class.cast(
+						CompositeOperation.class.cast(their).getMainOperation()),
+					conf, this);
+			} else if (isCompositeMultiRef(my) && isMultiRef(their)) {
+				conflict = new ReferenceConflict(
+					MultiReferenceOperation.class.cast(
+						CompositeOperation.class.cast(my).getMainOperation()),
+					MultiReferenceOperation.class.cast(their),
+					conf, this);
+			} else if (isMultiRef(my) && isCompositeMultiRef(their)) {
+				conflict = new ReferenceConflict(
+					MultiReferenceOperation.class.cast(my),
+					MultiReferenceOperation.class.cast(
+						CompositeOperation.class.cast(their).getMainOperation()),
+					conf, this);
+
+				// left: CM, right: CS
+				// left: CM, right: S
+				// left: M, right: CS
+			} else if (isCompositeMultiRef(my) && isCompositeSingleRef(their)) {
+				conflict = new ReferenceConflict(
+					MultiReferenceOperation.class.cast(
+						CompositeOperation.class.cast(my).getMainOperation()),
+					SingleReferenceOperation.class.cast(
+						CompositeOperation.class.cast(their).getMainOperation()),
+					conf, this);
+
+			} else if (isCompositeMultiRef(my) && isSingleRef(their)) {
+				conflict = new ReferenceConflict(
+					MultiReferenceOperation.class.cast(
+						CompositeOperation.class.cast(my).getMainOperation()),
+					SingleReferenceOperation.class.cast(their),
+					conf, this);
+
+			} else if (isMultiRef(my) && isCompositeSingleRef(their)) {
+				conflict = new ReferenceConflict(
+					MultiReferenceOperation.class.cast(my),
+					SingleReferenceOperation.class.cast(
+						CompositeOperation.class.cast(their).getMainOperation()),
+					conf, this);
+
+				// left: CS, right: CM
+				// left: S, right: CM
+				// left: CS, right: M
+			} else if (isCompositeSingleRef(my) && isCompositeMultiRef(their)) {
+				conflict = new ReferenceConflict(
+					SingleReferenceOperation.class.cast(
+						CompositeOperation.class.cast(my).getMainOperation()),
+					MultiReferenceOperation.class.cast(
+						CompositeOperation.class.cast(their).getMainOperation()),
+					conf, this);
+			} else if (isSingleRef(my) && isCompositeMultiRef(their)) {
+				conflict = new ReferenceConflict(
+					SingleReferenceOperation.class.cast(my),
+					MultiReferenceOperation.class.cast(
+						CompositeOperation.class.cast(their).getMainOperation()),
+					conf, this);
+			} else if (isCompositeSingleRef(my) && isMultiRef(their)) {
+				conflict = new ReferenceConflict(
+					SingleReferenceOperation.class.cast(
+						CompositeOperation.class.cast(my).getMainOperation()),
+					MultiReferenceOperation.class.cast(their),
+					conf, this);
 
 			} else if (isMultiRef(my) && isMultiRefSet(their) || isMultiRef(their) && isMultiRefSet(my)) {
 				conflict = createMultiRefMultiSet(conf);
@@ -279,44 +367,6 @@ public class DecisionManager {
 		return new MultiAttributeMoveSetConflict(conf, this, false);
 
 	}
-
-	// TODO: check why this methods are not used anymore
-	// private VisualConflict createReferenceCompVSSingleMulti(ConflictBucket conf) {
-	// if (isCompositeRef(conf.getMyOperation())) {
-	// return createRefFromSub(conf, ((CompositeOperation) conf.getMyOperation()).getSubOperations(),
-	// Arrays.asList(conf.getTheirOperation()));
-	// }
-	// return createRefFromSub(conf, Arrays.asList(conf.getMyOperation()),
-	// ((CompositeOperation) conf.getTheirOperation()).getSubOperations());
-	//
-	// }
-	//
-	// private VisualConflict createReferenceConflict(ConflictBucket conf) {
-	// final EList<AbstractOperation> myOperations = ((CompositeOperation) conf.getMyOperation()).getSubOperations();
-	// final EList<AbstractOperation> theirOperations = ((CompositeOperation) conf.getTheirOperation())
-	// .getSubOperations();
-	//
-	// return createRefFromSub(conf, myOperations, theirOperations);
-	// }
-
-	// private VisualConflict createRefFromSub(ConflictBucket conf, List<AbstractOperation> myOperations,
-	// List<AbstractOperation> theirOperations) {
-	//
-	// for (final AbstractOperation myOp : myOperations) {
-	// if (isSingleRef(myOp)) {
-	//
-	// return new ReferenceConflict(true, conf, this);
-	//
-	// } else if (isMultiRef(myOp)) {
-	//
-	// return new ReferenceConflict(false, conf, this);
-	//
-	// } else {
-	// return null;
-	// }
-	// }
-	// return null;
-	// }
 
 	private VisualConflict createAttributeAttributeDecision(ConflictBucket conf) {
 		return new AttributeConflict(conf, this);

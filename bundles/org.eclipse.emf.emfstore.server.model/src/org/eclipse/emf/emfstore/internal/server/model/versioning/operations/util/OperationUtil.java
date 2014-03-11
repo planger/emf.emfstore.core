@@ -61,25 +61,27 @@ public final class OperationUtil {
 	}
 
 	/**
-	 * Checks whether given operation is a reference operation.
+	 * Checks whether given operation is a single reference composite.
 	 * 
 	 * @param operation
 	 *            operation
 	 * @return true if correct
 	 */
-	public static boolean isReference(AbstractOperation operation) {
-		return isSingleRef(operation) || isMultiRef(operation) || isCompositeRef(operation);
+	public static boolean isCompositeSingleRef(AbstractOperation operation) {
+		return operation instanceof CompositeOperation && ((CompositeOperation) operation).getMainOperation()
+			instanceof SingleReferenceOperation;
 	}
 
 	/**
-	 * Checks whether given operation is a reference composite.
+	 * Checks whether given operation is a multi reference composite.
 	 * 
 	 * @param operation
 	 *            operation
 	 * @return true if correct
 	 */
-	public static boolean isCompositeRef(AbstractOperation operation) {
-		return operation instanceof CompositeOperation && ((CompositeOperation) operation).getMainOperation() != null;
+	public static boolean isCompositeMultiRef(AbstractOperation operation) {
+		return operation instanceof CompositeOperation && ((CompositeOperation) operation).getMainOperation()
+			instanceof MultiReferenceOperation;
 	}
 
 	/**
