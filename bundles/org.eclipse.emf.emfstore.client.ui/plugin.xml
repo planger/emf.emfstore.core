@@ -848,16 +848,6 @@
       
    </extension>
    <extension
-         point="org.eclipse.ui.services">
-      <sourceProvider
-            provider="org.eclipse.emf.emfstore.internal.client.ui.testers.ESLocalProjectPropertySourceProvider">
-         <variable
-               name="org.eclipse.emf.emfstore.internal.client.ui.currentProjectSpaceSaveState"
-               priorityLevel="workbench">
-         </variable>
-      </sourceProvider>
-   </extension>
-   <extension
          point="org.eclipse.emf.emfstore.client.usersessionProvider">
       <sessionProvider
             class="org.eclipse.emf.emfstore.internal.client.ui.dialogs.login.BasicUISessionProvider">
