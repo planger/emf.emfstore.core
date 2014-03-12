@@ -11,6 +11,7 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.common;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
@@ -25,6 +26,21 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
  */
 // TODO: internal
 public class ResourceFactoryRegistry extends XMIResourceFactoryImpl implements Resource.Factory.Registry {
+
+	/**
+	 * The protocol map.
+	 */
+	private final Map<String, Object> protocolToFactoryMap = new HashMap<String, Object>();
+
+	/**
+	 * The extension map.
+	 */
+	private final Map<String, Object> extensionToFactoryMap = new HashMap<String, Object>();
+
+	/**
+	 * The content type identifier map.
+	 */
+	private final Map<String, Object> contentTypeIdentifierToFactoryMap = new HashMap<String, Object>();
 
 	/**
 	 * {@inheritDoc}
@@ -59,7 +75,7 @@ public class ResourceFactoryRegistry extends XMIResourceFactoryImpl implements R
 	 * @see org.eclipse.emf.ecore.resource.Resource.Factory.Registry#getProtocolToFactoryMap()
 	 */
 	public Map<String, Object> getProtocolToFactoryMap() {
-		return null;
+		return protocolToFactoryMap;
 	}
 
 	/**
@@ -68,7 +84,7 @@ public class ResourceFactoryRegistry extends XMIResourceFactoryImpl implements R
 	 * @see org.eclipse.emf.ecore.resource.Resource.Factory.Registry#getExtensionToFactoryMap()
 	 */
 	public Map<String, Object> getExtensionToFactoryMap() {
-		return null;
+		return extensionToFactoryMap;
 	}
 
 	/**
@@ -77,6 +93,6 @@ public class ResourceFactoryRegistry extends XMIResourceFactoryImpl implements R
 	 * @see org.eclipse.emf.ecore.resource.Resource.Factory.Registry#getContentTypeToFactoryMap()
 	 */
 	public Map<String, Object> getContentTypeToFactoryMap() {
-		return null;
+		return contentTypeIdentifierToFactoryMap;
 	}
 }

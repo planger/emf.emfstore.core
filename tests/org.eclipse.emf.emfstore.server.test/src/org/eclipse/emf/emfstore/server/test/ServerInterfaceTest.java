@@ -20,10 +20,13 @@ import static org.eclipse.emf.emfstore.client.test.common.util.ProjectUtil.share
 import static org.eclipse.emf.emfstore.client.test.common.util.ProjectUtil.tag;
 import static org.eclipse.emf.emfstore.internal.common.APIUtil.toInternal;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.util.Date;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.emfstore.client.ESLocalProject;
 import org.eclipse.emf.emfstore.client.test.common.cases.ESTestWithLoggedInUser;
 import org.eclipse.emf.emfstore.client.test.common.dsl.Create;
@@ -38,16 +41,22 @@ import org.eclipse.emf.emfstore.internal.server.exceptions.InvalidProjectIdExcep
 import org.eclipse.emf.emfstore.internal.server.exceptions.InvalidVersionSpecException;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectId;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectInfo;
+import org.eclipse.emf.emfstore.internal.server.model.impl.api.ESSessionIdImpl;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.BranchVersionSpec;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.ChangePackage;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.PrimaryVersionSpec;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.VersioningFactory;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
+import org.eclipse.emf.emfstore.test.model.TestmodelPackage;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class ServerInterfaceTest extends ESTestWithLoggedInUser {
+
+	private static final String FOO_BRANCH = "foo-branch"; //$NON-NLS-1$
+	private static final String FOOTAG = "footag"; //$NON-NLS-1$
+	private static final String TRUNK = "trunk"; //$NON-NLS-1$
 
 	@BeforeClass
 	public static void beforeClass() {
@@ -70,8 +79,7 @@ public class ServerInterfaceTest extends ESTestWithLoggedInUser {
 
 		final ProjectInfo projectInfo = connectionManager.createEmptyProject(
 			usersession.getSessionId(),
-			ProjectUtil.defaultName(),
-			"Example Description",
+			ProjectUtil.defaultName(), "Example Description", //$NON-NLS-1$
 			Create.logMessage());
 		final List<ProjectInfo> projectInfos = connectionManager.getProjectList(usersession.getSessionId());
 
@@ -115,11 +123,11 @@ public class ServerInterfaceTest extends ESTestWithLoggedInUser {
 		final ProjectId projectId = Create.projectId();
 
 		projectId.setId(ProjectUtil.defaultName());
-		baseVersionSpec.setBranch("trunk");
+		baseVersionSpec.setBranch(TRUNK);
 		baseVersionSpec.setIdentifier(0);
-		branchVersionSpec.setBranch("trunk");
+		branchVersionSpec.setBranch(TRUNK);
 
-		final PrimaryVersionSpec versionSpec = connectionManager.createVersion(
+		connectionManager.createVersion(
 			usersession.getSessionId(),
 			projectId,
 			baseVersionSpec,
@@ -127,7 +135,8 @@ public class ServerInterfaceTest extends ESTestWithLoggedInUser {
 			branchVersionSpec,
 			projectSpace.getMergedVersion(),
 			VersioningFactory.eINSTANCE.createLogMessage());
-		final List<ProjectInfo> projectInfos = connectionManager.getProjectList(usersession.getSessionId());
+		connectionManager.getProjectList(usersession.getSessionId());
+		// TODO: assert missing
 	}
 
 	@Test
@@ -173,14 +182,27 @@ public class ServerInterfaceTest extends ESTestWithLoggedInUser {
 
 		final ESLocalProject localProject = addAndCommit(share(getUsersession(), CreateAPI.project(defaultName())))
 			.times(3);
-		tag(localProject, CreateAPI.primaryVersionSpec(1), "trunk", "footag");
+		tag(localProject, CreateAPI.primaryVersionSpec(1), TRUNK, FOOTAG);
 
 		final PrimaryVersionSpec resolvedVersionSpec = connectionManager.resolveVersionSpec(
 			toInternal(Usersession.class, getUsersession()).getSessionId(),
 			toInternal(ProjectSpace.class, localProject).getProjectId(),
-			Create.tagVersionSpec("trunk", "footag"));
+			Create.tagVersionSpec(TRUNK, FOOTAG));
 
 		assertEquals(1, resolvedVersionSpec.getIdentifier());
+	}
+
+	@Test
+	public void testERegisterEPackage() throws ESException {
+
+		EPackage.Registry.INSTANCE.remove(TestmodelPackage.eNS_URI);
+		assertNull(EPackage.Registry.INSTANCE.getEPackage(TestmodelPackage.eNS_URI));
+
+		final ConnectionManager connectionManager = ESWorkspaceProviderImpl.getInstance().getConnectionManager();
+		final TestmodelPackage testmodelPackage = TestmodelPackage.eINSTANCE;
+		final ESSessionIdImpl sessionId = ESSessionIdImpl.class.cast(getSuperUsersession().getSessionId());
+		connectionManager.registerEPackage(sessionId.toInternalAPI(), testmodelPackage);
+		assertNotNull(EPackage.Registry.INSTANCE.getEPackage(TestmodelPackage.eNS_URI));
 	}
 
 	@Test
@@ -207,14 +229,14 @@ public class ServerInterfaceTest extends ESTestWithLoggedInUser {
 		final ESLocalProject localProject = addAndCommit(share(getUsersession(), CreateAPI.project(defaultName())))
 			.times(1);
 
-		commitToBranch(addElement(localProject, Create.testElement()), "foo-branch");
+		commitToBranch(addElement(localProject, Create.testElement()), FOO_BRANCH);
 
 		final PrimaryVersionSpec resolvedVersionSpec = connectionManager.resolveVersionSpec(
 			toInternal(Usersession.class, getUsersession()).getSessionId(),
 			toInternal(ProjectSpace.class, localProject).getProjectId(),
 			Create.ancestorVersionSpec(
 				Create.primaryVersionSpec(1),
-				Create.primaryVersionSpec(2, "foo-branch")));
+				Create.primaryVersionSpec(2, FOO_BRANCH)));
 
 		assertEquals(1, resolvedVersionSpec.getIdentifier());
 	}
@@ -266,17 +288,17 @@ public class ServerInterfaceTest extends ESTestWithLoggedInUser {
 			toInternal(Usersession.class, getUsersession()).getSessionId(),
 			toInternal(ProjectSpace.class, localProject).getProjectId(),
 			Create.primaryVersionSpec(1),
-			Create.tagVersionSpec("trunk", "footag"));
+			Create.tagVersionSpec(TRUNK, FOOTAG));
 
 		connectionManager.removeTag(
 			toInternal(Usersession.class, getUsersession()).getSessionId(),
 			toInternal(ProjectSpace.class, localProject).getProjectId(),
 			Create.primaryVersionSpec(1),
-			Create.tagVersionSpec("trunk", "footag"));
+			Create.tagVersionSpec(TRUNK, FOOTAG));
 
 		connectionManager.resolveVersionSpec(
 			toInternal(Usersession.class, getUsersession()).getSessionId(),
 			toInternal(ProjectSpace.class, localProject).getProjectId(),
-			Create.tagVersionSpec("trunk", "footag"));
+			Create.tagVersionSpec(TRUNK, FOOTAG));
 	}
 }
