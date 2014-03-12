@@ -89,6 +89,9 @@ public class NewRepositoryWizard extends Wizard implements INewWizard {
 		for (final Usersession session : workspace.toInternalAPI().getUsersessions()) {
 			if (session.getServerInfo() == ESServerImpl.class.cast(server).toInternalAPI()) {
 				session.logout();
+				session.setSavePassword(false);
+				session.setPassword(null);
+				session.setPersistentPassword(null);
 			}
 		}
 
