@@ -8,6 +8,14 @@
             </message_arguments>
         </filter>
     </resource>
+    <resource path="src/org/eclipse/emf/emfstore/internal/client/model/ESWorkspaceProviderImpl.java" type="org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl">
+        <filter comment="internal API usage" id="572522506">
+            <message_arguments>
+                <message_argument value="ESPriorityComparator"/>
+                <message_argument value="ESWorkspaceProviderImpl"/>
+            </message_arguments>
+        </filter>
+    </resource>
     <resource path="src/org/eclipse/emf/emfstore/internal/client/model/connectionmanager/BasicSessionProvider.java" type="org.eclipse.emf.emfstore.internal.client.model.connectionmanager.BasicSessionProvider">
         <filter comment="Internal API usage" id="572522506">
             <message_arguments>

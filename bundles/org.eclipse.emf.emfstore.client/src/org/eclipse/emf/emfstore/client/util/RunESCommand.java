@@ -17,6 +17,7 @@ import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommand;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommandWithException;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommandWithResult;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommandWithResultAndException;
+import org.eclipse.emf.emfstore.internal.client.model.util.WorkspaceUtil;
 
 /**
  * Utility class for automatically wrapping changes against a model element
@@ -137,7 +138,8 @@ public final class RunESCommand {
 					// BEGIN SUPRESS CATCH EXCEPTION
 				} catch (final Exception e) {
 					// END SUPRESS CATCH EXCEPTION
-					// ignore
+					// TODO: externalize
+					WorkspaceUtil.logException("Exception occurred during command execution.", e); //$NON-NLS-1$
 				}
 			}
 		}.run(false);
@@ -161,7 +163,8 @@ public final class RunESCommand {
 					// BEGIN SUPRESS CATCH EXCEPTION
 				} catch (final Exception e) {
 					// END SUPRESS CATCH EXCEPTION
-					// ignore
+					// TODO: externalize
+					WorkspaceUtil.logException("Exception occurred during command execution.", e); //$NON-NLS-1$
 				}
 				return null;
 			}

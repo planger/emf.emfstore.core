@@ -7,12 +7,13 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Maximilian Koegel
- * Johannes Faltermeier
+ * Maximilian Koegel - initial API and implementation
+ * Johannes Faltermeier - EMFStore specific URI migration
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -103,7 +104,7 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 				// BEGIN SUPRESS CATCH EXCEPTION
 			} catch (final RuntimeException e) {
 				// END SURPRESS CATCH EXCEPTION
-				ModelUtil.logException("Workspace Initialization failed, shutting down", e);
+				ModelUtil.logException(Messages.ESWorkspaceProviderImpl_WorkspaceInit_Failed, e);
 				throw e;
 			}
 
@@ -208,7 +209,7 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 			// migrate, if needed, before loading
 			if (resourceSetProvider instanceof ClientXMIResourceSetProvider) {
 				if (!new ClientHrefMigrator().migrate()) {
-					throw new RuntimeException("Migration failed");
+					throw new RuntimeException(Messages.ESWorkspaceProviderImpl_Migration_Failed);
 				}
 			}
 
@@ -221,7 +222,7 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 			try {
 				resource.load(ModelUtil.getResourceLoadOptions());
 			} catch (final IOException e) {
-				WorkspaceUtil.logException("Error while loading workspace.", e);
+				WorkspaceUtil.logException(Messages.ESWorkspaceProviderImpl_Workspace_Loading_Failed, e);
 			}
 
 			final EList<EObject> directContents = resource.getContents();
@@ -230,12 +231,12 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 
 		workspace.setResourceSet(resourceSet);
 
-		new EMFStoreCommand() {
-			@Override
-			protected void doRun() {
+		RunESCommand.run(new Callable<Void>() {
+			public Void call() throws Exception {
 				workspace.init();
+				return null;
 			}
-		}.run(true);
+		});
 
 		currentWorkspace = workspace;
 
@@ -283,7 +284,8 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 	/**
 	 * Set the admin connection manager.
 	 * 
-	 * @param the new {@link AdminConnectionManager} to be set
+	 * @param adminConnectionManager
+	 *            the new {@link AdminConnectionManager} to be set
 	 */
 	public void setAdminConnectionManager(AdminConnectionManager adminConnectionManager) {
 		this.adminConnectionManager = adminConnectionManager;
@@ -299,7 +301,7 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 	public static ProjectSpace getProjectSpace(EObject modelElement) {
 
 		if (modelElement == null) {
-			throw new IllegalArgumentException("The model element is null");
+			throw new IllegalArgumentException(Messages.ESWorkspaceProviderImpl_ModelElement_Is_Null);
 		} else if (modelElement instanceof ProjectSpace) {
 			return (ProjectSpace) modelElement;
 		}
@@ -307,7 +309,8 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 		final Project project = ModelUtil.getProject(modelElement);
 
 		if (project == null) {
-			throw new IllegalArgumentException("The model element " + modelElement + " has no project");
+			throw new IllegalArgumentException(MessageFormat.format(
+				Messages.ESWorkspaceProviderImpl_ModelElement_Has_No_Project, modelElement));
 		}
 		return getProjectSpace(project);
 	}
@@ -321,14 +324,14 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 	 */
 	public static ProjectSpace getProjectSpace(Project project) {
 		if (project == null) {
-			throw new IllegalArgumentException("The project is null");
+			throw new IllegalArgumentException(Messages.ESWorkspaceProviderImpl_Project_Is_Null);
 		}
 		// check if my container is a project space
 		if (ModelPackage.eINSTANCE.getProjectSpace().isInstance(project.eContainer())) {
 			return (ProjectSpace) project.eContainer();
 		}
 
-		throw new IllegalStateException("Project is not contained by any project space");
+		throw new IllegalStateException(Messages.ESWorkspaceProviderImpl_Project_Not_Contained_By_ProjectSpace);
 	}
 
 	/**
@@ -492,7 +495,7 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 			resource.save(ModelUtil.getResourceSaveOptions());
 		} catch (final IOException e) {
 			WorkspaceUtil.logException(
-				"Creating new workspace failed! Delete workspace folder: "
+				Messages.ESWorkspaceProviderImpl_Create_Workspace_Failed
 					+ Configuration.getFileInfo().getWorkspaceDirectory(), e);
 		}
 		return workspace;
@@ -521,112 +524,10 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 			try {
 				migrator.migrate(curModels, new NullProgressMonitor());
 			} catch (final EMFStoreMigrationException e) {
-				WorkspaceUtil.logException("The migration of the project in projectspace at " + curModels.get(0)
-					+ " failed!", e);
+				WorkspaceUtil.logException(MessageFormat.format(
+					Messages.ESWorkspaceProviderImpl_Migration_Of_Project_Failed, curModels.get(0)), e);
 			}
 		}
-
-		// ModelVersion workspaceModelVersion = getWorkspaceModelVersion();
-		// int modelVersionNumber;
-		// try {
-		// modelVersionNumber = ModelUtil.getModelVersionNumber();
-		// stampCurrentVersionNumber(modelVersionNumber);
-		// } catch (MalformedModelVersionException e1) {
-		// WorkspaceUtil.logException("Loading model version failed, migration skipped!", e1);
-		// return;
-		// }
-		// if (workspaceModelVersion.getReleaseNumber() == modelVersionNumber) {
-		// return;
-		// } else if (workspaceModelVersion.getReleaseNumber() > modelVersionNumber) {
-		// backupAndRecreateWorkspace(resourceSet);
-		// WorkspaceUtil.logException("Model conforms to a newer version, update client! New workspace was backuped!",
-		// new IllegalStateException());
-		// return;
-		// }
-		//
-		// // we need to migrate
-		// if (!EMFStoreMigratorUtil.isMigratorAvailable()) {
-		// WorkspaceUtil.logException("Model requires migration, but no migrators are registered!",
-		// new IllegalStateException());
-		// return;
-		// }
-		//
-		// backupWorkspace(false);
-		//
-		// // ////////// start migration
-		// // load workspace in new resourceset
-		// ESExtensionPoint extensionPoint = new ESExtensionPoint("org.eclipse.emf.emfstore.client.resourceSetProvider",
-		// true);
-		// extensionPoint.setComparator(new ESPriorityComparator("priority", true));
-		// extensionPoint.reload();
-		//
-		// ESResourceSetProvider resourceSetProvider = extensionPoint.getElementWithHighestPriority().getClass("class",
-		// ESResourceSetProvider.class);
-		//
-		// ResourceSet migrationResourceSet = resourceSetProvider.getResourceSet();
-		// Resource resource = migrationResourceSet.createResource(ClientURIUtil.createWorkspaceURI());
-		//
-		// try {
-		// resource.load(ModelUtil.getResourceLoadOptions());
-		// } catch (IOException e) {
-		// WorkspaceUtil.logException("Error while loading workspace.", e);
-		// }
-		//
-		// EList<EObject> directContents = resource.getContents();
-		// Workspace workspace = (Workspace) directContents.get(0);
-		// for (ProjectSpace ps : workspace.getProjectSpaces()) {
-		// // TODO test this
-		// URI projectURI = migrationResourceSet.getURIConverter().normalize(ps.getProject().eResource().getURI());
-		// URI operationsURI = migrationResourceSet.getURIConverter()
-		// .normalize(ps.getLocalChangePackage().eResource().getURI());
-		// try {
-		// migrate(projectURI, operationsURI, workspaceModelVersion.getReleaseNumber());
-		// } catch (EMFStoreMigrationException e) {
-		// WorkspaceUtil.logException("The migration of the project in projectspace at " + ps.eResource().getURI()
-		// + " failed!", e);
-		// backupAndRecreateWorkspace(resourceSet);
-		// }
-		// }
-		//
-		// // TODO delete if new migration works
-		// // // start migrations
-		// // File workspaceFile = new File(Configuration.getFileInfo().getWorkspaceDirectory());
-		// // for (File file : workspaceFile.listFiles()) {
-		// // if (file.getName().startsWith(Configuration.getFileInfo().getProjectSpaceDirectoryPrefix())) {
-		// // String projectFilePath = file.getAbsolutePath() + File.separatorChar
-		// // + Configuration.getFileInfo().ProjectFragmentFileName
-		// // + Configuration.getFileInfo().ProjectFragmentExtension;
-		// // URI projectURI = URI.createFileURI(projectFilePath);
-		// // String operationsFilePath = null;
-		// // File[] listFiles = file.listFiles();
-		// // if (listFiles == null) {
-		// // WorkspaceUtil.logException("The migration of the project in projectspace at " + projectFilePath
-		// // + " failed!", new IllegalStateException("Broken projectSpace!"));
-		// // continue;
-		// // }
-		// // for (File subDirFile : listFiles) {
-		// // if (subDirFile.getName().endsWith(Configuration.getFileInfo().LocalChangePackageExtension)) {
-		// // operationsFilePath = subDirFile.getAbsolutePath();
-		// // }
-		// // }
-		// // if (operationsFilePath == null) {
-		// // WorkspaceUtil.logException("The migration of the project in projectspace at " + projectFilePath
-		// // + " failed!", new IllegalStateException("Broken workspace!"));
-		// // backupAndRecreateWorkspace(resourceSet);
-		// // }
-		// // URI operationsURI = URI.createFileURI(operationsFilePath);
-		// // try {
-		// // migrate(projectURI, operationsURI, workspaceModelVersion.getReleaseNumber());
-		// // } catch (EMFStoreMigrationException e) {
-		// // WorkspaceUtil.logException("The migration of the project in projectspace at " + projectFilePath
-		// // + " failed!", e);
-		// // backupAndRecreateWorkspace(resourceSet);
-		// // }
-		// // }
-		// // }
-		// // // end migration
-		//
-		// stampCurrentVersionNumber(modelVersionNumber);
 	}
 
 	private List<List<URI>> getPhysicalURIsForMigration() {
@@ -644,7 +545,7 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 		try {
 			resource.load(ModelUtil.getResourceLoadOptions());
 		} catch (final IOException e) {
-			WorkspaceUtil.logException("Error while loading workspace.", e);
+			WorkspaceUtil.logException(Messages.ESWorkspaceProviderImpl_Workspace_Loading_Failed, e);
 		}
 
 		final List<List<URI>> physicalURIs = new ArrayList<List<URI>>();
