@@ -59,7 +59,6 @@ import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommand;
 import org.eclipse.emf.emfstore.internal.client.model.util.WorkspaceUtil;
 import org.eclipse.emf.emfstore.internal.client.provider.ClientXMIResourceSetProvider;
 import org.eclipse.emf.emfstore.internal.client.startup.ClientHrefMigrator;
-import org.eclipse.emf.emfstore.internal.common.CommonUtil;
 import org.eclipse.emf.emfstore.internal.common.ESDisposable;
 import org.eclipse.emf.emfstore.internal.common.model.Project;
 import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
@@ -107,9 +106,6 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 				ModelUtil.logException(Messages.ESWorkspaceProviderImpl_WorkspaceInit_Failed, e);
 				throw e;
 			}
-
-			// init ecore packages
-			CommonUtil.getAllModelElementEClasses();
 
 			// notify post workspace observers
 			instance.notifyPostWorkspaceInitiators();
