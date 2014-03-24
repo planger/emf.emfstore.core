@@ -25,6 +25,7 @@ import org.eclipse.emf.emfstore.internal.common.ExtensionRegistry;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.eclipse.emf.emfstore.test.model.TestElement;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -40,6 +41,7 @@ import org.junit.runner.RunWith;
 public class BidirectionalConflictMergeTest extends AbstractUIControllerTestWithCommit {
 
 	@Override
+	@Ignore
 	@Test
 	public void testController() throws ESException {
 
