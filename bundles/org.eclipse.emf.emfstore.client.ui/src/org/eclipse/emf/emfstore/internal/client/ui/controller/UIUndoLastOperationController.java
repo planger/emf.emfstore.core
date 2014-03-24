@@ -13,6 +13,8 @@ package org.eclipse.emf.emfstore.internal.client.ui.controller;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.emfstore.client.ESLocalProject;
+import org.eclipse.emf.emfstore.client.util.ESVoidCallable;
+import org.eclipse.emf.emfstore.client.util.RunESCommand;
 import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
 import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESLocalProjectImpl;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
@@ -34,14 +36,14 @@ public class UIUndoLastOperationController extends
 	 * @param shell
 	 *            the shell that will be used during the reversal of the
 	 *            operation
-	 * @param projectSpace
-	 *            the {@link ProjectSpace} upon which to reverse the last
+	 * @param localProject
+	 *            the {@link ESLocalProject} upon which to reverse the last
 	 *            operation
 	 */
 	public UIUndoLastOperationController(Shell shell,
-		ESLocalProject projectSpace) {
+		ESLocalProject localProject) {
 		super(shell);
-		this.projectSpace = ((ESLocalProjectImpl) projectSpace)
+		projectSpace = ((ESLocalProjectImpl) localProject)
 			.toInternalAPI();
 	}
 
@@ -53,7 +55,13 @@ public class UIUndoLastOperationController extends
 	 */
 	@Override
 	public Void doRun(IProgressMonitor progressMonitor) throws ESException {
-		projectSpace.getOperationManager().undoLastOperation();
+		RunESCommand.run(new ESVoidCallable() {
+			@Override
+			public void run() {
+				projectSpace.getOperationManager().undoLastOperation();
+			}
+		});
+
 		return null;
 	}
 
