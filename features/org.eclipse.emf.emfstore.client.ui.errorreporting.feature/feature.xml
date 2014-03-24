@@ -4,7 +4,9 @@
       label="Error Reporting Support"
       version="1.2.0.qualifier"
       provider-name="Eclipse Modeling Project"
-      plugin="org.eclipse.emf.emfstore.branding">
+      plugin="org.eclipse.emf.emfstore.branding"
+      license-feature="org.eclipse.emf.emfstore.license.feature"
+      license-feature-version="1.2.0.qualifier">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]

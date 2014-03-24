@@ -4,7 +4,9 @@
       label="EMFStore Code Examples"
       version="1.2.0.qualifier"
       provider-name="Eclipse Modeling Project"
-      plugin="org.eclipse.emf.emfstore.example.installer">
+      plugin="org.eclipse.emf.emfstore.example.installer"
+      license-feature="org.eclipse.emf.emfstore.license.feature"
+      license-feature-version="1.2.0.qualifier">
 
    <description url="http://emfstore.org ">
       EMFStore Code Examples

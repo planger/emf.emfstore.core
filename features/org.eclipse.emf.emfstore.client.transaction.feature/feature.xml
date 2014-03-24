@@ -4,7 +4,9 @@
       label="EMFStore Transaction Support"
       version="1.2.0.qualifier"
       provider-name="Eclipse Modeling Project"
-      plugin="org.eclipse.emf.emfstore.client.transaction">
+      plugin="org.eclipse.emf.emfstore.client.transaction"
+      license-feature="org.eclipse.emf.emfstore.license.feature"
+      license-feature-version="1.2.0.qualifier">
 
    <description url="http://emfstore.org">
       This feature adds transaction support to EMFStore based on EMF Transaction. It automatically registers an TransactionalEditingDomain with the EMFStore.

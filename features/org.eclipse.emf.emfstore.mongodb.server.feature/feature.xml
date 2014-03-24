@@ -4,7 +4,9 @@
       label="EMFStore mongoDB Server Feature"
       version="1.2.0.qualifier"
       provider-name="Eclipse Modeling Project"
-      plugin="org.eclipse.emf.emfstore.mongodb.server">
+      plugin="org.eclipse.emf.emfstore.mongodb.server"
+      license-feature="org.eclipse.emf.emfstore.license.feature"
+      license-feature-version="1.2.0.qualifier">
 
    <description url="http://emfstore.org">
       This feature contains all plugins to run the EMFStore server

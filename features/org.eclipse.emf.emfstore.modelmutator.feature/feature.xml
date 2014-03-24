@@ -4,7 +4,9 @@
       label="Model Mutator"
       version="1.2.0.qualifier"
       provider-name="Eclipse Modeling Project"
-      plugin="org.eclipse.emf.emfstore.modelmutator">
+      plugin="org.eclipse.emf.emfstore.modelmutator"
+      license-feature="org.eclipse.emf.emfstore.license.feature"
+      license-feature-version="1.2.0.qualifier">
 
    <description url="http://emfstore.org">
       Contains a set of plugins that may be used to alter existing
