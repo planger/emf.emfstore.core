@@ -332,6 +332,16 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getTestElement_ContainedElement_NoOpposite()
+	{
+		return (EReference) testElementEClass.getEStructuralFeatures().get(21);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getTestElementToStringMap() {
 		return testElementToStringMapEClass;
 	}
@@ -486,6 +496,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 		createEReference(testElementEClass, TEST_ELEMENT__CONTAINED_ELEMENTS2);
 		createEReference(testElementEClass, TEST_ELEMENT__CONTAINER2);
 		createEReference(testElementEClass, TEST_ELEMENT__CONTAINED_ELEMENTS_NO_OPPOSITE);
+		createEReference(testElementEClass, TEST_ELEMENT__CONTAINED_ELEMENT_NO_OPPOSITE);
 
 		testElementToStringMapEClass = createEClass(TEST_ELEMENT_TO_STRING_MAP);
 		createEAttribute(testElementToStringMapEClass, TEST_ELEMENT_TO_STRING_MAP__VALUE);
@@ -640,6 +651,11 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 			this.getTestElement(),
 			null,
 			"containedElements_NoOpposite", null, 0, -1, TestElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(
+			getTestElement_ContainedElement_NoOpposite(),
+			this.getTestElement(),
+			null,
+			"containedElement_NoOpposite", null, 0, 1, TestElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(testElementToStringMapEClass, Map.Entry.class,
 			"TestElementToStringMap", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$

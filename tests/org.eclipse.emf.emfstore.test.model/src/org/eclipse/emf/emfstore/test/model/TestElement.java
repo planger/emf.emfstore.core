@@ -45,6 +45,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainedElements2 <em>Contained Elements2</em>}</li>
  *   <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainer2 <em>Container2</em>}</li>
  *   <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainedElements_NoOpposite <em>Contained Elements No Opposite</em>}</li>
+ *   <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainedElement_NoOpposite <em>Contained Element No Opposite</em>}</li>
  * </ul>
  * </p>
  *
@@ -502,5 +503,31 @@ public interface TestElement extends EObject {
 	 * @generated
 	 */
 	EList<TestElement> getContainedElements_NoOpposite();
+
+	/**
+	 * Returns the value of the '<em><b>Contained Element No Opposite</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Contained Element No Opposite</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Contained Element No Opposite</em>' containment reference.
+	 * @see #setContainedElement_NoOpposite(TestElement)
+	 * @see org.eclipse.emf.emfstore.test.model.TestmodelPackage#getTestElement_ContainedElement_NoOpposite()
+	 * @model containment="true"
+	 * @generated
+	 */
+	TestElement getContainedElement_NoOpposite();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainedElement_NoOpposite <em>Contained Element No Opposite</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Contained Element No Opposite</em>' containment reference.
+	 * @see #getContainedElement_NoOpposite()
+	 * @generated
+	 */
+	void setContainedElement_NoOpposite(TestElement value);
 
 } // TestElement

@@ -11,10 +11,9 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.client.conflictdetection.test;
 
+import org.eclipse.emf.emfstore.client.conflictdetection.test.merging.AllMergeTests;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-
-
 
 /**
  * Test Suite for running all tests of workspace.
@@ -23,15 +22,13 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	AttributeConflictTest.class,
 	ConflictDetectionAttributeTest.class,
 	ConflictDetectionMapTest.class,
 	ConflictDetectionReferenceTest.class,
-//	ConflictDetectionDeleteTest.class,
+	ConflictDetectionDeleteTest.class,
 	ConflictDetectionMultiReferenceTest.class,
 	ConflictDetectionMultiAttributeTest.class,
-	// TODO
-//	AllMergeTests.class
+	AllMergeTests.class
 })
 public class AllConflictDetectionTests {
 

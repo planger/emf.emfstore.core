@@ -16,39 +16,33 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-
 import org.eclipse.emf.emfstore.test.model.TestElement;
 import org.eclipse.emf.emfstore.test.model.TestmodelFactory;
 import org.eclipse.emf.emfstore.test.model.TestmodelPackage;
-
 import org.eclipse.emf.emfstore.test.model.provider.TestmodelEditPlugin;
 
 /**
  * This is the item provider adapter for a {@link org.eclipse.emf.emfstore.test.model.TestElement} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
+ * 
  * @generated
  */
 public class TestElementItemProvider
 	extends ItemProviderAdapter
 	implements
 	IEditingDomainItemProvider,
-	IStructuredItemContentProvider,
 	ITreeItemContentProvider,
 	IItemLabelProvider,
 	IItemPropertySource
@@ -57,6 +51,7 @@ public class TestElementItemProvider
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TestElementItemProvider(AdapterFactory adapterFactory)
@@ -68,6 +63,7 @@ public class TestElementItemProvider
 	 * This returns the property descriptors for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -96,6 +92,7 @@ public class TestElementItemProvider
 	 * This adds a property descriptor for the Name feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void addNamePropertyDescriptor(Object object)
@@ -120,6 +117,7 @@ public class TestElementItemProvider
 	 * This adds a property descriptor for the Strings feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void addStringsPropertyDescriptor(Object object)
@@ -144,6 +142,7 @@ public class TestElementItemProvider
 	 * This adds a property descriptor for the References feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void addReferencesPropertyDescriptor(Object object)
@@ -169,6 +168,7 @@ public class TestElementItemProvider
 	 * This adds a property descriptor for the Reference feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void addReferencePropertyDescriptor(Object object)
@@ -193,6 +193,7 @@ public class TestElementItemProvider
 	 * This adds a property descriptor for the Other Reference feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void addOtherReferencePropertyDescriptor(Object object)
@@ -218,6 +219,7 @@ public class TestElementItemProvider
 	 * This adds a property descriptor for the Description feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void addDescriptionPropertyDescriptor(Object object)
@@ -243,6 +245,7 @@ public class TestElementItemProvider
 	 * This adds a property descriptor for the Non Contained NTo1 feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void addNonContained_NTo1PropertyDescriptor(Object object)
@@ -268,6 +271,7 @@ public class TestElementItemProvider
 	 * This adds a property descriptor for the Non Contained 1To N feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void addNonContained_1ToNPropertyDescriptor(Object object)
@@ -293,6 +297,7 @@ public class TestElementItemProvider
 	 * This adds a property descriptor for the Non Contained NTo M feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void addNonContained_NToMPropertyDescriptor(Object object)
@@ -318,6 +323,7 @@ public class TestElementItemProvider
 	 * This adds a property descriptor for the Non Contained MTo N feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void addNonContained_MToNPropertyDescriptor(Object object)
@@ -343,6 +349,7 @@ public class TestElementItemProvider
 	 * This adds a property descriptor for the Contained Elements No Opposite feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void addContainedElements_NoOppositePropertyDescriptor(Object object)
@@ -370,6 +377,7 @@ public class TestElementItemProvider
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -385,6 +393,7 @@ public class TestElementItemProvider
 			childrenFeatures.add(TestmodelPackage.Literals.TEST_ELEMENT__ELEMENT_TO_STRING_MAP);
 			childrenFeatures.add(TestmodelPackage.Literals.TEST_ELEMENT__STRING_TO_ELEMENT_MAP);
 			childrenFeatures.add(TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS2);
+			childrenFeatures.add(TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENT_NO_OPPOSITE);
 		}
 		return childrenFeatures;
 	}
@@ -392,6 +401,7 @@ public class TestElementItemProvider
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -407,6 +417,7 @@ public class TestElementItemProvider
 	 * This returns TestElement.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -419,12 +430,13 @@ public class TestElementItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String getText(Object object)
 	{
-		String label = ((TestElement) object).getName();
+		final String label = ((TestElement) object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_TestElement_type") : //$NON-NLS-1$
 			getString("_UI_TestElement_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
@@ -435,6 +447,7 @@ public class TestElementItemProvider
 	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -456,6 +469,7 @@ public class TestElementItemProvider
 		case TestmodelPackage.TEST_ELEMENT__ELEMENT_TO_STRING_MAP:
 		case TestmodelPackage.TEST_ELEMENT__STRING_TO_ELEMENT_MAP:
 		case TestmodelPackage.TEST_ELEMENT__CONTAINED_ELEMENTS2:
+		case TestmodelPackage.TEST_ELEMENT__CONTAINED_ELEMENT_NO_OPPOSITE:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
 		}
@@ -467,6 +481,7 @@ public class TestElementItemProvider
 	 * that can be created under this object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -508,24 +523,31 @@ public class TestElementItemProvider
 			(createChildParameter
 			(TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS2,
 				TestmodelFactory.eINSTANCE.createTestElement()));
+
+		newChildDescriptors.add
+			(createChildParameter
+			(TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENT_NO_OPPOSITE,
+				TestmodelFactory.eINSTANCE.createTestElement()));
 	}
 
 	/**
 	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection)
 	{
-		Object childFeature = feature;
-		Object childObject = child;
+		final Object childFeature = feature;
+		final Object childObject = child;
 
-		boolean qualify =
+		final boolean qualify =
 			childFeature == TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS ||
 				childFeature == TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENT ||
-				childFeature == TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS2;
+				childFeature == TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS2 ||
+				childFeature == TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENT_NO_OPPOSITE;
 
 		if (qualify)
 		{
@@ -539,6 +561,7 @@ public class TestElementItemProvider
 	 * Return the resource locator for this item provider's resources.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override

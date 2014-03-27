@@ -909,10 +909,11 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl
 					acceptedMineList.add(myOp);
 				}
 				accceptedMineSet.remove(myOp);
+
 			}
 		}
 		// add all remaining operations in acceptedMineSet (they have been generated during merge)
-		accceptedMineSet.addAll(accceptedMineSet);
+		acceptedMineList.addAll(accceptedMineSet);
 
 		final List<AbstractOperation> rejectedTheirsList = new LinkedList<AbstractOperation>();
 		for (final ChangePackage theirCP : theirChangePackages) {

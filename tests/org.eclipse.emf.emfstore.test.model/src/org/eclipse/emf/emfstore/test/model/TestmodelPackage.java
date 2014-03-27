@@ -265,13 +265,22 @@ public interface TestmodelPackage extends EPackage {
 	int TEST_ELEMENT__CONTAINED_ELEMENTS_NO_OPPOSITE = EcorePackage.EOBJECT_FEATURE_COUNT + 20;
 
 	/**
+	 * The feature id for the '<em><b>Contained Element No Opposite</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TEST_ELEMENT__CONTAINED_ELEMENT_NO_OPPOSITE = EcorePackage.EOBJECT_FEATURE_COUNT + 21;
+
+	/**
 	 * The number of structural features of the '<em>Test Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TEST_ELEMENT_FEATURE_COUNT = EcorePackage.EOBJECT_FEATURE_COUNT + 21;
+	int TEST_ELEMENT_FEATURE_COUNT = EcorePackage.EOBJECT_FEATURE_COUNT + 22;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.emf.emfstore.test.model.impl.TestElementToStringMapImpl <em>Test Element To String Map</em>}' class.
@@ -663,6 +672,17 @@ public interface TestmodelPackage extends EPackage {
 	EReference getTestElement_ContainedElements_NoOpposite();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainedElement_NoOpposite <em>Contained Element No Opposite</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Contained Element No Opposite</em>'.
+	 * @see org.eclipse.emf.emfstore.test.model.TestElement#getContainedElement_NoOpposite()
+	 * @see #getTestElement()
+	 * @generated
+	 */
+	EReference getTestElement_ContainedElement_NoOpposite();
+
+	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Test Element To String Map</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1001,6 +1021,14 @@ public interface TestmodelPackage extends EPackage {
 		 */
 		EReference TEST_ELEMENT__CONTAINED_ELEMENTS_NO_OPPOSITE = eINSTANCE
 			.getTestElement_ContainedElements_NoOpposite();
+
+		/**
+		 * The meta object literal for the '<em><b>Contained Element No Opposite</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TEST_ELEMENT__CONTAINED_ELEMENT_NO_OPPOSITE = eINSTANCE.getTestElement_ContainedElement_NoOpposite();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.emf.emfstore.test.model.impl.TestElementToStringMapImpl <em>Test Element To String Map</em>}' class.
