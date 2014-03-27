@@ -115,7 +115,12 @@ public class BidirectionalConflictMergeTest extends AbstractUIControllerTestWith
 		final ESModelElementId newParentId) {
 		final TestElement child = (TestElement) localProject.getModelElement(childId);
 		final TestElement newParent = (TestElement) localProject.getModelElement(newParentId);
-		newParent.getContainedElements2().add(child);
+		RunESCommand.run(new Callable<Void>() {
+			public Void call() throws Exception {
+				newParent.getContainedElements2().add(child);
+				return null;
+			}
+		});
 
 	}
 
