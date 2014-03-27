@@ -17,9 +17,11 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Callable;
 
 import org.eclipse.emf.emfstore.client.test.common.cases.ESTest;
 import org.eclipse.emf.emfstore.client.test.common.dsl.Create;
+import org.eclipse.emf.emfstore.client.util.RunESCommand;
 import org.eclipse.emf.emfstore.internal.client.model.exceptions.ChangeConflictException;
 import org.eclipse.emf.emfstore.internal.common.model.ModelElementId;
 import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
@@ -49,7 +51,12 @@ public class MergeResolvedConflictsWithSyntheticOpTest extends ESTest {
 	public void testMerge() throws ChangeConflictException {
 
 		final TestElement testElement = Create.testElement();
-		getProject().getModelElements().add(testElement);
+		RunESCommand.run(new Callable<Void>() {
+			public Void call() throws Exception {
+				getProject().getModelElements().add(testElement);
+				return null;
+			}
+		});
 		final ModelElementId modelElementId = getProject().getModelElementId(testElement);
 
 		final ChangePackage myChangePackage = Create.changePackage();
