@@ -119,7 +119,7 @@ public class OrgUnitManagementGUI {
 		final FormToolkit toolkit = new FormToolkit(sash.getDisplay());
 
 		final PropertiesForm frm = new PropertiesForm(sash, SWT.NONE, adminBroker, this);
-		frm.setText("Properties");
+		frm.setText(Messages.OrgUnitManagementGUI_Properties);
 		frm.setFont(JFaceResources.getHeaderFont());
 
 		toolkit.decorateFormHeading(frm);
@@ -138,19 +138,19 @@ public class OrgUnitManagementGUI {
 	private void initTabFolder(AdminBroker adminBroker, PropertiesForm frm) {
 
 		final TabItem projectsTab = new TabItem(tabFolder, SWT.NONE);
-		projectsTabContents = new ProjectTabContent("Projects", adminBroker, frm);
+		projectsTabContents = new ProjectTabContent("Projects", adminBroker, frm); //$NON-NLS-1$
 		projectsTab.setControl(projectsTabContents.createContents(tabFolder));
-		projectsTab.setText("Projects");
+		projectsTab.setText(Messages.OrgUnitManagementGUI_Projects);
 
 		final TabItem groupsTab = new TabItem(tabFolder, SWT.NONE);
-		groupsTabContents = new GroupTabContent("Groups", adminBroker, frm);
+		groupsTabContents = new GroupTabContent("Groups", adminBroker, frm); //$NON-NLS-1$
 		groupsTab.setControl(groupsTabContents.createContents(tabFolder));
-		groupsTab.setText("Groups");
+		groupsTab.setText(Messages.OrgUnitManagementGUI_Groups);
 
 		final TabItem usersTab = new TabItem(tabFolder, SWT.NONE);
-		usersTabContents = new UserTabContent("Users", adminBroker, frm);
+		usersTabContents = new UserTabContent("Users", adminBroker, frm); //$NON-NLS-1$
 		usersTab.setControl(usersTabContents.createContents(tabFolder));
-		usersTab.setText("Users");
+		usersTab.setText(Messages.OrgUnitManagementGUI_Users);
 
 		tabFolder.setSelection(projectsTab);
 

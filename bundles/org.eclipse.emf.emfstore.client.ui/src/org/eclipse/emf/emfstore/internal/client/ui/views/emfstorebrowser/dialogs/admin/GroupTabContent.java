@@ -33,6 +33,7 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
@@ -42,6 +43,7 @@ import org.eclipse.ui.PlatformUI;
  */
 public class GroupTabContent extends TabContent implements IPropertyChangeListener {
 
+	private static final String NEW_GROUP_NAME = "New Group"; //$NON-NLS-1$
 	private static final String GROUP_ICON = "icons/Group.gif"; //$NON-NLS-1$
 	private static final String DELETE_ICON = "icons/delete.gif"; //$NON-NLS-1$
 
@@ -73,7 +75,15 @@ public class GroupTabContent extends TabContent implements IPropertyChangeListen
 			@Override
 			public void run() {
 				try {
-					getAdminBroker().createGroup(Messages.GroupTabContent_New_Group);
+					if (groupExists(NEW_GROUP_NAME)) {
+						MessageDialog
+							.openInformation(
+								Display.getCurrent().getActiveShell(),
+								Messages.GroupTabContent_GroupAlreadyExists_Title,
+								NLS.bind(Messages.GroupTabContent_GroupAlreadExists, "'" + NEW_GROUP_NAME + "'")); //$NON-NLS-1$//$NON-NLS-2$
+					} else {
+						getAdminBroker().createGroup(NEW_GROUP_NAME);
+					}
 				} catch (final AccessControlException e) {
 					MessageDialog.openWarning(
 						Display.getDefault().getActiveShell(),
@@ -127,6 +137,20 @@ public class GroupTabContent extends TabContent implements IPropertyChangeListen
 		importOrgUnit.addPropertyChangeListener(this);
 
 		return Arrays.asList(createNewGroup, deleteGroup, importOrgUnit);
+	}
+
+	private boolean groupExists(String groupName) {
+		try {
+			for (final ACGroup group : getAdminBroker().getGroups()) {
+				if (group.getName().equals(groupName)) {
+					return true;
+				}
+			}
+		} catch (final ESException ex) {
+			return false;
+		}
+
+		return false;
 	}
 
 	/**

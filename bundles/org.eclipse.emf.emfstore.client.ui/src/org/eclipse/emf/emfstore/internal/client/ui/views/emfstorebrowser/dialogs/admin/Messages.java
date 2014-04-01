@@ -32,11 +32,16 @@ public final class Messages extends NLS {
 	public static String GroupTabContent_Create_New_Group;
 	public static String GroupTabContent_Delete_Group;
 	public static String GroupTabContent_Error;
+	public static String GroupTabContent_GroupAlreadExists;
+	public static String GroupTabContent_GroupAlreadyExists_Title;
 	public static String GroupTabContent_Insufficient_Access_Rights;
-	public static String GroupTabContent_New_Group;
 	public static String GroupTabContent_Not_Allowed_To_Delete_Selected_Group;
 	public static String GroupTabContent_Not_Allowed_To_List_Groups;
 	public static String ManageOrgUnitsDialog_Close;
+	public static String OrgUnitManagementGUI_Groups;
+	public static String OrgUnitManagementGUI_Projects;
+	public static String OrgUnitManagementGUI_Properties;
+	public static String OrgUnitManagementGUI_Users;
 	public static String ProjectComposite_Insufficient_Access_Rights;
 	public static String ProjectComposite_Not_Allowed_To_Add_Participant_To_Project;
 	public static String ProjectComposite_Not_Allowed_To_Change_Role_Of_OrgUnit;
