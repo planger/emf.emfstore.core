@@ -11,9 +11,18 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.client.test.ui.controllers;
 
+import static org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory.withText;
+import static org.eclipse.swtbot.swt.finder.waits.Conditions.waitForShell;
+
 import org.eclipse.emf.emfstore.bowling.Player;
+import org.eclipse.emf.emfstore.internal.client.ui.controller.UIUpdateProjectToVersionController;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
+import org.eclipse.swtbot.swt.finder.results.VoidResult;
+import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
+import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -37,8 +46,27 @@ public class UIUpdateProjectToVersionControllerTest extends AbstractUIController
 		createPlayerAndCommit();
 		updateToVersion();
 
+		updateToVersionOnHead();
+
 		final Player player = (Player) getCopy().getModelElements().get(0);
 		assertEquals(PLAYER_NAME, player.getName());
+	}
+
+	protected void updateToVersionOnHead() {
+		SWTBotPreferences.PLAYBACK_DELAY = 100;
+
+		UIThreadRunnable.asyncExec(new VoidResult() {
+			public void run() {
+				final UIUpdateProjectToVersionController updateProjectController = new UIUpdateProjectToVersionController(
+					bot.getDisplay().getActiveShell(),
+					getCopy());
+				updateProjectController.execute();
+			}
+		});
+
+		final Matcher<Shell> matcher = withText("No need to update");
+		bot.waitUntil(waitForShell(matcher));
+		bot.button("OK").click();
 	}
 
 }

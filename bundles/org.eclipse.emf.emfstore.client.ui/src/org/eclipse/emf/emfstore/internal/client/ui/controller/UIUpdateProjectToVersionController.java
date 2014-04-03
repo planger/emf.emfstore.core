@@ -72,11 +72,16 @@ public class UIUpdateProjectToVersionController extends
 			}
 		}
 		if (historyInfo.size() == 0) {
-			return new UIUpdateProjectController(
-				getShell(),
-				projectSpace,
-				ESVersionSpec.FACTORY.createHEAD(projectSpace.getBaseVersion()))
-				.execute();
+			return RunInUI.WithException.runWithResult(new Callable<ESPrimaryVersionSpec>() {
+				public ESPrimaryVersionSpec call() throws Exception {
+					return new UIUpdateProjectController(
+						getShell(),
+						projectSpace,
+						ESVersionSpec.FACTORY.createHEAD(projectSpace.getBaseVersion()))
+						.execute();
+				}
+			});
+
 		}
 
 		final ListDialog listDialog = createDialog(historyInfo);
