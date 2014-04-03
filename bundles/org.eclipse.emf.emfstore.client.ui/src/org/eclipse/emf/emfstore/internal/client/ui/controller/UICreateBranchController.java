@@ -171,6 +171,7 @@ public class UICreateBranchController extends
 					logMessage.setAuthor(projectSpace
 						.getUsersession().getUsername());
 					logMessage.setClientDate(new Date());
+					logMessage.setMessage(commitDialog.getLogText());
 					changePackage.setLogMessage(logMessage.toAPI());
 					return null;
 				}

@@ -37,13 +37,15 @@ public class LogMessageColumnLabelProvider extends SCMLabelProvider {
 	@Override
 	public String getText(Object element) {
 		if (element instanceof TreeNode && !(((TreeNode) element).getValue() instanceof HistoryInfo)) {
-			String toolTipText = super.getToolTipText(element);
+			final String toolTipText = super.getToolTipText(element);
 			return toolTipText;
 		} else if (element instanceof HistoryInfo) {
 			LogMessage logMessage = null;
-			HistoryInfo historyInfo = (HistoryInfo) element;
-			StringBuilder builder = new StringBuilder();
-			if (historyInfo.getLogMessage() != null) {
+			final HistoryInfo historyInfo = (HistoryInfo) element;
+			final StringBuilder builder = new StringBuilder();
+			if (historyInfo.getPrimarySpec() != null && historyInfo.getPrimarySpec().getIdentifier() == -1) {
+				builder.append(""); //$NON-NLS-1$
+			} else if (historyInfo.getLogMessage() != null) {
 				logMessage = historyInfo.getLogMessage();
 			} else if (historyInfo.getChangePackage() != null && historyInfo.getChangePackage().getLogMessage() != null) {
 				logMessage = historyInfo.getChangePackage().getLogMessage();
