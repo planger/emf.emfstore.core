@@ -130,7 +130,7 @@ public final class ModelUtil {
 	private static Set<ESSingletonIdResolver> singletonIdResolvers;
 	private static HashMap<Object, Object> resourceLoadOptions;
 	private static HashMap<Object, Object> resourceSaveOptions;
-	private static HashMap<Object, Object> checksumSaveOptions;
+	private static Map<Object, Object> checksumSaveOptions;
 
 	/**
 	 * Private constructor.
@@ -440,6 +440,7 @@ public final class ModelUtil {
 			final Map<Object, Object> saveOptions = getResourceSaveOptions();
 			saveOptions.put(XMLResource.OPTION_DECLARE_XML, Boolean.FALSE);
 			saveOptions.put(XMLResource.OPTION_FORMATTED, Boolean.FALSE);
+			checksumSaveOptions = saveOptions;
 		}
 
 		return checksumSaveOptions;
