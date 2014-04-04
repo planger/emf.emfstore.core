@@ -231,7 +231,7 @@ public final class ModelUtil {
 			throw new SerializationException(e);
 		}
 
-		return stringWriter.toString();
+		return stringWriter.toString().trim();
 	}
 
 	/**
@@ -299,7 +299,7 @@ public final class ModelUtil {
 			}
 		});
 
-		final String serialized = copiedEObjectToString(copy, res).trim();
+		final String serialized = copiedEObjectToString(copy, res);
 
 		return computeChecksum(serialized);
 	}
