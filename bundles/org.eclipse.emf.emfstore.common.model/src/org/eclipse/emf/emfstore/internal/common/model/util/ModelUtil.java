@@ -60,6 +60,7 @@ import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionPoint;
 import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionPointException;
 import org.eclipse.emf.emfstore.common.extensionpoint.ESPriorityComparator;
 import org.eclipse.emf.emfstore.common.model.ESSingletonIdResolver;
+import org.eclipse.emf.emfstore.internal.common.CommonUtil;
 import org.eclipse.emf.emfstore.internal.common.ResourceFactoryRegistry;
 import org.eclipse.emf.emfstore.internal.common.model.AssociationClassElement;
 import org.eclipse.emf.emfstore.internal.common.model.IdEObjectCollection;
@@ -88,12 +89,6 @@ public final class ModelUtil {
 	private static final String SINGLETON_ID_RESOLVER_EXT_POINT_ID = "org.eclipse.emf.emfstore.common.model.singletonIdResolver"; //$NON-NLS-1$
 
 	private static final String IGNORED_DATATYPE_EXT_POINT_ID = "org.eclipse.emf.emfstore.common.model.ignoreDatatype"; //$NON-NLS-1$
-
-	private static final String UTF_8 = "UTF-8"; //$NON-NLS-1$
-
-	private static final String NEWLINE = "\r\n"; //$NON-NLS-1$
-
-	private static final String LINE_SEPARATOR = "line.separator"; //$NON-NLS-1$
 
 	/**
 	 * Constant that may be used in case no checksum computation has taken place.
@@ -135,6 +130,7 @@ public final class ModelUtil {
 	private static Set<ESSingletonIdResolver> singletonIdResolvers;
 	private static HashMap<Object, Object> resourceLoadOptions;
 	private static HashMap<Object, Object> resourceSaveOptions;
+	private static HashMap<Object, Object> checksumSaveOptions;
 
 	/**
 	 * Private constructor.
@@ -226,16 +222,13 @@ public final class ModelUtil {
 		resource.getContents().add(copy);
 
 		final StringWriter stringWriter = new StringWriter(initialSize);
-		final URIConverter.WriteableOutputStream uws = new URIConverter.WriteableOutputStream(stringWriter, UTF_8);
+		final URIConverter.WriteableOutputStream uws =
+			new URIConverter.WriteableOutputStream(stringWriter, CommonUtil.getEncoding());
 
-		final String lineSeparator = System.getProperty(LINE_SEPARATOR);
 		try {
-			System.setProperty(LINE_SEPARATOR, NEWLINE);
-			resource.save(uws, getResourceSaveOptions());
+			resource.save(uws, checksumSaveOptions);
 		} catch (final IOException e) {
 			throw new SerializationException(e);
-		} finally {
-			System.setProperty(LINE_SEPARATOR, lineSeparator);
 		}
 
 		return stringWriter.toString();
@@ -256,7 +249,10 @@ public final class ModelUtil {
 		final int len = eObjectString.length();
 
 		for (int i = 0; i < len; i++) {
-			h = 31 * h + eObjectString.charAt(i);
+			final char c = eObjectString.charAt(i);
+
+			h = 31 * h + c;
+
 		}
 
 		return h;
@@ -303,7 +299,8 @@ public final class ModelUtil {
 			}
 		});
 
-		final String serialized = copiedEObjectToString(copy, res);
+		final String serialized = copiedEObjectToString(copy, res).trim();
+
 		return computeChecksum(serialized);
 	}
 
@@ -396,7 +393,7 @@ public final class ModelUtil {
 			resourceLoadOptions.put(XMLResource.OPTION_USE_PARSER_POOL, new XMLParserPoolImpl());
 			resourceLoadOptions.put(XMLResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP, new HashMap());
 			resourceLoadOptions.put(XMLResource.OPTION_USE_ENCODED_ATTRIBUTE_STYLE, Boolean.TRUE);
-			resourceLoadOptions.put(XMLResource.OPTION_ENCODING, UTF_8);
+			resourceLoadOptions.put(XMLResource.OPTION_ENCODING, CommonUtil.getEncoding());
 		}
 		return resourceLoadOptions;
 	}
@@ -413,7 +410,7 @@ public final class ModelUtil {
 			resourceSaveOptions = new LinkedHashMap<Object, Object>();
 			resourceSaveOptions.put(XMLResource.OPTION_USE_ENCODED_ATTRIBUTE_STYLE, Boolean.TRUE);
 			resourceSaveOptions.put(XMLResource.OPTION_USE_CACHED_LOOKUP_TABLE, new ArrayList<Object>());
-			resourceSaveOptions.put(XMLResource.OPTION_ENCODING, UTF_8);
+			resourceSaveOptions.put(XMLResource.OPTION_ENCODING, CommonUtil.getEncoding());
 			resourceSaveOptions.put(XMLResource.OPTION_FLUSH_THRESHOLD, 100000);
 			resourceSaveOptions.put(XMLResource.OPTION_USE_FILE_BUFFER, Boolean.TRUE);
 
@@ -430,6 +427,22 @@ public final class ModelUtil {
 			}
 		}
 		return resourceSaveOptions;
+	}
+
+	/**
+	 * Delivers a map of options that is used while computing a checksum.
+	 * 
+	 * @return map of options for {@link XMIResource} or {@link XMLResource}.
+	 */
+	public static synchronized Map<Object, Object> getChecksumSaveOptions() {
+
+		if (checksumSaveOptions == null) {
+			final Map<Object, Object> saveOptions = getResourceSaveOptions();
+			saveOptions.put(XMLResource.OPTION_DECLARE_XML, Boolean.FALSE);
+			saveOptions.put(XMLResource.OPTION_FORMATTED, Boolean.FALSE);
+		}
+
+		return checksumSaveOptions;
 	}
 
 	/**
