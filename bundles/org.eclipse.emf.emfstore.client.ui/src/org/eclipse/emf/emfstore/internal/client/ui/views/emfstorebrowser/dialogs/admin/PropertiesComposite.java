@@ -12,7 +12,9 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.views.emfstorebrowser.dialogs.admin;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -257,17 +259,12 @@ public abstract class PropertiesComposite extends Composite {
 		final DragSourceListener dragListener = new DragSourceListener() {
 			public void dragFinished(DragSourceEvent event) {
 				getTableViewer().refresh();
-				PropertiesForm.setDragNDropObject(null);
+				PropertiesForm.setDragNDropObjects(Collections.<ACOrgUnit> emptyList());
 			}
 
 			public void dragSetData(DragSourceEvent event) {
-				final EObject eObject = getSelectedItem();
-				if (eObject != null) {
-					if (eObject instanceof ACOrgUnit) {
-						final ACOrgUnit orgUnit = (ACOrgUnit) eObject;
-						PropertiesForm.setDragNDropObject(orgUnit);
-					}
-				}
+				final List<ACOrgUnit> selectedItems = getSelectedItems();
+				PropertiesForm.setDragNDropObjects(selectedItems);
 			}
 
 			public void dragStart(DragSourceEvent event) {
@@ -334,19 +331,20 @@ public abstract class PropertiesComposite extends Composite {
 	 * 
 	 * @return selected item in table viewer
 	 */
-	protected EObject getSelectedItem() {
-		EObject result = null;
-		final ISelection sel = tableViewer.getSelection();
-		IStructuredSelection ssel = null;
-		if (sel != null) {
-			ssel = (IStructuredSelection) sel;
+	protected List<ACOrgUnit> getSelectedItems() {
+		final List<ACOrgUnit> selectedObjects = new ArrayList<ACOrgUnit>();
+		final ISelection selection = tableViewer.getSelection();
+
+		if (selection != null) {
+			final IStructuredSelection structuredSelection =
+				IStructuredSelection.class.cast(selection);
+
+			for (final Object obj : structuredSelection.toList()) {
+				selectedObjects.add(ACOrgUnit.class.cast(obj));
+			}
 		}
 
-		if (ssel != null) {
-			final Object obj = ssel.getFirstElement();
-			result = (ACOrgUnit) obj;
-		}
-		return result;
+		return selectedObjects;
 	}
 
 	/**

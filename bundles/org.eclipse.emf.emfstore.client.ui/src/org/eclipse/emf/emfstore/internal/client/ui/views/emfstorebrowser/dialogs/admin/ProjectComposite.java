@@ -12,6 +12,8 @@
 package org.eclipse.emf.emfstore.internal.client.ui.views.emfstorebrowser.dialogs.admin;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
@@ -247,16 +249,13 @@ public class ProjectComposite extends PropertiesComposite {
 
 			@Override
 			public void drop(DropTargetEvent event) {
-				if (PropertiesForm.getDragNDropObject() != null) {
-					if (PropertiesForm.getDragNDropObject() instanceof ACOrgUnit) {
-						final ACOrgUnit orgUnit = (ACOrgUnit) PropertiesForm.getDragNDropObject();
-						addExistingOrgUnit(orgUnit);
-						PropertiesForm.setDragNDropObject(null);
-						getTableViewer().refresh();
-					}
+				final List<ACOrgUnit> orgUnits = PropertiesForm.getDragNDropObjects();
+				for (final ACOrgUnit orgUnit : orgUnits) {
+					addExistingOrgUnit(orgUnit);
 				}
+				PropertiesForm.setDragNDropObjects(Collections.<ACOrgUnit> emptyList());
+				getTableViewer().refresh();
 			}
-
 		};
 		getTableViewer().addDropSupport(ops, transfers, dropListener);
 	}
