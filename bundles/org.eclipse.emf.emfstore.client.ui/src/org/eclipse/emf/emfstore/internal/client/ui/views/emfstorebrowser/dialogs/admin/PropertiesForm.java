@@ -11,16 +11,12 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.views.emfstorebrowser.dialogs.admin;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.emfstore.internal.client.model.AdminBroker;
 import org.eclipse.emf.emfstore.internal.client.ui.dialogs.EMFStoreMessageDialog;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectInfo;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACGroup;
-import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnit;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACUser;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.eclipse.jface.viewers.TableViewer;
@@ -47,7 +43,7 @@ public class PropertiesForm extends Form {
 	 * This is a place holder for object being dragged. Actually we should have used the Transfer class to extract drag
 	 * source. But it is not guaranteed to work always.
 	 */
-	private static List<ACOrgUnit> dragNDropObjects;
+	private static EObject dragNDropObject;
 
 	/**
 	 * This is a string variable indicating from where drag and drop operation started.
@@ -162,25 +158,20 @@ public class PropertiesForm extends Form {
 	 * This is a place holder for object being dragged. Actually we should have used the Transfer class to extract drag
 	 * source. But it is not guaranteed to work always.
 	 * 
-	 * @param dragNDropObjects
-	 *            objects being drag and dropped
+	 * @param dragNDropObject object being drag and dropped
 	 */
-	public static void setDragNDropObjects(List<ACOrgUnit> dragNDropObjects) {
-		PropertiesForm.dragNDropObjects = dragNDropObjects;
+	public static void setDragNDropObject(EObject dragNDropObject) {
+		PropertiesForm.dragNDropObject = dragNDropObject;
 	}
 
 	/**
 	 * This is a place holder for object being dragged. Actually we should have used the Transfer class to extract drag
 	 * source. But it is not guaranteed to work always.
 	 * 
-	 * @return the {@link ACOrgUnit}s being drag and dropped. If no {@link ACOrgUnit}s
-	 *         is being drag and dropped this returns an empty list
+	 * @return object being drag and dropped
 	 */
-	public static List<ACOrgUnit> getDragNDropObjects() {
-		if (dragNDropObjects == null) {
-			return Collections.<ACOrgUnit> emptyList();
-		}
-		return dragNDropObjects;
+	public static EObject getDragNDropObject() {
+		return dragNDropObject;
 	}
 
 	/**

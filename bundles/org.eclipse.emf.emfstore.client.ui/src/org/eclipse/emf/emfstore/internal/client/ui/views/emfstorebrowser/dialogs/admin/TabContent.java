@@ -11,8 +11,6 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.views.emfstorebrowser.dialogs.admin;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -227,13 +225,9 @@ public abstract class TabContent {
 
 		tableViewer.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent event) {
-				final List<EObject> selectedItems = getSelectedItem(event);
-				if (selectedItems.size() > 0) {
-					form.setInput(getSelectedItem(event).get(0));
-				} else {
-					form.setInput(null);
-				}
+				form.setInput(getSelectedItem(event));
 			}
+
 		});
 
 		addDragNDropSupport();
@@ -266,7 +260,7 @@ public abstract class TabContent {
 
 		final DragSourceListener dragListener = new DragSourceListener() {
 			public void dragFinished(DragSourceEvent event) {
-				PropertiesForm.setDragNDropObjects(Collections.<ACOrgUnit> emptyList());
+				PropertiesForm.setDragNDropObject(null);
 				PropertiesForm.setDragSource(StringUtils.EMPTY);
 			}
 
@@ -275,15 +269,11 @@ public abstract class TabContent {
 			}
 
 			public void dragSetData(DragSourceEvent event) {
-				final List<EObject> selectedItems = getSelectedItem(null);
-				if (selectedItems.size() > 0) {
-					final EObject selectedItem = selectedItems.get(0);
-					if (selectedItem instanceof ACOrgUnit) {
-						final List<ACOrgUnit> orgUnits = new ArrayList<ACOrgUnit>();
-						for (final EObject item : selectedItems) {
-							orgUnits.add(ACOrgUnit.class.cast(item));
-						}
-						PropertiesForm.setDragNDropObjects(orgUnits);
+				final EObject eObject = getSelectedItem(null);
+				if (eObject != null) {
+					if (eObject instanceof ACOrgUnit) {
+						final ACOrgUnit orgUnit = (ACOrgUnit) eObject;
+						PropertiesForm.setDragNDropObject(orgUnit);
 					}
 				}
 			}
@@ -293,12 +283,10 @@ public abstract class TabContent {
 		ops = DND.DROP_MOVE;
 		final DropTargetListener dropListener = new DropTargetListener() {
 			public void drop(DropTargetEvent event) {
-				final List<ACOrgUnit> orgUnits = PropertiesForm.getDragNDropObjects();
-				for (final ACOrgUnit orgUnit : orgUnits) {
-					doDrop(orgUnit);
+				if (PropertiesForm.getDragNDropObject() instanceof ACOrgUnit) {
+					doDrop((ACOrgUnit) PropertiesForm.getDragNDropObject());
+					PropertiesForm.setDragNDropObject(null);
 				}
-
-				PropertiesForm.setDragNDropObjects(Collections.<ACOrgUnit> emptyList());
 			}
 
 			public void dragEnter(DropTargetEvent event) {
@@ -369,23 +357,31 @@ public abstract class TabContent {
 	/**
 	 * returns selected item in ListViewer.
 	 */
-	private List<EObject> getSelectedItem(DoubleClickEvent event) {
-		final List<EObject> selectedObjects = new ArrayList<EObject>();
-		ISelection selection;
+	private EObject getSelectedItem(DoubleClickEvent event) {
+		EObject result = null;
+		ISelection sel;
 		if (event != null) {
-			selection = event.getSelection();
+			sel = event.getSelection();
 		} else {
-			selection = tableViewer.getSelection();
+			sel = tableViewer.getSelection();
 		}
 
-		if (selection != null) {
-			final IStructuredSelection structuredSelection = IStructuredSelection.class.cast(selection);
-			for (final Object eObject : structuredSelection.toList()) {
-				selectedObjects.add(EObject.class.cast(eObject));
+		IStructuredSelection ssel = null;
+		if (sel != null) {
+			ssel = (IStructuredSelection) sel;
+		}
+
+		if (ssel != null) {
+			final Object obj = ssel.getFirstElement();
+			if (obj instanceof ProjectInfo) {
+				result = (ProjectInfo) obj;
+			} else if (obj instanceof ACOrgUnit) {
+				result = (ACOrgUnit) obj;
 			}
 		}
 
-		return selectedObjects;
+		return result;
+
 	}
 
 	/**

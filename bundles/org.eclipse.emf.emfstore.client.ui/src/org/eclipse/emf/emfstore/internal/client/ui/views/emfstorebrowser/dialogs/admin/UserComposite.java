@@ -12,7 +12,6 @@
 package org.eclipse.emf.emfstore.internal.client.ui.views.emfstorebrowser.dialogs.admin;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -217,12 +216,14 @@ public class UserComposite extends PropertiesComposite {
 
 			@Override
 			public void drop(DropTargetEvent event) {
-				final List<ACOrgUnit> orgUnits = PropertiesForm.getDragNDropObjects();
-				for (final ACOrgUnit orgUnit : orgUnits) {
-					addExistingOrgUnit(orgUnit);
+				if (PropertiesForm.getDragNDropObject() != null) {
+					if (PropertiesForm.getDragNDropObject() instanceof ACGroup) {
+						final ACGroup group = (ACGroup) PropertiesForm.getDragNDropObject();
+						addExistingOrgUnit(group);
+						PropertiesForm.setDragNDropObject(null);
+						getTableViewer().refresh();
+					}
 				}
-				PropertiesForm.setDragNDropObjects(Collections.<ACOrgUnit> emptyList());
-				getTableViewer().refresh();
 			}
 		};
 		getTableViewer().addDropSupport(ops, transfers, dropListener);
