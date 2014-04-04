@@ -226,7 +226,7 @@ public final class ModelUtil {
 			new URIConverter.WriteableOutputStream(stringWriter, CommonUtil.getEncoding());
 
 		try {
-			resource.save(uws, checksumSaveOptions);
+			resource.save(uws, getChecksumSaveOptions());
 		} catch (final IOException e) {
 			throw new SerializationException(e);
 		}
