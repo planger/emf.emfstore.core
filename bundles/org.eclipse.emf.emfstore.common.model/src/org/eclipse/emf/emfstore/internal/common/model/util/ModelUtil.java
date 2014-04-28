@@ -437,7 +437,7 @@ public final class ModelUtil {
 	public static synchronized Map<Object, Object> getChecksumSaveOptions() {
 
 		if (checksumSaveOptions == null) {
-			final Map<Object, Object> saveOptions = getResourceSaveOptions();
+			final Map<Object, Object> saveOptions = new LinkedHashMap<Object, Object>(getResourceSaveOptions());
 			saveOptions.put(XMLResource.OPTION_DECLARE_XML, Boolean.FALSE);
 			saveOptions.put(XMLResource.OPTION_FORMATTED, Boolean.FALSE);
 			checksumSaveOptions = saveOptions;
