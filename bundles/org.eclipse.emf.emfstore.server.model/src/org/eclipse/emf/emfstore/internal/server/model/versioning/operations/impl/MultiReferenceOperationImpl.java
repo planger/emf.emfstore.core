@@ -146,11 +146,12 @@ public class MultiReferenceOperationImpl extends ReferenceOperationImpl implemen
 	 * @generated
 	 */
 	public void setAdd(boolean newAdd) {
-		boolean oldAdd = add;
+		final boolean oldAdd = add;
 		add = newAdd;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, OperationsPackage.MULTI_REFERENCE_OPERATION__ADD,
 				oldAdd, add));
+		}
 	}
 
 	/**
@@ -168,11 +169,12 @@ public class MultiReferenceOperationImpl extends ReferenceOperationImpl implemen
 	 * @generated
 	 */
 	public void setIndex(int newIndex) {
-		int oldIndex = index;
+		final int oldIndex = index;
 		index = newIndex;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, OperationsPackage.MULTI_REFERENCE_OPERATION__INDEX,
 				oldIndex, index));
+		}
 	}
 
 	/**
@@ -295,13 +297,14 @@ public class MultiReferenceOperationImpl extends ReferenceOperationImpl implemen
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (eIsProxy()) {
 			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (add: ");
+		final StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (add: "); //$NON-NLS-1$
 		result.append(add);
-		result.append(", index: ");
+		result.append(", index: "); //$NON-NLS-1$
 		result.append(index);
 		result.append(')');
 		return result.toString();
@@ -309,18 +312,18 @@ public class MultiReferenceOperationImpl extends ReferenceOperationImpl implemen
 
 	public void apply(IdEObjectCollection project) {
 
-		EObject modelElement = project.getModelElement(getModelElementId());
+		final EObject modelElement = project.getModelElement(getModelElementId());
 
 		if (modelElement == null) {
 			// fail silently
 			return;
 		}
 
-		Map<EObject, ModelElementId> allocatables = new LinkedHashMap<EObject, ModelElementId>();
-		EList<ModelElementId> referencedModelElementIds = getReferencedModelElements();
-		List<EObject> referencedModelElements = new ArrayList<EObject>();
+		final Map<EObject, ModelElementId> allocatables = new LinkedHashMap<EObject, ModelElementId>();
+		final EList<ModelElementId> referencedModelElementIds = getReferencedModelElements();
+		final List<EObject> referencedModelElements = new ArrayList<EObject>();
 
-		for (ModelElementId refrencedModelElementId : referencedModelElementIds) {
+		for (final ModelElementId refrencedModelElementId : referencedModelElementIds) {
 			EObject referencedModelElement = project.getModelElement(refrencedModelElementId);
 			if (referencedModelElement == null) {
 				referencedModelElement = ((IdEObjectCollectionImpl) project)
@@ -334,13 +337,13 @@ public class MultiReferenceOperationImpl extends ReferenceOperationImpl implemen
 		EReference reference;
 		try {
 			reference = (EReference) this.getFeature(modelElement);
-		} catch (UnkownFeatureException e) {
+		} catch (final UnkownFeatureException e) {
 			// fail silently
 			return;
 		}
-		Object object = modelElement.eGet(reference);
+		final Object object = modelElement.eGet(reference);
 		@SuppressWarnings("unchecked")
-		EList<EObject> list = (EList<EObject>) object;
+		final EList<EObject> list = (EList<EObject>) object;
 
 		switch (getUnset().getValue()) {
 		case UnsetType.IS_UNSET_VALUE:
@@ -354,7 +357,7 @@ public class MultiReferenceOperationImpl extends ReferenceOperationImpl implemen
 			if (isAdd()) {
 				if (index < list.size() && index > -1) {
 					int i = index;
-					for (EObject m : referencedModelElements) {
+					for (final EObject m : referencedModelElements) {
 
 						if (i < list.size()) {
 							if (list.contains(m)) {
@@ -379,7 +382,7 @@ public class MultiReferenceOperationImpl extends ReferenceOperationImpl implemen
 					// list.addAll(getIndex(), referencedModelElements);
 				} else {
 					// if index is out of range ignore index
-					for (EObject m : referencedModelElements) {
+					for (final EObject m : referencedModelElements) {
 						if (list.contains(m)) {
 							// move to end
 							list.move(list.size() - 1, m);
@@ -391,15 +394,21 @@ public class MultiReferenceOperationImpl extends ReferenceOperationImpl implemen
 				}
 			} else {
 
-				for (EObject me : referencedModelElements) {
+				final boolean indexAdjusted = false;
+
+				for (final EObject me : referencedModelElements) {
 					if (list.contains(me)) {
+						if (!indexAdjusted) {
+							final int indexOf = list.indexOf(me);
+							setIndex(indexOf);
+						}
 						list.remove(me);
 					}
 				}
 
 				project.allocateModelElementIds(allocatables);
 
-				for (EObject currentElement : referencedModelElements) {
+				for (final EObject currentElement : referencedModelElements) {
 					if (reference.isContainment()) {
 						project.addModelElement(currentElement);
 					}
@@ -415,12 +424,14 @@ public class MultiReferenceOperationImpl extends ReferenceOperationImpl implemen
 
 	@Override
 	public AbstractOperation reverse() {
-		MultiReferenceOperation multiReferenceOperation = OperationsFactory.eINSTANCE.createMultiReferenceOperation();
+		final MultiReferenceOperation multiReferenceOperation = OperationsFactory.eINSTANCE
+			.createMultiReferenceOperation();
 		super.reverse(multiReferenceOperation);
 		multiReferenceOperation.setAdd(!isAdd());
-		EList<ModelElementId> copiedReferencedModelElements = multiReferenceOperation.getReferencedModelElements();
-		EList<ModelElementId> modelElements = getReferencedModelElements();
-		for (ModelElementId modelElementId : modelElements) {
+		final EList<ModelElementId> copiedReferencedModelElements = multiReferenceOperation
+			.getReferencedModelElements();
+		final EList<ModelElementId> modelElements = getReferencedModelElements();
+		for (final ModelElementId modelElementId : modelElements) {
 			copiedReferencedModelElements.add(ModelUtil.clone(modelElementId));
 		}
 		multiReferenceOperation.setIndex(getIndex());
@@ -437,7 +448,7 @@ public class MultiReferenceOperationImpl extends ReferenceOperationImpl implemen
 	 */
 	@Override
 	public Set<ModelElementId> getOtherInvolvedModelElements() {
-		Set<ModelElementId> set = new LinkedHashSet<ModelElementId>();
+		final Set<ModelElementId> set = new LinkedHashSet<ModelElementId>();
 		set.addAll(getReferencedModelElements());
 		return set;
 	}
