@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * koegel
+ * Maximilian Koegel - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.server.model.versioning.operations;
 
@@ -30,7 +30,8 @@ public class UnkownFeatureException extends Exception {
 	 *            the missing features name
 	 */
 	public UnkownFeatureException(EClass eClass, String featureName) {
-		super("The feature \"" + featureName + " is unkown for EClass \"" + eClass.getName());
+		super("The feature \"" + featureName //$NON-NLS-1$
+			+ " is unkown for EClass \"" + eClass.getName()); //$NON-NLS-1$ 
 	}
 
 }

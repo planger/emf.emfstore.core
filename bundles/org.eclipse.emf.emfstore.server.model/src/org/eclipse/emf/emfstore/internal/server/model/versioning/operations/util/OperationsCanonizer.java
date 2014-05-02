@@ -55,8 +55,8 @@ public final class OperationsCanonizer {
 			foldCreatesAndDeletes(operations);
 
 			// BEGIN SUPRESS CATCH EXCEPTION
-		} catch (RuntimeException e) {
-			ModelUtil.log("Runtime exception in " + OperationsCanonizer.class.getName(), e, IStatus.ERROR);
+		} catch (final RuntimeException e) {
+			ModelUtil.log("Runtime exception in " + OperationsCanonizer.class.getName(), e, IStatus.ERROR); //$NON-NLS-1$
 		}
 		// END SUPRESS CATCH EXCEPTION
 
@@ -68,22 +68,22 @@ public final class OperationsCanonizer {
 		for (int i = 0; i < operations.size() - 1; i++) {
 
 			// look for a create operation
-			AbstractOperation opLeft = operations.get(i);
+			final AbstractOperation opLeft = operations.get(i);
 			if (!(opLeft instanceof CreateDeleteOperation)) {
 				continue;
 			}
-			CreateDeleteOperation createOp = (CreateDeleteOperation) opLeft;
+			final CreateDeleteOperation createOp = (CreateDeleteOperation) opLeft;
 
 			if (createOp.isDelete()) {
 				continue;
 			}
 
 			// ok, we got one, see if the next one is a matching delete
-			AbstractOperation opRight = operations.get(i + 1);
+			final AbstractOperation opRight = operations.get(i + 1);
 			if (!(opRight instanceof CreateDeleteOperation)) {
 				continue;
 			}
-			CreateDeleteOperation deleteOp = (CreateDeleteOperation) opRight;
+			final CreateDeleteOperation deleteOp = (CreateDeleteOperation) opRight;
 
 			if (!deleteOp.isDelete()) {
 				continue;
@@ -109,11 +109,11 @@ public final class OperationsCanonizer {
 		// look for suitable create operation
 		for (int i = 0; i < operations.size() - 1; i++) {
 
-			AbstractOperation opLeft = operations.get(i);
+			final AbstractOperation opLeft = operations.get(i);
 			if (!(opLeft instanceof CreateDeleteOperation)) {
 				continue;
 			}
-			CreateDeleteOperation createOp = (CreateDeleteOperation) opLeft;
+			final CreateDeleteOperation createOp = (CreateDeleteOperation) opLeft;
 
 			if (createOp.isDelete()) {
 				continue;
@@ -124,16 +124,16 @@ public final class OperationsCanonizer {
 			// the new object
 			for (int j = i + 1; j < operations.size(); j++) {
 
-				AbstractOperation opRight = operations.get(j);
+				final AbstractOperation opRight = operations.get(j);
 
 				if (opRight instanceof AttributeOperation
 					&& opLeft.getModelElementId().equals(opRight.getModelElementId())) {
 
-					AttributeOperation attOp = (AttributeOperation) opRight;
+					final AttributeOperation attOp = (AttributeOperation) opRight;
 					// found an attribute change for the new object
 					// now merge it into the created object and discard the
 					// attribute operation
-					EStructuralFeature feature = createOp.getModelElement().eClass()
+					final EStructuralFeature feature = createOp.getModelElement().eClass()
 						.getEStructuralFeature(attOp.getFeatureName());
 					createOp.getModelElement().eSet(feature, attOp.getNewValue());
 
@@ -159,11 +159,11 @@ public final class OperationsCanonizer {
 		// look for suitable delete operation
 		for (int i = operations.size() - 1; i > 0 && i < operations.size(); i--) {
 
-			AbstractOperation opRight = operations.get(i);
+			final AbstractOperation opRight = operations.get(i);
 			if (!(opRight instanceof CreateDeleteOperation)) {
 				continue;
 			}
-			CreateDeleteOperation deleteOp = (CreateDeleteOperation) opRight;
+			final CreateDeleteOperation deleteOp = (CreateDeleteOperation) opRight;
 
 			if (!deleteOp.isDelete()) {
 				continue;
@@ -174,16 +174,16 @@ public final class OperationsCanonizer {
 			// the object
 			for (int j = i - 1; j >= 0; j--) {
 
-				AbstractOperation opLeft = operations.get(j);
+				final AbstractOperation opLeft = operations.get(j);
 
 				if (opLeft instanceof AttributeOperation
 					&& opRight.getModelElementId().equals(opLeft.getModelElementId())) {
 
-					AttributeOperation attOp = (AttributeOperation) opLeft;
+					final AttributeOperation attOp = (AttributeOperation) opLeft;
 					// found an attribute change for the object, that is deleted
 					// now merge it into the deleted object and discard the
 					// attribute operation
-					EStructuralFeature feature = deleteOp.getModelElement().eClass()
+					final EStructuralFeature feature = deleteOp.getModelElement().eClass()
 						.getEStructuralFeature(attOp.getFeatureName());
 					deleteOp.getModelElement().eSet(feature, attOp.getOldValue());
 
@@ -210,7 +210,7 @@ public final class OperationsCanonizer {
 
 	private static boolean containsAttributeChangeTo(CompositeOperation comp, ModelElementId modelElementId) {
 
-		for (AbstractOperation op : comp.getSubOperations()) {
+		for (final AbstractOperation op : comp.getSubOperations()) {
 
 			if (op instanceof AttributeOperation && modelElementId.equals(op.getModelElementId())) {
 				return true;
@@ -223,13 +223,13 @@ public final class OperationsCanonizer {
 
 	private static void foldComposites(List<AbstractOperation> operations) {
 
-		List<CompositeOperation> emptyComposites = new LinkedList<CompositeOperation>();
-		for (AbstractOperation op : operations) {
+		final List<CompositeOperation> emptyComposites = new LinkedList<CompositeOperation>();
+		for (final AbstractOperation op : operations) {
 
 			if (!(op instanceof CompositeOperation)) {
 				continue;
 			}
-			CompositeOperation comp = (CompositeOperation) op;
+			final CompositeOperation comp = (CompositeOperation) op;
 
 			// safeguard preparation: if the main operation of the composite has
 			// been canonized away,
@@ -251,7 +251,7 @@ public final class OperationsCanonizer {
 			// away
 			else if (comp.getMainOperation() != null && !comp.getSubOperations().contains(comp.getMainOperation())) {
 
-				CompositeOperation restored = (CompositeOperation) operationCopy;
+				final CompositeOperation restored = (CompositeOperation) operationCopy;
 				comp.getSubOperations().clear();
 				comp.getSubOperations().addAll(restored.getSubOperations());
 				comp.setMainOperation(restored.getMainOperation());
@@ -264,20 +264,20 @@ public final class OperationsCanonizer {
 
 		for (int i = 0; i < operations.size() - 1; i++) {
 
-			AbstractOperation opLeft = operations.get(i);
+			final AbstractOperation opLeft = operations.get(i);
 			if (!(opLeft instanceof AttributeOperation)) {
 				continue;
 			}
-			AttributeOperation attOpLeft = (AttributeOperation) opLeft;
+			final AttributeOperation attOpLeft = (AttributeOperation) opLeft;
 
 			for (int j = i + 1; j < operations.size(); j++) {
 
-				AbstractOperation opRight = operations.get(j);
+				final AbstractOperation opRight = operations.get(j);
 
 				if (opRight instanceof AttributeOperation
 					&& opLeft.getModelElementId().equals(opRight.getModelElementId())) {
 
-					AttributeOperation attOpRight = (AttributeOperation) opRight;
+					final AttributeOperation attOpRight = (AttributeOperation) opRight;
 					if (attOpLeft.getFeatureName().equals(attOpRight.getFeatureName())) {
 						// merge opLeft and opRight in opLeft
 						attOpLeft.setNewValue(attOpRight.getNewValue());
@@ -293,8 +293,8 @@ public final class OperationsCanonizer {
 
 			}
 			// if the remaining leftOp is a noop, remove it altogether
-			if ((attOpLeft.getNewValue() == null && attOpLeft.getOldValue() == null)
-				|| (attOpLeft.getNewValue() != null && attOpLeft.getNewValue().equals(attOpLeft.getOldValue()))) {
+			if (attOpLeft.getNewValue() == null && attOpLeft.getOldValue() == null
+				|| attOpLeft.getNewValue() != null && attOpLeft.getNewValue().equals(attOpLeft.getOldValue())) {
 				operations.remove(i);
 				i--; // reexamine the index after removal
 			}
