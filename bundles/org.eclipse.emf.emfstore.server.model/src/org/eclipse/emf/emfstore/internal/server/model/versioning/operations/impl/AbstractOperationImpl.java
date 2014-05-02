@@ -140,11 +140,11 @@ public abstract class AbstractOperationImpl extends IdentifiableElementImpl impl
 	public ModelElementId getModelElementId() {
 		if (modelElementId != null && modelElementId.eIsProxy())
 		{
-			InternalEObject oldModelElementId = (InternalEObject) modelElementId;
+			final InternalEObject oldModelElementId = (InternalEObject) modelElementId;
 			modelElementId = (ModelElementId) eResolveProxy(oldModelElementId);
 			if (modelElementId != oldModelElementId)
 			{
-				InternalEObject newModelElementId = (InternalEObject) modelElementId;
+				final InternalEObject newModelElementId = (InternalEObject) modelElementId;
 				NotificationChain msgs = oldModelElementId.eInverseRemove(this, EOPPOSITE_FEATURE_BASE
 					- OperationsPackage.ABSTRACT_OPERATION__MODEL_ELEMENT_ID, null, null);
 				if (newModelElementId.eInternalContainer() == null)
@@ -152,11 +152,13 @@ public abstract class AbstractOperationImpl extends IdentifiableElementImpl impl
 					msgs = newModelElementId.eInverseAdd(this, EOPPOSITE_FEATURE_BASE
 						- OperationsPackage.ABSTRACT_OPERATION__MODEL_ELEMENT_ID, null, msgs);
 				}
-				if (msgs != null)
+				if (msgs != null) {
 					msgs.dispatch();
-				if (eNotificationRequired())
+				}
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
 						OperationsPackage.ABSTRACT_OPERATION__MODEL_ELEMENT_ID, oldModelElementId, modelElementId));
+				}
 			}
 		}
 		return modelElementId;
@@ -177,16 +179,17 @@ public abstract class AbstractOperationImpl extends IdentifiableElementImpl impl
 	 * @generated
 	 */
 	public NotificationChain basicSetModelElementId(ModelElementId newModelElementId, NotificationChain msgs) {
-		ModelElementId oldModelElementId = modelElementId;
+		final ModelElementId oldModelElementId = modelElementId;
 		modelElementId = newModelElementId;
 		if (eNotificationRequired())
 		{
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
 				OperationsPackage.ABSTRACT_OPERATION__MODEL_ELEMENT_ID, oldModelElementId, newModelElementId);
-			if (msgs == null)
+			if (msgs == null) {
 				msgs = notification;
-			else
+			} else {
 				msgs.add(notification);
+			}
 		}
 		return msgs;
 	}
@@ -200,19 +203,23 @@ public abstract class AbstractOperationImpl extends IdentifiableElementImpl impl
 		if (newModelElementId != modelElementId)
 		{
 			NotificationChain msgs = null;
-			if (modelElementId != null)
+			if (modelElementId != null) {
 				msgs = ((InternalEObject) modelElementId).eInverseRemove(this, EOPPOSITE_FEATURE_BASE
 					- OperationsPackage.ABSTRACT_OPERATION__MODEL_ELEMENT_ID, null, msgs);
-			if (newModelElementId != null)
+			}
+			if (newModelElementId != null) {
 				msgs = ((InternalEObject) newModelElementId).eInverseAdd(this, EOPPOSITE_FEATURE_BASE
 					- OperationsPackage.ABSTRACT_OPERATION__MODEL_ELEMENT_ID, null, msgs);
+			}
 			msgs = basicSetModelElementId(newModelElementId, msgs);
-			if (msgs != null)
+			if (msgs != null) {
 				msgs.dispatch();
+			}
 		}
-		else if (eNotificationRequired())
+		else if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET,
 				OperationsPackage.ABSTRACT_OPERATION__MODEL_ELEMENT_ID, newModelElementId, newModelElementId));
+		}
 	}
 
 	/**
@@ -230,11 +237,12 @@ public abstract class AbstractOperationImpl extends IdentifiableElementImpl impl
 	 * @generated
 	 */
 	public void setAccepted(boolean newAccepted) {
-		boolean oldAccepted = accepted;
+		final boolean oldAccepted = accepted;
 		accepted = newAccepted;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, OperationsPackage.ABSTRACT_OPERATION__ACCEPTED,
 				oldAccepted, accepted));
+		}
 	}
 
 	/**
@@ -252,11 +260,12 @@ public abstract class AbstractOperationImpl extends IdentifiableElementImpl impl
 	 * @generated
 	 */
 	public void setClientDate(Date newClientDate) {
-		Date oldClientDate = clientDate;
+		final Date oldClientDate = clientDate;
 		clientDate = newClientDate;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, OperationsPackage.ABSTRACT_OPERATION__CLIENT_DATE,
 				oldClientDate, clientDate));
+		}
 	}
 
 	/**
@@ -283,7 +292,10 @@ public abstract class AbstractOperationImpl extends IdentifiableElementImpl impl
 	public abstract AbstractOperation reverse();
 
 	/**
-	 * {@inheritDoc}
+	 * Initializes the given operation with the {@link ModelElementId} of this operation and a date.
+	 * 
+	 * @param abstractOperation
+	 *            the operation that needs to be initialized
 	 * 
 	 * @generated NOT
 	 */
@@ -304,8 +316,9 @@ public abstract class AbstractOperationImpl extends IdentifiableElementImpl impl
 		switch (featureID)
 		{
 		case OperationsPackage.ABSTRACT_OPERATION__MODEL_ELEMENT_ID:
-			if (resolve)
+			if (resolve) {
 				return getModelElementId();
+			}
 			return basicGetModelElementId();
 		case OperationsPackage.ABSTRACT_OPERATION__ACCEPTED:
 			return isAccepted();
@@ -385,13 +398,14 @@ public abstract class AbstractOperationImpl extends IdentifiableElementImpl impl
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (eIsProxy()) {
 			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (accepted: ");
+		final StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (accepted: "); //$NON-NLS-1$
 		result.append(accepted);
-		result.append(", clientDate: ");
+		result.append(", clientDate: "); //$NON-NLS-1$
 		result.append(clientDate);
 		result.append(')');
 		return result.toString();
@@ -401,11 +415,11 @@ public abstract class AbstractOperationImpl extends IdentifiableElementImpl impl
 	 * {@inheritDoc}
 	 */
 	public OperationId getOperationId() {
-		if (this.identifier == null) {
-			throw new IllegalStateException("Operation does not have an identifier");
+		if (identifier == null) {
+			throw new IllegalStateException("Operation does not have an identifier"); //$NON-NLS-1$
 		}
-		OperationId operationId = OperationsFactory.eINSTANCE.createOperationId();
-		operationId.setId(this.identifier);
+		final OperationId operationId = OperationsFactory.eINSTANCE.createOperationId();
+		operationId.setId(identifier);
 		return operationId;
 	}
 
@@ -415,7 +429,7 @@ public abstract class AbstractOperationImpl extends IdentifiableElementImpl impl
 	 * @see org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation#getAllInvolvedModelElements()
 	 */
 	public Set<ModelElementId> getAllInvolvedModelElements() {
-		Set<ModelElementId> result = new LinkedHashSet<ModelElementId>();
+		final Set<ModelElementId> result = new LinkedHashSet<ModelElementId>();
 		if (getModelElementId() != null) {
 			result.add(getModelElementId());
 		}

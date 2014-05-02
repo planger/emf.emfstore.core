@@ -54,13 +54,13 @@ public class OperationsFactoryImpl extends EFactoryImpl implements OperationsFac
 	public static OperationsFactory init() {
 		try
 		{
-			OperationsFactory theOperationsFactory = (OperationsFactory) EPackage.Registry.INSTANCE
-				.getEFactory("http://eclipse.org/emf/emfstore/server/model/versioning/operations");
+			final OperationsFactory theOperationsFactory = (OperationsFactory) EPackage.Registry.INSTANCE
+				.getEFactory("http://eclipse.org/emf/emfstore/server/model/versioning/operations"); //$NON-NLS-1$
 			if (theOperationsFactory != null)
 			{
 				return theOperationsFactory;
 			}
-		} catch (Exception exception)
+		} catch (final Exception exception)
 		{
 			EcorePlugin.INSTANCE.log(exception);
 		}
@@ -116,7 +116,7 @@ public class OperationsFactoryImpl extends EFactoryImpl implements OperationsFac
 		case OperationsPackage.EOBJECT_TO_MODEL_ELEMENT_ID_MAP:
 			return (EObject) createEObjectToModelElementIdMap();
 		default:
-			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
@@ -134,7 +134,7 @@ public class OperationsFactoryImpl extends EFactoryImpl implements OperationsFac
 		case OperationsPackage.UNSET_TYPE:
 			return createUnsetTypeFromString(eDataType, initialValue);
 		default:
-			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
@@ -152,7 +152,7 @@ public class OperationsFactoryImpl extends EFactoryImpl implements OperationsFac
 		case OperationsPackage.UNSET_TYPE:
 			return convertUnsetTypeToString(eDataType, instanceValue);
 		default:
-			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
@@ -162,7 +162,7 @@ public class OperationsFactoryImpl extends EFactoryImpl implements OperationsFac
 	 * @generated
 	 */
 	public CompositeOperation createCompositeOperation() {
-		CompositeOperationImpl compositeOperation = new CompositeOperationImpl();
+		final CompositeOperationImpl compositeOperation = new CompositeOperationImpl();
 		return compositeOperation;
 	}
 
@@ -172,7 +172,7 @@ public class OperationsFactoryImpl extends EFactoryImpl implements OperationsFac
 	 * @generated
 	 */
 	public CreateDeleteOperation createCreateDeleteOperation() {
-		CreateDeleteOperationImpl createDeleteOperation = new CreateDeleteOperationImpl();
+		final CreateDeleteOperationImpl createDeleteOperation = new CreateDeleteOperationImpl();
 		return createDeleteOperation;
 	}
 
@@ -182,7 +182,7 @@ public class OperationsFactoryImpl extends EFactoryImpl implements OperationsFac
 	 * @generated
 	 */
 	public AttributeOperation createAttributeOperation() {
-		AttributeOperationImpl attributeOperation = new AttributeOperationImpl();
+		final AttributeOperationImpl attributeOperation = new AttributeOperationImpl();
 		return attributeOperation;
 	}
 
@@ -192,7 +192,7 @@ public class OperationsFactoryImpl extends EFactoryImpl implements OperationsFac
 	 * @generated
 	 */
 	public MultiAttributeOperation createMultiAttributeOperation() {
-		MultiAttributeOperationImpl multiAttributeOperation = new MultiAttributeOperationImpl();
+		final MultiAttributeOperationImpl multiAttributeOperation = new MultiAttributeOperationImpl();
 		return multiAttributeOperation;
 	}
 
@@ -202,7 +202,7 @@ public class OperationsFactoryImpl extends EFactoryImpl implements OperationsFac
 	 * @generated
 	 */
 	public MultiAttributeSetOperation createMultiAttributeSetOperation() {
-		MultiAttributeSetOperationImpl multiAttributeSetOperation = new MultiAttributeSetOperationImpl();
+		final MultiAttributeSetOperationImpl multiAttributeSetOperation = new MultiAttributeSetOperationImpl();
 		return multiAttributeSetOperation;
 	}
 
@@ -212,7 +212,7 @@ public class OperationsFactoryImpl extends EFactoryImpl implements OperationsFac
 	 * @generated
 	 */
 	public MultiAttributeMoveOperation createMultiAttributeMoveOperation() {
-		MultiAttributeMoveOperationImpl multiAttributeMoveOperation = new MultiAttributeMoveOperationImpl();
+		final MultiAttributeMoveOperationImpl multiAttributeMoveOperation = new MultiAttributeMoveOperationImpl();
 		return multiAttributeMoveOperation;
 	}
 
@@ -222,7 +222,7 @@ public class OperationsFactoryImpl extends EFactoryImpl implements OperationsFac
 	 * @generated
 	 */
 	public SingleReferenceOperation createSingleReferenceOperation() {
-		SingleReferenceOperationImpl singleReferenceOperation = new SingleReferenceOperationImpl();
+		final SingleReferenceOperationImpl singleReferenceOperation = new SingleReferenceOperationImpl();
 		return singleReferenceOperation;
 	}
 
@@ -232,7 +232,7 @@ public class OperationsFactoryImpl extends EFactoryImpl implements OperationsFac
 	 * @generated
 	 */
 	public MultiReferenceOperation createMultiReferenceOperation() {
-		MultiReferenceOperationImpl multiReferenceOperation = new MultiReferenceOperationImpl();
+		final MultiReferenceOperationImpl multiReferenceOperation = new MultiReferenceOperationImpl();
 		return multiReferenceOperation;
 	}
 
@@ -242,7 +242,7 @@ public class OperationsFactoryImpl extends EFactoryImpl implements OperationsFac
 	 * @generated
 	 */
 	public MultiReferenceSetOperation createMultiReferenceSetOperation() {
-		MultiReferenceSetOperationImpl multiReferenceSetOperation = new MultiReferenceSetOperationImpl();
+		final MultiReferenceSetOperationImpl multiReferenceSetOperation = new MultiReferenceSetOperationImpl();
 		return multiReferenceSetOperation;
 	}
 
@@ -252,7 +252,7 @@ public class OperationsFactoryImpl extends EFactoryImpl implements OperationsFac
 	 * @generated
 	 */
 	public MultiReferenceMoveOperation createMultiReferenceMoveOperation() {
-		MultiReferenceMoveOperationImpl multiReferenceMoveOperation = new MultiReferenceMoveOperationImpl();
+		final MultiReferenceMoveOperationImpl multiReferenceMoveOperation = new MultiReferenceMoveOperationImpl();
 		return multiReferenceMoveOperation;
 	}
 
@@ -262,7 +262,7 @@ public class OperationsFactoryImpl extends EFactoryImpl implements OperationsFac
 	 * @generated
 	 */
 	public OperationId createOperationId() {
-		OperationIdImpl operationId = new OperationIdImpl();
+		final OperationIdImpl operationId = new OperationIdImpl();
 		return operationId;
 	}
 
@@ -272,7 +272,7 @@ public class OperationsFactoryImpl extends EFactoryImpl implements OperationsFac
 	 * @generated
 	 */
 	public OperationGroup createOperationGroup() {
-		OperationGroupImpl operationGroup = new OperationGroupImpl();
+		final OperationGroupImpl operationGroup = new OperationGroupImpl();
 		return operationGroup;
 	}
 
@@ -282,7 +282,7 @@ public class OperationsFactoryImpl extends EFactoryImpl implements OperationsFac
 	 * @generated
 	 */
 	public ModelElementGroup createModelElementGroup() {
-		ModelElementGroupImpl modelElementGroup = new ModelElementGroupImpl();
+		final ModelElementGroupImpl modelElementGroup = new ModelElementGroupImpl();
 		return modelElementGroup;
 	}
 
@@ -292,7 +292,7 @@ public class OperationsFactoryImpl extends EFactoryImpl implements OperationsFac
 	 * @generated
 	 */
 	public Map.Entry<EObject, ModelElementId> createEObjectToModelElementIdMap() {
-		EObjectToModelElementIdMapImpl eObjectToModelElementIdMap = new EObjectToModelElementIdMapImpl();
+		final EObjectToModelElementIdMapImpl eObjectToModelElementIdMap = new EObjectToModelElementIdMapImpl();
 		return eObjectToModelElementIdMap;
 	}
 
@@ -302,10 +302,12 @@ public class OperationsFactoryImpl extends EFactoryImpl implements OperationsFac
 	 * @generated
 	 */
 	public ContainmentType createContainmentTypeFromString(EDataType eDataType, String initialValue) {
-		ContainmentType result = ContainmentType.get(initialValue);
+		final ContainmentType result = ContainmentType.get(initialValue);
 		if (result == null)
-			throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '"
-				+ eDataType.getName() + "'");
+		{
+			throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" //$NON-NLS-1$ //$NON-NLS-2$
+				+ eDataType.getName() + "'"); //$NON-NLS-1$
+		}
 		return result;
 	}
 
@@ -326,10 +328,11 @@ public class OperationsFactoryImpl extends EFactoryImpl implements OperationsFac
 	 */
 	public UnsetType createUnsetTypeFromString(EDataType eDataType, String initialValue)
 	{
-		UnsetType result = UnsetType.get(initialValue);
-		if (result == null)
-			throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '"
-				+ eDataType.getName() + "'");
+		final UnsetType result = UnsetType.get(initialValue);
+		if (result == null) {
+			throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" //$NON-NLS-1$ //$NON-NLS-2$
+				+ eDataType.getName() + "'"); //$NON-NLS-1$
+		}
 		return result;
 	}
 

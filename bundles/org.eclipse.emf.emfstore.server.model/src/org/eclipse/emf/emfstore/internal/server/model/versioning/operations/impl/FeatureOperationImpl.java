@@ -46,9 +46,9 @@ public abstract class FeatureOperationImpl extends AbstractOperationImpl impleme
 	protected void reverse(AbstractOperation abstractOperation) {
 		super.reverse(abstractOperation);
 		if (!(abstractOperation instanceof FeatureOperation)) {
-			throw new IllegalArgumentException("Given operation is not a feature operation.");
+			throw new IllegalArgumentException("Given operation is not a feature operation."); //$NON-NLS-1$
 		}
-		FeatureOperation featureOperation = (FeatureOperation) abstractOperation;
+		final FeatureOperation featureOperation = (FeatureOperation) abstractOperation;
 		featureOperation.setFeatureName(getFeatureName());
 	}
 
@@ -61,7 +61,7 @@ public abstract class FeatureOperationImpl extends AbstractOperationImpl impleme
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String FEATURE_NAME_EDEFAULT = "";
+	protected static final String FEATURE_NAME_EDEFAULT = ""; //$NON-NLS-1$
 	/**
 	 * The cached value of the '{@link #getFeatureName() <em>Feature Name</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -127,11 +127,12 @@ public abstract class FeatureOperationImpl extends AbstractOperationImpl impleme
 	 * @generated
 	 */
 	public void setFeatureName(String newFeatureName) {
-		String oldFeatureName = featureName;
+		final String oldFeatureName = featureName;
 		featureName = newFeatureName;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, OperationsPackage.FEATURE_OPERATION__FEATURE_NAME,
 				oldFeatureName, featureName));
+		}
 	}
 
 	/**
@@ -153,11 +154,12 @@ public abstract class FeatureOperationImpl extends AbstractOperationImpl impleme
 	 */
 	public void setUnset(UnsetType newUnset)
 	{
-		UnsetType oldUnset = unset;
+		final UnsetType oldUnset = unset;
 		unset = newUnset == null ? UNSET_EDEFAULT : newUnset;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, OperationsPackage.FEATURE_OPERATION__UNSET, oldUnset,
 				unset));
+		}
 	}
 
 	/**
@@ -239,13 +241,14 @@ public abstract class FeatureOperationImpl extends AbstractOperationImpl impleme
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (eIsProxy()) {
 			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (featureName: ");
+		final StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (featureName: "); //$NON-NLS-1$
 		result.append(featureName);
-		result.append(", unset: ");
+		result.append(", unset: "); //$NON-NLS-1$
 		result.append(unset);
 		result.append(')');
 		return result.toString();
@@ -258,9 +261,9 @@ public abstract class FeatureOperationImpl extends AbstractOperationImpl impleme
 	 * @generated NOT
 	 */
 	public EStructuralFeature getFeature(Project project) throws UnkownFeatureException {
-		EObject modelElement = project.getModelElement(getModelElementId());
+		final EObject modelElement = project.getModelElement(getModelElementId());
 		if (modelElement == null) {
-			throw new IllegalArgumentException("Model Element is not in the given project");
+			throw new IllegalArgumentException("Model Element is not in the given project"); //$NON-NLS-1$
 		}
 		return getFeature(modelElement);
 	}
@@ -283,21 +286,22 @@ public abstract class FeatureOperationImpl extends AbstractOperationImpl impleme
 	 * @see org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation#getLeafOperations()
 	 */
 	public List<AbstractOperation> getLeafOperations() {
-		List<AbstractOperation> result = new ArrayList<AbstractOperation>();
+		final List<AbstractOperation> result = new ArrayList<AbstractOperation>();
 		result.add(this);
 		return result;
 	}
 
 	/**
+	 * 
 	 * {@inheritDoc}
 	 * 
+	 * @see org.eclipse.emf.emfstore.internal.server.model.versioning.operations.FeatureOperation#getFeature(org.eclipse.emf.ecore.EObject)
 	 * @generated NOT
-	 * @see org.eclipse.emf.emfstore.internal.server.model.versioning.operations.FeatureOperation#getFeature(org.eclipse.emf.emfstore.internal.common.model.ModelElement)
 	 */
 	public EStructuralFeature getFeature(EObject modelElement) throws UnkownFeatureException {
-		EList<EStructuralFeature> features = modelElement.eClass().getEAllStructuralFeatures();
-		for (EStructuralFeature feature : features) {
-			if (feature.getName().equals(this.getFeatureName())) {
+		final EList<EStructuralFeature> features = modelElement.eClass().getEAllStructuralFeatures();
+		for (final EStructuralFeature feature : features) {
+			if (feature.getName().equals(getFeatureName())) {
 				return feature;
 			}
 		}
@@ -321,6 +325,7 @@ public abstract class FeatureOperationImpl extends AbstractOperationImpl impleme
 		case UnsetType.WAS_UNSET_VALUE:
 			operation.setUnset(UnsetType.IS_UNSET);
 			break;
+		default:
 		}
 	}
 

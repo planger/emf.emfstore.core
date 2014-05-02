@@ -67,9 +67,9 @@ public class CompositeOperationImpl extends AbstractOperationImpl implements Com
 	 */
 	@Override
 	public Set<ModelElementId> getOtherInvolvedModelElements() {
-		Set<ModelElementId> result = new LinkedHashSet<ModelElementId>();
-		for (AbstractOperation operation : getSubOperations()) {
-			Set<ModelElementId> allInvolvedModelElements = operation.getAllInvolvedModelElements();
+		final Set<ModelElementId> result = new LinkedHashSet<ModelElementId>();
+		for (final AbstractOperation operation : getSubOperations()) {
+			final Set<ModelElementId> allInvolvedModelElements = operation.getAllInvolvedModelElements();
 			result.addAll(allInvolvedModelElements);
 		}
 		return result;
@@ -212,13 +212,14 @@ public class CompositeOperationImpl extends AbstractOperationImpl implements Com
 	public AbstractOperation getMainOperation() {
 		if (mainOperation != null && mainOperation.eIsProxy())
 		{
-			InternalEObject oldMainOperation = (InternalEObject) mainOperation;
+			final InternalEObject oldMainOperation = (InternalEObject) mainOperation;
 			mainOperation = (AbstractOperation) eResolveProxy(oldMainOperation);
 			if (mainOperation != oldMainOperation)
 			{
-				if (eNotificationRequired())
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
 						OperationsPackage.COMPOSITE_OPERATION__MAIN_OPERATION, oldMainOperation, mainOperation));
+				}
 			}
 		}
 		return mainOperation;
@@ -239,11 +240,12 @@ public class CompositeOperationImpl extends AbstractOperationImpl implements Com
 	 * @generated
 	 */
 	public void setMainOperation(AbstractOperation newMainOperation) {
-		AbstractOperation oldMainOperation = mainOperation;
+		final AbstractOperation oldMainOperation = mainOperation;
 		mainOperation = newMainOperation;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET,
 				OperationsPackage.COMPOSITE_OPERATION__MAIN_OPERATION, oldMainOperation, mainOperation));
+		}
 	}
 
 	/**
@@ -261,11 +263,12 @@ public class CompositeOperationImpl extends AbstractOperationImpl implements Com
 	 * @generated
 	 */
 	public void setCompositeName(String newCompositeName) {
-		String oldCompositeName = compositeName;
+		final String oldCompositeName = compositeName;
 		compositeName = newCompositeName;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET,
 				OperationsPackage.COMPOSITE_OPERATION__COMPOSITE_NAME, oldCompositeName, compositeName));
+		}
 	}
 
 	/**
@@ -283,12 +286,13 @@ public class CompositeOperationImpl extends AbstractOperationImpl implements Com
 	 * @generated
 	 */
 	public void setCompositeDescription(String newCompositeDescription) {
-		String oldCompositeDescription = compositeDescription;
+		final String oldCompositeDescription = compositeDescription;
 		compositeDescription = newCompositeDescription;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET,
 				OperationsPackage.COMPOSITE_OPERATION__COMPOSITE_DESCRIPTION, oldCompositeDescription,
 				compositeDescription));
+		}
 	}
 
 	/**
@@ -306,11 +310,12 @@ public class CompositeOperationImpl extends AbstractOperationImpl implements Com
 	 * @generated
 	 */
 	public void setReversed(boolean newReversed) {
-		boolean oldReversed = reversed;
+		final boolean oldReversed = reversed;
 		reversed = newReversed;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, OperationsPackage.COMPOSITE_OPERATION__REVERSED,
 				oldReversed, reversed));
+		}
 	}
 
 	// begin of custom code
@@ -353,8 +358,9 @@ public class CompositeOperationImpl extends AbstractOperationImpl implements Com
 		case OperationsPackage.COMPOSITE_OPERATION__SUB_OPERATIONS:
 			return getSubOperations();
 		case OperationsPackage.COMPOSITE_OPERATION__MAIN_OPERATION:
-			if (resolve)
+			if (resolve) {
 				return getMainOperation();
+			}
 			return basicGetMainOperation();
 		case OperationsPackage.COMPOSITE_OPERATION__COMPOSITE_NAME:
 			return getCompositeName();
@@ -456,29 +462,30 @@ public class CompositeOperationImpl extends AbstractOperationImpl implements Com
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (eIsProxy()) {
 			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (compositeName: ");
+		final StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (compositeName: "); //$NON-NLS-1$
 		result.append(compositeName);
-		result.append(", compositeDescription: ");
+		result.append(", compositeDescription: "); //$NON-NLS-1$
 		result.append(compositeDescription);
-		result.append(", reversed: ");
+		result.append(", reversed: "); //$NON-NLS-1$
 		result.append(reversed);
 		result.append(')');
 		return result.toString();
 	}
 
 	public void apply(IdEObjectCollection project) {
-		for (AbstractOperation abstractOperation : getSubOperations()) {
+		for (final AbstractOperation abstractOperation : getSubOperations()) {
 			abstractOperation.apply(project);
 		}
 	}
 
 	@Override
 	public AbstractOperation reverse() {
-		CompositeOperation compositeOperation = OperationsFactory.eINSTANCE.createCompositeOperation();
+		final CompositeOperation compositeOperation = OperationsFactory.eINSTANCE.createCompositeOperation();
 		// MK: do not call super class reverse since it requires a model element
 		// id that is NOT null
 		// super.reverse(compositeOperation);
@@ -488,9 +495,9 @@ public class CompositeOperationImpl extends AbstractOperationImpl implements Com
 		compositeOperation.setCompositeDescription(getCompositeDescription());
 		compositeOperation.setReversed(!isReversed());
 		// reverse subOperations and add in reverse order
-		EList<AbstractOperation> copiedSubOperations = compositeOperation.getSubOperations();
-		for (AbstractOperation abstractOperation : getSubOperations()) {
-			AbstractOperation reversedSubOperation = abstractOperation.reverse();
+		final EList<AbstractOperation> copiedSubOperations = compositeOperation.getSubOperations();
+		for (final AbstractOperation abstractOperation : getSubOperations()) {
+			final AbstractOperation reversedSubOperation = abstractOperation.reverse();
 			copiedSubOperations.add(0, reversedSubOperation);
 			if (getMainOperation() != null
 				&& getMainOperation().getIdentifier().equals(abstractOperation.getIdentifier())) {
@@ -507,8 +514,8 @@ public class CompositeOperationImpl extends AbstractOperationImpl implements Com
 	 * @see org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation#getLeafOperations()
 	 */
 	public List<AbstractOperation> getLeafOperations() {
-		List<AbstractOperation> result = new ArrayList<AbstractOperation>();
-		for (AbstractOperation subOperation : getSubOperations()) {
+		final List<AbstractOperation> result = new ArrayList<AbstractOperation>();
+		for (final AbstractOperation subOperation : getSubOperations()) {
 			result.addAll(subOperation.getLeafOperations());
 		}
 		return result;

@@ -65,9 +65,9 @@ public abstract class ReferenceOperationImpl extends FeatureOperationImpl implem
 	protected void reverse(AbstractOperation abstractOperation) {
 		super.reverse(abstractOperation);
 		if (!(abstractOperation instanceof ReferenceOperation)) {
-			throw new IllegalArgumentException("Given operation is not a reference operation.");
+			throw new IllegalArgumentException("Given operation is not a reference operation."); //$NON-NLS-1$
 		}
-		ReferenceOperation referenceOperation = (ReferenceOperation) abstractOperation;
+		final ReferenceOperation referenceOperation = (ReferenceOperation) abstractOperation;
 		referenceOperation.setBidirectional(isBidirectional());
 		referenceOperation.setContainmentType(getContainmentType());
 		referenceOperation.setOppositeFeatureName(getOppositeFeatureName());
@@ -151,11 +151,12 @@ public abstract class ReferenceOperationImpl extends FeatureOperationImpl implem
 	 * @generated
 	 */
 	public void setBidirectional(boolean newBidirectional) {
-		boolean oldBidirectional = bidirectional;
+		final boolean oldBidirectional = bidirectional;
 		bidirectional = newBidirectional;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, OperationsPackage.REFERENCE_OPERATION__BIDIRECTIONAL,
 				oldBidirectional, bidirectional));
+		}
 	}
 
 	/**
@@ -173,12 +174,13 @@ public abstract class ReferenceOperationImpl extends FeatureOperationImpl implem
 	 * @generated
 	 */
 	public void setOppositeFeatureName(String newOppositeFeatureName) {
-		String oldOppositeFeatureName = oppositeFeatureName;
+		final String oldOppositeFeatureName = oppositeFeatureName;
 		oppositeFeatureName = newOppositeFeatureName;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET,
 				OperationsPackage.REFERENCE_OPERATION__OPPOSITE_FEATURE_NAME, oldOppositeFeatureName,
 				oppositeFeatureName));
+		}
 	}
 
 	/**
@@ -196,11 +198,12 @@ public abstract class ReferenceOperationImpl extends FeatureOperationImpl implem
 	 * @generated
 	 */
 	public void setContainmentType(ContainmentType newContainmentType) {
-		ContainmentType oldContainmentType = containmentType;
+		final ContainmentType oldContainmentType = containmentType;
 		containmentType = newContainmentType == null ? CONTAINMENT_TYPE_EDEFAULT : newContainmentType;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET,
 				OperationsPackage.REFERENCE_OPERATION__CONTAINMENT_TYPE, oldContainmentType, containmentType));
+		}
 	}
 
 	/**
@@ -293,15 +296,16 @@ public abstract class ReferenceOperationImpl extends FeatureOperationImpl implem
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (eIsProxy()) {
 			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (bidirectional: ");
+		final StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (bidirectional: "); //$NON-NLS-1$
 		result.append(bidirectional);
-		result.append(", oppositeFeatureName: ");
+		result.append(", oppositeFeatureName: "); //$NON-NLS-1$
 		result.append(oppositeFeatureName);
-		result.append(", containmentType: ");
+		result.append(", containmentType: "); //$NON-NLS-1$
 		result.append(containmentType);
 		result.append(')');
 		return result.toString();

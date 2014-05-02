@@ -35,7 +35,7 @@ public enum ContainmentType implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	NONE(0, "NONE", "NONE"),
+	NONE(0, "NONE", "NONE"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>CONTAINER</b></em>' literal object.
@@ -46,7 +46,7 @@ public enum ContainmentType implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	CONTAINER(1, "CONTAINER", "CONTAINER"),
+	CONTAINER(1, "CONTAINER", "CONTAINER"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>CONTAINMENT</b></em>' literal object.
@@ -57,7 +57,7 @@ public enum ContainmentType implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	CONTAINMENT(2, "CONTAINMENT", "CONTAINMENT");
+	CONTAINMENT(2, "CONTAINMENT", "CONTAINMENT"); //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>NONE</b></em>' literal value.
@@ -137,7 +137,7 @@ public enum ContainmentType implements Enumerator {
 	public static ContainmentType get(String literal) {
 		for (int i = 0; i < VALUES_ARRAY.length; ++i)
 		{
-			ContainmentType result = VALUES_ARRAY[i];
+			final ContainmentType result = VALUES_ARRAY[i];
 			if (result.toString().equals(literal))
 			{
 				return result;
@@ -155,7 +155,7 @@ public enum ContainmentType implements Enumerator {
 	public static ContainmentType getByName(String name) {
 		for (int i = 0; i < VALUES_ARRAY.length; ++i)
 		{
-			ContainmentType result = VALUES_ARRAY[i];
+			final ContainmentType result = VALUES_ARRAY[i];
 			if (result.getName().equals(name))
 			{
 				return result;

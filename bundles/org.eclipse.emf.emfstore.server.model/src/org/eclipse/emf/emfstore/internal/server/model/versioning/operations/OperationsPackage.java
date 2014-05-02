@@ -39,7 +39,7 @@ public interface OperationsPackage extends EPackage {
 	 * 
 	 * @generated
 	 */
-	String eNAME = "operations";
+	String eNAME = "operations"; //$NON-NLS-1$
 
 	/**
 	 * The package namespace URI.
@@ -47,7 +47,7 @@ public interface OperationsPackage extends EPackage {
 	 * 
 	 * @generated
 	 */
-	String eNS_URI = "http://eclipse.org/emf/emfstore/server/model/versioning/operations";
+	String eNS_URI = "http://eclipse.org/emf/emfstore/server/model/versioning/operations"; //$NON-NLS-1$
 
 	/**
 	 * The package namespace name.
@@ -55,7 +55,7 @@ public interface OperationsPackage extends EPackage {
 	 * 
 	 * @generated
 	 */
-	String eNS_PREFIX = "org.eclipse.emf.emfstore.internal.server.model.versioning.operations";
+	String eNS_PREFIX = "org.eclipse.emf.emfstore.internal.server.model.versioning.operations"; //$NON-NLS-1$
 
 	/**
 	 * The singleton instance of the package.

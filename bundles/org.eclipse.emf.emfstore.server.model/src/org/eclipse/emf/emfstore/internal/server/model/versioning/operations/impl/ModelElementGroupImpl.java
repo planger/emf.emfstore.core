@@ -104,11 +104,12 @@ public class ModelElementGroupImpl extends EObjectImpl implements ModelElementGr
 	 * @generated
 	 */
 	public void setName(String newName) {
-		String oldName = name;
+		final String oldName = name;
 		name = newName;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, OperationsPackage.MODEL_ELEMENT_GROUP__NAME, oldName,
 				name));
+		}
 	}
 
 	/**
@@ -206,11 +207,12 @@ public class ModelElementGroupImpl extends EObjectImpl implements ModelElementGr
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (eIsProxy()) {
 			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
+		final StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (name: "); //$NON-NLS-1$
 		result.append(name);
 		result.append(')');
 		return result.toString();

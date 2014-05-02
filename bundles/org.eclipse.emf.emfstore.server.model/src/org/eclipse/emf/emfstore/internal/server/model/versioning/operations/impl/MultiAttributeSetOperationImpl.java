@@ -139,11 +139,12 @@ public class MultiAttributeSetOperationImpl extends FeatureOperationImpl impleme
 	 * @generated
 	 */
 	public void setIndex(int newIndex) {
-		int oldIndex = index;
+		final int oldIndex = index;
 		index = newIndex;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET,
 				OperationsPackage.MULTI_ATTRIBUTE_SET_OPERATION__INDEX, oldIndex, index));
+		}
 	}
 
 	/**
@@ -161,11 +162,12 @@ public class MultiAttributeSetOperationImpl extends FeatureOperationImpl impleme
 	 * @generated
 	 */
 	public void setOldValue(Object newOldValue) {
-		Object oldOldValue = oldValue;
+		final Object oldOldValue = oldValue;
 		oldValue = newOldValue;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET,
 				OperationsPackage.MULTI_ATTRIBUTE_SET_OPERATION__OLD_VALUE, oldOldValue, oldValue));
+		}
 	}
 
 	/**
@@ -183,11 +185,12 @@ public class MultiAttributeSetOperationImpl extends FeatureOperationImpl impleme
 	 * @generated
 	 */
 	public void setNewValue(Object newNewValue) {
-		Object oldNewValue = newValue;
+		final Object oldNewValue = newValue;
 		newValue = newNewValue;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET,
 				OperationsPackage.MULTI_ATTRIBUTE_SET_OPERATION__NEW_VALUE, oldNewValue, newValue));
+		}
 	}
 
 	/**
@@ -279,28 +282,30 @@ public class MultiAttributeSetOperationImpl extends FeatureOperationImpl impleme
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (eIsProxy()) {
 			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (index: ");
+		final StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (index: "); //$NON-NLS-1$
 		result.append(index);
-		result.append(", oldValue: ");
+		result.append(", oldValue: "); //$NON-NLS-1$
 		result.append(oldValue);
-		result.append(", newValue: ");
+		result.append(", newValue: "); //$NON-NLS-1$
 		result.append(newValue);
 		result.append(')');
 		return result.toString();
 	}
 
 	/**
+	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation#apply(org.eclipse.emf.emfstore.internal.common.model.Project)
+	 * @see org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation#apply(org.eclipse.emf.emfstore.internal.common.model.IdEObjectCollection)
 	 */
 	@SuppressWarnings("unchecked")
 	public void apply(IdEObjectCollection project) {
-		EObject modelElement = project.getModelElement(getModelElementId());
+		final EObject modelElement = project.getModelElement(getModelElementId());
 		if (modelElement == null) {
 			return;
 		}
@@ -315,24 +320,25 @@ public class MultiAttributeSetOperationImpl extends FeatureOperationImpl impleme
 				break;
 			case UnsetType.NONE_VALUE:
 			case UnsetType.WAS_UNSET_VALUE:
-				EList<Object> list = (EList<Object>) modelElement.eGet(feature);
+				final EList<Object> list = (EList<Object>) modelElement.eGet(feature);
 				if (feature.isUnique() && list.contains(getNewValue())) {
 					// silently skip setting value since it is already contained, but should be unique
 					return;
 				}
-				int i = getIndex();
-				if ((i >= 0 && i < list.size())) {
+				final int i = getIndex();
+				if (i >= 0 && i < list.size()) {
 					list.set(i, getNewValue());
 				}
 				break;
 			}
-		} catch (UnkownFeatureException e) {
+		} catch (final UnkownFeatureException e) {
 		}
 	}
 
 	@Override
 	public AbstractOperation reverse() {
-		MultiAttributeSetOperation attributeOperation = OperationsFactory.eINSTANCE.createMultiAttributeSetOperation();
+		final MultiAttributeSetOperation attributeOperation = OperationsFactory.eINSTANCE
+			.createMultiAttributeSetOperation();
 		super.reverse(attributeOperation);
 		attributeOperation.setIndex(getIndex());
 		// swap old and new value

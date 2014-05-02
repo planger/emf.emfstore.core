@@ -1,13 +1,14 @@
-/**
- * Copyright 2011 Chair for Applied Software Engineering,
+/*******************************************************************************
+ * Copyright (c) 2008-2011 Chair for Applied Software Engineering,
  * Technische Universitaet Muenchen.
  * All rights reserved. This program and the accompanying materials
- * are made available under the Eclipse Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- */
+ * Maximilian Koegel - initial API and implementation
+ ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.server.model.versioning.operations;
 
 import java.util.Arrays;
@@ -37,7 +38,7 @@ public enum UnsetType implements Enumerator
 	 * @generated
 	 * @ordered
 	 */
-	NONE(0, "NONE", ""),
+	NONE(0, "NONE", ""), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>IS UNSET</b></em>' literal object.
@@ -48,7 +49,7 @@ public enum UnsetType implements Enumerator
 	 * @generated
 	 * @ordered
 	 */
-	IS_UNSET(1, "IS_UNSET", "IS_UNSET"),
+	IS_UNSET(1, "IS_UNSET", "IS_UNSET"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>WAS UNSET</b></em>' literal object.
@@ -59,7 +60,7 @@ public enum UnsetType implements Enumerator
 	 * @generated
 	 * @ordered
 	 */
-	WAS_UNSET(2, "WAS_UNSET", "WAS_UNSET");
+	WAS_UNSET(2, "WAS_UNSET", "WAS_UNSET"); //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>NONE</b></em>' literal value.
@@ -144,7 +145,7 @@ public enum UnsetType implements Enumerator
 	{
 		for (int i = 0; i < VALUES_ARRAY.length; ++i)
 		{
-			UnsetType result = VALUES_ARRAY[i];
+			final UnsetType result = VALUES_ARRAY[i];
 			if (result.toString().equals(literal))
 			{
 				return result;
@@ -164,7 +165,7 @@ public enum UnsetType implements Enumerator
 	{
 		for (int i = 0; i < VALUES_ARRAY.length; ++i)
 		{
-			UnsetType result = VALUES_ARRAY[i];
+			final UnsetType result = VALUES_ARRAY[i];
 			if (result.getName().equals(name))
 			{
 				return result;

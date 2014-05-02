@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.emfstore.internal.common.model.IdEObjectCollection;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.MultiAttributeOperation;
+import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.OperationsFactory;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.OperationsPackage;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.UnkownFeatureException;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.UnsetType;
@@ -123,11 +124,12 @@ public class MultiAttributeOperationImpl extends FeatureOperationImpl implements
 	 * @generated
 	 */
 	public void setAdd(boolean newAdd) {
-		boolean oldAdd = add;
+		final boolean oldAdd = add;
 		add = newAdd;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, OperationsPackage.MULTI_ATTRIBUTE_OPERATION__ADD,
 				oldAdd, add));
+		}
 	}
 
 	/**
@@ -250,29 +252,30 @@ public class MultiAttributeOperationImpl extends FeatureOperationImpl implements
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (eIsProxy()) {
 			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (add: ");
+		final StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (add: "); //$NON-NLS-1$
 		result.append(add);
-		result.append(", indexes: ");
+		result.append(", indexes: "); //$NON-NLS-1$
 		result.append(indexes);
-		result.append(", referencedValues: ");
+		result.append(", referencedValues: "); //$NON-NLS-1$
 		result.append(referencedValues);
 		result.append(')');
 		return result.toString();
 	}
 
 	/**
+	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation#apply(org.eclipse.emf.emfstore.internal.common.model.Project)
+	 * @see org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation#apply(org.eclipse.emf.emfstore.internal.common.model.IdEObjectCollection)
 	 */
-
 	@SuppressWarnings("unchecked")
 	public void apply(IdEObjectCollection project) {
-		EObject modelElement = project.getModelElement(getModelElementId());
+		final EObject modelElement = project.getModelElement(getModelElementId());
 		if (modelElement == null) {
 			return;
 		}
@@ -283,8 +286,8 @@ public class MultiAttributeOperationImpl extends FeatureOperationImpl implements
 		}
 
 		try {
-			EAttribute feature = (EAttribute) getFeature(modelElement);
-			EList<Object> list = (EList<Object>) modelElement.eGet(feature);
+			final EAttribute feature = (EAttribute) getFeature(modelElement);
+			final EList<Object> list = (EList<Object>) modelElement.eGet(feature);
 
 			switch (getUnset().getValue()) {
 			case UnsetType.IS_UNSET_VALUE:
@@ -295,8 +298,8 @@ public class MultiAttributeOperationImpl extends FeatureOperationImpl implements
 				if (isAdd()) {
 
 					for (int i = 0; i < getReferencedValues().size(); i++) {
-						Object value = getReferencedValues().get(i);
-						int index = getIndexes().get(i);
+						final Object value = getReferencedValues().get(i);
+						final int index = getIndexes().get(i);
 						if (feature.isUnique() && list.contains(value)) {
 							// silently skip adding value since it is already contained, but should be unique
 							continue;
@@ -309,7 +312,7 @@ public class MultiAttributeOperationImpl extends FeatureOperationImpl implements
 					}
 				} else {
 					for (int i = getIndexes().size() - 1; i >= 0; i--) {
-						int index = getIndexes().get(i);
+						final int index = getIndexes().get(i);
 						if (index >= 0 && list.size() > index) {
 							list.remove(index);
 						}
@@ -321,7 +324,7 @@ public class MultiAttributeOperationImpl extends FeatureOperationImpl implements
 				break;
 			}
 
-		} catch (UnkownFeatureException e) {
+		} catch (final UnkownFeatureException e) {
 			return;
 		}
 	}
@@ -333,7 +336,7 @@ public class MultiAttributeOperationImpl extends FeatureOperationImpl implements
 	 */
 	@Override
 	public AbstractOperation reverse() {
-		MultiAttributeOperation operation = OperationsFactoryImpl.eINSTANCE.createMultiAttributeOperation();
+		final MultiAttributeOperation operation = OperationsFactory.eINSTANCE.createMultiAttributeOperation();
 		super.reverse(operation);
 		operation.setAdd(!isAdd());
 		operation.getReferencedValues().addAll(getReferencedValues());

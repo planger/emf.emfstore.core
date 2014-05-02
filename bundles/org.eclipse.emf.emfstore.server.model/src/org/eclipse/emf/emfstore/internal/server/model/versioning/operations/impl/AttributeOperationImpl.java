@@ -115,11 +115,12 @@ public class AttributeOperationImpl extends FeatureOperationImpl implements Attr
 	 * @generated
 	 */
 	public void setOldValue(Object newOldValue) {
-		Object oldOldValue = oldValue;
+		final Object oldOldValue = oldValue;
 		oldValue = newOldValue;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, OperationsPackage.ATTRIBUTE_OPERATION__OLD_VALUE,
 				oldOldValue, oldValue));
+		}
 	}
 
 	/**
@@ -137,11 +138,12 @@ public class AttributeOperationImpl extends FeatureOperationImpl implements Attr
 	 * @generated
 	 */
 	public void setNewValue(Object newNewValue) {
-		Object oldNewValue = newValue;
+		final Object oldNewValue = newValue;
 		newValue = newNewValue;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, OperationsPackage.ATTRIBUTE_OPERATION__NEW_VALUE,
 				oldNewValue, newValue));
+		}
 	}
 
 	/**
@@ -223,20 +225,21 @@ public class AttributeOperationImpl extends FeatureOperationImpl implements Attr
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (eIsProxy()) {
 			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (oldValue: ");
+		final StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (oldValue: "); //$NON-NLS-1$
 		result.append(oldValue);
-		result.append(", newValue: ");
+		result.append(", newValue: "); //$NON-NLS-1$
 		result.append(newValue);
 		result.append(')');
 		return result.toString();
 	}
 
 	public void apply(IdEObjectCollection project) {
-		EObject object = project.getModelElement(this.getModelElementId());
+		final EObject object = project.getModelElement(getModelElementId());
 
 		if (object == null) {
 			// silently fail
@@ -251,13 +254,13 @@ public class AttributeOperationImpl extends FeatureOperationImpl implements Attr
 				object.eUnset(attribute);
 				break;
 			case UnsetType.NONE_VALUE:
-				object.eSet(attribute, this.getNewValue());
+				object.eSet(attribute, getNewValue());
 				break;
 			case UnsetType.WAS_UNSET_VALUE:
-				object.eSet(attribute, this.getNewValue());
+				object.eSet(attribute, getNewValue());
 				break;
 			}
-		} catch (UnkownFeatureException e) {
+		} catch (final UnkownFeatureException e) {
 			// fail silently
 			return;
 		}
@@ -265,7 +268,7 @@ public class AttributeOperationImpl extends FeatureOperationImpl implements Attr
 
 	@Override
 	public AbstractOperation reverse() {
-		AttributeOperation attributeOperation = OperationsFactory.eINSTANCE.createAttributeOperation();
+		final AttributeOperation attributeOperation = OperationsFactory.eINSTANCE.createAttributeOperation();
 		super.reverse(attributeOperation);
 		// swap old and new value
 		attributeOperation.setNewValue(getOldValue());

@@ -97,13 +97,10 @@ public class OperationsSwitch<T> {
 		{
 			return doSwitch(theEClass.getClassifierID(), theEObject);
 		}
-		else
-		{
-			List<EClass> eSuperTypes = theEClass.getESuperTypes();
-			return eSuperTypes.isEmpty() ?
-				defaultCase(theEObject) :
-				doSwitch(eSuperTypes.get(0), theEObject);
-		}
+		final List<EClass> eSuperTypes = theEClass.getESuperTypes();
+		return eSuperTypes.isEmpty() ?
+			defaultCase(theEObject) :
+			doSwitch(eSuperTypes.get(0), theEObject);
 	}
 
 	/**
@@ -119,199 +116,254 @@ public class OperationsSwitch<T> {
 		switch (classifierID)
 		{
 		case OperationsPackage.ABSTRACT_OPERATION: {
-			AbstractOperation abstractOperation = (AbstractOperation) theEObject;
+			final AbstractOperation abstractOperation = (AbstractOperation) theEObject;
 			T result = caseAbstractOperation(abstractOperation);
-			if (result == null)
+			if (result == null) {
 				result = caseIdentifiableElement(abstractOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = defaultCase(theEObject);
+			}
 			return result;
 		}
 		case OperationsPackage.COMPOSITE_OPERATION: {
-			CompositeOperation compositeOperation = (CompositeOperation) theEObject;
+			final CompositeOperation compositeOperation = (CompositeOperation) theEObject;
 			T result = caseCompositeOperation(compositeOperation);
-			if (result == null)
+			if (result == null) {
 				result = caseAbstractOperation(compositeOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = caseIdentifiableElement(compositeOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = defaultCase(theEObject);
+			}
 			return result;
 		}
 		case OperationsPackage.FEATURE_OPERATION: {
-			FeatureOperation featureOperation = (FeatureOperation) theEObject;
+			final FeatureOperation featureOperation = (FeatureOperation) theEObject;
 			T result = caseFeatureOperation(featureOperation);
-			if (result == null)
+			if (result == null) {
 				result = caseAbstractOperation(featureOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = caseIdentifiableElement(featureOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = defaultCase(theEObject);
+			}
 			return result;
 		}
 		case OperationsPackage.CREATE_DELETE_OPERATION: {
-			CreateDeleteOperation createDeleteOperation = (CreateDeleteOperation) theEObject;
+			final CreateDeleteOperation createDeleteOperation = (CreateDeleteOperation) theEObject;
 			T result = caseCreateDeleteOperation(createDeleteOperation);
-			if (result == null)
+			if (result == null) {
 				result = caseAbstractOperation(createDeleteOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = caseIdentifiableElement(createDeleteOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = defaultCase(theEObject);
+			}
 			return result;
 		}
 		case OperationsPackage.ATTRIBUTE_OPERATION: {
-			AttributeOperation attributeOperation = (AttributeOperation) theEObject;
+			final AttributeOperation attributeOperation = (AttributeOperation) theEObject;
 			T result = caseAttributeOperation(attributeOperation);
-			if (result == null)
+			if (result == null) {
 				result = caseFeatureOperation(attributeOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = caseAbstractOperation(attributeOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = caseIdentifiableElement(attributeOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = defaultCase(theEObject);
+			}
 			return result;
 		}
 		case OperationsPackage.MULTI_ATTRIBUTE_OPERATION: {
-			MultiAttributeOperation multiAttributeOperation = (MultiAttributeOperation) theEObject;
+			final MultiAttributeOperation multiAttributeOperation = (MultiAttributeOperation) theEObject;
 			T result = caseMultiAttributeOperation(multiAttributeOperation);
-			if (result == null)
+			if (result == null) {
 				result = caseFeatureOperation(multiAttributeOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = caseAbstractOperation(multiAttributeOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = caseIdentifiableElement(multiAttributeOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = defaultCase(theEObject);
+			}
 			return result;
 		}
 		case OperationsPackage.MULTI_ATTRIBUTE_SET_OPERATION: {
-			MultiAttributeSetOperation multiAttributeSetOperation = (MultiAttributeSetOperation) theEObject;
+			final MultiAttributeSetOperation multiAttributeSetOperation = (MultiAttributeSetOperation) theEObject;
 			T result = caseMultiAttributeSetOperation(multiAttributeSetOperation);
-			if (result == null)
+			if (result == null) {
 				result = caseFeatureOperation(multiAttributeSetOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = caseAbstractOperation(multiAttributeSetOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = caseIdentifiableElement(multiAttributeSetOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = defaultCase(theEObject);
+			}
 			return result;
 		}
 		case OperationsPackage.MULTI_ATTRIBUTE_MOVE_OPERATION: {
-			MultiAttributeMoveOperation multiAttributeMoveOperation = (MultiAttributeMoveOperation) theEObject;
+			final MultiAttributeMoveOperation multiAttributeMoveOperation = (MultiAttributeMoveOperation) theEObject;
 			T result = caseMultiAttributeMoveOperation(multiAttributeMoveOperation);
-			if (result == null)
+			if (result == null) {
 				result = caseFeatureOperation(multiAttributeMoveOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = caseAbstractOperation(multiAttributeMoveOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = caseIdentifiableElement(multiAttributeMoveOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = defaultCase(theEObject);
+			}
 			return result;
 		}
 		case OperationsPackage.SINGLE_REFERENCE_OPERATION: {
-			SingleReferenceOperation singleReferenceOperation = (SingleReferenceOperation) theEObject;
+			final SingleReferenceOperation singleReferenceOperation = (SingleReferenceOperation) theEObject;
 			T result = caseSingleReferenceOperation(singleReferenceOperation);
-			if (result == null)
+			if (result == null) {
 				result = caseReferenceOperation(singleReferenceOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = caseFeatureOperation(singleReferenceOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = caseAbstractOperation(singleReferenceOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = caseIdentifiableElement(singleReferenceOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = defaultCase(theEObject);
+			}
 			return result;
 		}
 		case OperationsPackage.MULTI_REFERENCE_SET_OPERATION: {
-			MultiReferenceSetOperation multiReferenceSetOperation = (MultiReferenceSetOperation) theEObject;
+			final MultiReferenceSetOperation multiReferenceSetOperation = (MultiReferenceSetOperation) theEObject;
 			T result = caseMultiReferenceSetOperation(multiReferenceSetOperation);
-			if (result == null)
+			if (result == null) {
 				result = caseReferenceOperation(multiReferenceSetOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = caseFeatureOperation(multiReferenceSetOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = caseAbstractOperation(multiReferenceSetOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = caseIdentifiableElement(multiReferenceSetOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = defaultCase(theEObject);
+			}
 			return result;
 		}
 		case OperationsPackage.MULTI_REFERENCE_OPERATION: {
-			MultiReferenceOperation multiReferenceOperation = (MultiReferenceOperation) theEObject;
+			final MultiReferenceOperation multiReferenceOperation = (MultiReferenceOperation) theEObject;
 			T result = caseMultiReferenceOperation(multiReferenceOperation);
-			if (result == null)
+			if (result == null) {
 				result = caseReferenceOperation(multiReferenceOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = caseFeatureOperation(multiReferenceOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = caseAbstractOperation(multiReferenceOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = caseIdentifiableElement(multiReferenceOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = defaultCase(theEObject);
+			}
 			return result;
 		}
 		case OperationsPackage.MULTI_REFERENCE_MOVE_OPERATION: {
-			MultiReferenceMoveOperation multiReferenceMoveOperation = (MultiReferenceMoveOperation) theEObject;
+			final MultiReferenceMoveOperation multiReferenceMoveOperation = (MultiReferenceMoveOperation) theEObject;
 			T result = caseMultiReferenceMoveOperation(multiReferenceMoveOperation);
-			if (result == null)
+			if (result == null) {
 				result = caseFeatureOperation(multiReferenceMoveOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = caseAbstractOperation(multiReferenceMoveOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = caseIdentifiableElement(multiReferenceMoveOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = defaultCase(theEObject);
+			}
 			return result;
 		}
 		case OperationsPackage.REFERENCE_OPERATION: {
-			ReferenceOperation referenceOperation = (ReferenceOperation) theEObject;
+			final ReferenceOperation referenceOperation = (ReferenceOperation) theEObject;
 			T result = caseReferenceOperation(referenceOperation);
-			if (result == null)
+			if (result == null) {
 				result = caseFeatureOperation(referenceOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = caseAbstractOperation(referenceOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = caseIdentifiableElement(referenceOperation);
-			if (result == null)
+			}
+			if (result == null) {
 				result = defaultCase(theEObject);
+			}
 			return result;
 		}
 		case OperationsPackage.OPERATION_ID: {
-			OperationId operationId = (OperationId) theEObject;
+			final OperationId operationId = (OperationId) theEObject;
 			T result = caseOperationId(operationId);
-			if (result == null)
+			if (result == null) {
 				result = caseUniqueIdentifier(operationId);
-			if (result == null)
+			}
+			if (result == null) {
 				result = defaultCase(theEObject);
+			}
 			return result;
 		}
 		case OperationsPackage.OPERATION_GROUP: {
-			OperationGroup operationGroup = (OperationGroup) theEObject;
+			final OperationGroup operationGroup = (OperationGroup) theEObject;
 			T result = caseOperationGroup(operationGroup);
-			if (result == null)
+			if (result == null) {
 				result = defaultCase(theEObject);
+			}
 			return result;
 		}
 		case OperationsPackage.MODEL_ELEMENT_GROUP: {
-			ModelElementGroup modelElementGroup = (ModelElementGroup) theEObject;
+			final ModelElementGroup modelElementGroup = (ModelElementGroup) theEObject;
 			T result = caseModelElementGroup(modelElementGroup);
-			if (result == null)
+			if (result == null) {
 				result = defaultCase(theEObject);
+			}
 			return result;
 		}
 		case OperationsPackage.EOBJECT_TO_MODEL_ELEMENT_ID_MAP: {
 			@SuppressWarnings("unchecked")
-			Map.Entry<EObject, ModelElementId> eObjectToModelElementIdMap = (Map.Entry<EObject, ModelElementId>) theEObject;
+			final Map.Entry<EObject, ModelElementId> eObjectToModelElementIdMap = (Map.Entry<EObject, ModelElementId>) theEObject;
 			T result = caseEObjectToModelElementIdMap(eObjectToModelElementIdMap);
-			if (result == null)
+			if (result == null) {
 				result = defaultCase(theEObject);
+			}
 			return result;
 		}
 		default:

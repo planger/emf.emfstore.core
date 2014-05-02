@@ -72,19 +72,20 @@ public class CreateDeleteOperationImpl extends AbstractOperationImpl implements 
 				return;
 			}
 
-			EObject localModelElement = collection.getModelElement(getModelElementId());
-			List<EObject> allContainedModelElements = ModelUtil.getAllContainedModelElementsAsList(localModelElement,
+			final EObject localModelElement = collection.getModelElement(getModelElementId());
+			final List<EObject> allContainedModelElements = ModelUtil.getAllContainedModelElementsAsList(
+				localModelElement,
 				false);
 			allContainedModelElements.add(localModelElement);
 
-			for (AbstractOperation op : getSubOperations()) {
+			for (final AbstractOperation op : getSubOperations()) {
 				op.apply(collection);
 			}
 
 			// remove model element from its parent, this should only apply if
 			// the local model element in directly contained in the project
 			if (localModelElement.eContainmentFeature() != null) {
-				EReference eContainmentFeature = localModelElement.eContainmentFeature();
+				final EReference eContainmentFeature = localModelElement.eContainmentFeature();
 				if (eContainmentFeature.isMany()) {
 					((List<?>) localModelElement.eContainer().eGet(eContainmentFeature)).remove(localModelElement);
 				} else {
@@ -100,21 +101,23 @@ public class CreateDeleteOperationImpl extends AbstractOperationImpl implements 
 			}
 
 			// clone operation in order to retrieve the model element
-			CreateDeleteOperationImpl clone = ModelUtil.clone(this);
+			final CreateDeleteOperationImpl clone = ModelUtil.clone(this);
 
-			EObject element = getModelElement();
-			List<EObject> allContainedModelElements = ModelUtil.getAllContainedModelElementsAsList(element, false);
+			final EObject element = getModelElement();
+			final List<EObject> allContainedModelElements = ModelUtil
+				.getAllContainedModelElementsAsList(element, false);
 			allContainedModelElements.add(element);
-			EObject copiedElement = ModelUtil.clone(element);
-			List<EObject> copiedAllContainedModelElements = ModelUtil.getAllContainedModelElementsAsList(copiedElement,
+			final EObject copiedElement = ModelUtil.clone(element);
+			final List<EObject> copiedAllContainedModelElements = ModelUtil.getAllContainedModelElementsAsList(
+				copiedElement,
 				false);
 			copiedAllContainedModelElements.add(copiedElement);
 			clone.getEObjectToIdMap().clear();
 
 			for (int i = 0; i < allContainedModelElements.size(); i++) {
-				EObject child = allContainedModelElements.get(i);
-				EObject copiedChild = copiedAllContainedModelElements.get(i);
-				ModelElementId childId = ModelUtil.clone(getEObjectToIdMap().get(child));
+				final EObject child = allContainedModelElements.get(i);
+				final EObject copiedChild = copiedAllContainedModelElements.get(i);
+				final ModelElementId childId = ModelUtil.clone(getEObjectToIdMap().get(child));
 
 				if (ModelUtil.isIgnoredDatatype(child)) {
 					continue;
@@ -129,7 +132,7 @@ public class CreateDeleteOperationImpl extends AbstractOperationImpl implements 
 			collection.allocateModelElementIds(clone.getEObjectToIdMap().map());
 			collection.addModelElement(clone.getModelElement());
 
-			for (ReferenceOperation operation : getSubOperations()) {
+			for (final ReferenceOperation operation : getSubOperations()) {
 				operation.apply(collection);
 			}
 		}
@@ -139,29 +142,30 @@ public class CreateDeleteOperationImpl extends AbstractOperationImpl implements 
 	public AbstractOperation reverse() {
 		// TODO: see comment in checkValidity
 		// checkValidity();
-		CreateDeleteOperation createDeleteOperation = OperationsFactory.eINSTANCE.createCreateDeleteOperation();
+		final CreateDeleteOperation createDeleteOperation = OperationsFactory.eINSTANCE.createCreateDeleteOperation();
 		super.reverse(createDeleteOperation);
-		createDeleteOperation.setDelete(!this.isDelete());
+		createDeleteOperation.setDelete(!isDelete());
 
-		EObject element = getModelElement();
-		List<EObject> allContainedModelElements = ModelUtil.getAllContainedModelElementsAsList(element, false);
+		final EObject element = getModelElement();
+		final List<EObject> allContainedModelElements = ModelUtil.getAllContainedModelElementsAsList(element, false);
 		allContainedModelElements.add(element);
-		EObject copiedElement = ModelUtil.clone(element);
+		final EObject copiedElement = ModelUtil.clone(element);
 		createDeleteOperation.setModelElement(copiedElement);
-		createDeleteOperation.setModelElementId(ModelUtil.clone(this.getModelElementId()));
-		List<EObject> copiedAllContainedModelElements = ModelUtil.getAllContainedModelElementsAsList(copiedElement,
+		createDeleteOperation.setModelElementId(ModelUtil.clone(getModelElementId()));
+		final List<EObject> copiedAllContainedModelElements = ModelUtil.getAllContainedModelElementsAsList(
+			copiedElement,
 			false);
 		copiedAllContainedModelElements.add(copiedElement);
 
 		for (int i = 0; i < allContainedModelElements.size(); i++) {
-			EObject child = allContainedModelElements.get(i);
-			EObject copiedChild = copiedAllContainedModelElements.get(i);
-			ModelElementId childId = ModelUtil.clone(getEObjectToIdMap().get(child));
+			final EObject child = allContainedModelElements.get(i);
+			final EObject copiedChild = copiedAllContainedModelElements.get(i);
+			final ModelElementId childId = ModelUtil.clone(getEObjectToIdMap().get(child));
 			((CreateDeleteOperationImpl) createDeleteOperation).getEObjectToIdMap().put(copiedChild, childId);
 		}
 
-		EList<ReferenceOperation> clonedSubOperations = createDeleteOperation.getSubOperations();
-		for (ReferenceOperation operation : getSubOperations()) {
+		final EList<ReferenceOperation> clonedSubOperations = createDeleteOperation.getSubOperations();
+		for (final ReferenceOperation operation : getSubOperations()) {
 			clonedSubOperations.add(0, (ReferenceOperation) operation.reverse());
 		}
 		return createDeleteOperation;
@@ -254,11 +258,12 @@ public class CreateDeleteOperationImpl extends AbstractOperationImpl implements 
 	 * @generated
 	 */
 	public void setDelete(boolean newDelete) {
-		boolean oldDelete = delete;
+		final boolean oldDelete = delete;
 		delete = newDelete;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, OperationsPackage.CREATE_DELETE_OPERATION__DELETE,
 				oldDelete, delete));
+		}
 	}
 
 	/**
@@ -269,11 +274,11 @@ public class CreateDeleteOperationImpl extends AbstractOperationImpl implements 
 	public EObject getModelElement() {
 		if (modelElement != null && modelElement.eIsProxy())
 		{
-			InternalEObject oldModelElement = (InternalEObject) modelElement;
+			final InternalEObject oldModelElement = (InternalEObject) modelElement;
 			modelElement = eResolveProxy(oldModelElement);
 			if (modelElement != oldModelElement)
 			{
-				InternalEObject newModelElement = (InternalEObject) modelElement;
+				final InternalEObject newModelElement = (InternalEObject) modelElement;
 				NotificationChain msgs = oldModelElement.eInverseRemove(this, EOPPOSITE_FEATURE_BASE
 					- OperationsPackage.CREATE_DELETE_OPERATION__MODEL_ELEMENT, null, null);
 				if (newModelElement.eInternalContainer() == null)
@@ -281,11 +286,13 @@ public class CreateDeleteOperationImpl extends AbstractOperationImpl implements 
 					msgs = newModelElement.eInverseAdd(this, EOPPOSITE_FEATURE_BASE
 						- OperationsPackage.CREATE_DELETE_OPERATION__MODEL_ELEMENT, null, msgs);
 				}
-				if (msgs != null)
+				if (msgs != null) {
 					msgs.dispatch();
-				if (eNotificationRequired())
+				}
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
 						OperationsPackage.CREATE_DELETE_OPERATION__MODEL_ELEMENT, oldModelElement, modelElement));
+				}
 			}
 		}
 		return modelElement;
@@ -306,16 +313,17 @@ public class CreateDeleteOperationImpl extends AbstractOperationImpl implements 
 	 * @generated
 	 */
 	public NotificationChain basicSetModelElement(EObject newModelElement, NotificationChain msgs) {
-		EObject oldModelElement = modelElement;
+		final EObject oldModelElement = modelElement;
 		modelElement = newModelElement;
 		if (eNotificationRequired())
 		{
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
 				OperationsPackage.CREATE_DELETE_OPERATION__MODEL_ELEMENT, oldModelElement, newModelElement);
-			if (msgs == null)
+			if (msgs == null) {
 				msgs = notification;
-			else
+			} else {
 				msgs.add(notification);
+			}
 		}
 		return msgs;
 	}
@@ -329,19 +337,23 @@ public class CreateDeleteOperationImpl extends AbstractOperationImpl implements 
 		if (newModelElement != modelElement)
 		{
 			NotificationChain msgs = null;
-			if (modelElement != null)
+			if (modelElement != null) {
 				msgs = ((InternalEObject) modelElement).eInverseRemove(this, EOPPOSITE_FEATURE_BASE
 					- OperationsPackage.CREATE_DELETE_OPERATION__MODEL_ELEMENT, null, msgs);
-			if (newModelElement != null)
+			}
+			if (newModelElement != null) {
 				msgs = ((InternalEObject) newModelElement).eInverseAdd(this, EOPPOSITE_FEATURE_BASE
 					- OperationsPackage.CREATE_DELETE_OPERATION__MODEL_ELEMENT, null, msgs);
+			}
 			msgs = basicSetModelElement(newModelElement, msgs);
-			if (msgs != null)
+			if (msgs != null) {
 				msgs.dispatch();
+			}
 		}
-		else if (eNotificationRequired())
+		else if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET,
 				OperationsPackage.CREATE_DELETE_OPERATION__MODEL_ELEMENT, newModelElement, newModelElement));
+		}
 	}
 
 	/**
@@ -404,16 +416,17 @@ public class CreateDeleteOperationImpl extends AbstractOperationImpl implements 
 		case OperationsPackage.CREATE_DELETE_OPERATION__DELETE:
 			return isDelete();
 		case OperationsPackage.CREATE_DELETE_OPERATION__MODEL_ELEMENT:
-			if (resolve)
+			if (resolve) {
 				return getModelElement();
+			}
 			return basicGetModelElement();
 		case OperationsPackage.CREATE_DELETE_OPERATION__SUB_OPERATIONS:
 			return getSubOperations();
 		case OperationsPackage.CREATE_DELETE_OPERATION__EOBJECT_TO_ID_MAP:
-			if (coreType)
+			if (coreType) {
 				return getEObjectToIdMap();
-			else
-				return getEObjectToIdMap().map();
+			}
+			return getEObjectToIdMap().map();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -498,11 +511,12 @@ public class CreateDeleteOperationImpl extends AbstractOperationImpl implements 
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (eIsProxy()) {
 			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (delete: ");
+		final StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (delete: "); //$NON-NLS-1$
 		result.append(delete);
 		result.append(')');
 		return result.toString();
@@ -513,10 +527,10 @@ public class CreateDeleteOperationImpl extends AbstractOperationImpl implements 
 	 */
 	@Override
 	public Set<ModelElementId> getOtherInvolvedModelElements() {
-		Set<ModelElementId> result = new LinkedHashSet<ModelElementId>();
+		final Set<ModelElementId> result = new LinkedHashSet<ModelElementId>();
 		result.addAll(getEObjectToIdMap().values());
 		result.remove(getModelElementId());
-		for (ReferenceOperation operation : getSubOperations()) {
+		for (final ReferenceOperation operation : getSubOperations()) {
 			result.addAll(operation.getAllInvolvedModelElements());
 		}
 		return result;
@@ -528,8 +542,8 @@ public class CreateDeleteOperationImpl extends AbstractOperationImpl implements 
 	 * @see org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation#getLeafOperations()
 	 */
 	public List<AbstractOperation> getLeafOperations() {
-		List<AbstractOperation> result = new ArrayList<AbstractOperation>(getSubOperations().size() + 1);
-		CreateDeleteOperation createDeleteClone = ModelUtil.clone(this);
+		final List<AbstractOperation> result = new ArrayList<AbstractOperation>(getSubOperations().size() + 1);
+		final CreateDeleteOperation createDeleteClone = ModelUtil.clone(this);
 		createDeleteClone.getSubOperations().clear();
 		result.add(createDeleteClone);
 		result.addAll(getSubOperations());
@@ -537,26 +551,27 @@ public class CreateDeleteOperationImpl extends AbstractOperationImpl implements 
 	}
 
 	/**
+	 * 
 	 * {@inheritDoc}
 	 * 
+	 * @see org.eclipse.emf.emfstore.internal.server.model.versioning.operations.CreateDeleteOperation#getParentofDeletedElement(org.eclipse.emf.emfstore.internal.common.model.Project)
 	 * @generated NOT
-	 * @see org.eclipse.emf.emfstore.internal.server.model.versioning.operations.CreateDeleteOperation#getParentElement(org.eclipse.emf.emfstore.internal.common.model.Project)
 	 */
 	public ModelElementId getParentofDeletedElement(Project project) {
 
-		EList<ReferenceOperation> referenceOperations = getSubOperations();
+		final EList<ReferenceOperation> referenceOperations = getSubOperations();
 		if (referenceOperations.size() == 0) {
 			return null;
 		}
 
-		ReferenceOperation lastReferenceOperation = referenceOperations.get(referenceOperations.size() - 1);
+		final ReferenceOperation lastReferenceOperation = referenceOperations.get(referenceOperations.size() - 1);
 
 		try {
-			EStructuralFeature feature = lastReferenceOperation.getFeature(project);
+			final EStructuralFeature feature = lastReferenceOperation.getFeature(project);
 			if (!(feature instanceof EReference)) {
 				return null;
 			}
-			EReference reference = (EReference) feature;
+			final EReference reference = (EReference) feature;
 			// reference is from parent side, so parent is the element that is
 			// changed by the last ref op
 			if (reference.isContainment()) {
@@ -568,7 +583,7 @@ public class CreateDeleteOperationImpl extends AbstractOperationImpl implements 
 				// in other involved of the ref op
 			} else if (reference.isContainer()) {
 				if (lastReferenceOperation.getModelElementId().equals(getModelElementId())) {
-					Set<ModelElementId> otherInvolvedModelElements = lastReferenceOperation
+					final Set<ModelElementId> otherInvolvedModelElements = lastReferenceOperation
 						.getOtherInvolvedModelElements();
 					if (otherInvolvedModelElements.size() > 0) {
 						return otherInvolvedModelElements.iterator().next();
@@ -577,7 +592,7 @@ public class CreateDeleteOperationImpl extends AbstractOperationImpl implements 
 			}
 			return null;
 
-		} catch (UnkownFeatureException e) {
+		} catch (final UnkownFeatureException e) {
 			// parent does not exist any more or feature does not exist
 			return null;
 		}
