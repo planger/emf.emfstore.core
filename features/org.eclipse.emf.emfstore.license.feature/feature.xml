@@ -5,7 +5,7 @@
       version="1.2.0.qualifier"
       provider-name="Eclipse Modeling Project">
 
-   <description url="http://www.example.com/description">
+   <description>
       Contains the shared license for all EMFStore features.
    </description>
 
