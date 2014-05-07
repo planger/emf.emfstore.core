@@ -18,7 +18,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.emfstore.client.test.common.cases.ESTest;
 import org.eclipse.emf.emfstore.client.test.common.dsl.Create;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommand;
@@ -96,7 +95,7 @@ public class MultiReferenceNotificationTest extends ESTest {
 		assertSame(actor, addMany.getNotifier());
 		assertTrue(addMany.isReferenceNotification());
 		assertTrue(addMany.isAddManyEvent());
-		assertEquals(((EList<TestElement>) addMany.getNewValue()).size(), 3);
+		assertEquals(((List<TestElement>) addMany.getNewValue()).size(), 3);
 		assertEquals(NON_CONTAINED_1_TO_N, addMany.getReference().getName());
 
 	}
@@ -154,7 +153,7 @@ public class MultiReferenceNotificationTest extends ESTest {
 		assertSame(actor, addMany.getNotifier());
 		assertTrue(addMany.isReferenceNotification());
 		assertTrue(addMany.isAddManyEvent());
-		assertEquals(((EList<TestElement>) addMany.getNewValue()).size(), 3);
+		assertEquals(((List<TestElement>) addMany.getNewValue()).size(), 3);
 		assertEquals(NON_CONTAINED_N_TO_M, addMany.getReference().getName());
 
 	}

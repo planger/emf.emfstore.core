@@ -129,6 +129,7 @@ public class MoveNotificationTest extends ESTest {
 				tournament1.getContainedElements().add(matchup);
 			}
 		}.run(false);
+
 		assertTrue(project.contains(matchup));
 		assertTrue(tournament1.getContainedElements().contains(matchup));
 		assertTrue(UNEXPECTED_NOTIFICATIONS,
@@ -146,15 +147,6 @@ public class MoveNotificationTest extends ESTest {
 		assertTrue(UNEXPECTED_NOTIFICATIONS,
 			observer.resetNotifyCalled() && observer.resetAddedCalled() && !observer.resetRemovedCalled()
 				&& !observer.resetDeletedCalled());
-
-		// move matchup from tournament 1 to 2
-
-		// EditingDomain domain = AdapterFactoryEditingDomain.getEditingDomainFor(tournament2);
-		// Set<EObject> collection = new HashSet<EObject>();
-		// collection.add(matchup);
-		// domain.getCommandStack().execute(
-		// DragAndDropCommand.create(domain, tournament2, 0f, 1,
-		// DragAndDropCommand.DROP_MOVE, collection));
 
 		new EMFStoreCommand() {
 			@Override
@@ -199,10 +191,11 @@ public class MoveNotificationTest extends ESTest {
 	}
 
 	private class TestIdEObjectCollectionChangeObserver implements IdEObjectCollectionChangeObserver {
-		private boolean notifyCalled = false;
-		private boolean addedCalled = false;
-		private boolean removedCalled = false;
-		private boolean deletedCalled = false;
+
+		private boolean notifyCalled;
+		private boolean addedCalled;
+		private boolean removedCalled;
+		private boolean deletedCalled;
 
 		public void notify(Notification notification, IdEObjectCollection collection, EObject modelElement) {
 			notifyCalled = true;

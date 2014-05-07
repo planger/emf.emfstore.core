@@ -11,12 +11,6 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.client.changetracking.test.notification;
 
-import org.eclipse.emf.emfstore.client.changetracking.test.notification.AttributeNotificationTest;
-import org.eclipse.emf.emfstore.client.changetracking.test.notification.ContainmentNotificationTest;
-import org.eclipse.emf.emfstore.client.changetracking.test.notification.MoveNotificationTest;
-import org.eclipse.emf.emfstore.client.changetracking.test.notification.MultiReferenceNotificationTest;
-import org.eclipse.emf.emfstore.client.changetracking.test.notification.NotificationToOperationConverterTest;
-import org.eclipse.emf.emfstore.client.changetracking.test.notification.ReferenceNotificationTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -26,12 +20,12 @@ import org.junit.runners.Suite;
  * @author chodnick
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ 
-	AttributeNotificationTest.class, 
-	ReferenceNotificationTest.class, 
+@Suite.SuiteClasses({
+	AttributeNotificationTest.class,
+	ReferenceNotificationTest.class,
 	MoveNotificationTest.class,
-	MultiReferenceNotificationTest.class, 
-	ContainmentNotificationTest.class, 
+	MultiReferenceNotificationTest.class,
+	ContainmentNotificationTest.class,
 	NotificationToOperationConverterTest.class })
 public class AllNotificationTests {
 
