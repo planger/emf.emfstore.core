@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -35,6 +36,9 @@ import org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorConfigurat
  */
 public class MutateUtil implements Util {
 
+	/**
+	 * The EMFDataProvider that generates data.
+	 */
 	private final EMFDataProvider dataProvider;
 
 	/**
@@ -140,7 +144,7 @@ public class MutateUtil implements Util {
 			}
 			resource.save(options);
 		} catch (final IOException e) {
-			throw new RuntimeException("Could not save the eobject: " + obj, e);
+			throw new RuntimeException(Messages.MutateUtil_SaveFailed + obj, e);
 		}
 	}
 
@@ -150,10 +154,10 @@ public class MutateUtil implements Util {
 	 * @return A file path to the current run folder.
 	 */
 	public String getRunResourcePath(String suffix) {
-		final String toAdd = suffix == null || "".equals(suffix) ? "" : "_"
+		final String toAdd = suffix == null || StringUtils.EMPTY.equals(suffix) ? StringUtils.EMPTY : "_" //$NON-NLS-1$
 			+ suffix;
 		return FuzzyUtil.ROOT_FOLDER + FuzzyUtil.RUN_FOLDER
-			+ dataProvider.getConfig().getId() + "/"
+			+ dataProvider.getConfig().getId() + "/" //$NON-NLS-1$
 			+ dataProvider.getCurrentSeedCount() + toAdd
 			+ FuzzyUtil.FILE_SUFFIX;
 	}
@@ -166,5 +170,14 @@ public class MutateUtil implements Util {
 	 */
 	public URI getRunResourceURI(String suffix) {
 		return URI.createFileURI(getRunResourcePath(suffix));
+	}
+
+	/**
+	 * Returns the {@link EMFDataProvider} that is used to generated data.
+	 * 
+	 * @return the dataProvider
+	 */
+	protected EMFDataProvider getDataProvider() {
+		return dataProvider;
 	}
 }
