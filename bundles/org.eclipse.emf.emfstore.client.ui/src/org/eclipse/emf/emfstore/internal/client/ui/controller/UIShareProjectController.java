@@ -10,12 +10,10 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.controller;
 
-import java.util.concurrent.Callable;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.emfstore.client.ESLocalProject;
 import org.eclipse.emf.emfstore.client.ESUsersession;
-import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
+import org.eclipse.emf.emfstore.client.util.ESVoidCallable;
 import org.eclipse.emf.emfstore.internal.client.model.exceptions.LoginCanceledException;
 import org.eclipse.emf.emfstore.internal.client.ui.common.RunInUI;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
@@ -33,24 +31,62 @@ public class UIShareProjectController extends AbstractEMFStoreUIController<Void>
 
 	private final ESLocalProject localProject;
 	private ESUsersession usersession;
+	private boolean loginHasBeenCancelled;
+	private boolean shareWasSuccessful;
+	private String shareErrorMessage;
 
 	/**
 	 * Constructor.
 	 * 
 	 * @param shell
 	 *            the parent {@link Shell} that is used during the share
-	 * @param projectSpace
-	 *            the {@link ProjectSpace} that should get shared
+	 * @param localProject
+	 *            the {@link ESLocalProject} that should be shared
 	 */
 	public UIShareProjectController(Shell shell, ESLocalProject localProject) {
 		super(shell, true, false);
 		this.localProject = localProject;
 	}
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param shell
+	 *            the parent {@link Shell} that is used during the share
+	 * @param usersession
+	 *            the {@link ESUsersession} that is used to share the project
+	 * @param localProject
+	 *            the {@link ESLocalProject} that should be shared
+	 */
 	public UIShareProjectController(Shell shell, ESUsersession usersession, ESLocalProject localProject) {
 		super(shell, true, true);
 		this.usersession = usersession;
 		this.localProject = localProject;
+	}
+
+	@Override
+	public void afterRun() {
+		if (loginHasBeenCancelled) {
+			// do nothing
+			return;
+		}
+
+		RunInUI.run(new ESVoidCallable() {
+			@Override
+			public void run() {
+				if (shareWasSuccessful) {
+					MessageDialog.openInformation(
+						getShell(),
+						Messages.UIShareProjectController_ShareSucceeded,
+						Messages.UIShareProjectController_SharedSucceeded_Message);
+				} else {
+					MessageDialog.openError(
+						getShell(),
+						Messages.UIShareProjectController_ShareFailed,
+						shareErrorMessage);
+				}
+			}
+		});
 	}
 
 	/**
@@ -63,22 +99,13 @@ public class UIShareProjectController extends AbstractEMFStoreUIController<Void>
 	public Void doRun(final IProgressMonitor progressMonitor) throws ESException {
 		try {
 			localProject.shareProject(usersession != null ? usersession : null, progressMonitor);
-			RunInUI.run(new Callable<Void>() {
-				public Void call() throws Exception {
-					MessageDialog.openInformation(getShell(), "Share succeeded",
-						"The project has been successfully shared.");
-					return null;
-				}
-			});
-		} catch (LoginCanceledException e) {
+			shareWasSuccessful = true;
+		} catch (final LoginCanceledException e) {
 			// fail silently
+			loginHasBeenCancelled = true;
 		} catch (final ESException e) {
-			RunInUI.run(new Callable<Void>() {
-				public Void call() throws Exception {
-					MessageDialog.openError(getShell(), "Share project failed", e.getMessage());
-					return null;
-				}
-			});
+			shareWasSuccessful = false;
+			shareErrorMessage = e.getMessage();
 		}
 
 		return null;

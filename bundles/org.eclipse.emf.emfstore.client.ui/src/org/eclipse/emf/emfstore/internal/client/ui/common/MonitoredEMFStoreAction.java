@@ -74,10 +74,12 @@ public abstract class MonitoredEMFStoreAction<T> {
 				}
 			});
 		} catch (final InvocationTargetException e) {
-			WorkspaceUtil.logException("Error during execution of an EMFStore UI controller: " + e.getMessage(), e);
+			WorkspaceUtil.logException(Messages.MonitoredEMFStoreAction + e.getMessage(), e);
 		} catch (final InterruptedException e) {
-			WorkspaceUtil.logException("Error during execution of an EMFStore UI controller: " + e.getMessage(), e);
+			WorkspaceUtil.logException(Messages.MonitoredEMFStoreAction + e.getMessage(), e);
 		}
+
+		afterRun();
 
 		return returnValue;
 	}
@@ -99,6 +101,8 @@ public abstract class MonitoredEMFStoreAction<T> {
 			handleException(e);
 		}
 
+		afterRun();
+
 		return returnValue;
 	}
 
@@ -106,7 +110,7 @@ public abstract class MonitoredEMFStoreAction<T> {
 	 * Called right before {@link #doRun(IProgressMonitor)} is called. This
 	 * method will not be executed via the {@link IProgressService} and is
 	 * intended to be overridden by clients to initialize data that needs user
-	 * involvement via UI calls. Client should not execute long-lasting
+	 * involvement via UI calls. Clients should not execute long-lasting
 	 * operations via this method.
 	 * 
 	 * @return true, if execution may continue, false, if requirements for
@@ -115,6 +119,17 @@ public abstract class MonitoredEMFStoreAction<T> {
 	public boolean preRun() {
 		// default is true
 		return true;
+	}
+
+	/**
+	 * Called after {@link #doRun(IProgressMonitor)} is finished. This
+	 * method will not be executed via the {@link IProgressService} and is
+	 * intended to be overridden by clients. Clients may use this method
+	 * in order to perform clean-up tasks or the like.
+	 * 
+	 */
+	public void afterRun() {
+		// do nothing by default
 	}
 
 	/**
