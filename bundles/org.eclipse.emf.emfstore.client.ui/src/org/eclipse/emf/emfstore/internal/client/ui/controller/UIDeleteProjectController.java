@@ -12,11 +12,11 @@
 package org.eclipse.emf.emfstore.internal.client.ui.controller;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.emfstore.client.ESLocalProject;
-import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.eclipse.swt.widgets.Shell;
 
@@ -34,8 +34,8 @@ public class UIDeleteProjectController extends AbstractEMFStoreUIController<Void
 	 * 
 	 * @param shell
 	 *            the shell that will be used during the deletion of the project
-	 * @param projectSpace
-	 *            the {@link ProjectSpace} containing the project that should be deleted
+	 * @param localProject
+	 *            the {@link ESLocalProject} containing the project that should be deleted
 	 */
 	public UIDeleteProjectController(Shell shell, ESLocalProject localProject) {
 		super(shell);
@@ -46,24 +46,25 @@ public class UIDeleteProjectController extends AbstractEMFStoreUIController<Void
 		try {
 			// TODO: pass monitor in & handle exceptions
 			localProject.delete(new NullProgressMonitor());
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
-		} catch (ESException e) {
+		} catch (final ESException e) {
 			e.printStackTrace();
 		}
 	}
 
 	private boolean confirmation(final ESLocalProject localProject) {
-		String message = "Do you really want to delete your local copy of project \"" + localProject.getProjectName()
-			+ "\n";
+		String message = MessageFormat.format(
+			Messages.UIDeleteProjectController_DeleteQuestion,
+			localProject.getProjectName());
 
-		if (localProject.getBaseVersion() != null) {
-			message += " in version " + localProject.getBaseVersion().getIdentifier();
+		if (localProject.isShared() && localProject.getBaseVersion() != null) {
+			message += Messages.UIDeleteProjectController_InVersion + localProject.getBaseVersion().getIdentifier();
 		}
 
-		message += " ?";
+		message += Messages.UIDeleteProjectController_QuestionMark;
 
-		return confirm("Confirmation", message);
+		return confirm(Messages.UIDeleteProjectController_Confirmation, message);
 	}
 
 	/**

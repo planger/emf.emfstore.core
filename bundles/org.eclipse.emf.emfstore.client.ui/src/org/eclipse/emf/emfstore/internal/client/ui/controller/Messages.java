@@ -26,6 +26,10 @@ public final class Messages extends NLS {
 	public static String UIAddTagController_TagNameTextDefault;
 	public static String UIAddTagController_TagNameLabel;
 	public static String UIAddTagController_Title;
+	public static String UIDeleteProjectController_Confirmation;
+	public static String UIDeleteProjectController_DeleteQuestion;
+	public static String UIDeleteProjectController_InVersion;
+	public static String UIDeleteProjectController_QuestionMark;
 	public static String UIShareProjectController_SharedSucceeded_Message;
 	public static String UIShareProjectController_ShareFailed;
 	public static String UIShareProjectController_ShareSucceeded;
