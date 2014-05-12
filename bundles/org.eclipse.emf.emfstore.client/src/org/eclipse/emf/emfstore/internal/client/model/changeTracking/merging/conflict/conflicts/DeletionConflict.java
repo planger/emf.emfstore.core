@@ -7,12 +7,14 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * wesendon
+ * Otto von Wesendonk - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.conflict.conflicts;
 
+import java.text.MessageFormat;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.DecisionManager;
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.conflict.ConflictContext;
@@ -59,26 +61,26 @@ public class DeletionConflict extends VisualConflict {
 	@Override
 	protected ConflictDescription initConflictDescription(ConflictDescription description) {
 		if (isLeftMy()) {
-			description.setDescription(DecisionUtil.getDescription("deletionconflict.my", getDecisionManager()
+			description.setDescription(DecisionUtil.getDescription("deletionconflict.my", getDecisionManager() //$NON-NLS-1$
 				.isBranchMerge()));
 		} else {
-			description.setDescription(DecisionUtil.getDescription("deletionconflict.their", getDecisionManager()
+			description.setDescription(DecisionUtil.getDescription("deletionconflict.their", getDecisionManager() //$NON-NLS-1$
 				.isBranchMerge()));
 		}
 
-		description.add("modelelement", getLeftOperation().getModelElementId());
-		description.add("firstother", getRightOperation().getModelElementId());
-		description.add("otherinvolved", generateOthers());
-		description.setImage("delete.gif");
+		description.add("modelelement", getLeftOperation().getModelElementId()); //$NON-NLS-1$
+		description.add("firstother", getRightOperation().getModelElementId()); //$NON-NLS-1$
+		description.add("otherinvolved", generateOthers()); //$NON-NLS-1$
+		description.setImage("delete.gif"); //$NON-NLS-1$
 
 		return description;
 	}
 
 	private String generateOthers() {
 		if (getRightOperations().size() > 1) {
-			return " and " + (getRightOperations().size() - 1) + " other elements";
+			return MessageFormat.format(Messages.DeletionConflict_AndOtherElements, getRightOperations().size() - 1);
 		}
-		return "";
+		return StringUtils.EMPTY;
 	}
 
 	/**
@@ -86,9 +88,9 @@ public class DeletionConflict extends VisualConflict {
 	 */
 	@Override
 	protected void initConflictOptions(List<ConflictOption> options) {
-		ConflictOption myOption = new ConflictOption("", OptionType.MyOperation);
+		final ConflictOption myOption = new ConflictOption(StringUtils.EMPTY, OptionType.MyOperation);
 		myOption.addOperations(getMyOperations());
-		ConflictOption theirOption = new ConflictOption("", OptionType.TheirOperation);
+		final ConflictOption theirOption = new ConflictOption(StringUtils.EMPTY, OptionType.TheirOperation);
 		theirOption.addOperations(getTheirOperations());
 
 		if (isLeftMy()) {
@@ -104,14 +106,14 @@ public class DeletionConflict extends VisualConflict {
 	}
 
 	private String keepMsg() {
-		EObject modelElement = getDecisionManager().getModelElement(getRightOperation().getModelElementId());
-		String result = "Recover " + DecisionUtil.getClassAndName(modelElement);
+		final EObject modelElement = getDecisionManager().getModelElement(getRightOperation().getModelElementId());
+		String result = Messages.DeletionConflict_Recover + DecisionUtil.getClassAndName(modelElement);
 		result += generateOthers();
 		return result;
 	}
 
 	private String deleteMsg() {
-		EObject modelElement = getDecisionManager().getModelElement(getLeftOperation().getModelElementId());
-		return "Delete " + DecisionUtil.getClassAndName(modelElement);
+		final EObject modelElement = getDecisionManager().getModelElement(getLeftOperation().getModelElementId());
+		return Messages.DeletionConflict_Delete + DecisionUtil.getClassAndName(modelElement);
 	}
 }

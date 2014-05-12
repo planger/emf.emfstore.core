@@ -7,17 +7,20 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Edgar - initial API and implementation
+ * Edgar Mueller - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model.connectionmanager.xmlrpc;
 
 import org.eclipse.osgi.util.NLS;
 
 /**
- * @author Edgar
- *
+ * XML-RPC related messages on client side.
+ * 
+ * @author emueller
+ * 
  */
-public class Messages extends NLS {
+public final class Messages extends NLS {
+
 	private static final String BUNDLE_NAME = "org.eclipse.emf.emfstore.internal.client.model.connectionmanager.xmlrpc.messages"; //$NON-NLS-1$
 	public static String XmlRpcClientManager_Could_Not_Load_Certificate;
 	public static String XmlRpcClientManager_Malformed_URL_Or_Port;

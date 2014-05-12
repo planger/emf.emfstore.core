@@ -56,9 +56,9 @@ public class XmlRpcConnectionManager extends AbstractConnectionManager<XmlRpcCli
 	 */
 	public AuthenticationInformation logIn(String username, String password, ServerInfo serverInfo,
 		ClientVersionInfo clientVersionInfo) throws ESException {
-		XmlRpcClientManager clientManager = new XmlRpcClientManager(XmlRpcConnectionHandler.EMFSTORE);
+		final XmlRpcClientManager clientManager = new XmlRpcClientManager(XmlRpcConnectionHandler.EMFSTORE);
 		clientManager.initConnection(serverInfo);
-		AuthenticationInformation authenticationInformation = clientManager.callWithResult("logIn",
+		final AuthenticationInformation authenticationInformation = clientManager.callWithResult("logIn", //$NON-NLS-1$
 			AuthenticationInformation.class, username, password, clientVersionInfo);
 		addConnectionProxy(authenticationInformation.getSessionId(), clientManager);
 		return authenticationInformation;
@@ -68,7 +68,7 @@ public class XmlRpcConnectionManager extends AbstractConnectionManager<XmlRpcCli
 	 * {@inheritDoc}
 	 */
 	public void logout(SessionId sessionId) throws ESException {
-		getConnectionProxy(sessionId).call("logout", sessionId);
+		getConnectionProxy(sessionId).call("logout", sessionId); //$NON-NLS-1$
 		removeConnectionProxy(sessionId);
 	}
 
@@ -77,7 +77,7 @@ public class XmlRpcConnectionManager extends AbstractConnectionManager<XmlRpcCli
 	 */
 	public void addTag(SessionId sessionId, ProjectId projectId, PrimaryVersionSpec versionSpec, TagVersionSpec tag)
 		throws ESException {
-		getConnectionProxy(sessionId).call("addTag", sessionId, projectId, versionSpec, tag);
+		getConnectionProxy(sessionId).call("addTag", sessionId, projectId, versionSpec, tag); //$NON-NLS-1$
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class XmlRpcConnectionManager extends AbstractConnectionManager<XmlRpcCli
 	 */
 	public ProjectInfo createEmptyProject(SessionId sessionId, String name, String description, LogMessage logMessage)
 		throws ESException {
-		return getConnectionProxy(sessionId).callWithResult("createEmptyProject", ProjectInfo.class, sessionId, name,
+		return getConnectionProxy(sessionId).callWithResult("createEmptyProject", ProjectInfo.class, sessionId, name, //$NON-NLS-1$
 			description, logMessage);
 	}
 
@@ -94,7 +94,7 @@ public class XmlRpcConnectionManager extends AbstractConnectionManager<XmlRpcCli
 	 */
 	public ProjectInfo createProject(SessionId sessionId, String name, String description, LogMessage logMessage,
 		Project project) throws ESException {
-		return getConnectionProxy(sessionId).callWithResult("createProject", ProjectInfo.class, sessionId, name,
+		return getConnectionProxy(sessionId).callWithResult("createProject", ProjectInfo.class, sessionId, name, //$NON-NLS-1$
 			description, logMessage, project);
 	}
 
@@ -104,7 +104,7 @@ public class XmlRpcConnectionManager extends AbstractConnectionManager<XmlRpcCli
 	public PrimaryVersionSpec createVersion(SessionId sessionId, ProjectId projectId,
 		PrimaryVersionSpec baseVersionSpec, ChangePackage changePackage, BranchVersionSpec targetBranch,
 		PrimaryVersionSpec sourceVersion, LogMessage logMessage) throws ESException, InvalidVersionSpecException {
-		return getConnectionProxy(sessionId).callWithResult("createVersion", PrimaryVersionSpec.class, sessionId,
+		return getConnectionProxy(sessionId).callWithResult("createVersion", PrimaryVersionSpec.class, sessionId, //$NON-NLS-1$
 			projectId, baseVersionSpec, changePackage, targetBranch, sourceVersion, logMessage);
 	}
 
@@ -112,7 +112,7 @@ public class XmlRpcConnectionManager extends AbstractConnectionManager<XmlRpcCli
 	 * {@inheritDoc}
 	 */
 	public void deleteProject(SessionId sessionId, ProjectId projectId, boolean deleteFiles) throws ESException {
-		getConnectionProxy(sessionId).call("deleteProject", sessionId, projectId, deleteFiles);
+		getConnectionProxy(sessionId).call("deleteProject", sessionId, projectId, deleteFiles); //$NON-NLS-1$
 	}
 
 	/**
@@ -120,7 +120,7 @@ public class XmlRpcConnectionManager extends AbstractConnectionManager<XmlRpcCli
 	 */
 	public FileChunk downloadFileChunk(SessionId sessionId, ProjectId projectId, FileTransferInformation fileInformation)
 		throws ESException {
-		return getConnectionProxy(sessionId).callWithResult("downloadFileChunk", FileChunk.class, sessionId, projectId,
+		return getConnectionProxy(sessionId).callWithResult("downloadFileChunk", FileChunk.class, sessionId, projectId, //$NON-NLS-1$
 			fileInformation);
 	}
 
@@ -129,7 +129,7 @@ public class XmlRpcConnectionManager extends AbstractConnectionManager<XmlRpcCli
 	 */
 	public ProjectHistory exportProjectHistoryFromServer(SessionId sessionId, ProjectId projectId)
 		throws ESException {
-		return getConnectionProxy(sessionId).callWithResult("exportProjectHistoryFromServer", ProjectHistory.class,
+		return getConnectionProxy(sessionId).callWithResult("exportProjectHistoryFromServer", ProjectHistory.class, //$NON-NLS-1$
 			sessionId, projectId);
 	}
 
@@ -139,7 +139,7 @@ public class XmlRpcConnectionManager extends AbstractConnectionManager<XmlRpcCli
 	public List<ChangePackage> getChanges(SessionId sessionId, ProjectId projectId, VersionSpec source,
 		VersionSpec target)
 		throws InvalidVersionSpecException, ESException {
-		return getConnectionProxy(sessionId).callWithListResult("getChanges", ChangePackage.class, sessionId,
+		return getConnectionProxy(sessionId).callWithListResult("getChanges", ChangePackage.class, sessionId, //$NON-NLS-1$
 			projectId, source, target);
 	}
 
@@ -151,7 +151,7 @@ public class XmlRpcConnectionManager extends AbstractConnectionManager<XmlRpcCli
 	 *      org.eclipse.emf.emfstore.internal.server.model.ProjectId)
 	 */
 	public List<BranchInfo> getBranches(SessionId sessionId, ProjectId projectId) throws ESException {
-		return getConnectionProxy(sessionId).callWithListResult("getBranches", BranchInfo.class, sessionId, projectId);
+		return getConnectionProxy(sessionId).callWithListResult("getBranches", BranchInfo.class, sessionId, projectId); //$NON-NLS-1$
 	}
 
 	/**
@@ -159,7 +159,7 @@ public class XmlRpcConnectionManager extends AbstractConnectionManager<XmlRpcCli
 	 */
 	public List<HistoryInfo> getHistoryInfo(SessionId sessionId, ProjectId projectId, HistoryQuery<?> historyQuery)
 		throws ESException {
-		return getConnectionProxy(sessionId).callWithListResult("getHistoryInfo", HistoryInfo.class, sessionId,
+		return getConnectionProxy(sessionId).callWithListResult("getHistoryInfo", HistoryInfo.class, sessionId, //$NON-NLS-1$
 			projectId, historyQuery);
 	}
 
@@ -168,7 +168,7 @@ public class XmlRpcConnectionManager extends AbstractConnectionManager<XmlRpcCli
 	 */
 	public Project getProject(SessionId sessionId, ProjectId projectId, VersionSpec versionSpec)
 		throws InvalidVersionSpecException, ESException {
-		return getConnectionProxy(sessionId).callWithResult("getProject", Project.class, sessionId, projectId,
+		return getConnectionProxy(sessionId).callWithResult("getProject", Project.class, sessionId, projectId, //$NON-NLS-1$
 			versionSpec);
 	}
 
@@ -176,7 +176,7 @@ public class XmlRpcConnectionManager extends AbstractConnectionManager<XmlRpcCli
 	 * {@inheritDoc}
 	 */
 	public List<ProjectInfo> getProjectList(SessionId sessionId) throws ESException {
-		return getConnectionProxy(sessionId).callWithListResult("getProjectList", ProjectInfo.class, sessionId);
+		return getConnectionProxy(sessionId).callWithListResult("getProjectList", ProjectInfo.class, sessionId); //$NON-NLS-1$
 	}
 
 	/**
@@ -184,7 +184,7 @@ public class XmlRpcConnectionManager extends AbstractConnectionManager<XmlRpcCli
 	 */
 	public ProjectId importProjectHistoryToServer(SessionId sessionId, ProjectHistory projectHistory)
 		throws ESException {
-		return getConnectionProxy(sessionId).callWithResult("importProjectHistoryToServer", ProjectId.class, sessionId,
+		return getConnectionProxy(sessionId).callWithResult("importProjectHistoryToServer", ProjectId.class, sessionId, //$NON-NLS-1$
 			projectHistory);
 	}
 
@@ -193,14 +193,14 @@ public class XmlRpcConnectionManager extends AbstractConnectionManager<XmlRpcCli
 	 */
 	public void removeTag(SessionId sessionId, ProjectId projectId, PrimaryVersionSpec versionSpec, TagVersionSpec tag)
 		throws ESException {
-		getConnectionProxy(sessionId).call("removeTag", sessionId, projectId, versionSpec, tag);
+		getConnectionProxy(sessionId).call("removeTag", sessionId, projectId, versionSpec, tag); //$NON-NLS-1$
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public ACUser resolveUser(SessionId sessionId, ACOrgUnitId id) throws ESException {
-		return getConnectionProxy(sessionId).callWithResult("resolveUser", ACUser.class, sessionId, id);
+		return getConnectionProxy(sessionId).callWithResult("resolveUser", ACUser.class, sessionId, id); //$NON-NLS-1$
 	}
 
 	/**
@@ -208,7 +208,7 @@ public class XmlRpcConnectionManager extends AbstractConnectionManager<XmlRpcCli
 	 */
 	public PrimaryVersionSpec resolveVersionSpec(SessionId sessionId, ProjectId projectId, VersionSpec versionSpec)
 		throws InvalidVersionSpecException, ESException {
-		return getConnectionProxy(sessionId).callWithResult("resolveVersionSpec", PrimaryVersionSpec.class, sessionId,
+		return getConnectionProxy(sessionId).callWithResult("resolveVersionSpec", PrimaryVersionSpec.class, sessionId, //$NON-NLS-1$
 			projectId, versionSpec);
 	}
 
@@ -217,7 +217,7 @@ public class XmlRpcConnectionManager extends AbstractConnectionManager<XmlRpcCli
 	 */
 	public void transmitProperty(SessionId sessionId, OrgUnitProperty changedProperty, ACUser tmpUser,
 		ProjectId projectId) throws ESException {
-		getConnectionProxy(sessionId).call("transmitProperty", sessionId, changedProperty, tmpUser, projectId);
+		getConnectionProxy(sessionId).call("transmitProperty", sessionId, changedProperty, tmpUser, projectId); //$NON-NLS-1$
 	}
 
 	/**
@@ -225,7 +225,7 @@ public class XmlRpcConnectionManager extends AbstractConnectionManager<XmlRpcCli
 	 */
 	public FileTransferInformation uploadFileChunk(SessionId sessionId, ProjectId projectId, FileChunk fileChunk)
 		throws ESException {
-		return getConnectionProxy(sessionId).callWithResult("uploadFileChunk", FileTransferInformation.class,
+		return getConnectionProxy(sessionId).callWithResult("uploadFileChunk", FileTransferInformation.class, //$NON-NLS-1$
 			sessionId, projectId, fileChunk);
 	}
 
@@ -234,7 +234,7 @@ public class XmlRpcConnectionManager extends AbstractConnectionManager<XmlRpcCli
 	 */
 	public List<EMFStoreProperty> setEMFProperties(SessionId sessionId, List<EMFStoreProperty> properties,
 		ProjectId projectId) throws ESException {
-		return getConnectionProxy(sessionId).callWithListResult("setEMFProperties", EMFStoreProperty.class, sessionId,
+		return getConnectionProxy(sessionId).callWithListResult("setEMFProperties", EMFStoreProperty.class, sessionId, //$NON-NLS-1$
 			properties, projectId);
 	}
 
@@ -242,7 +242,7 @@ public class XmlRpcConnectionManager extends AbstractConnectionManager<XmlRpcCli
 	 * {@inheritDoc}
 	 */
 	public List<EMFStoreProperty> getEMFProperties(SessionId sessionId, ProjectId projectId) throws ESException {
-		return getConnectionProxy(sessionId).callWithListResult("getEMFProperties", EMFStoreProperty.class, sessionId,
+		return getConnectionProxy(sessionId).callWithListResult("getEMFProperties", EMFStoreProperty.class, sessionId, //$NON-NLS-1$
 			projectId);
 	}
 
@@ -263,7 +263,7 @@ public class XmlRpcConnectionManager extends AbstractConnectionManager<XmlRpcCli
 	 *      org.eclipse.emf.ecore.EPackage)
 	 */
 	public void registerEPackage(SessionId sessionId, EPackage pkg) throws ESException {
-		getConnectionProxy(sessionId).call("registerEPackage", sessionId, pkg);
+		getConnectionProxy(sessionId).call("registerEPackage", sessionId, pkg); //$NON-NLS-1$
 
 	}
 }

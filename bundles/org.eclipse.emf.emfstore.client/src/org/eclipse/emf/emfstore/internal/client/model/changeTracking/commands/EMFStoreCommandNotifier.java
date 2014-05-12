@@ -27,7 +27,7 @@ import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
  */
 public class EMFStoreCommandNotifier {
 
-	private List<ESCommandObserver> commandObservers;
+	private final List<ESCommandObserver> commandObservers;
 
 	/**
 	 * Default constructor.
@@ -44,14 +44,14 @@ public class EMFStoreCommandNotifier {
 	 */
 	public void notifiyListenersAboutStart(final Command command) {
 		for (final ESCommandObserver commandObservers : this.commandObservers) {
-			ESSafeRunnable code = new ESSafeRunnable() {
+			final ESSafeRunnable code = new ESSafeRunnable() {
 
 				public void run() {
 					commandObservers.commandStarted(command);
 				}
 
 				public void handleException(Throwable exception) {
-					ModelUtil.logWarning("Command Observer threw exception", exception);
+					ModelUtil.logWarning(Messages.EMFStoreCommandNotifier_CommandObserverException, exception);
 				}
 			};
 
@@ -68,14 +68,14 @@ public class EMFStoreCommandNotifier {
 	 */
 	public void notifiyListenersAboutCommandFailed(final Command command, final Exception exception) {
 		for (final ESCommandObserver commandObservers : this.commandObservers) {
-			ESSafeRunnable code = new ESSafeRunnable() {
+			final ESSafeRunnable code = new ESSafeRunnable() {
 
 				public void run() {
 					commandObservers.commandFailed(command, exception);
 				}
 
 				public void handleException(Throwable exception) {
-					ModelUtil.logWarning("Command Observer threw exception", exception);
+					ModelUtil.logWarning(Messages.EMFStoreCommandNotifier_CommandObserverException, exception);
 				}
 			};
 
@@ -90,14 +90,14 @@ public class EMFStoreCommandNotifier {
 	 */
 	public void notifiyListenersAboutCommandCompleted(final Command command) {
 		for (final ESCommandObserver commandObservers : this.commandObservers) {
-			ESSafeRunnable code = new ESSafeRunnable() {
+			final ESSafeRunnable code = new ESSafeRunnable() {
 
 				public void run() {
 					commandObservers.commandCompleted(command);
 				}
 
 				public void handleException(Throwable exception) {
-					ModelUtil.logWarning("Command Observer threw exception", exception);
+					ModelUtil.logWarning(Messages.EMFStoreCommandNotifier_CommandObserverException, exception);
 				}
 			};
 

@@ -21,6 +21,9 @@ import org.eclipse.osgi.util.NLS;
  */
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.emf.emfstore.internal.client.model.changeTracking.merging.conflict.conflicts.messages"; //$NON-NLS-1$
+	public static String DeletionConflict_AndOtherElements;
+	public static String DeletionConflict_Delete;
+	public static String DeletionConflict_Recover;
 	public static String MultiReference_Move_To;
 	public static String MultiReferenceConflict_Add;
 	public static String MultiReferenceConflict_MoveTo;
