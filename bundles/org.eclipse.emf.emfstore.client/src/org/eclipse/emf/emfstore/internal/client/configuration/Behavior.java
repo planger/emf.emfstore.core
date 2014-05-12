@@ -45,7 +45,7 @@ public class Behavior {
 	 * The checksum value that is used in case no checksum should be computed.
 	 */
 	public static final long NO_CHECKSUM = -1;
-	private static final String AUTO_SAVE_EXTENSION_POINT_ATTRIBUTE_NAME = "autoSave";
+	private static final String AUTO_SAVE_EXTENSION_POINT_ATTRIBUTE_NAME = "autoSave"; //$NON-NLS-1$
 	private static Boolean autoSave;
 	private ESChecksumErrorHandler checksumErrorHandler;
 
@@ -67,7 +67,7 @@ public class Behavior {
 	 */
 	public boolean isAutoSaveEnabled() {
 		if (autoSave == null) {
-			autoSave = new ESExtensionPoint("org.eclipse.emf.emfstore.client.recordingOptions")
+			autoSave = new ESExtensionPoint("org.eclipse.emf.emfstore.client.recordingOptions") //$NON-NLS-1$
 				.getBoolean(
 					AUTO_SAVE_EXTENSION_POINT_ATTRIBUTE_NAME, false);
 		}
@@ -82,8 +82,8 @@ public class Behavior {
 	 */
 	public boolean isChecksumCheckActive() {
 		final ESExtensionPoint extensionPoint = new ESExtensionPoint(
-			"org.eclipse.emf.emfstore.client.checksumErrorHandler");
-		return extensionPoint.getBoolean("isActive", true);
+			"org.eclipse.emf.emfstore.client.checksumErrorHandler"); //$NON-NLS-1$
+		return extensionPoint.getBoolean("isActive", true); //$NON-NLS-1$
 	}
 
 	/**
@@ -96,13 +96,13 @@ public class Behavior {
 		if (checksumErrorHandler == null) {
 
 			final ESExtensionPoint extensionPoint = new ESExtensionPoint(
-				"org.eclipse.emf.emfstore.client.checksumErrorHandler");
+				"org.eclipse.emf.emfstore.client.checksumErrorHandler"); //$NON-NLS-1$
 
 			final ESExtensionElement elementWithHighestPriority = extensionPoint.getElementWithHighestPriority();
 
 			if (elementWithHighestPriority != null) {
 				final ESChecksumErrorHandler errorHandler = elementWithHighestPriority
-					.getClass("errorHandler",
+					.getClass("errorHandler", //$NON-NLS-1$
 						ESChecksumErrorHandler.class);
 
 				if (errorHandler != null) {
@@ -135,8 +135,8 @@ public class Behavior {
 	 */
 	public List<ServerInfo> getDefaultServerInfos() {
 		final ESClientConfigurationProvider provider = new ESExtensionPoint(
-			"org.eclipse.emf.emfstore.client.defaultConfigurationProvider")
-			.getClass("providerClass",
+			"org.eclipse.emf.emfstore.client.defaultConfigurationProvider") //$NON-NLS-1$
+			.getClass("providerClass", //$NON-NLS-1$
 				ESClientConfigurationProvider.class);
 		final ArrayList<ServerInfo> result = new ArrayList<ServerInfo>();
 		if (provider != null) {
@@ -154,16 +154,16 @@ public class Behavior {
 
 	private ServerInfo getLocalhostServerInfo() {
 		final ServerInfo serverInfo = ModelFactory.eINSTANCE.createServerInfo();
-		serverInfo.setName("Localhost Server");
+		serverInfo.setName("Localhost Server"); //$NON-NLS-1$
 		serverInfo.setPort(8080);
-		serverInfo.setUrl("localhost");
+		serverInfo.setUrl("localhost"); //$NON-NLS-1$
 		serverInfo.setCertificateAlias(KeyStoreManager.DEFAULT_CERTIFICATE);
 
 		final Usersession superUsersession = ModelFactory.eINSTANCE.createUsersession();
 		superUsersession.setServerInfo(serverInfo);
-		superUsersession.setPassword("super");
+		superUsersession.setPassword("super"); //$NON-NLS-1$
 		superUsersession.setSavePassword(true);
-		superUsersession.setUsername("super");
+		superUsersession.setUsername("super"); //$NON-NLS-1$
 		serverInfo.setLastUsersession(superUsersession);
 
 		return serverInfo;

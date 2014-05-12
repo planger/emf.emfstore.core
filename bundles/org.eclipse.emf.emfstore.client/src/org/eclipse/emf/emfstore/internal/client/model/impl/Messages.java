@@ -21,6 +21,15 @@ import org.eclipse.osgi.util.NLS;
  */
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.emf.emfstore.internal.client.model.impl.messages"; //$NON-NLS-1$
+	public static String OperationRecorder_CutElementsPresent_0;
+	public static String OperationRecorder_CutElementsPresent_1;
+	public static String OperationRecorder_ElementChangedWithoutCommand_0;
+	public static String OperationRecorder_ElementChangedWithoutCommand_1;
+	public static String OperationRecorder_InvalidNotificationClassification_0;
+	public static String OperationRecorder_InvalidNotificationClassification_1;
+	public static String OperationRecorder_InvalidNotificationMessage;
+	public static String OperationRecorder_OnlyOneCompositeAllowed;
+	public static String OperationRecorder_Unknown;
 	public static String ProjectSpaceBase_Activate_ChecksumErrorHandler_Invalid_Chekcum;
 	public static String ProjectSpaceBase_Arguments_Must_Not_Be_Null;
 	public static String ProjectSpaceBase_Cannot_Compute_Checksum;
@@ -39,10 +48,12 @@ public final class Messages extends NLS {
 	public static String ProjectSpaceBase_Transmit_Properties_Failed;
 	public static String ProjectSpaceBase_Unknown_Author;
 	public static String ProjectSpaceBase_Update_Cancelled_Invalid_Checksum;
+	public static String ResourcePersister_MissingID;
 	public static String UsersessionImpl_Invalid_Server_URL;
 	public static String UsersessionImpl_No_ServerInfo_Set;
 	public static String UsersessionImpl_Username;
 	public static String UsersessionImpl_Username_Or_Password_not_Set;
+	public static String WorkspaceBase_ImportedFrom;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

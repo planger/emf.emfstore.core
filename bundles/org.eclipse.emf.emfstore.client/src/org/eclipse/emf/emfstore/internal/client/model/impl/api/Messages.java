@@ -14,11 +14,12 @@ package org.eclipse.emf.emfstore.internal.client.model.impl.api;
 import org.eclipse.osgi.util.NLS;
 
 /**
+ * API implementation related messages.
  * 
  * @author emueller
  * 
  */
-public class Messages extends NLS {
+public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.emf.emfstore.internal.client.model.impl.api.messages"; //$NON-NLS-1$
 	public static String ESLocalProjectImpl_No_Usersession_Found;
 	public static String ESRemoteProjectImpl_Fetching_Project;

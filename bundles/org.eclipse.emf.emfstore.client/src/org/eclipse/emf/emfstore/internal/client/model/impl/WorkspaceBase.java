@@ -231,7 +231,7 @@ public abstract class WorkspaceBase extends EObjectImpl implements Workspace, ES
 	public ProjectSpace importProject(String absoluteFileName) throws IOException {
 		final Project project = ResourceHelper.getElementFromResource(absoluteFileName, Project.class, 0);
 		return importProject(project, absoluteFileName.substring(absoluteFileName.lastIndexOf(File.separatorChar) + 1),
-			"Imported from " + absoluteFileName);
+			Messages.WorkspaceBase_ImportedFrom + absoluteFileName);
 	}
 
 	/**

@@ -11,6 +11,7 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model.impl;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -81,7 +82,7 @@ public class OperationRecorder implements ESCommandObserver, ESCommitObserver, E
 	/**
 	 * Name of unknown creator.
 	 */
-	public static final String UNKOWN_CREATOR = "unknown";
+	public static final String UNKOWN_CREATOR = Messages.OperationRecorder_Unknown;
 
 	private int currentOperationListSize;
 	private ESCommandStack emfStoreCommandStack;
@@ -228,8 +229,9 @@ public class OperationRecorder implements ESCommandObserver, ESCommitObserver, E
 
 	private void checkCommandConstraints(EObject modelElement) {
 		if (!commandIsRunning && config.isForceCommands()) {
-			WorkspaceUtil.handleException("An element has been changed without using a command!",
-				new MissingCommandException("Element " + modelElement + " has been changed without using a command"));
+			WorkspaceUtil.handleException(Messages.OperationRecorder_ElementChangedWithoutCommand_0,
+				new MissingCommandException(
+					MessageFormat.format(Messages.OperationRecorder_ElementChangedWithoutCommand_1, modelElement)));
 		}
 	}
 
@@ -329,7 +331,6 @@ public class OperationRecorder implements ESCommandObserver, ESCommitObserver, E
 	 * Starts change recording on this workspace, resumes previous recordings if
 	 * there are any.
 	 * 
-	 * @generated NOT
 	 */
 	public void startChangeRecording() {
 		if (notificationRecorder == null) {
@@ -342,7 +343,6 @@ public class OperationRecorder implements ESCommandObserver, ESCommitObserver, E
 	 * Stops current recording of changes and adds recorded changes to this
 	 * project spaces changes.
 	 * 
-	 * @generated NOT
 	 */
 	public void stopChangeRecording() {
 		isRecording = false;
@@ -356,7 +356,8 @@ public class OperationRecorder implements ESCommandObserver, ESCommitObserver, E
 		final List<NotificationInfo> rec = notificationRecorder.getRecording().asMutableList();
 		for (final NotificationInfo n : rec) {
 			if (!n.isValid()) {
-				WorkspaceUtil.log("INVALID NOTIFICATION MESSAGE DETECTED: " + n.getValidationMessage(), null, 0);
+				WorkspaceUtil.log(Messages.OperationRecorder_InvalidNotificationMessage + n.getValidationMessage(),
+					null, 0);
 				continue;
 			}
 			final AbstractOperation op = converter.convert(n);
@@ -366,8 +367,8 @@ public class OperationRecorder implements ESCommandObserver, ESCommitObserver, E
 				// we should never get here, this would indicate a
 				// consistency error,
 				// n.isValid() should have been false
-				WorkspaceUtil.log("INVALID NOTIFICATION CLASSIFICATION,"
-					+ " notification is valid, but cannot be converted to an operation: " + n.toString(), null, 0);
+				WorkspaceUtil.log(Messages.OperationRecorder_InvalidNotificationClassification_0
+					+ Messages.OperationRecorder_InvalidNotificationClassification_1 + n.toString(), null, 0);
 				continue;
 			}
 		}
@@ -494,8 +495,8 @@ public class OperationRecorder implements ESCommandObserver, ESCommitObserver, E
 		final EList<EObject> cutElements = project.getCutElements();
 		if (config.isDenyAddCutElementsToModelElements() && cutElements.size() != 0) {
 			throw new IllegalStateException(
-				"It is not allowed to have cutelements at the end of the command."
-					+ " Remove them or use isDenyAddCutElementsToModelElements flag in the org.eclipse.emf.emfstore.client.recording.options extension point.");
+				Messages.OperationRecorder_CutElementsPresent_0
+					+ Messages.OperationRecorder_CutElementsPresent_1);
 		}
 
 		for (final EObject eObject : new ArrayList<EObject>(cutElements)) {
@@ -618,9 +619,9 @@ public class OperationRecorder implements ESCommandObserver, ESCommitObserver, E
 
 	private EReference getNonContainmentKeyReference(EClass eClass) {
 		for (final EReference eRef : eClass.getEReferences()) {
-			if (eRef.getName().equals("key") && !eRef.isContainment()) {
+			if (eRef.getName().equals("key") && !eRef.isContainment()) { //$NON-NLS-1$
 				return eRef;
-			} else if (eRef.getName().equals("key") && eRef.isContainment()) {
+			} else if (eRef.getName().equals("key") && eRef.isContainment()) { //$NON-NLS-1$
 				return null;
 			}
 		}
@@ -816,7 +817,7 @@ public class OperationRecorder implements ESCommandObserver, ESCommitObserver, E
 	public CompositeOperationHandle beginCompositeOperation() {
 
 		if (compositeOperation != null) {
-			throw new IllegalStateException("Can only have one composite at once!");
+			throw new IllegalStateException(Messages.OperationRecorder_OnlyOneCompositeAllowed);
 		}
 
 		compositeOperation = OperationsFactory.eINSTANCE.createCompositeOperation();

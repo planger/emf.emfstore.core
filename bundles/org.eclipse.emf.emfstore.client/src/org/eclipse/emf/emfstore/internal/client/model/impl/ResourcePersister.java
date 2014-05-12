@@ -17,6 +17,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.Notification;
@@ -150,7 +151,7 @@ public class ResourcePersister implements ESCommandObserver, IdEObjectCollection
 
 		for (final Resource resource : resources) {
 
-			if (resource.getURI() == null || resource.getURI().toString().equals("")) {
+			if (resource.getURI() == null || resource.getURI().toString().equals(StringUtils.EMPTY)) {
 				continue;
 			}
 
@@ -289,7 +290,7 @@ public class ResourcePersister implements ESCommandObserver, IdEObjectCollection
 		final String modelElementId = collection.getModelElementId(modelElement).toString();
 
 		if (modelElementId == null) {
-			WorkspaceUtil.handleException(new IllegalStateException("No ID for model element" + modelElement));
+			WorkspaceUtil.handleException(new IllegalStateException(Messages.ResourcePersister_MissingID + modelElement));
 		}
 
 		return modelElementId;
