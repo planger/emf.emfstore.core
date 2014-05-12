@@ -27,9 +27,6 @@
    <feature url="features/org.eclipse.emf.emfstore.ecore.feature_1.2.0.qualifier.jar" id="org.eclipse.emf.emfstore.ecore.feature" version="1.2.0.qualifier">
       <category name="org.eclipse.emf.emfstore.other"/>
    </feature>
-   <feature url="features/org.eclipse.emf.emfstore.client.ui.historybrowsercomparator.feature_1.2.0.qualifier.jar" id="org.eclipse.emf.emfstore.client.ui.historybrowsercomparator.feature" version="1.2.0.qualifier">
-      <category name="org.eclipse.emf.emfstore.other"/>
-   </feature>
    <feature url="features/org.eclipse.emf.emfstore.sdk.feature_1.2.0.qualifier.jar" id="org.eclipse.emf.emfstore.sdk.feature" version="1.2.0.qualifier">
       <category name="org.eclipse.emfstore.sdk"/>
    </feature>
