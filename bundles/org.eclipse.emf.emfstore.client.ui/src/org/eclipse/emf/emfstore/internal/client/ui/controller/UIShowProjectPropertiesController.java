@@ -11,6 +11,8 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.controller;
 
+import java.text.MessageFormat;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.emfstore.client.ESRemoteProject;
@@ -55,24 +57,27 @@ public class UIShowProjectPropertiesController extends AbstractEMFStoreUIControl
 	 */
 	@Override
 	public Void doRun(IProgressMonitor progressMonitor) throws ESException {
-		String revision = "<unknown>";
+		String revision = Messages.UIShowProjectPropertiesController_UnknownTag;
 		ESPrimaryVersionSpec versionSpec;
 
 		try {
-			ServerInfo serverInfo = (ServerInfo) projectInfo.eContainer();
-			ESRemoteProject remoteProjectImpl = new ESRemoteProjectImpl(serverInfo, projectInfo);
+			final ServerInfo serverInfo = (ServerInfo) projectInfo.eContainer();
+			final ESRemoteProject remoteProjectImpl = new ESRemoteProjectImpl(serverInfo, projectInfo);
 			// TODO: monitor
 			versionSpec = remoteProjectImpl.resolveVersionSpec(ESVersionSpec.FACTORY.createHEAD(),
 				new NullProgressMonitor());
-			revision = "" + versionSpec.getIdentifier();
-		} catch (ESException e) {
+			revision = Integer.toString(versionSpec.getIdentifier());
+		} catch (final ESException e) {
 			// do nothing
 		}
 
 		final String rev = revision;
 
-		MessageDialog.openInformation(getShell(), "Project Information", "Current revision: " + rev + "\n"
-			+ "ProjectId: " + projectInfo.getProjectId().getId());
+		MessageDialog.openInformation(getShell(),
+			Messages.UIShowProjectPropertiesController_ProjectInformation,
+			MessageFormat.format(Messages.UIShowProjectPropertiesController_CurrentRevision,
+				rev,
+				projectInfo.getProjectId().getId()));
 		return null;
 	}
 }

@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * emueller
+ * Edgar Mueller - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.controller;
 
@@ -54,8 +54,10 @@ public class UILoginSessionController extends AbstractEMFStoreUIController<Void>
 
 		try {
 			loginDialogController.login(serverInfo);
-		} catch (ESException e) {
-			MessageDialog.openError(getShell(), "Login failed", e.getMessage());
+		} catch (final ESException e) {
+			MessageDialog.openError(getShell(),
+				Messages.UILoginSessionController_LoginFailed_Title,
+				e.getMessage());
 		}
 
 		return null;

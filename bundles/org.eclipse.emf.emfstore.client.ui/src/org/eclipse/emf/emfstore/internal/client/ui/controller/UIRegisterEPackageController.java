@@ -35,7 +35,7 @@ import org.eclipse.swt.widgets.Shell;
 public class UIRegisterEPackageController extends
 	AbstractEMFStoreUIController<Void> {
 
-	private ServerInfo serverInfo;
+	private final ServerInfo serverInfo;
 
 	/**
 	 * Instantiates a new UIRegisterPackageController.
@@ -59,7 +59,7 @@ public class UIRegisterEPackageController extends
 	 *             if any error in the EmfStore occurs
 	 */
 	public void registerEPackage(ServerInfo serverInfo) throws ESException {
-		EPackageTreeSelectionDialog dialog = new EPackageTreeSelectionDialog(
+		final EPackageTreeSelectionDialog dialog = new EPackageTreeSelectionDialog(
 			EPackageRegistryHelper.getAvailablePackages(true));
 		dialog.open();
 		final EPackage pkg = dialog.getSelectedEPackage();
@@ -78,13 +78,14 @@ public class UIRegisterEPackageController extends
 	@Override
 	public Void doRun(IProgressMonitor monitor) {
 		try {
-			this.registerEPackage(serverInfo);
+			registerEPackage(serverInfo);
 		} catch (final ESException e) {
 			RunInUI.run(new Callable<Void>() {
 
 				public Void call() throws Exception {
 					WorkspaceUtil.logException(e.getMessage(), e);
-					MessageDialog.openError(getShell(), "Registration failed",
+					MessageDialog.openError(getShell(),
+						Messages.UIRegisterEPackageController_RegistrationFailed,
 						e.getMessage());
 					return null;
 				}

@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Edgar Mueller
+ * Edgar Mueller - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.controller;
 
@@ -66,7 +66,7 @@ public class UIAddTagController extends AbstractEMFStoreUIController<Void> {
 	@Override
 	public Void doRun(IProgressMonitor monitor) throws ESException {
 
-		CreateTagDialog dialog = createDialog(getShell(), localProject.getBranches(monitor));
+		final CreateTagDialog dialog = createDialog(getShell(), localProject.getBranches(monitor));
 
 		String tagName = StringUtils.EMPTY;
 		BranchInfo branchInfo = null;
@@ -82,23 +82,26 @@ public class UIAddTagController extends AbstractEMFStoreUIController<Void> {
 			branchInfo = dialog.getResult();
 
 			if (branchInfo == null) {
-				MessageDialog.openWarning(getShell(), "No branch selected",
-					"No branch has been selected. Please select the branch should be tagged.");
+				MessageDialog.openWarning(getShell(),
+					Messages.UIAddTagController_NoBranchSelected_Title,
+					Messages.UIAddTagController_NoBranchSelected_Message);
 			} else if (StringUtils.isBlank(tagName)) {
-				MessageDialog.openWarning(getShell(), "Empty tag name",
-					"No tag name has been given. Please enter the name of the tag.");
+				MessageDialog.openWarning(getShell(),
+					Messages.UIAddTagController_EmptyTagName_Title,
+					Messages.UIAddTagController_EmptyTagName_Message);
 			}
 		}
 
-		String branchName = branchInfo.getName();
-		ESPrimaryVersionSpec primaryVersion = historyInfo.getPrimarySpec();
-		ESTagVersionSpec tag = ESVersionSpec.FACTORY.createTAG(tagName, branchName);
+		final String branchName = branchInfo.getName();
+		final ESPrimaryVersionSpec primaryVersion = historyInfo.getPrimarySpec();
+		final ESTagVersionSpec tag = ESVersionSpec.FACTORY.createTAG(tagName, branchName);
 
 		try {
 			localProject.addTag(primaryVersion, tag, monitor);
-		} catch (ESException e) {
+		} catch (final ESException e) {
 			WorkspaceUtil.logException(e.getMessage(), e);
-			MessageDialog.openError(getShell(), Messages.UIAddTagController_ErrorTitle,
+			MessageDialog.openError(getShell(),
+				Messages.UIAddTagController_ErrorTitle,
 				Messages.UIAddTagController_ErrorReason + e.getMessage());
 			return null;
 		}
@@ -110,7 +113,7 @@ public class UIAddTagController extends AbstractEMFStoreUIController<Void> {
 	}
 
 	private CreateTagDialog createDialog(Shell shell, List<ESBranchInfo> branches) {
-		List<BranchInfo> internalBranches = APIUtil.toInternal(branches);
+		final List<BranchInfo> internalBranches = APIUtil.toInternal(branches);
 		return new CreateTagDialog(shell, internalBranches);
 	}
 

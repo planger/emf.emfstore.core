@@ -11,8 +11,10 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.controller;
 
+import java.text.MessageFormat;
 import java.util.concurrent.Callable;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.emfstore.client.ESRemoteProject;
 import org.eclipse.emf.emfstore.client.ESUsersession;
@@ -21,8 +23,8 @@ import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESUsersessionImpl
 import org.eclipse.emf.emfstore.internal.client.ui.common.RunInUI;
 import org.eclipse.emf.emfstore.internal.client.ui.views.emfstorebrowser.views.CreateProjectDialog;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 
 /**
@@ -33,9 +35,8 @@ import org.eclipse.swt.widgets.Shell;
  */
 public class UICreateRemoteProjectController extends AbstractEMFStoreUIController<ESRemoteProject> {
 
-	private Usersession session;
+	private final Usersession session;
 	private final String projectName;
-	private String description;
 
 	/**
 	 * Constructor.
@@ -47,7 +48,6 @@ public class UICreateRemoteProjectController extends AbstractEMFStoreUIControlle
 		super(shell, true, false);
 		session = null;
 		projectName = null;
-		description = null;
 	}
 
 	/**
@@ -62,7 +62,6 @@ public class UICreateRemoteProjectController extends AbstractEMFStoreUIControlle
 		super(shell);
 		this.session = ((ESUsersessionImpl) session).toInternalAPI();
 		projectName = null;
-		description = "";
 	}
 
 	/**
@@ -74,29 +73,26 @@ public class UICreateRemoteProjectController extends AbstractEMFStoreUIControlle
 	 *            the session to be used to create the project
 	 * @param projectName
 	 *            the name of the project to be created
-	 * @param description
-	 *            an optional description of the project. May be <code>null</code>
 	 */
 	public UICreateRemoteProjectController(Shell shell, ESUsersession session, String projectName) {
 		super(shell);
 		this.session = ((ESUsersessionImpl) session).toInternalAPI();
 		this.projectName = projectName;
-		this.description = description == null ? "" : description;
 	}
 
 	private ESRemoteProject createRemoteProject(IProgressMonitor monitor) throws ESException {
-		String projectName = RunInUI.runWithResult(new Callable<String>() {
+		final String projectName = RunInUI.runWithResult(new Callable<String>() {
 
 			public String call() throws Exception {
-				CreateProjectDialog dialog = new CreateProjectDialog(getShell());
-				if (dialog.open() == Dialog.OK) {
+				final CreateProjectDialog dialog = new CreateProjectDialog(getShell());
+				if (dialog.open() == Window.OK) {
 					return dialog.getName();
 				}
 				return null;
 			}
 		});
 
-		return createRemoteProject(session, projectName, description, monitor);
+		return createRemoteProject(session, projectName, StringUtils.EMPTY, monitor);
 	}
 
 	private ESRemoteProject createRemoteProject(final Usersession usersession, final String name,
@@ -114,20 +110,21 @@ public class UICreateRemoteProjectController extends AbstractEMFStoreUIControlle
 	public ESRemoteProject doRun(IProgressMonitor monitor) throws ESException {
 		try {
 			if (session == null) {
-				throw new IllegalArgumentException("Session must not be null.");
+				throw new IllegalArgumentException(Messages.UICreateRemoteProjectController_SessionMustNotBeNull);
 			}
 
 			if (projectName == null) {
 				return createRemoteProject(monitor);
 			}
 
-			return createRemoteProject(session, projectName, description, monitor);
+			return createRemoteProject(session, projectName, StringUtils.EMPTY, monitor);
 
 		} catch (final ESException e) {
 			RunInUI.run(new Callable<Void>() {
 				public Void call() throws Exception {
-					MessageDialog.openError(getShell(), "Create project failed", "Creation of remote project failed: "
-						+ e.getMessage());
+					MessageDialog.openError(getShell(),
+						Messages.UICreateRemoteProjectController_CreateProjectFailed_Title,
+						MessageFormat.format(Messages.UICreateRemoteProjectController_CreateProjectFailed_Message, e.getMessage()));
 					return null;
 				}
 			});

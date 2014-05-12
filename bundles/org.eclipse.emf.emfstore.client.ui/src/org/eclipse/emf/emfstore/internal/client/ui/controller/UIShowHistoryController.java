@@ -36,8 +36,7 @@ import org.eclipse.ui.PlatformUI;
 public class UIShowHistoryController extends AbstractEMFStoreUIController<Void> {
 
 	// TODO: remove hard-coded reference
-	private static final String HISTORYVIEW_ID =
-		"org.eclipse.emf.emfstore.client.ui.views.historybrowserview.HistoryBrowserView";
+	private static final String HISTORYVIEW_ID = "org.eclipse.emf.emfstore.client.ui.views.historybrowserview.HistoryBrowserView"; //$NON-NLS-1$
 
 	private final EObject modelElement;
 

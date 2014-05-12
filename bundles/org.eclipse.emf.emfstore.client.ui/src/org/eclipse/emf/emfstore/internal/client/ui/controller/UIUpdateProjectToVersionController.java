@@ -59,9 +59,8 @@ public class UIUpdateProjectToVersionController extends
 	@Override
 	public ESPrimaryVersionSpec doRun(IProgressMonitor monitor)
 		throws ESException {
-		final ESRangeQuery query = ESHistoryQuery.FACTORY.rangeQuery(
-			projectSpace.getBaseVersion(), 20, 0, false, false, false,
-			false);
+		final ESRangeQuery<?> query = ESHistoryQuery.FACTORY.rangeQuery(
+			projectSpace.getBaseVersion(), 20, 0, false, false, false, false);
 		final List<ESHistoryInfo> historyInfo = projectSpace.getHistoryInfos(query, new NullProgressMonitor());
 		// filter base version
 		final Iterator<ESHistoryInfo> iter = historyInfo.iterator();
@@ -118,19 +117,19 @@ public class UIUpdateProjectToVersionController extends
 
 				final ESHistoryInfo historyInfo = (ESHistoryInfo) element;
 
-				final StringBuilder sb = new StringBuilder("Version ");
+				final StringBuilder sb = new StringBuilder(Messages.UIUpdateProjectToVersionController_Version);
 				sb.append(Integer.toString(historyInfo.getPrimarySpec()
 					.getIdentifier()));
-				sb.append("  -  ");
+				sb.append("  -  "); //$NON-NLS-1$
 				sb.append(historyInfo.getLogMessage().getMessage());
 
 				return sb.toString();
 			}
 		});
 		listDialog.setInput(historyInfo);
-		listDialog.setTitle("Select a Version to update to");
+		listDialog.setTitle(Messages.UIUpdateProjectToVersionController_SelectVersion_Title);
 		listDialog
-			.setMessage("The project will be updated to the selected Version");
+			.setMessage(Messages.UIUpdateProjectToVersionController_SelectVersion_Message);
 		listDialog
 			.setInitialSelections(new Object[] { historyInfo.get(0) });
 		return listDialog;

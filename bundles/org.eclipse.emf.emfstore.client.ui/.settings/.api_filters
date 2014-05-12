@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <component id="org.eclipse.emf.emfstore.client.ui" version="2">
+    <resource path="src/org/eclipse/emf/emfstore/internal/client/ui/controller/UIUpdateProjectController.java" type="org.eclipse.emf.emfstore.internal.client.ui.controller.UIUpdateProjectController">
+        <filter comment="Internal usage" id="640712815">
+            <message_arguments>
+                <message_argument value="ESPagedUpdateConfig"/>
+                <message_argument value="UIUpdateProjectController"/>
+                <message_argument value="getNumberOfAllowedChanges()"/>
+            </message_arguments>
+        </filter>
+    </resource>
     <resource path="src/org/eclipse/emf/emfstore/internal/client/ui/views/emfstorebrowser/dialogs/admin/PropertiesForm.java" type="org.eclipse.emf.emfstore.internal.client.ui.views.emfstorebrowser.dialogs.admin.PropertiesForm">
         <filter comment="internal API usage" id="571473929">
             <message_arguments>

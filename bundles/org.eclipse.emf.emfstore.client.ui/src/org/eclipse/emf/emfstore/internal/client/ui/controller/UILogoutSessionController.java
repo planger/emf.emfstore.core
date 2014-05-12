@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * emueller
+ * Edgar Mueller - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.controller;
 
@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Shell;
  */
 public class UILogoutSessionController extends AbstractEMFStoreUIController<Void> {
 
-	private ESUsersessionImpl session;
+	private final ESUsersessionImpl session;
 
 	/**
 	 * Constructor.
@@ -56,8 +56,10 @@ public class UILogoutSessionController extends AbstractEMFStoreUIController<Void
 
 		try {
 			session.logout();
-		} catch (ESException e) {
-			MessageDialog.openWarning(getShell(), "Logout failed", "Logout failed: " + e.getMessage());
+		} catch (final ESException e) {
+			MessageDialog.openWarning(getShell(),
+				Messages.UILogoutSessionController_LogoutFailed_Title,
+				Messages.UILogoutSessionController_LogoutFailed_Message + e.getMessage());
 		}
 
 		// reset the password in the RAM cache

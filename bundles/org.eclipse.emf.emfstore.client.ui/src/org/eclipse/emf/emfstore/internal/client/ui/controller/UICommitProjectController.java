@@ -77,8 +77,9 @@ public class UICommitProjectController extends
 	public void noLocalChanges(ESLocalProject localProject) {
 		RunInUI.run(new Callable<Void>() {
 			public Void call() throws Exception {
-				MessageDialog.openInformation(getShell(), "No local changes",
-					"No local changes in your project. No need to commit.");
+				MessageDialog.openInformation(getShell(),
+					Messages.UICommitProjectController_NoLocalChanges_Title,
+					Messages.UICommitProjectController_NoLocalChanges_Message);
 				return null;
 			}
 		});
@@ -88,16 +89,17 @@ public class UICommitProjectController extends
 	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see org.eclipse.emf.emfstore.client.callbacks.ESCommitCallback#baseVersionOutOfDate(org.eclipse.emf.emfstore.internal.client.model.ProjectSpace)
+	 * @see org.eclipse.emf.emfstore.client.callbacks.ESCommitCallback#baseVersionOutOfDate(ESLocalProject,
+	 *      IProgressMonitor)
 	 */
 	public boolean baseVersionOutOfDate(final ESLocalProject projectSpace,
 		IProgressMonitor progressMonitor) {
 
-		final String message = "Your project is outdated, you need to update before commit. Do you want to update now?";
+		final String message = Messages.UICommitProjectController_ProjectOutdated;
 
 		final boolean shouldUpdate = RunInUI.runWithResult(new Callable<Boolean>() {
 			public Boolean call() throws Exception {
-				return MessageDialog.openConfirm(getShell(), "Confirmation",
+				return MessageDialog.openConfirm(getShell(), Messages.UICommitProjectController_Confirmation,
 					message);
 			}
 		});
@@ -138,11 +140,10 @@ public class UICommitProjectController extends
 				public Void call() throws Exception {
 					MessageDialog
 						.openInformation(
-							getShell(),
-							"No local changes",
-							"No need to commit any more, there are no more changes pending for commit.\n"
-								+ "This may have happened because you rejected your changes in favor for changes "
-								+ "of other users in a merge.");
+							getShell(), "No local changes", //$NON-NLS-1$
+							Messages.UICommitProjectController_NoPendingChanges_0
+								+ Messages.UICommitProjectController_NoPendingChanges_1
+								+ Messages.UICommitProjectController_NoPendingChanges_2);
 					return null;
 				}
 			});
@@ -218,7 +219,8 @@ public class UICommitProjectController extends
 			WorkspaceUtil.logException(e.getMessage(), e);
 			RunInUI.run(new Callable<Void>() {
 				public Void call() throws Exception {
-					MessageDialog.openError(getShell(), "Commit failed",
+					MessageDialog.openError(getShell(),
+						Messages.UICommitProjectController_CommitFailed,
 						e.getMessage());
 					return null;
 				}

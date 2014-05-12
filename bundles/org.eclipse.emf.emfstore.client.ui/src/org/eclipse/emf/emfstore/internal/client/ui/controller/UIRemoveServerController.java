@@ -50,7 +50,7 @@ public class UIRemoveServerController extends
 	 */
 	public UIRemoveServerController(Shell shell, ESServer server) {
 		super(shell);
-		this.serverInfo = ((ESServerImpl) server).toInternalAPI();
+		serverInfo = ((ESServerImpl) server).toInternalAPI();
 	}
 
 	/**
@@ -62,23 +62,20 @@ public class UIRemoveServerController extends
 	@Override
 	public Void doRun(IProgressMonitor monitor) throws ESException {
 
-		boolean shouldDelete = MessageDialog.openQuestion(getShell(),
-			"Confirm deletion", String.format(
-				"Are you sure you want to delete the server \'%s\'",
+		final boolean shouldDelete = MessageDialog.openQuestion(getShell(),
+			Messages.UIRemoveServerController_Confirmation, String.format(
+				Messages.UIRemoveServerController_DeleteProject_Prompt,
 				serverInfo.getName()));
 
 		if (!shouldDelete) {
 			return null;
 		}
 
-		// TODO OTS
-		ESWorkspaceImpl workspace = ESWorkspaceProviderImpl.getInstance()
-			.getWorkspace();
-		EList<ProjectSpace> projectSpaces = workspace.toInternalAPI()
-			.getProjectSpaces();
-		ArrayList<ProjectSpace> usedSpaces = new ArrayList<ProjectSpace>();
+		final ESWorkspaceImpl workspace = ESWorkspaceProviderImpl.getInstance().getWorkspace();
+		final EList<ProjectSpace> projectSpaces = workspace.toInternalAPI().getProjectSpaces();
+		final ArrayList<ProjectSpace> usedSpaces = new ArrayList<ProjectSpace>();
 
-		for (ProjectSpace projectSpace : projectSpaces) {
+		for (final ProjectSpace projectSpace : projectSpaces) {
 			if (projectSpace.getUsersession() != null
 				&& projectSpace.getUsersession().getServerInfo()
 					.equals(serverInfo)) {
@@ -102,7 +99,7 @@ public class UIRemoveServerController extends
 					EcoreUtil.delete(serverInfo);
 					// TODO OTS auto save;
 					// ESWorkspaceProviderImpl.getInstance().getWorkspace().save();
-				};
+				}
 			}.run(false);
 
 			return null;
@@ -110,18 +107,17 @@ public class UIRemoveServerController extends
 
 		final StringBuilder message = new StringBuilder();
 
-		for (ProjectSpace pSpace : usedSpaces) {
-			message.append("\n" + pSpace.getProjectName());
+		for (final ProjectSpace pSpace : usedSpaces) {
+			message.append(Messages.UIRemoveServerController_Newline + pSpace.getProjectName());
 		}
 
-		MessageDialog
-			.openError(
-				getShell(),
-				"Error while deleting",
-				String.format(
-					"Cannot delete \'%s\' because it is currently used by the following projects: \n"
-						+ message.toString(),
-					serverInfo.getName()));
+		MessageDialog.openError(
+			getShell(),
+			Messages.UIRemoveServerController_ErrorDelete_Title,
+			String.format(
+				Messages.UIRemoveServerController_ErrorDelete_Message
+					+ message.toString(),
+				serverInfo.getName()));
 
 		return null;
 	}

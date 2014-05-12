@@ -16,7 +16,7 @@ import org.eclipse.emf.emfstore.client.ESLocalProject;
 import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
 import org.eclipse.emf.emfstore.internal.client.ui.views.emfstorebrowser.views.CreateProjectDialog;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
-import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 
 /**
@@ -47,8 +47,6 @@ public class UICreateLocalProjectController extends AbstractEMFStoreUIController
 	 *            the parent {@link Shell} that should be used during the creation of the local project
 	 * @param name
 	 *            the name of the local project
-	 * @param description
-	 *            an optional description for the project. May be <code>null</code>
 	 */
 	public UICreateLocalProjectController(Shell shell, String name) {
 		super(shell);
@@ -56,9 +54,9 @@ public class UICreateLocalProjectController extends AbstractEMFStoreUIController
 	}
 
 	private ESLocalProject createLocalProject() {
-		CreateProjectDialog dialog = new CreateProjectDialog(getShell());
-		if (dialog.open() == Dialog.OK) {
-			String projectName = dialog.getName();
+		final CreateProjectDialog dialog = new CreateProjectDialog(getShell());
+		if (dialog.open() == Window.OK) {
+			final String projectName = dialog.getName();
 
 			return createLocalProject(projectName);
 		}

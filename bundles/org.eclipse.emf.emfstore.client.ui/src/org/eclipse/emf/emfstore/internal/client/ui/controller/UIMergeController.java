@@ -26,8 +26,8 @@ import org.eclipse.emf.emfstore.internal.client.ui.dialogs.merge.MergeProjectHan
 import org.eclipse.emf.emfstore.internal.server.model.versioning.BranchInfo;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.PrimaryVersionSpec;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 
 /**
@@ -44,12 +44,12 @@ public class UIMergeController extends AbstractEMFStoreUIController<Void> {
 	 * 
 	 * @param shell
 	 *            active shell
-	 * @param projectSpace
-	 *            projectspace
+	 * @param localProject
+	 *            the project being merged
 	 */
 	public UIMergeController(Shell shell, ESLocalProject localProject) {
 		super(shell);
-		this.projectSpace = ((ESLocalProjectImpl) localProject)
+		projectSpace = ((ESLocalProjectImpl) localProject)
 			.toInternalAPI();
 	}
 
@@ -59,12 +59,12 @@ public class UIMergeController extends AbstractEMFStoreUIController<Void> {
 			MessageDialog
 				.openError(
 					getShell(),
-					"Merge not possible",
-					"There are pending changes. Please revert or commit first. Merging with local changes is currently not supported.");
+					Messages.UIMergeController_MergeNotApplicable_Title,
+					Messages.UIMergeController_MergeNotApplicable_Message);
 			return null;
 		}
 
-		PrimaryVersionSpec selectedVersionSpec = branchSelection(projectSpace);
+		final PrimaryVersionSpec selectedVersionSpec = branchSelection(projectSpace);
 
 		if (selectedVersionSpec != null) {
 			projectSpace.mergeBranch(selectedVersionSpec,
@@ -78,28 +78,28 @@ public class UIMergeController extends AbstractEMFStoreUIController<Void> {
 
 		// OTS: progress monitor
 		final List<BranchInfo> branches = projectSpace.getBranches();
-		ListIterator<BranchInfo> iterator = branches.listIterator();
+		final ListIterator<BranchInfo> iterator = branches.listIterator();
 		while (iterator.hasNext()) {
-			BranchInfo current = iterator.next();
+			final BranchInfo current = iterator.next();
 			if (current.getName().equals(
 				projectSpace.getBaseVersion().getBranch())) {
 				iterator.remove();
 			}
 		}
 
-		BranchInfo result = RunInUI.WithException
+		final BranchInfo result = RunInUI.WithException
 			.runWithResult(new Callable<BranchInfo>() {
 				public BranchInfo call() throws Exception {
 
-					BranchSelectionDialog dialog = new BranchSelectionDialog(
+					final BranchSelectionDialog dialog = new BranchSelectionDialog(
 						getShell(),
 						branches);
 					dialog.setBlockOnOpen(true);
 
-					if (dialog.open() != Dialog.OK
+					if (dialog.open() != Window.OK
 						|| dialog.getResult() == null) {
 						throw new CancelOperationException(
-							"No Branch specified");
+							Messages.UIMergeController_NoBranchGiven);
 					}
 					return dialog.getResult();
 

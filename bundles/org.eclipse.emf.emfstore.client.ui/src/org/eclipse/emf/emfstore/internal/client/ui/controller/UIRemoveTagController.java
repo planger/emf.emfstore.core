@@ -64,8 +64,8 @@ public class UIRemoveTagController extends AbstractEMFStoreUIController<Void> {
 
 		// TODO: controller currently does not work if the active workbench window is not
 		// the history view
-		IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
+		final IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		final IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
 
 		if (activePage == null || !(activePage.getActivePart() instanceof HistoryBrowserView)) {
 			return null;
@@ -80,29 +80,31 @@ public class UIRemoveTagController extends AbstractEMFStoreUIController<Void> {
 			}
 		};
 
-		ElementListSelectionDialog dlg = new ElementListSelectionDialog(PlatformUI.getWorkbench()
+		final ElementListSelectionDialog dlg = new ElementListSelectionDialog(PlatformUI.getWorkbench()
 			.getActiveWorkbenchWindow().getShell(), tagLabelProvider);
 		dlg.setElements(historyInfo.getTagSpecs().toArray());
-		dlg.setTitle("Tag selection");
+		dlg.setTitle(Messages.UIRemoveTagController_SelectTag);
 		dlg.setBlockOnOpen(true);
 		dlg.setMultipleSelection(true);
-		int ret = dlg.open();
+		final int ret = dlg.open();
 
 		if (ret != Window.OK) {
 			return null;
 		}
 
-		ProjectSpace projectSpace = historyBrowserView.getProjectSpace();
-		Object[] result = dlg.getResult();
+		final ProjectSpace projectSpace = historyBrowserView.getProjectSpace();
+		final Object[] result = dlg.getResult();
 
-		for (Object o : result) {
+		for (final Object o : result) {
 			if (o instanceof ESTagVersionSpec) {
-				ESTagVersionSpec tag = (ESTagVersionSpec) o;
+				final ESTagVersionSpec tag = (ESTagVersionSpec) o;
 				try {
 					// TODO: monitor
 					projectSpace.toAPI().removeTag(historyInfo.getPrimarySpec(), tag, new NullProgressMonitor());
-				} catch (ESException e) {
-					MessageDialog.openError(getShell(), "Remove tag failed", "Remove tag failed: " + e.getMessage());
+				} catch (final ESException e) {
+					MessageDialog.openError(getShell(),
+						Messages.UIRemoveTagController_RemoveTagFailed_Title,
+						Messages.UIRemoveTagController_RemoveTagFailed_Message + e.getMessage());
 				}
 			}
 		}

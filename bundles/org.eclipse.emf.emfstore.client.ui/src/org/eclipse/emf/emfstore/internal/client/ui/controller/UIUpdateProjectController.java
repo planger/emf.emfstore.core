@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Edgar Mueller
+ * Edgar Mueller - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.controller;
 
@@ -129,8 +129,9 @@ public class UIUpdateProjectController extends
 		RunInUI.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				MessageDialog
-					.openInformation(getShell(), "No need to update",
-						"Your project is up to date, you do not need to update.");
+					.openInformation(getShell(),
+						Messages.UIUpdateProjectController_NoNeedToUpdate,
+						Messages.UIUpdateProjectController_ProjectUpToDate);
 				return null;
 			}
 		});
@@ -218,8 +219,9 @@ public class UIUpdateProjectController extends
 		if (!doNotUsePagedUpdate && !newBaseVersion.equals(headVersion) && !newBaseVersion.equals(oldBaseVersion)) {
 			final boolean yes = RunInUI.runWithResult(new Callable<Boolean>() {
 				public Boolean call() throws Exception {
-					return MessageDialog.openConfirm(getShell(), "More updates available",
-						"There are more updates available on the server.  Do you want to fetch and apply them now?");
+					return MessageDialog.openConfirm(getShell(),
+						Messages.UIUpdateProjectController_MoreUpdatesAvailable_Title,
+						Messages.UIUpdateProjectController_MoreUpdatesAvailable_Message);
 				}
 			});
 			if (yes) {

@@ -7,8 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * ovonwesen
- * emueller
+ * Otto von Wesendonk, Edgar Mueller - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.controller;
 
@@ -24,10 +23,10 @@ import org.eclipse.swt.widgets.Shell;
 
 /**
  * Abstract UI controller class. UI controllers are responsible for calling the controllers that do the actual work
- * and handling UI related aspects of executing them. This might be calling some information dialogs as well as handling
+ * and handle UI related aspects of executing them. This might be, opening some information dialogs as well as handling
  * exceptions thrown by the controllers. The action executed by a controller may either be run in the UI thread or get
- * executed in its own thread. If the controller's action should be executed in its own thread you have to wrap all
- * UI calls with RunInUIThread or {@link RunInUIThreadWithResult} to avoid invalid thread access
+ * executed in its own thread. If the controller's action should be executed in its own thread clients need to wrap all
+ * UI calls with RunInUIThread or {@link RunInUI#runWithResult} to avoid invalid thread access
  * exceptions.
  * 
  * 
@@ -112,18 +111,27 @@ public abstract class AbstractEMFStoreUIController<T> extends MonitoredEMFStoreA
 		if (isForked()) {
 			return RunInUI.runWithResult(new Callable<Boolean>() {
 				public Boolean call() throws Exception {
-					MessageDialog dialog = new MessageDialog(shell, title, null, message, MessageDialog.QUESTION,
-						new String[] { "Yes", "No" }, 0);
-					int result = dialog.open();
+					final MessageDialog dialog = new MessageDialog(shell,
+						title,
+						null,
+						message,
+						MessageDialog.QUESTION,
+						new String[] { Messages.AbstractEMFStoreUIController_Yes,
+							Messages.AbstractEMFStoreUIController_No },
+						0);
+					final int result = dialog.open();
 					return result == Window.OK;
 				}
 			});
-		} else {
-			MessageDialog dialog = new MessageDialog(shell, title, null, message, MessageDialog.QUESTION, new String[] {
-				"Yes", "No" }, 0);
-			int result = dialog.open();
-			return result == Window.OK;
 		}
+		final MessageDialog dialog = new MessageDialog(shell,
+			title,
+			null,
+			message,
+			MessageDialog.QUESTION,
+			new String[] { Messages.AbstractEMFStoreUIController_Yes, Messages.AbstractEMFStoreUIController_No },
+			0);
+		return dialog.open() == Window.OK;
 	}
 
 	@Override
@@ -133,12 +141,12 @@ public abstract class AbstractEMFStoreUIController<T> extends MonitoredEMFStoreA
 		if (isForked()) {
 			RunInUI.run(new Callable<Void>() {
 				public Void call() throws Exception {
-					MessageDialog.openError(getShell(), "Error", e.getMessage());
+					MessageDialog.openError(getShell(), Messages.AbstractEMFStoreUIController_Error, e.getMessage());
 					return null;
 				}
 			});
 		} else {
-			MessageDialog.openError(getShell(), "Error", e.getMessage());
+			MessageDialog.openError(getShell(), Messages.AbstractEMFStoreUIController_Error, e.getMessage());
 		}
 	}
 }

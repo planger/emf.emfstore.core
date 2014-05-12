@@ -11,6 +11,8 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.controller;
 
+import java.text.MessageFormat;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.emfstore.client.ESLocalProject;
 import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
@@ -36,13 +38,12 @@ public class UIRevertOperationController extends
 	 * @param shell
 	 *            the parent {@link Shell} to be used during the revert of the
 	 *            operations
-	 * @param projectSpace
+	 * @param localProject
 	 *            the {@link ProjectSpace} upon which to revert operations
 	 */
-	public UIRevertOperationController(Shell shell, ESLocalProject projectSpace) {
+	public UIRevertOperationController(Shell shell, ESLocalProject localProject) {
 		super(shell);
-		this.projectSpace = ((ESLocalProjectImpl) projectSpace)
-			.toInternalAPI();
+		this.projectSpace = ((ESLocalProjectImpl) localProject).toInternalAPI();
 	}
 
 	/**
@@ -54,15 +55,17 @@ public class UIRevertOperationController extends
 	@Override
 	public Void doRun(IProgressMonitor progressMonitor) throws ESException {
 
-		String message = "Do you really want to revert all your changes on project "
-			+ projectSpace.getProjectName() + "?";
+		final String message = MessageFormat.format(
+			Messages.UIRevertOperationController_RevertPrompt,
+			projectSpace.getProjectName());
 
-		if (confirm("Confirmation", message)) {
-			progressMonitor.beginTask("Revert project...", 100);
+		if (confirm(Messages.UIRevertOperationController_Confirmation, message)) {
+			progressMonitor.beginTask(Messages.UIRevertOperationController_RevertProject, 100);
 			progressMonitor.worked(10);
 			projectSpace.revert();
-			MessageDialog.openInformation(getShell(), "Revert",
-				"Reverted project ");
+			MessageDialog.openInformation(getShell(),
+				Messages.UIRevertOperationController_Revert,
+				Messages.UIRevertOperationController_ProjectReverted);
 		}
 
 		return null;

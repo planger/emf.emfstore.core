@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * emueller
+ * Edgar Mueller - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.controller;
 
@@ -59,20 +59,22 @@ public class UIManageOrgUnitsController extends
 	public Void doRun(IProgressMonitor progressMonitor) throws ESException {
 		try {
 			// TODO OTS
-			ESWorkspaceImpl workspace = ESWorkspaceProviderImpl.getInstance()
+			final ESWorkspaceImpl workspace = ESWorkspaceProviderImpl.getInstance()
 				.getWorkspace();
 			final AdminBroker adminBroker = workspace.toInternalAPI()
 				.getAdminBroker(session);
-			ManageOrgUnitsDialog dialog = new ManageOrgUnitsDialog(PlatformUI
+			final ManageOrgUnitsDialog dialog = new ManageOrgUnitsDialog(PlatformUI
 				.getWorkbench().getDisplay().getActiveShell(), adminBroker);
 			dialog.create();
 			dialog.open();
 		} catch (final AccessControlException e) {
-			MessageDialog.openError(getShell(), "Access denied ",
+			MessageDialog.openError(getShell(),
+				Messages.UIManageOrgUnitsController_AccessDenied,
 				e.getMessage());
 		} catch (final ESException e) {
 			MessageDialog.openError(getShell(),
-				"Error while retrieving the admin broker", e.getMessage());
+				Messages.UIManageOrgUnitsController_AdminBrokerError,
+				e.getMessage());
 		}
 
 		return null;
