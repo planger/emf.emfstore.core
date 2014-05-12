@@ -508,7 +508,7 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 	public void conflictSingleReferenceBothOpposite() {
 
 		final TestElement issue = Create.testElement();
-		final TestElement solution1  = Create.testElement();
+		final TestElement solution1 = Create.testElement();
 		final TestElement solution2 = Create.testElement();
 
 		new EMFStoreCommand() {
@@ -652,7 +652,7 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 				solution2inProject2.setContainedElement(issue22);
 			}
 		}.run(false);
-		
+
 		List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		List<AbstractOperation> ops2 = ps2.getOperations();
 
@@ -858,9 +858,9 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 		assertEquals(false, doConflict(set, add));
 		assertEquals(false, doConflict(add, set));
 	}
-	
+
 	private <T extends EObject> T addToProject(final T eObject) {
-		RunESCommand.run(new Callable<Void>() {			
+		RunESCommand.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				getProject().getModelElements().add(eObject);
 				return null;
@@ -868,7 +868,7 @@ public class ConflictDetectionReferenceTest extends ConflictDetectionTest {
 		});
 		return eObject;
 	}
-	
+
 	/**
 	 * Set vs remove - no conflict.
 	 */

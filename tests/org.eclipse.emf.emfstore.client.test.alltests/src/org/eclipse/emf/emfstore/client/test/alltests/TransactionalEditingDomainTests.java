@@ -12,7 +12,6 @@
 package org.eclipse.emf.emfstore.client.test.alltests;
 
 import org.junit.runner.RunWith;
-import org.junit.runners.Suite.SuiteClasses;
 
 /**
  * Test suite for all SWT, API and ChangeTracking Tests. Used for testing with

@@ -12,7 +12,6 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.server.startup;
 
-
 /**
  * Applies migrator to files on server.
  * 

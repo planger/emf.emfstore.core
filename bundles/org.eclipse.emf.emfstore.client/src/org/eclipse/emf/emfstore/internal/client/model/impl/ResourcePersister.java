@@ -290,7 +290,8 @@ public class ResourcePersister implements ESCommandObserver, IdEObjectCollection
 		final String modelElementId = collection.getModelElementId(modelElement).toString();
 
 		if (modelElementId == null) {
-			WorkspaceUtil.handleException(new IllegalStateException(Messages.ResourcePersister_MissingID + modelElement));
+			WorkspaceUtil
+				.handleException(new IllegalStateException(Messages.ResourcePersister_MissingID + modelElement));
 		}
 
 		return modelElementId;

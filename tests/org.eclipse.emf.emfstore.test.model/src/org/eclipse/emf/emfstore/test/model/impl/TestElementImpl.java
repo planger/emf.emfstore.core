@@ -40,31 +40,42 @@ import org.eclipse.emf.emfstore.test.model.TestmodelPackage;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getStrings <em>Strings</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getReferences <em>References</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getContainedElements <em>Contained Elements</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getReference <em>Reference</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getContainedElement <em>Contained Element</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getOtherReference <em>Other Reference</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getDescription <em>Description</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getContainer <em>Container</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getSrefContainer <em>Sref Container</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getElementMap <em>Element Map</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getStringToStringMap <em>String To String Map</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getElementToStringMap <em>Element To String Map</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getStringToElementMap <em>String To Element Map</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getNonContained_NTo1 <em>Non Contained NTo1</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getNonContained_1ToN <em>Non Contained 1To N</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getNonContained_NToM <em>Non Contained NTo M</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getNonContained_MToN <em>Non Contained MTo N</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getContainedElements2 <em>Contained Elements2</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getContainer2 <em>Container2</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getContainedElements_NoOpposite <em>Contained Elements No Opposite</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getContainedElement_NoOpposite <em>Contained Element No Opposite</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getName <em>Name</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getStrings <em>Strings</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getReferences <em>References</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getContainedElements <em>Contained Elements</em>}
+ * </li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getReference <em>Reference</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getContainedElement <em>Contained Element</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getOtherReference <em>Other Reference</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getDescription <em>Description</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getContainer <em>Container</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getSrefContainer <em>Sref Container</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getElementMap <em>Element Map</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getStringToStringMap <em>String To String Map
+ * </em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getElementToStringMap <em>Element To String Map
+ * </em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getStringToElementMap <em>String To Element Map
+ * </em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getNonContained_NTo1 <em>Non Contained NTo1</em>}
+ * </li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getNonContained_1ToN <em>Non Contained 1To N
+ * </em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getNonContained_NToM <em>Non Contained NTo M
+ * </em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getNonContained_MToN <em>Non Contained MTo N
+ * </em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getContainedElements2 <em>Contained Elements2
+ * </em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getContainer2 <em>Container2</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getContainedElements_NoOpposite <em>Contained
+ * Elements No Opposite</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getContainedElement_NoOpposite <em>Contained
+ * Element No Opposite</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @generated
  */
 public class TestElementImpl extends EObjectImpl implements TestElement {
@@ -72,6 +83,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -82,6 +94,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -92,6 +105,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	 * The cached value of the '{@link #getStrings() <em>Strings</em>}' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getStrings()
 	 * @generated
 	 * @ordered
@@ -102,6 +116,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	 * The cached value of the '{@link #getReferences() <em>References</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getReferences()
 	 * @generated
 	 * @ordered
@@ -112,6 +127,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	 * The cached value of the '{@link #getContainedElements() <em>Contained Elements</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getContainedElements()
 	 * @generated
 	 * @ordered
@@ -122,6 +138,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	 * The cached value of the '{@link #getReference() <em>Reference</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getReference()
 	 * @generated
 	 * @ordered
@@ -132,6 +149,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	 * The cached value of the '{@link #getContainedElement() <em>Contained Element</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getContainedElement()
 	 * @generated
 	 * @ordered
@@ -142,6 +160,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	 * The cached value of the '{@link #getOtherReference() <em>Other Reference</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getOtherReference()
 	 * @generated
 	 * @ordered
@@ -152,6 +171,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	 * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getDescription()
 	 * @generated
 	 * @ordered
@@ -162,6 +182,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	 * The cached value of the '{@link #getDescription() <em>Description</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getDescription()
 	 * @generated
 	 * @ordered
@@ -172,6 +193,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	 * The cached value of the '{@link #getElementMap() <em>Element Map</em>}' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getElementMap()
 	 * @generated
 	 * @ordered
@@ -182,6 +204,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	 * The cached value of the '{@link #getStringToStringMap() <em>String To String Map</em>}' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getStringToStringMap()
 	 * @generated
 	 * @ordered
@@ -192,6 +215,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	 * The cached value of the '{@link #getElementToStringMap() <em>Element To String Map</em>}' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getElementToStringMap()
 	 * @generated
 	 * @ordered
@@ -202,6 +226,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	 * The cached value of the '{@link #getStringToElementMap() <em>String To Element Map</em>}' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getStringToElementMap()
 	 * @generated
 	 * @ordered
@@ -212,6 +237,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	 * The cached value of the '{@link #getNonContained_NTo1() <em>Non Contained NTo1</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getNonContained_NTo1()
 	 * @generated
 	 * @ordered
@@ -222,6 +248,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	 * The cached value of the '{@link #getNonContained_1ToN() <em>Non Contained 1To N</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getNonContained_1ToN()
 	 * @generated
 	 * @ordered
@@ -232,6 +259,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	 * The cached value of the '{@link #getNonContained_NToM() <em>Non Contained NTo M</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getNonContained_NToM()
 	 * @generated
 	 * @ordered
@@ -242,6 +270,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	 * The cached value of the '{@link #getNonContained_MToN() <em>Non Contained MTo N</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getNonContained_MToN()
 	 * @generated
 	 * @ordered
@@ -249,9 +278,11 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	protected EList<TestElement> nonContained_MToN;
 
 	/**
-	 * The cached value of the '{@link #getContainedElements2() <em>Contained Elements2</em>}' containment reference list.
+	 * The cached value of the '{@link #getContainedElements2() <em>Contained Elements2</em>}' containment reference
+	 * list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getContainedElements2()
 	 * @generated
 	 * @ordered
@@ -259,9 +290,11 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	protected EList<TestElement> containedElements2;
 
 	/**
-	 * The cached value of the '{@link #getContainedElements_NoOpposite() <em>Contained Elements No Opposite</em>}' containment reference list.
+	 * The cached value of the '{@link #getContainedElements_NoOpposite() <em>Contained Elements No Opposite</em>}'
+	 * containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getContainedElements_NoOpposite()
 	 * @generated
 	 * @ordered
@@ -269,9 +302,11 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	protected EList<TestElement> containedElements_NoOpposite;
 
 	/**
-	 * The cached value of the '{@link #getContainedElement_NoOpposite() <em>Contained Element No Opposite</em>}' containment reference.
+	 * The cached value of the '{@link #getContainedElement_NoOpposite() <em>Contained Element No Opposite</em>}'
+	 * containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getContainedElement_NoOpposite()
 	 * @generated
 	 * @ordered
@@ -281,6 +316,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected TestElementImpl() {
@@ -290,6 +326,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -300,6 +337,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public String getName() {
@@ -309,6 +347,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setName(String newName) {
@@ -321,6 +360,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EList<String> getStrings() {
@@ -334,6 +374,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EList<TestElement> getReferences() {
@@ -348,6 +389,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EList<TestElement> getContainedElements() {
@@ -362,6 +404,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TestElement getReference() {
@@ -382,6 +425,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TestElement basicGetReference() {
@@ -391,6 +435,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setReference(TestElement newReference) {
@@ -404,6 +449,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TestElement getContainedElement() {
@@ -413,6 +459,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetContainedElement(TestElement newContainedElement, NotificationChain msgs) {
@@ -433,6 +480,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setContainedElement(TestElement newContainedElement) {
@@ -457,6 +505,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TestElement getOtherReference() {
@@ -477,6 +526,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TestElement basicGetOtherReference() {
@@ -486,6 +536,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setOtherReference(TestElement newOtherReference) {
@@ -499,6 +550,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public String getDescription() {
@@ -508,6 +560,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setDescription(String newDescription) {
@@ -521,6 +574,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TestElement getContainer() {
@@ -532,6 +586,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetContainer(TestElement newContainer, NotificationChain msgs) {
@@ -542,6 +597,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setContainer(TestElement newContainer) {
@@ -568,6 +624,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TestElement getSrefContainer() {
@@ -579,6 +636,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetSrefContainer(TestElement newSrefContainer, NotificationChain msgs) {
@@ -590,6 +648,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setSrefContainer(TestElement newSrefContainer) {
@@ -616,6 +675,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EMap<TestElement, TestElement> getElementMap() {
@@ -631,6 +691,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EMap<String, String> getStringToStringMap() {
@@ -645,6 +706,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EMap<TestElement, String> getElementToStringMap() {
@@ -660,6 +722,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EMap<String, TestElement> getStringToElementMap() {
@@ -675,6 +738,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TestElement getNonContained_NTo1() {
@@ -695,6 +759,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TestElement basicGetNonContained_NTo1() {
@@ -704,6 +769,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetNonContained_NTo1(TestElement newNonContained_NTo1, NotificationChain msgs) {
@@ -724,6 +790,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setNonContained_NTo1(TestElement newNonContained_NTo1) {
@@ -748,6 +815,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EList<TestElement> getNonContained_1ToN() {
@@ -762,6 +830,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EList<TestElement> getNonContained_NToM() {
@@ -776,6 +845,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EList<TestElement> getNonContained_MToN() {
@@ -790,6 +860,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EList<TestElement> getContainedElements2() {
@@ -804,6 +875,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TestElement getContainer2() {
@@ -815,6 +887,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetContainer2(TestElement newContainer2, NotificationChain msgs) {
@@ -825,6 +898,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setContainer2(TestElement newContainer2) {
@@ -851,6 +925,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EList<TestElement> getContainedElements_NoOpposite()
@@ -866,6 +941,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TestElement getContainedElement_NoOpposite()
@@ -876,6 +952,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetContainedElement_NoOpposite(TestElement newContainedElement_NoOpposite,
@@ -899,6 +976,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setContainedElement_NoOpposite(TestElement newContainedElement_NoOpposite)
@@ -925,6 +1003,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
@@ -976,6 +1055,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -1021,6 +1101,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -1043,6 +1124,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -1118,6 +1200,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
@@ -1206,6 +1289,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -1285,6 +1369,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -1342,6 +1427,7 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override

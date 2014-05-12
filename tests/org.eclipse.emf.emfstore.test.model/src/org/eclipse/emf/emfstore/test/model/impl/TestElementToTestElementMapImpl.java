@@ -12,17 +12,13 @@
 package org.eclipse.emf.emfstore.test.model.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.BasicEMap;
 import org.eclipse.emf.common.util.EMap;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-
 import org.eclipse.emf.emfstore.test.model.TestElement;
 import org.eclipse.emf.emfstore.test.model.TestmodelPackage;
 
@@ -33,11 +29,11 @@ import org.eclipse.emf.emfstore.test.model.TestmodelPackage;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementToTestElementMapImpl#getTypedValue <em>Value</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementToTestElementMapImpl#getTypedKey <em>Key</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementToTestElementMapImpl#getTypedValue <em>Value</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementToTestElementMapImpl#getTypedKey <em>Key</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @generated
  */
 public class TestElementToTestElementMapImpl extends EObjectImpl implements BasicEMap.Entry<TestElement, TestElement> {
@@ -45,6 +41,7 @@ public class TestElementToTestElementMapImpl extends EObjectImpl implements Basi
 	 * The cached value of the '{@link #getTypedValue() <em>Value</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getTypedValue()
 	 * @generated
 	 * @ordered
@@ -55,6 +52,7 @@ public class TestElementToTestElementMapImpl extends EObjectImpl implements Basi
 	 * The cached value of the '{@link #getTypedKey() <em>Key</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getTypedKey()
 	 * @generated
 	 * @ordered
@@ -64,6 +62,7 @@ public class TestElementToTestElementMapImpl extends EObjectImpl implements Basi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected TestElementToTestElementMapImpl() {
@@ -73,6 +72,7 @@ public class TestElementToTestElementMapImpl extends EObjectImpl implements Basi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -83,6 +83,7 @@ public class TestElementToTestElementMapImpl extends EObjectImpl implements Basi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TestElement getTypedValue() {
@@ -103,6 +104,7 @@ public class TestElementToTestElementMapImpl extends EObjectImpl implements Basi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TestElement basicGetTypedValue() {
@@ -112,6 +114,7 @@ public class TestElementToTestElementMapImpl extends EObjectImpl implements Basi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setTypedValue(TestElement newValue) {
@@ -125,6 +128,7 @@ public class TestElementToTestElementMapImpl extends EObjectImpl implements Basi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TestElement getTypedKey() {
@@ -145,6 +149,7 @@ public class TestElementToTestElementMapImpl extends EObjectImpl implements Basi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TestElement basicGetTypedKey() {
@@ -154,6 +159,7 @@ public class TestElementToTestElementMapImpl extends EObjectImpl implements Basi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setTypedKey(TestElement newKey) {
@@ -167,6 +173,7 @@ public class TestElementToTestElementMapImpl extends EObjectImpl implements Basi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -188,6 +195,7 @@ public class TestElementToTestElementMapImpl extends EObjectImpl implements Basi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -207,6 +215,7 @@ public class TestElementToTestElementMapImpl extends EObjectImpl implements Basi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -226,6 +235,7 @@ public class TestElementToTestElementMapImpl extends EObjectImpl implements Basi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -243,6 +253,7 @@ public class TestElementToTestElementMapImpl extends EObjectImpl implements Basi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected int hash = -1;
@@ -250,6 +261,7 @@ public class TestElementToTestElementMapImpl extends EObjectImpl implements Basi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public int getHash() {
@@ -264,6 +276,7 @@ public class TestElementToTestElementMapImpl extends EObjectImpl implements Basi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setHash(int hash) {
@@ -273,6 +286,7 @@ public class TestElementToTestElementMapImpl extends EObjectImpl implements Basi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TestElement getKey() {
@@ -282,6 +296,7 @@ public class TestElementToTestElementMapImpl extends EObjectImpl implements Basi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setKey(TestElement key) {
@@ -291,6 +306,7 @@ public class TestElementToTestElementMapImpl extends EObjectImpl implements Basi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TestElement getValue() {
@@ -300,6 +316,7 @@ public class TestElementToTestElementMapImpl extends EObjectImpl implements Basi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TestElement setValue(TestElement value) {
@@ -311,6 +328,7 @@ public class TestElementToTestElementMapImpl extends EObjectImpl implements Basi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
@@ -319,4 +337,4 @@ public class TestElementToTestElementMapImpl extends EObjectImpl implements Basi
 		return container == null ? null : (EMap<TestElement, TestElement>) container.eGet(eContainmentFeature());
 	}
 
-} //TestElementToTestElementMapImpl
+} // TestElementToTestElementMapImpl

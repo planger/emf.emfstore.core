@@ -13,6 +13,7 @@ package org.eclipse.emf.emfstore.internal.client.model.impl;
 
 import java.util.Collection;
 import java.util.Date;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;

@@ -64,7 +64,6 @@ public class InvalidArgumentsTest {
 
 	private static ESServer server;
 	private static ESUsersession session;
-	
 
 	/**
 	 * {@inheritDoc}
@@ -82,7 +81,7 @@ public class InvalidArgumentsTest {
 		ServerConfiguration.setTesting(true);
 		CommonUtil.setTesting(true);
 
-//		SetupHelper.addUserFileToServer(false);
+		// SetupHelper.addUserFileToServer(false);
 		connectionManager = new XmlRpcConnectionManager() {
 			@Override
 			protected XmlRpcClientManager getConnectionProxy(SessionId sessionId) throws UnknownSessionException {
@@ -101,10 +100,10 @@ public class InvalidArgumentsTest {
 			((ESServerImpl) server).toInternalAPI(), ((ESUsersessionImpl) session).toInternalAPI().getSessionId());
 		initArguments();
 	}
-	
+
 	@AfterClass
 	public static void afterClass() {
-		
+
 	}
 
 	// / FIXME

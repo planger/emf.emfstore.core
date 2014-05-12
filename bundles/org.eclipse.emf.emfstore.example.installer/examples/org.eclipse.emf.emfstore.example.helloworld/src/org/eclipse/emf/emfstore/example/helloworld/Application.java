@@ -129,7 +129,8 @@ public class Application implements IApplication {
 
 		// We start working now with the local project and later we will synchronize it with the copy of the project we
 		// just checked out.
-		// We create some EObjects and add them to the project, that is, to project�s containment tree. Everything that
+		// We create some EObjects and add them to the project, that is, to project�s containment tree. Everything
+		// that
 		// is
 		// in the project�s containment tree (spanning tree on containment references) is considered part of the
 		// project. We will use an example model about bowling.

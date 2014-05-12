@@ -122,9 +122,11 @@ public class UICreateRemoteProjectController extends AbstractEMFStoreUIControlle
 		} catch (final ESException e) {
 			RunInUI.run(new Callable<Void>() {
 				public Void call() throws Exception {
-					MessageDialog.openError(getShell(),
+					MessageDialog.openError(
+						getShell(),
 						Messages.UICreateRemoteProjectController_CreateProjectFailed_Title,
-						MessageFormat.format(Messages.UICreateRemoteProjectController_CreateProjectFailed_Message, e.getMessage()));
+						MessageFormat.format(Messages.UICreateRemoteProjectController_CreateProjectFailed_Message,
+							e.getMessage()));
 					return null;
 				}
 			});

@@ -15,7 +15,7 @@ import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Edgar
- *
+ * 
  */
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.emf.emfstore.client.test.common.util.messages"; //$NON-NLS-1$

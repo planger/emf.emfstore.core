@@ -12,6 +12,7 @@
 package org.eclipse.emf.emfstore.test.model.impl;
 
 import java.util.Map;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -25,6 +26,7 @@ import org.eclipse.emf.emfstore.test.model.TestmodelPackage;
  * <!-- begin-user-doc -->
  * An implementation of the model <b>Factory</b>.
  * <!-- end-user-doc -->
+ * 
  * @generated
  */
 public class TestmodelFactoryImpl extends EFactoryImpl implements TestmodelFactory {
@@ -32,6 +34,7 @@ public class TestmodelFactoryImpl extends EFactoryImpl implements TestmodelFacto
 	 * Creates the default factory implementation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public static TestmodelFactory init() {
@@ -54,6 +57,7 @@ public class TestmodelFactoryImpl extends EFactoryImpl implements TestmodelFacto
 	 * Creates an instance of the factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TestmodelFactoryImpl() {
@@ -63,6 +67,7 @@ public class TestmodelFactoryImpl extends EFactoryImpl implements TestmodelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -87,6 +92,7 @@ public class TestmodelFactoryImpl extends EFactoryImpl implements TestmodelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TestElement createTestElement() {
@@ -97,6 +103,7 @@ public class TestmodelFactoryImpl extends EFactoryImpl implements TestmodelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public Map.Entry<TestElement, String> createTestElementToStringMap() {
@@ -107,6 +114,7 @@ public class TestmodelFactoryImpl extends EFactoryImpl implements TestmodelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public Map.Entry<String, String> createStringToStringMap() {
@@ -117,6 +125,7 @@ public class TestmodelFactoryImpl extends EFactoryImpl implements TestmodelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public Map.Entry<TestElement, TestElement> createTestElementToTestElementMap() {
@@ -127,6 +136,7 @@ public class TestmodelFactoryImpl extends EFactoryImpl implements TestmodelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public Map.Entry<String, TestElement> createStringToTestElementMap() {
@@ -137,6 +147,7 @@ public class TestmodelFactoryImpl extends EFactoryImpl implements TestmodelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TestmodelPackage getTestmodelPackage() {
@@ -146,6 +157,7 @@ public class TestmodelFactoryImpl extends EFactoryImpl implements TestmodelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @deprecated
 	 * @generated
 	 */

@@ -10,17 +10,16 @@ import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACUser;
 import org.eclipse.emf.emfstore.internal.server.model.dao.ACDAOFacade;
 
 public class DAOFacadeMock implements ACDAOFacade {
-	
+
 	private List<ACUser> users;
 	private List<ACGroup> groups;
 	private List<ProjectHistory> projects;
-	
+
 	public DAOFacadeMock() {
 		users = new ArrayList<ACUser>();
 		groups = new ArrayList<ACGroup>();
 		projects = new ArrayList<ProjectHistory>();
 	}
-	
 
 	public List<ACUser> getUsers() {
 		return users;
@@ -46,25 +45,20 @@ public class DAOFacadeMock implements ACDAOFacade {
 		groups.remove(group);
 	}
 
-
 	public void save() throws IOException {
-		
-	}
 
+	}
 
 	public void add(ProjectHistory history) {
 		projects.add(history);
 	}
 
-
 	public List<ProjectHistory> getProjects() {
 		return projects;
 	}
 
-
 	public void remove(ProjectHistory history) {
 		projects.remove(history);
 	}
-
 
 }

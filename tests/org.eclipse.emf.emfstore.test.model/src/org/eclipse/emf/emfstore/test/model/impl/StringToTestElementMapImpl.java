@@ -12,17 +12,13 @@
 package org.eclipse.emf.emfstore.test.model.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.BasicEMap;
 import org.eclipse.emf.common.util.EMap;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-
 import org.eclipse.emf.emfstore.test.model.TestElement;
 import org.eclipse.emf.emfstore.test.model.TestmodelPackage;
 
@@ -33,11 +29,11 @@ import org.eclipse.emf.emfstore.test.model.TestmodelPackage;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.impl.StringToTestElementMapImpl#getTypedValue <em>Value</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.impl.StringToTestElementMapImpl#getTypedKey <em>Key</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.StringToTestElementMapImpl#getTypedValue <em>Value</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.StringToTestElementMapImpl#getTypedKey <em>Key</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @generated
  */
 public class StringToTestElementMapImpl extends EObjectImpl implements BasicEMap.Entry<String, TestElement> {
@@ -45,6 +41,7 @@ public class StringToTestElementMapImpl extends EObjectImpl implements BasicEMap
 	 * The cached value of the '{@link #getTypedValue() <em>Value</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getTypedValue()
 	 * @generated
 	 * @ordered
@@ -55,6 +52,7 @@ public class StringToTestElementMapImpl extends EObjectImpl implements BasicEMap
 	 * The default value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getTypedKey()
 	 * @generated
 	 * @ordered
@@ -65,6 +63,7 @@ public class StringToTestElementMapImpl extends EObjectImpl implements BasicEMap
 	 * The cached value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getTypedKey()
 	 * @generated
 	 * @ordered
@@ -74,6 +73,7 @@ public class StringToTestElementMapImpl extends EObjectImpl implements BasicEMap
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected StringToTestElementMapImpl() {
@@ -83,6 +83,7 @@ public class StringToTestElementMapImpl extends EObjectImpl implements BasicEMap
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -93,6 +94,7 @@ public class StringToTestElementMapImpl extends EObjectImpl implements BasicEMap
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TestElement getTypedValue() {
@@ -113,6 +115,7 @@ public class StringToTestElementMapImpl extends EObjectImpl implements BasicEMap
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TestElement basicGetTypedValue() {
@@ -122,6 +125,7 @@ public class StringToTestElementMapImpl extends EObjectImpl implements BasicEMap
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setTypedValue(TestElement newValue) {
@@ -135,6 +139,7 @@ public class StringToTestElementMapImpl extends EObjectImpl implements BasicEMap
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public String getTypedKey() {
@@ -144,6 +149,7 @@ public class StringToTestElementMapImpl extends EObjectImpl implements BasicEMap
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setTypedKey(String newKey) {
@@ -157,6 +163,7 @@ public class StringToTestElementMapImpl extends EObjectImpl implements BasicEMap
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -176,6 +183,7 @@ public class StringToTestElementMapImpl extends EObjectImpl implements BasicEMap
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -195,6 +203,7 @@ public class StringToTestElementMapImpl extends EObjectImpl implements BasicEMap
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -214,6 +223,7 @@ public class StringToTestElementMapImpl extends EObjectImpl implements BasicEMap
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -231,6 +241,7 @@ public class StringToTestElementMapImpl extends EObjectImpl implements BasicEMap
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -248,6 +259,7 @@ public class StringToTestElementMapImpl extends EObjectImpl implements BasicEMap
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected int hash = -1;
@@ -255,6 +267,7 @@ public class StringToTestElementMapImpl extends EObjectImpl implements BasicEMap
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public int getHash() {
@@ -269,6 +282,7 @@ public class StringToTestElementMapImpl extends EObjectImpl implements BasicEMap
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setHash(int hash) {
@@ -278,6 +292,7 @@ public class StringToTestElementMapImpl extends EObjectImpl implements BasicEMap
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public String getKey() {
@@ -287,6 +302,7 @@ public class StringToTestElementMapImpl extends EObjectImpl implements BasicEMap
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setKey(String key) {
@@ -296,6 +312,7 @@ public class StringToTestElementMapImpl extends EObjectImpl implements BasicEMap
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TestElement getValue() {
@@ -305,6 +322,7 @@ public class StringToTestElementMapImpl extends EObjectImpl implements BasicEMap
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TestElement setValue(TestElement value) {
@@ -316,6 +334,7 @@ public class StringToTestElementMapImpl extends EObjectImpl implements BasicEMap
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
@@ -324,4 +343,4 @@ public class StringToTestElementMapImpl extends EObjectImpl implements BasicEMap
 		return container == null ? null : (EMap<String, TestElement>) container.eGet(eContainmentFeature());
 	}
 
-} //StringToTestElementMapImpl
+} // StringToTestElementMapImpl

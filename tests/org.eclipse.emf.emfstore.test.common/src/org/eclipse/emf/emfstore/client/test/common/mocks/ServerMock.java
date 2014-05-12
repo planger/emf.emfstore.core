@@ -27,7 +27,7 @@ public class ServerMock {
 	public void setServer(ESServer server) {
 		this.server = server;
 	}
-	
+
 	public ProjectHistory getHistory(ESLocalProject localProject) {
 		ESLocalProjectImpl projectImpl = ESLocalProjectImpl.class.cast(localProject);
 		final ProjectId id = projectImpl.toInternalAPI().getProjectId();

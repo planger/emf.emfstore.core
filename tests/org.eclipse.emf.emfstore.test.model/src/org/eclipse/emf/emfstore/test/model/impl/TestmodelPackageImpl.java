@@ -17,9 +17,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-
 import org.eclipse.emf.emfstore.test.model.TestElement;
 import org.eclipse.emf.emfstore.test.model.TestmodelFactory;
 import org.eclipse.emf.emfstore.test.model.TestmodelPackage;
@@ -28,12 +26,14 @@ import org.eclipse.emf.emfstore.test.model.TestmodelPackage;
  * <!-- begin-user-doc -->
  * An implementation of the model <b>Package</b>.
  * <!-- end-user-doc -->
+ * 
  * @generated
  */
 public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPackage {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	private EClass testElementEClass = null;
@@ -41,6 +41,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	private EClass testElementToStringMapEClass = null;
@@ -48,6 +49,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	private EClass stringToStringMapEClass = null;
@@ -55,6 +57,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	private EClass testElementToTestElementMapEClass = null;
@@ -62,20 +65,20 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	private EClass stringToTestElementMapEClass = null;
 
 	/**
-	 * Creates an instance of the model <b>Package</b>, registered with
-	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
+	 * Creates an instance of the model <b>Package</b>, registered with {@link org.eclipse.emf.ecore.EPackage.Registry
+	 * EPackage.Registry} by the package
 	 * package URI value.
-	 * <p>Note: the correct way to create the package is via the static
-	 * factory method {@link #init init()}, which also performs
-	 * initialization of the package, or returns the registered package,
-	 * if one already exists.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <p>
+	 * Note: the correct way to create the package is via the static factory method {@link #init init()}, which also
+	 * performs initialization of the package, or returns the registered package, if one already exists. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
 	 * @see org.eclipse.emf.emfstore.test.model.TestmodelPackage#eNS_URI
 	 * @see #init()
@@ -88,6 +91,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	private static boolean isInited = false;
@@ -95,10 +99,11 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
 	 * 
-	 * <p>This method is used to initialize {@link TestmodelPackage#eINSTANCE} when that field is accessed.
-	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <p>
+	 * This method is used to initialize {@link TestmodelPackage#eINSTANCE} when that field is accessed. Clients should
+	 * not invoke it directly. Instead, they should simply access that field to obtain the package. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
+	 * 
 	 * @see #eNS_URI
 	 * @see #createPackageContents()
 	 * @see #initializePackageContents()
@@ -110,7 +115,8 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 
 		// Obtain or create and register package
 		TestmodelPackageImpl theTestmodelPackage = (TestmodelPackageImpl) (EPackage.Registry.INSTANCE.get(eNS_URI) instanceof TestmodelPackageImpl ? EPackage.Registry.INSTANCE
-			.get(eNS_URI) : new TestmodelPackageImpl());
+			.get(eNS_URI)
+			: new TestmodelPackageImpl());
 
 		isInited = true;
 
@@ -131,6 +137,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EClass getTestElement() {
@@ -140,6 +147,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EAttribute getTestElement_Name() {
@@ -149,6 +157,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EAttribute getTestElement_Strings() {
@@ -158,6 +167,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getTestElement_References() {
@@ -167,6 +177,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getTestElement_ContainedElements() {
@@ -176,6 +187,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getTestElement_Reference() {
@@ -185,6 +197,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getTestElement_ContainedElement() {
@@ -194,6 +207,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getTestElement_OtherReference() {
@@ -203,6 +217,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EAttribute getTestElement_Description() {
@@ -212,6 +227,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getTestElement_Container() {
@@ -221,6 +237,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getTestElement_SrefContainer() {
@@ -230,6 +247,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getTestElement_ElementMap() {
@@ -239,6 +257,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getTestElement_StringToStringMap() {
@@ -248,6 +267,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getTestElement_ElementToStringMap() {
@@ -257,6 +277,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getTestElement_StringToElementMap() {
@@ -266,6 +287,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getTestElement_NonContained_NTo1() {
@@ -275,6 +297,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getTestElement_NonContained_1ToN() {
@@ -284,6 +307,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getTestElement_NonContained_NToM() {
@@ -293,6 +317,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getTestElement_NonContained_MToN() {
@@ -302,6 +327,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getTestElement_ContainedElements2() {
@@ -311,6 +337,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getTestElement_Container2() {
@@ -320,6 +347,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getTestElement_ContainedElements_NoOpposite()
@@ -330,6 +358,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getTestElement_ContainedElement_NoOpposite()
@@ -340,6 +369,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EClass getTestElementToStringMap() {
@@ -349,6 +379,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EAttribute getTestElementToStringMap_Value() {
@@ -358,6 +389,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getTestElementToStringMap_Key() {
@@ -367,6 +399,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EClass getStringToStringMap() {
@@ -376,6 +409,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EAttribute getStringToStringMap_Key() {
@@ -385,6 +419,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EAttribute getStringToStringMap_Value() {
@@ -394,6 +429,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EClass getTestElementToTestElementMap() {
@@ -403,6 +439,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getTestElementToTestElementMap_Value() {
@@ -412,6 +449,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getTestElementToTestElementMap_Key() {
@@ -421,6 +459,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EClass getStringToTestElementMap() {
@@ -430,6 +469,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getStringToTestElementMap_Value() {
@@ -439,6 +479,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EAttribute getStringToTestElementMap_Key() {
@@ -448,6 +489,7 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TestmodelFactory getTestmodelFactory() {
@@ -457,15 +499,17 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	private boolean isCreated = false;
 
 	/**
-	 * Creates the meta-model objects for the package.  This method is
+	 * Creates the meta-model objects for the package. This method is
 	 * guarded to have no affect on any invocation but its first.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void createPackageContents() {
@@ -518,15 +562,17 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	private boolean isInitialized = false;
 
 	/**
-	 * Complete the initialization of the package and its meta-model.  This
+	 * Complete the initialization of the package and its meta-model. This
 	 * method is guarded to have no affect on any invocation but its first.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void initializePackageContents() {
@@ -709,4 +755,4 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 		createResource(eNS_URI);
 	}
 
-} //TestmodelPackageImpl
+} // TestmodelPackageImpl

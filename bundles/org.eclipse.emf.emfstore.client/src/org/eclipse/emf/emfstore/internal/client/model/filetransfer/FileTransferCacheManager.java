@@ -14,7 +14,6 @@ package org.eclipse.emf.emfstore.internal.client.model.filetransfer;
 import java.io.File;
 import java.io.IOException;
 
-import org.eclipse.emf.emfstore.internal.client.configuration.FileInfo;
 import org.eclipse.emf.emfstore.internal.client.model.Configuration;
 import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
 import org.eclipse.emf.emfstore.internal.client.provider.XMIClientURIConverter;

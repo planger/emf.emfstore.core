@@ -58,18 +58,18 @@ public abstract class ConflictDetectionTest extends ESTest {
 
 	public Set<AbstractOperation> getConflicts(final List<AbstractOperation> ops1, final List<AbstractOperation> ops2,
 		Project project) {
-		
+
 		final ChangePackage changePackage1 = VersioningFactory.eINSTANCE.createChangePackage();
 		final ChangePackage changePackage2 = VersioningFactory.eINSTANCE.createChangePackage();
-		
+
 		RunESCommand.run(new ESVoidCallable() {
 			@Override
 			public void run() {
 				changePackage1.getOperations().addAll(ops1);
-				changePackage2.getOperations().addAll(ops2);				
+				changePackage2.getOperations().addAll(ops2);
 			}
 		});
-		
+
 		final ChangeConflictSet conflicts = new ConflictDetector().calculateConflicts(Arrays.asList(changePackage1),
 			Arrays.asList(changePackage2), project);
 		final LinkedHashSet<AbstractOperation> result = new LinkedHashSet<AbstractOperation>();
@@ -93,7 +93,5 @@ public abstract class ConflictDetectionTest extends ESTest {
 			}
 		}.run(false);
 	}
-
-	
 
 }

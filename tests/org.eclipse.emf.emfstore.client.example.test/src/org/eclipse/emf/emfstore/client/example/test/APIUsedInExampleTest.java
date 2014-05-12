@@ -27,12 +27,12 @@ import org.junit.Test;
  * 
  */
 public class APIUsedInExampleTest extends ESTestWithLoggedInUser {
-	
+
 	@BeforeClass
 	public static void beforeClass() {
 		startEMFStore();
 	}
-	
+
 	@AfterClass
 	public static void afterClass() {
 		stopEMFStore();

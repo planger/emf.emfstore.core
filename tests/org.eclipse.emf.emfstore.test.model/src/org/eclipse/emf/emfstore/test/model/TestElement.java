@@ -13,42 +13,43 @@ package org.eclipse.emf.emfstore.test.model;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Test Element</b></em>'.
  * <!-- end-user-doc -->
- *
+ * 
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getStrings <em>Strings</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getReferences <em>References</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainedElements <em>Contained Elements</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getReference <em>Reference</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainedElement <em>Contained Element</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getOtherReference <em>Other Reference</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getDescription <em>Description</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainer <em>Container</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getSrefContainer <em>Sref Container</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getElementMap <em>Element Map</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getStringToStringMap <em>String To String Map</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getElementToStringMap <em>Element To String Map</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getStringToElementMap <em>String To Element Map</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getNonContained_NTo1 <em>Non Contained NTo1</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getNonContained_1ToN <em>Non Contained 1To N</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getNonContained_NToM <em>Non Contained NTo M</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getNonContained_MToN <em>Non Contained MTo N</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainedElements2 <em>Contained Elements2</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainer2 <em>Container2</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainedElements_NoOpposite <em>Contained Elements No Opposite</em>}</li>
- *   <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainedElement_NoOpposite <em>Contained Element No Opposite</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getName <em>Name</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getStrings <em>Strings</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getReferences <em>References</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainedElements <em>Contained Elements</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getReference <em>Reference</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainedElement <em>Contained Element</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getOtherReference <em>Other Reference</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getDescription <em>Description</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainer <em>Container</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getSrefContainer <em>Sref Container</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getElementMap <em>Element Map</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getStringToStringMap <em>String To String Map</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getElementToStringMap <em>Element To String Map</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getStringToElementMap <em>String To Element Map</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getNonContained_NTo1 <em>Non Contained NTo1</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getNonContained_1ToN <em>Non Contained 1To N</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getNonContained_NToM <em>Non Contained NTo M</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getNonContained_MToN <em>Non Contained MTo N</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainedElements2 <em>Contained Elements2</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainer2 <em>Container2</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainedElements_NoOpposite <em>Contained Elements No
+ * Opposite</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainedElement_NoOpposite <em>Contained Element No
+ * Opposite</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @see org.eclipse.emf.emfstore.test.model.TestmodelPackage#getTestElement()
  * @model
  * @generated
@@ -58,10 +59,10 @@ public interface TestElement extends EObject {
 	 * Returns the value of the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Name</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Name</em>' attribute isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see #setName(String)
 	 * @see org.eclipse.emf.emfstore.test.model.TestmodelPackage#getTestElement_Name()
@@ -74,6 +75,7 @@ public interface TestElement extends EObject {
 	 * Sets the value of the '{@link org.eclipse.emf.emfstore.test.model.TestElement#getName <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Name</em>' attribute.
 	 * @see #getName()
 	 * @generated
@@ -85,10 +87,11 @@ public interface TestElement extends EObject {
 	 * The list contents are of type {@link java.lang.String}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Strings</em>' attribute list isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Strings</em>' attribute list isn't clear, there really should be more of a description
+	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Strings</em>' attribute list.
 	 * @see org.eclipse.emf.emfstore.test.model.TestmodelPackage#getTestElement_Strings()
 	 * @model
@@ -101,10 +104,11 @@ public interface TestElement extends EObject {
 	 * The list contents are of type {@link org.eclipse.emf.emfstore.test.model.TestElement}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>References</em>' reference list isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>References</em>' reference list isn't clear, there really should be more of a
+	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>References</em>' reference list.
 	 * @see org.eclipse.emf.emfstore.test.model.TestmodelPackage#getTestElement_References()
 	 * @model
@@ -115,13 +119,15 @@ public interface TestElement extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Contained Elements</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.emf.emfstore.test.model.TestElement}.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainer <em>Container</em>}'.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainer
+	 * <em>Container</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Contained Elements</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Contained Elements</em>' containment reference list isn't clear, there really should
+	 * be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Contained Elements</em>' containment reference list.
 	 * @see org.eclipse.emf.emfstore.test.model.TestmodelPackage#getTestElement_ContainedElements()
 	 * @see org.eclipse.emf.emfstore.test.model.TestElement#getContainer
@@ -134,10 +140,11 @@ public interface TestElement extends EObject {
 	 * Returns the value of the '<em><b>Reference</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Reference</em>' reference isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Reference</em>' reference isn't clear, there really should be more of a description
+	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Reference</em>' reference.
 	 * @see #setReference(TestElement)
 	 * @see org.eclipse.emf.emfstore.test.model.TestmodelPackage#getTestElement_Reference()
@@ -147,9 +154,11 @@ public interface TestElement extends EObject {
 	TestElement getReference();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.emf.emfstore.test.model.TestElement#getReference <em>Reference</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.emf.emfstore.test.model.TestElement#getReference <em>Reference</em>}'
+	 * reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Reference</em>' reference.
 	 * @see #getReference()
 	 * @generated
@@ -158,13 +167,15 @@ public interface TestElement extends EObject {
 
 	/**
 	 * Returns the value of the '<em><b>Contained Element</b></em>' containment reference.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.emf.emfstore.test.model.TestElement#getSrefContainer <em>Sref Container</em>}'.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.emf.emfstore.test.model.TestElement#getSrefContainer
+	 * <em>Sref Container</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Contained Element</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Contained Element</em>' containment reference isn't clear, there really should be more
+	 * of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Contained Element</em>' containment reference.
 	 * @see #setContainedElement(TestElement)
 	 * @see org.eclipse.emf.emfstore.test.model.TestmodelPackage#getTestElement_ContainedElement()
@@ -175,9 +186,11 @@ public interface TestElement extends EObject {
 	TestElement getContainedElement();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainedElement <em>Contained Element</em>}' containment reference.
+	 * Sets the value of the '{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainedElement
+	 * <em>Contained Element</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Contained Element</em>' containment reference.
 	 * @see #getContainedElement()
 	 * @generated
@@ -188,10 +201,11 @@ public interface TestElement extends EObject {
 	 * Returns the value of the '<em><b>Other Reference</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Other Reference</em>' reference isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Other Reference</em>' reference isn't clear, there really should be more of a
+	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Other Reference</em>' reference.
 	 * @see #setOtherReference(TestElement)
 	 * @see org.eclipse.emf.emfstore.test.model.TestmodelPackage#getTestElement_OtherReference()
@@ -201,9 +215,11 @@ public interface TestElement extends EObject {
 	TestElement getOtherReference();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.emf.emfstore.test.model.TestElement#getOtherReference <em>Other Reference</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.emf.emfstore.test.model.TestElement#getOtherReference
+	 * <em>Other Reference</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Other Reference</em>' reference.
 	 * @see #getOtherReference()
 	 * @generated
@@ -214,10 +230,11 @@ public interface TestElement extends EObject {
 	 * Returns the value of the '<em><b>Description</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Description</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Description</em>' attribute isn't clear, there really should be more of a description
+	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Description</em>' attribute.
 	 * @see #setDescription(String)
 	 * @see org.eclipse.emf.emfstore.test.model.TestmodelPackage#getTestElement_Description()
@@ -227,9 +244,11 @@ public interface TestElement extends EObject {
 	String getDescription();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.emf.emfstore.test.model.TestElement#getDescription <em>Description</em>}' attribute.
+	 * Sets the value of the '{@link org.eclipse.emf.emfstore.test.model.TestElement#getDescription
+	 * <em>Description</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Description</em>' attribute.
 	 * @see #getDescription()
 	 * @generated
@@ -238,13 +257,15 @@ public interface TestElement extends EObject {
 
 	/**
 	 * Returns the value of the '<em><b>Container</b></em>' container reference.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainedElements <em>Contained Elements</em>}'.
+	 * It is bidirectional and its opposite is '
+	 * {@link org.eclipse.emf.emfstore.test.model.TestElement#getContainedElements <em>Contained Elements</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Container</em>' container reference isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Container</em>' container reference isn't clear, there really should be more of a
+	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Container</em>' container reference.
 	 * @see #setContainer(TestElement)
 	 * @see org.eclipse.emf.emfstore.test.model.TestmodelPackage#getTestElement_Container()
@@ -255,9 +276,11 @@ public interface TestElement extends EObject {
 	TestElement getContainer();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainer <em>Container</em>}' container reference.
+	 * Sets the value of the '{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainer <em>Container</em>}'
+	 * container reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Container</em>' container reference.
 	 * @see #getContainer()
 	 * @generated
@@ -266,13 +289,15 @@ public interface TestElement extends EObject {
 
 	/**
 	 * Returns the value of the '<em><b>Sref Container</b></em>' container reference.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainedElement <em>Contained Element</em>}'.
+	 * It is bidirectional and its opposite is '
+	 * {@link org.eclipse.emf.emfstore.test.model.TestElement#getContainedElement <em>Contained Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Sref Container</em>' container reference isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Sref Container</em>' container reference isn't clear, there really should be more of a
+	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Sref Container</em>' container reference.
 	 * @see #setSrefContainer(TestElement)
 	 * @see org.eclipse.emf.emfstore.test.model.TestmodelPackage#getTestElement_SrefContainer()
@@ -283,9 +308,11 @@ public interface TestElement extends EObject {
 	TestElement getSrefContainer();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.emf.emfstore.test.model.TestElement#getSrefContainer <em>Sref Container</em>}' container reference.
+	 * Sets the value of the '{@link org.eclipse.emf.emfstore.test.model.TestElement#getSrefContainer
+	 * <em>Sref Container</em>}' container reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Sref Container</em>' container reference.
 	 * @see #getSrefContainer()
 	 * @generated
@@ -298,13 +325,15 @@ public interface TestElement extends EObject {
 	 * and the value is of type {@link org.eclipse.emf.emfstore.test.model.TestElement},
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Element Map</em>' map isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Element Map</em>' map isn't clear, there really should be more of a description
+	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Element Map</em>' map.
 	 * @see org.eclipse.emf.emfstore.test.model.TestmodelPackage#getTestElement_ElementMap()
-	 * @model mapType="org.eclipse.emf.emfstore.test.model.TestElementToTestElementMap<org.eclipse.emf.emfstore.test.model.TestElement, org.eclipse.emf.emfstore.test.model.TestElement>"
+	 * @model mapType=
+	 *        "org.eclipse.emf.emfstore.test.model.TestElementToTestElementMap<org.eclipse.emf.emfstore.test.model.TestElement, org.eclipse.emf.emfstore.test.model.TestElement>"
 	 * @generated
 	 */
 	EMap<TestElement, TestElement> getElementMap();
@@ -315,13 +344,15 @@ public interface TestElement extends EObject {
 	 * and the value is of type {@link java.lang.String},
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>String To String Map</em>' map isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>String To String Map</em>' map isn't clear, there really should be more of a
+	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>String To String Map</em>' map.
 	 * @see org.eclipse.emf.emfstore.test.model.TestmodelPackage#getTestElement_StringToStringMap()
-	 * @model mapType="org.eclipse.emf.emfstore.test.model.StringToStringMap<org.eclipse.emf.ecore.EString, org.eclipse.emf.ecore.EString>"
+	 * @model mapType=
+	 *        "org.eclipse.emf.emfstore.test.model.StringToStringMap<org.eclipse.emf.ecore.EString, org.eclipse.emf.ecore.EString>"
 	 * @generated
 	 */
 	EMap<String, String> getStringToStringMap();
@@ -332,13 +363,15 @@ public interface TestElement extends EObject {
 	 * and the value is of type {@link java.lang.String},
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Element To String Map</em>' map isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Element To String Map</em>' map isn't clear, there really should be more of a
+	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Element To String Map</em>' map.
 	 * @see org.eclipse.emf.emfstore.test.model.TestmodelPackage#getTestElement_ElementToStringMap()
-	 * @model mapType="org.eclipse.emf.emfstore.test.model.TestElementToStringMap<org.eclipse.emf.emfstore.test.model.TestElement, org.eclipse.emf.ecore.EString>"
+	 * @model mapType=
+	 *        "org.eclipse.emf.emfstore.test.model.TestElementToStringMap<org.eclipse.emf.emfstore.test.model.TestElement, org.eclipse.emf.ecore.EString>"
 	 * @generated
 	 */
 	EMap<TestElement, String> getElementToStringMap();
@@ -349,26 +382,30 @@ public interface TestElement extends EObject {
 	 * and the value is of type {@link org.eclipse.emf.emfstore.test.model.TestElement},
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>String To Element Map</em>' map isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>String To Element Map</em>' map isn't clear, there really should be more of a
+	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>String To Element Map</em>' map.
 	 * @see org.eclipse.emf.emfstore.test.model.TestmodelPackage#getTestElement_StringToElementMap()
-	 * @model mapType="org.eclipse.emf.emfstore.test.model.StringToTestElementMap<org.eclipse.emf.ecore.EString, org.eclipse.emf.emfstore.test.model.TestElement>"
+	 * @model mapType=
+	 *        "org.eclipse.emf.emfstore.test.model.StringToTestElementMap<org.eclipse.emf.ecore.EString, org.eclipse.emf.emfstore.test.model.TestElement>"
 	 * @generated
 	 */
 	EMap<String, TestElement> getStringToElementMap();
 
 	/**
 	 * Returns the value of the '<em><b>Non Contained NTo1</b></em>' reference.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.emf.emfstore.test.model.TestElement#getNonContained_1ToN <em>Non Contained 1To N</em>}'.
+	 * It is bidirectional and its opposite is '
+	 * {@link org.eclipse.emf.emfstore.test.model.TestElement#getNonContained_1ToN <em>Non Contained 1To N</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Non Contained NTo1</em>' reference isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Non Contained NTo1</em>' reference isn't clear, there really should be more of a
+	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Non Contained NTo1</em>' reference.
 	 * @see #setNonContained_NTo1(TestElement)
 	 * @see org.eclipse.emf.emfstore.test.model.TestmodelPackage#getTestElement_NonContained_NTo1()
@@ -379,9 +416,11 @@ public interface TestElement extends EObject {
 	TestElement getNonContained_NTo1();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.emf.emfstore.test.model.TestElement#getNonContained_NTo1 <em>Non Contained NTo1</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.emf.emfstore.test.model.TestElement#getNonContained_NTo1
+	 * <em>Non Contained NTo1</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Non Contained NTo1</em>' reference.
 	 * @see #getNonContained_NTo1()
 	 * @generated
@@ -391,13 +430,15 @@ public interface TestElement extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Non Contained 1To N</b></em>' reference list.
 	 * The list contents are of type {@link org.eclipse.emf.emfstore.test.model.TestElement}.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.emf.emfstore.test.model.TestElement#getNonContained_NTo1 <em>Non Contained NTo1</em>}'.
+	 * It is bidirectional and its opposite is '
+	 * {@link org.eclipse.emf.emfstore.test.model.TestElement#getNonContained_NTo1 <em>Non Contained NTo1</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Non Contained 1To N</em>' reference list isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Non Contained 1To N</em>' reference list isn't clear, there really should be more of a
+	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Non Contained 1To N</em>' reference list.
 	 * @see org.eclipse.emf.emfstore.test.model.TestmodelPackage#getTestElement_NonContained_1ToN()
 	 * @see org.eclipse.emf.emfstore.test.model.TestElement#getNonContained_NTo1
@@ -409,13 +450,15 @@ public interface TestElement extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Non Contained NTo M</b></em>' reference list.
 	 * The list contents are of type {@link org.eclipse.emf.emfstore.test.model.TestElement}.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.emf.emfstore.test.model.TestElement#getNonContained_MToN <em>Non Contained MTo N</em>}'.
+	 * It is bidirectional and its opposite is '
+	 * {@link org.eclipse.emf.emfstore.test.model.TestElement#getNonContained_MToN <em>Non Contained MTo N</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Non Contained NTo M</em>' reference list isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Non Contained NTo M</em>' reference list isn't clear, there really should be more of a
+	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Non Contained NTo M</em>' reference list.
 	 * @see org.eclipse.emf.emfstore.test.model.TestmodelPackage#getTestElement_NonContained_NToM()
 	 * @see org.eclipse.emf.emfstore.test.model.TestElement#getNonContained_MToN
@@ -427,13 +470,15 @@ public interface TestElement extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Non Contained MTo N</b></em>' reference list.
 	 * The list contents are of type {@link org.eclipse.emf.emfstore.test.model.TestElement}.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.emf.emfstore.test.model.TestElement#getNonContained_NToM <em>Non Contained NTo M</em>}'.
+	 * It is bidirectional and its opposite is '
+	 * {@link org.eclipse.emf.emfstore.test.model.TestElement#getNonContained_NToM <em>Non Contained NTo M</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Non Contained MTo N</em>' reference list isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Non Contained MTo N</em>' reference list isn't clear, there really should be more of a
+	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Non Contained MTo N</em>' reference list.
 	 * @see org.eclipse.emf.emfstore.test.model.TestmodelPackage#getTestElement_NonContained_MToN()
 	 * @see org.eclipse.emf.emfstore.test.model.TestElement#getNonContained_NToM
@@ -445,13 +490,15 @@ public interface TestElement extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Contained Elements2</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.emf.emfstore.test.model.TestElement}.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainer2 <em>Container2</em>}'.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainer2
+	 * <em>Container2</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Contained Elements2</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Contained Elements2</em>' containment reference list isn't clear, there really should
+	 * be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Contained Elements2</em>' containment reference list.
 	 * @see org.eclipse.emf.emfstore.test.model.TestmodelPackage#getTestElement_ContainedElements2()
 	 * @see org.eclipse.emf.emfstore.test.model.TestElement#getContainer2
@@ -462,13 +509,15 @@ public interface TestElement extends EObject {
 
 	/**
 	 * Returns the value of the '<em><b>Container2</b></em>' container reference.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainedElements2 <em>Contained Elements2</em>}'.
+	 * It is bidirectional and its opposite is '
+	 * {@link org.eclipse.emf.emfstore.test.model.TestElement#getContainedElements2 <em>Contained Elements2</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Container2</em>' container reference isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Container2</em>' container reference isn't clear, there really should be more of a
+	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Container2</em>' container reference.
 	 * @see #setContainer2(TestElement)
 	 * @see org.eclipse.emf.emfstore.test.model.TestmodelPackage#getTestElement_Container2()
@@ -479,9 +528,11 @@ public interface TestElement extends EObject {
 	TestElement getContainer2();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainer2 <em>Container2</em>}' container reference.
+	 * Sets the value of the '{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainer2 <em>Container2</em>}'
+	 * container reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Container2</em>' container reference.
 	 * @see #getContainer2()
 	 * @generated
@@ -493,10 +544,11 @@ public interface TestElement extends EObject {
 	 * The list contents are of type {@link org.eclipse.emf.emfstore.test.model.TestElement}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Contained Elements No Opposite</em>' reference list isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Contained Elements No Opposite</em>' reference list isn't clear, there really should
+	 * be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Contained Elements No Opposite</em>' containment reference list.
 	 * @see org.eclipse.emf.emfstore.test.model.TestmodelPackage#getTestElement_ContainedElements_NoOpposite()
 	 * @model containment="true"
@@ -508,10 +560,11 @@ public interface TestElement extends EObject {
 	 * Returns the value of the '<em><b>Contained Element No Opposite</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Contained Element No Opposite</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Contained Element No Opposite</em>' containment reference isn't clear, there really
+	 * should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Contained Element No Opposite</em>' containment reference.
 	 * @see #setContainedElement_NoOpposite(TestElement)
 	 * @see org.eclipse.emf.emfstore.test.model.TestmodelPackage#getTestElement_ContainedElement_NoOpposite()
@@ -521,9 +574,11 @@ public interface TestElement extends EObject {
 	TestElement getContainedElement_NoOpposite();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainedElement_NoOpposite <em>Contained Element No Opposite</em>}' containment reference.
+	 * Sets the value of the '{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainedElement_NoOpposite
+	 * <em>Contained Element No Opposite</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Contained Element No Opposite</em>' containment reference.
 	 * @see #getContainedElement_NoOpposite()
 	 * @generated
