@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.eclipse.emf.emfstore.internal.common.model" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="org.eclipse.emf.emfstore.common.model" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
-      <appinfo>
-         <meta.schema plugin="org.eclipse.emf.emfstore.internal.common.model" id="modelVersion" name="Model Version"/>
-      </appinfo>
+      <appInfo>
+         <meta.schema plugin="org.eclipse.emf.emfstore.common.model" id="modelVersion" name="Model Version"/>
+      </appInfo>
       <documentation>
          Allows to register the version of a model that is present in a client feature.
       </documentation>
@@ -12,9 +12,9 @@
 
    <element name="extension">
       <annotation>
-         <appinfo>
+         <appInfo>
             <meta.element />
-         </appinfo>
+         </appInfo>
       </annotation>
       <complexType>
          <choice>
@@ -39,9 +39,9 @@
                <documentation>
                   
                </documentation>
-               <appinfo>
+               <appInfo>
                   <meta.attribute translatable="true"/>
-               </appinfo>
+               </appInfo>
             </annotation>
          </attribute>
       </complexType>
@@ -60,18 +60,18 @@
    </element>
 
    <annotation>
-      <appinfo>
+      <appInfo>
          <meta.section type="since"/>
-      </appinfo>
+      </appInfo>
       <documentation>
          1.0
       </documentation>
    </annotation>
 
    <annotation>
-      <appinfo>
+      <appInfo>
          <meta.section type="examples"/>
-      </appinfo>
+      </appInfo>
       <documentation>
          If your model has changed increase the integer by one.
       </documentation>
@@ -80,9 +80,9 @@
 
 
    <annotation>
-      <appinfo>
+      <appInfo>
          <meta.section type="copyright"/>
-      </appinfo>
+      </appInfo>
       <documentation>
          Copyright (c) 2011-2013 EclipseSource Muenchen GmbH and others.&lt;br/&gt;
 
