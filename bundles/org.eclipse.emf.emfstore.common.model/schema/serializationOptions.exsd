@@ -63,6 +63,20 @@
                </documentation>
             </annotation>
          </attribute>
+         <attribute name="GzipCompression" type="boolean">
+            <annotation>
+               <documentation>
+                  use gzip compression for communication with EMFStore Server
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="GzipRequesting" type="boolean">
+            <annotation>
+               <documentation>
+                  request gzip compression for with EMFStore Server&apos;s answer
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

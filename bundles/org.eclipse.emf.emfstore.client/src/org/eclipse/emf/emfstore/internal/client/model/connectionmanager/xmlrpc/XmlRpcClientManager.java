@@ -22,6 +22,8 @@ import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 import org.apache.xmlrpc.client.XmlRpcSun15HttpTransportFactory;
 import org.eclipse.emf.emfstore.client.exceptions.ESCertificateException;
+import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionElement;
+import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionPoint;
 import org.eclipse.emf.emfstore.internal.client.model.Configuration;
 import org.eclipse.emf.emfstore.internal.client.model.ServerInfo;
 import org.eclipse.emf.emfstore.internal.client.model.connectionmanager.ConnectionManager;
@@ -41,6 +43,9 @@ public class XmlRpcClientManager {
 
 	private final String serverInterface;
 	private XmlRpcClient client;
+	private static boolean serializationOptionsInitialized;
+	private static boolean gzipCompressionEnabled;
+	private static boolean gzipRequestingEnabled;
 
 	/**
 	 * Default constructor.
@@ -59,6 +64,7 @@ public class XmlRpcClientManager {
 	 */
 	public void initConnection(ServerInfo serverInfo) throws ConnectionException {
 		try {
+			initSerializationOptions();
 			final XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
 			config.setServerURL(createURL(serverInfo));
 			config.setEnabledForExceptions(true);
@@ -66,6 +72,8 @@ public class XmlRpcClientManager {
 			config.setConnectionTimeout(Configuration.getXMLRPC().getXMLRPCConnectionTimeout());
 			config.setReplyTimeout(Configuration.getXMLRPC().getXMLRPCReplyTimeout());
 			config.setContentLengthOptional(true);
+			config.setGzipCompressing(gzipCompressionEnabled);
+			config.setGzipRequesting(gzipRequestingEnabled);
 
 			client = new XmlRpcClient();
 			client.setTypeFactory(new EObjectTypeFactory(client));
@@ -86,7 +94,7 @@ public class XmlRpcClientManager {
 
 	private URL createURL(ServerInfo serverInfo) throws MalformedURLException {
 		checkUrl(serverInfo.getUrl());
-		return new URL("https", serverInfo.getUrl(), serverInfo.getPort(), "xmlrpc"); //$NON-NLS-1$ //$NON-NLS-2$
+		return new URL("https", serverInfo.getUrl(), serverInfo.getPort(), "/xmlrpc"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	private void checkUrl(String url) throws MalformedURLException {
@@ -167,4 +175,28 @@ public class XmlRpcClientManager {
 			}
 		}
 	}
+
+	/**
+	 * Initializes the serialization options for compressed server communication
+	 */
+	private static void initSerializationOptions() {
+
+		if (serializationOptionsInitialized) {
+			return;
+		}
+		// init compression with false if not configured
+		gzipRequestingEnabled = false;
+		gzipCompressionEnabled = false;
+		final ESExtensionElement element = new ESExtensionPoint(
+			"org.eclipse.emf.emfstore.common.model.serializationOptions") //$NON-NLS-1$
+			.getFirst();
+
+		if (element != null) {
+			gzipCompressionEnabled = element.getBoolean("GzipCompression"); //$NON-NLS-1$
+			gzipRequestingEnabled = element.getBoolean("GzipRequesting"); //$NON-NLS-1$
+		}
+
+		serializationOptionsInitialized = true;
+	}
+
 }
