@@ -177,7 +177,7 @@ public final class ServerKeyStoreManager {
 		System.setProperty("javax.net.ssl.trustStorePassword", Arrays.toString(getKeyStorePassword()));
 	}
 
-	private char[] getKeyStorePassword() {
+	public char[] getKeyStorePassword() {
 		return ServerConfiguration.getProperties()
 			.getProperty(ServerConfiguration.KEYSTORE_PASSWORD, ServerConfiguration.KEYSTORE_PASSWORD_DEFAULT)
 			.toCharArray();

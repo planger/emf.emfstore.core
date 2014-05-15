@@ -68,6 +68,7 @@ import org.eclipse.emf.emfstore.internal.server.startup.StartupListener;
 import org.eclipse.emf.emfstore.internal.server.storage.ServerXMIResourceSetProvider;
 import org.eclipse.emf.emfstore.server.ESDynamicModelProvider;
 import org.eclipse.emf.emfstore.server.ESServerURIUtil;
+import org.eclipse.emf.emfstore.server.exceptions.ESServerInitException;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 
@@ -317,13 +318,17 @@ public class EMFStoreController implements IApplication, Runnable {
 		final Set<ConnectionHandler<? extends EMFStoreInterface>> connectionHandlers = new LinkedHashSet<ConnectionHandler<? extends EMFStoreInterface>>();
 
 		// crate XML RPC connection handlers
-		final XmlRpcConnectionHandler xmlRpcConnectionHander = new XmlRpcConnectionHandler();
-		xmlRpcConnectionHander.init(emfStore, accessControl);
-		connectionHandlers.add(xmlRpcConnectionHander);
+		try {
+			final XmlRpcConnectionHandler xmlRpcConnectionHander = new XmlRpcConnectionHandler();
+			xmlRpcConnectionHander.init(emfStore, accessControl);
+			connectionHandlers.add(xmlRpcConnectionHander);
 
-		final XmlRpcAdminConnectionHandler xmlRpcAdminConnectionHander = new XmlRpcAdminConnectionHandler();
-		xmlRpcAdminConnectionHander.init(adminEmfStore, accessControl);
-		connectionHandlers.add(xmlRpcAdminConnectionHander);
+			final XmlRpcAdminConnectionHandler xmlRpcAdminConnectionHander = new XmlRpcAdminConnectionHandler();
+			xmlRpcAdminConnectionHander.init(adminEmfStore, accessControl);
+			connectionHandlers.add(xmlRpcAdminConnectionHander);
+		} catch (final ESServerInitException ex) {
+			throw new FatalESException("Exception initializing Connection Handlers", ex);
+		}
 
 		return connectionHandlers;
 	}
