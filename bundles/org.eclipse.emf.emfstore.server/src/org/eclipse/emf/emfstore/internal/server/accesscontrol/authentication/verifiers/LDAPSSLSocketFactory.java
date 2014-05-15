@@ -43,7 +43,7 @@ public class LDAPSSLSocketFactory extends SSLSocketFactory {
 	public LDAPSSLSocketFactory() {
 		SSLContext context;
 		try {
-			context = SSLContext.getInstance("TLS");
+			context = SSLContext.getInstance("TLS"); //$NON-NLS-1$
 			final TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
 				TrustManagerFactory.getDefaultAlgorithm());
 			trustManagerFactory.init(ServerKeyStoreManager.getInstance().getKeyStore());

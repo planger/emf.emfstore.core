@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Edgar - initial API and implementation
+ * Edgar Mueller - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.server.accesscontrol.authentication.verifiers;
 
@@ -58,11 +58,11 @@ public final class VersionVerifier {
 		throws ClientVersionOutOfDateException {
 
 		if (clientVersionInfo == null) {
-			throw new ClientVersionOutOfDateException("No client version received.");
+			throw new ClientVersionOutOfDateException(Messages.VersionVerifier_NoClientVersionReceived);
 		}
 
 		if (versions == null) {
-			final String msg = "No server versions supplied";
+			final String msg = Messages.VersionVerifier_NoServerVersionsSupplied;
 			ModelUtil.logWarning(msg, new ClientVersionOutOfDateException(msg));
 			return;
 		}
@@ -80,16 +80,17 @@ public final class VersionVerifier {
 
 			for (final String str : versions) {
 				if (versions.length == 1) {
-					acceptedVersions.append(str + ". ");
+					acceptedVersions.append(str + ". "); //$NON-NLS-1$
 				} else {
-					acceptedVersions.append(str + ", ");
+					acceptedVersions.append(str + ", "); //$NON-NLS-1$
 				}
 			}
 
-			acceptedVersions.replace(acceptedVersions.length() - 2, acceptedVersions.length(), ".");
+			acceptedVersions.replace(acceptedVersions.length() - 2, acceptedVersions.length(), "."); //$NON-NLS-1$
 
-			throw new ClientVersionOutOfDateException("Client version: " + clientVersionInfo.getVersion()
-				+ " - Accepted versions: " + acceptedVersions);
+			throw new ClientVersionOutOfDateException(Messages.VersionVerifier_ClientVersion + clientVersionInfo.getVersion()
+				+ " - " //$NON-NLS-1$
+				+ Messages.VersionVerifier_AcceptedVersions + acceptedVersions);
 		}
 	}
 
@@ -98,14 +99,15 @@ public final class VersionVerifier {
 		final int index = version.lastIndexOf('*');
 		final String quoted = Pattern.quote(version.substring(0, index));
 		final String end = Pattern.quote(version.substring(index + 1, version.length()));
-		if (!clientVersionInfo.getVersion().matches(quoted + ".*" + end)) {
-			throw new ClientVersionOutOfDateException("Client version: " + clientVersionInfo.getVersion()
-				+ " - Accepted versions: " + version);
+		if (!clientVersionInfo.getVersion().matches(quoted + ".*" + end)) { //$NON-NLS-1$
+			throw new ClientVersionOutOfDateException("Client version: " + clientVersionInfo.getVersion() //$NON-NLS-1$
+				+ " - " //$NON-NLS-1$
+				+ "Accepted versions: " + version); //$NON-NLS-1$
 		}
 	}
 
 	private static boolean isWildcardVersion(String[] versions) {
-		return versions.length == 1 && versions[0].contains("*");
+		return versions.length == 1 && versions[0].contains("*"); //$NON-NLS-1$
 	}
 
 	private static boolean matchesClientVersion(final String version, final ClientVersionInfo clientVersionInfo) {

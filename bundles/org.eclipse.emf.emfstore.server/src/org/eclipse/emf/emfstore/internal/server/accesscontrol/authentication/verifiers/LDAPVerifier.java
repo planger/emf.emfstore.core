@@ -11,6 +11,7 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.server.accesscontrol.authentication.verifiers;
 
+import java.text.MessageFormat;
 import java.util.Properties;
 
 import javax.naming.Context;
@@ -38,7 +39,7 @@ public class LDAPVerifier extends AbstractAuthenticationControl {
 	private final String searchDn;
 	private boolean useSSL;
 
-	private static final String DEFAULT_CTX = "com.sun.jndi.ldap.LdapCtxFactory";
+	private static final String DEFAULT_CTX = "com.sun.jndi.ldap.LdapCtxFactory"; //$NON-NLS-1$
 	private final String authUser;
 	private final String authPassword;
 
@@ -58,7 +59,7 @@ public class LDAPVerifier extends AbstractAuthenticationControl {
 		this.authUser = authUser;
 		this.authPassword = authPassword;
 
-		if (ldapUrl.startsWith("ldaps://")) {
+		if (ldapUrl.startsWith("ldaps://")) { //$NON-NLS-1$
 			useSSL = true;
 			ServerKeyStoreManager.getInstance().setJavaSSLProperties();
 		}
@@ -87,7 +88,8 @@ public class LDAPVerifier extends AbstractAuthenticationControl {
 				dirContext = new InitialDirContext(anonymousBind());
 			}
 		} catch (final NamingException e) {
-			ModelUtil.logWarning("LDAP Directory " + ldapUrl + " not found.", e);
+			ModelUtil.logWarning(MessageFormat.format(
+				Messages.LDAPVerifier_LDAPDirectoryNotFound, ldapUrl), e);
 			return false;
 		}
 		final String resolvedName = resolveUser(username, dirContext);
@@ -99,23 +101,24 @@ public class LDAPVerifier extends AbstractAuthenticationControl {
 		try {
 			dirContext = new InitialDirContext(authenticatedBind(resolvedName, password));
 		} catch (final NamingException e) {
-			e.printStackTrace();
-			ModelUtil.logWarning("Login failed on " + ldapBase + " .", e);
+			ModelUtil.logWarning(
+				MessageFormat.format(Messages.LDAPVerifier_LoginFailed, ldapBase), e);
 			return false;
 		}
+
 		return true;
 	}
 
 	private Properties anonymousBind() {
 		final Properties props = new Properties();
-		props.put("java.naming.ldap.version", "3");
+		props.put("java.naming.ldap.version", "3"); //$NON-NLS-1$ //$NON-NLS-2$
 		props.put(Context.INITIAL_CONTEXT_FACTORY, DEFAULT_CTX);
 		props.put(Context.PROVIDER_URL, ldapUrl);
 
 		if (useSSL()) {
-			props.put("java.naming.ldap.factory.socket",
+			props.put("java.naming.ldap.factory.socket", //$NON-NLS-1$
 				LDAPSSLSocketFactory.class.getCanonicalName());
-			props.put(Context.SECURITY_PROTOCOL, "ssl");
+			props.put(Context.SECURITY_PROTOCOL, "ssl"); //$NON-NLS-1$
 		}
 
 		return props;
@@ -127,8 +130,8 @@ public class LDAPVerifier extends AbstractAuthenticationControl {
 
 	private Properties authenticatedBind(String principal, String credentials) {
 		final Properties bind = anonymousBind();
-		bind.put(Context.SECURITY_AUTHENTICATION, "simple");
-		bind.put(Context.SECURITY_PRINCIPAL, principal + "," + ldapBase);
+		bind.put(Context.SECURITY_AUTHENTICATION, "simple"); //$NON-NLS-1$
+		bind.put(Context.SECURITY_PRINCIPAL, principal + "," + ldapBase); //$NON-NLS-1$
 		bind.put(Context.SECURITY_CREDENTIALS, credentials);
 
 		return bind;
@@ -139,10 +142,13 @@ public class LDAPVerifier extends AbstractAuthenticationControl {
 		constraints.setSearchScope(SearchControls.SUBTREE_SCOPE);
 		NamingEnumeration<SearchResult> results = null;
 		try {
-			results = dirContext.search(ldapBase, "(& (" + searchDn + "=" + username + ") (objectclass=*))",
+			results = dirContext.search(ldapBase, "(& (" + //$NON-NLS-1$
+				searchDn + "=" + username //$NON-NLS-1$
+				+ ") (objectclass=*))", //$NON-NLS-1$ 
 				constraints);
 		} catch (final NamingException e) {
-			ModelUtil.logWarning("Search failed, base = " + ldapBase, e);
+			ModelUtil.logWarning(MessageFormat.format(
+				Messages.LDAPVerifier_SearchFailed, ldapBase), e);
 			return null;
 		}
 
@@ -160,12 +166,13 @@ public class LDAPVerifier extends AbstractAuthenticationControl {
 				break;
 			}
 		} catch (final NamingException e) {
-			ModelUtil.logException("Search returned invalid results, base = " + ldapBase, e);
+			ModelUtil.logException(MessageFormat.format(
+				Messages.LDAPVerifier_InvalidResults, ldapBase), e);
 			return null;
 		}
 
 		if (resolvedName == null) {
-			ModelUtil.logWarning("Distinguished name not found on " + ldapBase);
+			ModelUtil.logWarning(MessageFormat.format(Messages.LDAPVerifier_DistinguishedNameNotFound, ldapBase));
 			return null;
 		}
 		return resolvedName;

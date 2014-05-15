@@ -24,7 +24,7 @@ import org.eclipse.emf.emfstore.internal.server.exceptions.FatalESException;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACUser;
 
 /**
- * This verifyer can be used to store user and passwords in a property file. Entries in the property file look should
+ * This verifier can be used to store user and passwords in a property file. Entries in the property file look should
  * look like this: <b>user = password</b>
  * 
  * @author wesendonk
@@ -38,7 +38,7 @@ public class SimplePropertyFileVerifier extends AbstractAuthenticationControl {
 	private final String filePath;
 
 	/**
-	 * Hash algorithms supported by spfv verifier.
+	 * Hash algorithms supported by SPFV verifier.
 	 * 
 	 * @author wesendon
 	 */
@@ -71,7 +71,7 @@ public class SimplePropertyFileVerifier extends AbstractAuthenticationControl {
 		super();
 		this.filePath = filePath;
 		if (hash == null) {
-			throw new FatalESException("Hash may not be null for verifier.");
+			throw new FatalESException(Messages.SimplePropertyFileVerifier_HashMayNotBeNull);
 		}
 		this.hash = hash;
 
@@ -86,7 +86,7 @@ public class SimplePropertyFileVerifier extends AbstractAuthenticationControl {
 			fis = new FileInputStream(propertyFile);
 			passwordFile.load(fis);
 		} catch (final IOException e) {
-			ModelUtil.logInfo("Couldn't load password file from path: " + filePath);
+			ModelUtil.logInfo(Messages.SimplePropertyFileVerifier_CouldNotLoadPasswordFile + filePath);
 			// Run with empty password file
 			// throw new AccessControlException("Couldn't load password file from path: "+filePath);
 		} finally {
@@ -94,7 +94,7 @@ public class SimplePropertyFileVerifier extends AbstractAuthenticationControl {
 				try {
 					fis.close();
 				} catch (final IOException e) {
-					ModelUtil.logInfo("Couldn't load password file from path: " + filePath);
+					ModelUtil.logInfo("Couldn't load password file from path: " + filePath); //$NON-NLS-1$
 				}
 			}
 		}
@@ -129,10 +129,10 @@ public class SimplePropertyFileVerifier extends AbstractAuthenticationControl {
 			MessageDigest md = null;
 			switch (hash) {
 			case SHA1:
-				md = MessageDigest.getInstance("SHA-1");
+				md = MessageDigest.getInstance("SHA-1"); //$NON-NLS-1$
 				break;
 			case MD5:
-				md = MessageDigest.getInstance("MD5");
+				md = MessageDigest.getInstance("MD5"); //$NON-NLS-1$
 				break;
 			default:
 			}
