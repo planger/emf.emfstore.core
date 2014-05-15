@@ -13,12 +13,14 @@
 package org.eclipse.emf.emfstore.server.exceptions;
 
 /**
- * indicates that the SSL initialization of the server failed, e.g. because of keystore or algorithm issues
+ * Indicates that the SSL initialization of the server failed, e.g. because of keystore or algorithm issues.
  * 
  * @author Marco van Meegen
  * 
  * @noextend This class is not intended to be subclassed by clients.
  * @noinstantiate This class is not intended to be instantiated by clients.
+ * 
+ * @since 1.3
  */
 public class ESInitSSLException extends ESException {
 

@@ -13,12 +13,14 @@
 package org.eclipse.emf.emfstore.server.exceptions;
 
 /**
- * indicates that the EMFStore xml rpc server failed to initialize
+ * Indicates that the EMFStore XML RPC server failed to initialize.
  * 
  * @author Marco van Meegen
  * 
  * @noextend This class is not intended to be subclassed by clients.
  * @noinstantiate This class is not intended to be instantiated by clients.
+ * 
+ * @since 1.3
  */
 public class ESServerInitException extends ESException {
 
