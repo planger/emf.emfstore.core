@@ -111,10 +111,10 @@ public class LDAPVerifier extends AbstractAuthenticationControl {
 		props.put("java.naming.ldap.version", "3");
 		props.put(Context.INITIAL_CONTEXT_FACTORY, DEFAULT_CTX);
 		props.put(Context.PROVIDER_URL, ldapUrl);
-		props.put("java.naming.ldap.factory.socket",
-			LDAPSSLSocketFactory.class.getCanonicalName());
 
 		if (useSSL()) {
+			props.put("java.naming.ldap.factory.socket",
+				LDAPSSLSocketFactory.class.getCanonicalName());
 			props.put(Context.SECURITY_PROTOCOL, "ssl");
 		}
 
@@ -127,8 +127,8 @@ public class LDAPVerifier extends AbstractAuthenticationControl {
 
 	private Properties authenticatedBind(String principal, String credentials) {
 		final Properties bind = anonymousBind();
-
 		bind.put(Context.SECURITY_AUTHENTICATION, "simple");
+		bind.put(Context.SECURITY_PRINCIPAL, principal + "," + ldapBase);
 		bind.put(Context.SECURITY_CREDENTIALS, credentials);
 
 		return bind;
