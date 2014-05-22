@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
 import org.eclipse.emf.emfstore.internal.server.ServerConfiguration;
@@ -35,6 +36,7 @@ import org.eclipse.emf.emfstore.internal.server.exceptions.FatalESException;
 import org.eclipse.emf.emfstore.internal.server.exceptions.SessionTimedOutException;
 import org.eclipse.emf.emfstore.internal.server.model.AuthenticationInformation;
 import org.eclipse.emf.emfstore.internal.server.model.ClientVersionInfo;
+import org.eclipse.emf.emfstore.internal.server.model.ProjectHistory;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectId;
 import org.eclipse.emf.emfstore.internal.server.model.SessionId;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACGroup;
@@ -410,6 +412,49 @@ public class AccessControlImpl implements AccessControl {
 	}
 
 	/**
+	 * Removes any orphan {@link ProjectId}s from the given {@link ProjectAdminRole}, i.e.
+	 * all invalid {@link ProjectId}s will be removed.
+	 * 
+	 * @param orgUnitId
+	 * 
+	 * @param paRole the {@link ProjectAdminRole} to be cleaned up
+	 * 
+	 * @throws AccessControlException in case the requested orgUnit does not exist
+	 */
+	private void cleanupPARole(ACOrgUnitId orgUnitId) throws AccessControlException {
+
+		ProjectAdminRole paRole = null;
+		final List<Role> roles = getAllRoles(orgUnitId);
+
+		for (final Role role : roles) {
+			if (ProjectAdminRole.class.isInstance(role)) {
+				paRole = (ProjectAdminRole) role;
+				break;
+			}
+		}
+
+		if (paRole == null) {
+			return;
+		}
+
+		final EList<ProjectHistory> projects = daoFacade.getProjects();
+		final Set<ProjectId> validProjectIds = new LinkedHashSet<ProjectId>();
+		final Set<ProjectId> invalidProjectIdsOfRole = new LinkedHashSet<ProjectId>();
+		for (final ProjectHistory projectHistory : projects) {
+			validProjectIds.add(projectHistory.getProjectId());
+		}
+		for (final ProjectId projectId : paRole.getProjects()) {
+			if (!validProjectIds.contains(projectId)) {
+				invalidProjectIdsOfRole.add(projectId);
+			}
+		}
+		paRole.getProjects().removeAll(invalidProjectIdsOfRole);
+		if (paRole.getProjects().size() == 0) {
+			getOrgUnit(orgUnitId).getRoles().remove(paRole);
+		}
+	}
+
+	/**
 	 * 
 	 * {@inheritDoc}
 	 * 
@@ -419,6 +464,7 @@ public class AccessControlImpl implements AccessControl {
 	public boolean checkProjectAdminAccessForOrgUnit(SessionId sessionId, ACOrgUnitId orgUnitId)
 		throws AccessControlException {
 
+		cleanupPARole(orgUnitId);
 		final List<Role> allRoles = getAllRoles(orgUnitId);
 		final Set<ProjectId> involvedProjects = new LinkedHashSet<ProjectId>();
 		final ACUser user = getUser(sessionId);

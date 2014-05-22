@@ -33,6 +33,10 @@ import org.eclipse.emf.emfstore.internal.server.model.ProjectHistory;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectId;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectInfo;
 import org.eclipse.emf.emfstore.internal.server.model.SessionId;
+import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACUser;
+import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.roles.ProjectAdminRole;
+import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.roles.Role;
+import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.roles.RolesPackage;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.BranchInfo;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.ChangePackage;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.LogMessage;
@@ -281,6 +285,7 @@ public class ProjectSubInterfaceImpl extends AbstractSubEmfstoreInterface {
 			try {
 				final ProjectHistory project = getProject(projectId);
 				getServerSpace().getProjects().remove(project);
+				removeAllProjectAdmins(projectId);
 				try {
 					save(getServerSpace());
 				} catch (final FatalESException e) {
@@ -308,6 +313,30 @@ public class ProjectSubInterfaceImpl extends AbstractSubEmfstoreInterface {
 				}
 			} catch (final IOException e) {
 				throw new StorageException("Project resource files couldn't be deleted.", e);
+			}
+		}
+	}
+
+	private void removeAllProjectAdmins(ProjectId projectId) {
+		final List<ACUser> users = getServerSpace().getUsers();
+		for (final ACUser acUser : users) {
+			ProjectAdminRole obsoletePARole = null;
+			boolean paRoleIsObsolete = false;
+			for (final Role role : acUser.getRoles()) {
+				if (role.eClass().equals(RolesPackage.eINSTANCE.getProjectAdminRole())) {
+					final ProjectAdminRole paRole = ProjectAdminRole.class.cast(role);
+					final int indexOf = paRole.getProjects().indexOf(projectId);
+					if (indexOf != -1) {
+						paRole.getProjects().remove(indexOf);
+					}
+					if (paRole.getProjects().size() == 0) {
+						paRoleIsObsolete = true;
+						obsoletePARole = paRole;
+					}
+				}
+			}
+			if (paRoleIsObsolete) {
+				acUser.getRoles().remove(obsoletePARole);
 			}
 		}
 	}

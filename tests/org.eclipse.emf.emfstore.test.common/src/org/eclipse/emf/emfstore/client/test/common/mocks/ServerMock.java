@@ -42,7 +42,7 @@ public class ServerMock {
 	public ProjectHistory getHistory(ESLocalProject localProject) {
 		final ESLocalProjectImpl projectImpl = ESLocalProjectImpl.class.cast(localProject);
 		final ProjectId id = projectImpl.toInternalAPI().getProjectId();
-		for (final ProjectHistory history : serverSpace.getProjects()) {
+		for (final ProjectHistory history : getServerSpace().getProjects()) {
 			if (history.getProjectId().equals(id)) {
 				return history;
 			}
@@ -56,5 +56,12 @@ public class ServerMock {
 
 	public void setEmfStore(EMFStore emfStore) {
 		this.emfStore = emfStore;
+	}
+
+	/**
+	 * @return the serverSpace
+	 */
+	public ServerSpace getServerSpace() {
+		return serverSpace;
 	}
 }

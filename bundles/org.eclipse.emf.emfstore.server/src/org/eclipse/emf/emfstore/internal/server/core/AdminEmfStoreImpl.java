@@ -457,9 +457,9 @@ public class AdminEmfStoreImpl extends AbstractEmfstoreInterface implements Admi
 			return;
 		}
 		// add project to role if it exists
-		for (final Role role1 : orgUnit.getRoles()) {
-			if (role1.eClass().getName().equals(roleClass.getName())) {
-				role1.getProjects().add(ModelUtil.clone(projectId));
+		for (final Role r : orgUnit.getRoles()) {
+			if (r.eClass().getName().equals(roleClass.getName())) {
+				r.getProjects().add(ModelUtil.clone(projectId));
 				save();
 				return;
 			}

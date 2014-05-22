@@ -27,6 +27,7 @@ import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
 import org.eclipse.emf.emfstore.internal.server.accesscontrol.PAPrivileges;
 import org.eclipse.emf.emfstore.internal.server.exceptions.AccessControlException;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectInfo;
+import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACUser;
 import org.eclipse.emf.emfstore.internal.server.model.impl.api.ESSessionIdImpl;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.junit.After;
@@ -102,13 +103,17 @@ public class DeleteProjectTest extends ProjectAdminTest {
 		makeUserPA();
 		ProjectUtil.share(getUsersession(), getLocalProject());
 		getLocalProject().getRemoteProject().delete(new NullProgressMonitor());
+
 		final List<ProjectInfo> projectList = ESWorkspaceProviderImpl.getInstance().getConnectionManager()
 			.getProjectList(
 				ESSessionIdImpl.class.cast(getUsersession().getSessionId()).toInternalAPI());
 		// TODO: not transparent with mock server
 		final ConnectionMock mock = (ConnectionMock) ESWorkspaceProviderImpl.getInstance().getConnectionManager();
+		final ACUser user = ServerUtil.getUser(getSuperUsersession(), getUser());
+
 		assertFalse(mock.didDeleteFiles());
 		assertEquals(0, projectList.size());
+		assertFalse(hasProjectAdminRole(user));
 	}
 
 	@Test(expected = AccessControlException.class)
