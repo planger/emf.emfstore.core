@@ -95,7 +95,11 @@ public class ESRemoteProjectImpl implements ESRemoteProject {
 	 * @see org.eclipse.emf.emfstore.client.ESProject#getGlobalProjectId()
 	 */
 	public ESGlobalProjectId getGlobalProjectId() {
-		return getProjectInfo().getProjectId().toAPI();
+		return RunESCommand.runWithResult(new Callable<ESGlobalProjectId>() {
+			public ESGlobalProjectId call() throws Exception {
+				return getProjectInfo().getProjectId().toAPI();
+			}
+		});
 	}
 
 	/**
@@ -105,7 +109,11 @@ public class ESRemoteProjectImpl implements ESRemoteProject {
 	 * @see org.eclipse.emf.emfstore.client.ESProject#getProjectName()
 	 */
 	public String getProjectName() {
-		return getProjectInfo().getName();
+		return RunESCommand.runWithResult(new Callable<String>() {
+			public String call() throws Exception {
+				return getProjectInfo().getName();
+			}
+		});
 	}
 
 	/**
@@ -232,25 +240,30 @@ public class ESRemoteProjectImpl implements ESRemoteProject {
 	 * @see org.eclipse.emf.emfstore.client.ESRemoteProject#getHistoryInfos(org.eclipse.emf.emfstore.client.ESUsersession,
 	 *      org.eclipse.emf.emfstore.server.model.query.ESHistoryQuery, org.eclipse.core.runtime.IProgressMonitor)
 	 */
-	public List<ESHistoryInfo> getHistoryInfos(ESUsersession session,
+	public List<ESHistoryInfo> getHistoryInfos(final ESUsersession session,
 		final ESHistoryQuery<? extends ESHistoryQuery<?>> query,
-		IProgressMonitor monitor) throws ESException {
+		final IProgressMonitor monitor) throws ESException {
 
-		final Usersession usersession = ((ESUsersessionImpl) session).toInternalAPI();
-		final ESHistoryQueryImpl<?, ?> queryImpl = (ESHistoryQueryImpl<?, ?>) query;
+		return RunESCommand.WithException.runWithResult(ESException.class, new Callable<List<ESHistoryInfo>>() {
+			public List<ESHistoryInfo> call() throws Exception {
+				final Usersession usersession = ((ESUsersessionImpl) session).toInternalAPI();
+				final ESHistoryQueryImpl<?, ?> queryImpl = (ESHistoryQueryImpl<?, ?>) query;
 
-		final List<HistoryInfo> historyInfos = new ServerCall<List<HistoryInfo>>(usersession,
-			monitor) {
-			@Override
-			protected List<HistoryInfo> run() throws ESException {
-				return getConnectionManager().getHistoryInfo(
-					getUsersession().getSessionId(),
-					getProjectInfo().getProjectId(),
-					queryImpl.toInternalAPI());
+				final List<HistoryInfo> historyInfos = new ServerCall<List<HistoryInfo>>(usersession,
+					monitor) {
+					@Override
+					protected List<HistoryInfo> run() throws ESException {
+						return getConnectionManager().getHistoryInfo(
+							getUsersession().getSessionId(),
+							getProjectInfo().getProjectId(),
+							queryImpl.toInternalAPI());
+					}
+				}.execute();
+
+				return APIUtil.mapToAPI(ESHistoryInfo.class, historyInfos);
 			}
-		}.execute();
+		});
 
-		return APIUtil.mapToAPI(ESHistoryInfo.class, historyInfos);
 	}
 
 	/**
@@ -498,7 +511,12 @@ public class ESRemoteProjectImpl implements ESRemoteProject {
 	 * @see org.eclipse.emf.emfstore.client.ESRemoteProject#getServer()
 	 */
 	public ESServerImpl getServer() {
-		return getServerInfo().toAPI();
+		return RunESCommand.runWithResult(new Callable<ESServerImpl>() {
+			public ESServerImpl call() throws Exception {
+				return getServerInfo().toAPI();
+			}
+		});
+
 	}
 
 	/**
@@ -507,8 +525,12 @@ public class ESRemoteProjectImpl implements ESRemoteProject {
 	 * 
 	 * @see org.eclipse.emf.emfstore.client.ESRemoteProject#getHeadVersion(org.eclipse.core.runtime.IProgressMonitor)
 	 */
-	public ESPrimaryVersionSpec getHeadVersion(IProgressMonitor monitor) throws ESException {
-		return resolveVersionSpec(Versions.createHEAD().toAPI(), monitor);
+	public ESPrimaryVersionSpec getHeadVersion(final IProgressMonitor monitor) throws ESException {
+		return RunESCommand.WithException.runWithResult(ESException.class, new Callable<ESPrimaryVersionSpec>() {
+			public ESPrimaryVersionSpec call() throws Exception {
+				return resolveVersionSpec(Versions.createHEAD().toAPI(), monitor);
+			}
+		});
 	}
 
 	private boolean canDeleteFiles(ACOrgUnit orgUnit, ProjectId projectId) {

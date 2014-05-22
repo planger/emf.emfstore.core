@@ -65,7 +65,11 @@ public class ESServerImpl extends AbstractAPIImpl<ESServerImpl, ServerInfo> impl
 	 * @see org.eclipse.emf.emfstore.client.ESServer#getName()
 	 */
 	public String getName() {
-		return toInternalAPI().getName();
+		return RunESCommand.runWithResult(new Callable<String>() {
+			public String call() throws Exception {
+				return toInternalAPI().getName();
+			}
+		});
 	}
 
 	/**
@@ -90,7 +94,11 @@ public class ESServerImpl extends AbstractAPIImpl<ESServerImpl, ServerInfo> impl
 	 * @see org.eclipse.emf.emfstore.client.ESServer#getPort()
 	 */
 	public int getPort() {
-		return toInternalAPI().getPort();
+		return RunESCommand.runWithResult(new Callable<Integer>() {
+			public Integer call() throws Exception {
+				return toInternalAPI().getPort();
+			}
+		});
 	}
 
 	/**
@@ -115,7 +123,11 @@ public class ESServerImpl extends AbstractAPIImpl<ESServerImpl, ServerInfo> impl
 	 * @see org.eclipse.emf.emfstore.client.ESServer#getURL()
 	 */
 	public String getURL() {
-		return toInternalAPI().getUrl();
+		return RunESCommand.runWithResult(new Callable<String>() {
+			public String call() throws Exception {
+				return toInternalAPI().getUrl();
+			}
+		});
 	}
 
 	/**
@@ -140,7 +152,11 @@ public class ESServerImpl extends AbstractAPIImpl<ESServerImpl, ServerInfo> impl
 	 * @see org.eclipse.emf.emfstore.client.ESServer#getCertificateAlias()
 	 */
 	public String getCertificateAlias() {
-		return toInternalAPI().getCertificateAlias();
+		return RunESCommand.runWithResult(new Callable<String>() {
+			public String call() throws Exception {
+				return toInternalAPI().getCertificateAlias();
+			}
+		});
 	}
 
 	/**
@@ -165,12 +181,14 @@ public class ESServerImpl extends AbstractAPIImpl<ESServerImpl, ServerInfo> impl
 	 * @see org.eclipse.emf.emfstore.client.ESServer#getLastUsersession()
 	 */
 	public ESUsersession getLastUsersession() {
-
-		if (toInternalAPI().getLastUsersession() == null) {
-			return null;
-		}
-
-		return toInternalAPI().getLastUsersession().toAPI();
+		return RunESCommand.runWithResult(new Callable<ESUsersession>() {
+			public ESUsersession call() throws Exception {
+				if (toInternalAPI().getLastUsersession() == null) {
+					return null;
+				}
+				return toInternalAPI().getLastUsersession().toAPI();
+			}
+		});
 	}
 
 	/**
@@ -260,8 +278,13 @@ public class ESServerImpl extends AbstractAPIImpl<ESServerImpl, ServerInfo> impl
 	 * @see org.eclipse.emf.emfstore.client.ESServer#getRemoteProjects()
 	 */
 	public List<ESRemoteProject> getRemoteProjects() throws ESException {
-		final List<ProjectInfo> projectInfos = getRemoteProjectsServerCall().setServer(toInternalAPI()).execute();
-		return copy(mapToRemoteProject(projectInfos));
+		return RunESCommand.WithException.runWithResult(ESException.class, new Callable<List<ESRemoteProject>>() {
+			public List<ESRemoteProject> call() throws Exception {
+				final List<ProjectInfo> projectInfos = getRemoteProjectsServerCall().setServer(toInternalAPI())
+					.execute();
+				return copy(mapToRemoteProject(projectInfos));
+			}
+		});
 	}
 
 	/**
