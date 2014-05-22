@@ -19,12 +19,23 @@ import org.eclipse.emf.emfstore.server.exceptions.ESInitSSLException;
 
 /**
  * 
- * Utility to expose ssl parameters to ESWebServerProviders.
+ * Utility to expose SSL parameters to ESWebServerProviders.
  * 
  * @author Marco.vanMeegen
+ * @since 1.3
  */
-public class ESKeyStoreUtil {
+public final class ESKeyStoreUtil {
 
+	private ESKeyStoreUtil() {
+
+	}
+
+	/**
+	 * Returns the keystore used by the server.
+	 * 
+	 * @return the server's keystore
+	 * @throws ESInitSSLException in case an error occurs while fetching the keystore
+	 */
 	public static KeyStore getKeyStore() throws ESInitSSLException {
 		try {
 			return ServerKeyStoreManager.getInstance().getKeyStore();
@@ -35,6 +46,11 @@ public class ESKeyStoreUtil {
 
 	}
 
+	/**
+	 * Returns the password of the keystore.
+	 * 
+	 * @return the password of the keystore
+	 */
 	public static String getKeyStorePassword() {
 		return new String(ServerKeyStoreManager.getInstance().getKeyStorePassword());
 	}

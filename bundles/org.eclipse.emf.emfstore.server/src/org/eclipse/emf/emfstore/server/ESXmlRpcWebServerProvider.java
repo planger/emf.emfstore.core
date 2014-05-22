@@ -11,16 +11,16 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.server;
 
-import org.eclipse.emf.emfstore.internal.server.exceptions.FatalESException;
 import org.eclipse.emf.emfstore.server.exceptions.ESServerInitException;
 
 /**
- * extension point interface to use client specific web server/server configuration/logging etc to implement EMFStore
- * Server, e.g. embedded jetty.
- * Only one extension is allowed in a osgi system, otherwise EMFStore startup will terminate with an error. If none is
- * specified, the default emfstore builtin server is used.
+ * Extension point interface to use client specific web server/server configuration/logging etc to implement EMFStore
+ * Server, e.g. embedded Jetty.
+ * Only one extension is allowed in a OSGi system, otherwise EMFStore startup will terminate with an error. If none is
+ * specified, the default EMFStore built-in server is used.
  * 
  * @author Marco van Meegen
+ * @since 1.3
  * 
  */
 public interface ESXmlRpcWebServerProvider {
@@ -28,43 +28,44 @@ public interface ESXmlRpcWebServerProvider {
 	/**
 	 * Stops the server.
 	 */
-	public abstract void stopServer();
+	void stopServer();
 
 	/**
-	 * Removes a handler from the Webserver.
+	 * Removes a handler from the web server.
 	 * 
 	 * @param handlerName the handler's name
 	 * @return true, if other handler still available
 	 */
-	public abstract boolean removeHandler(String handlerName);
+	boolean removeHandler(String handlerName);
 
 	/**
-	 * Adds a handler to the webserver.
+	 * Adds a handler to the web server.
 	 * 
 	 * @param handlerName handler name
 	 * @param clazz class of server interface
-	 * @throws FatalESException in case of failure
+	 * @throws ESServerInitException in case of failure
 	 */
-	public abstract void addHandler(String handlerName, Class<?> clazz) throws ESServerInitException;
+	void addHandler(String handlerName, Class<?> clazz) throws ESServerInitException;
 
 	/**
 	 * Starts the server.
 	 * 
-	 * @throws FatalESException in case of failure
+	 * @throws ESServerInitException in case of failure
 	 */
-	public abstract void initServer() throws ESServerInitException;
+	void initServer() throws ESServerInitException;
 
 	/**
-	 * set the port for the server, must be called before any other method can be called
+	 * Set the port for the server, must be called before any other method can be called.
 	 * 
 	 * @param port http(s) port where server will answer
 	 */
-	public abstract void setPort(int port);
+	void setPort(int port);
 
 	/**
+	 * Returns the port the server is listening to.
 	 * 
 	 * @return port server listens to
 	 */
-	public abstract int getPort();
+	int getPort();
 
 }

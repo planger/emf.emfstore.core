@@ -12,7 +12,6 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.server;
 
-import org.eclipse.emf.emfstore.internal.server.DefaultServerWorkspaceLocationProvider;
 
 /**
  * Interface for workspace location providers. Implementing classes provide a location for the workspace - or server
@@ -29,7 +28,7 @@ public interface ESLocationProvider {
 	/**
 	 * Get the path to the workspace directory, where the model data is stored to. This method is called only once on
 	 * workspace startup to retrieve path. If you want to use profiles look at
-	 * {@link DefaultServerWorkspaceLocationProvider} and it's subclasses .
+	 * {@link org.eclipse.emf.emfstore.internal.server.DefaultServerWorkspaceLocationProvider} and it's subclasses .
 	 * 
 	 * @return a string representing the path
 	 */
