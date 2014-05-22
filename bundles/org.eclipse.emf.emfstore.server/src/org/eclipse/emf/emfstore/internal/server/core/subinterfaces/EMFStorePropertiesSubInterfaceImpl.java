@@ -41,8 +41,8 @@ import org.eclipse.emf.emfstore.server.exceptions.ESException;
  */
 public class EMFStorePropertiesSubInterfaceImpl extends AbstractSubEmfstoreInterface {
 
-	private static final String EMFSTORE_PROPERTIES_MONITOR = "EmfStorePropertiesMonitor";
-	private Map<ProjectHistory, Map<String, EMFStoreProperty>> cache;
+	private static final String EMFSTORE_PROPERTIES_MONITOR = "EmfStorePropertiesMonitor"; //$NON-NLS-1$
+	private final Map<ProjectHistory, Map<String, EMFStoreProperty>> cache;
 
 	/**
 	 * @param parentInterface
@@ -74,18 +74,18 @@ public class EMFStorePropertiesSubInterfaceImpl extends AbstractSubEmfstoreInter
 
 		synchronized (MonitorProvider.getInstance().getMonitor(EMFSTORE_PROPERTIES_MONITOR)) {
 
-			List<EMFStoreProperty> rejectedProperties = new ArrayList<EMFStoreProperty>();
-			ProjectHistory history = findHistory(projectId);
+			final List<EMFStoreProperty> rejectedProperties = new ArrayList<EMFStoreProperty>();
+			final ProjectHistory history = findHistory(projectId);
 
 			if (history == null) {
-				throw new ESException("The Project does not exist on the server. Cannot set the properties.");
+				throw new ESException(Messages.EMFStorePropertiesSubInterfaceImpl_Project_Does_Not_Exist);
 			}
 
-			EList<EMFStoreProperty> sharedProperties = history.getSharedProperties();
-			Set<EMFStoreProperty> replacedProperties = new LinkedHashSet<EMFStoreProperty>();
+			final EList<EMFStoreProperty> sharedProperties = history.getSharedProperties();
+			final Set<EMFStoreProperty> replacedProperties = new LinkedHashSet<EMFStoreProperty>();
 
-			for (EMFStoreProperty property : properties) {
-				EMFStoreProperty foundProperty = findProperty(history, property.getKey());
+			for (final EMFStoreProperty property : properties) {
+				final EMFStoreProperty foundProperty = findProperty(history, property.getKey());
 
 				if (foundProperty == null) {
 					// property has not been shared yet
@@ -115,11 +115,11 @@ public class EMFStorePropertiesSubInterfaceImpl extends AbstractSubEmfstoreInter
 
 			try {
 				getServerSpace().save();
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				// rollback
 				sharedProperties.removeAll(properties);
 				sharedProperties.addAll(replacedProperties);
-				throw new ESException("Cannot set the properties on the server.", e);
+				throw new ESException(Messages.EMFStorePropertiesSubInterfaceImpl_Properties_Not_Set, e);
 			}
 
 			return rejectedProperties;
@@ -139,17 +139,17 @@ public class EMFStorePropertiesSubInterfaceImpl extends AbstractSubEmfstoreInter
 	public List<EMFStoreProperty> getEMFProperties(ProjectId projectId) throws ESException {
 		sanityCheckObjects(projectId);
 
-		ProjectHistory history = findHistory(projectId);
+		final ProjectHistory history = findHistory(projectId);
 
 		if (history != null) {
-			List<EMFStoreProperty> temp = new ArrayList<EMFStoreProperty>();
-			for (EMFStoreProperty prop : history.getSharedProperties()) {
+			final List<EMFStoreProperty> temp = new ArrayList<EMFStoreProperty>();
+			for (final EMFStoreProperty prop : history.getSharedProperties()) {
 				temp.add(prop);
 			}
 			return temp;
 		}
 
-		throw new ESException("The Project does not exist on the server. Cannot set the properties.");
+		throw new ESException("The Project does not exist on the server. Cannot set the properties."); //$NON-NLS-1$
 
 	}
 
@@ -161,9 +161,9 @@ public class EMFStorePropertiesSubInterfaceImpl extends AbstractSubEmfstoreInter
 	 * @return the found project history or <code>null</code> if none has been found
 	 */
 	private ProjectHistory findHistory(ProjectId projectId) {
-		EList<ProjectHistory> serverProjects = getServerSpace().getProjects();
+		final EList<ProjectHistory> serverProjects = getServerSpace().getProjects();
 
-		for (ProjectHistory history : serverProjects) {
+		for (final ProjectHistory history : serverProjects) {
 			if (history.getProjectId().equals(projectId)) {
 				return history;
 			}
@@ -182,7 +182,7 @@ public class EMFStorePropertiesSubInterfaceImpl extends AbstractSubEmfstoreInter
 	 * @return the actual property or <code>null</code> if no such property has been found
 	 */
 	private EMFStoreProperty findProperty(ProjectHistory projectHistory, String propertyName) {
-		Map<String, EMFStoreProperty> propertiesMap = initCacheForHistory(projectHistory);
+		final Map<String, EMFStoreProperty> propertiesMap = initCacheForHistory(projectHistory);
 		return propertiesMap.get(propertyName);
 	}
 
@@ -199,7 +199,7 @@ public class EMFStorePropertiesSubInterfaceImpl extends AbstractSubEmfstoreInter
 
 		if (propertiesMap == null) {
 			propertiesMap = new LinkedHashMap<String, EMFStoreProperty>();
-			for (EMFStoreProperty prop : projectHistory.getSharedProperties()) {
+			for (final EMFStoreProperty prop : projectHistory.getSharedProperties()) {
 				propertiesMap.put(prop.getKey(), prop);
 			}
 		}
@@ -217,7 +217,7 @@ public class EMFStorePropertiesSubInterfaceImpl extends AbstractSubEmfstoreInter
 	 *            the property to be added to the history
 	 */
 	private void updateCache(ProjectHistory history, EMFStoreProperty property) {
-		Map<String, EMFStoreProperty> properties = initCacheForHistory(history);
+		final Map<String, EMFStoreProperty> properties = initCacheForHistory(history);
 		properties.put(property.getKey(), property);
 	}
 }

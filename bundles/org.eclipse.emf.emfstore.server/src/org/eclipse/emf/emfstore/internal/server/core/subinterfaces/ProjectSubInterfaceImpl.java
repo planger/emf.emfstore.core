@@ -12,6 +12,7 @@
 package org.eclipse.emf.emfstore.internal.server.core.subinterfaces;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -84,8 +85,10 @@ public class ProjectSubInterfaceImpl extends AbstractSubEmfstoreInterface {
 		if (projectHistory != null) {
 			return projectHistory;
 		}
-		throw new InvalidProjectIdException("Project with the id:" + (projectId == null ? "null" : projectId)
-			+ " doesn't exist.");
+		throw new InvalidProjectIdException(
+			MessageFormat.format(
+				Messages.ProjectSubInterfaceImpl_ProjectDoesNotExist,
+				projectId == null ? Messages.ProjectSubInterfaceImpl_Null : projectId));
 	}
 
 	private ProjectHistory getProjectOrNull(ProjectId projectId) {
@@ -100,6 +103,8 @@ public class ProjectSubInterfaceImpl extends AbstractSubEmfstoreInterface {
 	/**
 	 * Get the project state for a specific version.
 	 * 
+	 * @param projectId
+	 *            the {@link ProjectId} of the project to be fetched
 	 * @param versionSpec
 	 *            the requested version
 	 * @return the state of the project for the specified version
@@ -152,7 +157,7 @@ public class ProjectSubInterfaceImpl extends AbstractSubEmfstoreInterface {
 			if (currentVersion.getProjectState() == null) {
 				// TODO: nicer exception. Is this null check necessary anyway? (there were problems
 				// in past, because the xml files were inconsistent.
-				throw new ESException("Couldn't find project state.");
+				throw new ESException(Messages.ProjectSubInterfaceImpl_ProjectState_Not_Found);
 			}
 			final Project projectState = ModelUtil.clone(currentVersion.getProjectState());
 			Collections.reverse(versions);
@@ -312,7 +317,7 @@ public class ProjectSubInterfaceImpl extends AbstractSubEmfstoreInterface {
 					throw e;
 				}
 			} catch (final IOException e) {
-				throw new StorageException("Project resource files couldn't be deleted.", e);
+				throw new StorageException(Messages.ProjectSubInterfaceImpl_ProjectResources_Not_Deleted, e);
 			}
 		}
 	}
