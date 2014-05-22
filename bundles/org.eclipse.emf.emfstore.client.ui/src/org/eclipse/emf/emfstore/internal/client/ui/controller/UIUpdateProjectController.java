@@ -11,6 +11,7 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.controller;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -18,9 +19,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.emfstore.client.ESLocalProject;
 import org.eclipse.emf.emfstore.client.ESPagedUpdateConfig;
 import org.eclipse.emf.emfstore.client.callbacks.ESUpdateCallback;
+import org.eclipse.emf.emfstore.client.util.ESVoidCallable;
 import org.eclipse.emf.emfstore.common.model.ESModelElementIdToEObjectMapping;
 import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
 import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESLocalProjectImpl;
+import org.eclipse.emf.emfstore.internal.client.model.util.WorkspaceUtil;
 import org.eclipse.emf.emfstore.internal.client.ui.common.RunInUI;
 import org.eclipse.emf.emfstore.internal.client.ui.dialogs.UpdateDialog;
 import org.eclipse.emf.emfstore.internal.client.ui.dialogs.merge.MergeProjectHandler;
@@ -189,7 +192,7 @@ public class UIUpdateProjectController extends
 		throws ESException {
 
 		final ESPrimaryVersionSpec oldBaseVersion = localProject.getBaseVersion();
-		ESPrimaryVersionSpec newBaseVersion;
+		ESPrimaryVersionSpec newBaseVersion = null;
 
 		final ESPrimaryVersionSpec headVersion = localProject.resolveVersionSpec(
 			ESVersionSpec.FACTORY.createHEAD(oldBaseVersion.getBranch()),
@@ -208,26 +211,55 @@ public class UIUpdateProjectController extends
 			return oldBaseVersion;
 		}
 
-		if (version != null) {
-			newBaseVersion = localProject.update(version,
-				UIUpdateProjectController.this, monitor);
-		} else {
-			newBaseVersion = localProject.update(resolvedVersion,
-				UIUpdateProjectController.this, monitor);
-		}
+		try {
+			if (version != null) {
+				newBaseVersion = localProject.update(version,
+					UIUpdateProjectController.this, monitor);
+			} else {
+				newBaseVersion = localProject.update(resolvedVersion,
+					UIUpdateProjectController.this, monitor);
+			}
 
-		if (!doNotUsePagedUpdate && !newBaseVersion.equals(headVersion) && !newBaseVersion.equals(oldBaseVersion)) {
-			final boolean yes = RunInUI.runWithResult(new Callable<Boolean>() {
-				public Boolean call() throws Exception {
-					return MessageDialog.openConfirm(getShell(),
-						Messages.UIUpdateProjectController_MoreUpdatesAvailable_Title,
-						Messages.UIUpdateProjectController_MoreUpdatesAvailable_Message);
+			if (!doNotUsePagedUpdate && !newBaseVersion.equals(headVersion) && !newBaseVersion.equals(oldBaseVersion)) {
+				final boolean yes = RunInUI.runWithResult(new Callable<Boolean>() {
+					public Boolean call() throws Exception {
+						return MessageDialog.openConfirm(getShell(),
+							Messages.UIUpdateProjectController_MoreUpdatesAvailable_Title,
+							Messages.UIUpdateProjectController_MoreUpdatesAvailable_Message);
+					}
+				});
+				if (yes) {
+					return RunInUI.WithException.runWithResult(new Callable<ESPrimaryVersionSpec>() {
+						public ESPrimaryVersionSpec call() throws Exception {
+							return new UIUpdateProjectController(getShell(), localProject, maxChanges)
+								.executeSub(monitor);
+						}
+					});
 				}
-			});
-			if (yes) {
-				return RunInUI.WithException.runWithResult(new Callable<ESPrimaryVersionSpec>() {
-					public ESPrimaryVersionSpec call() throws Exception {
-						return new UIUpdateProjectController(getShell(), localProject, maxChanges).executeSub(monitor);
+			}
+		} catch (final ESException e) {
+			WorkspaceUtil.logException(e.getMessage(), e);
+			if (e.getCause() instanceof Error) {
+				RunInUI.run(new ESVoidCallable() {
+					@Override
+					public void run() {
+						MessageDialog.openError(
+							getShell(),
+							"Update failed",
+							MessageFormat
+								.format(
+									"A serious {0} occurred during update. The failure message was: {1}\nPlease consult your administrator.",
+									e.getCause().getMessage(),
+									e.getCause().getClass().getSimpleName()));
+					}
+				});
+			} else {
+				RunInUI.run(new Callable<Void>() {
+					public Void call() throws Exception {
+						MessageDialog.openError(getShell(),
+							"Update failed",
+							e.getMessage());
+						return null;
 					}
 				});
 			}
