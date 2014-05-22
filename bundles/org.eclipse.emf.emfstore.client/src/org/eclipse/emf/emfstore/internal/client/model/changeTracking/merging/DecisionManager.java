@@ -56,6 +56,7 @@ import org.eclipse.emf.emfstore.internal.common.model.Project;
 import org.eclipse.emf.emfstore.internal.server.conflictDetection.ChangeConflictSet;
 import org.eclipse.emf.emfstore.internal.server.conflictDetection.ConflictBucket;
 import org.eclipse.emf.emfstore.internal.server.conflictDetection.ConflictDetector;
+import org.eclipse.emf.emfstore.internal.server.model.versioning.ChangePackage;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.impl.ChangePackageImpl;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.CompositeOperation;
@@ -500,9 +501,24 @@ public class DecisionManager {
 	 * 
 	 * @param theirOperation
 	 *            operation
-	 * @return name as string or ""
+	 * @return name as string or empty string
 	 */
 	public String getAuthorForOperation(AbstractOperation theirOperation) {
+		// TODO: review
+		EObject container = theirOperation;
+		while (!(container instanceof ChangePackage)) {
+			container = container.eContainer();
+		}
+
+		final ChangePackage cp = (ChangePackage) container;
+
+		// ME: I don't think this will be ever the case
+		if (cp.getLogMessage() == null || cp.getLogMessage().getAuthor() == null) {
+			return StringUtils.EMPTY;
+		}
+
+		return cp.getLogMessage().getAuthor();
+		// theirOperation.
 		// for (ChangePackage cp : theirChangePackages) {
 		// for (AbstractOperation op : cp.getOperations()) {
 		// List<AbstractOperation> tmpList = new ArrayList<AbstractOperation>();
@@ -525,7 +541,7 @@ public class DecisionManager {
 		// }
 		// }
 		// MKCD
-		return StringUtils.EMPTY;
+		// return StringUtils.EMPTY;
 	}
 
 	private Integer myLeafOperationCount;
