@@ -11,65 +11,64 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.client.test.common.mocks;
 
-import java.io.IOException;
-
-import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectHistory;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACGroup;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACUser;
 import org.eclipse.emf.emfstore.internal.server.model.dao.ACDAOFacade;
+import org.eclipse.emf.emfstore.internal.server.model.impl.ServerSpaceImpl;
 
-public class DAOFacadeMock implements ACDAOFacade {
+public class MockServerSpace extends ServerSpaceImpl {
 
-	private final EList<ACUser> users;
-	private final EList<ACGroup> groups;
-	private final EList<ProjectHistory> projects;
+	private final ACDAOFacade daoFacade;
 
-	public DAOFacadeMock() {
-		users = new BasicEList<ACUser>();
-		groups = new BasicEList<ACGroup>();
-		projects = new BasicEList<ProjectHistory>();
+	public MockServerSpace(ACDAOFacade daoFacade) {
+		this.daoFacade = daoFacade;
 	}
 
-	public EList<ACUser> getUsers() {
-		return users;
-	}
-
-	public EList<ACGroup> getGroups() {
-		return groups;
-	}
-
+	@Override
 	public void add(ACUser user) {
-		users.add(user);
+		daoFacade.add(user);
 	}
 
+	@Override
+	public EList<ACUser> getUsers() {
+		return daoFacade.getUsers();
+	}
+
+	@Override
+	public void remove(ACUser group) {
+		daoFacade.remove(group);
+	}
+
+	@Override
 	public void add(ACGroup group) {
-		groups.add(group);
+		daoFacade.add(group);
 	}
 
-	public void remove(ACUser user) {
-		users.remove(user);
+	@Override
+	public EList<ACGroup> getGroups() {
+		return daoFacade.getGroups();
 	}
 
+	@Override
 	public void remove(ACGroup group) {
-		groups.remove(group);
+		daoFacade.remove(group);
 	}
 
-	public void save() throws IOException {
-
-	}
-
+	@Override
 	public void add(ProjectHistory history) {
-		projects.add(history);
+		daoFacade.add(history);
 	}
 
+	@Override
 	public EList<ProjectHistory> getProjects() {
-		return projects;
+		return daoFacade.getProjects();
 	}
 
+	@Override
 	public void remove(ProjectHistory history) {
-		projects.remove(history);
+		daoFacade.remove(history);
 	}
 
 }

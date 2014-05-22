@@ -7,24 +7,40 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Edgar - initial API and implementation
+ * Edgar Mueller - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.server.model.dao;
 
-import java.util.List;
-
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACUser;
 
 /**
- * @author Edgar
+ * @author emueller
  * 
  */
 public interface ACUserDAO extends DAO {
 
+	/**
+	 * Add a user.
+	 * 
+	 * @param user
+	 *            the user to be added
+	 */
 	void add(ACUser user);
 
-	List<ACUser> getUsers();
+	/**
+	 * Returns all users.
+	 * 
+	 * @return a list containing all users
+	 */
+	EList<ACUser> getUsers();
 
-	void remove(ACUser group);
+	/**
+	 * Removes a user.
+	 * 
+	 * @param user
+	 *            the user to be removed
+	 */
+	void remove(ACUser user);
 
 }
