@@ -97,9 +97,9 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 	 * @see org.eclipse.emf.emfstore.client.ESProject#getGlobalProjectId()
 	 */
 	public ESGlobalProjectId getGlobalProjectId() {
+		checkIsShared();
 		return RunESCommand.runWithResult(new Callable<ESGlobalProjectId>() {
 			public ESGlobalProjectId call() throws Exception {
-				checkIsShared();
 				return toInternalAPI().getProjectId().toAPI();
 			}
 		});
@@ -173,10 +173,9 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 	 * @see org.eclipse.emf.emfstore.client.ESProject#getBranches(org.eclipse.core.runtime.IProgressMonitor)
 	 */
 	public List<ESBranchInfo> getBranches(final IProgressMonitor monitor) throws ESException {
+		checkIsShared();
 		return RunESCommand.WithException.runWithResult(ESException.class, new Callable<List<ESBranchInfo>>() {
 			public List<ESBranchInfo> call() throws Exception {
-				checkIsShared();
-
 				final List<BranchInfo> branchInfos = new ServerCall<List<BranchInfo>>(toInternalAPI(), monitor) {
 					@Override
 					protected List<BranchInfo> run() throws ESException {
@@ -644,9 +643,9 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 	 * @see org.eclipse.emf.emfstore.client.ESLocalProject#getBaseVersion()
 	 */
 	public ESPrimaryVersionSpec getBaseVersion() {
+		checkIsShared();
 		return RunESCommand.runWithResult(new Callable<ESPrimaryVersionSpec>() {
 			public ESPrimaryVersionSpec call() throws Exception {
-				checkIsShared();
 				return toInternalAPI().getBaseVersion().toAPI();
 			}
 		});
@@ -659,9 +658,9 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 	 * @see org.eclipse.emf.emfstore.client.ESLocalProject#getLastUpdated()
 	 */
 	public Date getLastUpdated() {
+		checkIsShared();
 		return RunESCommand.runWithResult(new Callable<Date>() {
 			public Date call() throws Exception {
-				checkIsShared();
 				return toInternalAPI().getLastUpdated();
 			}
 		});
@@ -674,9 +673,9 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 	 * @see org.eclipse.emf.emfstore.client.ESLocalProject#getRecentLogMessages()
 	 */
 	public List<String> getRecentLogMessages() {
+		checkIsShared();
 		return RunESCommand.runWithResult(new Callable<List<String>>() {
 			public List<String> call() throws Exception {
-				checkIsShared();
 				return toInternalAPI().getOldLogMessages();
 			}
 		});
@@ -780,10 +779,9 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 	 * @see org.eclipse.emf.emfstore.client.ESLocalProject#getRemoteProject()
 	 */
 	public ESRemoteProjectImpl getRemoteProject() throws ESException {
+		checkIsShared();
 		return RunESCommand.WithException.runWithResult(ESException.class, new Callable<ESRemoteProjectImpl>() {
 			public ESRemoteProjectImpl call() throws Exception {
-				checkIsShared();
-
 				// TODO OTS only return if server is available
 				if (getUsersession() == null || getUsersession().getServer() == null) {
 					throw new ESException(Messages.ESLocalProjectImpl_No_Usersession_Found);
