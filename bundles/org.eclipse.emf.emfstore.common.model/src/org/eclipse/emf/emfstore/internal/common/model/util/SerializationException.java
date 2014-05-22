@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * koegel
+ * Maximilian Koegel - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.common.model.util;
 
@@ -21,7 +21,7 @@ import org.eclipse.emf.ecore.EObject;
 @SuppressWarnings("serial")
 public class SerializationException extends Exception {
 
-	private static final String DE_SERIALIZATION_FAILED = "(De-)Serialization failed";
+	private static final String DE_SERIALIZATION_FAILED = Messages.SerializationException_Failed;
 
 	/**
 	 * Default constructor.
@@ -29,7 +29,7 @@ public class SerializationException extends Exception {
 	 * @param cause the cause
 	 */
 	public SerializationException(Throwable cause) {
-		super(DE_SERIALIZATION_FAILED + ".", cause);
+		super(DE_SERIALIZATION_FAILED + ".", cause); //$NON-NLS-1$
 	}
 
 	/**
@@ -38,7 +38,7 @@ public class SerializationException extends Exception {
 	 * @param eObject the eObject that failed to serialize
 	 */
 	public SerializationException(EObject eObject) {
-		super(DE_SERIALIZATION_FAILED + ": " + eObject.toString());
+		super(DE_SERIALIZATION_FAILED + ": " + eObject.toString()); //$NON-NLS-1$
 	}
 
 	/**
@@ -47,6 +47,6 @@ public class SerializationException extends Exception {
 	 * @param msg exception message
 	 */
 	public SerializationException(String msg) {
-		super(DE_SERIALIZATION_FAILED + ": " + msg);
+		super(DE_SERIALIZATION_FAILED + ": " + msg); //$NON-NLS-1$
 	}
 }

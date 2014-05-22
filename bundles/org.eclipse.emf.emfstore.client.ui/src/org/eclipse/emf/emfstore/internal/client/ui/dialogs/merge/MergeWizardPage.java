@@ -11,6 +11,7 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.dialogs.merge;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,10 +48,10 @@ public class MergeWizardPage extends WizardPage {
 	/**
 	 * Name of wizard page.
 	 */
-	public static final String PAGE_NAME = "Resolve Conflicts";
+	public static final String PAGE_NAME = Messages.MergeWizardPage_PageName;
 
 	private ArrayList<DecisionBox> decisionBoxes;
-	private DecisionManager decisionManager;
+	private final DecisionManager decisionManager;
 
 	/**
 	 * Default Constructor.
@@ -61,15 +62,20 @@ public class MergeWizardPage extends WizardPage {
 	protected MergeWizardPage(DecisionManager decisionManager) {
 		super(PAGE_NAME);
 		this.decisionManager = decisionManager;
-		setTitle("Merge Conflicts");
-		int countMyOperations = decisionManager.countMyOperations();
-		int countTheirOperations = decisionManager.countTheirOperations();
-		int countMyLeafOperations = decisionManager.countMyLeafOperations();
-		int countTheirLeafOperations = decisionManager.countTheirLeafOperations();
-		setDescription("Some of your " + countMyOperations + " composite changes and " + countMyLeafOperations
-			+ " overall changes conflict with " + countTheirOperations + " composite changes and "
-			+ countTheirLeafOperations + " overall changes from the repository."
-			+ "\nIn order to resolve these issues, select an option for every conflict.");
+		setTitle(Messages.MergeWizardPage_Title);
+		final int countMyOperations = decisionManager.countMyOperations();
+		final int countTheirOperations = decisionManager.countTheirOperations();
+		final int countMyLeafOperations = decisionManager.countMyLeafOperations();
+		final int countTheirLeafOperations = decisionManager.countTheirLeafOperations();
+		setDescription(MessageFormat.format(
+			Messages.MergeWizardPage_Description_1
+				+ Messages.MergeWizardPage_Description_2
+				+ Messages.MergeWizardPage_Description_3
+				+ Messages.MergeWizardPage_Description_4,
+			countMyOperations,
+			countMyLeafOperations,
+			countTheirOperations,
+			countTheirLeafOperations));
 	}
 
 	/**
@@ -78,7 +84,7 @@ public class MergeWizardPage extends WizardPage {
 	public void createControl(final Composite parent) {
 		parent.setLayout(new GridLayout());
 
-		Composite topBar = createTopBar(parent);
+		final Composite topBar = createTopBar(parent);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(topBar);
 		final ScrolledComposite scrolledComposite = new ScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
 		scrolledComposite.setExpandHorizontal(true);
@@ -87,32 +93,32 @@ public class MergeWizardPage extends WizardPage {
 
 		final Composite client = new Composite(scrolledComposite, SWT.NONE);
 		client.setLayout(new GridLayout());
-		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		final GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		client.setLayoutData(gridData);
 
-		ColorSwitcher colorSwitcher = new ColorSwitcher();
+		final ColorSwitcher colorSwitcher = new ColorSwitcher();
 
 		decisionBoxes = new ArrayList<DecisionBox>();
 
 		// show only unresolved conflicts
-		List<VisualConflict> unresolvedConflicts = new ArrayList<VisualConflict>();
-		for (VisualConflict conflict : decisionManager.getConflicts()) {
+		final List<VisualConflict> unresolvedConflicts = new ArrayList<VisualConflict>();
+		for (final VisualConflict conflict : decisionManager.getConflicts()) {
 			if (!conflict.isResolved()) {
 				unresolvedConflicts.add(conflict);
 			}
 		}
 
-		for (VisualConflict conflict : unresolvedConflicts) {
+		for (final VisualConflict conflict : unresolvedConflicts) {
 			decisionBoxes.add(new DecisionBox(client, decisionManager, colorSwitcher.getColor(), conflict));
 		}
 
 		// Listener to check for changes in the width of the client. A changed width can influence the height
 		// of the client. Thus one has to adjust the height of the scrolledComposite accordingly.
 		client.addListener(SWT.Resize, new Listener() {
-			int widthBeforeChange = -1; // initial negative value
+			private int widthBeforeChange = -1; // initial negative value
 
 			public void handleEvent(Event event) {
-				int widthAfterChange = client.getSize().x;
+				final int widthAfterChange = client.getSize().x;
 				if (widthBeforeChange != widthAfterChange) {
 					scrolledComposite.setMinHeight(client.computeSize(widthAfterChange, SWT.DEFAULT).y);
 					widthBeforeChange = widthAfterChange;
@@ -122,31 +128,31 @@ public class MergeWizardPage extends WizardPage {
 
 		scrolledComposite.setContent(client);
 
-		Point computeSize = calcParentSize(parent, topBar);
+		final Point computeSize = calcParentSize(parent, topBar);
 		scrolledComposite.setMinSize(computeSize);
 
 		setControl(scrolledComposite);
 	}
 
 	private Point calcParentSize(final Composite parent, Composite topBar) {
-		Point computeSize = parent.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+		final Point computeSize = parent.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 		computeSize.x = parent.getBounds().width;
 		// Due to resizing issues give a bit of extra space.
-		computeSize.y = (computeSize.y + topBar.getSize().y + 50);
+		computeSize.y = computeSize.y + topBar.getSize().y + 50;
 		return computeSize;
 	}
 
 	private Composite createTopBar(Composite parent) {
-		Composite composite = new Composite(parent, SWT.NONE);
+		final Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new RowLayout(SWT.HORIZONTAL));
 		composite.setSize(SWT.DEFAULT, 200);
 
-		Button acceptMine = new Button(composite, SWT.PUSH);
-		acceptMine.setText("Keep All My Changes");
+		final Button acceptMine = new Button(composite, SWT.PUSH);
+		acceptMine.setText(Messages.MergeWizardPage_KeepMyChanges);
 		acceptMine.addSelectionListener(new SelectAllSelectionListener(OptionType.MyOperation));
 
-		Button accecptTheirs = new Button(composite, SWT.PUSH);
-		accecptTheirs.setText("Keep All Their Changes");
+		final Button accecptTheirs = new Button(composite, SWT.PUSH);
+		accecptTheirs.setText(Messages.MergeWizardPage_KeepTheirChanges);
 		accecptTheirs.addSelectionListener(new SelectAllSelectionListener(OptionType.TheirOperation));
 
 		return composite;
@@ -175,16 +181,20 @@ public class MergeWizardPage extends WizardPage {
 
 		private void select() {
 			if (type.equals(OptionType.MyOperation)) {
-				boolean confirm = MessageDialog.openConfirm(getShell(), "Override changes of other users",
-					"Are you sure you want to override " + decisionManager.countTheirOperations()
-						+ " composite operations and " + decisionManager.countTheirLeafOperations()
-						+ " overall changes of other users by keeping your changes?");
+				final boolean confirm = MessageDialog.openConfirm(getShell(),
+					Messages.MergeWizardPage_Override_Title,
+					MessageFormat.format(
+						Messages.MergeWizardPage_Override_Message_1
+							+ Messages.MergeWizardPage_Override_Message_2
+							+ Messages.MergeWizardPage_Override_Message_3,
+						decisionManager.countTheirOperations(),
+						decisionManager.countTheirLeafOperations()));
 				if (!confirm) {
 					return;
 				}
 			}
-			for (DecisionBox box : decisionBoxes) {
-				for (ConflictOption option : box.getConflict().getOptions()) {
+			for (final DecisionBox box : decisionBoxes) {
+				for (final ConflictOption option : box.getConflict().getOptions()) {
 					if (option.getType().equals(type)) {
 						box.setSolution(option);
 						break;
@@ -208,7 +218,7 @@ public class MergeWizardPage extends WizardPage {
 
 		public Color getColor() {
 			color = !color;
-			return (color) ? UIDecisionConfig.getFirstDecisionBoxColor() : UIDecisionConfig.getSecondDecisionBoxColor();
+			return color ? UIDecisionConfig.getFirstDecisionBoxColor() : UIDecisionConfig.getSecondDecisionBoxColor();
 		}
 	}
 }

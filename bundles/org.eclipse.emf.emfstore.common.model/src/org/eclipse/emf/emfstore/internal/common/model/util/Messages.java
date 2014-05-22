@@ -21,6 +21,10 @@ import org.eclipse.osgi.util.NLS;
  */
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.emf.emfstore.internal.common.model.util.messages"; //$NON-NLS-1$
+	public static String FileUtil_Comparing;
+	public static String FileUtil_DestinationExists;
+	public static String FileUtil_SourceMustBeFolder;
+	public static String FileUtil_SourceOrDestinationIsNull;
 	public static String ModelUtil_Incoming_CrossRef_Is_Map_Key;
 	public static String ModelUtil_ModelElement_Is_In_Containment_Cycle;
 	public static String ModelUtil_Resource_Contains_Multiple_Objects;
@@ -28,6 +32,7 @@ public final class Messages extends NLS {
 	public static String ModelUtil_Resource_Contains_No_Objects_Of_Given_Class;
 	public static String ModelUtil_Save_Options_Initialized;
 	public static String ModelUtil_SingletonIdResolver_Not_Instantiated;
+	public static String SerializationException_Failed;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
