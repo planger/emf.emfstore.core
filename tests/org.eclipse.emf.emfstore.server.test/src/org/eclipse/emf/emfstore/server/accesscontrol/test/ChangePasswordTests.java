@@ -14,6 +14,7 @@ package org.eclipse.emf.emfstore.server.accesscontrol.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import org.eclipse.emf.emfstore.client.ESLocalProject;
 import org.eclipse.emf.emfstore.client.test.common.dsl.Roles;
 import org.eclipse.emf.emfstore.client.test.common.util.ProjectUtil;
 import org.eclipse.emf.emfstore.client.test.common.util.ServerUtil;
@@ -22,6 +23,7 @@ import org.eclipse.emf.emfstore.internal.server.accesscontrol.PAPrivileges;
 import org.eclipse.emf.emfstore.internal.server.exceptions.AccessControlException;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnitId;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACUser;
+import org.eclipse.emf.emfstore.internal.server.model.impl.api.ESGlobalProjectIdImpl;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -81,6 +83,33 @@ public class ChangePasswordTests extends ProjectAdminTest {
 		getAdminBroker().changeRole(getProjectSpace().getProjectId(), createUser, Roles.writer());
 		ServerUtil.changePassword(getUsersession(), createUser, getNewUsername(), NEW_USER_PASSWORD);
 		final ACUser user = ServerUtil.getUser(getSuperUsersession(), createUser);
+		assertEquals(NEW_USER_PASSWORD, user.getPassword());
+	}
+
+	@Test(expected = AccessControlException.class)
+	public void changePasswordOfOtherPASameProject() throws ESException {
+		makeUserPA();
+		final ACOrgUnitId newUser = ServerUtil.createUser(getSuperUsersession(), getNewUsername());
+		ProjectUtil.share(getUsersession(), getLocalProject());
+		getAdminBroker().changeRole(getProjectSpace().getProjectId(), newUser, Roles.projectAdmin());
+		// try to change the password of the other project admin
+		ServerUtil.changePassword(getUsersession(), newUser, getNewUsername(), NEW_USER_PASSWORD);
+		final ACUser user = ServerUtil.getUser(getSuperUsersession(), newUser);
+		assertEquals(NEW_USER_PASSWORD, user.getPassword());
+	}
+
+	@Test(expected = AccessControlException.class)
+	public void changePasswordOfOtherPADifferentProjects() throws ESException {
+		makeUserPA();
+		final ACOrgUnitId newUser = ServerUtil.createUser(getSuperUsersession(), getNewUsername());
+		ProjectUtil.share(getUsersession(), getLocalProject());
+		// share a second project
+		final ESLocalProject share2 = ProjectUtil.share(getSuperUsersession(), getLocalProject());
+		getAdminBroker().changeRole(ESGlobalProjectIdImpl.class.cast(share2.getGlobalProjectId()).toInternalAPI(),
+			newUser, Roles.projectAdmin());
+		// try to change the password of the other project admin
+		ServerUtil.changePassword(getUsersession(), newUser, getNewUsername(), NEW_USER_PASSWORD);
+		final ACUser user = ServerUtil.getUser(getSuperUsersession(), newUser);
 		assertEquals(NEW_USER_PASSWORD, user.getPassword());
 	}
 
