@@ -27,6 +27,7 @@ import org.eclipse.emf.emfstore.internal.client.model.filetransfer.FileDownloadS
 import org.eclipse.emf.emfstore.internal.client.model.filetransfer.FileDownloadStatus.Status;
 import org.eclipse.emf.emfstore.internal.server.model.FileIdentifier;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
+import org.junit.After;
 import org.junit.Test;
 
 /**
@@ -39,11 +40,7 @@ public class FileManagerTest extends TransmissionTests {
 
 	private File file;
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see org.eclipse.emf.emfstore.server.test.TransmissionTests#after()
-	 */
+	@After
 	@Override
 	public void after() {
 		if (file != null) {
