@@ -17,6 +17,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.io.FileUtils;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.emfstore.client.ESLocalProject;
 import org.eclipse.emf.emfstore.client.ESProject;
@@ -30,9 +31,22 @@ import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
 import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
 import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
 import org.eclipse.emf.emfstore.test.model.TestElement;
+import org.junit.After;
 import org.junit.Test;
 
 public class ImportExportTest extends ESTest {
+
+	private File temp;
+
+	@After
+	@Override
+	public void after() {
+		if (temp != null) {
+			FileUtils.deleteQuietly(temp);
+			temp = null;
+		}
+		super.after();
+	}
 
 	@Test
 	public void testExportImportChangesController() throws IOException {
@@ -43,7 +57,7 @@ public class ImportExportTest extends ESTest {
 
 		// TODO: assert file extension is correct
 
-		final File temp = File.createTempFile("changes", ExportImportDataUnits.Change.getExtension());
+		temp = File.createTempFile("changes", ExportImportDataUnits.Change.getExtension());
 		new ExportImportControllerExecutor(temp, new NullProgressMonitor())
 			.execute(ExportImportControllerFactory.Export.getExportChangesController(getProjectSpace()));
 
@@ -63,7 +77,7 @@ public class ImportExportTest extends ESTest {
 
 		// TODO: assert file extension is correct
 
-		final File temp = File.createTempFile("project", ExportImportDataUnits.Project.getExtension());
+		temp = File.createTempFile("project", ExportImportDataUnits.Project.getExtension());
 		new ExportImportControllerExecutor(temp, new NullProgressMonitor())
 			.execute(ExportImportControllerFactory.Export.getExportProjectController(getProjectSpace()));
 
@@ -86,7 +100,7 @@ public class ImportExportTest extends ESTest {
 
 	@Test
 	public void testDuplicateImportOfProjectSpace() throws IOException {
-		final File temp = File.createTempFile("projectSpace", ExportImportDataUnits.ProjectSpace.getExtension());
+		temp = File.createTempFile("projectSpace", ExportImportDataUnits.ProjectSpace.getExtension());
 		new ExportImportControllerExecutor(temp, new NullProgressMonitor())
 			.execute(ExportImportControllerFactory.Export.getExportProjectSpaceController(getProjectSpace()));
 
@@ -111,7 +125,7 @@ public class ImportExportTest extends ESTest {
 
 		// TODO: assert file extension is correct
 
-		final File temp = File.createTempFile("projectSpace", ExportImportDataUnits.ProjectSpace.getExtension());
+		temp = File.createTempFile("projectSpace", ExportImportDataUnits.ProjectSpace.getExtension());
 		new ExportImportControllerExecutor(temp, new NullProgressMonitor())
 			.execute(ExportImportControllerFactory.Export.getExportProjectSpaceController(getProjectSpace()));
 

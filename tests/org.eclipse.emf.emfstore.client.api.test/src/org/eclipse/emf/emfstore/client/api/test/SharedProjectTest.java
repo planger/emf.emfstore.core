@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import org.apache.commons.io.FileUtils;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -52,6 +53,7 @@ import org.eclipse.emf.emfstore.server.model.query.ESRangeQuery;
 import org.eclipse.emf.emfstore.server.model.versionspec.ESBranchVersionSpec;
 import org.eclipse.emf.emfstore.server.model.versionspec.ESPrimaryVersionSpec;
 import org.eclipse.emf.emfstore.server.model.versionspec.ESVersionSpec;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -62,6 +64,7 @@ public class SharedProjectTest extends ESTestWithSharedProject {
 	private static final String CHECKOUT_NAME = "testCheckout"; //$NON-NLS-1$
 	private static final String NEW_BRANCH_NAME = "newBranch"; //$NON-NLS-1$
 	private static final String COMMIT_MESSAGE = "SomeCommitMessage"; //$NON-NLS-1$
+	private static File tempFile;
 
 	private ESCommitCallback callback;
 	private boolean noLocalChangesOccurred;
@@ -74,6 +77,16 @@ public class SharedProjectTest extends ESTestWithSharedProject {
 	@AfterClass
 	public static void afterClass() {
 		stopEMFStore();
+	}
+
+	@After
+	@Override
+	public void after() {
+		if (tempFile != null) {
+			FileUtils.deleteQuietly(tempFile);
+			tempFile = null;
+		}
+		super.after();
 	}
 
 	@Test
@@ -341,8 +354,9 @@ public class SharedProjectTest extends ESTestWithSharedProject {
 
 	private static Resource createResource() throws IOException {
 		final ResourceSetImpl resourceSet = new ResourceSetImpl();
+		tempFile = File.createTempFile("league", ".xmi"); //$NON-NLS-1$//$NON-NLS-2$
 		final Resource resource = resourceSet.createResource(
-			URI.createFileURI(File.createTempFile("league", ".xmi").getAbsolutePath())); //$NON-NLS-1$ //$NON-NLS-2$
+			URI.createFileURI(tempFile.getAbsolutePath()));
 		return resource;
 	}
 
