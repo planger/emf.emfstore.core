@@ -389,6 +389,7 @@ public class SingleReferenceOperationImpl extends ReferenceOperationImpl impleme
 					setOldValue(updatedOldValue);
 				}
 			} else if (oldValue != null) {
+				oldModelElement = null;
 				setOldValue(null);
 			}
 
