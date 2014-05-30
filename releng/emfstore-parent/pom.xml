@@ -11,7 +11,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<tycho-version>0.18.0</tycho-version>
+		<tycho-version>0.20.0</tycho-version>
 		<junit-version>4.8.2</junit-version>
 		<maven-checkstyle-version>2.10</maven-checkstyle-version>
 		<jacoco-version>0.6.2.201302030002</jacoco-version>
