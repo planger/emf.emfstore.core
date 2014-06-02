@@ -12,8 +12,6 @@
 package org.eclipse.emf.emfstore.common;
 
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.URIConverter;
-import org.eclipse.emf.emfstore.internal.common.ResourceFactoryRegistry;
 
 /**
  * Interface for resource set provider.
@@ -25,8 +23,9 @@ import org.eclipse.emf.emfstore.internal.common.ResourceFactoryRegistry;
 public interface ESResourceSetProvider {
 
 	/**
-	 * Returns ResourceSet with load and save options configured and including {@link ResourceFactoryRegistry} and
-	 * {@link URIConverter}.
+	 * Returns ResourceSet with load and save options configured and including
+	 * {@link org.eclipse.emf.emfstore.internal.common.ResourceFactoryRegistry ResourceFactoryRegistry} and
+	 * {@link org.eclipse.emf.ecore.resource.URIConverter URIConverter}.
 	 * 
 	 * @return the ResourceSet
 	 */

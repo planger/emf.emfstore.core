@@ -7,8 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Otto von Wesendonk
- * Edgar Mueller
+ * Otto von Wesendonk, Edgar Mueller - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.common;
 
@@ -27,7 +26,7 @@ import org.eclipse.emf.emfstore.internal.common.api.InternalAPIDelegator;
  * @author emueller
  * @author eneufeld
  */
-public class APIUtil {
+public final class APIUtil {
 
 	private APIUtil() {
 	}
@@ -56,6 +55,17 @@ public class APIUtil {
 		return result;
 	}
 
+	/**
+	 * Maps a list of a given API type to its internal API counterpart by copying and mapping the entities.
+	 * 
+	 * @param toCopy
+	 *            the list to be copied and mapped to the internal API type
+	 * @return the copied list with its elements mapped to their internal API type
+	 * 
+	 * @param <INT> the internal API mapping to an API implementation class
+	 * @param <API> the type of the API interface
+	 * @param <IMPL> the type of the API implementation class
+	 */
 	public static <IMPL extends InternalAPIDelegator<API, INT>, INT extends APIDelegate<API>, API>
 		List<INT> toInternal(List<API> toCopy) {
 
@@ -74,6 +84,20 @@ public class APIUtil {
 		return result;
 	}
 
+	/**
+	 * Maps a list of a given internal API type to its external API counterpart by copying and mapping the entities.
+	 * 
+	 * @param cls
+	 *            the desired internal API type
+	 * @param toCopy
+	 *            the list to be copied and mapped to the external API type
+	 * @return the copied list with its elements mapped to their external API type
+	 * 
+	 * @param <DESIRED> the internal API type
+	 * @param <INT> the internal API mapping to an API implementation class
+	 * @param <API> the type of the API interface
+	 * @param <IMPL> the type of the API implementation class
+	 */
 	public static <IMPL extends InternalAPIDelegator<API, INT>, INT extends APIDelegate<API>, API, DESIRED>
 		List<INT> toInternal(Class<DESIRED> cls, List<API> toCopy) {
 
@@ -92,6 +116,17 @@ public class APIUtil {
 		return result;
 	}
 
+	/**
+	 * Maps a list of a given internal API type to its external API counterpart by copying and mapping the entities.
+	 * 
+	 * @param toCopy
+	 *            the list to be copied and mapped to the external API type
+	 * @return the copied list with its elements mapped to their external API type
+	 * 
+	 * @param <INT> the internal API mapping to an API implementation class
+	 * @param <API> the type of the API interface
+	 * @param <IMPL> the type of the API implementation class
+	 */
 	public static <IMPL extends InternalAPIDelegator<API, INT>, INT extends APIDelegate<API>, API>
 		List<API> toExternal(List<INT> toCopy) {
 
@@ -108,6 +143,17 @@ public class APIUtil {
 		return result;
 	}
 
+	/**
+	 * Maps a set of a given internal API type to its external API counterpart by copying and mapping the entities.
+	 * 
+	 * @param toCopy
+	 *            the set to be copied and mapped to the external API type
+	 * @return the copied set with its elements mapped to their external API type
+	 * 
+	 * @param <INT> the internal API mapping to an API implementation class
+	 * @param <API> the type of the API interface
+	 * @param <IMPL> the type of the API implementation class
+	 */
 	public static <IMPL extends InternalAPIDelegator<API, INT>, INT extends APIDelegate<API>, API>
 		Set<API> toExternal(Set<INT> toCopy) {
 
@@ -127,6 +173,8 @@ public class APIUtil {
 	/**
 	 * Maps a list of a given internal type to its corresponding API type by copying it.
 	 * 
+	 * @param apiClass
+	 *            the desired API type
 	 * @param toCopy
 	 *            the list to be copied
 	 * @return the copied list with its elements mapped to their API type
@@ -157,6 +205,8 @@ public class APIUtil {
 	/**
 	 * Maps a list of a given external API type to its corresponding internal type by copying it.
 	 * 
+	 * @param apiClass
+	 *            the desired API type
 	 * @param toCopy
 	 *            the list to be copied
 	 * @return the copied list with its elements mapped to their API type
@@ -186,6 +236,17 @@ public class APIUtil {
 		return result;
 	}
 
+	/**
+	 * Maps a set of a given API type to its internal API counterpart by copying and mapping the entities.
+	 * 
+	 * @param toCopy
+	 *            the set to be copied and mapped to the internal API type
+	 * @return the copied set with its elements mapped to their internal API type
+	 * 
+	 * @param <INT> the internal API mapping to an API implementation class
+	 * @param <API> the type of the API interface
+	 * @param <IMPL> the type of the API implementation class
+	 */
 	public static <IMPL extends InternalAPIDelegator<API, INT>, INT extends APIDelegate<API>, API>
 		Set<INT> toInternal(Set<API> toCopy) {
 
@@ -204,6 +265,20 @@ public class APIUtil {
 		return result;
 	}
 
+	/**
+	 * Maps an given API type to its internal API counterpart.
+	 * 
+	 * @param apiClass
+	 *            the desired API type
+	 * @param element
+	 *            the type to be mapped
+	 * @return the internal API type
+	 * 
+	 * @param <T> the internal API mapping to an API implementation class
+	 * @param <V> the type of the API interface
+	 * @param <U> the type of the API implementation class
+	 */
+	@SuppressWarnings("unchecked")
 	public static <V, U extends InternalAPIDelegator<U, T>, T extends APIDelegate<U>> T toInternal(
 		Class<T> apiClass, V element) {
 		return ((U) element).toInternalAPI();

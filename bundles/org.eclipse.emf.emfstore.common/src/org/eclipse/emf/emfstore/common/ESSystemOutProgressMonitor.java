@@ -31,7 +31,7 @@ public final class ESSystemOutProgressMonitor implements IProgressMonitor {
 	 * @see org.eclipse.core.runtime.IProgressMonitor#beginTask(java.lang.String, int)
 	 */
 	public void beginTask(String name, int totalWork) {
-		System.out.print(name + ":");
+		System.out.print(name + ":"); //$NON-NLS-1$
 	}
 
 	/**
@@ -40,7 +40,7 @@ public final class ESSystemOutProgressMonitor implements IProgressMonitor {
 	 * @see org.eclipse.core.runtime.IProgressMonitor#done()
 	 */
 	public void done() {
-		System.out.println("...DONE");
+		System.out.println("...DONE"); //$NON-NLS-1$
 	}
 
 	/**
@@ -55,7 +55,7 @@ public final class ESSystemOutProgressMonitor implements IProgressMonitor {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see org.eclipse.core.runtime.IProgressMonitor#isCanceled() {@inheritDoc}
+	 * @see org.eclipse.core.runtime.IProgressMonitor#isCanceled()
 	 */
 	public boolean isCanceled() {
 		return cancelled;
@@ -96,7 +96,7 @@ public final class ESSystemOutProgressMonitor implements IProgressMonitor {
 	 * @see org.eclipse.core.runtime.IProgressMonitor#worked(int)
 	 */
 	public void worked(int work) {
-		System.out.print(".");
+		System.out.print("."); //$NON-NLS-1$
 	}
 
 }
