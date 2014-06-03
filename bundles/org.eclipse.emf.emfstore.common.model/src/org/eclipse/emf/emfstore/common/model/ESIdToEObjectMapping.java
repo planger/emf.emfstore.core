@@ -18,7 +18,7 @@ import org.eclipse.emf.ecore.EObject;
  * 
  * @author emueller
  * 
- * @param <T>
+ * @param <ID>
  *            the type of the ID being used
  */
 public interface ESIdToEObjectMapping<ID> {

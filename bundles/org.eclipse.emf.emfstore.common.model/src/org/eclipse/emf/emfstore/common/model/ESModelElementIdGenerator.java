@@ -12,7 +12,6 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.common.model;
 
-import org.eclipse.emf.emfstore.internal.common.model.ModelElementId;
 
 /**
  * Allows clients to return a custom ID for new model elements.
@@ -29,10 +28,14 @@ import org.eclipse.emf.emfstore.internal.common.model.ModelElementId;
 public interface ESModelElementIdGenerator<ID> {
 
 	/**
-	 * Generates the next {@link ModelElementId} for the {@link ESObjectContainer}.
+	 * Generates the next {@link org.eclipse.emf.emfstore.internal.common.model.ModelElementId ModelElementId} for the
+	 * {@link ESObjectContainer}.
 	 * 
-	 * @param container The {@link ESObjectContainer} for which a new {@link ModelElementId} should be created.
-	 * @return The next {@link ModelElementId} for the given {@link ESObjectContainer}.
+	 * @param container The {@link ESObjectContainer} for which a new
+	 *            {@link org.eclipse.emf.emfstore.internal.common.model.ModelElementId ModelElementId} should be
+	 *            created.
+	 * @return The next {@link org.eclipse.emf.emfstore.internal.common.model.ModelElementId ModelElementId} for
+	 *         the given {@link ESObjectContainer}.
 	 */
 	ID generateModelElementId(ESObjectContainer<ID> container);
 
