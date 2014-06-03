@@ -962,7 +962,7 @@ public class VersionImpl extends EObjectImpl implements Version {
 				}
 			}
 
-			if (result != null && result.getContents().size() > 1) {
+			if (result != null && result.getContents().size() > 0) {
 				Project project = (Project) result.getContents().get(0);
 				initProjectStateAfterLoad((ProjectImpl) project);
 			}
