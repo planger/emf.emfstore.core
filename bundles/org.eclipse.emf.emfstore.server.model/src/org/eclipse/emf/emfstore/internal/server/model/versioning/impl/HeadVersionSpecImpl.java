@@ -70,21 +70,9 @@ public class HeadVersionSpecImpl extends VersionSpecImpl implements HeadVersionS
 	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see org.eclipse.emf.emfstore.internal.common.api.APIDelegate#setAPIImpl(java.lang.Object)
-	 * 
-	 * @generated NOT
-	 */
-	public void setAPIImpl(ESHeadVersionSpecImpl esHeadVersionSpecImpl) {
-		apiImpl = esHeadVersionSpecImpl;
-	}
-
-	/**
-	 * 
-	 * {@inheritDoc}
-	 * 
 	 * @see org.eclipse.emf.emfstore.internal.common.api.APIDelegate#createAPI()
 	 * 
-	 * @generated NOTn
+	 * @generated NOT
 	 */
 	public ESHeadVersionSpecImpl createAPI() {
 		return new ESHeadVersionSpecImpl(this);

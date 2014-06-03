@@ -52,6 +52,14 @@
             </message_arguments>
         </filter>
     </resource>
+    <resource path="src/org/eclipse/emf/emfstore/internal/server/model/versioning/impl/VersionImpl.java" type="org.eclipse.emf.emfstore.internal.server.model.versioning.impl.VersionImpl">
+        <filter comment="internal API usage" id="572522506">
+            <message_arguments>
+                <message_argument value="ESPriorityComparator"/>
+                <message_argument value="VersionImpl"/>
+            </message_arguments>
+        </filter>
+    </resource>
     <resource path="src/org/eclipse/emf/emfstore/server/model/ESGlobalProjectId.java" type="org.eclipse.emf.emfstore.server.model.ESGlobalProjectId">
         <filter id="571473929">
             <message_arguments>

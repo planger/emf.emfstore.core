@@ -109,11 +109,12 @@ public class VersionPropertyImpl extends EObjectImpl implements VersionProperty 
 	 * @generated
 	 */
 	public void setName(String newName) {
-		String oldName = name;
+		final String oldName = name;
 		name = newName;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, VersioningPackage.VERSION_PROPERTY__NAME, oldName,
 				name));
+		}
 	}
 
 	/**
@@ -131,11 +132,12 @@ public class VersionPropertyImpl extends EObjectImpl implements VersionProperty 
 	 * @generated
 	 */
 	public void setValue(String newValue) {
-		String oldValue = value;
+		final String oldValue = value;
 		value = newValue;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, VersioningPackage.VERSION_PROPERTY__VALUE, oldValue,
 				value));
+		}
 	}
 
 	/**
@@ -217,13 +219,14 @@ public class VersionPropertyImpl extends EObjectImpl implements VersionProperty 
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (eIsProxy()) {
 			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
+		final StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (name: "); //$NON-NLS-1$
 		result.append(name);
-		result.append(", value: ");
+		result.append(", value: "); //$NON-NLS-1$
 		result.append(value);
 		result.append(')');
 		return result.toString();

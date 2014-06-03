@@ -20,7 +20,6 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.HistoryQuery;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.PrimaryVersionSpec;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.VersioningPackage;
 import org.eclipse.emf.emfstore.server.model.query.ESHistoryQuery;
-import org.eclipse.emf.emfstore.server.model.versionspec.ESPrimaryVersionSpec;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object ' <em><b>History Query</b></em>'. <!-- end-user-doc -->
@@ -120,21 +119,23 @@ public abstract class HistoryQueryImpl<T extends ESHistoryQuery<?>> extends EObj
 	 */
 	public PrimaryVersionSpec getSource() {
 		if (source != null && source.eIsProxy()) {
-			InternalEObject oldSource = (InternalEObject) source;
+			final InternalEObject oldSource = (InternalEObject) source;
 			source = (PrimaryVersionSpec) eResolveProxy(oldSource);
 			if (source != oldSource) {
-				InternalEObject newSource = (InternalEObject) source;
+				final InternalEObject newSource = (InternalEObject) source;
 				NotificationChain msgs = oldSource.eInverseRemove(this, EOPPOSITE_FEATURE_BASE
 					- VersioningPackage.HISTORY_QUERY__SOURCE, null, null);
 				if (newSource.eInternalContainer() == null) {
 					msgs = newSource.eInverseAdd(this,
 						EOPPOSITE_FEATURE_BASE - VersioningPackage.HISTORY_QUERY__SOURCE, null, msgs);
 				}
-				if (msgs != null)
+				if (msgs != null) {
 					msgs.dispatch();
-				if (eNotificationRequired())
+				}
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, VersioningPackage.HISTORY_QUERY__SOURCE,
 						oldSource, source));
+				}
 			}
 		}
 		return source;
@@ -155,28 +156,18 @@ public abstract class HistoryQueryImpl<T extends ESHistoryQuery<?>> extends EObj
 	 * @generated
 	 */
 	public NotificationChain basicSetSource(PrimaryVersionSpec newSource, NotificationChain msgs) {
-		PrimaryVersionSpec oldSource = source;
+		final PrimaryVersionSpec oldSource = source;
 		source = newSource;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
 				VersioningPackage.HISTORY_QUERY__SOURCE, oldSource, newSource);
-			if (msgs == null)
+			if (msgs == null) {
 				msgs = notification;
-			else
+			} else {
 				msgs.add(notification);
+			}
 		}
 		return msgs;
-	}
-
-	/**
-	 * 
-	 * {@inheritDoc}
-	 * 
-	 * @see org.eclipse.emf.emfstore.internal.server.model.ESHistoryQuery.query.IHistoryQuery#setSource(org.eclipse.emf.emfstore.internal.server.model.ESPrimaryVersionSpec.versionspecs.IPrimaryVersionSpec)
-	 * @generated NOT
-	 */
-	public void setSource(ESPrimaryVersionSpec newSource) {
-		setSource((PrimaryVersionSpec) newSource);
 	}
 
 	/**
@@ -188,18 +179,22 @@ public abstract class HistoryQueryImpl<T extends ESHistoryQuery<?>> extends EObj
 	public void setSource(PrimaryVersionSpec newSource) {
 		if (newSource != source) {
 			NotificationChain msgs = null;
-			if (source != null)
+			if (source != null) {
 				msgs = ((InternalEObject) source).eInverseRemove(this, EOPPOSITE_FEATURE_BASE
 					- VersioningPackage.HISTORY_QUERY__SOURCE, null, msgs);
-			if (newSource != null)
+			}
+			if (newSource != null) {
 				msgs = ((InternalEObject) newSource).eInverseAdd(this, EOPPOSITE_FEATURE_BASE
 					- VersioningPackage.HISTORY_QUERY__SOURCE, null, msgs);
+			}
 			msgs = basicSetSource(newSource, msgs);
-			if (msgs != null)
+			if (msgs != null) {
 				msgs.dispatch();
-		} else if (eNotificationRequired())
+			}
+		} else if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, VersioningPackage.HISTORY_QUERY__SOURCE, newSource,
 				newSource));
+		}
 	}
 
 	/**
@@ -217,12 +212,13 @@ public abstract class HistoryQueryImpl<T extends ESHistoryQuery<?>> extends EObj
 	 * @generated
 	 */
 	public void setIncludeChangePackages(boolean newIncludeChangePackages) {
-		boolean oldIncludeChangePackages = includeChangePackages;
+		final boolean oldIncludeChangePackages = includeChangePackages;
 		includeChangePackages = newIncludeChangePackages;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET,
 				VersioningPackage.HISTORY_QUERY__INCLUDE_CHANGE_PACKAGES, oldIncludeChangePackages,
 				includeChangePackages));
+		}
 	}
 
 	/**
@@ -240,11 +236,12 @@ public abstract class HistoryQueryImpl<T extends ESHistoryQuery<?>> extends EObj
 	 * @generated
 	 */
 	public void setIncludeAllVersions(boolean newIncludeAllVersions) {
-		boolean oldIncludeAllVersions = includeAllVersions;
+		final boolean oldIncludeAllVersions = includeAllVersions;
 		includeAllVersions = newIncludeAllVersions;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET,
 				VersioningPackage.HISTORY_QUERY__INCLUDE_ALL_VERSIONS, oldIncludeAllVersions, includeAllVersions));
+		}
 	}
 
 	/**
@@ -270,8 +267,9 @@ public abstract class HistoryQueryImpl<T extends ESHistoryQuery<?>> extends EObj
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 		case VersioningPackage.HISTORY_QUERY__SOURCE:
-			if (resolve)
+			if (resolve) {
 				return getSource();
+			}
 			return basicGetSource();
 		case VersioningPackage.HISTORY_QUERY__INCLUDE_CHANGE_PACKAGES:
 			return isIncludeChangePackages();
@@ -348,13 +346,14 @@ public abstract class HistoryQueryImpl<T extends ESHistoryQuery<?>> extends EObj
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (eIsProxy()) {
 			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (includeChangePackages: ");
+		final StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (includeChangePackages: "); //$NON-NLS-1$
 		result.append(includeChangePackages);
-		result.append(", includeAllVersions: ");
+		result.append(", includeAllVersions: "); //$NON-NLS-1$
 		result.append(includeAllVersions);
 		result.append(')');
 		return result.toString();

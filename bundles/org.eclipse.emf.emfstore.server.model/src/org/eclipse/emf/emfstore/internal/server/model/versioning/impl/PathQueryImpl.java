@@ -76,21 +76,23 @@ public class PathQueryImpl extends HistoryQueryImpl<ESPathQuery> implements Path
 	 */
 	public PrimaryVersionSpec getTarget() {
 		if (target != null && target.eIsProxy()) {
-			InternalEObject oldTarget = (InternalEObject) target;
+			final InternalEObject oldTarget = (InternalEObject) target;
 			target = (PrimaryVersionSpec) eResolveProxy(oldTarget);
 			if (target != oldTarget) {
-				InternalEObject newTarget = (InternalEObject) target;
+				final InternalEObject newTarget = (InternalEObject) target;
 				NotificationChain msgs = oldTarget.eInverseRemove(this, EOPPOSITE_FEATURE_BASE
 					- VersioningPackage.PATH_QUERY__TARGET, null, null);
 				if (newTarget.eInternalContainer() == null) {
 					msgs = newTarget.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - VersioningPackage.PATH_QUERY__TARGET,
 						null, msgs);
 				}
-				if (msgs != null)
+				if (msgs != null) {
 					msgs.dispatch();
-				if (eNotificationRequired())
+				}
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, VersioningPackage.PATH_QUERY__TARGET,
 						oldTarget, target));
+				}
 			}
 		}
 		return target;
@@ -111,15 +113,16 @@ public class PathQueryImpl extends HistoryQueryImpl<ESPathQuery> implements Path
 	 * @generated
 	 */
 	public NotificationChain basicSetTarget(PrimaryVersionSpec newTarget, NotificationChain msgs) {
-		PrimaryVersionSpec oldTarget = target;
+		final PrimaryVersionSpec oldTarget = target;
 		target = newTarget;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
 				VersioningPackage.PATH_QUERY__TARGET, oldTarget, newTarget);
-			if (msgs == null)
+			if (msgs == null) {
 				msgs = notification;
-			else
+			} else {
 				msgs.add(notification);
+			}
 		}
 		return msgs;
 	}
@@ -132,18 +135,22 @@ public class PathQueryImpl extends HistoryQueryImpl<ESPathQuery> implements Path
 	public void setTarget(PrimaryVersionSpec newTarget) {
 		if (newTarget != target) {
 			NotificationChain msgs = null;
-			if (target != null)
+			if (target != null) {
 				msgs = ((InternalEObject) target).eInverseRemove(this, EOPPOSITE_FEATURE_BASE
 					- VersioningPackage.PATH_QUERY__TARGET, null, msgs);
-			if (newTarget != null)
+			}
+			if (newTarget != null) {
 				msgs = ((InternalEObject) newTarget).eInverseAdd(this, EOPPOSITE_FEATURE_BASE
 					- VersioningPackage.PATH_QUERY__TARGET, null, msgs);
+			}
 			msgs = basicSetTarget(newTarget, msgs);
-			if (msgs != null)
+			if (msgs != null) {
 				msgs.dispatch();
-		} else if (eNotificationRequired())
+			}
+		} else if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, VersioningPackage.PATH_QUERY__TARGET, newTarget,
 				newTarget));
+		}
 	}
 
 	/**
@@ -169,8 +176,9 @@ public class PathQueryImpl extends HistoryQueryImpl<ESPathQuery> implements Path
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 		case VersioningPackage.PATH_QUERY__TARGET:
-			if (resolve)
+			if (resolve) {
 				return getTarget();
+			}
 			return basicGetTarget();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -237,19 +245,6 @@ public class PathQueryImpl extends HistoryQueryImpl<ESPathQuery> implements Path
 			apiImpl = createAPI();
 		}
 		return apiImpl;
-	}
-
-	/**
-	 * 
-	 * {@inheritDoc}
-	 * 
-	 * @see org.eclipse.emf.emfstore.internal.common.api.APIDelegate#setAPIImpl(java.lang.Object)
-	 * 
-	 * @generated NOT
-	 */
-	public void setAPIImpl(ESPathQueryImpl esPathQueryImpl) {
-		apiImpl = esPathQueryImpl;
-
 	}
 
 	/**

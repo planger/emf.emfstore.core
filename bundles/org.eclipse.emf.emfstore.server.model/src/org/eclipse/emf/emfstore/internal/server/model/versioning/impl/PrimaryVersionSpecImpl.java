@@ -116,11 +116,12 @@ public class PrimaryVersionSpecImpl extends VersionSpecImpl implements PrimaryVe
 	 * @generated
 	 */
 	public void setIdentifier(int newIdentifier) {
-		int oldIdentifier = identifier;
+		final int oldIdentifier = identifier;
 		identifier = newIdentifier;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, VersioningPackage.PRIMARY_VERSION_SPEC__IDENTIFIER,
 				oldIdentifier, identifier));
+		}
 	}
 
 	/**
@@ -140,12 +141,13 @@ public class PrimaryVersionSpecImpl extends VersionSpecImpl implements PrimaryVe
 	 * @generated
 	 */
 	public void setProjectStateChecksum(long newProjectStateChecksum) {
-		long oldProjectStateChecksum = projectStateChecksum;
+		final long oldProjectStateChecksum = projectStateChecksum;
 		projectStateChecksum = newProjectStateChecksum;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET,
 				VersioningPackage.PRIMARY_VERSION_SPEC__PROJECT_STATE_CHECKSUM, oldProjectStateChecksum,
 				projectStateChecksum));
+		}
 	}
 
 	/**
@@ -227,13 +229,14 @@ public class PrimaryVersionSpecImpl extends VersionSpecImpl implements PrimaryVe
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (eIsProxy()) {
 			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (identifier: ");
+		final StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (identifier: "); //$NON-NLS-1$
 		result.append(identifier);
-		result.append(", projectStateChecksum: ");
+		result.append(", projectStateChecksum: "); //$NON-NLS-1$
 		result.append(projectStateChecksum);
 		result.append(')');
 		return result.toString();
@@ -250,9 +253,9 @@ public class PrimaryVersionSpecImpl extends VersionSpecImpl implements PrimaryVe
 	@Override
 	public boolean equals(Object object) {
 		if (object instanceof PrimaryVersionSpec) {
-			PrimaryVersionSpec otherPrimaryVersionSpec = (PrimaryVersionSpec) object;
-			return this.getIdentifier() == otherPrimaryVersionSpec.getIdentifier()
-				&& (this.getBranch() != null && this.getBranch().equals(otherPrimaryVersionSpec.getBranch()));
+			final PrimaryVersionSpec otherPrimaryVersionSpec = (PrimaryVersionSpec) object;
+			return getIdentifier() == otherPrimaryVersionSpec.getIdentifier()
+				&& getBranch() != null && getBranch().equals(otherPrimaryVersionSpec.getBranch());
 		}
 
 		return false;
@@ -272,9 +275,9 @@ public class PrimaryVersionSpecImpl extends VersionSpecImpl implements PrimaryVe
 	}
 
 	public int compareTo(PrimaryVersionSpec o) {
-		if (this.getIdentifier() == o.getIdentifier()) {
+		if (getIdentifier() == o.getIdentifier()) {
 			return 0;
-		} else if (this.getIdentifier() < o.getIdentifier()) {
+		} else if (getIdentifier() < o.getIdentifier()) {
 			return -1;
 		} else {
 			return 1;

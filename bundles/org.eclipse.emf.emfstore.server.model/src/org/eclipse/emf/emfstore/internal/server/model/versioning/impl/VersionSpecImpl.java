@@ -37,7 +37,7 @@ public abstract class VersionSpecImpl extends EObjectImpl implements VersionSpec
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String BRANCH_EDEFAULT = "trunk";
+	protected static final String BRANCH_EDEFAULT = "trunk"; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getBranch() <em>Branch</em>}' attribute.
@@ -83,11 +83,12 @@ public abstract class VersionSpecImpl extends EObjectImpl implements VersionSpec
 	 * @generated
 	 */
 	public void setBranch(String newBranch) {
-		String oldBranch = branch;
+		final String oldBranch = branch;
 		branch = newBranch;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, VersioningPackage.VERSION_SPEC__BRANCH, oldBranch,
 				branch));
+		}
 	}
 
 	/**
@@ -159,11 +160,12 @@ public abstract class VersionSpecImpl extends EObjectImpl implements VersionSpec
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (eIsProxy()) {
 			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (branch: ");
+		final StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (branch: "); //$NON-NLS-1$
 		result.append(branch);
 		result.append(')');
 		return result.toString();
