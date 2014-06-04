@@ -303,6 +303,36 @@ public interface TestmodelPackage extends EPackage {
 	int TEST_ELEMENT__CONTAINED_ELEMENT_NO_OPPOSITE = EcorePackage.EOBJECT_FEATURE_COUNT + 21;
 
 	/**
+	 * The feature id for the '<em><b>Feature Map Entries</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered
+	 */
+	int TEST_ELEMENT__FEATURE_MAP_ENTRIES = EcorePackage.EOBJECT_FEATURE_COUNT + 22;
+
+	/**
+	 * The feature id for the '<em><b>Feature Map References1</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered
+	 */
+	int TEST_ELEMENT__FEATURE_MAP_REFERENCES1 = EcorePackage.EOBJECT_FEATURE_COUNT + 23;
+
+	/**
+	 * The feature id for the '<em><b>Feature Map References2</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered
+	 */
+	int TEST_ELEMENT__FEATURE_MAP_REFERENCES2 = EcorePackage.EOBJECT_FEATURE_COUNT + 24;
+
+	/**
 	 * The number of structural features of the '<em>Test Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -310,7 +340,7 @@ public interface TestmodelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TEST_ELEMENT_FEATURE_COUNT = EcorePackage.EOBJECT_FEATURE_COUNT + 22;
+	int TEST_ELEMENT_FEATURE_COUNT = EcorePackage.EOBJECT_FEATURE_COUNT + 25;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.emf.emfstore.test.model.impl.TestElementToStringMapImpl
@@ -781,6 +811,47 @@ public interface TestmodelPackage extends EPackage {
 	EReference getTestElement_ContainedElement_NoOpposite();
 
 	/**
+	 * Returns the meta object for the attribute list '
+	 * {@link org.eclipse.emf.emfstore.test.model.TestElement#getFeatureMapEntries <em>Feature Map Entries</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @return the meta object for the attribute list '<em>Feature Map Entries</em>'.
+	 * @see org.eclipse.emf.emfstore.test.model.TestElement#getFeatureMapEntries()
+	 * @see #getTestElement()
+	 * @generated
+	 */
+	EAttribute getTestElement_FeatureMapEntries();
+
+	/**
+	 * Returns the meta object for the containment reference list '
+	 * {@link org.eclipse.emf.emfstore.test.model.TestElement#getFeatureMapReferences1 <em>Feature Map References1</em>}
+	 * '.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @return the meta object for the containment reference list '<em>Feature Map References1</em>'.
+	 * @see org.eclipse.emf.emfstore.test.model.TestElement#getFeatureMapReferences1()
+	 * @see #getTestElement()
+	 * @generated
+	 */
+	EReference getTestElement_FeatureMapReferences1();
+
+	/**
+	 * Returns the meta object for the containment reference list '
+	 * {@link org.eclipse.emf.emfstore.test.model.TestElement#getFeatureMapReferences2 <em>Feature Map References2</em>}
+	 * '.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @return the meta object for the containment reference list '<em>Feature Map References2</em>'.
+	 * @see org.eclipse.emf.emfstore.test.model.TestElement#getFeatureMapReferences2()
+	 * @see #getTestElement()
+	 * @generated
+	 */
+	EReference getTestElement_FeatureMapReferences2();
+
+	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Test Element To String Map</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1167,6 +1238,33 @@ public interface TestmodelPackage extends EPackage {
 		 * @generated
 		 */
 		EReference TEST_ELEMENT__CONTAINED_ELEMENT_NO_OPPOSITE = eINSTANCE.getTestElement_ContainedElement_NoOpposite();
+
+		/**
+		 * The meta object literal for the '<em><b>Feature Map Entries</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * 
+		 * @generated
+		 */
+		EAttribute TEST_ELEMENT__FEATURE_MAP_ENTRIES = eINSTANCE.getTestElement_FeatureMapEntries();
+
+		/**
+		 * The meta object literal for the '<em><b>Feature Map References1</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * 
+		 * @generated
+		 */
+		EReference TEST_ELEMENT__FEATURE_MAP_REFERENCES1 = eINSTANCE.getTestElement_FeatureMapReferences1();
+
+		/**
+		 * The meta object literal for the '<em><b>Feature Map References2</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * 
+		 * @generated
+		 */
+		EReference TEST_ELEMENT__FEATURE_MAP_REFERENCES2 = eINSTANCE.getTestElement_FeatureMapReferences2();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.emf.emfstore.test.model.impl.TestElementToStringMapImpl

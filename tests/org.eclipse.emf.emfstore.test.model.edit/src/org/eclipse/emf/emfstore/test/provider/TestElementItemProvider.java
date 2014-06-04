@@ -18,11 +18,14 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.util.FeatureMap;
+import org.eclipse.emf.ecore.util.FeatureMapUtil;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
+import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
@@ -42,9 +45,7 @@ import org.eclipse.emf.emfstore.test.model.provider.TestmodelEditPlugin;
 public class TestElementItemProvider
 	extends ItemProviderAdapter
 	implements
-	IEditingDomainItemProvider,
-	ITreeItemContentProvider,
-	IItemLabelProvider,
+	IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider,
 	IItemPropertySource
 {
 	/**
@@ -394,6 +395,9 @@ public class TestElementItemProvider
 			childrenFeatures.add(TestmodelPackage.Literals.TEST_ELEMENT__STRING_TO_ELEMENT_MAP);
 			childrenFeatures.add(TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS2);
 			childrenFeatures.add(TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENT_NO_OPPOSITE);
+			childrenFeatures.add(TestmodelPackage.Literals.TEST_ELEMENT__FEATURE_MAP_ENTRIES);
+			childrenFeatures.add(TestmodelPackage.Literals.TEST_ELEMENT__FEATURE_MAP_REFERENCES1);
+			childrenFeatures.add(TestmodelPackage.Literals.TEST_ELEMENT__FEATURE_MAP_REFERENCES2);
 		}
 		return childrenFeatures;
 	}
@@ -436,7 +440,7 @@ public class TestElementItemProvider
 	@Override
 	public String getText(Object object)
 	{
-		final String label = ((TestElement) object).getName();
+		String label = ((TestElement) object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_TestElement_type") : //$NON-NLS-1$
 			getString("_UI_TestElement_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
@@ -470,6 +474,7 @@ public class TestElementItemProvider
 		case TestmodelPackage.TEST_ELEMENT__STRING_TO_ELEMENT_MAP:
 		case TestmodelPackage.TEST_ELEMENT__CONTAINED_ELEMENTS2:
 		case TestmodelPackage.TEST_ELEMENT__CONTAINED_ELEMENT_NO_OPPOSITE:
+		case TestmodelPackage.TEST_ELEMENT__FEATURE_MAP_ENTRIES:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
 		}
@@ -528,6 +533,30 @@ public class TestElementItemProvider
 			(createChildParameter
 			(TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENT_NO_OPPOSITE,
 				TestmodelFactory.eINSTANCE.createTestElement()));
+
+		newChildDescriptors.add
+			(createChildParameter
+			(TestmodelPackage.Literals.TEST_ELEMENT__FEATURE_MAP_ENTRIES,
+				FeatureMapUtil.createEntry
+					(TestmodelPackage.Literals.TEST_ELEMENT__FEATURE_MAP_REFERENCES1,
+						TestmodelFactory.eINSTANCE.createTestElement())));
+
+		newChildDescriptors.add
+			(createChildParameter
+			(TestmodelPackage.Literals.TEST_ELEMENT__FEATURE_MAP_ENTRIES,
+				FeatureMapUtil.createEntry
+					(TestmodelPackage.Literals.TEST_ELEMENT__FEATURE_MAP_REFERENCES2,
+						TestmodelFactory.eINSTANCE.createTestElement())));
+
+		newChildDescriptors.add
+			(createChildParameter
+			(TestmodelPackage.Literals.TEST_ELEMENT__FEATURE_MAP_REFERENCES1,
+				TestmodelFactory.eINSTANCE.createTestElement()));
+
+		newChildDescriptors.add
+			(createChildParameter
+			(TestmodelPackage.Literals.TEST_ELEMENT__FEATURE_MAP_REFERENCES2,
+				TestmodelFactory.eINSTANCE.createTestElement()));
 	}
 
 	/**
@@ -540,14 +569,24 @@ public class TestElementItemProvider
 	@Override
 	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection)
 	{
-		final Object childFeature = feature;
-		final Object childObject = child;
+		Object childFeature = feature;
+		Object childObject = child;
 
-		final boolean qualify =
+		if (childFeature instanceof EStructuralFeature
+			&& FeatureMapUtil.isFeatureMap((EStructuralFeature) childFeature))
+		{
+			FeatureMap.Entry entry = (FeatureMap.Entry) childObject;
+			childFeature = entry.getEStructuralFeature();
+			childObject = entry.getValue();
+		}
+
+		boolean qualify =
 			childFeature == TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS ||
 				childFeature == TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENT ||
 				childFeature == TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENTS2 ||
-				childFeature == TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENT_NO_OPPOSITE;
+				childFeature == TestmodelPackage.Literals.TEST_ELEMENT__CONTAINED_ELEMENT_NO_OPPOSITE ||
+				childFeature == TestmodelPackage.Literals.TEST_ELEMENT__FEATURE_MAP_REFERENCES1 ||
+				childFeature == TestmodelPackage.Literals.TEST_ELEMENT__FEATURE_MAP_REFERENCES2;
 
 		if (qualify)
 		{
