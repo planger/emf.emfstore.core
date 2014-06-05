@@ -30,10 +30,18 @@ import org.eclipse.swt.widgets.Shell;
  */
 public class UICompareRevisionsController extends AbstractEMFStoreUIController<Void> {
 
-	private ESLocalProject localProject;
-	private ESPrimaryVersionSpec versionSpec1;
-	private ESPrimaryVersionSpec versionSpec2;
+	private final ESLocalProject localProject;
+	private final ESPrimaryVersionSpec versionSpec1;
+	private final ESPrimaryVersionSpec versionSpec2;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param shell shell to display the controller
+	 * @param versionSpec1 the first verion spec to compare
+	 * @param versionSpec2 the second version spec to compare
+	 * @param localProject the project
+	 */
 	public UICompareRevisionsController(Shell shell, ESPrimaryVersionSpec versionSpec1,
 		ESPrimaryVersionSpec versionSpec2, ESLocalProject localProject) {
 		super(shell);
@@ -44,11 +52,11 @@ public class UICompareRevisionsController extends AbstractEMFStoreUIController<V
 
 	@Override
 	public Void doRun(IProgressMonitor monitor) throws ESException {
-		ESRemoteProjectImpl remoteProject = (ESRemoteProjectImpl) localProject.getRemoteProject();
-		ESLocalProjectImpl project1 = remoteProject.fetch(localProject.getProjectName(),
+		final ESRemoteProjectImpl remoteProject = (ESRemoteProjectImpl) localProject.getRemoteProject();
+		final ESLocalProjectImpl project1 = remoteProject.fetch(localProject.getProjectName(),
 			localProject.getUsersession(), versionSpec1, monitor);
 
-		ESLocalProjectImpl project2 = remoteProject.fetch(localProject.getProjectName(),
+		final ESLocalProjectImpl project2 = remoteProject.fetch(localProject.getProjectName(),
 			localProject.getUsersession(), versionSpec2, monitor);
 
 		if (HistoryCompare.hasRegisteredExtensions()) {

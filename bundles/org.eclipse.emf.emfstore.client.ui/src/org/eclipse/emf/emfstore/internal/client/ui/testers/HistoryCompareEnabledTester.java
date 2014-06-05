@@ -22,6 +22,13 @@ import org.eclipse.emf.emfstore.internal.client.ui.views.historybrowserview.Hist
  */
 public class HistoryCompareEnabledTester extends PropertyTester {
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.core.expressions.IPropertyTester#test(java.lang.Object, java.lang.String, java.lang.Object[],
+	 *      java.lang.Object)
+	 */
 	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
 		return HistoryCompare.hasRegisteredExtensions();
 	}

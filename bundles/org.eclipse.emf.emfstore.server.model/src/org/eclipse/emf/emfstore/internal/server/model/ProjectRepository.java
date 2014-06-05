@@ -19,5 +19,10 @@ import java.util.List;
  */
 public interface ProjectRepository {
 
+	/**
+	 * Returns the {@link ProjectHistory ProjectHistories} of this repository.
+	 * 
+	 * @return a list of project histories.
+	 */
 	List<ProjectHistory> getProjects();
 }

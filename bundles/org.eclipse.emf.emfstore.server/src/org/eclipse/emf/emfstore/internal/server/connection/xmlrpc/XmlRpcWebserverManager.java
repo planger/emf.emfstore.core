@@ -30,6 +30,9 @@ import org.eclipse.emf.emfstore.server.ESXmlRpcWebServerProvider;
 public final class XmlRpcWebserverManager {
 	private static final String WEBSERVER_PROVIDER_KEY = "org.eclipse.emf.emfstore.server.webServerProvider"; //$NON-NLS-1$
 
+	/**
+	 * The web server provider.
+	 */
 	public static ESXmlRpcWebServerProvider webServerProvider = null;
 
 	/**

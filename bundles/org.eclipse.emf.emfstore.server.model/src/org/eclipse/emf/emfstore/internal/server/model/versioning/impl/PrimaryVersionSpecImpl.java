@@ -274,6 +274,12 @@ public class PrimaryVersionSpecImpl extends VersionSpecImpl implements PrimaryVe
 		return getIdentifier() >> 31 + (getBranch() != null ? getBranch().hashCode() : 0);
 	}
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
 	public int compareTo(PrimaryVersionSpec o) {
 		if (getIdentifier() == o.getIdentifier()) {
 			return 0;

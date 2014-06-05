@@ -29,19 +29,32 @@ import org.eclipse.emf.emfstore.server.model.query.ESPathQuery;
 import org.eclipse.emf.emfstore.server.model.query.ESRangeQuery;
 import org.eclipse.emf.emfstore.server.model.versionspec.ESPrimaryVersionSpec;
 
+/**
+ * Factory for creating {@link org.eclipse.emf.emfstore.internal.server.model.versioning.HistoryQuery HistoryQueries}.
+ */
 public class HistoryQueryFactoryImpl implements ESHistoryQueryFactory {
 
+	/**
+	 * The instance.
+	 */
 	public static final HistoryQueryFactoryImpl INSTANCE = new HistoryQueryFactoryImpl();
 
 	private HistoryQueryFactoryImpl() {
 	}
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.server.model.query.ESHistoryQueryFactory#rangeQuery(org.eclipse.emf.emfstore.server.model.versionspec.ESPrimaryVersionSpec,
+	 *      int, int, boolean, boolean, boolean, boolean)
+	 */
 	public ESRangeQuery rangeQuery(ESPrimaryVersionSpec source, int upper, int lower, boolean allVersions,
 		boolean incoming, boolean outgoing, boolean includeChangePackages) {
 
-		PrimaryVersionSpec sourceVersionSpec = ((ESPrimaryVersionSpecImpl) source).toInternalAPI();
+		final PrimaryVersionSpec sourceVersionSpec = ((ESPrimaryVersionSpecImpl) source).toInternalAPI();
 
-		RangeQuery<?> rangeQuery = HistoryQueryBuilder.rangeQuery(
+		final RangeQuery<?> rangeQuery = HistoryQueryBuilder.rangeQuery(
 			sourceVersionSpec,
 			upper,
 			lower,
@@ -50,7 +63,7 @@ public class HistoryQueryFactoryImpl implements ESHistoryQueryFactory {
 			outgoing,
 			includeChangePackages);
 
-		ESRangeQueryImpl<?, ?> apiImpl = (ESRangeQueryImpl<?, ?>) rangeQuery.toAPI();
+		final ESRangeQueryImpl<?, ?> apiImpl = (ESRangeQueryImpl<?, ?>) rangeQuery.toAPI();
 		return apiImpl;
 	}
 
@@ -63,9 +76,9 @@ public class HistoryQueryFactoryImpl implements ESHistoryQueryFactory {
 	 */
 	public ESPathQuery pathQuery(ESPrimaryVersionSpec source, ESPrimaryVersionSpec target, boolean allVersions,
 		boolean includeChangePackages) {
-		PrimaryVersionSpec sourceVersionSpec = ((ESPrimaryVersionSpecImpl) source).toInternalAPI();
-		PrimaryVersionSpec targetVersionSpec = ((ESPrimaryVersionSpecImpl) target).toInternalAPI();
-		PathQuery pathQuery = HistoryQueryBuilder.pathQuery(
+		final PrimaryVersionSpec sourceVersionSpec = ((ESPrimaryVersionSpecImpl) source).toInternalAPI();
+		final PrimaryVersionSpec targetVersionSpec = ((ESPrimaryVersionSpecImpl) target).toInternalAPI();
+		final PathQuery pathQuery = HistoryQueryBuilder.pathQuery(
 			sourceVersionSpec,
 			targetVersionSpec,
 			allVersions,
@@ -73,18 +86,25 @@ public class HistoryQueryFactoryImpl implements ESHistoryQueryFactory {
 		return pathQuery.toAPI();
 	}
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.server.model.query.ESHistoryQueryFactory#modelElementQuery(org.eclipse.emf.emfstore.server.model.versionspec.ESPrimaryVersionSpec,
+	 *      java.util.List, int, int, boolean, boolean)
+	 */
 	public ESModelElementQuery modelElementQuery(ESPrimaryVersionSpec source, List<ESModelElementId> modelElements,
 		int upper, int lower, boolean allVersions, boolean includeChangePackages) {
 
 		// TODO: provide util method for mapping to internal classes
-		List<ModelElementId> modelElementIds = new ArrayList<ModelElementId>();
-		for (ESModelElementId id : modelElements) {
+		final List<ModelElementId> modelElementIds = new ArrayList<ModelElementId>();
+		for (final ESModelElementId id : modelElements) {
 			modelElementIds.add(((ESModelElementIdImpl) id).toInternalAPI());
 		}
 
-		PrimaryVersionSpec sourcePrimaryVersionSpec = ((ESPrimaryVersionSpecImpl) source).toInternalAPI();
+		final PrimaryVersionSpec sourcePrimaryVersionSpec = ((ESPrimaryVersionSpecImpl) source).toInternalAPI();
 
-		ModelElementQuery modelelementQuery = HistoryQueryBuilder.modelelementQuery(
+		final ModelElementQuery modelelementQuery = HistoryQueryBuilder.modelelementQuery(
 			sourcePrimaryVersionSpec,
 			modelElementIds,
 			upper,
@@ -92,14 +112,21 @@ public class HistoryQueryFactoryImpl implements ESHistoryQueryFactory {
 			allVersions,
 			includeChangePackages);
 
-		ESModelElementQueryImpl apiImpl = (ESModelElementQueryImpl) modelelementQuery.toAPI();
+		final ESModelElementQueryImpl apiImpl = (ESModelElementQueryImpl) modelelementQuery.toAPI();
 		return apiImpl;
 	}
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.server.model.query.ESHistoryQueryFactory#modelElementQuery(org.eclipse.emf.emfstore.server.model.versionspec.ESPrimaryVersionSpec,
+	 *      org.eclipse.emf.emfstore.common.model.ESModelElementId, int, int, boolean, boolean)
+	 */
 	public ESModelElementQuery modelElementQuery(ESPrimaryVersionSpec source, ESModelElementId id, int upper,
 		int lower,
 		boolean allVersions, boolean includeCp) {
-		ModelElementQuery modelelementQuery = HistoryQueryBuilder.modelelementQuery(
+		final ModelElementQuery modelelementQuery = HistoryQueryBuilder.modelelementQuery(
 			((ESPrimaryVersionSpecImpl) source).toInternalAPI(),
 			((ESModelElementIdImpl) id).toInternalAPI(), upper, lower, allVersions, includeCp);
 		return modelelementQuery.toAPI();

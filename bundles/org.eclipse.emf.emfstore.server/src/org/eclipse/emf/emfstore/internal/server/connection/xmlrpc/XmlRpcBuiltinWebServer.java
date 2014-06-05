@@ -44,6 +44,9 @@ public final class XmlRpcBuiltinWebServer implements ESXmlRpcWebServerProvider {
 	private WebServer webServer;
 	private int port;
 
+	/**
+	 * Constructor.
+	 */
 	public XmlRpcBuiltinWebServer() {
 		webServer = null;
 		port = -1;

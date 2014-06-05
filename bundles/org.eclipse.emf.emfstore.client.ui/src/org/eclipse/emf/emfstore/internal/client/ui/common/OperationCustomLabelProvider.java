@@ -29,6 +29,9 @@ public interface OperationCustomLabelProvider extends ESDisposable {
 	 */
 	String ID = "org.eclipse.emf.emfstore.internal.client.ui.common.operationCustomLabelProvider";
 
+	/**
+	 * Enum specifying whether a renderer is able to render an element or not.
+	 */
 	enum CanRender {
 		/**
 		 * Default constant for a renderer that is able to render the given element.

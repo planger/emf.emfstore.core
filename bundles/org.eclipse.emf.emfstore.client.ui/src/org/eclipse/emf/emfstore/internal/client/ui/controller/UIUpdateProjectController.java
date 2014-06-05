@@ -53,6 +53,9 @@ public class UIUpdateProjectController extends
 	AbstractEMFStoreUIController<ESPrimaryVersionSpec> implements
 	ESUpdateCallback {
 
+	/**
+	 * Constant specifying that all changes should be taken into account.
+	 */
 	protected static final int ALL_CHANGES = -1;
 	private static boolean doNotUsePagedUpdate = true;
 

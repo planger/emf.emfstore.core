@@ -36,8 +36,8 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.Crea
  */
 public class ModelElementIdToEObjectMappingImpl implements ModelElementIdToEObjectMapping {
 
-	private Map<String, EObject> idToEObjectMapping;
-	private ModelElementIdToEObjectMapping delegateMapping;
+	private final Map<String, EObject> idToEObjectMapping;
+	private final ModelElementIdToEObjectMapping delegateMapping;
 	private ESModelElementIdToEObjectMappingImpl apiImpl;
 
 	/**
@@ -47,8 +47,8 @@ public class ModelElementIdToEObjectMappingImpl implements ModelElementIdToEObje
 	 *            an initial mapping from {EObject}s to their {@link ModelElementId}s
 	 */
 	public ModelElementIdToEObjectMappingImpl(ModelElementIdToEObjectMapping mapping) {
-		this.delegateMapping = mapping;
-		this.idToEObjectMapping = new LinkedHashMap<String, EObject>();
+		delegateMapping = mapping;
+		idToEObjectMapping = new LinkedHashMap<String, EObject>();
 	}
 
 	/**
@@ -63,7 +63,7 @@ public class ModelElementIdToEObjectMappingImpl implements ModelElementIdToEObje
 	public ModelElementIdToEObjectMappingImpl(ModelElementIdToEObjectMapping mapping,
 		List<ChangePackage> changePackages) {
 		this(mapping);
-		for (ChangePackage changePackage : changePackages) {
+		for (final ChangePackage changePackage : changePackages) {
 			this.put(changePackage);
 		}
 	}
@@ -73,8 +73,9 @@ public class ModelElementIdToEObjectMappingImpl implements ModelElementIdToEObje
 	 * 
 	 * @param mapping
 	 *            an initial mapping from {EObject}s to their {@link ESModelElementId}s
-	 * @param changePackage
-	 *            a {@link ChangePackage}s whose involved model elements should
+	 * @param operationsList1 list of operations for which involved model elements should
+	 *            be added to the mapping
+	 * @param operationsList2 list of operations for which involved model elements should
 	 *            be added to the mapping
 	 */
 	public ModelElementIdToEObjectMappingImpl(ModelElementIdToEObjectMapping mapping,
@@ -84,6 +85,13 @@ public class ModelElementIdToEObjectMappingImpl implements ModelElementIdToEObje
 		this.put(operationsList2);
 	}
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param project the project which contains the initial mapping from {EObject}s to their {@link ESModelElementId}s
+	 * @param changePackage a {@link ChangePackage}s whose involved model elements should
+	 *            be added to the mapping
+	 */
 	public ModelElementIdToEObjectMappingImpl(Project project, ChangePackage changePackage) {
 		this(project);
 		this.put(changePackage);
@@ -93,11 +101,11 @@ public class ModelElementIdToEObjectMappingImpl implements ModelElementIdToEObje
 	 * Adds all model elements that are involved in operations contained in the {@link ChangePackage} and their
 	 * respective IDs into the mapping.
 	 * 
-	 * @param changePackage
-	 *            the {@link ChangePackage} whose model elements should be added to the mapping
+	 * @param changePackages
+	 *            the {@link ChangePackage ChangePackages} whose model elements should be added to the mapping
 	 */
 	public void put(List<ChangePackage> changePackages) {
-		for (ChangePackage changePackage : changePackages) {
+		for (final ChangePackage changePackage : changePackages) {
 			put(changePackage);
 		}
 	}
@@ -113,8 +121,13 @@ public class ModelElementIdToEObjectMappingImpl implements ModelElementIdToEObje
 		put(changePackage.getOperations());
 	}
 
+	/**
+	 * Put the given elements from the operations to the mapping.
+	 * 
+	 * @param operations the operations
+	 */
 	public void put(Collection<AbstractOperation> operations) {
-		for (AbstractOperation op : operations) {
+		for (final AbstractOperation op : operations) {
 			scanOperationIntoMapping(op);
 		}
 	}
@@ -122,16 +135,16 @@ public class ModelElementIdToEObjectMappingImpl implements ModelElementIdToEObje
 	private void scanOperationIntoMapping(AbstractOperation operation) {
 
 		if (operation instanceof CompositeOperation) {
-			CompositeOperation composite = (CompositeOperation) operation;
-			for (AbstractOperation subOp : composite.getSubOperations()) {
+			final CompositeOperation composite = (CompositeOperation) operation;
+			for (final AbstractOperation subOp : composite.getSubOperations()) {
 				scanOperationIntoMapping(subOp);
 			}
 			return;
 		}
 
 		if (isCreateDelete(operation)) {
-			CreateDeleteOperation createDeleteOperation = (CreateDeleteOperation) operation;
-			for (EObject modelElement : createDeleteOperation.getEObjectToIdMap().keySet()) {
+			final CreateDeleteOperation createDeleteOperation = (CreateDeleteOperation) operation;
+			for (final EObject modelElement : createDeleteOperation.getEObjectToIdMap().keySet()) {
 				idToEObjectMapping.put(createDeleteOperation.getEObjectToIdMap().get(modelElement).toString(),
 					modelElement);
 			}
@@ -139,12 +152,13 @@ public class ModelElementIdToEObjectMappingImpl implements ModelElementIdToEObje
 	}
 
 	/**
+	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see org.eclipse.emf.emfstore.common.model.ESModelElementIdToEObjectMapping#get(org.eclipse.emf.emfstore.internal.common.model.ModelElementId)
+	 * @see org.eclipse.emf.emfstore.common.model.ESIdToEObjectMapping#get(java.lang.Object)
 	 */
 	public EObject get(ModelElementId modelElementId) {
-		EObject eObject = delegateMapping.get(modelElementId);
+		final EObject eObject = delegateMapping.get(modelElementId);
 		if (eObject != null) {
 			return eObject;
 		}
