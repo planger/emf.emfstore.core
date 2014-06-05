@@ -65,15 +65,6 @@ public class InvalidArgumentsTest {
 	private static ESServer server;
 	private static ESUsersession session;
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @throws ESException in case of failure
-	 * @throws IOException
-	 * @throws FatalESException
-	 * @throws ESServerStartFailedException
-	 * @throws IllegalArgumentException
-	 */
 	@BeforeClass
 	public static void setUpBeforeClass() throws ESException, IOException, IllegalArgumentException,
 		ESServerStartFailedException, FatalESException {
@@ -128,54 +119,42 @@ public class InvalidArgumentsTest {
 		arguments.put(ACOrgUnitId.class, AccesscontrolFactory.eINSTANCE.createACOrgUnitId());
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Test(expected = InvalidInputException.class)
 	public void deleteProjectTest() throws ESException {
 		try {
 			testAllInvalidCombinations(connectionManager.getClass().getMethod("deleteProject",
 				new Class[] { SessionId.class, ProjectId.class, boolean.class }));
-		} catch (SecurityException e) {
+		} catch (final SecurityException e) {
 			throw new ESException(e);
-		} catch (NoSuchMethodException e) {
+		} catch (final NoSuchMethodException e) {
 			throw new ESException(e);
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Test(expected = InvalidInputException.class)
 	public void createProjectTest() throws ESException {
 		try {
 			testAllInvalidCombinations(connectionManager.getClass().getMethod("createEmptyProject",
 				new Class[] { SessionId.class, String.class, String.class, LogMessage.class }));
-		} catch (SecurityException e) {
+		} catch (final SecurityException e) {
 			throw new ESException(e);
-		} catch (NoSuchMethodException e) {
+		} catch (final NoSuchMethodException e) {
 			throw new ESException(e);
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Test(expected = InvalidInputException.class)
 	public void createProject2Test() throws ESException {
 		try {
 			testAllInvalidCombinations(connectionManager.getClass().getMethod("createProject",
 				new Class[] { SessionId.class, String.class, String.class, LogMessage.class, Project.class }));
-		} catch (SecurityException e) {
+		} catch (final SecurityException e) {
 			throw new ESException(e);
-		} catch (NoSuchMethodException e) {
+		} catch (final NoSuchMethodException e) {
 			throw new ESException(e);
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Test(expected = InvalidInputException.class)
 	public void createVersionTest() throws ESException {
 		try {
@@ -183,96 +162,81 @@ public class InvalidArgumentsTest {
 				"createVersion",
 				new Class[] { SessionId.class, ProjectId.class, PrimaryVersionSpec.class, ChangePackage.class,
 					BranchVersionSpec.class, PrimaryVersionSpec.class, LogMessage.class }));
-		} catch (SecurityException e) {
+		} catch (final SecurityException e) {
 			throw new ESException(e);
-		} catch (NoSuchMethodException e) {
+		} catch (final NoSuchMethodException e) {
 			throw new ESException(e);
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Test(expected = InvalidInputException.class)
 	public void getChangesTest() throws ESException {
 		try {
 			testAllInvalidCombinations(connectionManager.getClass().getMethod("getChanges",
 				new Class[] { SessionId.class, ProjectId.class, VersionSpec.class, VersionSpec.class }));
-		} catch (SecurityException e) {
+		} catch (final SecurityException e) {
 			throw new ESException(e);
-		} catch (NoSuchMethodException e) {
+		} catch (final NoSuchMethodException e) {
 			throw new ESException(e);
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Test(expected = InvalidInputException.class)
 	public void getHistoryInfoTest() throws ESException {
 		try {
 			testAllInvalidCombinations(connectionManager.getClass().getMethod("getHistoryInfo",
 				new Class[] { SessionId.class, ProjectId.class, HistoryQuery.class }));
-		} catch (SecurityException e) {
+		} catch (final SecurityException e) {
 			throw new ESException(e);
-		} catch (NoSuchMethodException e) {
+		} catch (final NoSuchMethodException e) {
 			throw new ESException(e);
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Test(expected = InvalidInputException.class)
 	public void getProjectTest() throws ESException {
 		try {
 			testAllInvalidCombinations(connectionManager.getClass().getMethod("getProject",
 				new Class[] { SessionId.class, ProjectId.class, VersionSpec.class }));
-		} catch (SecurityException e) {
+		} catch (final SecurityException e) {
 			throw new ESException(e);
-		} catch (NoSuchMethodException e) {
+		} catch (final NoSuchMethodException e) {
 			throw new ESException(e);
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Test(expected = InvalidInputException.class)
 	public void addTagTest() throws ESException {
 		try {
 			testAllInvalidCombinations(connectionManager.getClass().getMethod("addTag",
 				new Class[] { SessionId.class, ProjectId.class, PrimaryVersionSpec.class, TagVersionSpec.class }));
-		} catch (SecurityException e) {
+		} catch (final SecurityException e) {
 			throw new ESException(e);
-		} catch (NoSuchMethodException e) {
+		} catch (final NoSuchMethodException e) {
 			throw new ESException(e);
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Test(expected = InvalidInputException.class)
 	public void removeTagTest() throws ESException {
 		try {
 			testAllInvalidCombinations(connectionManager.getClass().getMethod("removeTag",
 				new Class[] { SessionId.class, ProjectId.class, PrimaryVersionSpec.class, TagVersionSpec.class }));
-		} catch (SecurityException e) {
+		} catch (final SecurityException e) {
 			throw new ESException(e);
-		} catch (NoSuchMethodException e) {
+		} catch (final NoSuchMethodException e) {
 			throw new ESException(e);
 		}
 	}
 
 	private void testAllInvalidCombinations(Method method) throws ESException {
-		int parameterLength = method.getParameterTypes().length;
-		Object[] parameters = new Object[parameterLength];
-		int combinations = (int) (Math.round(Math.pow(2, parameterLength)) - 1);
+		final int parameterLength = method.getParameterTypes().length;
+		final Object[] parameters = new Object[parameterLength];
+		final int combinations = (int) (Math.round(Math.pow(2, parameterLength)) - 1);
 		for (int i = 0; i < combinations; i++) {
 			for (int j = 0; j < parameterLength; j++) {
-				Class<?> class1 = method.getParameterTypes()[j];
-				boolean argument = getArgument(j, i);
+				final Class<?> class1 = method.getParameterTypes()[j];
+				final boolean argument = getArgument(j, i);
 				parameters[j] = getParameter(class1, argument);
 			}
 			callMethod(method, parameters);
@@ -283,7 +247,7 @@ public class InvalidArgumentsTest {
 		if (clazz.equals(boolean.class)) {
 			return false;
 		}
-		return (b) ? arguments.get(clazz) : null;
+		return b ? arguments.get(clazz) : null;
 	}
 
 	private void callMethod(Method method, Object[] parameters) throws ESException {
@@ -297,13 +261,13 @@ public class InvalidArgumentsTest {
 		try {
 			// method.invoke(connectionManager, null, null, false);
 			method.invoke(connectionManager, parameters);
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			e.printStackTrace();
 			Assert.assertTrue(false);
-		} catch (IllegalAccessException e) {
+		} catch (final IllegalAccessException e) {
 			e.printStackTrace();
 			Assert.assertTrue(false);
-		} catch (InvocationTargetException e) {
+		} catch (final InvocationTargetException e) {
 			if (e.getCause() instanceof ESException) {
 				throw (ESException) e.getCause();
 			}
@@ -316,7 +280,7 @@ public class InvalidArgumentsTest {
 		if (j == 0) {
 			return (i & 1) == 1;
 		}
-		int position = (int) Math.pow(2, j);
+		final int position = (int) Math.pow(2, j);
 		return (i & position) == position;
 	}
 }

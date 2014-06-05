@@ -31,8 +31,8 @@ public class DefaultOperationLabelProvider implements OperationCustomLabelProvid
 	 */
 	protected static final String UNKOWN_ELEMENT = "(Unkown Element)";
 
-	private AdapterFactoryLabelProvider adapterFactoryLabelProvider;
-	private ComposedAdapterFactory adapterFactory;
+	private final AdapterFactoryLabelProvider adapterFactoryLabelProvider;
+	private final ComposedAdapterFactory adapterFactory;
 
 	/**
 	 * Constructor.
@@ -46,12 +46,12 @@ public class DefaultOperationLabelProvider implements OperationCustomLabelProvid
 	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see org.eclipse.emf.emfstore.internal.client.ui.common.AbstractOperationCustomLabelProvider#getDescription(org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation)
+	 * @see org.eclipse.emf.emfstore.internal.client.ui.common.OperationCustomLabelProvider#getDescription(org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation)
 	 */
 	public String getDescription(AbstractOperation operation) {
 
 		if (operation instanceof CompositeOperation) {
-			CompositeOperation compositeOperation = (CompositeOperation) operation;
+			final CompositeOperation compositeOperation = (CompositeOperation) operation;
 			// artificial composite because of opposite reference,
 			// take description of main operation
 			if (compositeOperation.getMainOperation() != null) {
@@ -66,7 +66,7 @@ public class DefaultOperationLabelProvider implements OperationCustomLabelProvid
 	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see org.eclipse.emf.emfstore.internal.client.ui.common.AbstractOperationCustomLabelProvider#getImage(org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation)
+	 * @see org.eclipse.emf.emfstore.internal.client.ui.common.OperationCustomLabelProvider#getImage(org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation)
 	 */
 	public Object getImage(AbstractOperation operation) {
 		return adapterFactoryLabelProvider.getImage(operation);
@@ -76,7 +76,7 @@ public class DefaultOperationLabelProvider implements OperationCustomLabelProvid
 	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see org.eclipse.emf.emfstore.internal.client.ui.common.AbstractOperationCustomLabelProvider#canRender(org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation)
+	 * @see org.eclipse.emf.emfstore.internal.client.ui.common.OperationCustomLabelProvider#canRender(org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation)
 	 */
 	public CanRender canRender(AbstractOperation operation) {
 		return CanRender.Yes;
@@ -86,7 +86,7 @@ public class DefaultOperationLabelProvider implements OperationCustomLabelProvid
 	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see org.eclipse.emf.emfstore.internal.client.ui.common.AbstractOperationCustomLabelProvider#getModelElementName(org.eclipse.emf.ecore.EObject)
+	 * @see org.eclipse.emf.emfstore.internal.client.ui.common.OperationCustomLabelProvider#getModelElementName(org.eclipse.emf.ecore.EObject)
 	 */
 	public String getModelElementName(EObject modelElement) {
 
@@ -99,8 +99,8 @@ public class DefaultOperationLabelProvider implements OperationCustomLabelProvid
 	}
 
 	private String trim(Object object) {
-		String string = object.toString();
-		String result = string.trim();
+		final String string = object.toString();
+		final String result = string.trim();
 
 		if (result.length() == 0) {
 			return "(empty name)";
@@ -113,7 +113,7 @@ public class DefaultOperationLabelProvider implements OperationCustomLabelProvid
 	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see org.eclipse.emf.emfstore.internal.client.ui.common.AbstractOperationCustomLabelProvider#dispose()
+	 * @see org.eclipse.emf.emfstore.internal.common.ESDisposable#dispose()
 	 */
 	public void dispose() {
 		if (adapterFactory != null) {

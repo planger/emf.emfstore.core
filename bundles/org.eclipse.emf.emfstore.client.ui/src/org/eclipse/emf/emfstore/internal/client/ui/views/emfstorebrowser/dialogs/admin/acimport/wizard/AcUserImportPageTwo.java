@@ -43,9 +43,6 @@ public class AcUserImportPageTwo extends WizardPage {
 
 	/**
 	 * Page for displaying the OrgUnits that can be imported.
-	 * 
-	 * @param title
-	 * @param message
 	 */
 	public AcUserImportPageTwo() {
 		super("PAGE_TWO");
@@ -56,11 +53,11 @@ public class AcUserImportPageTwo extends WizardPage {
 	 * @see org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets.Composite)
 	 */
 	public void createControl(Composite parent) {
-		Composite composite = new Composite(parent, SWT.NONE);
+		final Composite composite = new Composite(parent, SWT.NONE);
 
 		composite.setLayout(new GridLayout(2, false));
 
-		Button selectAll = new Button(composite, SWT.CHECK);
+		final Button selectAll = new Button(composite, SWT.CHECK);
 		selectAll.setText("Select/deselect all");
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.horizontalSpan = 2;
@@ -69,7 +66,7 @@ public class AcUserImportPageTwo extends WizardPage {
 		selectAll.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
-				boolean selection = ((Button) event.widget).getSelection();
+				final boolean selection = ((Button) event.widget).getSelection();
 				traverseCheck(tv.getTree(), selection);
 				setPageComplete(selection);
 			}
@@ -93,8 +90,8 @@ public class AcUserImportPageTwo extends WizardPage {
 		tv.getTree().addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event event) {
 				if (event.detail == SWT.CHECK) {
-					TreeItem item = (TreeItem) event.item;
-					boolean checked = item.getChecked();
+					final TreeItem item = (TreeItem) event.item;
+					final boolean checked = item.getChecked();
 					traverseCheck(item, checked);
 
 					// TODO not perfect:
@@ -106,7 +103,7 @@ public class AcUserImportPageTwo extends WizardPage {
 			}
 		});
 
-		Button expandAllButton = new Button(composite, SWT.PUSH);
+		final Button expandAllButton = new Button(composite, SWT.PUSH);
 		expandAllButton.setText("Expand all");
 		expandAllButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -115,7 +112,7 @@ public class AcUserImportPageTwo extends WizardPage {
 			}
 		});
 
-		Button collapseAllButton = new Button(composite, SWT.PUSH);
+		final Button collapseAllButton = new Button(composite, SWT.PUSH);
 		collapseAllButton.setText("Collapse all");
 		collapseAllButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -135,7 +132,7 @@ public class AcUserImportPageTwo extends WizardPage {
 		// first clear old checked items
 		wrappedOrgUnits = new ArrayList<ImportItemWrapper>();
 		this.traverse(tv.getTree());
-		return this.wrappedOrgUnits;
+		return wrappedOrgUnits;
 	}
 
 	private void traverseCheck(TreeItem item, boolean check) {
@@ -144,7 +141,7 @@ public class AcUserImportPageTwo extends WizardPage {
 		} else {
 			tv.collapseToLevel(item, AbstractTreeViewer.ALL_LEVELS);
 		}
-		TreeItem[] items = item.getItems();
+		final TreeItem[] items = item.getItems();
 		for (int i = 0; i < items.length; i++) {
 			items[i].setChecked(check);
 			traverseCheck(items[i], check);
@@ -152,7 +149,7 @@ public class AcUserImportPageTwo extends WizardPage {
 	}
 
 	private void traverseCheck(Tree tree, boolean check) {
-		TreeItem[] items = tree.getItems();
+		final TreeItem[] items = tree.getItems();
 		for (int i = 0; i < items.length; i++) {
 			items[i].setChecked(check);
 			traverseCheck(items[i], check);
@@ -160,10 +157,10 @@ public class AcUserImportPageTwo extends WizardPage {
 	}
 
 	private void traverse(TreeItem item) {
-		TreeItem[] items = item.getItems();
+		final TreeItem[] items = item.getItems();
 		for (int i = 0; i < items.length; i++) {
 			if (items[i].getChecked()) {
-				this.wrappedOrgUnits.add((ImportItemWrapper) items[i].getData());
+				wrappedOrgUnits.add((ImportItemWrapper) items[i].getData());
 			}
 			traverse(items[i]);
 		}
@@ -171,10 +168,10 @@ public class AcUserImportPageTwo extends WizardPage {
 	}
 
 	private void traverse(Tree tree) {
-		TreeItem[] items = tree.getItems();
+		final TreeItem[] items = tree.getItems();
 		for (int i = 0; i < items.length; i++) {
 			if (items[i].getChecked()) {
-				this.wrappedOrgUnits.add((ImportItemWrapper) items[i].getData());
+				wrappedOrgUnits.add((ImportItemWrapper) items[i].getData());
 			}
 			traverse(items[i]);
 		}
@@ -188,14 +185,14 @@ public class AcUserImportPageTwo extends WizardPage {
 	 * @param src the selected ImportSource
 	 */
 	public void init(ImportSource src) {
-		AcUserImportWizard wizard = (AcUserImportWizard) getWizard();
+		final AcUserImportWizard wizard = (AcUserImportWizard) getWizard();
 
 		tv.setContentProvider(src);
 		tv.setLabelProvider(new ImportLabelProvider(wizard.getController()));
 		tv.setInput(src.getElements(null)); // argument is a non-null that will
 		// be ignored
 
-		this.setTitle(wizard.getController().getTitle());
+		setTitle(wizard.getController().getTitle());
 		this.setMessage(wizard.getController().getMessage());
 	}
 }

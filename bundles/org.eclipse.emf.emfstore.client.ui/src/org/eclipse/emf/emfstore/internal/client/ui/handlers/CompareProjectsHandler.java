@@ -24,14 +24,15 @@ import org.eclipse.emf.emfstore.internal.client.ui.dialogs.CompareProjectsDialog
 public class CompareProjectsHandler extends AbstractEMFStoreHandler {
 
 	/**
+	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see org.eclipse.emf.emfstore.internal.client.ui.commands.handlers.AbstractEMFStoreHandler#handle()
+	 * @see org.eclipse.emf.emfstore.internal.client.ui.handlers.AbstractEMFStoreHandler#handle()
 	 */
 	@Override
 	public void handle() {
 		// TODO: Controller?
-		CompareProjectsDialog compareDialog = new CompareProjectsDialog(getShell(),
+		final CompareProjectsDialog compareDialog = new CompareProjectsDialog(getShell(),
 			requireSelection(ProjectSpace.class));
 		compareDialog.create();
 		compareDialog.open();

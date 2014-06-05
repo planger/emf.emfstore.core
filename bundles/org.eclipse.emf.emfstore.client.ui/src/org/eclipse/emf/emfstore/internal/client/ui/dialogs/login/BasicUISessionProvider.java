@@ -21,7 +21,7 @@ import org.eclipse.emf.emfstore.internal.client.model.exceptions.LoginCanceledEx
 import org.eclipse.emf.emfstore.internal.client.ui.common.RunInUI;
 import org.eclipse.emf.emfstore.internal.server.exceptions.AccessControlException;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
-import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 
 /**
@@ -39,26 +39,26 @@ public class BasicUISessionProvider extends ESAbstractSessionProvider {
 	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see org.eclipse.emf.emfstore.internal.client.model.connectionmanager.SessionProvider#provideUsersession(org.eclipse.emf.emfstore.internal.client.model.ServerInfo)
+	 * @see org.eclipse.emf.emfstore.client.sessionprovider.ESAbstractSessionProvider#provideUsersession(org.eclipse.emf.emfstore.client.ESServer)
 	 */
 	@Override
 	public ESUsersession provideUsersession(ESServer server) throws ESException {
 		if (server == null) {
-			Integer userInput = RunInUI.runWithResult(new Callable<Integer>() {
+			final Integer userInput = RunInUI.runWithResult(new Callable<Integer>() {
 				public Integer call() throws Exception {
 					// try to retrieve a server info by showing a server info selection dialog
-					ServerInfoSelectionDialog dialog = new ServerInfoSelectionDialog(
+					final ServerInfoSelectionDialog dialog = new ServerInfoSelectionDialog(
 						Display.getCurrent().getActiveShell(),
 						ESWorkspaceProviderImpl.getInstance().getInternalWorkspace().getServerInfos());
-					int input = dialog.open();
+					final int input = dialog.open();
 					selectedServerInfo = dialog.getResult();
 					return input;
 				}
 			});
 
-			if (userInput == Dialog.OK) {
+			if (userInput == Window.OK) {
 				server = selectedServerInfo;
-			} else if (userInput == Dialog.CANCEL) {
+			} else if (userInput == Window.CANCEL) {
 				throw new LoginCanceledException("Operation canceled by user.");
 			}
 		}

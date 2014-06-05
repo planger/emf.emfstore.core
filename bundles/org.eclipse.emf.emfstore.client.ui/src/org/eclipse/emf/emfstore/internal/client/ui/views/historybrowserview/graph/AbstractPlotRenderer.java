@@ -61,7 +61,7 @@ import org.eclipse.swt.graphics.Color;
  * This class is suitable for us within an AWT TableCellRenderer or within a SWT PaintListener registered on a Table
  * instance. It is meant to rubber stamp the graphics necessary for one row of a plotted commit list.
  * <p>
- * Subclasses should call {@link #paintCommit(PlotCommit, int)} after they have otherwise configured their instance to
+ * Subclasses should call {@link #paintCommit(IPlotCommit, int)} after they have otherwise configured their instance to
  * draw one commit into the current location.
  * <p>
  * All drawing methods assume the coordinate space for the current commit's cell starts at (upper left corner is) 0,0.
@@ -183,7 +183,7 @@ public abstract class AbstractPlotRenderer {
 
 	private int computeDotSize(final int h) {
 		int d = (int) (Math.min(h, LANE_WIDTH) * 0.50f);
-		d += (d & 1);
+		d += d & 1;
 		return d;
 	}
 

@@ -201,7 +201,6 @@ public class ProjectImpl extends NotifiableIdEObjectCollectionImpl implements Pr
 	 * @param adapter
 	 *            the adapter class
 	 * @return the adapter
-	 * @author shterev
 	 */
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		return Platform.getAdapterManager().getAdapter(this, adapter);

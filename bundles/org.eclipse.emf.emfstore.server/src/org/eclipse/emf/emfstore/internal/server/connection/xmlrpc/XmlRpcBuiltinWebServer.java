@@ -55,7 +55,7 @@ public final class XmlRpcBuiltinWebServer implements ESXmlRpcWebServerProvider {
 	/**
 	 * Starts the server.
 	 * 
-	 * @throws FatalESException in case of failure
+	 * @throws ESServerInitException in case of failure
 	 */
 	public void initServer() throws ESServerInitException {
 		if (port == -1) {
@@ -126,7 +126,7 @@ public final class XmlRpcBuiltinWebServer implements ESXmlRpcWebServerProvider {
 	 * 
 	 * @param handlerName handler name
 	 * @param clazz class of server interface
-	 * @throws FatalESException in case of failure
+	 * @throws ESServerInitException in case of failure
 	 */
 	public void addHandler(String handlerName, Class<?> clazz) throws ESServerInitException {
 		try {

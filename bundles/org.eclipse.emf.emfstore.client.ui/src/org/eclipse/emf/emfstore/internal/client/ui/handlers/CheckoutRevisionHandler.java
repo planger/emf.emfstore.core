@@ -24,7 +24,7 @@ import org.eclipse.ui.PlatformUI;
 
 /**
  * Handler for checking out a specific revision of a project.<br/>
- * It is assumed that the user previously has selected a {@link HisotryInfo} instance.
+ * It is assumed that the user previously has selected a {@link HistoryInfo} instance.
  * 
  * @author emueller
  * 
@@ -34,12 +34,12 @@ public class CheckoutRevisionHandler extends AbstractEMFStoreHandler {
 	@Override
 	public void handle() {
 
-		HistoryInfo historyInfo = requireSelection(HistoryInfo.class);
-		PrimaryVersionSpec versionSpec = ModelUtil.clone(historyInfo.getPrimarySpec());
+		final HistoryInfo historyInfo = requireSelection(HistoryInfo.class);
+		final PrimaryVersionSpec versionSpec = ModelUtil.clone(historyInfo.getPrimarySpec());
 
 		// TODO: remove HistoryBrowserView
-		IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
+		final IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		final IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
 		if (activePage == null) {
 			return;
 		}
@@ -48,12 +48,12 @@ public class CheckoutRevisionHandler extends AbstractEMFStoreHandler {
 			return;
 		}
 
-		HistoryBrowserView view = (HistoryBrowserView) activePage.getActivePart();
+		final HistoryBrowserView view = (HistoryBrowserView) activePage.getActivePart();
 
 		ESRemoteProjectImpl remoteProject = null;
 		try {
 			remoteProject = view.getProjectSpace().toAPI().getRemoteProject();
-		} catch (ESException e) {
+		} catch (final ESException e) {
 			// TODO: OTS
 		}
 

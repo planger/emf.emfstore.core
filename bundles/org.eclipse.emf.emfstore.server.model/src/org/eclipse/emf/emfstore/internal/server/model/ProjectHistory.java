@@ -41,7 +41,7 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.Version;
  * </ul>
  * </p>
  * 
- * @see org.eclipse.emf.emfstore.internal.common.model.server.model.ModelPackage#getProjectHistory()
+ * @see ModelPackage#getProjectHistory()
  * @model
  * @generated
  */
@@ -87,7 +87,7 @@ public interface ProjectHistory extends EObject {
 	 * <!-- end-user-doc -->
 	 * 
 	 * @return the value of the '<em>Versions</em>' containment reference list.
-	 * @see org.eclipse.emf.emfstore.internal.common.model.server.model.ModelPackage#getProjectHistory_Versions()
+	 * @see ModelPackage#getProjectHistory_Versions()
 	 * @model containment="true" resolveProxies="true" required="true"
 	 * @generated
 	 */
@@ -112,7 +112,7 @@ public interface ProjectHistory extends EObject {
 	 * 
 	 * @return the value of the '<em>Project Name</em>' attribute.
 	 * @see #setProjectName(String)
-	 * @see org.eclipse.emf.emfstore.internal.common.model.server.model.ModelPackage#getProjectHistory_ProjectName()
+	 * @see ModelPackage#getProjectHistory_ProjectName()
 	 * @model required="true"
 	 * @generated
 	 */
@@ -174,7 +174,7 @@ public interface ProjectHistory extends EObject {
 	 * 
 	 * @return the value of the '<em>Shared Properties</em>' containment
 	 *         reference list.
-	 * @see org.eclipse.emf.emfstore.internal.common.model.server.model.ModelPackage#getProjectHistory_SharedProperties()
+	 * @see ModelPackage#getProjectHistory_SharedProperties()
 	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
@@ -192,7 +192,7 @@ public interface ProjectHistory extends EObject {
 	 * <!-- end-user-doc -->
 	 * 
 	 * @return the value of the '<em>Branches</em>' containment reference list.
-	 * @see org.eclipse.emf.emfstore.internal.common.model.server.model.ModelPackage#getProjectHistory_Branches()
+	 * @see ModelPackage#getProjectHistory_Branches()
 	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */

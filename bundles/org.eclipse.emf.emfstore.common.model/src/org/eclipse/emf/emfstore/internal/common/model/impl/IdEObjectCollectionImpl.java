@@ -441,21 +441,26 @@ public abstract class IdEObjectCollectionImpl extends EObjectImpl implements IdE
 	}
 
 	/**
+	 * Gets all model elements by class.
 	 * 
-	 * {@inheritDoc}
+	 * @param modelElementClass the EClass
+	 * @param list the list of model elements
+	 * @return the model elements matching the class
 	 * 
-	 * @see org.eclipse.emf.emfstore.internal.common.model.IdEObjectCollection#getAllModelElementsByClass(org.eclipse.emf.ecore.EClass,
-	 *      org.eclipse.emf.common.util.EList)
+	 * @param <T> type
 	 */
 	public <T extends EObject> EList<T> getAllModelElementsByClass(EClass modelElementClass, EList<T> list) {
 		return getAllModelElementsByClass(modelElementClass, list, true);
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Gets all model elements by class.
 	 * 
-	 * @see org.eclipse.emf.emfstore.internal.common.model.Project#getModelElementsByClass(org.eclipse.emf.ecore.EClass)
-	 * @generated NOT
+	 * @param modelElementClass the EClass
+	 * @param list the list of model elements
+	 * @return the model elements matching the class
+	 * 
+	 * @param <T> type
 	 */
 	// cast below is guarded by sanity check
 	@SuppressWarnings("unchecked")
@@ -470,11 +475,14 @@ public abstract class IdEObjectCollectionImpl extends EObjectImpl implements IdE
 	}
 
 	/**
+	 * Gets all model elements by class.
 	 * 
-	 * {@inheritDoc}
+	 * @param modelElementClass the EClass
+	 * @param list the list of model elements
+	 * @param subclasses whether to use subclasses
+	 * @return the model elements matching the class
 	 * 
-	 * @see org.eclipse.emf.emfstore.internal.common.model.IdEObjectCollection#getAllModelElementsByClass(org.eclipse.emf.ecore.EClass,
-	 *      org.eclipse.emf.common.util.EList, java.lang.Boolean)
+	 * @param <T> type
 	 */
 	// two casts below are guarded by initial sanity check and if statement
 	@SuppressWarnings("unchecked")
@@ -795,9 +803,10 @@ public abstract class IdEObjectCollectionImpl extends EObjectImpl implements IdE
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Returns the EObject Id.
 	 * 
-	 * @see org.eclipse.emf.emfstore.common.model.ESModelElementIdToEObjectMapping#getEObjectId(org.eclipse.emf.ecore.EObject)
+	 * @param eObject the eobject
+	 * @return the id or null if there is no model element id
 	 */
 	public String getEObjectId(EObject eObject) {
 		final ModelElementId modelElementId = getModelElementId(eObject);
@@ -858,9 +867,9 @@ public abstract class IdEObjectCollectionImpl extends EObjectImpl implements IdE
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Removes a model element.
 	 * 
-	 * @see org.eclipse.emf.emfstore.common.model.ESObjectContainer#removeModelElement(org.eclipse.emf.ecore.EObject)
+	 * @param modelElement the element to remove
 	 */
 	public void removeModelElement(EObject modelElement) {
 		getModelElements().remove(modelElement);

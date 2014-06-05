@@ -39,7 +39,7 @@ import org.eclipse.ui.PlatformUI;
 public class VersionDecorator extends AdapterImpl implements ILightweightLabelDecorator, ESUpdateObserver,
 	ESCommitObserver {
 
-	private ArrayList<ILabelProviderListener> listeners = new ArrayList<ILabelProviderListener>();
+	private final ArrayList<ILabelProviderListener> listeners = new ArrayList<ILabelProviderListener>();
 
 	/**
 	 * Default constructor.
@@ -53,8 +53,8 @@ public class VersionDecorator extends AdapterImpl implements ILightweightLabelDe
 	 */
 	public void decorate(Object element, IDecoration decoration) {
 		if (element instanceof ProjectSpace) {
-			ProjectSpace projectSpace = (ProjectSpace) element;
-			StringBuilder stringBuilder = new StringBuilder();
+			final ProjectSpace projectSpace = (ProjectSpace) element;
+			final StringBuilder stringBuilder = new StringBuilder();
 			if (projectSpace.getBaseVersion() != null) {
 				stringBuilder.append("@");
 				stringBuilder.append(projectSpace.getBaseVersion().getIdentifier());
@@ -62,7 +62,7 @@ public class VersionDecorator extends AdapterImpl implements ILightweightLabelDe
 			} else {
 				stringBuilder.append("(Not shared)");
 			}
-			String string = stringBuilder.toString();
+			final String string = stringBuilder.toString();
 			decoration.addSuffix(string);
 		}
 	}
@@ -113,7 +113,7 @@ public class VersionDecorator extends AdapterImpl implements ILightweightLabelDe
 	 */
 	@Override
 	public void notifyChanged(Notification msg) {
-		for (ILabelProviderListener listener : listeners) {
+		for (final ILabelProviderListener listener : listeners) {
 			listener.labelProviderChanged(new LabelProviderChangedEvent(this));
 		}
 	}
@@ -122,9 +122,8 @@ public class VersionDecorator extends AdapterImpl implements ILightweightLabelDe
 	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see org.eclipse.emf.emfstore.client.observer.ESCommitObserver#inspectChanges(org.eclipse.emf.emfstore.internal.client.model.ProjectSpace,
-	 *      org.eclipse.emf.emfstore.internal.server.model.versioning.ChangePackage,
-	 *      org.eclipse.core.runtime.IProgressMonitor)
+	 * @see org.eclipse.emf.emfstore.client.observer.ESCommitObserver#inspectChanges(org.eclipse.emf.emfstore.client.ESLocalProject,
+	 *      org.eclipse.emf.emfstore.server.model.ESChangePackage, org.eclipse.core.runtime.IProgressMonitor)
 	 */
 	public boolean inspectChanges(ESLocalProject project, ESChangePackage changePackage, IProgressMonitor monitor) {
 		return false;
@@ -134,8 +133,8 @@ public class VersionDecorator extends AdapterImpl implements ILightweightLabelDe
 	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see org.eclipse.emf.emfstore.client.observer.ESCommitObserver#commitCompleted(org.eclipse.emf.emfstore.internal.client.ESLocalProject.ILocalProject,
-	 *      org.eclipse.emf.emfstore.internal.server.model.ESPrimaryVersionSpec.versionspecs.IPrimaryVersionSpec,
+	 * @see org.eclipse.emf.emfstore.client.observer.ESCommitObserver#commitCompleted(org.eclipse.emf.emfstore.client.ESLocalProject,
+	 *      org.eclipse.emf.emfstore.server.model.versionspec.ESPrimaryVersionSpec,
 	 *      org.eclipse.core.runtime.IProgressMonitor)
 	 */
 	public void commitCompleted(ESLocalProject project, ESPrimaryVersionSpec newRevision, IProgressMonitor monitor) {
@@ -154,7 +153,7 @@ public class VersionDecorator extends AdapterImpl implements ILightweightLabelDe
 	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see org.eclipse.emf.emfstore.internal.client.model.observer.UpdateObserver#updateCompleted(org.eclipse.emf.emfstore.internal.client.ESLocalProject.ILocalProject,
+	 * @see org.eclipse.emf.emfstore.client.observer.ESUpdateObserver#updateCompleted(org.eclipse.emf.emfstore.client.ESLocalProject,
 	 *      org.eclipse.core.runtime.IProgressMonitor)
 	 */
 	public void updateCompleted(ESLocalProject project, IProgressMonitor monitor) {

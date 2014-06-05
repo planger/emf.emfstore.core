@@ -45,18 +45,18 @@ import org.junit.runners.model.InitializationError;
  * <code>@DataProvider(IntDataProvider.class)</code><br/>
  * <br/>
  * This class must implement the interface {@link FuzzyDataProvider}. The
- * default value is the example implementation: {@link IntDataProvider}.<br/>
+ * default value is the example implementation: IntDataProvider.<br/>
  * <br/>
- * The {@link MyTest} class illustrates an example usage of the {@link FuzzyRunner}.
+ * The MyTest class illustrates an example usage of the {@link FuzzyRunner}.
  * 
  * @author Julian Sommerfeldt
  * 
  */
 public class FuzzyRunner extends Suite {
 
-	private ArrayList<Runner> runners = new ArrayList<Runner>();
+	private final ArrayList<Runner> runners = new ArrayList<Runner>();
 
-	private FuzzyDataProvider<?> dataProvider;
+	private final FuzzyDataProvider<?> dataProvider;
 
 	/**
 	 * The string representing a seperation in a name (e.g. test name).
@@ -76,12 +76,12 @@ public class FuzzyRunner extends Suite {
 		dataProvider = getDataProvider();
 		dataProvider.setTestClass(getTestClass());
 		dataProvider.init();
-		FrameworkField dataField = getDataField();
-		FrameworkField utilField = getUtilField();
-		FrameworkField optionsField = getOptionsField();
-		org.eclipse.emf.emfstore.fuzzy.Util util = dataProvider.getUtil();
+		final FrameworkField dataField = getDataField();
+		final FrameworkField utilField = getUtilField();
+		final FrameworkField optionsField = getOptionsField();
+		final org.eclipse.emf.emfstore.fuzzy.Util util = dataProvider.getUtil();
 		for (int i = 0; i < dataProvider.size(); i++) {
-			FuzzyTestClassRunner runner = new FuzzyTestClassRunner(clazz,
+			final FuzzyTestClassRunner runner = new FuzzyTestClassRunner(clazz,
 				dataProvider, dataField, utilField, optionsField, util,
 				i + 1);
 			if (runner.getChildren().size() > 0) {
@@ -98,9 +98,9 @@ public class FuzzyRunner extends Suite {
 	 */
 	@Override
 	public void run(final RunNotifier notifier) {
-		List<RunListener> listener = dataProvider.getListener();
+		final List<RunListener> listener = dataProvider.getListener();
 		if (listener != null) {
-			for (RunListener runListener : listener) {
+			for (final RunListener runListener : listener) {
 				notifier.addListener(runListener);
 			}
 		}
@@ -122,7 +122,7 @@ public class FuzzyRunner extends Suite {
 
 	private FrameworkField getSingleStaticFrameworkField(
 		Class<? extends Annotation> annotation) {
-		List<FrameworkField> fields = getTestClass().getAnnotatedFields(
+		final List<FrameworkField> fields = getTestClass().getAnnotatedFields(
 			annotation);
 
 		// Check if there are more than one Data field in the class
@@ -133,8 +133,8 @@ public class FuzzyRunner extends Suite {
 		}
 
 		// get the field and check modifiers
-		for (FrameworkField field : fields) {
-			int modifiers = field.getField().getModifiers();
+		for (final FrameworkField field : fields) {
+			final int modifiers = field.getField().getModifiers();
 			if (!Modifier.isStatic(modifiers)) {
 				return field;
 			}
@@ -150,7 +150,7 @@ public class FuzzyRunner extends Suite {
 	 *             If there is not exact one fitting field.
 	 */
 	private FrameworkField getDataField() throws InitializationError {
-		FrameworkField field = getSingleStaticFrameworkField(Data.class);
+		final FrameworkField field = getSingleStaticFrameworkField(Data.class);
 
 		if (field == null) {
 			throw new InitializationError(
@@ -170,13 +170,13 @@ public class FuzzyRunner extends Suite {
 	 */
 	private FuzzyDataProvider<?> getDataProvider() throws InitializationError {
 		// Get the DataProvider Annotation
-		Annotation[] annotations = getTestClass().getAnnotations();
+		final Annotation[] annotations = getTestClass().getAnnotations();
 
 		// take default DataProvider, if there is no annotation
 		Class<?> dataProviderClass = null;
 
 		// check for the dataprovider annotation
-		for (Annotation annotation : annotations) {
+		for (final Annotation annotation : annotations) {
 			if (annotation instanceof DataProvider) {
 
 				// Check if the given class is an implementation of
@@ -195,22 +195,22 @@ public class FuzzyRunner extends Suite {
 		try {
 			return (FuzzyDataProvider<?>) dataProviderClass.getConstructor()
 				.newInstance();
-		} catch (InstantiationException e) {
+		} catch (final InstantiationException e) {
 			throw new InitializationError(
 				"The DataProvider must have a zero-parameter constructor!");
-		} catch (IllegalAccessException e) {
+		} catch (final IllegalAccessException e) {
 			throw new InitializationError(
 				"The DataProvider must have a zero-parameter constructor!");
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			throw new InitializationError(
 				"The DataProvider must have a zero-parameter constructor!");
-		} catch (InvocationTargetException e) {
+		} catch (final InvocationTargetException e) {
 			throw new InitializationError(
 				"The DataProvider must have a zero-parameter constructor!");
-		} catch (NoSuchMethodException e) {
+		} catch (final NoSuchMethodException e) {
 			throw new InitializationError(
 				"The DataProvider must have a zero-parameter constructor!");
-		} catch (SecurityException e) {
+		} catch (final SecurityException e) {
 			throw new InitializationError(
 				"The DataProvider must have a zero-parameter constructor!");
 		}

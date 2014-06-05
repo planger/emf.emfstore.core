@@ -60,14 +60,14 @@ public class NewRepositoryWizardPageOne extends WizardPage {
 	 * {@inheritDoc}
 	 */
 	public void createControl(Composite parent) {
-		NewRepositoryWizard wizard = (NewRepositoryWizard) getWizard();
-		ESServer server = wizard.getServer();
+		final NewRepositoryWizard wizard = (NewRepositoryWizard) getWizard();
+		final ESServer server = wizard.getServer();
 
 		GridData gd;
-		Composite composite = new Composite(parent, SWT.NONE);
+		final Composite composite = new Composite(parent, SWT.NONE);
 
-		GridLayout gl = new GridLayout();
-		int ncol = 3;
+		final GridLayout gl = new GridLayout();
+		final int ncol = 3;
 		gl.numColumns = ncol;
 		composite.setLayout(gl);
 
@@ -104,7 +104,7 @@ public class NewRepositoryWizardPageOne extends WizardPage {
 		initCombo();
 
 		// Choose Certificate, Opens Dialogue
-		Button button = new Button(composite, SWT.NONE);
+		final Button button = new Button(composite, SWT.NONE);
 		button.setText("Edit");
 		button.addSelectionListener(new SelectionDialogListener());
 
@@ -131,7 +131,7 @@ public class NewRepositoryWizardPageOne extends WizardPage {
 				} else {
 					certificateCombo.setText("");
 				}
-			} catch (ESCertificateException e1) {
+			} catch (final ESCertificateException e1) {
 				certificateCombo.setText("");
 			}
 		}
@@ -139,14 +139,14 @@ public class NewRepositoryWizardPageOne extends WizardPage {
 
 	private void initCombo() {
 		try {
-			ArrayList<String> certificates = KeyStoreManager.getInstance().getCertificates();
+			final ArrayList<String> certificates = KeyStoreManager.getInstance().getCertificates();
 			certificateCombo.setItems(certificates.toArray(new String[certificates.size()]));
 
-			NewRepositoryWizard wizard = (NewRepositoryWizard) getWizard();
-			ESServer server = wizard.getServer();
-			String selectedCertificate = server.getCertificateAlias();
+			final NewRepositoryWizard wizard = (NewRepositoryWizard) getWizard();
+			final ESServer server = wizard.getServer();
+			final String selectedCertificate = server.getCertificateAlias();
 			certificateCombo.select(certificates.indexOf(selectedCertificate));
-		} catch (ESCertificateException e) {
+		} catch (final ESCertificateException e) {
 			WorkspaceUtil.logException(e.getMessage(), e);
 		}
 	}
@@ -169,7 +169,7 @@ public class NewRepositoryWizardPageOne extends WizardPage {
 	 * Saves the uses choices from this page to the model. Called on exit of the
 	 * page
 	 * 
-	 * @return
+	 * @return the server
 	 */
 	public ESServer getServer() {
 		return ESServer.FACTORY.createServer(name.getText(),
@@ -185,14 +185,14 @@ public class NewRepositoryWizardPageOne extends WizardPage {
 	 * @return boolean
 	 */
 	private static boolean isTextNonEmpty(String s) {
-		if ((s != null) && (s.trim().length() > 0)) {
+		if (s != null && s.trim().length() > 0) {
 			return true;
 		}
 		return false;
 	}
 
 	private boolean isComboNotEmpty() {
-		String s = certificateCombo.getItem(certificateCombo.getSelectionIndex());
+		final String s = certificateCombo.getItem(certificateCombo.getSelectionIndex());
 		return isTextNonEmpty(s);
 	}
 
@@ -218,7 +218,8 @@ public class NewRepositoryWizardPageOne extends WizardPage {
 		 * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
 		 */
 		public void widgetSelected(SelectionEvent e) {
-			CertificateSelectionDialog csd = new CertificateSelectionDialog(Display.getCurrent().getActiveShell(),
+			final CertificateSelectionDialog csd = new CertificateSelectionDialog(
+				Display.getCurrent().getActiveShell(),
 				new LabelProvider() {
 					@Override
 					public String getText(Object element) {
@@ -233,7 +234,7 @@ public class NewRepositoryWizardPageOne extends WizardPage {
 			try {
 				certificates = KeyStoreManager.getInstance().getCertificates();
 				csd.setElements(certificates.toArray());
-			} catch (ESCertificateException e1) {
+			} catch (final ESCertificateException e1) {
 				csd.setErrorMessage(e1.getMessage());
 			}
 			csd.setBlockOnOpen(true);
@@ -242,7 +243,7 @@ public class NewRepositoryWizardPageOne extends WizardPage {
 			if (csd.getReturnCode() == Window.OK) {
 				initCombo();
 				for (int i = 0; i < certificateCombo.getItemCount(); i++) {
-					String item = certificateCombo.getItem(i);
+					final String item = certificateCombo.getItem(i);
 					if (item.equals(csd.getCertificateAlias())) {
 						certificateCombo.select(i);
 						break;

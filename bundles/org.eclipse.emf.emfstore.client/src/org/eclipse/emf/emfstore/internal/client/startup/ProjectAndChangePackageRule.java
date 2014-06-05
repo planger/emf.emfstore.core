@@ -20,9 +20,10 @@ import org.eclipse.emf.emfstore.internal.server.startup.UpdateXMIAttributeRule;
 public class ProjectAndChangePackageRule implements UpdateXMIAttributeRule {
 
 	/**
+	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see org.eclipse.emf.emfstore.internal.client.migration.UpdateXMIAttributeRule#getNewAttribute(java.lang.String)
+	 * @see org.eclipse.emf.emfstore.internal.server.startup.UpdateXMIAttributeRule#getNewAttribute(java.lang.String)
 	 */
 	public String getNewAttribute(String oldAttr) {
 		return oldAttr.split("\\.")[0] + "#/"; //$NON-NLS-1$ //$NON-NLS-2$

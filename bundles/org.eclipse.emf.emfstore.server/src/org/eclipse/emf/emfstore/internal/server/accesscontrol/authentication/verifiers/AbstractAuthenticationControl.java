@@ -118,7 +118,8 @@ public abstract class AbstractAuthenticationControl implements AuthenticationCon
 
 	/**
 	 * This method must be implemented by subclasses in order to verify a pair of username and password.
-	 * When using authentication you should use {@link AuthenticationControl#logIn(String, String)} in order to gain a
+	 * When using authentication you should use
+	 * {@link AuthenticationControl#logIn(ACUser, String, String, ClientVersionInfo)} in order to gain a
 	 * session id.
 	 * 
 	 * @param resolvedUser

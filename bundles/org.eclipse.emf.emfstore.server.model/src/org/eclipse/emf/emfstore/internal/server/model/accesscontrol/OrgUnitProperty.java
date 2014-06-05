@@ -124,8 +124,6 @@ public interface OrgUnitProperty extends EObject {
 	/**
 	 * Sets a new boolean property.
 	 * 
-	 * @param name
-	 *            the name of the property
 	 * @param value
 	 *            the new value
 	 * @generated NOT

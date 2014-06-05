@@ -17,7 +17,7 @@ import org.eclipse.emf.emfstore.internal.common.model.IdentifiableElement;
  * -->
  * 
  * 
- * @see org.eclipse.emf.emfstore.internal.common.model.server.model.ModelPackage#getFileIdentifier()
+ * @see ModelPackage#getFileIdentifier()
  * @model
  * @generated
  */

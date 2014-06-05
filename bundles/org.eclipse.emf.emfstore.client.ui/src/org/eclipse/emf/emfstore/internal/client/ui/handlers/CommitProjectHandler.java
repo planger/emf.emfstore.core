@@ -40,8 +40,8 @@ public class CommitProjectHandler extends AbstractEMFStoreHandler {
 	/**
 	 * Constructor.
 	 * 
-	 * @param projectSpace
-	 *            the project space to be committed
+	 * @param localProject
+	 *            the local project to be committed
 	 */
 	public CommitProjectHandler(ESLocalProject localProject) {
 		this.localProject = localProject;

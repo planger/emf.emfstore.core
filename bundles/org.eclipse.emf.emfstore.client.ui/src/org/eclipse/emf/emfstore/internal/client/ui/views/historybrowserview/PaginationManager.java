@@ -28,7 +28,7 @@ import org.eclipse.emf.emfstore.server.model.ESHistoryInfo;
 import org.eclipse.emf.emfstore.server.model.query.ESHistoryQuery;
 
 /**
- * Class handling pagination. See constructor {@link #PaginationManager(ProjectSpace, int, int)}
+ * Class handling pagination. See constructor {@link #PaginationManager(ProjectSpace, EObject, int, int)}
  * 
  * @author Aumann
  * 
@@ -42,11 +42,11 @@ public class PaginationManager {
 	 */
 	private PrimaryVersionSpec currentCenterVersionShown;
 
-	private int aboveCenterCount, belowCenterCount;
+	private final int aboveCenterCount, belowCenterCount;
 
 	private List<HistoryInfo> currentlyPresentedInfos = new ArrayList<HistoryInfo>();
 
-	private ProjectSpace projectSpace;
+	private final ProjectSpace projectSpace;
 
 	private boolean nextPage;
 
@@ -54,7 +54,7 @@ public class PaginationManager {
 
 	private boolean showAllVersions;
 
-	private EObject modelElement;
+	private final EObject modelElement;
 
 	private final String projectBranch;
 
@@ -80,7 +80,7 @@ public class PaginationManager {
 		this.belowCenterCount = belowCenterCount;
 		this.projectSpace = projectSpace;
 		this.modelElement = modelElement;
-		this.projectBranch = projectSpace.getBaseVersion().getBranch();
+		projectBranch = projectSpace.getBaseVersion().getBranch();
 	}
 
 	/**
@@ -114,13 +114,13 @@ public class PaginationManager {
 		} else {
 			newCenterVersion = currentCenterVersionShown;
 		}
-		HistoryQuery<ESHistoryQuery> query = getQuery(newCenterVersion, aboveCenterCount, belowCenterCount);
+		final HistoryQuery<ESHistoryQuery> query = getQuery(newCenterVersion, aboveCenterCount, belowCenterCount);
 		// TODO monitor
-		List<ESHistoryInfo> infos = projectSpace.toAPI().getHistoryInfos(query.toAPI(),
+		final List<ESHistoryInfo> infos = projectSpace.toAPI().getHistoryInfos(query.toAPI(),
 			new NullProgressMonitor());
 
-		List<HistoryInfo> historyInfos = new ArrayList<HistoryInfo>();
-		for (ESHistoryInfo info : infos) {
+		final List<HistoryInfo> historyInfos = new ArrayList<HistoryInfo>();
+		for (final ESHistoryInfo info : infos) {
 			historyInfos.add(((ESHistoryInfoImpl) info).toInternalAPI());
 		}
 
@@ -145,13 +145,14 @@ public class PaginationManager {
 	 */
 	private void setCorrectCenterVersionAndHistory(List<HistoryInfo> newQueryHistoryInfos, int newCenterVersionId,
 		int positionOfOldCenterInCurrentDisplay) {
-		int idOfCurrentVersionShown = currentlyPresentedInfos.get(positionOfOldCenterInCurrentDisplay).getPrimarySpec()
+		final int idOfCurrentVersionShown = currentlyPresentedInfos.get(positionOfOldCenterInCurrentDisplay)
+			.getPrimarySpec()
 			.getIdentifier();
 		int olderVersions = 0, newerVersions = 0;
 		int newCenterVersionPos = -1;
 		int oldCenterVersionPos = -1;
 		for (int i = 0; i < newQueryHistoryInfos.size(); i++) {
-			int idOfI = newQueryHistoryInfos.get(i).getPrimarySpec().getIdentifier();
+			final int idOfI = newQueryHistoryInfos.get(i).getPrimarySpec().getIdentifier();
 			if (idOfI > newCenterVersionId) {
 				++newerVersions;
 			} else if (idOfI < newCenterVersionId) {
@@ -172,22 +173,23 @@ public class PaginationManager {
 		assert prevPage ^ nextPage;
 
 		if (prevPage && newerVersions < aboveCenterCount) {
-			List<HistoryInfo> mergedInfos = mergeHistoryInfoLists(newQueryHistoryInfos, currentlyPresentedInfos);
-			int oldCenterPos = findPositionOfId(currentCenterVersionShown.getIdentifier(), mergedInfos);
+			final List<HistoryInfo> mergedInfos = mergeHistoryInfoLists(newQueryHistoryInfos, currentlyPresentedInfos);
+			final int oldCenterPos = findPositionOfId(currentCenterVersionShown.getIdentifier(), mergedInfos);
 
 			// not enough versions: go further down, but never further than the old center as this is supposed to be
 			// prevPage and thus at the very least not nextPage
-			int newCenterPos = Math.min(Math.min(aboveCenterCount, oldCenterPos), newQueryHistoryInfos.size() - 1);
+			final int newCenterPos = Math
+				.min(Math.min(aboveCenterCount, oldCenterPos), newQueryHistoryInfos.size() - 1);
 			newCenterVersion = mergedInfos.get(newCenterPos).getPrimarySpec();
 			currentlyPresentedInfos = cutInfos(mergedInfos, newCenterPos);
 
 		} else if (nextPage && olderVersions < belowCenterCount) {
-			List<HistoryInfo> mergedInfos = mergeHistoryInfoLists(newQueryHistoryInfos, currentlyPresentedInfos);
-			int oldCenterPos = findPositionOfId(currentCenterVersionShown.getIdentifier(), mergedInfos);
+			final List<HistoryInfo> mergedInfos = mergeHistoryInfoLists(newQueryHistoryInfos, currentlyPresentedInfos);
+			final int oldCenterPos = findPositionOfId(currentCenterVersionShown.getIdentifier(), mergedInfos);
 
 			// not enough versions: go further up, but never further than the old center as this is supposed to be
 			// nextPage and thus at the very least not prevPage
-			int newCenterPos = Math.max(Math.max(mergedInfos.size() - 1 - belowCenterCount, oldCenterPos), 0);
+			final int newCenterPos = Math.max(Math.max(mergedInfos.size() - 1 - belowCenterCount, oldCenterPos), 0);
 			newCenterVersion = mergedInfos.get(newCenterPos).getPrimarySpec();
 			currentlyPresentedInfos = cutInfos(mergedInfos, newCenterPos);
 
@@ -200,9 +202,9 @@ public class PaginationManager {
 	}
 
 	private List<HistoryInfo> cutInfos(List<HistoryInfo> mergedInfos, int newCenterPos) {
-		int smallestIndexIn = Math.max(0, newCenterPos - aboveCenterCount);
-		int largestIndexIn = Math.min(mergedInfos.size() - 1, newCenterPos + belowCenterCount);
-		List<HistoryInfo> cut = new ArrayList<HistoryInfo>();
+		final int smallestIndexIn = Math.max(0, newCenterPos - aboveCenterCount);
+		final int largestIndexIn = Math.min(mergedInfos.size() - 1, newCenterPos + belowCenterCount);
+		final List<HistoryInfo> cut = new ArrayList<HistoryInfo>();
 		for (int i = smallestIndexIn; i <= largestIndexIn; i++) {
 			cut.add(mergedInfos.get(i));
 		}
@@ -241,7 +243,7 @@ public class PaginationManager {
 	private List<HistoryInfo> newMerge(List<HistoryInfo> newQuery, List<HistoryInfo> olderVersions) {
 		int newPos = 0, oldPos = 0;
 
-		List<HistoryInfo> merge = new ArrayList<HistoryInfo>();
+		final List<HistoryInfo> merge = new ArrayList<HistoryInfo>();
 		while (newPos < newQuery.size() && oldPos < olderVersions.size()) {
 			if (getId(newQuery.get(newPos)) >= getId(olderVersions.get(oldPos))) {
 				merge.add(newQuery.get(newPos));
@@ -264,10 +266,10 @@ public class PaginationManager {
 		}
 
 		// remove duplicates
-		Iterator<HistoryInfo> iterator = merge.iterator();
+		final Iterator<HistoryInfo> iterator = merge.iterator();
 		int prevId = Integer.MIN_VALUE;
 		while (iterator.hasNext()) {
-			int currId = getId(iterator.next());
+			final int currId = getId(iterator.next());
 			if (currId == prevId) {
 				iterator.remove();
 			}
@@ -325,7 +327,7 @@ public class PaginationManager {
 	 */
 	private QueryMargins getBranchAdaptedMargins(PrimaryVersionSpec centerVersion, int aboveCenter, int belowCenter)
 		throws ESException {
-		QueryMargins margins = new QueryMargins();
+		final QueryMargins margins = new QueryMargins();
 		centerVersion.setBranch(projectBranch);
 		margins.aboveCenter = aboveCenter;
 		margins.belowCenter = belowCenter;
@@ -333,12 +335,12 @@ public class PaginationManager {
 		// currently always the biggest primary version of given branch which is equal or lower
 		// to the given versionSpec
 		// TODO monitor
-		PrimaryVersionSpec nearestSpec = projectSpace.resolveVersionSpec(centerVersion,
+		final PrimaryVersionSpec nearestSpec = projectSpace.resolveVersionSpec(centerVersion,
 			new NullProgressMonitor());
 		if (nearestSpec.getIdentifier() < centerVersion.getIdentifier()) {
-			margins.aboveCenter = aboveCenter + (centerVersion.getIdentifier() - nearestSpec.getIdentifier()) + 1;
+			margins.aboveCenter = aboveCenter + centerVersion.getIdentifier() - nearestSpec.getIdentifier() + 1;
 		} else if (nearestSpec.getIdentifier() > centerVersion.getIdentifier()) {
-			margins.belowCenter = belowCenter + (nearestSpec.getIdentifier() - centerVersion.getIdentifier() + 1);
+			margins.belowCenter = belowCenter + nearestSpec.getIdentifier() - centerVersion.getIdentifier() + 1;
 		}
 		margins.querySpec = nearestSpec;
 
@@ -393,8 +395,8 @@ public class PaginationManager {
 			return false;
 		}
 
-		int newestVersion = getId(currentlyPresentedInfos.get(0));
-		int oldestVersion = getId(currentlyPresentedInfos.get(currentlyPresentedInfos.size() - 1));
+		final int newestVersion = getId(currentlyPresentedInfos.get(0));
+		final int oldestVersion = getId(currentlyPresentedInfos.get(currentlyPresentedInfos.size() - 1));
 		//
 		// List<HistoryInfo> currentHistoryInfosBU = currentlyPresentedInfos;
 		// PrimaryVersionSpec currentCenterBU = currentCenterVersionShown;
@@ -403,18 +405,18 @@ public class PaginationManager {
 			return true; // already there
 		}
 
-		HistoryQuery<ESHistoryQuery> query = getQuery(Versions.createPRIMARY(projectSpace.getBaseVersion(), id),
+		final HistoryQuery<ESHistoryQuery> query = getQuery(Versions.createPRIMARY(projectSpace.getBaseVersion(), id),
 			aboveCenterCount
 				+ belowCenterCount, aboveCenterCount + belowCenterCount);
 		// TODO: monitor
-		List<ESHistoryInfo> infos = projectSpace.toAPI().getHistoryInfos(query.toAPI(),
+		final List<ESHistoryInfo> infos = projectSpace.toAPI().getHistoryInfos(query.toAPI(),
 			new NullProgressMonitor());
-		List<HistoryInfo> historyInfos = new ArrayList<HistoryInfo>();
-		for (ESHistoryInfo info : infos) {
+		final List<HistoryInfo> historyInfos = new ArrayList<HistoryInfo>();
+		for (final ESHistoryInfo info : infos) {
 			historyInfos.add(((ESHistoryInfoImpl) info).toInternalAPI());
 		}
 		int requestedIdPos = findPositionOfId(id, historyInfos, false);
-		boolean contained = containsId(historyInfos, id);
+		final boolean contained = containsId(historyInfos, id);
 		int newCenterPos;
 		if (!contained) {
 			return false;
@@ -447,8 +449,8 @@ public class PaginationManager {
 	}
 
 	private boolean containsId(List<HistoryInfo> infos, int id) {
-		int newestVersion = getId(infos.get(0));
-		int oldestVersion = getId(infos.get(infos.size() - 1));
+		final int newestVersion = getId(infos.get(0));
+		final int oldestVersion = getId(infos.get(infos.size() - 1));
 
 		if (newestVersion >= id && id >= oldestVersion) {
 			return true;

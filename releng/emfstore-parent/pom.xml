@@ -15,6 +15,8 @@
 		<junit-version>4.8.2</junit-version>
 		<maven-checkstyle-version>2.10</maven-checkstyle-version>
 		<jacoco-version>0.6.2.201302030002</jacoco-version>
+		<javadoc-version>2.9</javadoc-version>
+		<javadoc-title>EMFStore 1.3.0 API</javadoc-title>
 		<emfstore-version>1.3.0-SNAPSHOT</emfstore-version>
 		<jarsigner-version>1.0.5</jarsigner-version>
 		<maven.antrun.plugin.version>1.7</maven.antrun.plugin.version>
@@ -195,6 +197,57 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>${javadoc-version}</version>
+				<configuration>
+					<doctitle>${javadoc-title}</doctitle>
+					<show>protected</show>
+					<show>public</show>
+					<nohelp>true</nohelp>
+					<excludePackageNames>*.test.*:*.bowling.*:*.example.*</excludePackageNames>
+					<tags>
+						<tag>
+              				<name>generated</name>
+              				<placement>X</placement>
+            			</tag>
+						<tag>
+              				<name>ordered</name>
+              				<placement>X</placement>
+            			</tag>
+						<tag>
+              				<name>model</name>
+              				<placement>X</placement>
+            			</tag>
+						<tag>
+              				<name>noextend</name>
+              				<placement>X</placement>
+            			</tag>
+						<tag>
+              				<name>noimplement</name>
+              				<placement>X</placement>
+            			</tag>
+						<tag>
+              				<name>noinstantiate</name>
+              				<placement>X</placement>
+            			</tag>
+						<tag>
+              				<name>noreference</name>
+              				<placement>X</placement>
+            			</tag>
+						<tag>
+              				<name>extends</name>
+              				<placement>X</placement>
+            			</tag>
+						<tag>
+              				<name>implements</name>
+              				<placement>X</placement>
+            			</tag>
+          			</tags>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
