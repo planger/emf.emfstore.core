@@ -15,6 +15,7 @@ import org.eclipse.emf.emfstore.client.ESLocalProject;
 import org.eclipse.emf.emfstore.client.ESUsersession;
 import org.eclipse.emf.emfstore.client.util.ESVoidCallable;
 import org.eclipse.emf.emfstore.internal.client.model.exceptions.LoginCanceledException;
+import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESLocalProjectImpl;
 import org.eclipse.emf.emfstore.internal.client.ui.common.RunInUI;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -84,6 +85,9 @@ public class UIShareProjectController extends AbstractEMFStoreUIController<Void>
 						getShell(),
 						Messages.UIShareProjectController_ShareFailed,
 						shareErrorMessage);
+					if (ESLocalProjectImpl.class.isInstance(localProject)) {
+						((ESLocalProjectImpl) localProject).toInternalAPI().setUsersession(null);
+					}
 				}
 			}
 		});
