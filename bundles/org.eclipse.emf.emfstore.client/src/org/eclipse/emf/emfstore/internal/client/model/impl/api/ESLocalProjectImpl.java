@@ -646,7 +646,8 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 		checkIsShared();
 		return RunESCommand.runWithResult(new Callable<ESPrimaryVersionSpec>() {
 			public ESPrimaryVersionSpec call() throws Exception {
-				return toInternalAPI().getBaseVersion().toAPI();
+				final PrimaryVersionSpec baseVersion = toInternalAPI().getBaseVersion();
+				return baseVersion != null ? baseVersion.toAPI() : null;
 			}
 		});
 	}
