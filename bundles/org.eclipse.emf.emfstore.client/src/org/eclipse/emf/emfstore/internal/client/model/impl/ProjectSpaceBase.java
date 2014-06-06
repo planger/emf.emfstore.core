@@ -1297,7 +1297,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl
 	 * @see org.eclipse.emf.emfstore.internal.client.model.ProjectSpace#isShared()
 	 */
 	public boolean isShared() {
-		return getUsersession() != null;
+		return getUsersession() != null && getBaseVersion() != null;
 	}
 
 	private void notifyPreRevertMyChanges(final ChangePackage changePackage) {
