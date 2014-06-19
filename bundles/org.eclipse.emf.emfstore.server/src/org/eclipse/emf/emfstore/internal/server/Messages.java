@@ -50,6 +50,7 @@ public final class Messages extends NLS {
 	public static String EMFStoreController_Waiting_For_Termination_Interrupted;
 	public static String ServerConfiguration_Default_Checksum_Behavior;
 	public static String ServerConfiguration_No_Location_Provider;
+	public static String ServerConfiguration_No_WebServer_Provider;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

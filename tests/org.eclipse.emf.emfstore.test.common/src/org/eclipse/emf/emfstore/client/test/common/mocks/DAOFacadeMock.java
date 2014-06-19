@@ -1,9 +1,20 @@
+/*******************************************************************************
+ * Copyright (c) 2011-2014 EclipseSource Muenchen GmbH and others.
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ * Edgar Mueller - initial API and implementation
+ ******************************************************************************/
 package org.eclipse.emf.emfstore.client.test.common.mocks;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
+import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectHistory;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACGroup;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACUser;
@@ -11,21 +22,21 @@ import org.eclipse.emf.emfstore.internal.server.model.dao.ACDAOFacade;
 
 public class DAOFacadeMock implements ACDAOFacade {
 
-	private List<ACUser> users;
-	private List<ACGroup> groups;
-	private List<ProjectHistory> projects;
+	private final EList<ACUser> users;
+	private final EList<ACGroup> groups;
+	private final EList<ProjectHistory> projects;
 
 	public DAOFacadeMock() {
-		users = new ArrayList<ACUser>();
-		groups = new ArrayList<ACGroup>();
-		projects = new ArrayList<ProjectHistory>();
+		users = new BasicEList<ACUser>();
+		groups = new BasicEList<ACGroup>();
+		projects = new BasicEList<ProjectHistory>();
 	}
 
-	public List<ACUser> getUsers() {
+	public EList<ACUser> getUsers() {
 		return users;
 	}
 
-	public List<ACGroup> getGroups() {
+	public EList<ACGroup> getGroups() {
 		return groups;
 	}
 
@@ -53,7 +64,7 @@ public class DAOFacadeMock implements ACDAOFacade {
 		projects.add(history);
 	}
 
-	public List<ProjectHistory> getProjects() {
+	public EList<ProjectHistory> getProjects() {
 		return projects;
 	}
 

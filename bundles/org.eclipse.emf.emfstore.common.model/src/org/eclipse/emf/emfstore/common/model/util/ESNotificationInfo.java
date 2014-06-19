@@ -17,11 +17,10 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.emfstore.internal.common.model.util.NotificationInfo;
 
 /**
- * A wrapper type around {@link NotificationInfo} that adds
- * some convenience methods.
+ * A wrapper type around {@link org.eclipse.emf.emfstore.internal.common.model.util.NotificationInfo NotificationInfo}
+ * that adds some convenience methods.
  * 
  * @author jsommerfeldt
  * 

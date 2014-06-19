@@ -15,11 +15,10 @@ import java.util.Comparator;
 
 /**
  * A comparator for {@link ESExtensionElement}. This allows to sort the elements in the {@link ESExtensionPoint} in
- * order to
- * represent priority of registed elements.
+ * order to represent priority of registered elements.
  * 
- * This comparator by default uses a field priority, which is expected to hold an priority number and then sorty by this
- * number.
+ * This comparator by default uses a field priority, which is expected to hold an priority number and then sort
+ * by by this number.
  * 
  * @author wesendon
  * 
@@ -34,7 +33,7 @@ public final class ESPriorityComparator implements Comparator<ESExtensionElement
 	 * Default constructor.
 	 */
 	public ESPriorityComparator() {
-		this("priority", false);
+		this("priority", false); //$NON-NLS-1$
 	}
 
 	/**
@@ -43,7 +42,7 @@ public final class ESPriorityComparator implements Comparator<ESExtensionElement
 	 * @param descending if true, priorities are sorted in descending order, ascending otherwise
 	 */
 	public ESPriorityComparator(final boolean descending) {
-		this("priority", descending);
+		this("priority", descending); //$NON-NLS-1$
 	}
 
 	/**
@@ -56,7 +55,7 @@ public final class ESPriorityComparator implements Comparator<ESExtensionElement
 	 */
 	public ESPriorityComparator(final String fieldname, final boolean descending) {
 		this.fieldname = fieldname;
-		this.desc = descending;
+		desc = descending;
 	}
 
 	/**
@@ -68,9 +67,9 @@ public final class ESPriorityComparator implements Comparator<ESExtensionElement
 		try {
 			element1.setThrowException(true);
 			element2.setThrowException(true);
-			return element1.getInteger(this.fieldname).compareTo(element2.getInteger(this.fieldname))
-				* ((desc) ? -1 : 1);
-		} catch (ESExtensionPointException e) {
+			return element1.getInteger(fieldname).compareTo(element2.getInteger(fieldname))
+				* (desc ? -1 : 1);
+		} catch (final ESExtensionPointException e) {
 			return 0;
 		}
 	}

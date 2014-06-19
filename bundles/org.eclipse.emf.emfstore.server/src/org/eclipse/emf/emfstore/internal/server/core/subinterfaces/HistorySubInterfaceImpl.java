@@ -139,6 +139,16 @@ public class HistorySubInterfaceImpl extends AbstractSubEmfstoreInterface {
 		}
 	}
 
+	/**
+	 * Returns history information for the given project.
+	 * 
+	 * @param projectId
+	 *            the {@link ProjectId} of the project whose history should be fetched
+	 * @param historyQuery
+	 *            the history query
+	 * @return a list containing {@link HistoryInfo} about the project
+	 * @throws ESException in case an error occurs while fetching the history
+	 */
 	@EmfStoreMethod(MethodId.GETHISTORYINFO)
 	public List<HistoryInfo> getHistoryInfo(ProjectId projectId, HistoryQuery<?> historyQuery) throws ESException {
 		sanityCheckObjects(projectId, historyQuery);
@@ -427,11 +437,11 @@ public class HistorySubInterfaceImpl extends AbstractSubEmfstoreInterface {
 		final ProjectHistory project = getSubInterface(ProjectSubInterfaceImpl.class).getProject(projectId);
 
 		if (version.getPrimarySpec().equals(project.getLastVersion().getPrimarySpec())) {
-			history.getTagSpecs().add(Versions.createTAG("HEAD", VersionSpec.GLOBAL));
+			history.getTagSpecs().add(Versions.createTAG("HEAD", VersionSpec.GLOBAL)); //$NON-NLS-1$
 		}
 		for (final BranchInfo branch : project.getBranches()) {
 			if (version.getPrimarySpec().equals(branch.getHead())) {
-				history.getTagSpecs().add(Versions.createTAG("HEAD: " + branch.getName(), branch.getName()));
+				history.getTagSpecs().add(Versions.createTAG("HEAD: " + branch.getName(), branch.getName())); //$NON-NLS-1$
 			}
 		}
 

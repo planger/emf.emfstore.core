@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2011-2014 EclipseSource Muenchen GmbH and others.
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ * Edgar Mueller - initial API and implementation
+ ******************************************************************************/
 package org.eclipse.emf.emfstore.client.test.common.mocks;
 
 import org.eclipse.emf.emfstore.client.ESLocalProject;
@@ -12,11 +23,11 @@ public class ServerMock {
 
 	private EMFStore emfStore;
 	private ESServer server;
-	private ServerSpace serverSpace;
+	private final ServerSpace serverSpace;
 
 	public ServerMock(ESServer server, EMFStore emfstore, ServerSpace serverSpace) {
 		this.server = server;
-		this.emfStore = emfstore;
+		emfStore = emfstore;
 		this.serverSpace = serverSpace;
 	}
 
@@ -29,14 +40,14 @@ public class ServerMock {
 	}
 
 	public ProjectHistory getHistory(ESLocalProject localProject) {
-		ESLocalProjectImpl projectImpl = ESLocalProjectImpl.class.cast(localProject);
+		final ESLocalProjectImpl projectImpl = ESLocalProjectImpl.class.cast(localProject);
 		final ProjectId id = projectImpl.toInternalAPI().getProjectId();
-		for (final ProjectHistory history : serverSpace.getProjects()) {
+		for (final ProjectHistory history : getServerSpace().getProjects()) {
 			if (history.getProjectId().equals(id)) {
 				return history;
 			}
 		}
-		throw new RuntimeException("Project History not found");
+		throw new RuntimeException("Project History not found"); //$NON-NLS-1$
 	}
 
 	public EMFStore getEMFStore() {
@@ -45,5 +56,12 @@ public class ServerMock {
 
 	public void setEmfStore(EMFStore emfStore) {
 		this.emfStore = emfStore;
+	}
+
+	/**
+	 * @return the serverSpace
+	 */
+	public ServerSpace getServerSpace() {
+		return serverSpace;
 	}
 }

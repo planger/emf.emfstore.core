@@ -14,7 +14,8 @@ package org.eclipse.emf.emfstore.internal.server.connection.xmlrpc;
 import org.eclipse.emf.emfstore.internal.server.EMFStore;
 import org.eclipse.emf.emfstore.internal.server.accesscontrol.AccessControl;
 import org.eclipse.emf.emfstore.internal.server.connection.ConnectionHandler;
-import org.eclipse.emf.emfstore.internal.server.exceptions.FatalESException;
+import org.eclipse.emf.emfstore.server.ESXmlRpcWebServerProvider;
+import org.eclipse.emf.emfstore.server.exceptions.ESServerInitException;
 
 /**
  * Connection Handler for XML RPC EMFStore interface.
@@ -49,10 +50,10 @@ public class XmlRpcConnectionHandler implements ConnectionHandler<EMFStore> {
 	 *      org.eclipse.emf.emfstore.internal.server.accesscontrol.AccessControl)
 	 */
 	@SuppressWarnings("static-access")
-	public synchronized void init(EMFStore emfStore, AccessControl accessControl) throws FatalESException {
+	public synchronized void init(EMFStore emfStore, AccessControl accessControl) throws ESServerInitException {
 		this.emfStore = emfStore;
 		this.accessControl = accessControl;
-		final XmlRpcWebserverManager webServer = XmlRpcWebserverManager.getInstance();
+		final ESXmlRpcWebServerProvider webServer = XmlRpcWebserverManager.getInstance();
 		webServer.initServer();
 		webServer.addHandler(EMFSTORE, XmlRpcEmfStoreImpl.class);
 	}
@@ -82,7 +83,7 @@ public class XmlRpcConnectionHandler implements ConnectionHandler<EMFStore> {
 	 * @see org.eclipse.emf.emfstore.internal.server.connection.ConnectionHandler#stop()
 	 */
 	public void stop() {
-		final XmlRpcWebserverManager webserverManager = XmlRpcWebserverManager.getInstance();
+		final ESXmlRpcWebServerProvider webserverManager = XmlRpcWebserverManager.getInstance();
 		if (!webserverManager.removeHandler(EMFSTORE)) {
 			webserverManager.stopServer();
 		}

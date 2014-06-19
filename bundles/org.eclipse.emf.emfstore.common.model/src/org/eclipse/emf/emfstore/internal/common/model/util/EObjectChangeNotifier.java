@@ -34,8 +34,8 @@ public class EObjectChangeNotifier extends EContentAdapter {
 
 	private final NotifiableIdEObjectCollectionImpl collection;
 	private boolean isInitializing;
-	private Stack<Notification> currentNotifications;
-	private Stack<List<EObject>> removedModelElements;
+	private final Stack<Notification> currentNotifications;
+	private final Stack<List<EObject>> removedModelElements;
 	private int reentrantCallToAddAdapterCounter;
 	private boolean notificationDisabled;
 
@@ -49,7 +49,7 @@ public class EObjectChangeNotifier extends EContentAdapter {
 	 *            the {@link Notifier} to listen to
 	 */
 	public EObjectChangeNotifier(NotifiableIdEObjectCollectionImpl notifiableCollection, Notifier notifier) {
-		this.collection = notifiableCollection;
+		collection = notifiableCollection;
 		isInitializing = true;
 		currentNotifications = new Stack<Notification>();
 		removedModelElements = new Stack<List<EObject>>();
@@ -81,11 +81,11 @@ public class EObjectChangeNotifier extends EContentAdapter {
 			return;
 		}
 
-		Notification currentNotification = currentNotifications.peek();
+		final Notification currentNotification = currentNotifications.peek();
 
 		if (currentNotification != null && !currentNotification.isTouch() && !isInitializing
 			&& notifier instanceof EObject && !ModelUtil.isIgnoredDatatype((EObject) notifier)) {
-			EObject modelElement = (EObject) notifier;
+			final EObject modelElement = (EObject) notifier;
 			if (!collection.contains(modelElement) && isInCollectionHierarchy(modelElement)) {
 				collection.modelElementAdded(collection, modelElement);
 			}
@@ -104,7 +104,7 @@ public class EObjectChangeNotifier extends EContentAdapter {
 			return;
 		}
 
-		Notification currentNotification = currentNotifications.peek();
+		final Notification currentNotification = currentNotifications.peek();
 
 		if (currentNotification != null && currentNotification.isTouch()) {
 			return;
@@ -112,7 +112,7 @@ public class EObjectChangeNotifier extends EContentAdapter {
 
 		if (currentNotification != null && currentNotification.getFeature() instanceof EReference) {
 			// do not remove adapter because of opposite
-			EReference eReference = (EReference) currentNotification.getFeature();
+			final EReference eReference = (EReference) currentNotification.getFeature();
 			if (eReference.isContainment() && eReference.getEOpposite() != null
 				&& !eReference.getEOpposite().isTransient()) {
 				return;
@@ -120,7 +120,7 @@ public class EObjectChangeNotifier extends EContentAdapter {
 		}
 
 		if (notifier instanceof EObject) {
-			EObject modelElement = (EObject) notifier;
+			final EObject modelElement = (EObject) notifier;
 			if (!isInCollectionHierarchy(modelElement)
 				&& (collection.contains(modelElement) || collection.getDeletedModelElementId(modelElement) != null)) {
 				removedModelElements.peek().add(modelElement);
@@ -138,7 +138,7 @@ public class EObjectChangeNotifier extends EContentAdapter {
 	 *         false otherwise
 	 */
 	private boolean isInCollectionHierarchy(EObject modelElement) {
-		EObject parent = modelElement.eContainer();
+		final EObject parent = modelElement.eContainer();
 		if (parent == null) {
 			return false;
 		}
@@ -167,12 +167,12 @@ public class EObjectChangeNotifier extends EContentAdapter {
 
 		removedModelElements.push(new ArrayList<EObject>());
 		currentNotifications.push(notification);
-		Object feature = notification.getFeature();
-		Object notifier = notification.getNotifier();
-		Object newValue = notification.getNewValue();
+		final Object feature = notification.getFeature();
+		final Object notifier = notification.getNotifier();
+		final Object newValue = notification.getNewValue();
 
 		if (feature instanceof EReference) {
-			EReference eReference = (EReference) feature;
+			final EReference eReference = (EReference) feature;
 
 			// Do not create notifications for transient features
 			if (eReference.isTransient()) {
@@ -189,7 +189,7 @@ public class EObjectChangeNotifier extends EContentAdapter {
 		// detect if the notification is about a reference to an object outside of the collection => notify
 		// project
 		if (feature instanceof EReference && newValue != null && !notification.isTouch()) {
-			EReference reference = (EReference) feature;
+			final EReference reference = (EReference) feature;
 
 			if (!reference.isContainment() && !reference.isContainer()) {
 				if (newValue instanceof EObject) {
@@ -204,13 +204,19 @@ public class EObjectChangeNotifier extends EContentAdapter {
 		}
 
 		currentNotifications.pop();
+		notifyCollection(notification, notifier);
+		notifyCollectionAboutRemovedElements();
+	}
 
+	private void notifyCollectionAboutRemovedElements() {
+		for (final EObject removedElement : removedModelElements.pop()) {
+			collection.modelElementRemoved(collection, removedElement);
+		}
+	}
+
+	private void notifyCollection(Notification notification, final Object notifier) {
 		if (!notification.isTouch() && notifier instanceof EObject && hasId(notifier)) {
 			collection.notify(notification, collection, (EObject) notifier);
-		}
-
-		for (EObject removedElement : removedModelElements.pop()) {
-			collection.modelElementRemoved(collection, removedElement);
 		}
 	}
 
@@ -220,23 +226,23 @@ public class EObjectChangeNotifier extends EContentAdapter {
 	}
 
 	private void handleMapEntry(Map.Entry<?, ?> entry, EReference reference) {
-		for (EReference ref : reference.getEReferenceType().getEReferences()) {
-			if (ref.getName().equals("key") && entry.getKey() instanceof EObject) {
+		for (final EReference ref : reference.getEReferenceType().getEReferences()) {
+			if (ref.getName().equals("key") && entry.getKey() instanceof EObject) { //$NON-NLS-1$
 				handleSingleReference((EObject) entry.getKey());
-			} else if (ref.getName().equals("value") && entry.getValue() instanceof EObject) {
+			} else if (ref.getName().equals("value") && entry.getValue() instanceof EObject) { //$NON-NLS-1$
 				handleSingleReference((EObject) entry.getValue());
 			}
 		}
 	}
 
 	private void handleMultiReference(List<?> list) {
-		for (Object obj : list) {
+		for (final Object obj : list) {
 
 			if (!(obj instanceof EObject)) {
 				continue;
 			}
 
-			EObject eObject = (EObject) obj;
+			final EObject eObject = (EObject) obj;
 
 			if (!collection.contains(eObject)) {
 				collection.addCutElement(eObject);
@@ -258,8 +264,8 @@ public class EObjectChangeNotifier extends EContentAdapter {
 	 */
 	private void handleContainer(Notification notification, EReference eReference) {
 		if (notification.getEventType() == Notification.SET) {
-			Object newValue = notification.getNewValue();
-			Object oldValue = notification.getOldValue();
+			final Object newValue = notification.getNewValue();
+			final Object oldValue = notification.getOldValue();
 			if (newValue == null && oldValue != null) {
 				removeAdapter((Notifier) notification.getNotifier());
 			}

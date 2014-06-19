@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.emf.emfstore.client.test.common.dsl.Add;
 import org.eclipse.emf.emfstore.client.test.common.dsl.Create;
@@ -26,6 +27,7 @@ import org.eclipse.emf.emfstore.internal.client.model.filetransfer.FileDownloadS
 import org.eclipse.emf.emfstore.internal.client.model.filetransfer.FileDownloadStatus.Status;
 import org.eclipse.emf.emfstore.internal.server.model.FileIdentifier;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
+import org.junit.After;
 import org.junit.Test;
 
 /**
@@ -36,9 +38,21 @@ import org.junit.Test;
  */
 public class FileManagerTest extends TransmissionTests {
 
+	private File file;
+
+	@After
+	@Override
+	public void after() {
+		if (file != null) {
+			FileUtils.deleteQuietly(file);
+			file = null;
+		}
+		super.after();
+	}
+
 	@Test
 	public void testTransfer() throws ESException, IOException, InterruptedException {
-		final File file = File.createTempFile("foo", "tmp");
+		file = File.createTempFile("foo", "tmp"); //$NON-NLS-1$//$NON-NLS-2$
 		file.deleteOnExit();
 		final FileIdentifier id = getProjectSpace1().addFile(file);
 		// dummy change, addFile is not recognized as a change
@@ -64,7 +78,7 @@ public class FileManagerTest extends TransmissionTests {
 
 	@Test
 	public void testTransferWithBlocking() throws ESException, IOException, InterruptedException {
-		final File file = File.createTempFile("foo", "tmp");
+		file = File.createTempFile("foo", "tmp"); //$NON-NLS-1$//$NON-NLS-2$
 		file.deleteOnExit();
 		final FileIdentifier id = getProjectSpace1().addFile(file);
 		// dummy change, addFile is not recognized as a change

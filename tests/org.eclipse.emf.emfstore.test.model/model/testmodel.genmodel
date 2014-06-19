@@ -36,6 +36,11 @@
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference testmodel.ecore#//TestElement/container2"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testmodel.ecore#//TestElement/containedElements_NoOpposite"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference testmodel.ecore#//TestElement/containedElement_NoOpposite"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute testmodel.ecore#//TestElement/featureMapEntries"/>
+      <genFeatures property="None" notify="false" children="true" createChild="true"
+          ecoreFeature="ecore:EReference testmodel.ecore#//TestElement/featureMapReferences1"/>
+      <genFeatures property="None" notify="false" children="true" createChild="true"
+          ecoreFeature="ecore:EReference testmodel.ecore#//TestElement/featureMapReferences2"/>
     </genClasses>
     <genClasses ecoreClass="testmodel.ecore#//TestElementToStringMap">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testmodel.ecore#//TestElementToStringMap/value"/>

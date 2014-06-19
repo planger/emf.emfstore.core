@@ -62,9 +62,9 @@ public class ModelElementIdImpl extends UniqueIdentifierImpl implements ModelEle
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Sets the api impl.
 	 * 
-	 * @see org.eclipse.emf.emfstore.internal.common.api.APIDelegate#setAPIImpl(java.lang.Object)
+	 * @param esModelElementIdImpl api impl
 	 */
 	public void setAPIImpl(ESModelElementIdImpl esModelElementIdImpl) {
 		apiImpl = esModelElementIdImpl;

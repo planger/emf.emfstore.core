@@ -61,7 +61,7 @@ public abstract class IdentifiableElementImpl extends EObjectImpl implements Ide
 	 */
 	protected IdentifiableElementImpl() {
 		super();
-		this.identifier = EcoreUtil.generateUUID();
+		identifier = EcoreUtil.generateUUID();
 	}
 
 	/**
@@ -89,11 +89,12 @@ public abstract class IdentifiableElementImpl extends EObjectImpl implements Ide
 	 * @generated
 	 */
 	public void setIdentifier(String newIdentifier) {
-		String oldIdentifier = identifier;
+		final String oldIdentifier = identifier;
 		identifier = newIdentifier;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.IDENTIFIABLE_ELEMENT__IDENTIFIER,
 				oldIdentifier, identifier));
+		}
 	}
 
 	/**
@@ -161,11 +162,12 @@ public abstract class IdentifiableElementImpl extends EObjectImpl implements Ide
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (eIsProxy()) {
 			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (identifier: ");
+		final StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (identifier: "); //$NON-NLS-1$
 		result.append(identifier);
 		result.append(')');
 		return result.toString();

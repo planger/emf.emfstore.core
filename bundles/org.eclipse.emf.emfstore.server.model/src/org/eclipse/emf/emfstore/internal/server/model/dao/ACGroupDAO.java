@@ -7,24 +7,40 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Edgar - initial API and implementation
+ * Edgar Mueller - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.server.model.dao;
 
-import java.util.List;
-
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACGroup;
 
 /**
- * @author Edgar
+ * @author emueller
  * 
  */
 public interface ACGroupDAO extends DAO {
 
+	/**
+	 * Add a group.
+	 * 
+	 * @param group
+	 *            the group to be added
+	 */
 	void add(ACGroup group);
 
-	List<ACGroup> getGroups();
+	/**
+	 * Returns all groups.
+	 * 
+	 * @return a list containing all groups
+	 */
+	EList<ACGroup> getGroups();
 
+	/**
+	 * Removes a group.
+	 * 
+	 * @param group
+	 *            the group to be removed
+	 */
 	void remove(ACGroup group);
 
 }

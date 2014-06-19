@@ -49,7 +49,6 @@ public final class FileUtil {
 	 * @throws IOException copy problem
 	 */
 	// created input stream is closed by copyFile
-	// TODO: refactor
 	public static void copyFile(File source, File destination) throws IOException {
 		copyFile(new FileInputStream(source), destination);
 	}
@@ -67,7 +66,7 @@ public final class FileUtil {
 		try {
 
 			if (source == null || destination == null) {
-				throw new IOException("Source or destination is null.");
+				throw new IOException(Messages.FileUtil_SourceOrDestinationIsNull);
 			}
 
 			if (destination.getParentFile() != null) {
@@ -118,15 +117,15 @@ public final class FileUtil {
 	 */
 	public static void zipFolder(File source, File destination) throws IOException {
 		if (!source.isDirectory()) {
-			throw new IOException("Source must be folder.");
+			throw new IOException(Messages.FileUtil_SourceMustBeFolder);
 		}
 		if (destination.exists()) {
-			throw new IOException("Destination already exists.");
+			throw new IOException(Messages.FileUtil_DestinationExists);
 		}
 		final ZipOutputStream zipOutputStream = new ZipOutputStream(new BufferedOutputStream(
 			new FileOutputStream(destination)));
 		String path = source.getPath();
-		path += path.endsWith(File.separator) ? "" : File.separatorChar;
+		path += path.endsWith(File.separator) ? StringUtils.EMPTY : File.separatorChar;
 		zip(source, path, zipOutputStream, new byte[8192]);
 		zipOutputStream.close();
 	}
@@ -134,12 +133,12 @@ public final class FileUtil {
 	private static void zip(File current, String rootPath, ZipOutputStream zipStream, byte[] buffer) throws IOException {
 		if (current.isDirectory()) {
 			for (final File file : current.listFiles()) {
-				if (!".".equals(file.getName()) && !"..".equals(file.getName())) {
+				if (!".".equals(file.getName()) && !"..".equals(file.getName())) { //$NON-NLS-1$ //$NON-NLS-2$
 					zip(file, rootPath, zipStream, buffer);
 				}
 			}
 		} else if (current.isFile()) {
-			zipStream.putNextEntry(new ZipEntry(current.getPath().replace(rootPath, "")));
+			zipStream.putNextEntry(new ZipEntry(current.getPath().replace(rootPath, StringUtils.EMPTY)));
 			final FileInputStream file = new FileInputStream(current);
 			int read;
 			while ((read = file.read(buffer)) != -1) {
@@ -183,7 +182,7 @@ public final class FileUtil {
 		try {
 			stream1 = new BufferedInputStream(new FileInputStream(file1));
 			stream2 = new BufferedInputStream(new FileInputStream(file2));
-			monitor.beginTask("Comparing...",
+			monitor.beginTask(Messages.FileUtil_Comparing,
 				file1.length() > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) file1.length());
 			final boolean equals = areEqual(stream1, stream2, monitor);
 			monitor.done();
@@ -258,7 +257,7 @@ public final class FileUtil {
 	 * @return the file extension, if any, otherwise empty string
 	 */
 	public static String getExtension(File file) {
-		final int lastIndexOf = file.getName().lastIndexOf(".");
+		final int lastIndexOf = file.getName().lastIndexOf("."); //$NON-NLS-1$
 
 		if (lastIndexOf == -1) {
 			return StringUtils.EMPTY;

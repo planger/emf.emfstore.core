@@ -53,7 +53,11 @@ public class ESWorkspaceImpl extends AbstractAPIImpl<ESWorkspaceImpl, Workspace>
 	 * @see org.eclipse.emf.emfstore.client.ESWorkspace#getLocalProjects()
 	 */
 	public List<ESLocalProject> getLocalProjects() {
-		return APIUtil.mapToAPI(ESLocalProject.class, toInternalAPI().getProjectSpaces());
+		return RunESCommand.runWithResult(new Callable<List<ESLocalProject>>() {
+			public List<ESLocalProject> call() throws Exception {
+				return APIUtil.mapToAPI(ESLocalProject.class, toInternalAPI().getProjectSpaces());
+			}
+		});
 	}
 
 	/**
@@ -79,7 +83,11 @@ public class ESWorkspaceImpl extends AbstractAPIImpl<ESWorkspaceImpl, Workspace>
 	 * @see org.eclipse.emf.emfstore.client.ESWorkspace#getServers()
 	 */
 	public List<ESServer> getServers() {
-		return APIUtil.mapToAPI(ESServer.class, toInternalAPI().getServerInfos());
+		return RunESCommand.runWithResult(new Callable<List<ESServer>>() {
+			public List<ESServer> call() throws Exception {
+				return APIUtil.mapToAPI(ESServer.class, toInternalAPI().getServerInfos());
+			}
+		});
 	}
 
 	/**

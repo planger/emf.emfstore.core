@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * wesendon
+ * Otto von Wesendonk - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.common.observer;
 
@@ -19,7 +19,7 @@ import java.util.Map;
 import org.eclipse.emf.emfstore.common.ESObserver;
 
 /**
- * ProxyObserver, returned by the {@link ObserverBus} when calling {@link ObserverBus#notify(Class))}, normally it has
+ * ProxyObserver, returned by the {@link ObserverBus} when calling {@link ObserverBus#notify}, normally it has
  * the type of the class extending ESObserver in order to call the observer interface with type safety.
  * However, the same proxies can be casted into {@link ObserverCall} in order to access the results by all registered
  * observers.
@@ -61,7 +61,7 @@ public interface ObserverCall {
 			this.observer = observer;
 			this.method = method;
 			this.result = result;
-			this.throwable = null;
+			throwable = null;
 		}
 
 		/**
@@ -74,7 +74,7 @@ public interface ObserverCall {
 		public Result(ESObserver observer, Method method, Throwable throwable) {
 			this.observer = observer;
 			this.method = method;
-			this.result = null;
+			result = null;
 			this.throwable = throwable;
 		}
 
@@ -102,7 +102,7 @@ public interface ObserverCall {
 		 * @return this can't be null
 		 */
 		public ESObserver getObserver() {
-			return this.observer;
+			return observer;
 		}
 
 		/**
@@ -111,7 +111,7 @@ public interface ObserverCall {
 		 * @return the result or null
 		 */
 		public Object getResult() {
-			return this.result;
+			return result;
 		}
 
 		/**
@@ -122,7 +122,7 @@ public interface ObserverCall {
 		public Object getResultOrDefaultValue() {
 			Object result = getResult();
 			if (result == null) {
-				result = getDefaultValue(this.method);
+				result = getDefaultValue(method);
 			}
 			return result;
 		}
@@ -142,13 +142,13 @@ public interface ObserverCall {
 
 		private static final Map<String, Object> DEFAULT_VALUES = new LinkedHashMap<String, Object>();
 		static {
-			DEFAULT_VALUES.put("int", Integer.valueOf(0));
-			DEFAULT_VALUES.put("boolean", Boolean.FALSE);
-			DEFAULT_VALUES.put("long", Long.valueOf(0));
-			DEFAULT_VALUES.put("float", new Float(0));
-			DEFAULT_VALUES.put("double", new Double(0));
-			DEFAULT_VALUES.put("byte", new Byte(Byte.MIN_VALUE));
-			DEFAULT_VALUES.put("short", new Short(Short.MIN_VALUE));
+			DEFAULT_VALUES.put("int", Integer.valueOf(0)); //$NON-NLS-1$
+			DEFAULT_VALUES.put("boolean", Boolean.FALSE); //$NON-NLS-1$
+			DEFAULT_VALUES.put("long", Long.valueOf(0)); //$NON-NLS-1$
+			DEFAULT_VALUES.put("float", new Float(0)); //$NON-NLS-1$
+			DEFAULT_VALUES.put("double", new Double(0)); //$NON-NLS-1$
+			DEFAULT_VALUES.put("byte", new Byte(Byte.MIN_VALUE)); //$NON-NLS-1$
+			DEFAULT_VALUES.put("short", new Short(Short.MIN_VALUE)); //$NON-NLS-1$
 		}
 	}
 }

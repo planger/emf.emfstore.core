@@ -162,11 +162,12 @@ public class RangeQueryImpl<T extends ESRangeQuery<?>>
 	 * @generated
 	 */
 	public void setUpperLimit(int newUpperLimit) {
-		int oldUpperLimit = upperLimit;
+		final int oldUpperLimit = upperLimit;
 		upperLimit = newUpperLimit;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, VersioningPackage.RANGE_QUERY__UPPER_LIMIT,
 				oldUpperLimit, upperLimit));
+		}
 	}
 
 	/**
@@ -184,11 +185,12 @@ public class RangeQueryImpl<T extends ESRangeQuery<?>>
 	 * @generated
 	 */
 	public void setLowerLimit(int newLowerLimit) {
-		int oldLowerLimit = lowerLimit;
+		final int oldLowerLimit = lowerLimit;
 		lowerLimit = newLowerLimit;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, VersioningPackage.RANGE_QUERY__LOWER_LIMIT,
 				oldLowerLimit, lowerLimit));
+		}
 	}
 
 	/**
@@ -206,11 +208,12 @@ public class RangeQueryImpl<T extends ESRangeQuery<?>>
 	 * @generated
 	 */
 	public void setIncludeIncoming(boolean newIncludeIncoming) {
-		boolean oldIncludeIncoming = includeIncoming;
+		final boolean oldIncludeIncoming = includeIncoming;
 		includeIncoming = newIncludeIncoming;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, VersioningPackage.RANGE_QUERY__INCLUDE_INCOMING,
 				oldIncludeIncoming, includeIncoming));
+		}
 	}
 
 	/**
@@ -228,11 +231,12 @@ public class RangeQueryImpl<T extends ESRangeQuery<?>>
 	 * @generated
 	 */
 	public void setIncludeOutgoing(boolean newIncludeOutgoing) {
-		boolean oldIncludeOutgoing = includeOutgoing;
+		final boolean oldIncludeOutgoing = includeOutgoing;
 		includeOutgoing = newIncludeOutgoing;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, VersioningPackage.RANGE_QUERY__INCLUDE_OUTGOING,
 				oldIncludeOutgoing, includeOutgoing));
+		}
 	}
 
 	/**
@@ -330,17 +334,18 @@ public class RangeQueryImpl<T extends ESRangeQuery<?>>
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (eIsProxy()) {
 			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (upperLimit: ");
+		final StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (upperLimit: "); //$NON-NLS-1$
 		result.append(upperLimit);
-		result.append(", lowerLimit: ");
+		result.append(", lowerLimit: "); //$NON-NLS-1$
 		result.append(lowerLimit);
-		result.append(", includeIncoming: ");
+		result.append(", includeIncoming: "); //$NON-NLS-1$
 		result.append(includeIncoming);
-		result.append(", includeOutgoing: ");
+		result.append(", includeOutgoing: "); //$NON-NLS-1$
 		result.append(includeOutgoing);
 		result.append(')');
 		return result.toString();
@@ -360,18 +365,6 @@ public class RangeQueryImpl<T extends ESRangeQuery<?>>
 		}
 
 		return apiImpl;
-	}
-
-	/**
-	 * 
-	 * {@inheritDoc}
-	 * 
-	 * @see org.eclipse.emf.emfstore.internal.common.api.APIDelegate#setAPIImpl(java.lang.Object)
-	 * 
-	 * @generated NOT
-	 */
-	public void setAPIImpl(T esRangeQueryImpl) {
-		apiImpl = esRangeQueryImpl;
 	}
 
 	/**

@@ -31,6 +31,7 @@ import org.eclipse.emf.emfstore.client.exceptions.ESServerStartFailedException;
 import org.eclipse.emf.emfstore.client.test.common.mocks.AdminConnectionManagerMock;
 import org.eclipse.emf.emfstore.client.test.common.mocks.ConnectionMock;
 import org.eclipse.emf.emfstore.client.test.common.mocks.DAOFacadeMock;
+import org.eclipse.emf.emfstore.client.test.common.mocks.MockServerSpace;
 import org.eclipse.emf.emfstore.client.test.common.mocks.ResourceFactoryMock;
 import org.eclipse.emf.emfstore.client.test.common.mocks.ServerMock;
 import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionElement;
@@ -144,7 +145,8 @@ public final class ServerUtil {
 		FatalESException {
 
 		// AuthControlMock authMock = new AuthControlMock();
-		final ServerSpace serverSpace = initServerSpace();
+		final DAOFacadeMock daoFacadeMock = new DAOFacadeMock();
+		final ServerSpace serverSpace = initServerSpace(daoFacadeMock);
 
 		// perform initial default setup
 
@@ -160,7 +162,6 @@ public final class ServerUtil {
 			Messages.ServerUtil_Failed_To_Copy_Keystore, Messages.ServerUtil_Keystore_Copied_To_Server_Workspace);
 
 		ServerConfiguration.setProperties(initProperties(properties));
-		final DAOFacadeMock daoFacadeMock = new DAOFacadeMock();
 		setSuperUser(daoFacadeMock);
 		final AccessControl accessControl = new AccessControlImpl(daoFacadeMock);
 		accessControl.setAuthenticationControl(AuthenticationControlFactory.INSTANCE
@@ -411,6 +412,15 @@ public final class ServerUtil {
 		set.setResourceFactoryRegistry(new ResourceFactoryMock());
 		final Resource resource = set.createResource(URI.createURI(StringUtils.EMPTY));
 		final ServerSpace serverSpace = ModelFactory.eINSTANCE.createServerSpace();
+		resource.getContents().add(serverSpace);
+		return serverSpace;
+	}
+
+	private static ServerSpace initServerSpace(ACDAOFacade daoFacade) {
+		final ResourceSetImpl set = new ResourceSetImpl();
+		set.setResourceFactoryRegistry(new ResourceFactoryMock());
+		final Resource resource = set.createResource(URI.createURI(StringUtils.EMPTY));
+		final ServerSpace serverSpace = new MockServerSpace(daoFacade); // ModelFactory.eINSTANCE.createServerSpace();
 		resource.getContents().add(serverSpace);
 		return serverSpace;
 	}

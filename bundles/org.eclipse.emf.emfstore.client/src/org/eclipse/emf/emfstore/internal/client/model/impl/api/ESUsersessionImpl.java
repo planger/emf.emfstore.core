@@ -51,12 +51,15 @@ public class ESUsersessionImpl extends AbstractAPIImpl<ESUsersessionImpl, Userse
 	 * @see org.eclipse.emf.emfstore.client.ESUsersession#getServer()
 	 */
 	public ESServer getServer() {
+		return RunESCommand.runWithResult(new Callable<ESServer>() {
+			public ESServer call() throws Exception {
+				if (toInternalAPI().getServerInfo() == null) {
+					return null;
+				}
 
-		if (toInternalAPI().getServerInfo() == null) {
-			return null;
-		}
-
-		return toInternalAPI().getServerInfo().toAPI();
+				return toInternalAPI().getServerInfo().toAPI();
+			}
+		});
 	}
 
 	/**
@@ -66,7 +69,11 @@ public class ESUsersessionImpl extends AbstractAPIImpl<ESUsersessionImpl, Userse
 	 * @see org.eclipse.emf.emfstore.client.ESUsersession#getUsername()
 	 */
 	public String getUsername() {
-		return toInternalAPI().getUsername();
+		return RunESCommand.runWithResult(new Callable<String>() {
+			public String call() throws Exception {
+				return toInternalAPI().getUsername();
+			}
+		});
 	}
 
 	/**
@@ -76,7 +83,11 @@ public class ESUsersessionImpl extends AbstractAPIImpl<ESUsersessionImpl, Userse
 	 * @see org.eclipse.emf.emfstore.client.ESUsersession#getPassword()
 	 */
 	public String getPassword() {
-		return toInternalAPI().getPassword();
+		return RunESCommand.runWithResult(new Callable<String>() {
+			public String call() throws Exception {
+				return toInternalAPI().getPassword();
+			}
+		});
 	}
 
 	/**
@@ -184,7 +195,11 @@ public class ESUsersessionImpl extends AbstractAPIImpl<ESUsersessionImpl, Userse
 	 * @see org.eclipse.emf.emfstore.client.ESUsersession#getSessionId()
 	 */
 	public ESSessionId getSessionId() {
-		return toInternalAPI().getSessionId().toAPI();
+		return RunESCommand.runWithResult(new Callable<ESSessionId>() {
+			public ESSessionId call() throws Exception {
+				return toInternalAPI().getSessionId().toAPI();
+			}
+		});
 	}
 
 	/**

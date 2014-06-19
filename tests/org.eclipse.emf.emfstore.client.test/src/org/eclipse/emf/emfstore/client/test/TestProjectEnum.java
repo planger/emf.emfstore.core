@@ -67,7 +67,6 @@ public enum TestProjectEnum {
 
 	/**
 	 * @return test project path
-	 * @return
 	 */
 	public String getPath() {
 		return path;

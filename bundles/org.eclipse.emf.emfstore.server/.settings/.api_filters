@@ -8,4 +8,12 @@
             </message_arguments>
         </filter>
     </resource>
+    <resource path="src/org/eclipse/emf/emfstore/internal/server/core/subinterfaces/EPackageSubInterfaceImpl.java" type="org.eclipse.emf.emfstore.internal.server.core.subinterfaces.EPackageSubInterfaceImpl">
+        <filter comment="internal API usage" id="572522506">
+            <message_arguments>
+                <message_argument value="ESPriorityComparator"/>
+                <message_argument value="EPackageSubInterfaceImpl"/>
+            </message_arguments>
+        </filter>
+    </resource>
 </component>

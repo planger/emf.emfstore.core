@@ -43,7 +43,7 @@ public interface ProjectInfo extends EObject {
 	 * 
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see #setName(String)
-	 * @see org.eclipse.emf.emfstore.internal.common.model.server.model.ModelPackage#getProjectInfo_Name()
+	 * @see ModelPackage#getProjectInfo_Name()
 	 * @model required="true"
 	 * @generated
 	 */
@@ -71,7 +71,7 @@ public interface ProjectInfo extends EObject {
 	 * 
 	 * @return the value of the '<em>Description</em>' attribute.
 	 * @see #setDescription(String)
-	 * @see org.eclipse.emf.emfstore.internal.common.model.server.model.ModelPackage#getProjectInfo_Description()
+	 * @see ModelPackage#getProjectInfo_Description()
 	 * @model
 	 * @generated
 	 */

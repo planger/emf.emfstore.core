@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.emf.ecore.util.BasicFeatureMap;
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
@@ -29,6 +30,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.util.FeatureMap;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.emf.emfstore.test.model.TestElement;
 import org.eclipse.emf.emfstore.test.model.TestmodelPackage;
@@ -73,6 +75,12 @@ import org.eclipse.emf.emfstore.test.model.TestmodelPackage;
  * Elements No Opposite</em>}</li>
  * <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getContainedElement_NoOpposite <em>Contained
  * Element No Opposite</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getFeatureMapEntries <em>Feature Map Entries
+ * </em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getFeatureMapReferences1 <em>Feature Map
+ * References1</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.impl.TestElementImpl#getFeatureMapReferences2 <em>Feature Map
+ * References2</em>}</li>
  * </ul>
  * </p>
  * 
@@ -312,6 +320,17 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	 * @ordered
 	 */
 	protected TestElement containedElement_NoOpposite;
+
+	/**
+	 * The cached value of the '{@link #getFeatureMapEntries() <em>Feature Map Entries</em>}' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @see #getFeatureMapEntries()
+	 * @generated
+	 * @ordered
+	 */
+	protected FeatureMap featureMapEntries;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1006,6 +1025,43 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 	 * 
 	 * @generated
 	 */
+	public FeatureMap getFeatureMapEntries()
+	{
+		if (featureMapEntries == null)
+		{
+			featureMapEntries = new BasicFeatureMap(this, TestmodelPackage.TEST_ELEMENT__FEATURE_MAP_ENTRIES);
+		}
+		return featureMapEntries;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	public EList<TestElement> getFeatureMapReferences1()
+	{
+		return getFeatureMapEntries().list(TestmodelPackage.Literals.TEST_ELEMENT__FEATURE_MAP_REFERENCES1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	public EList<TestElement> getFeatureMapReferences2()
+	{
+		return getFeatureMapEntries().list(TestmodelPackage.Literals.TEST_ELEMENT__FEATURE_MAP_REFERENCES2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -1094,6 +1150,12 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 			return ((InternalEList<?>) getContainedElements_NoOpposite()).basicRemove(otherEnd, msgs);
 		case TestmodelPackage.TEST_ELEMENT__CONTAINED_ELEMENT_NO_OPPOSITE:
 			return basicSetContainedElement_NoOpposite(null, msgs);
+		case TestmodelPackage.TEST_ELEMENT__FEATURE_MAP_ENTRIES:
+			return ((InternalEList<?>) getFeatureMapEntries()).basicRemove(otherEnd, msgs);
+		case TestmodelPackage.TEST_ELEMENT__FEATURE_MAP_REFERENCES1:
+			return ((InternalEList<?>) getFeatureMapReferences1()).basicRemove(otherEnd, msgs);
+		case TestmodelPackage.TEST_ELEMENT__FEATURE_MAP_REFERENCES2:
+			return ((InternalEList<?>) getFeatureMapReferences2()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -1193,6 +1255,14 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 			return getContainedElements_NoOpposite();
 		case TestmodelPackage.TEST_ELEMENT__CONTAINED_ELEMENT_NO_OPPOSITE:
 			return getContainedElement_NoOpposite();
+		case TestmodelPackage.TEST_ELEMENT__FEATURE_MAP_ENTRIES:
+			if (coreType)
+				return getFeatureMapEntries();
+			return ((FeatureMap.Internal) getFeatureMapEntries()).getWrapper();
+		case TestmodelPackage.TEST_ELEMENT__FEATURE_MAP_REFERENCES1:
+			return getFeatureMapReferences1();
+		case TestmodelPackage.TEST_ELEMENT__FEATURE_MAP_REFERENCES2:
+			return getFeatureMapReferences2();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1282,6 +1352,17 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 		case TestmodelPackage.TEST_ELEMENT__CONTAINED_ELEMENT_NO_OPPOSITE:
 			setContainedElement_NoOpposite((TestElement) newValue);
 			return;
+		case TestmodelPackage.TEST_ELEMENT__FEATURE_MAP_ENTRIES:
+			((FeatureMap.Internal) getFeatureMapEntries()).set(newValue);
+			return;
+		case TestmodelPackage.TEST_ELEMENT__FEATURE_MAP_REFERENCES1:
+			getFeatureMapReferences1().clear();
+			getFeatureMapReferences1().addAll((Collection<? extends TestElement>) newValue);
+			return;
+		case TestmodelPackage.TEST_ELEMENT__FEATURE_MAP_REFERENCES2:
+			getFeatureMapReferences2().clear();
+			getFeatureMapReferences2().addAll((Collection<? extends TestElement>) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1362,6 +1443,15 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 		case TestmodelPackage.TEST_ELEMENT__CONTAINED_ELEMENT_NO_OPPOSITE:
 			setContainedElement_NoOpposite((TestElement) null);
 			return;
+		case TestmodelPackage.TEST_ELEMENT__FEATURE_MAP_ENTRIES:
+			getFeatureMapEntries().clear();
+			return;
+		case TestmodelPackage.TEST_ELEMENT__FEATURE_MAP_REFERENCES1:
+			getFeatureMapReferences1().clear();
+			return;
+		case TestmodelPackage.TEST_ELEMENT__FEATURE_MAP_REFERENCES2:
+			getFeatureMapReferences2().clear();
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1420,6 +1510,12 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 			return containedElements_NoOpposite != null && !containedElements_NoOpposite.isEmpty();
 		case TestmodelPackage.TEST_ELEMENT__CONTAINED_ELEMENT_NO_OPPOSITE:
 			return containedElement_NoOpposite != null;
+		case TestmodelPackage.TEST_ELEMENT__FEATURE_MAP_ENTRIES:
+			return featureMapEntries != null && !featureMapEntries.isEmpty();
+		case TestmodelPackage.TEST_ELEMENT__FEATURE_MAP_REFERENCES1:
+			return !getFeatureMapReferences1().isEmpty();
+		case TestmodelPackage.TEST_ELEMENT__FEATURE_MAP_REFERENCES2:
+			return !getFeatureMapReferences2().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1442,6 +1538,8 @@ public class TestElementImpl extends EObjectImpl implements TestElement {
 		result.append(strings);
 		result.append(", description: "); //$NON-NLS-1$
 		result.append(description);
+		result.append(", featureMapEntries: "); //$NON-NLS-1$
+		result.append(featureMapEntries);
 		result.append(')');
 		return result.toString();
 	}

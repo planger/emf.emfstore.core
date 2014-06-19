@@ -24,6 +24,13 @@ public class EMFCompareComparator implements ESCompare {
 
 	private ComparisonResourceSnapshot snapshot;
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.client.ui.ESCompare#compare(org.eclipse.emf.ecore.EObject,
+	 *      org.eclipse.emf.ecore.EObject)
+	 */
 	public void compare(EObject e1, EObject e2) {
 		if (!(e1 instanceof Project) || !(e2 instanceof Project)) {
 			throw new IllegalArgumentException("The objects have to be Projects!");
@@ -32,14 +39,20 @@ public class EMFCompareComparator implements ESCompare {
 		try {
 			snapshot = DiffFactory.eINSTANCE.createComparisonResourceSnapshot();
 			snapshot.setDate(Calendar.getInstance().getTime());
-			MatchModel match = MatchService.doContentMatch(e1, e2, null);
+			final MatchModel match = MatchService.doContentMatch(e1, e2, null);
 			snapshot.setMatch(match);
 			snapshot.setDiff(DiffService.doDiff(match, false));
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			ModelUtil.logException(e);
 		}
 	}
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.client.ui.ESCompare#display()
+	 */
 	public void display() {
 		CompareUI.openCompareEditor(new ModelCompareEditorInput(snapshot), true);
 	}

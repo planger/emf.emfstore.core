@@ -11,12 +11,14 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.controller;
 
+import java.text.MessageFormat;
 import java.util.concurrent.Callable;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.emfstore.client.ESLocalProject;
 import org.eclipse.emf.emfstore.client.callbacks.ESCommitCallback;
+import org.eclipse.emf.emfstore.client.util.ESVoidCallable;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
 import org.eclipse.emf.emfstore.common.model.ESModelElementIdToEObjectMapping;
 import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
@@ -217,14 +219,30 @@ public class UICommitProjectController extends
 			// ignore
 		} catch (final ESException e) {
 			WorkspaceUtil.logException(e.getMessage(), e);
-			RunInUI.run(new Callable<Void>() {
-				public Void call() throws Exception {
-					MessageDialog.openError(getShell(),
-						Messages.UICommitProjectController_CommitFailed,
-						e.getMessage());
-					return null;
-				}
-			});
+			if (e.getCause() instanceof Error) {
+				RunInUI.run(new ESVoidCallable() {
+					@Override
+					public void run() {
+						MessageDialog.openError(
+							getShell(),
+							Messages.UICommitProjectController_CommitFailed,
+							MessageFormat
+								.format(
+									"A serious {0} occurred during commit. The failure message was: {1}\nPlease consult your administrator.",
+									e.getCause().getMessage(),
+									e.getCause().getClass().getSimpleName()));
+					}
+				});
+			} else {
+				RunInUI.run(new Callable<Void>() {
+					public Void call() throws Exception {
+						MessageDialog.openError(getShell(),
+							Messages.UICommitProjectController_CommitFailed,
+							e.getMessage());
+						return null;
+					}
+				});
+			}
 		}
 
 		return null;

@@ -1,8 +1,14 @@
-/**
- * <copyright> Copyright (c) 2008-2009 Jonas Helming, Maximilian Koegel. All rights reserved. This program and the
- * accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this
- * distribution, and is available at http://www.eclipse.org/legal/epl-v10.html </copyright>
- */
+/*******************************************************************************
+ * Copyright (c) 2008-2014 Chair for Applied Software Engineering,
+ * Technische Universitaet Muenchen.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ * Edgar Mueller - initial API and implementation
+ ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.common.model.impl;
 
 import org.eclipse.emf.emfstore.common.model.ESModelElementId;
@@ -17,6 +23,12 @@ import org.eclipse.emf.emfstore.internal.common.model.ModelElementId;
 public class ESModelElementIdImpl extends AbstractAPIImpl<ESModelElementIdImpl, ModelElementId> implements
 	ESModelElementId {
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param modelElementId
+	 *            the {@link ModelElementId} to be wrapped
+	 */
 	public ESModelElementIdImpl(ModelElementId modelElementId) {
 		super(modelElementId);
 	}

@@ -21,7 +21,7 @@ public class Activator extends Plugin {
 	/**
 	 * The plug-in ID.
 	 */
-	public static final String PLUGIN_ID = "org.eclipse.emf.emfstore.common";
+	public static final String PLUGIN_ID = "org.eclipse.emf.emfstore.common"; //$NON-NLS-1$
 
 	/**
 	 * The shared instance.
@@ -44,6 +44,7 @@ public class Activator extends Plugin {
 	 * @see org.eclipse.core.runtime.Plugin#start(org.osgi.framework.BundleContext)
 	 */
 	// BEGIN SUPRESS CATCH EXCEPTION
+	@Override
 	public void start(final BundleContext context) throws Exception {
 		// END SUPRESS CATCH EXCEPTION
 		super.start(context);
@@ -51,11 +52,13 @@ public class Activator extends Plugin {
 	}
 
 	/**
+	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+	 * @see org.eclipse.core.runtime.Plugin#stop(org.osgi.framework.BundleContext)
 	 */
 	// BEGIN SUPRESS CATCH EXCEPTION
+	@Override
 	public void stop(final BundleContext context) throws Exception {
 		// END SUPRESS CATCH EXCEPTION
 		plugin = null;

@@ -45,7 +45,7 @@ import org.eclipse.emf.emfstore.server.exceptions.ESException;
  */
 public class EPackageSubInterfaceImpl extends AbstractSubEmfstoreInterface {
 
-	private static final String E_PACKAGE_REGISTRATION = "EPackage_Registration";
+	private static final String E_PACKAGE_REGISTRATION = "EPackage_Registration"; //$NON-NLS-1$
 
 	/**
 	 * Constructor.
@@ -67,12 +67,12 @@ public class EPackageSubInterfaceImpl extends AbstractSubEmfstoreInterface {
 	@EmfStoreMethod(MethodId.REGISTEREPACKAGE)
 	public void registerEPackage(EPackage ePackage) throws ESException {
 		synchronized (MonitorProvider.getInstance().getMonitor(E_PACKAGE_REGISTRATION)) {
-			List<EPackage> packages = EPackageHelper.getAllSubPackages(ePackage);
-			Set<EPackage> rmPackages = new LinkedHashSet<EPackage>();
+			final List<EPackage> packages = EPackageHelper.getAllSubPackages(ePackage);
+			final Set<EPackage> rmPackages = new LinkedHashSet<EPackage>();
 			packages.add(ePackage);
 
 			// check for subpackages that are already registered
-			for (EPackage subPkg : packages) {
+			for (final EPackage subPkg : packages) {
 				if (EPackage.Registry.INSTANCE.getEPackage(subPkg.getNsURI()) != null) {
 					rmPackages.add(subPkg);
 				}
@@ -85,40 +85,41 @@ public class EPackageSubInterfaceImpl extends AbstractSubEmfstoreInterface {
 
 			if (packages.isEmpty()) {
 				throw new ESException(
-					"Registration failed: Package(s) with supplied NsUris(s) is/are already registred!");
+					Messages.EPackageSubInterfaceImpl_RegistrationFailed_AlreadyRegistered);
 
 			}
 
-			URI dynamicModelUri = ESServerURIUtil.createDynamicModelsURI(ePackage);
+			final URI dynamicModelUri = ESServerURIUtil.createDynamicModelsURI(ePackage);
 
 			// create a resource to save the file to disc
-			ESExtensionPoint extensionPoint = new ESExtensionPoint(
-				"org.eclipse.emf.emfstore.server.resourceSetProvider",
-				true, new ESPriorityComparator("priority", true));
+			final ESExtensionPoint extensionPoint = new ESExtensionPoint(
+				"org.eclipse.emf.emfstore.server.resourceSetProvider", //$NON-NLS-1$
+				true, new ESPriorityComparator("priority", true)); //$NON-NLS-1$
 
-			ESResourceSetProvider resourceSetProvider = extensionPoint.getElementWithHighestPriority().getClass(
-				"class",
+			final ESResourceSetProvider resourceSetProvider = extensionPoint.getElementWithHighestPriority().getClass(
+				"class", //$NON-NLS-1$
 				ESResourceSetProvider.class);
 
-			ResourceSet resourceSet = resourceSetProvider.getResourceSet();
+			final ResourceSet resourceSet = resourceSetProvider.getResourceSet();
 			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
-				.put("ecore", new EcoreResourceFactoryImpl());
-			Resource resource = resourceSet.createResource(dynamicModelUri);
+				.put("ecore", new EcoreResourceFactoryImpl()); //$NON-NLS-1$
+			final Resource resource = resourceSet.createResource(dynamicModelUri);
 			resource.getContents().add(ePackage);
 			try {
 				ModelUtil.saveResource(resource, ModelUtil.getResourceLogger());
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				// DanglingHREFException may be ignored, as the referenced
 				// elements were either stored earlier or can still be stored later
 				if (!(e.getCause() instanceof DanglingHREFException)) {
-					throw new ESException("Registration failed: Could not persist .ecore!", e);
+					throw new ESException(Messages.EPackageSubInterfaceImpl_RegistrationFailed_Persistence, e);
 				}
 			}
 			// Finally register EPackages in global EPackage-registry.
-			for (EPackage registerPackage : packages) {
+			for (final EPackage registerPackage : packages) {
 				EPackage.Registry.INSTANCE.put(registerPackage.getNsURI(), registerPackage);
 			}
-			ModelUtil.logInfo("EPackage \"" + ePackage.getNsURI() + "\" registered and saved.");
+			ModelUtil.logInfo(Messages.EPackageSubInterfaceImpl_Registration_Success_1 + ePackage.getNsURI()
+				+ Messages.EPackageSubInterfaceImpl_Registration_Success_2);
 		}
 	}
 }

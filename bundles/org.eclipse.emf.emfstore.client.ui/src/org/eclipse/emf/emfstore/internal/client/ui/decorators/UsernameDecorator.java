@@ -28,16 +28,16 @@ import org.eclipse.jface.viewers.LabelProviderChangedEvent;
  */
 public class UsernameDecorator extends AdapterImpl implements ILightweightLabelDecorator {
 
-	private ArrayList<ILabelProviderListener> listeners = new ArrayList<ILabelProviderListener>();
+	private final ArrayList<ILabelProviderListener> listeners = new ArrayList<ILabelProviderListener>();
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void decorate(Object element, final IDecoration decoration) {
 		if (element instanceof ProjectSpace) {
-			ProjectSpace projectSpace = (ProjectSpace) element;
+			final ProjectSpace projectSpace = (ProjectSpace) element;
 			if (projectSpace.getUsersession() != null) {
-				String string = " " + projectSpace.getUsersession().getUsername();
+				final String string = " " + projectSpace.getUsersession().getUsername();
 				decoration.addSuffix(string);
 			}
 		}
@@ -85,10 +85,10 @@ public class UsernameDecorator extends AdapterImpl implements ILightweightLabelD
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Notify label providers that the decoration changed.
 	 */
 	public void decorationChanged() {
-		for (ILabelProviderListener listener : listeners) {
+		for (final ILabelProviderListener listener : listeners) {
 			listener.labelProviderChanged(new LabelProviderChangedEvent(this));
 		}
 	}

@@ -29,6 +29,7 @@ import org.eclipse.emf.ecore.EObject;
  * @noextend This interface is not intended to be extended by clients.
  * @noimplement This interface is not intended to be implemented by clients.
  * 
+ * @param <T> the ID type being used
  */
 public interface ESObjectContainer<T> {
 
@@ -95,24 +96,25 @@ public interface ESObjectContainer<T> {
 	/**
 	 * Retrieve a list of all model elements of a certain type in the collection.
 	 * 
-	 * @param <T>
-	 *            the type of the model element(s) to be retrieved
 	 * @param modelElementClass
 	 *            the {@link Class} of the model element(s) to be retrieved
 	 * @param includeSubclasses
 	 *            whether to also include all subclasses of the given {@link Class} in the list
 	 * @return a list of model elements of the given type
+	 * 
+	 * @param <U>
+	 *            the type of the model element(s) to be retrieved
 	 */
 	<U extends EObject> Set<U> getAllModelElementsByClass(Class<U> modelElementClass, Boolean includeSubclasses);
 
 	/**
 	 * Retrieve a list of all model elements of a certain type in the collection.
 	 * 
-	 * @param <T>
-	 *            the type of the model element(s) to be retrieved
 	 * @param modelElementClass
 	 *            the {@link Class} of the model element(s) to be retrieved
 	 * @return a list of model elements of the given type
+	 * @param <U>
+	 *            the type of the model element(s) to be retrieved
 	 */
 	<U extends EObject> Set<U> getAllModelElementsByClass(Class<U> modelElementClass);
 }

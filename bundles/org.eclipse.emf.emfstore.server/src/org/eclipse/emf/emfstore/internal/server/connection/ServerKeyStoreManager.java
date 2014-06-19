@@ -140,6 +140,9 @@ public final class ServerKeyStoreManager {
 		return keyStore;
 	}
 
+	/**
+	 * Unloads the keystore by setting it to
+	 */
 	public void unloadKeyStore() {
 		keyStore = null;
 	}
@@ -177,7 +180,12 @@ public final class ServerKeyStoreManager {
 		System.setProperty("javax.net.ssl.trustStorePassword", Arrays.toString(getKeyStorePassword()));
 	}
 
-	private char[] getKeyStorePassword() {
+	/**
+	 * Returns the keystore password as a char array.
+	 * 
+	 * @return the password
+	 */
+	public char[] getKeyStorePassword() {
 		return ServerConfiguration.getProperties()
 			.getProperty(ServerConfiguration.KEYSTORE_PASSWORD, ServerConfiguration.KEYSTORE_PASSWORD_DEFAULT)
 			.toCharArray();

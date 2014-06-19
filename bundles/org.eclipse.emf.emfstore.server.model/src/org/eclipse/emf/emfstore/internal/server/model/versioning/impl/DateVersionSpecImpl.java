@@ -94,11 +94,12 @@ public class DateVersionSpecImpl extends VersionSpecImpl implements DateVersionS
 	 * @generated
 	 */
 	public void setDate(Date newDate) {
-		Date oldDate = date;
+		final Date oldDate = date;
 		date = newDate;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, VersioningPackage.DATE_VERSION_SPEC__DATE, oldDate,
 				date));
+		}
 	}
 
 	/**
@@ -170,11 +171,12 @@ public class DateVersionSpecImpl extends VersionSpecImpl implements DateVersionS
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (eIsProxy()) {
 			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (date: ");
+		final StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (date: "); //$NON-NLS-1$
 		result.append(date);
 		result.append(')');
 		return result.toString();
@@ -195,18 +197,6 @@ public class DateVersionSpecImpl extends VersionSpecImpl implements DateVersionS
 		}
 
 		return apiImpl;
-	}
-
-	/**
-	 * 
-	 * {@inheritDoc}
-	 * 
-	 * @see org.eclipse.emf.emfstore.internal.common.api.APIDelegate#setAPIImpl(java.lang.Object)
-	 * 
-	 * @generated NOT
-	 */
-	public void setAPIImpl(ESDateVersionSpecImpl esDateVersionSpecImpl) {
-		apiImpl = esDateVersionSpecImpl;
 	}
 
 	/**

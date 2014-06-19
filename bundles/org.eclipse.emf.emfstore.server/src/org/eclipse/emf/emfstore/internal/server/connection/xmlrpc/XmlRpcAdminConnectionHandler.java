@@ -14,7 +14,8 @@ package org.eclipse.emf.emfstore.internal.server.connection.xmlrpc;
 import org.eclipse.emf.emfstore.internal.server.AdminEmfStore;
 import org.eclipse.emf.emfstore.internal.server.accesscontrol.AccessControl;
 import org.eclipse.emf.emfstore.internal.server.connection.ConnectionHandler;
-import org.eclipse.emf.emfstore.internal.server.exceptions.FatalESException;
+import org.eclipse.emf.emfstore.server.ESXmlRpcWebServerProvider;
+import org.eclipse.emf.emfstore.server.exceptions.ESServerInitException;
 
 /**
  * Connection Handler for XML RPC AdminEmfstore interface.
@@ -43,9 +44,9 @@ public class XmlRpcAdminConnectionHandler implements ConnectionHandler<AdminEmfS
 	 * {@inheritDoc}
 	 */
 	public synchronized void init(AdminEmfStore adminEmfStore, AccessControl accessControl)
-		throws FatalESException {
+		throws ESServerInitException {
 		XmlRpcAdminConnectionHandler.adminEmfStore = adminEmfStore;
-		final XmlRpcWebserverManager webServer = XmlRpcWebserverManager.getInstance();
+		final ESXmlRpcWebServerProvider webServer = XmlRpcWebserverManager.getInstance();
 		webServer.initServer();
 		webServer.addHandler(ADMINEMFSTORE, XmlRpcAdminEmfStoreImpl.class);
 	}
@@ -66,7 +67,7 @@ public class XmlRpcAdminConnectionHandler implements ConnectionHandler<AdminEmfS
 	 * @see org.eclipse.emf.emfstore.internal.server.connection.ConnectionHandler#stop()
 	 */
 	public void stop() {
-		final XmlRpcWebserverManager webserverManager = XmlRpcWebserverManager.getInstance();
+		final ESXmlRpcWebServerProvider webserverManager = XmlRpcWebserverManager.getInstance();
 		if (!webserverManager.removeHandler(ADMINEMFSTORE)) {
 			webserverManager.stopServer();
 		}

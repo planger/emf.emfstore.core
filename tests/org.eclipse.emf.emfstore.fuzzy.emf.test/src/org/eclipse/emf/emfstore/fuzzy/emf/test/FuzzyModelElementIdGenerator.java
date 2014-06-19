@@ -20,7 +20,7 @@ import org.eclipse.emf.emfstore.internal.common.model.ModelElementId;
 import org.eclipse.emf.emfstore.internal.common.model.ModelFactory;
 
 /**
- * Implementation of {@link ModelElementIdGenerator} which increments the
+ * Implementation of {@link ESModelElementIdGenerator} which increments the
  * ModelElementId for each new modelelement for each IdEObjectCollection
  * starting with 0.
  * 
@@ -30,7 +30,7 @@ import org.eclipse.emf.emfstore.internal.common.model.ModelFactory;
 @SuppressWarnings("restriction")
 public class FuzzyModelElementIdGenerator implements ESModelElementIdGenerator<ModelElementId> {
 
-	private Map<Object, Integer> collectionsToIds = new HashMap<Object, Integer>();
+	private final Map<Object, Integer> collectionsToIds = new HashMap<Object, Integer>();
 
 	/**
 	 * Generates a new {@link ModelElementId}.
@@ -45,7 +45,7 @@ public class FuzzyModelElementIdGenerator implements ESModelElementIdGenerator<M
 		if (id == null) {
 			id = new Integer(0);
 		}
-		ModelElementId modelElementId = ModelFactory.eINSTANCE
+		final ModelElementId modelElementId = ModelFactory.eINSTANCE
 			.createModelElementId();
 		modelElementId.setId(String.valueOf(id));
 		collectionsToIds.put(collection, id + 1);

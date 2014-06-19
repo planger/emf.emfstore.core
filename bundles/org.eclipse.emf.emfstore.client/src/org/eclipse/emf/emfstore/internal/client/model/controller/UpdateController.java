@@ -226,6 +226,13 @@ public class UpdateController extends ServerCall<PrimaryVersionSpec> {
 		save(localChanges, "Could not save local changes");
 	}
 
+	/**
+	 * Remove duplicate change packages from the change package.
+	 * 
+	 * @param incomingChanges incoming change packages
+	 * @param localChanges local change package
+	 * @return baseVersionDelta
+	 */
 	public int removeFromChangePackages(List<ChangePackage> incomingChanges, ChangePackage localChanges) {
 		final Iterator<ChangePackage> incomingChangesIterator = incomingChanges.iterator();
 		int baseVersionDelta = 0;
@@ -244,6 +251,13 @@ public class UpdateController extends ServerCall<PrimaryVersionSpec> {
 		return baseVersionDelta;
 	}
 
+	/**
+	 * Remove duplicate operations.
+	 * 
+	 * @param incomingChanges incoming change package
+	 * @param localChanges local change package
+	 * @return <code>true</code> when all change packages have been consumed
+	 */
 	public boolean removeDuplicateOperations(ChangePackage incomingChanges, ChangePackage localChanges) {
 
 		final Iterator<AbstractOperation> localOperationsIterator = localChanges.getOperations().iterator();

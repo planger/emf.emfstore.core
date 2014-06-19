@@ -82,12 +82,9 @@ public interface UrlFactory extends EFactory {
 	/**
 	 * Creates and parses the model element url.
 	 * 
-	 * @throws MalformedURLException
-	 *             when the url is malformed (d'oh!)
-	 * @generated NOT
+	 * @param url url
 	 * @return the newly created {@link ModelElementUrl}
-	 * @param url
-	 *            the url as a string.
+	 * @throws MalformedURLException when the url is malformed (d'oh!)
 	 */
 	ModelElementUrl createModelElementUrl(String url) throws MalformedURLException;
 

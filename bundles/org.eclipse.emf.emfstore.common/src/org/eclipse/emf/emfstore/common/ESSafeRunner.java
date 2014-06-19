@@ -37,12 +37,12 @@ public final class ESSafeRunner {
 		try {
 			code.run();
 			// BEGIN SUPRESS CATCH EXCEPTION
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			// END SUPRESS CATCH EXCEPTION
 			handleException(code, e);
-		} catch (LinkageError e) {
+		} catch (final LinkageError e) {
 			handleException(code, e);
-		} catch (AssertionError e) {
+		} catch (final AssertionError e) {
 			handleException(code, e);
 		}
 	}
@@ -51,10 +51,9 @@ public final class ESSafeRunner {
 		code.handleException(exception);
 		if (CommonUtil.isTesting()) {
 			if (exception instanceof RuntimeException) {
-				throw ((RuntimeException) exception);
-			} else {
-				throw new RuntimeException(exception);
+				throw (RuntimeException) exception;
 			}
+			throw new RuntimeException(exception);
 		}
 	}
 }

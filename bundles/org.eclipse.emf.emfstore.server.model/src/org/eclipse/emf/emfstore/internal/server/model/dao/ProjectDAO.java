@@ -7,26 +7,40 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Edgar - initial API and implementation
+ * Edgar Mueller - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.server.model.dao;
 
-import java.util.List;
-
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectHistory;
 
 /**
- * @author Edgar
+ * @author emueller
  * 
  */
 public interface ProjectDAO {
 
+	/**
+	 * Add a project history.
+	 * 
+	 * @param history
+	 *            the history to be added
+	 */
 	void add(ProjectHistory history);
 
-	List<ProjectHistory> getProjects();
+	/**
+	 * Returns all project histories.
+	 * 
+	 * @return a list containing all project histories
+	 */
+	EList<ProjectHistory> getProjects();
 
+	/**
+	 * Removes a project history.
+	 * 
+	 * @param history
+	 *            the project history to be removed
+	 */
 	void remove(ProjectHistory history);
-
-	// void update(ProjectHistory history);
 
 }

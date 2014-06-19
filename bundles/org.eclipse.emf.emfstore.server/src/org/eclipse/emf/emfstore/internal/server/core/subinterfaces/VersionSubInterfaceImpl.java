@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.emfstore.internal.common.model.Project;
 import org.eclipse.emf.emfstore.internal.common.model.impl.ProjectImpl;
 import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
@@ -121,7 +122,7 @@ public class VersionSubInterfaceImpl extends AbstractSubEmfstoreInterface {
 		Version currentTarget = getVersion(projectHistory, versionSpec.getTarget());
 
 		if (currentSource == null || currentTarget == null) {
-			throw new InvalidVersionSpecException("Specified source and/or target version invalid.");
+			throw new InvalidVersionSpecException(Messages.VersionSubInterfaceImpl_Invalid_Source_Or_Target);
 		}
 
 		// The goal is to find the common ancestor version of the source and
@@ -161,8 +162,9 @@ public class VersionSubInterfaceImpl extends AbstractSubEmfstoreInterface {
 		final String branch = versionSpec.getBranch();
 		final int versions = projectHistory.getVersions().size();
 		if (0 > index || index >= versions || branch == null) {
-			throw new InvalidVersionSpecException("Invalid version requested. Version " + index
-				+ " does not exist on server.");
+			throw new InvalidVersionSpecException(MessageFormat.format(
+				Messages.VersionSubInterfaceImpl_InvalidVersionRequested,
+				index));
 		}
 
 		if (branch.equals(VersionSpec.GLOBAL)) {
@@ -268,7 +270,8 @@ public class VersionSubInterfaceImpl extends AbstractSubEmfstoreInterface {
 			final Version baseVersion = getVersion(projectHistory, baseVersionSpec);
 
 			if (baseVersion == null || baseBranch == null) {
-				throw new InvalidVersionSpecException("Branch and/or version doesn't exist.");
+				throw new InvalidVersionSpecException(
+					Messages.VersionSubInterfaceImpl_InvalidBranchOrVersion);
 			}
 
 			// defined here fore scoping reasons
@@ -294,12 +297,14 @@ public class VersionSubInterfaceImpl extends AbstractSubEmfstoreInterface {
 
 				// case for new branch creation
 			} else if (getBranchInfo(projectHistory, targetBranch) == null) {
-				if (targetBranch.getBranch().equals("")) {
-					throw new InvalidVersionSpecException("Empty branch name is not permitted.");
+				if (targetBranch.getBranch().equals(StringUtils.EMPTY)) {
+					throw new InvalidVersionSpecException(Messages.VersionSubInterfaceImpl_EmptyBranch_Not_Allowed);
 				}
 				if (targetBranch.getBranch().equals(VersionSpec.GLOBAL)) {
-					throw new InvalidVersionSpecException("Reserved branch name '" + VersionSpec.GLOBAL
-						+ "' must not be used.");
+					throw new InvalidVersionSpecException(
+						Messages.VersionSubInterfaceImpl_BranchName_Reserved_1
+							+ VersionSpec.GLOBAL +
+							Messages.VersionSubInterfaceImpl_BranchName_Reserved_2);
 				}
 				// when branch does NOT exist, create new branch
 				newVersion = createVersion(projectHistory, newProjectState, logMessage, user, baseVersion);
@@ -309,7 +314,7 @@ public class VersionSubInterfaceImpl extends AbstractSubEmfstoreInterface {
 
 			} else {
 				// This point only can be reached with invalid input
-				throw new IllegalStateException("The combination of targetSpec and/or branch are invalid.");
+				throw new IllegalStateException(Messages.VersionSubInterfaceImpl_TargetBranchCombination_Invalid);
 			}
 
 			if (sourceVersion != null) {
@@ -319,30 +324,10 @@ public class VersionSubInterfaceImpl extends AbstractSubEmfstoreInterface {
 			// try to save
 			try {
 				try {
-					getResourceHelper().createResourceForProject(newProjectState,
-						newVersion.getPrimarySpec(), projectHistory.getProjectId());
-					getResourceHelper().createResourceForChangePackage(changePackage, newVersion.getPrimarySpec(),
-						projectId);
-					getResourceHelper().createResourceForVersion(newVersion, projectHistory.getProjectId());
-
-					newVersion.setProjectStateResource(newProjectState.eResource());
-					newVersion.setChangeResource(changePackage.eResource());
-
+					trySave(projectId, changePackage, projectHistory, newVersion, newProjectState);
 				} catch (final FatalESException e) {
 					// try to roll back. removing version is necessary in all cases
-					projectHistory.getVersions().remove(newVersion);
-
-					if (newBranch == null) {
-						// normal commit
-						baseVersion.setNextVersion(null);
-						baseBranch.setHead(ModelUtil.clone(baseVersion.getPrimarySpec()));
-					} else {
-						// branch commit
-						baseVersion.getBranchedVersions().remove(newVersion);
-						projectHistory.getBranches().remove(newBranch);
-					}
-					// TODO: delete obsolete project, changepackage and version files
-					throw new StorageException(StorageException.NOSAVE, e);
+					rollback(projectHistory, baseBranch, baseVersion, newVersion, newBranch, e);
 				}
 
 				// if ancestor isn't null, a new branch was created. In this
@@ -360,12 +345,52 @@ public class VersionSubInterfaceImpl extends AbstractSubEmfstoreInterface {
 			} catch (final FatalESException e) {
 				// roll back failed
 				EMFStoreController.getInstance().shutdown(e);
-				throw new ESException("Shutting down server.");
+				throw new ESException(Messages.VersionSubInterfaceImpl_ShuttingServerDown);
 			}
 
-			ModelUtil.logInfo("Total time for commit: " + (System.currentTimeMillis() - currentTimeMillis));
+			ModelUtil.logInfo(
+				Messages.VersionSubInterfaceImpl_TotalTimeForCommit +
+					(System.currentTimeMillis() - currentTimeMillis));
 			return newVersion.getPrimarySpec();
 		}
+	}
+
+	private void rollback(final ProjectHistory projectHistory, final BranchInfo baseBranch,
+		final Version baseVersion, Version newVersion, BranchInfo newBranch, final FatalESException e)
+		throws StorageException {
+		projectHistory.getVersions().remove(newVersion);
+
+		if (newBranch == null) {
+			// normal commit
+			baseVersion.setNextVersion(null);
+			baseBranch.setHead(ModelUtil.clone(baseVersion.getPrimarySpec()));
+		} else {
+			// branch commit
+			baseVersion.getBranchedVersions().remove(newVersion);
+			projectHistory.getBranches().remove(newBranch);
+		}
+		// TODO: delete obsolete project, changepackage and version files
+		throw new StorageException(StorageException.NOSAVE, e);
+	}
+
+	/**
+	 * @param projectId
+	 * @param changePackage
+	 * @param projectHistory
+	 * @param newVersion
+	 * @param newProjectState
+	 * @throws FatalESException
+	 */
+	private void trySave(ProjectId projectId, ChangePackage changePackage, final ProjectHistory projectHistory,
+		Version newVersion, final Project newProjectState) throws FatalESException {
+		getResourceHelper().createResourceForProject(newProjectState,
+			newVersion.getPrimarySpec(), projectHistory.getProjectId());
+		getResourceHelper().createResourceForChangePackage(changePackage, newVersion.getPrimarySpec(),
+			projectId);
+		getResourceHelper().createResourceForVersion(newVersion, projectHistory.getProjectId());
+
+		newVersion.setProjectStateResource(newProjectState.eResource());
+		newVersion.setChangeResource(changePackage.eResource());
 	}
 
 	private BranchInfo createNewBranch(ProjectHistory projectHistory, PrimaryVersionSpec baseSpec,
@@ -394,7 +419,8 @@ public class VersionSubInterfaceImpl extends AbstractSubEmfstoreInterface {
 			}
 		} catch (final SerializationException exception) {
 			// TODO: clarify what to do in case checksum computation fails + provide ext. point
-			throw new ESException(MessageFormat.format("Could not compute checksum of project {0}.",
+			throw new ESException(MessageFormat.format(
+				Messages.VersionSubInterfaceImpl_ChecksumComputationFailed,
 				projectHistory.getProjectName()), exception);
 		}
 
@@ -624,7 +650,7 @@ public class VersionSubInterfaceImpl extends AbstractSubEmfstoreInterface {
 				}
 				if (currentVersion.getPrimarySpec().compareTo(sourceVersion.getPrimarySpec()) < 0) {
 					// walked too far, invalid path.
-					throw new InvalidVersionSpecException("Walked too far, invalid path.");
+					throw new InvalidVersionSpecException(Messages.VersionSubInterfaceImpl_InvalidPath);
 				}
 				// Shortcut for most common merge usecase: If you have 2
 				// parallel branches and merge several times
@@ -664,7 +690,7 @@ public class VersionSubInterfaceImpl extends AbstractSubEmfstoreInterface {
 		} else if (currentVersion.getAncestorVersion() != null) {
 			currentVersion = currentVersion.getAncestorVersion();
 		} else {
-			throw new InvalidVersionSpecException("Couldn't determine next version in history.");
+			throw new InvalidVersionSpecException(Messages.VersionSubInterfaceImpl_NextVersionInvalid);
 		}
 		return currentVersion;
 	}

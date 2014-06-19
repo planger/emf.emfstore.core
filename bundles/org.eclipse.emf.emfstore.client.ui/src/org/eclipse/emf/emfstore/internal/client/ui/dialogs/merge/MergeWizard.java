@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * wesendon
+ * Otto von Wesendonk - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.dialogs.merge;
 
@@ -23,7 +23,7 @@ import org.eclipse.jface.wizard.Wizard;
  */
 public class MergeWizard extends Wizard {
 
-	private DecisionManager decisionManager;
+	private final DecisionManager decisionManager;
 
 	/**
 	 * Default constructor.
@@ -33,8 +33,8 @@ public class MergeWizard extends Wizard {
 	 */
 	public MergeWizard(DecisionManager decisionManager) {
 		super();
-		setWindowTitle("Merge Wizard");
-		setDefaultPageImageDescriptor(UIDecisionUtil.getImageDescriptor("merge_wizard2.gif"));
+		setWindowTitle(Messages.MergeWizard_Title);
+		setDefaultPageImageDescriptor(UIDecisionUtil.getImageDescriptor("merge_wizard2.gif")); //$NON-NLS-1$
 
 		this.decisionManager = decisionManager;
 	}
@@ -57,9 +57,10 @@ public class MergeWizard extends Wizard {
 			return true;
 		}
 
-		MessageDialog.openInformation(getShell(), "Resolve all conflicts first",
-			"You have to resolve all conflicts in order to finish."
-				+ "\nTherefore choose an option for every conflict.");
+		MessageDialog.openInformation(getShell(),
+			Messages.MergeWizard_ResolveConflicts_Title,
+			Messages.MergeWizard_ResolveConflicts_Message_1
+				+ Messages.MergeWizard_ResolveConflicts_Message_2);
 		return false;
 	}
 }

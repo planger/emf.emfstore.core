@@ -26,7 +26,7 @@ import org.eclipse.emf.emfstore.internal.common.model.provider.IdentifiableEleme
 import org.eclipse.emf.emfstore.internal.server.model.FileIdentifier;
 
 /**
- * This is the item provider adapter for a {@link org.eclipse.emf.server.model.FileIdentifier} object. <!--
+ * This is the item provider adapter for a {@link FileIdentifier} object. <!--
  * begin-user-doc --> <!-- end-user-doc -->
  * 
  * @generated
@@ -80,7 +80,7 @@ public class FileIdentifierItemProvider extends IdentifiableElementItemProvider 
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((FileIdentifier) object).getIdentifier();
+		final String label = ((FileIdentifier) object).getIdentifier();
 		return label == null || label.length() == 0 ?
 			getString("_UI_FileIdentifier_type") :
 			getString("_UI_FileIdentifier_type") + " " + label;

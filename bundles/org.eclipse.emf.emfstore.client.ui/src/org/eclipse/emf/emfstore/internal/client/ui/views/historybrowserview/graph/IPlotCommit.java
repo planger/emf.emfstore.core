@@ -143,8 +143,10 @@ public interface IPlotCommit {
 	 */
 	Color getColor();
 
-/**
-	 * Sets the light color of this commit. It is usually a brighter version of this commit's color (see {@link #setColor(Color)). The light color is used whenever a more faded color representation for this commit is needed (e.g. label backgrounds, lane colors for expanded commit nodes).
+	/**
+	 * Sets the light color of this commit. It is usually a brighter version of this commit's color (see
+	 * {@link #setColor(Color)}). The light color is used whenever a more faded color representation for this commit is
+	 * needed (e.g. label backgrounds, lane colors for expanded commit nodes).
 	 * 
 	 * @param color The new light color of this commit.
 	 */

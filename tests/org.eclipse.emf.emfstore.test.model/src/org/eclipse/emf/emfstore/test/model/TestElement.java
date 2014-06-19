@@ -14,6 +14,7 @@ package org.eclipse.emf.emfstore.test.model;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.FeatureMap;
 
 /**
  * <!-- begin-user-doc -->
@@ -47,6 +48,11 @@ import org.eclipse.emf.ecore.EObject;
  * Opposite</em>}</li>
  * <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getContainedElement_NoOpposite <em>Contained Element No
  * Opposite</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getFeatureMapEntries <em>Feature Map Entries</em>}</li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getFeatureMapReferences1 <em>Feature Map References1</em>}
+ * </li>
+ * <li>{@link org.eclipse.emf.emfstore.test.model.TestElement#getFeatureMapReferences2 <em>Feature Map References2</em>}
+ * </li>
  * </ul>
  * </p>
  * 
@@ -584,5 +590,59 @@ public interface TestElement extends EObject {
 	 * @generated
 	 */
 	void setContainedElement_NoOpposite(TestElement value);
+
+	/**
+	 * Returns the value of the '<em><b>Feature Map Entries</b></em>' attribute list.
+	 * The list contents are of type {@link org.eclipse.emf.ecore.util.FeatureMap.Entry}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Feature Map Entries</em>' attribute list isn't clear, there really should be more of a
+	 * description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * 
+	 * @return the value of the '<em>Feature Map Entries</em>' attribute list.
+	 * @see org.eclipse.emf.emfstore.test.model.TestmodelPackage#getTestElement_FeatureMapEntries()
+	 * @model dataType="org.eclipse.emf.ecore.EFeatureMapEntry" many="true"
+	 *        extendedMetaData="kind='group'"
+	 * @generated
+	 */
+	FeatureMap getFeatureMapEntries();
+
+	/**
+	 * Returns the value of the '<em><b>Feature Map References1</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipse.emf.emfstore.test.model.TestElement}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Feature Map References1</em>' containment reference list isn't clear, there really
+	 * should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * 
+	 * @return the value of the '<em>Feature Map References1</em>' containment reference list.
+	 * @see org.eclipse.emf.emfstore.test.model.TestmodelPackage#getTestElement_FeatureMapReferences1()
+	 * @model containment="true" transient="true" volatile="true" derived="true"
+	 *        extendedMetaData="group='#featureMapEntries'"
+	 * @generated
+	 */
+	EList<TestElement> getFeatureMapReferences1();
+
+	/**
+	 * Returns the value of the '<em><b>Feature Map References2</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipse.emf.emfstore.test.model.TestElement}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Feature Map References2</em>' containment reference list isn't clear, there really
+	 * should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * 
+	 * @return the value of the '<em>Feature Map References2</em>' containment reference list.
+	 * @see org.eclipse.emf.emfstore.test.model.TestmodelPackage#getTestElement_FeatureMapReferences2()
+	 * @model containment="true" transient="true" volatile="true" derived="true"
+	 *        extendedMetaData="group='#featureMapEntries'"
+	 * @generated
+	 */
+	EList<TestElement> getFeatureMapReferences2();
 
 } // TestElement

@@ -157,11 +157,12 @@ public class LogMessageImpl extends EObjectImpl implements LogMessage {
 	 * @generated
 	 */
 	public void setMessage(String newMessage) {
-		String oldMessage = message;
+		final String oldMessage = message;
 		message = newMessage;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, VersioningPackage.LOG_MESSAGE__MESSAGE, oldMessage,
 				message));
+		}
 	}
 
 	/**
@@ -179,11 +180,12 @@ public class LogMessageImpl extends EObjectImpl implements LogMessage {
 	 * @generated
 	 */
 	public void setAuthor(String newAuthor) {
-		String oldAuthor = author;
+		final String oldAuthor = author;
 		author = newAuthor;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, VersioningPackage.LOG_MESSAGE__AUTHOR, oldAuthor,
 				author));
+		}
 	}
 
 	/**
@@ -201,10 +203,11 @@ public class LogMessageImpl extends EObjectImpl implements LogMessage {
 	 * @generated
 	 */
 	public void setDate(Date newDate) {
-		Date oldDate = date;
+		final Date oldDate = date;
 		date = newDate;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, VersioningPackage.LOG_MESSAGE__DATE, oldDate, date));
+		}
 	}
 
 	/**
@@ -222,11 +225,12 @@ public class LogMessageImpl extends EObjectImpl implements LogMessage {
 	 * @generated
 	 */
 	public void setClientDate(Date newClientDate) {
-		Date oldClientDate = clientDate;
+		final Date oldClientDate = clientDate;
 		clientDate = newClientDate;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, VersioningPackage.LOG_MESSAGE__CLIENT_DATE,
 				oldClientDate, clientDate));
+		}
 	}
 
 	/**
@@ -328,17 +332,18 @@ public class LogMessageImpl extends EObjectImpl implements LogMessage {
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (eIsProxy()) {
 			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (author: ");
+		final StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (author: "); //$NON-NLS-1$
 		result.append(author);
-		result.append(", message: ");
+		result.append(", message: "); //$NON-NLS-1$
 		result.append(message);
-		result.append(", date: ");
+		result.append(", date: "); //$NON-NLS-1$
 		result.append(date);
-		result.append(", clientDate: ");
+		result.append(", clientDate: "); //$NON-NLS-1$
 		result.append(clientDate);
 		result.append(')');
 		return result.toString();
@@ -358,18 +363,6 @@ public class LogMessageImpl extends EObjectImpl implements LogMessage {
 		}
 
 		return apiImpl;
-	}
-
-	/**
-	 * 
-	 * {@inheritDoc}
-	 * 
-	 * @see org.eclipse.emf.emfstore.internal.common.api.APIDelegate#setAPIImpl(java.lang.Object)
-	 * 
-	 * @generated NOT
-	 */
-	public void setAPIImpl(ESLogMessageImpl esLogMessageImpl) {
-		apiImpl = esLogMessageImpl;
 	}
 
 	/**

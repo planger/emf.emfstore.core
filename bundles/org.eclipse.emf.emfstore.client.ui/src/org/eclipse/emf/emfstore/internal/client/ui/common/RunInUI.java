@@ -52,10 +52,10 @@ public final class RunInUI {
 				public T doRun() throws ESException {
 					try {
 						return callable.call();
-					} catch (ESException e) {
+					} catch (final ESException e) {
 						throw e;
 						// BEGIN SUPRESS CATCH EXCEPTION
-					} catch (Exception e) {
+					} catch (final Exception e) {
 						// END SUPRESS CATCH EXCEPTION
 						throw new ESException(e.getMessage(), e);
 					}
@@ -78,7 +78,7 @@ public final class RunInUI {
 						callable.call();
 						return null;
 						// BEGIN SUPRESS CATCH EXCEPTION
-					} catch (Exception e) {
+					} catch (final Exception e) {
 						// END SUPRESS CATCH EXCEPTION
 						throw new ESException(e.getMessage());
 					}
@@ -102,13 +102,13 @@ public final class RunInUI {
 						callable.call();
 						return null;
 						// BEGIN SUPRESS CATCH EXCEPTION
-					} catch (Exception e) {
+					} catch (final Exception e) {
 						// END SUPRESS CATCH EXCEPTION
 						throw new ESException(e.getMessage());
 					}
 				}
 			}.execute();
-		} catch (ESException e) {
+		} catch (final ESException e) {
 			WorkspaceUtil.handleException(e);
 		}
 	}
@@ -130,13 +130,13 @@ public final class RunInUI {
 					try {
 						return callable.call();
 						// BEGIN SUPRESS CATCH EXCEPTION
-					} catch (Exception e) {
+					} catch (final Exception e) {
 						// END SUPRESS CATCH EXCEPTION
 						throw new ESException(e.getMessage());
 					}
 				}
 			}.execute();
-		} catch (ESException e) {
+		} catch (final ESException e) {
 			// ignore
 		}
 
@@ -163,7 +163,7 @@ public final class RunInUI {
 		 * 
 		 * {@inheritDoc}
 		 * 
-		 * @see org.eclipse.emf.emfstore.internal.client.ui.common.RunInUIThreadWithResult#doRun(org.eclipse.swt.widgets.Shell)
+		 * @see org.eclipse.emf.emfstore.internal.client.ui.common.RunInUI.RunInUIThreadWithResult#doRun()
 		 */
 		@Override
 		public abstract Void doRun() throws ESException;
@@ -218,7 +218,7 @@ public final class RunInUI {
 				public void run() {
 					try {
 						returnValue = RunInUIThreadWithResult.this.doRun();
-					} catch (ESException e) {
+					} catch (final ESException e) {
 						exception = e;
 					}
 				}
@@ -234,8 +234,6 @@ public final class RunInUI {
 		/**
 		 * Invokes the wrapped call and must be implemented by clients.
 		 * 
-		 * @param shell
-		 *            the shell that is used during the execution
 		 * @return an optional return value that may be returned by clients
 		 * 
 		 * @throws ESException in case an error occurs

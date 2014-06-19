@@ -84,4 +84,11 @@ public class ESTestWithMockServer extends ESTest {
 	public static void stopEMFStore() {
 		// do nothing
 	}
+
+	/**
+	 * @return the server
+	 */
+	public static ServerMock getServerMock() {
+		return server;
+	}
 }

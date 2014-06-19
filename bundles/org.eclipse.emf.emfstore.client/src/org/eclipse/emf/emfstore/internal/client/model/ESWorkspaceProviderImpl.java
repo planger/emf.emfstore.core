@@ -354,7 +354,11 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 	 * @return the workspace
 	 */
 	public ESWorkspaceImpl getWorkspace() {
-		return getInternalWorkspace().toAPI();
+		return RunESCommand.runWithResult(new Callable<ESWorkspaceImpl>() {
+			public ESWorkspaceImpl call() throws Exception {
+				return getInternalWorkspace().toAPI();
+			}
+		});
 	}
 
 	public Workspace getInternalWorkspace() {

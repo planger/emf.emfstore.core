@@ -88,10 +88,9 @@ public class ModelSwitch<T> {
 	protected T doSwitch(EClass theEClass, EObject theEObject) {
 		if (theEClass.eContainer() == modelPackage) {
 			return doSwitch(theEClass.getClassifierID(), theEObject);
-		} else {
-			List<EClass> eSuperTypes = theEClass.getESuperTypes();
-			return eSuperTypes.isEmpty() ? defaultCase(theEObject) : doSwitch(eSuperTypes.get(0), theEObject);
 		}
+		final List<EClass> eSuperTypes = theEClass.getESuperTypes();
+		return eSuperTypes.isEmpty() ? defaultCase(theEObject) : doSwitch(eSuperTypes.get(0), theEObject);
 	}
 
 	/**
@@ -106,76 +105,87 @@ public class ModelSwitch<T> {
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
 		case ModelPackage.PROJECT: {
-			Project project = (Project) theEObject;
+			final Project project = (Project) theEObject;
 			T result = caseProject(project);
-			if (result == null)
+			if (result == null) {
 				result = defaultCase(theEObject);
+			}
 			return result;
 		}
 		case ModelPackage.UNIQUE_IDENTIFIER: {
-			UniqueIdentifier uniqueIdentifier = (UniqueIdentifier) theEObject;
+			final UniqueIdentifier uniqueIdentifier = (UniqueIdentifier) theEObject;
 			T result = caseUniqueIdentifier(uniqueIdentifier);
-			if (result == null)
+			if (result == null) {
 				result = defaultCase(theEObject);
+			}
 			return result;
 		}
 		case ModelPackage.IDENTIFIABLE_ELEMENT: {
-			IdentifiableElement identifiableElement = (IdentifiableElement) theEObject;
+			final IdentifiableElement identifiableElement = (IdentifiableElement) theEObject;
 			T result = caseIdentifiableElement(identifiableElement);
-			if (result == null)
+			if (result == null) {
 				result = defaultCase(theEObject);
+			}
 			return result;
 		}
 		case ModelPackage.MODEL_ELEMENT_ID: {
-			ModelElementId modelElementId = (ModelElementId) theEObject;
+			final ModelElementId modelElementId = (ModelElementId) theEObject;
 			T result = caseModelElementId(modelElementId);
-			if (result == null)
+			if (result == null) {
 				result = caseUniqueIdentifier(modelElementId);
-			if (result == null)
+			}
+			if (result == null) {
 				result = defaultCase(theEObject);
+			}
 			return result;
 		}
 		case ModelPackage.MODEL_VERSION: {
-			ModelVersion modelVersion = (ModelVersion) theEObject;
+			final ModelVersion modelVersion = (ModelVersion) theEObject;
 			T result = caseModelVersion(modelVersion);
-			if (result == null)
+			if (result == null) {
 				result = defaultCase(theEObject);
+			}
 			return result;
 		}
 		case ModelPackage.NON_DOMAIN_ELEMENT: {
-			NonDomainElement nonDomainElement = (NonDomainElement) theEObject;
+			final NonDomainElement nonDomainElement = (NonDomainElement) theEObject;
 			T result = caseNonDomainElement(nonDomainElement);
-			if (result == null)
+			if (result == null) {
 				result = defaultCase(theEObject);
+			}
 			return result;
 		}
 		case ModelPackage.ASSOCIATION_CLASS_ELEMENT: {
-			AssociationClassElement associationClassElement = (AssociationClassElement) theEObject;
+			final AssociationClassElement associationClassElement = (AssociationClassElement) theEObject;
 			T result = caseAssociationClassElement(associationClassElement);
-			if (result == null)
+			if (result == null) {
 				result = defaultCase(theEObject);
+			}
 			return result;
 		}
 		case ModelPackage.EMF_STORE_PROPERTY: {
-			EMFStoreProperty emfStoreProperty = (EMFStoreProperty) theEObject;
+			final EMFStoreProperty emfStoreProperty = (EMFStoreProperty) theEObject;
 			T result = caseEMFStoreProperty(emfStoreProperty);
-			if (result == null)
+			if (result == null) {
 				result = defaultCase(theEObject);
+			}
 			return result;
 		}
 		case ModelPackage.PROPERTY_MAP_ENTRY: {
 			@SuppressWarnings("unchecked")
-			Map.Entry<String, EMFStoreProperty> propertyMapEntry = (Map.Entry<String, EMFStoreProperty>) theEObject;
+			final Map.Entry<String, EMFStoreProperty> propertyMapEntry = (Map.Entry<String, EMFStoreProperty>) theEObject;
 			T result = casePropertyMapEntry(propertyMapEntry);
-			if (result == null)
+			if (result == null) {
 				result = defaultCase(theEObject);
+			}
 			return result;
 		}
 		case ModelPackage.PROPERTY_STRING_VALUE: {
-			PropertyStringValue propertyStringValue = (PropertyStringValue) theEObject;
+			final PropertyStringValue propertyStringValue = (PropertyStringValue) theEObject;
 			T result = casePropertyStringValue(propertyStringValue);
-			if (result == null)
+			if (result == null) {
 				result = defaultCase(theEObject);
+			}
 			return result;
 		}
 		default:

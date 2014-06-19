@@ -25,7 +25,7 @@ public class ProjectSpaceRule implements UpdateXMIAttributeRule {
 	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see org.eclipse.emf.emfstore.internal.client.migration.UpdateXMIAttributeRule#getNewAttribute(java.lang.String)
+	 * @see UpdateXMIAttributeRule#getNewAttribute(java.lang.String)
 	 */
 	public String getNewAttribute(String oldHRef) {
 		final String[] fragments = oldHRef.split("#"); //$NON-NLS-1$

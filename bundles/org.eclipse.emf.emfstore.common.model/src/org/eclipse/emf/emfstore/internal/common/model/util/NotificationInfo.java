@@ -33,7 +33,7 @@ import org.eclipse.emf.emfstore.internal.common.model.impl.util.ESNotificationIn
 
 public class NotificationInfo implements Notification, APIDelegate<ESNotificationInfo> {
 
-	private Notification notification;
+	private final Notification notification;
 	private boolean valid;
 	private String validationMessage;
 	private ESNotificationInfo apiImpl;
@@ -44,7 +44,7 @@ public class NotificationInfo implements Notification, APIDelegate<ESNotificatio
 	 * @param n the notification to wrap
 	 */
 	public NotificationInfo(Notification n) {
-		this.notification = n;
+		notification = n;
 		NotificationValidator.getInstance().validate(this);
 	}
 
@@ -127,15 +127,15 @@ public class NotificationInfo implements Notification, APIDelegate<ESNotificatio
 	 * @return true if the changed feature is marked transient, false otherwise
 	 */
 	public boolean isTransient() {
-		return (isReferenceNotification() && getReference().isTransient())
-			|| (isAttributeNotification() && getAttribute().isTransient());
+		return isReferenceNotification() && getReference().isTransient()
+			|| isAttributeNotification() && getAttribute().isTransient();
 	}
 
 	/**
 	 * @return true if the event is of type Notification.ADD, false otherwise
 	 */
 	public boolean isAddEvent() {
-		return this.getEventType() == Notification.ADD;
+		return getEventType() == Notification.ADD;
 	}
 
 	/**
@@ -143,7 +143,7 @@ public class NotificationInfo implements Notification, APIDelegate<ESNotificatio
 	 */
 
 	public boolean isRemoveEvent() {
-		return this.getEventType() == Notification.REMOVE;
+		return getEventType() == Notification.REMOVE;
 	}
 
 	/**
@@ -151,7 +151,7 @@ public class NotificationInfo implements Notification, APIDelegate<ESNotificatio
 	 */
 
 	public boolean isSetEvent() {
-		return this.getEventType() == Notification.SET;
+		return getEventType() == Notification.SET;
 	}
 
 	/**
@@ -159,7 +159,7 @@ public class NotificationInfo implements Notification, APIDelegate<ESNotificatio
 	 */
 
 	public boolean isAddManyEvent() {
-		return this.getEventType() == Notification.ADD_MANY;
+		return getEventType() == Notification.ADD_MANY;
 	}
 
 	/**
@@ -167,14 +167,14 @@ public class NotificationInfo implements Notification, APIDelegate<ESNotificatio
 	 */
 
 	public boolean isRemoveManyEvent() {
-		return this.getEventType() == Notification.REMOVE_MANY;
+		return getEventType() == Notification.REMOVE_MANY;
 	}
 
 	/**
 	 * @return true if the event is of type Notification.MOVE, false otherwise
 	 */
 	public boolean isMoveEvent() {
-		return this.getEventType() == Notification.MOVE;
+		return getEventType() == Notification.MOVE;
 	}
 
 	/**
@@ -189,19 +189,19 @@ public class NotificationInfo implements Notification, APIDelegate<ESNotificatio
 		}
 
 		try {
-			Field declaredField = NotificationImpl.class.getDeclaredField("next");
+			final Field declaredField = NotificationImpl.class.getDeclaredField("next"); //$NON-NLS-1$
 			declaredField.setAccessible(true);
-			Object object = declaredField.get(notification);
-			Notification nextNotification = (Notification) object;
+			final Object object = declaredField.get(notification);
+			final Notification nextNotification = (Notification) object;
 
 			if (nextNotification == null) {
 				return false;
 			}
 
-			Object feature = nextNotification.getFeature();
+			final Object feature = nextNotification.getFeature();
 
 			if (feature instanceof EReference) {
-				EReference eReference = (EReference) feature;
+				final EReference eReference = (EReference) feature;
 
 				if (eReference.isTransient()) {
 					return false;
@@ -211,19 +211,18 @@ public class NotificationInfo implements Notification, APIDelegate<ESNotificatio
 			// notifications from project are never propagated, thus considered nonexistent
 			// however, they themselves might have followups
 			if (nextNotification.getNotifier() instanceof Project) {
-				NotificationInfo nextNextInfo = new NotificationInfo(nextNotification);
+				final NotificationInfo nextNextInfo = new NotificationInfo(nextNotification);
 				return nextNextInfo.hasNext();
-			} else {
-				return true;
 			}
+			return true;
 
 			// BEGIN SUPRESS CATCH EXCEPTION
-		} catch (RuntimeException e) {
+		} catch (final RuntimeException e) {
 			return false;
 			// END SUPRESS CATCH EXCEPTION
-		} catch (IllegalAccessException e) {
+		} catch (final IllegalAccessException e) {
 			return false;
-		} catch (NoSuchFieldException e) {
+		} catch (final NoSuchFieldException e) {
 			return false;
 		}
 	}
@@ -469,42 +468,42 @@ public class NotificationInfo implements Notification, APIDelegate<ESNotificatio
 	 * @return a string useful for debugging only
 	 */
 	public String getDebugString() {
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		// handle type
 
 		if (isAddEvent()) {
-			sb.append("ADD");
+			sb.append("ADD"); //$NON-NLS-1$
 		} else if (isSetEvent()) {
-			sb.append("SET");
+			sb.append("SET"); //$NON-NLS-1$
 		} else if (isAddManyEvent()) {
-			sb.append("ADD_MANY");
+			sb.append("ADD_MANY"); //$NON-NLS-1$
 		} else if (isRemoveEvent()) {
-			sb.append("REMOVE");
+			sb.append("REMOVE"); //$NON-NLS-1$
 		} else if (isRemoveManyEvent()) {
-			sb.append("REMOVE_MANY");
+			sb.append("REMOVE_MANY"); //$NON-NLS-1$
 		} else if (isMoveEvent()) {
-			sb.append("MOVE");
+			sb.append("MOVE"); //$NON-NLS-1$
 		} else {
 			sb.append(getEventType());
 		}
 
-		sb.append(" val: " + getValidationMessage());
-		EObject n = (EObject) notification.getNotifier();
+		sb.append(" val: " + getValidationMessage()); //$NON-NLS-1$
+		final EObject n = (EObject) notification.getNotifier();
 
-		sb.append(" / on: " + extractName(n));
-		sb.append(".");
+		sb.append(" / on: " + extractName(n)); //$NON-NLS-1$
+		sb.append("."); //$NON-NLS-1$
 		if (isAttributeNotification()) {
 			sb.append(getAttribute().getName());
 		} else if (isReferenceNotification()) {
 			sb.append(getReference().getName());
 		}
-		sb.append(" / old: ");
+		sb.append(" / old: "); //$NON-NLS-1$
 		if (getOldValue() instanceof EObject) {
 			sb.append(extractName((EObject) getOldValue()));
 		} else {
 			sb.append(getOldValue());
 		}
-		sb.append(" / new: ");
+		sb.append(" / new: "); //$NON-NLS-1$
 		if (getNewValue() instanceof EObject) {
 			sb.append(extractName((EObject) getNewValue()));
 		} else {
@@ -521,13 +520,11 @@ public class NotificationInfo implements Notification, APIDelegate<ESNotificatio
 			return null;
 		}
 
-		EStructuralFeature f = o.eClass().getEStructuralFeature("name");
+		final EStructuralFeature f = o.eClass().getEStructuralFeature("name"); //$NON-NLS-1$
 		if (f != null && o.eGet(f) != null) {
-			return "'" + (String) o.eGet(f) + "'";
-		} else {
-			return o.eClass().getName();
+			return "'" + (String) o.eGet(f) + "'"; //$NON-NLS-1$//$NON-NLS-2$
 		}
-
+		return o.eClass().getName();
 	}
 
 	/**
@@ -553,9 +550,10 @@ public class NotificationInfo implements Notification, APIDelegate<ESNotificatio
 	}
 
 	/**
+	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see org.eclipse.emf.emfstore.internal.common.api.APIDelegate#createAPIImpl()
+	 * @see org.eclipse.emf.emfstore.internal.common.api.APIDelegate#createAPI()
 	 */
 	public ESNotificationInfo createAPI() {
 		return new ESNotificationInfoImpl(this);

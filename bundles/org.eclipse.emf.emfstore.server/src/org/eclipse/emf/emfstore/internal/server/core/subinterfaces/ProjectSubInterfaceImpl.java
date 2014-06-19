@@ -12,6 +12,7 @@
 package org.eclipse.emf.emfstore.internal.server.core.subinterfaces;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -33,6 +34,10 @@ import org.eclipse.emf.emfstore.internal.server.model.ProjectHistory;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectId;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectInfo;
 import org.eclipse.emf.emfstore.internal.server.model.SessionId;
+import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACUser;
+import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.roles.ProjectAdminRole;
+import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.roles.Role;
+import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.roles.RolesPackage;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.BranchInfo;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.ChangePackage;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.LogMessage;
@@ -80,8 +85,10 @@ public class ProjectSubInterfaceImpl extends AbstractSubEmfstoreInterface {
 		if (projectHistory != null) {
 			return projectHistory;
 		}
-		throw new InvalidProjectIdException("Project with the id:" + (projectId == null ? "null" : projectId)
-			+ " doesn't exist.");
+		throw new InvalidProjectIdException(
+			MessageFormat.format(
+				Messages.ProjectSubInterfaceImpl_ProjectDoesNotExist,
+				projectId == null ? Messages.ProjectSubInterfaceImpl_Null : projectId));
 	}
 
 	private ProjectHistory getProjectOrNull(ProjectId projectId) {
@@ -96,6 +103,8 @@ public class ProjectSubInterfaceImpl extends AbstractSubEmfstoreInterface {
 	/**
 	 * Get the project state for a specific version.
 	 * 
+	 * @param projectId
+	 *            the {@link ProjectId} of the project to be fetched
 	 * @param versionSpec
 	 *            the requested version
 	 * @return the state of the project for the specified version
@@ -148,7 +157,7 @@ public class ProjectSubInterfaceImpl extends AbstractSubEmfstoreInterface {
 			if (currentVersion.getProjectState() == null) {
 				// TODO: nicer exception. Is this null check necessary anyway? (there were problems
 				// in past, because the xml files were inconsistent.
-				throw new ESException("Couldn't find project state.");
+				throw new ESException(Messages.ProjectSubInterfaceImpl_ProjectState_Not_Found);
 			}
 			final Project projectState = ModelUtil.clone(currentVersion.getProjectState());
 			Collections.reverse(versions);
@@ -281,6 +290,7 @@ public class ProjectSubInterfaceImpl extends AbstractSubEmfstoreInterface {
 			try {
 				final ProjectHistory project = getProject(projectId);
 				getServerSpace().getProjects().remove(project);
+				removeAllProjectAdmins(projectId);
 				try {
 					save(getServerSpace());
 				} catch (final FatalESException e) {
@@ -307,7 +317,31 @@ public class ProjectSubInterfaceImpl extends AbstractSubEmfstoreInterface {
 					throw e;
 				}
 			} catch (final IOException e) {
-				throw new StorageException("Project resource files couldn't be deleted.", e);
+				throw new StorageException(Messages.ProjectSubInterfaceImpl_ProjectResources_Not_Deleted, e);
+			}
+		}
+	}
+
+	private void removeAllProjectAdmins(ProjectId projectId) {
+		final List<ACUser> users = getServerSpace().getUsers();
+		for (final ACUser acUser : users) {
+			ProjectAdminRole obsoletePARole = null;
+			boolean paRoleIsObsolete = false;
+			for (final Role role : acUser.getRoles()) {
+				if (role.eClass().equals(RolesPackage.eINSTANCE.getProjectAdminRole())) {
+					final ProjectAdminRole paRole = ProjectAdminRole.class.cast(role);
+					final int indexOf = paRole.getProjects().indexOf(projectId);
+					if (indexOf != -1) {
+						paRole.getProjects().remove(indexOf);
+					}
+					if (paRole.getProjects().size() == 0) {
+						paRoleIsObsolete = true;
+						obsoletePARole = paRole;
+					}
+				}
+			}
+			if (paRoleIsObsolete) {
+				acUser.getRoles().remove(obsoletePARole);
 			}
 		}
 	}

@@ -65,8 +65,8 @@ public interface ESUpdateCallback {
 
 	/**
 	 * A default implementation of an update callback that does nothing and defaults {@link
-	 * this#conflictOccurred(ESChangeConflict, IProgressMonitor)} to {@code false} and {@link
-	 * this#checksumCheckFailed(ESLocalProject, ESPrimaryVersionSpec, IProgressMonitor)} to {@code true}.
+	 * this#conflictOccurred(ESConflictSet, IProgressMonitor)} to {@code false} and checksumCheckFailed
+	 * to {@code true}.
 	 */
 	ESUpdateCallback NOCALLBACK = new ESUpdateCallback() {
 

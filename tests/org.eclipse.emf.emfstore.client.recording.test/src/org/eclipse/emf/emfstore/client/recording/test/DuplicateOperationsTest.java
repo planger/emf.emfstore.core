@@ -32,6 +32,7 @@ import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESWorkspaceImpl;
 import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.ChangePackage;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.VersioningFactory;
+import org.eclipse.emf.emfstore.internal.server.model.versioning.Versions;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AttributeOperation;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.OperationsFactory;
@@ -46,6 +47,7 @@ public class DuplicateOperationsTest extends ESTest {
 	private static final String A = "A"; //$NON-NLS-1$
 	private static final String B = "B"; //$NON-NLS-1$
 	private static final String C = "C"; //$NON-NLS-1$
+	private static final String TRUNK = "trunk"; //$NON-NLS-1$
 
 	private UpdateController createDummyUpdateController() {
 		final ProjectSpaceBase p = (ProjectSpaceBase) getProjectSpace();
@@ -55,6 +57,7 @@ public class DuplicateOperationsTest extends ESTest {
 			public Void call() throws Exception {
 				workspace.toInternalAPI().getUsersessions().add(u);
 				p.setUsersession(u);
+				p.setBaseVersion(Versions.createPRIMARY(TRUNK, 0));
 				return null;
 			}
 		});

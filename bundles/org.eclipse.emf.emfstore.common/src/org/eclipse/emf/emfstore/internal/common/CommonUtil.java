@@ -60,7 +60,7 @@ public final class CommonUtil {
 		final List<EReference> eAllContainments = parent.eClass().getEAllContainments();
 		EReference reference = null;
 
-		for (EReference containmentItem : eAllContainments) {
+		for (final EReference containmentItem : eAllContainments) {
 
 			final EClass eReferenceType = containmentItem.getEReferenceType();
 
@@ -89,7 +89,7 @@ public final class CommonUtil {
 		final List<EReference> containments = eClass.getEAllContainments();
 		final Set<EClass> eClasses = new LinkedHashSet<EClass>();
 
-		for (EReference ref : containments) {
+		for (final EReference ref : containments) {
 			final EClass eReferenceType = ref.getEReferenceType();
 			eClasses.addAll(getAllSubEClasses(eReferenceType));
 		}
@@ -114,10 +114,10 @@ public final class CommonUtil {
 
 		final Set<EClass> result = new LinkedHashSet<EClass>();
 
-		for (EClass subClass : allEClasses) {
+		for (final EClass subClass : allEClasses) {
 			final boolean isSuperTypeOf = eClass.isSuperTypeOf(subClass)
 				|| eClass.equals(EcorePackage.eINSTANCE.getEObject());
-			if (isSuperTypeOf && (!subClass.isAbstract()) && (!subClass.isInterface())) {
+			if (isSuperTypeOf && !subClass.isAbstract() && !subClass.isInterface()) {
 				result.add(subClass);
 			}
 		}
@@ -138,14 +138,15 @@ public final class CommonUtil {
 		final Set<EClass> result = new LinkedHashSet<EClass>();
 		final Registry registry = EPackage.Registry.INSTANCE;
 
-		for (Entry<String, Object> entry : new LinkedHashSet<Entry<String, Object>>(registry.entrySet())) {
+		for (final Entry<String, Object> entry : new LinkedHashSet<Entry<String, Object>>(registry.entrySet())) {
 			try {
 				final EPackage ePackage = EPackage.Registry.INSTANCE.getEPackage(entry.getKey());
 				result.addAll(getAllModelElementEClasses(ePackage));
 			}
 			// BEGIN SUPRESS CATCH EXCEPTION
-			catch (RuntimeException exception) {
-				Activator.getDefault().logException("Failed to load model package " + entry.getKey(), exception);
+			catch (final RuntimeException exception) {
+				Activator.getDefault().logException(Messages.CommonUtil_LoadingPackageFailed + entry.getKey(),
+					exception);
 				// END SUPRESS CATCH EXCEPTION
 			}
 
@@ -164,10 +165,10 @@ public final class CommonUtil {
 	 */
 	private static Set<EClass> getAllModelElementEClasses(final EPackage ePackage) {
 		final Set<EClass> result = new LinkedHashSet<EClass>();
-		for (EPackage subPackage : ePackage.getESubpackages()) {
+		for (final EPackage subPackage : ePackage.getESubpackages()) {
 			result.addAll(getAllModelElementEClasses(subPackage));
 		}
-		for (EClassifier classifier : ePackage.getEClassifiers()) {
+		for (final EClassifier classifier : ePackage.getEClassifiers()) {
 			if (classifier instanceof EClass) {
 				final EClass subEClass = (EClass) classifier;
 				result.add(subEClass);
@@ -198,15 +199,14 @@ public final class CommonUtil {
 		}
 
 		if (seenModelElements.contains(child.eContainer())) {
-			throw new IllegalStateException("ModelElement is in a containment cycle");
+			throw new IllegalStateException(Messages.CommonUtil_ContainmentCycle);
 		}
 
 		if (parent.isInstance(child)) {
 			return (T) child;
-		} else {
-			seenModelElements.add(child);
-			return getParent(parent, child.eContainer(), seenModelElements);
 		}
+		seenModelElements.add(child);
+		return getParent(parent, child.eContainer(), seenModelElements);
 	}
 
 	/**
@@ -267,13 +267,13 @@ public final class CommonUtil {
 		if (eObject == null) {
 			return result;
 		}
-		for (EReference containmentReference : eObject.eClass().getEAllContainments()) {
+		for (final EReference containmentReference : eObject.eClass().getEAllContainments()) {
 			if (!containmentReference.isTransient()) {
 				final Object contentObject = eObject.eGet(containmentReference, true);
 				if (containmentReference.isMany()) {
 					@SuppressWarnings("unchecked")
 					final EList<? extends EObject> contentList = (EList<? extends EObject>) contentObject;
-					for (EObject content : contentList) {
+					for (final EObject content : contentList) {
 						result.add(content);
 						result.addAll(getNonTransientContents(content));
 					}
@@ -296,13 +296,13 @@ public final class CommonUtil {
 		if (object == null) {
 			return result;
 		}
-		for (EReference reference : object.eClass().getEAllReferences()) {
+		for (final EReference reference : object.eClass().getEAllReferences()) {
 			if (!reference.isTransient() && !reference.isContainment()) {
 				final Object referenceObject = object.eGet(reference, true);
 				if (reference.isMany()) {
 					final EList<? extends EObject> referencesList = (EList<? extends EObject>) referenceObject;
 					result.addAll(referencesList);
-					for (EObject ref : referencesList) {
+					for (final EObject ref : referencesList) {
 						if (CommonUtil.isSingletonEObject(ref)) {
 							continue;
 						}
@@ -355,7 +355,7 @@ public final class CommonUtil {
 
 		// 1. Run: Put all children in set
 		while (contents.hasNext()) {
-			EObject content = contents.next();
+			final EObject content = contents.next();
 			childrenSet.addAll(content.eContents());
 		}
 
@@ -365,7 +365,7 @@ public final class CommonUtil {
 		// -- no: RootNode in rootNode-Set
 		// -- yes: Drop RootNode, will be imported as a child
 		while (contents.hasNext()) {
-			EObject content = contents.next();
+			final EObject content = contents.next();
 
 			if (!childrenSet.contains(content)) {
 				rootNodes.add(content);
@@ -373,10 +373,10 @@ public final class CommonUtil {
 		}
 
 		// 3. Check if RootNodes are SelfContained -- yes: import -- no: error
-		Set<EObject> notSelfContained = new LinkedHashSet<EObject>();
-		for (EObject rootNode : rootNodes) {
+		final Set<EObject> notSelfContained = new LinkedHashSet<EObject>();
+		for (final EObject rootNode : rootNodes) {
 			if (!CommonUtil.isSelfContained(rootNode)) {
-				errorStrings.add(rootNode + " is not self contained\n");
+				errorStrings.add(rootNode + Messages.CommonUtil_NotSelfContained);
 				notSelfContained.add(rootNode);
 			}
 		}
@@ -423,6 +423,6 @@ public final class CommonUtil {
 	 * @return the file encoding
 	 */
 	public static String getEncoding() {
-		return "UTF-8";
+		return "UTF-8"; //$NON-NLS-1$
 	}
 }

@@ -172,20 +172,22 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 	 * 
 	 * @see org.eclipse.emf.emfstore.client.ESProject#getBranches(org.eclipse.core.runtime.IProgressMonitor)
 	 */
-	public List<ESBranchInfo> getBranches(IProgressMonitor monitor) throws ESException {
-
+	public List<ESBranchInfo> getBranches(final IProgressMonitor monitor) throws ESException {
 		checkIsShared();
+		return RunESCommand.WithException.runWithResult(ESException.class, new Callable<List<ESBranchInfo>>() {
+			public List<ESBranchInfo> call() throws Exception {
+				final List<BranchInfo> branchInfos = new ServerCall<List<BranchInfo>>(toInternalAPI(), monitor) {
+					@Override
+					protected List<BranchInfo> run() throws ESException {
+						return getConnectionManager().getBranches(
+							getSessionId(),
+							toInternalAPI().getProjectId());
+					}
+				}.execute();
 
-		final List<BranchInfo> branchInfos = new ServerCall<List<BranchInfo>>(toInternalAPI(), monitor) {
-			@Override
-			protected List<BranchInfo> run() throws ESException {
-				return getConnectionManager().getBranches(
-					getSessionId(),
-					toInternalAPI().getProjectId());
+				return APIUtil.mapToAPI(ESBranchInfo.class, branchInfos);
 			}
-		}.execute();
-
-		return APIUtil.mapToAPI(ESBranchInfo.class, branchInfos);
+		});
 	}
 
 	/**
@@ -624,11 +626,11 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 	 * @see org.eclipse.emf.emfstore.client.ESLocalProject#getUsersession()
 	 */
 	public ESUsersessionImpl getUsersession() {
-		if (toInternalAPI().getUsersession() == null) {
-			return null;
-		}
 		return RunESCommand.runWithResult(new Callable<ESUsersessionImpl>() {
 			public ESUsersessionImpl call() throws Exception {
+				if (toInternalAPI().getUsersession() == null) {
+					return null;
+				}
 				return toInternalAPI().getUsersession().toAPI();
 			}
 		});
@@ -642,7 +644,12 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 	 */
 	public ESPrimaryVersionSpec getBaseVersion() {
 		checkIsShared();
-		return toInternalAPI().getBaseVersion().toAPI();
+		return RunESCommand.runWithResult(new Callable<ESPrimaryVersionSpec>() {
+			public ESPrimaryVersionSpec call() throws Exception {
+				final PrimaryVersionSpec baseVersion = toInternalAPI().getBaseVersion();
+				return baseVersion != null ? baseVersion.toAPI() : null;
+			}
+		});
 	}
 
 	/**
@@ -653,7 +660,11 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 	 */
 	public Date getLastUpdated() {
 		checkIsShared();
-		return toInternalAPI().getLastUpdated();
+		return RunESCommand.runWithResult(new Callable<Date>() {
+			public Date call() throws Exception {
+				return toInternalAPI().getLastUpdated();
+			}
+		});
 	}
 
 	/**
@@ -769,21 +780,23 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 	 * @see org.eclipse.emf.emfstore.client.ESLocalProject#getRemoteProject()
 	 */
 	public ESRemoteProjectImpl getRemoteProject() throws ESException {
-
 		checkIsShared();
+		return RunESCommand.WithException.runWithResult(ESException.class, new Callable<ESRemoteProjectImpl>() {
+			public ESRemoteProjectImpl call() throws Exception {
+				// TODO OTS only return if server is available
+				if (getUsersession() == null || getUsersession().getServer() == null) {
+					throw new ESException(Messages.ESLocalProjectImpl_No_Usersession_Found);
+				}
 
-		// TODO OTS only return if server is available
-		if (getUsersession() == null || getUsersession().getServer() == null) {
-			throw new ESException(Messages.ESLocalProjectImpl_No_Usersession_Found);
-		}
+				final ProjectInfo projectInfo = org.eclipse.emf.emfstore.internal.server.model.ModelFactory.eINSTANCE
+					.createProjectInfo();
+				projectInfo.setProjectId(ModelUtil.clone(toInternalAPI().getProjectId()));
+				projectInfo.setName(getProjectName());
+				projectInfo.setVersion(ModelUtil.clone(toInternalAPI().getBaseVersion()));
 
-		final ProjectInfo projectInfo = org.eclipse.emf.emfstore.internal.server.model.ModelFactory.eINSTANCE
-			.createProjectInfo();
-		projectInfo.setProjectId(ModelUtil.clone(toInternalAPI().getProjectId()));
-		projectInfo.setName(getProjectName());
-		projectInfo.setVersion(ModelUtil.clone(toInternalAPI().getBaseVersion()));
-
-		return new ESRemoteProjectImpl(getUsersession().toInternalAPI().getServerInfo(), projectInfo);
+				return new ESRemoteProjectImpl(getUsersession().toInternalAPI().getServerInfo(), projectInfo);
+			}
+		});
 	}
 
 	/**
@@ -793,7 +806,11 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 	 * @see org.eclipse.emf.emfstore.client.ESLocalProject#getLocalProjectId()
 	 */
 	public ESLocalProjectId getLocalProjectId() {
-		return new ESLocalProjectIdImpl(toInternalAPI().getIdentifier());
+		return RunESCommand.runWithResult(new Callable<ESLocalProjectId>() {
+			public ESLocalProjectId call() throws Exception {
+				return new ESLocalProjectIdImpl(toInternalAPI().getIdentifier());
+			}
+		});
 	}
 
 	private void checkIsShared() {
@@ -809,9 +826,13 @@ public class ESLocalProjectImpl extends AbstractAPIImpl<ESLocalProjectImpl, Proj
 	 * @see org.eclipse.emf.emfstore.client.ESProject#getHistoryInfos(org.eclipse.emf.emfstore.server.model.query.ESHistoryQuery,
 	 *      org.eclipse.core.runtime.IProgressMonitor)
 	 */
-	public List<ESHistoryInfo> getHistoryInfos(ESHistoryQuery<? extends ESHistoryQuery<?>> query,
-		IProgressMonitor monitor) throws ESException {
-		return copy(getRemoteProject().getHistoryInfos(getUsersession(), query, monitor));
+	public List<ESHistoryInfo> getHistoryInfos(final ESHistoryQuery<? extends ESHistoryQuery<?>> query,
+		final IProgressMonitor monitor) throws ESException {
+		return RunESCommand.WithException.runWithResult(ESException.class, new Callable<List<ESHistoryInfo>>() {
+			public List<ESHistoryInfo> call() throws Exception {
+				return copy(getRemoteProject().getHistoryInfos(getUsersession(), query, monitor));
+			}
+		});
 	}
 
 }

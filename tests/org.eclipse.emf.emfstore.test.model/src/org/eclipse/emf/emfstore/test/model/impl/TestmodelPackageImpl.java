@@ -372,6 +372,39 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 	 * 
 	 * @generated
 	 */
+	public EAttribute getTestElement_FeatureMapEntries()
+	{
+		return (EAttribute) testElementEClass.getEStructuralFeatures().get(22);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	public EReference getTestElement_FeatureMapReferences1()
+	{
+		return (EReference) testElementEClass.getEStructuralFeatures().get(23);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	public EReference getTestElement_FeatureMapReferences2()
+	{
+		return (EReference) testElementEClass.getEStructuralFeatures().get(24);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	public EClass getTestElementToStringMap() {
 		return testElementToStringMapEClass;
 	}
@@ -541,6 +574,9 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 		createEReference(testElementEClass, TEST_ELEMENT__CONTAINER2);
 		createEReference(testElementEClass, TEST_ELEMENT__CONTAINED_ELEMENTS_NO_OPPOSITE);
 		createEReference(testElementEClass, TEST_ELEMENT__CONTAINED_ELEMENT_NO_OPPOSITE);
+		createEAttribute(testElementEClass, TEST_ELEMENT__FEATURE_MAP_ENTRIES);
+		createEReference(testElementEClass, TEST_ELEMENT__FEATURE_MAP_REFERENCES1);
+		createEReference(testElementEClass, TEST_ELEMENT__FEATURE_MAP_REFERENCES2);
 
 		testElementToStringMapEClass = createEClass(TEST_ELEMENT_TO_STRING_MAP);
 		createEAttribute(testElementToStringMapEClass, TEST_ELEMENT_TO_STRING_MAP__VALUE);
@@ -702,6 +738,20 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 			this.getTestElement(),
 			null,
 			"containedElement_NoOpposite", null, 0, 1, TestElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(
+			getTestElement_FeatureMapEntries(),
+			ecorePackage.getEFeatureMapEntry(),
+			"featureMapEntries", null, 0, -1, TestElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(
+			getTestElement_FeatureMapReferences1(),
+			this.getTestElement(),
+			null,
+			"featureMapReferences1", null, 0, -1, TestElement.class, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(
+			getTestElement_FeatureMapReferences2(),
+			this.getTestElement(),
+			null,
+			"featureMapReferences2", null, 0, -1, TestElement.class, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(testElementToStringMapEClass, Map.Entry.class,
 			"TestElementToStringMap", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -753,6 +803,37 @@ public class TestmodelPackageImpl extends EPackageImpl implements TestmodelPacka
 
 		// Create resource
 		createResource(eNS_URI);
+
+		// Create annotations
+		// http:///org/eclipse/emf/ecore/util/ExtendedMetaData
+		createExtendedMetaDataAnnotations();
+	}
+
+	/**
+	 * Initializes the annotations for <b>http:///org/eclipse/emf/ecore/util/ExtendedMetaData</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	protected void createExtendedMetaDataAnnotations()
+	{
+		String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$			
+		addAnnotation(getTestElement_FeatureMapEntries(),
+			source,
+			new String[]
+			{ "kind", "group" //$NON-NLS-1$ //$NON-NLS-2$
+			});
+		addAnnotation(getTestElement_FeatureMapReferences1(),
+			source,
+			new String[]
+			{ "group", "#featureMapEntries" //$NON-NLS-1$ //$NON-NLS-2$
+			});
+		addAnnotation(getTestElement_FeatureMapReferences2(),
+			source,
+			new String[]
+			{ "group", "#featureMapEntries" //$NON-NLS-1$ //$NON-NLS-2$
+			});
 	}
 
 } // TestmodelPackageImpl

@@ -90,17 +90,17 @@ public final class ModelMutatorUtil {
 
 	private Map<EClassifier, AttributeSetter<?>> attributeSetters;
 
-	private Map<EObject, List<EReference>> validContainmentReferences = new LinkedHashMap<EObject, List<EReference>>();
+	private final Map<EObject, List<EReference>> validContainmentReferences = new LinkedHashMap<EObject, List<EReference>>();
 
-	private Map<EObject, List<EReference>> validCrossReferences = new LinkedHashMap<EObject, List<EReference>>();
+	private final Map<EObject, List<EReference>> validCrossReferences = new LinkedHashMap<EObject, List<EReference>>();
 
-	private Map<EReference, List<EClass>> allContainments = new LinkedHashMap<EReference, List<EClass>>();
+	private final Map<EReference, List<EClass>> allContainments = new LinkedHashMap<EReference, List<EClass>>();
 
-	private Map<EClass, List<EClass>> allSubClasses = new LinkedHashMap<EClass, List<EClass>>();
+	private final Map<EClass, List<EClass>> allSubClasses = new LinkedHashMap<EClass, List<EClass>>();
 
-	private Map<EPackage, List<EClass>> allClassesInPackage = new LinkedHashMap<EPackage, List<EClass>>();
+	private final Map<EPackage, List<EClass>> allClassesInPackage = new LinkedHashMap<EPackage, List<EClass>>();
 
-	private ModelMutatorConfiguration config;
+	private final ModelMutatorConfiguration config;
 
 	private List<EClass> allEClasses;
 
@@ -139,7 +139,7 @@ public final class ModelMutatorUtil {
 		List<EReference> list = validContainmentReferences.get(eObject);
 		if (list == null) {
 			list = new ArrayList<EReference>();
-			for (EReference reference : eObject.eClass().getEAllReferences()) {
+			for (final EReference reference : eObject.eClass().getEAllReferences()) {
 				if (reference.isContainment() && isValid(reference, eObject)) {
 					list.add(reference);
 				}
@@ -163,7 +163,7 @@ public final class ModelMutatorUtil {
 		List<EReference> list = validCrossReferences.get(eObject);
 		if (list == null) {
 			list = new ArrayList<EReference>();
-			for (EReference reference : eObject.eClass().getEAllReferences()) {
+			for (final EReference reference : eObject.eClass().getEAllReferences()) {
 				if (!reference.isContainer() && !reference.isContainment() && isValid(reference, eObject)) {
 					list.add(reference);
 				}
@@ -188,7 +188,7 @@ public final class ModelMutatorUtil {
 		try {
 			if (feature.isMany()) {
 				// has the maximum amount of referenced objects been reached?
-				Collection<?> referencedItems = (Collection<?>) eObject.eGet(feature);
+				final Collection<?> referencedItems = (Collection<?>) eObject.eGet(feature);
 				if (feature.getUpperBound() >= 0 && referencedItems.size() >= feature.getUpperBound()) {
 					return false;
 				}
@@ -196,7 +196,7 @@ public final class ModelMutatorUtil {
 			// can the feature be changed reflectively?
 			result = feature.isChangeable() && !feature.isVolatile() && !feature.isDerived();
 			// BEGIN SUPRESS CATCH EXCEPTION
-		} catch (RuntimeException e) {
+		} catch (final RuntimeException e) {
 			// END SUPRESS CATCH EXCEPTION
 			handle(e, config);
 		}
@@ -230,9 +230,9 @@ public final class ModelMutatorUtil {
 		if (list == null) {
 			list = new ArrayList<EClass>();
 
-			EClass referenceType = reference.getEReferenceType();
+			final EClass referenceType = reference.getEReferenceType();
 			if (EcorePackage.eINSTANCE.getEObject().equals(referenceType)) {
-				for (EPackage ePackage : config.getModelPackages()) {
+				for (final EPackage ePackage : config.getModelPackages()) {
 					list.addAll(getAllEClasses(ePackage));
 				}
 			}
@@ -272,8 +272,8 @@ public final class ModelMutatorUtil {
 		List<EClass> list = allSubClasses.get(eClass);
 		if (list == null) {
 			list = new ArrayList<EClass>();
-			List<EClass> allEClasses = getAllEClasses(config.getModelPackages());
-			for (EClass possibleSubClass : allEClasses) {
+			final List<EClass> allEClasses = getAllEClasses(config.getModelPackages());
+			for (final EClass possibleSubClass : allEClasses) {
 				// is the EClass really a subClass, while not being abstract or an interface?
 				if (eClass.isSuperTypeOf(possibleSubClass) && canHaveInstance(possibleSubClass)) {
 					list.add(possibleSubClass);
@@ -297,11 +297,11 @@ public final class ModelMutatorUtil {
 	public List<EClass> getAllEClasses() {
 		if (allEClasses == null) {
 			allEClasses = new ArrayList<EClass>();
-			Registry registry = EPackage.Registry.INSTANCE;
+			final Registry registry = EPackage.Registry.INSTANCE;
 			// for all registered EPackages
-			for (Entry<String, Object> entry : new LinkedHashSet<Entry<String, Object>>(registry.entrySet())) {
-				EPackage ePackage = registry.getEPackage(entry.getKey());
-				for (EClass eClass : getAllEClasses(ePackage)) {
+			for (final Entry<String, Object> entry : new LinkedHashSet<Entry<String, Object>>(registry.entrySet())) {
+				final EPackage ePackage = registry.getEPackage(entry.getKey());
+				for (final EClass eClass : getAllEClasses(ePackage)) {
 					// no abstracts or interfaces
 					if (canHaveInstance(eClass)) {
 						allEClasses.add(eClass);
@@ -319,8 +319,8 @@ public final class ModelMutatorUtil {
 	 * @return The {@link EClass}es contained in the {@link EPackage}s.
 	 */
 	public List<EClass> getAllEClasses(Collection<EPackage> ePackages) {
-		List<EClass> eClasses = new ArrayList<EClass>();
-		for (EPackage ePackage : ePackages) {
+		final List<EClass> eClasses = new ArrayList<EClass>();
+		for (final EPackage ePackage : ePackages) {
 			eClasses.addAll(getAllEClasses(ePackage));
 		}
 		return eClasses;
@@ -338,11 +338,11 @@ public final class ModelMutatorUtil {
 		if (list == null) {
 			list = new ArrayList<EClass>();
 			// obtain all EClasses from sub packages
-			for (EPackage subPackage : ePackage.getESubpackages()) {
+			for (final EPackage subPackage : ePackage.getESubpackages()) {
 				list.addAll(getAllEClasses(subPackage));
 			}
 			// obtain all EClasses that are direct contents of the EPackage
-			for (EClassifier classifier : ePackage.getEClassifiers()) {
+			for (final EClassifier classifier : ePackage.getEClassifiers()) {
 				if (classifier instanceof EClass) {
 					list.add((EClass) classifier);
 				}
@@ -367,14 +367,14 @@ public final class ModelMutatorUtil {
 	 */
 	public static Map<EClass, List<EObject>> getAllClassesAndObjects(EObject rootObject) {
 		// initialize the computation process
-		Map<EClass, List<EObject>> result = new LinkedHashMap<EClass, List<EObject>>();
-		TreeIterator<EObject> allContents = rootObject.eAllContents();
+		final Map<EClass, List<EObject>> result = new LinkedHashMap<EClass, List<EObject>>();
+		final TreeIterator<EObject> allContents = rootObject.eAllContents();
 		List<EObject> newList = new ArrayList<EObject>();
 		newList.add(rootObject);
 		result.put(rootObject.eClass(), newList);
 		// iterate over all direct and indirect contents
 		while (allContents.hasNext()) {
-			EObject eObject = allContents.next();
+			final EObject eObject = allContents.next();
 			// did this EObject's EClass appear before?
 			if (result.containsKey(eObject.eClass())) {
 				result.get(eObject.eClass()).add(eObject);
@@ -404,7 +404,7 @@ public final class ModelMutatorUtil {
 				// unique feature already contains object -> nothing to do
 				return;
 			}
-			EditingDomain domain = config.getEditingDomain();
+			final EditingDomain domain = config.getEditingDomain();
 			if (index == null) {
 				domain.getCommandStack().execute(new AddCommand(domain, eObject, feature, newValue));
 			} else {
@@ -412,7 +412,7 @@ public final class ModelMutatorUtil {
 			}
 
 			// BEGIN SUPRESS CATCH EXCEPTION
-		} catch (RuntimeException e) {
+		} catch (final RuntimeException e) {
 			// END SUPRESS CATCH EXCEPTION
 			handle(e, config);
 		}
@@ -429,7 +429,7 @@ public final class ModelMutatorUtil {
 	 */
 	public void addPerCommand(EObject eObject, EStructuralFeature feature, Collection<?> objects) {
 		try {
-			for (Object object : objects) {
+			for (final Object object : objects) {
 				if (feature.isUnique() && ((Collection<?>) eObject.eGet(feature)).contains(object)) {
 					// object already exists in unique feature, don't add it again
 					objects.remove(object);
@@ -439,10 +439,10 @@ public final class ModelMutatorUtil {
 			if (objects.isEmpty()) {
 				return;
 			}
-			EditingDomain domain = config.getEditingDomain();
+			final EditingDomain domain = config.getEditingDomain();
 			domain.getCommandStack().execute(new AddCommand(domain, eObject, feature, objects));
 			// BEGIN SUPRESS CATCH EXCEPTION
-		} catch (RuntimeException e) {
+		} catch (final RuntimeException e) {
 			// END SUPRESS CATCH EXCEPTION
 			handle(e, config);
 		}
@@ -459,14 +459,14 @@ public final class ModelMutatorUtil {
 	public void movePerCommand(EObject parent, EStructuralFeature feature, Object objectToMove, Integer index) {
 		try {
 
-			Collection<?> containments = (Collection<?>) parent.eGet(feature);
+			final Collection<?> containments = (Collection<?>) parent.eGet(feature);
 			if (!containments.contains(objectToMove)) {
 				return;
 			}
-			EditingDomain domain = config.getEditingDomain();
+			final EditingDomain domain = config.getEditingDomain();
 			domain.getCommandStack().execute(new MoveCommand(domain, parent, feature, objectToMove, index));
 			// BEGIN SUPRESS CATCH EXCEPTION
-		} catch (RuntimeException e) {
+		} catch (final RuntimeException e) {
 			// END SUPRESS CATCH EXCEPTION
 			handle(e, config);
 		}
@@ -491,7 +491,7 @@ public final class ModelMutatorUtil {
 			newValue = SetCommand.UNSET_VALUE;
 		}
 		try {
-			EditingDomain domain = config.getEditingDomain();
+			final EditingDomain domain = config.getEditingDomain();
 			if (index != null) {
 				if (feature.isUnique() && ((Collection<?>) eObject.eGet(feature)).contains(newValue)) {
 					return null;
@@ -506,7 +506,7 @@ public final class ModelMutatorUtil {
 				return null;
 			}
 			// BEGIN SUPRESS CATCH EXCEPTION
-		} catch (RuntimeException e) {
+		} catch (final RuntimeException e) {
 			// END SUPRESS CATCH EXCEPTION
 			handle(e, config);
 			return null;
@@ -545,10 +545,10 @@ public final class ModelMutatorUtil {
 	 */
 	public void removePerCommand(EObject eObject, EStructuralFeature feature, Collection<?> objects) {
 		try {
-			EditingDomain domain = config.getEditingDomain();
+			final EditingDomain domain = config.getEditingDomain();
 			domain.getCommandStack().execute(new RemoveCommand(domain, eObject, feature, objects));
 			// BEGIN SUPRESS CATCH EXCEPTION
-		} catch (RuntimeException e) {
+		} catch (final RuntimeException e) {
 			// END SUPRESS CATCH EXCEPTION
 			handle(e, config);
 		}
@@ -564,20 +564,20 @@ public final class ModelMutatorUtil {
 	@SuppressWarnings("unchecked")
 	public void removeFullPerCommand(final EObject eObject, int howToDelete) {
 		try {
-			EditingDomain domain = config.getEditingDomain();
+			final EditingDomain domain = config.getEditingDomain();
 			// delete with DeleteCommand
 			if (DELETE_DELETE_COMMAND == howToDelete) {
 				domain.getCommandStack().execute(new DeleteCommand(domain, Collections.singleton(eObject)));
 
 				// delete through cutting containment (RemoveCommand)
 			} else if (DELETE_CUT_CONTAINMENT == howToDelete) {
-				EStructuralFeature feature = eObject.eContainingFeature();
+				final EStructuralFeature feature = eObject.eContainingFeature();
 				if (feature == null) {
 					EcoreUtil.delete(eObject, true);
 					return;
 				}
 
-				EObject eContainer = eObject.eContainer();
+				final EObject eContainer = eObject.eContainer();
 				if (feature.isMany()) {
 					((EList<Object>) eContainer.eGet(feature)).remove(eObject);
 				} else {
@@ -593,44 +593,36 @@ public final class ModelMutatorUtil {
 				throw new IllegalArgumentException("This is not a valid delete mode argument: " + howToDelete);
 			}
 			// BEGIN SUPRESS CATCH EXCEPTION
-		} catch (RuntimeException e) {
+		} catch (final RuntimeException e) {
 			// END SUPRESS CATCH EXCEPTION
 			handle(e, config);
 		}
 	}
 
 	/**
-	 * Sets all possible attributes of known types to random values using {@link IAttributeSetter} and
+	 * Sets all possible attributes of known types to random values using {@link AttributeSetter} and
 	 * SetCommands/AddCommands.
 	 * 
 	 * @param eObject the EObject to set attributes for
-	 * @see IAttributeSetter
-	 * @see AttributeHandler
-	 * @see #addPerCommand(EObject, EStructuralFeature, Collection, Set, boolean)
-	 * @see #addPerCommand(EObject, EStructuralFeature, Object, Set, boolean)
-	 * @see #setPerCommand(EObject, EStructuralFeature, Object, Set, boolean)
+	 * @see AttributeSetter
 	 */
 	public void setEObjectAttributes(EObject eObject) {
 		setEObjectAttributes(eObject, Integer.MAX_VALUE);
 	}
 
 	/**
-	 * Sets all possible attributes of known types to random values using {@link IAttributeSetter} and
+	 * Sets all possible attributes of known types to random values using {@link AttributeSetter} and
 	 * SetCommands/AddCommands.
 	 * 
 	 * @param eObject the EObject to set attributes for
 	 * @param maxNumber The maximal number of attributes to mutate.
-	 * @see IAttributeSetter
-	 * @see AttributeHandler
-	 * @see #addPerCommand(EObject, EStructuralFeature, Collection, Set, boolean)
-	 * @see #addPerCommand(EObject, EStructuralFeature, Object, Set, boolean)
-	 * @see #setPerCommand(EObject, EStructuralFeature, Object, Set, boolean)
+	 * @see AttributeSetter
 	 */
 	public void setEObjectAttributes(EObject eObject, int maxNumber) {
-		Random random = config.getRandom();
+		final Random random = config.getRandom();
 		int numAttrLeft = maxNumber;
-		for (EAttribute attribute : eObject.eClass().getEAllAttributes()) {
-			EClassifier attributeType = attribute.getEAttributeType();
+		for (final EAttribute attribute : eObject.eClass().getEAllAttributes()) {
+			final EClassifier attributeType = attribute.getEAttributeType();
 
 			// randomly remove attributes
 			if (random.nextBoolean() && eObject.eIsSet(attribute) && attribute.isMany()) {
@@ -642,7 +634,7 @@ public final class ModelMutatorUtil {
 			}
 
 			// the attribute setter used to create new attributes
-			AttributeSetter<?> attributeSetter = getAttributeSetter(attributeType);
+			final AttributeSetter<?> attributeSetter = getAttributeSetter(attributeType);
 
 			// was there a fitting attribute setter?
 			if (attributeSetter == null) {
@@ -650,10 +642,10 @@ public final class ModelMutatorUtil {
 			}
 
 			if (attribute.isMany()) {
-				int numberOfAttributes = computeFeatureAmount(attribute, random);
+				final int numberOfAttributes = computeFeatureAmount(attribute, random);
 
 				// vary between empty attributes and already value containing ones
-				int size = ((Collection<?>) eObject.eGet(attribute)).size();
+				final int size = ((Collection<?>) eObject.eGet(attribute)).size();
 				if (size == 0) {
 					addPerCommand(eObject, attribute, attributeSetter.createNewAttributes(numberOfAttributes));
 				} else {
@@ -662,7 +654,7 @@ public final class ModelMutatorUtil {
 						if (random.nextBoolean()) {
 							setPerCommand(eObject, attribute, attributeSetter.createNewAttribute(), i);
 						} else {
-							Object attributeToMove = ((Collection<?>) eObject.eGet(attribute)).toArray()[random
+							final Object attributeToMove = ((Collection<?>) eObject.eGet(attribute)).toArray()[random
 								.nextInt(size)];
 							movePerCommand(eObject, attribute, attributeToMove, random.nextInt(size));
 						}
@@ -723,9 +715,9 @@ public final class ModelMutatorUtil {
 
 		if (attributeSetters == null) {
 
-			Random random = config.getRandom();
+			final Random random = config.getRandom();
 
-			EcorePackage ecoreInstance = EcorePackage.eINSTANCE;
+			final EcorePackage ecoreInstance = EcorePackage.eINSTANCE;
 
 			attributeSetters = new LinkedHashMap<EClassifier, AttributeSetter<?>>();
 			AttributeSetter<?> oAttributeSetter;
@@ -798,13 +790,13 @@ public final class ModelMutatorUtil {
 	 * @return list of all EClasses that can be referenced by <code>reference</code>
 	 */
 	public Set<EClass> getReferenceClasses(EReference reference, Set<EClass> allEClasses) {
-		Set<EClass> result = new LinkedHashSet<EClass>();
-		EClass referenceType = reference.getEReferenceType();
+		final Set<EClass> result = new LinkedHashSet<EClass>();
+		final EClass referenceType = reference.getEReferenceType();
 		// 'referenceType: EObject' allows all kinds of EObjects
 		if (referenceType.equals(EcorePackage.eINSTANCE.getEObject())) {
 			return allEClasses;
 		}
-		for (EClass eClass : allEClasses) {
+		for (final EClass eClass : allEClasses) {
 			// can eClass be referenced by reference
 			if (referenceType.equals(eClass) || referenceType.isSuperTypeOf(eClass)) {
 				result.add(eClass);
@@ -823,15 +815,16 @@ public final class ModelMutatorUtil {
 	 * @param referenceClass the EClass all referenced EObject shall be instances of
 	 * @param reference the reference to set
 	 * @param allEObjects Map containing all available EObjects mapped to their EClasses.
-	 * @see #addPerCommand(EObject, EStructuralFeature, Collection, Set, boolean)
-	 * @see #addPerCommand(EObject, EStructuralFeature, Object, Set, boolean)
-	 * @see #setPerCommand(EObject, EStructuralFeature, Object, Set, boolean)
+	 * @see #addPerCommand(EObject, EStructuralFeature, Collection)
+	 * @see #addPerCommand(EObject, EStructuralFeature, Object, Integer)
+	 * @see #setPerCommand(EObject, EStructuralFeature, Object)
+	 * @see #setPerCommand(EObject, EStructuralFeature, Object, Integer)
 	 */
 	public void setReference(EObject eObject, EClass referenceClass, EReference reference,
 		Map<EClass, List<EObject>> allEObjects) {
-		Random random = config.getRandom();
+		final Random random = config.getRandom();
 
-		List<EObject> possibleReferenceObjects = allEObjects.get(referenceClass);
+		final List<EObject> possibleReferenceObjects = allEObjects.get(referenceClass);
 		Collections.shuffle(possibleReferenceObjects, random);
 
 		if (possibleReferenceObjects.isEmpty()) {
@@ -843,17 +836,17 @@ public final class ModelMutatorUtil {
 			int numberOfReferences = computeFeatureAmount(reference, random);
 			numberOfReferences -= ((EList<?>) eObject.eGet(reference)).size();
 			for (int i = 0; i < numberOfReferences; i++) {
-				EList<Object> ownerList = AbstractOverrideableCommand.getOwnerList(eObject, reference);
+				final EList<Object> ownerList = AbstractOverrideableCommand.getOwnerList(eObject, reference);
 
 				// change between set, move and add for higher operation coverage
-				int size = ownerList.size();
+				final int size = ownerList.size();
 				if (size > 0 && random.nextBoolean()) {
 					if (random.nextBoolean()) {
 						// if the reference is ordered, do not use an index
-						Integer newIndex = reference.isOrdered() ? null : random.nextInt(size);
+						final Integer newIndex = reference.isOrdered() ? null : random.nextInt(size);
 						setPerCommand(eObject, reference, possibleReferenceObjects.get(index), newIndex);
 					} else {
-						Object objectToMove = ownerList.get(random.nextInt(size));
+						final Object objectToMove = ownerList.get(random.nextInt(size));
 						movePerCommand(eObject, reference, objectToMove, index);
 					}
 				} else {
@@ -876,7 +869,7 @@ public final class ModelMutatorUtil {
 	 * @return The count of all direct and indirect children of the object.
 	 */
 	public static int getAllObjectsCount(EObject obj) {
-		TreeIterator<EObject> eAllContents = obj.eAllContents();
+		final TreeIterator<EObject> eAllContents = obj.eAllContents();
 		int i = 0;
 		while (eAllContents.hasNext()) {
 			i++;

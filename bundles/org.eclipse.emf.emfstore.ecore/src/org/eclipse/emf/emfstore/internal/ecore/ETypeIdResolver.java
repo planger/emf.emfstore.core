@@ -22,16 +22,29 @@ import org.eclipse.emf.emfstore.common.model.ESSingletonIdResolver;
 import org.eclipse.emf.emfstore.internal.common.model.ModelElementId;
 import org.eclipse.emf.emfstore.internal.common.model.ModelFactory;
 
+/**
+ * 
+ * 
+ */
 public class ETypeIdResolver implements ESSingletonIdResolver {
 
-	private Map<String, EClass> datatypes = new LinkedHashMap<String, EClass>();
+	private final Map<String, EClass> datatypes = new LinkedHashMap<String, EClass>();
 
+	/**
+	 * Constructor.
+	 */
 	public ETypeIdResolver() {
 		// eclass stuff
 		datatypes.put("EClass", EcorePackage.eINSTANCE.getEClass());
 		datatypes.put("EStructuralFeature", EcorePackage.eINSTANCE.getEStructuralFeature());
 	}
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.common.model.ESSingletonIdResolver#getSingleton(org.eclipse.emf.emfstore.common.model.ESModelElementId)
+	 */
 	public EObject getSingleton(ESModelElementId singletonId) {
 		if (singletonId == null) {
 			return null;
@@ -40,19 +53,25 @@ public class ETypeIdResolver implements ESSingletonIdResolver {
 		return datatypes.get(singletonId.getId());
 	}
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.common.model.ESSingletonIdResolver#getSingletonModelElementId(org.eclipse.emf.ecore.EObject)
+	 */
 	public ESModelElementId getSingletonModelElementId(EObject singleton) {
 		if (!(singleton instanceof EClass || EStructuralFeature.class.isInstance(singleton)) || singleton == null) {
 			return null;
 		}
 
 		// TODO: EM, provide 2nd map for performance reasons
-		for (Map.Entry<String, EClass> entry : datatypes.entrySet()) {
+		for (final Map.Entry<String, EClass> entry : datatypes.entrySet()) {
 			if (!entry.getValue().isInstance(singleton)) {
 				continue;
 			}
 
 			// TODO: don't create IDs on the fly rather put them directly into the map
-			ModelElementId id = ModelFactory.eINSTANCE.createModelElementId();
+			final ModelElementId id = ModelFactory.eINSTANCE.createModelElementId();
 			id.setId(entry.getKey());
 			return id.toAPI();
 		}
@@ -60,6 +79,12 @@ public class ETypeIdResolver implements ESSingletonIdResolver {
 		return null;
 	}
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.common.model.ESSingletonIdResolver#isSingleton(org.eclipse.emf.ecore.EObject)
+	 */
 	public boolean isSingleton(EObject eDataType) {
 		return EClass.class.isInstance(eDataType) || EStructuralFeature.class.isInstance(eDataType);
 	}

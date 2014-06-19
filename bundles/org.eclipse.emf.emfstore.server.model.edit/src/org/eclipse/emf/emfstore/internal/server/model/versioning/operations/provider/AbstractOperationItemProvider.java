@@ -77,9 +77,9 @@ public class AbstractOperationItemProvider extends IdentifiableElementItemProvid
 	@Override
 	public Collection<?> getChildren(Object object) {
 		if (object instanceof AbstractOperation) {
-			AbstractOperation operation = (AbstractOperation) object;
-			ArrayList<ModelElementId> result = new ArrayList<ModelElementId>();
-			ModelElementId modelElementId = operation.getModelElementId();
+			final AbstractOperation operation = (AbstractOperation) object;
+			final ArrayList<ModelElementId> result = new ArrayList<ModelElementId>();
+			final ModelElementId modelElementId = operation.getModelElementId();
 			if (modelElementId != null) {
 				result.add(modelElementId);
 			}
@@ -198,7 +198,7 @@ public class AbstractOperationItemProvider extends IdentifiableElementItemProvid
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((AbstractOperation) object).getIdentifier();
+		final String label = ((AbstractOperation) object).getIdentifier();
 		return label == null || label.length() == 0 ?
 			getString("_UI_AbstractOperation_type") :
 			getString("_UI_AbstractOperation_type") + " " + label;
@@ -254,8 +254,8 @@ public class AbstractOperationItemProvider extends IdentifiableElementItemProvid
 	}
 
 	public static String getModelElementNames(List<ModelElementId> modelElementIds) {
-		StringBuilder builder = new StringBuilder();
-		for (ModelElementId modelElementId : modelElementIds) {
+		final StringBuilder builder = new StringBuilder();
+		for (final ModelElementId modelElementId : modelElementIds) {
 			builder.append(NAME_TAG__SEPARATOR);
 			builder.append(modelElementId.getId());
 			builder.append(NAME_TAG__SEPARATOR);
@@ -284,11 +284,11 @@ public class AbstractOperationItemProvider extends IdentifiableElementItemProvid
 	 * 
 	 * @param idList
 	 *            the list of model element IDs to return the names for
-	 * @return
+	 * @return classes and names as a string
 	 */
 	public static String getModelElementClassesAndNames(EList<ModelElementId> idList, String typeName) {
 
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 
 		if (idList.size() > 2) {
 			return idList.size() + " " + typeName + "s";
@@ -300,7 +300,7 @@ public class AbstractOperationItemProvider extends IdentifiableElementItemProvid
 			} else if (i > 0) {
 				sb.append(", ");
 			}
-			ModelElementId id = idList.get(i);
+			final ModelElementId id = idList.get(i);
 			sb.append(getModelElementClassAndName(id));
 
 		}
@@ -313,8 +313,8 @@ public class AbstractOperationItemProvider extends IdentifiableElementItemProvid
 			return "(null)";
 		}
 
-		String string = object.toString();
-		String result = string.trim();
+		final String string = object.toString();
+		final String result = string.trim();
 
 		if (result.length() == 0) {
 			return "(empty)";

@@ -66,7 +66,6 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -151,7 +150,7 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 		if (isUnlinkedFromNavigator) {
 			return null;
 		}
-		return this.projectSpace;
+		return projectSpace;
 	}
 
 	@Override
@@ -163,7 +162,7 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 		// init viewer
 		viewer = new TreeViewerWithModelElementSelectionProvider(parent);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(viewer.getControl());
-		Tree tree = viewer.getTree();
+		final Tree tree = viewer.getTree();
 		tree.setHeaderVisible(true);
 		ColumnViewerToolTipSupport.enableFor(viewer);
 		getSite().setSelectionProvider(viewer);
@@ -242,7 +241,7 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 	}
 
 	private TreeViewerColumn createColumn(String label, int width) {
-		TreeViewerColumn column = new TreeViewerColumn(viewer, SWT.MULTI);
+		final TreeViewerColumn column = new TreeViewerColumn(viewer, SWT.MULTI);
 		column.getColumn().setText(label);
 		column.getColumn().setWidth(width);
 		return column;
@@ -250,11 +249,11 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 
 	// TODO review this stuff
 	private void initMenuManager() {
-		MenuManager menuMgr = new MenuManager();
+		final MenuManager menuMgr = new MenuManager();
 		menuMgr.add(new Separator("additions"));
 		getSite().registerContextMenu(menuMgr, viewer);
-		Control control = viewer.getControl();
-		Menu menu = menuMgr.createContextMenu(control);
+		final Control control = viewer.getControl();
+		final Menu menu = menuMgr.createContextMenu(control);
 		control.setMenu(menu);
 		getSite().registerContextMenu(menuMgr, viewer);
 	}
@@ -281,7 +280,7 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 	}
 
 	private void addBaseVersionTag(List<HistoryInfo> infos) {
-		HistoryInfo historyInfo = getHistoryInfo(projectSpace.getBaseVersion());
+		final HistoryInfo historyInfo = getHistoryInfo(projectSpace.getBaseVersion());
 		if (historyInfo != null) {
 			historyInfo.getTagSpecs().add(Versions.createTAG(
 				ESVersionSpec.BASE, ESVersionSpec.GLOBAL));
@@ -310,24 +309,24 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 	}
 
 	private List<HistoryInfo> getHistoryInfos() {
-		Shell shell =
+		final Shell shell =
 			getViewSite().getShell();
 
-		List<HistoryInfo> result = new AbstractEMFStoreUIController<List<HistoryInfo>>(shell, true,
+		final List<HistoryInfo> result = new AbstractEMFStoreUIController<List<HistoryInfo>>(shell, true,
 			false) {
 			@Override
 			public List<HistoryInfo> doRun(final IProgressMonitor monitor) throws ESException {
 				return new UnknownEMFStoreWorkloadCommand<List<HistoryInfo>>(monitor) {
 					@Override
 					public List<HistoryInfo> run(final IProgressMonitor monitor) throws ESException {
-						List<HistoryInfo> historyInfosFromServer = getHistoryInfosFromServer(monitor);
+						final List<HistoryInfo> historyInfosFromServer = getHistoryInfosFromServer(monitor);
 						return historyInfosFromServer;
 					}
 				}.execute(); // UnknownEMFStoreWorkloadCommand
 			}
 		}.execute(); // AbstractEMFStoreUIController
 
-		return (result != null) ? result : new ArrayList<HistoryInfo>();
+		return result != null ? result : new ArrayList<HistoryInfo>();
 	}
 
 	private List<HistoryInfo> getHistoryInfosFromServer(final IProgressMonitor monitor)
@@ -337,17 +336,17 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 			@Override
 			protected List<HistoryInfo> run() throws ESException {
 				monitor.beginTask("Fetching history form server", 100);
-				List<HistoryInfo> historyInfos = getLocalChanges();
+				final List<HistoryInfo> historyInfos = getLocalChanges();
 				monitor.worked(10);
 				if (projectSpace != modelElement) {
-					List<ESHistoryInfo> infos = modelElementQuery();
-					for (ESHistoryInfo info : infos) {
+					final List<ESHistoryInfo> infos = modelElementQuery();
+					for (final ESHistoryInfo info : infos) {
 						historyInfos.add(((ESHistoryInfoImpl) info).toInternalAPI());
 					}
 				} else {
 					// TODO monitor
-					List<ESHistoryInfo> infos = rangeQuery();
-					for (ESHistoryInfo info : infos) {
+					final List<ESHistoryInfo> infos = rangeQuery();
+					for (final ESHistoryInfo info : infos) {
 						historyInfos.add(((ESHistoryInfoImpl) info).toInternalAPI());
 					}
 				}
@@ -360,7 +359,7 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 	}
 
 	private List<ESHistoryInfo> modelElementQuery() throws ESException {
-		ModelElementQuery query = HistoryQueryBuilder.modelelementQuery(
+		final ModelElementQuery query = HistoryQueryBuilder.modelelementQuery(
 			centerVersion,
 			Arrays.asList(ModelUtil.getModelElementId(modelElement)),
 			UPPER_LIMIT,
@@ -368,20 +367,20 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 			showAllVersions,
 			true);
 		// TODO: proivde util method
-		ESHistoryQuery<ESModelElementQuery> api = query.toAPI();
-		List<ESHistoryInfo> infos =
+		final ESHistoryQuery<ESModelElementQuery> api = query.toAPI();
+		final List<ESHistoryInfo> infos =
 			projectSpace.toAPI().getHistoryInfos(api, new NullProgressMonitor());
 		return infos;
 	}
 
 	private List<ESHistoryInfo> rangeQuery() throws ESException {
-		RangeQuery<ESRangeQuery<ESRangeQuery<?>>> rangeQuery = HistoryQueryBuilder
+		final RangeQuery<ESRangeQuery<ESRangeQuery<?>>> rangeQuery = HistoryQueryBuilder
 			.rangeQuery(
 				centerVersion,
 				UPPER_LIMIT,
 				LOWER_LIMIT,
 				showAllVersions, true, true, true);
-		List<ESHistoryInfo> infos = projectSpace.toAPI().getHistoryInfos(
+		final List<ESHistoryInfo> infos = projectSpace.toAPI().getHistoryInfos(
 			rangeQuery.toAPI(),
 			new NullProgressMonitor());
 		return infos;
@@ -389,16 +388,16 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 
 	private List<HistoryInfo> getLocalChanges() {
 
-		ArrayList<HistoryInfo> revisions = new ArrayList<HistoryInfo>();
+		final ArrayList<HistoryInfo> revisions = new ArrayList<HistoryInfo>();
 		if (projectSpace != null) {
 			// TODO: add a feature "hide local revision"
-			HistoryInfo localHistoryInfo = VersioningFactory.eINSTANCE.createHistoryInfo();
-			ChangePackage changePackage = projectSpace.getLocalChangePackage(false);
+			final HistoryInfo localHistoryInfo = VersioningFactory.eINSTANCE.createHistoryInfo();
+			final ChangePackage changePackage = projectSpace.getLocalChangePackage(false);
 			// filter for modelelement, do additional sanity check as the
 			// project space could've been also selected
 			if (modelElement != null && projectSpace.getProject().contains(modelElement)) {
-				Set<AbstractOperation> operationsToRemove = new LinkedHashSet<AbstractOperation>();
-				for (AbstractOperation ao : changePackage.getOperations()) {
+				final Set<AbstractOperation> operationsToRemove = new LinkedHashSet<AbstractOperation>();
+				for (final AbstractOperation ao : changePackage.getOperations()) {
 					if (!ao.getAllInvolvedModelElements().contains(
 						ModelUtil.getProject(modelElement).getModelElementId(modelElement))) {
 						operationsToRemove.add(ao);
@@ -407,7 +406,7 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 				changePackage.getOperations().removeAll(operationsToRemove);
 			}
 			localHistoryInfo.setChangePackage(changePackage);
-			PrimaryVersionSpec versionSpec = VersioningFactory.eINSTANCE.createPrimaryVersionSpec();
+			final PrimaryVersionSpec versionSpec = VersioningFactory.eINSTANCE.createPrimaryVersionSpec();
 			versionSpec.setIdentifier(-1);
 			localHistoryInfo.setPrimarySpec(versionSpec);
 			localHistoryInfo.setPreviousSpec(ModelUtil.clone(projectSpace.getBaseVersion()));
@@ -417,14 +416,14 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 	}
 
 	private void resetProviders(List<HistoryInfo> infos) {
-		ArrayList<ChangePackage> cps = new ArrayList<ChangePackage>();
-		for (HistoryInfo info : infos) {
+		final ArrayList<ChangePackage> cps = new ArrayList<ChangePackage>();
+		for (final HistoryInfo info : infos) {
 			if (info.getChangePackage() != null) {
 				cps.add(info.getChangePackage());
 			}
 		}
 
-		ChangePackageVisualizationHelper newHelper = new ChangePackageVisualizationHelper(
+		final ChangePackageVisualizationHelper newHelper = new ChangePackageVisualizationHelper(
 			new ModelElementIdToEObjectMappingImpl(projectSpace.getProject(), cps));
 		changeLabel.setProject(projectSpace.getProject());
 		changeLabel.setChangePackageVisualizationHelper(newHelper);
@@ -441,22 +440,27 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 	public void setInput(EObject input) {
 		try {
 			if (input instanceof ProjectSpace) {
-				this.projectSpace = (ProjectSpace) input;
+				projectSpace = (ProjectSpace) input;
 			} else if (input != null) {
-				ESWorkspaceImpl workspace = ESWorkspaceProviderImpl.getInstance().getWorkspace();
-				this.projectSpace = workspace.toInternalAPI().getProjectSpace(ModelUtil.getProject(input));
+				final ESWorkspaceImpl workspace = ESWorkspaceProviderImpl.getInstance().getWorkspace();
+				projectSpace = workspace.toInternalAPI().getProjectSpace(ModelUtil.getProject(input));
 			} else {
-				this.projectSpace = null;
+				projectSpace = null;
 			}
-			this.modelElement = input;
+			modelElement = input;
 
 			showAll(true);
 			setCenterVersion();
 			refresh();
-		} catch (ESException e) {
+		} catch (final ESException e) {
 		}
 	}
 
+	/**
+	 * Sets a {@link ESLocalProject} as an input for the view. The history for the input will be shown.
+	 * 
+	 * @param localProject the project to show the history for.
+	 */
 	public void setInput(ESLocalProject localProject) {
 		setInput((EObject) localProject);
 	}
@@ -467,7 +471,7 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 	}
 
 	private void setCenterVersion() {
-		if (this.projectSpace != null) {
+		if (projectSpace != null) {
 			centerVersion = projectSpace.getBaseVersion();
 		} else {
 			centerVersion = null;
@@ -487,12 +491,12 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 			.setText("Select a <a>project</a> or call 'Show history' from the context menu of an element in the navigator.");
 		noProjectHint.addSelectionListener(new SelectionListener() {
 			public void widgetSelected(SelectionEvent e) {
-				ElementListSelectionDialog elsd = new ElementListSelectionDialog(parent.getShell(),
+				final ElementListSelectionDialog elsd = new ElementListSelectionDialog(parent.getShell(),
 					new ESBrowserLabelProvider());
-				List<ProjectSpace> relevantProjectSpaces = new ArrayList<ProjectSpace>();
+				final List<ProjectSpace> relevantProjectSpaces = new ArrayList<ProjectSpace>();
 				// TODO OTS
-				ESWorkspaceImpl workspace = ESWorkspaceProviderImpl.getInstance().getWorkspace();
-				for (ProjectSpace ps : workspace.toInternalAPI().getProjectSpaces()) {
+				final ESWorkspaceImpl workspace = ESWorkspaceProviderImpl.getInstance().getWorkspace();
+				for (final ProjectSpace ps : workspace.toInternalAPI().getProjectSpaces()) {
 					if (ps.getUsersession() != null) {
 						relevantProjectSpaces.add(ps);
 					}
@@ -501,9 +505,9 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 				elsd.setMultipleSelection(false);
 				elsd.setTitle("Select a project from the workspace");
 				elsd.setMessage("Please select a project from the current workspace.");
-				if (Dialog.OK == elsd.open()) {
-					for (Object o : elsd.getResult()) {
-						ProjectSpace resultSelection = (ProjectSpace) o;
+				if (Window.OK == elsd.open()) {
+					for (final Object o : elsd.getResult()) {
+						final ProjectSpace resultSelection = (ProjectSpace) o;
 						if (resultSelection != null) {
 							setInput(resultSelection);
 						}
@@ -513,7 +517,7 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
-				this.widgetSelected(e);
+				widgetSelected(e);
 			}
 		});
 	}
@@ -548,8 +552,8 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 	 */
 
 	private void initToolBar() {
-		IActionBars bars = getViewSite().getActionBars();
-		IToolBarManager menuManager = bars.getToolBarManager();
+		final IActionBars bars = getViewSite().getActionBars();
+		final IToolBarManager menuManager = bars.getToolBarManager();
 
 		addRefreshAction(menuManager);
 		addShowAllBranchesAction(menuManager);
@@ -560,7 +564,7 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 	}
 
 	private void addRefreshAction(IToolBarManager menuManager) {
-		Action refresh = new Action() {
+		final Action refresh = new Action() {
 			@Override
 			public void run() {
 				refresh();
@@ -573,7 +577,7 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 	}
 
 	private void addNextAndPreviousAction(IToolBarManager menuManager) {
-		Action prev = new Action() {
+		final Action prev = new Action() {
 			@Override
 			public void run() {
 				centerVersion = prevNextCenter(false);
@@ -585,7 +589,7 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 		prev.setToolTipText("Previous items");
 		menuManager.add(prev);
 
-		Action next = new Action() {
+		final Action next = new Action() {
 			@Override
 			public void run() {
 				centerVersion = prevNextCenter(true);
@@ -616,7 +620,7 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 		while (current != null) {
 			if (next) {
 				if (current.getNextSpec().size() > 0) {
-					HistoryInfo nextInfo = getHistoryInfo(current.getNextSpec().get(0));
+					final HistoryInfo nextInfo = getHistoryInfo(current.getNextSpec().get(0));
 					if (nextInfo == null) {
 						return current.getPrimarySpec();
 					}
@@ -627,7 +631,7 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 			} else {
 				if (current.getPreviousSpec() != null
 					&& current.getPreviousSpec().getBranch().equals(projectSpace.getBaseVersion().getBranch())) {
-					HistoryInfo prevInfo = getHistoryInfo(current.getPreviousSpec());
+					final HistoryInfo prevInfo = getHistoryInfo(current.getPreviousSpec());
 					if (prevInfo == null) {
 						return current.getPrimarySpec();
 					}
@@ -648,7 +652,7 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 		if (version == null) {
 			return null;
 		}
-		for (HistoryInfo info : infos) {
+		for (final HistoryInfo info : infos) {
 			if (version.equals(info.getPrimarySpec())) {
 				return info;
 			}
@@ -658,16 +662,16 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 
 	private PrimaryVersionSpec biggestOrSmallesInfo(boolean biggest) {
 		@SuppressWarnings("unchecked")
-		List<HistoryInfo> input = (List<HistoryInfo>) viewer.getInput();
+		final List<HistoryInfo> input = (List<HistoryInfo>) viewer.getInput();
 		if (input == null) {
 			return centerVersion;
 		}
-		ArrayList<HistoryInfo> resultCandidates = new ArrayList<HistoryInfo>(input);
+		final ArrayList<HistoryInfo> resultCandidates = new ArrayList<HistoryInfo>(input);
 		PrimaryVersionSpec result = centerVersion;
-		for (HistoryInfo info : resultCandidates) {
+		for (final HistoryInfo info : resultCandidates) {
 			if (info.getPrimarySpec().getIdentifier() != -1
-				&& ((biggest && info.getPrimarySpec().compareTo(result) == 1) || (!biggest && info.getPrimarySpec()
-					.compareTo(result) == -1))) {
+				&& (biggest && info.getPrimarySpec().compareTo(result) == 1 || !biggest && info.getPrimarySpec()
+					.compareTo(result) == -1)) {
 				result = info.getPrimarySpec();
 			}
 		}
@@ -676,12 +680,12 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 
 	private void addLinkWithNavigatorAction(IToolBarManager menuManager) {
 		isUnlinkedFromNavigator = Activator.getDefault().getDialogSettings().getBoolean("LinkWithNavigator");
-		Action linkWithNavigator = new Action("Link with navigator", SWT.TOGGLE) {
+		final Action linkWithNavigator = new Action("Link with navigator", SWT.TOGGLE) {
 
 			@Override
 			public void run() {
-				Activator.getDefault().getDialogSettings().put("LinkWithNavigator", !this.isChecked());
-				isUnlinkedFromNavigator = (!this.isChecked());
+				Activator.getDefault().getDialogSettings().put("LinkWithNavigator", !isChecked());
+				isUnlinkedFromNavigator = !isChecked();
 			}
 
 		};
@@ -707,14 +711,14 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 	}
 
 	private void addJumpToRevisionAction(IToolBarManager menuManager) {
-		Action jumpTo = new Action() {
+		final Action jumpTo = new Action() {
 			@Override
 			public void run() {
 				final InputDialog inputDialog = new InputDialog(getSite().getShell(), "Go to revision", "Revision", "",
 					null);
 				if (inputDialog.open() == Window.OK) {
 					if (projectSpace != null) {
-						PrimaryVersionSpec versionSpec = resolveVersion(inputDialog.getValue());
+						final PrimaryVersionSpec versionSpec = resolveVersion(inputDialog.getValue());
 						if (versionSpec != null) {
 							showAll(true);
 							centerVersion = versionSpec;
@@ -740,10 +744,10 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 						try {
 							return projectSpace.resolveVersionSpec(Versions.createPRIMARY(
 								VersionSpec.GLOBAL, Integer.parseInt(value)), new NullProgressMonitor());
-						} catch (ESException e) {
+						} catch (final ESException e) {
 							EMFStoreMessageDialog.showExceptionDialog(
 								"Error: The version you requested does not exist.", e);
-						} catch (NumberFormatException e) {
+						} catch (final NumberFormatException e) {
 							MessageDialog.openError(getSite().getShell(), "Error", "A numeric value was expected!");
 						}
 						return null;
@@ -818,25 +822,25 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 		 */
 		@Override
 		public ISelection getSelection() {
-			Control control = getControl();
+			final Control control = getControl();
 
 			if (control == null || control.isDisposed()) {
 				return super.getSelection();
 			}
 
-			Widget[] items = getSelection(getControl());
+			final Widget[] items = getSelection(getControl());
 			if (items.length != 1) {
 				return super.getSelection();
 			}
 
-			Widget item = items[0];
-			Object data = item.getData();
+			final Widget item = items[0];
+			final Object data = item.getData();
 			if (data == null) {
 				return super.getSelection();
 			}
 
 			// TODO: remove assignment
-			Object element = data;
+			final Object element = data;
 			EObject selectedModelElement = null;
 
 			if (element instanceof CompositeOperation) {
@@ -860,10 +864,10 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 		}
 
 		private EObject handleCompositeOperation(CompositeOperation op) {
-			AbstractOperation mainOperation = op.getMainOperation();
+			final AbstractOperation mainOperation = op.getMainOperation();
 			if (mainOperation != null) {
-				ModelElementId modelElementId = mainOperation.getModelElementId();
-				EObject modelElement = projectSpace.getProject().getModelElement(modelElementId);
+				final ModelElementId modelElementId = mainOperation.getModelElementId();
+				final EObject modelElement = projectSpace.getProject().getModelElement(modelElementId);
 				return modelElement;
 			}
 
@@ -871,8 +875,8 @@ public class HistoryBrowserView extends ViewPart implements ProjectSpaceContaine
 		}
 
 		private EObject handleAbstractOperation(AbstractOperation op) {
-			ModelElementId modelElementId = op.getModelElementId();
-			EObject modelElement = projectSpace.getProject().getModelElement(modelElementId);
+			final ModelElementId modelElementId = op.getModelElementId();
+			final EObject modelElement = projectSpace.getProject().getModelElement(modelElementId);
 			return modelElement;
 		}
 	}

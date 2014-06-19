@@ -41,7 +41,7 @@ public class CSVImportSource extends ImportSource {
 
 	private static final String CSV_IMPORT_SOURCE_PATH = "org.eclipse.emf.emfstore.client.ui.CSVImportSourcePath";
 
-	private Map<String, ImportItemWrapper> groupMap = new LinkedHashMap<String, ImportItemWrapper>();
+	private final Map<String, ImportItemWrapper> groupMap = new LinkedHashMap<String, ImportItemWrapper>();
 
 	private ArrayList<ImportItemWrapper> groups;
 	private ArrayList<ImportItemWrapper> users;
@@ -62,7 +62,7 @@ public class CSVImportSource extends ImportSource {
 	 */
 	@Override
 	public Object[] getChildren(Object ob) {
-		ImportItemWrapper importWrapper = (ImportItemWrapper) ob;
+		final ImportItemWrapper importWrapper = (ImportItemWrapper) ob;
 		if (importWrapper != null && importWrapper.getChildOrgUnits() != null) {
 			return importWrapper.getChildOrgUnits().toArray();
 		}
@@ -77,7 +77,7 @@ public class CSVImportSource extends ImportSource {
 	 */
 	@Override
 	public Object[] getElements(Object ob) {
-		return this.groups.toArray();
+		return groups.toArray();
 	}
 
 	/**
@@ -90,7 +90,7 @@ public class CSVImportSource extends ImportSource {
 	}
 
 	/**
-	 * @see org.eclipse.emf.emfstore.internal.client.ui.views.emfstorebrowser.dialogs.admin.acimport.ImportSource#init()
+	 * @see org.eclipse.emf.emfstore.internal.client.ui.views.emfstorebrowser.dialogs.admin.acimport.ImportSource#init(Shell)
 	 * @param shell
 	 *            the shell, which holds the dialog for file selection
 	 * @return if a file was selected and successfully handled
@@ -101,23 +101,24 @@ public class CSVImportSource extends ImportSource {
 		groups = new ArrayList<ImportItemWrapper>();
 		users = new ArrayList<ImportItemWrapper>();
 
-		FileDialog dialog = new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.OPEN);
+		final FileDialog dialog = new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+			SWT.OPEN);
 		dialog.setText("Choose import file");
-		String initialPath = EMFStorePreferenceHelper.getPreference(CSV_IMPORT_SOURCE_PATH,
+		final String initialPath = EMFStorePreferenceHelper.getPreference(CSV_IMPORT_SOURCE_PATH,
 			System.getProperty("user.home"));
 		dialog.setFilterPath(initialPath);
-		String fn = dialog.open();
+		final String fn = dialog.open();
 		if (fn == null) {
 			return false;
 		}
 
-		String fileName = dialog.getFileName();
-		String filterPath = dialog.getFilterPath();
+		final String fileName = dialog.getFileName();
+		final String filterPath = dialog.getFilterPath();
 		if (fileName == null) {
 			return false;
 		}
 
-		this.absFileName = filterPath + File.separatorChar + fileName;
+		absFileName = filterPath + File.separatorChar + fileName;
 		final File file = new File(absFileName);
 		EMFStorePreferenceHelper.setPreference(CSV_IMPORT_SOURCE_PATH, filterPath);
 		BufferedReader bufferedReader = null;
@@ -128,20 +129,20 @@ public class CSVImportSource extends ImportSource {
 			bufferedReader = new BufferedReader(isr);
 			String line = bufferedReader.readLine();
 
-			int indexUserName = 0;
-			int indexForGroup = 1;
+			final int indexUserName = 0;
+			final int indexForGroup = 1;
 
 			while ((line = bufferedReader.readLine()) != null) {
 				// Get the user information from the next line
-				String[] title = line.split(",");
+				final String[] title = line.split(",");
 
-				String userName = title[indexUserName];
-				String groupName = title[indexForGroup];
+				final String userName = title[indexUserName];
+				final String groupName = title[indexForGroup];
 
 				ImportItemWrapper importWrapper = null;
 				ArrayList<ImportItemWrapper> childOrgUnits;
 				if (groupMap.get(groupName) == null) {
-					ACGroup group = AccesscontrolFactory.eINSTANCE.createACGroup();
+					final ACGroup group = AccesscontrolFactory.eINSTANCE.createACGroup();
 					importWrapper = new ImportItemWrapper(null, group);
 
 					group.setName(groupName);
@@ -153,24 +154,24 @@ public class CSVImportSource extends ImportSource {
 					childOrgUnits = importWrapper.getChildOrgUnits();
 				}
 
-				ACUser user = AccesscontrolFactory.eINSTANCE.createACUser();
+				final ACUser user = AccesscontrolFactory.eINSTANCE.createACUser();
 				user.setName(userName);
-				ImportItemWrapper userImportWrapper = new ImportItemWrapper(null, user, importWrapper);
+				final ImportItemWrapper userImportWrapper = new ImportItemWrapper(null, user, importWrapper);
 				users.add(userImportWrapper);
 
 				childOrgUnits.add(userImportWrapper);
 				importWrapper.setChildOrgUnits(childOrgUnits);
 			}
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			// TODO: sensible error messages
 			WorkspaceUtil.logWarning(e.getMessage(), e);
 			EMFStoreMessageDialog.showExceptionDialog("File not found", e);
 			return false;
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			WorkspaceUtil.logWarning(e.getMessage(), e);
 			EMFStoreMessageDialog.showExceptionDialog("An I/O-exception occured", e);
 			return false;
-		} catch (ArrayIndexOutOfBoundsException e) {
+		} catch (final ArrayIndexOutOfBoundsException e) {
 			WorkspaceUtil.logWarning(e.getMessage(), e);
 			EMFStoreMessageDialog.showExceptionDialog("ArrayIndexOutOfBoundsException", e);
 			return false;
@@ -178,7 +179,7 @@ public class CSVImportSource extends ImportSource {
 			try {
 				bufferedReader.close();
 				isr.close();
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				WorkspaceUtil.logWarning(e.getMessage(), e);
 				EMFStoreMessageDialog.showExceptionDialog("An I/O-exception occured", e);
 				return false;
@@ -196,7 +197,7 @@ public class CSVImportSource extends ImportSource {
 	 */
 	@Override
 	public String getMessage() {
-		return "Importing from file: " + this.absFileName;
+		return "Importing from file: " + absFileName;
 	}
 
 	/**

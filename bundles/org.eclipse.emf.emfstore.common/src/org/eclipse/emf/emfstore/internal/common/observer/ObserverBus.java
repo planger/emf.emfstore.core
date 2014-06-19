@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * wesendon
+ * Otto von Wesendonk - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.common.observer;
 
@@ -88,6 +88,7 @@ import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionPointException;
  */
 public class ObserverBus {
 
+	private static final String EXTENSION_POINT_ID = "org.eclipse.emf.emfstore.common.observerBusExtensionPointRegistration"; //$NON-NLS-1$
 	private final transient Map<Class<? extends ESObserver>, List<ESObserver>> observerMap;
 
 	/**
@@ -106,7 +107,7 @@ public class ObserverBus {
 	 * @return call object
 	 */
 	public <T extends ESObserver> T notify(final Class<T> clazz) {
-		return (T) notify(clazz, false);
+		return notify(clazz, false);
 	}
 
 	/**
@@ -122,7 +123,7 @@ public class ObserverBus {
 		if (clazz == null) {
 			return null;
 		}
-		return (T) createProxy(clazz, false);
+		return createProxy(clazz, false);
 	}
 
 	/**
@@ -141,7 +142,7 @@ public class ObserverBus {
 	 * @param classes set of classes
 	 */
 	public void register(final ESObserver observer, final Class<? extends ESObserver>... classes) {
-		for (Class<? extends ESObserver> iface : classes) {
+		for (final Class<? extends ESObserver> iface : classes) {
 			if (iface.isInstance(observer)) {
 				addObserver(observer, iface);
 			}
@@ -164,7 +165,7 @@ public class ObserverBus {
 	 * @param classes set of classes
 	 */
 	public void unregister(final ESObserver observer, final Class<? extends ESObserver>... classes) {
-		for (Class<? extends ESObserver> iface : classes) {
+		for (final Class<? extends ESObserver> iface : classes) {
 			if (iface.isInstance(observer)) {
 				removeObserver(observer, iface);
 			}
@@ -205,7 +206,7 @@ public class ObserverBus {
 		if (!clazz.equals(method.getDeclaringClass())) {
 			return false;
 		}
-		for (Class<?> interfaceClass : clazz.getInterfaces()) {
+		for (final Class<?> interfaceClass : clazz.getInterfaces()) {
 			if (ESPrioritizedObserver.class.equals(interfaceClass)) {
 				return true;
 			}
@@ -234,11 +235,11 @@ public class ObserverBus {
 		public ProxyHandler(Class<ESObserver> clazz, boolean prioritized) {
 			this.clazz = clazz;
 			this.prioritized = prioritized;
-			this.lastResults = new ArrayList<ObserverCall.Result>();
+			lastResults = new ArrayList<ObserverCall.Result>();
 		}
 
 		// BEGIN SUPRESS CATCH EXCEPTION
-		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+		public Object invoke(Object proxy, Method method, Object[] args) throws Exception {
 			// END SUPRESS CATCH EXCEPTION
 			// fork for calls to ObserverCall.class
 			if (ObserverCall.class.equals(method.getDeclaringClass())) {
@@ -269,13 +270,13 @@ public class ObserverBus {
 
 		private List<ObserverCall.Result> notifiyObservers(List<ESObserver> observers, Method method, Object[] args) {
 			final List<ObserverCall.Result> results = new ArrayList<ObserverCall.Result>(observers.size());
-			for (ESObserver observer : observers) {
+			for (final ESObserver observer : observers) {
 				try {
 					results.add(new Result(observer, method, method.invoke(observer, args)));
 					// BEGIN SUPRESS CATCH EXCEPTION
-				} catch (Throwable throwable) {
+				} catch (final Exception exceptin) {
 					// END SUPRESS CATCH EXCEPTION
-					results.add(new Result(observer, method, throwable));
+					results.add(new Result(observer, method, exceptin));
 				}
 			}
 			return results;
@@ -296,33 +297,32 @@ public class ObserverBus {
 	private void sortObservers(List<ESObserver> observers) {
 		Collections.sort(observers, new Comparator<ESObserver>() {
 			public int compare(ESObserver observer1, ESObserver observer2) {
-				int prio1 = ((ESPrioritizedObserver) observer1).getPriority();
-				int prio2 = ((ESPrioritizedObserver) observer2).getPriority();
+				final int prio1 = ((ESPrioritizedObserver) observer1).getPriority();
+				final int prio2 = ((ESPrioritizedObserver) observer2).getPriority();
 				if (prio1 == prio2) {
 					return 0;
 				}
-				return (prio1 > prio2) ? 1 : -1;
+				return prio1 > prio2 ? 1 : -1;
 			}
 		});
 	}
 
 	@SuppressWarnings("unchecked")
 	private Class<? extends ESObserver>[] getObserverInterfaces(ESObserver observer) {
-		HashSet<Class<? extends ESObserver>> observerIFacesFound = new LinkedHashSet<Class<? extends ESObserver>>();
+		final HashSet<Class<? extends ESObserver>> observerIFacesFound = new LinkedHashSet<Class<? extends ESObserver>>();
 		getClasses(observer.getClass(), observerIFacesFound);
 		return observerIFacesFound.toArray(new Class[observerIFacesFound.size()]);
 	}
 
 	@SuppressWarnings("unchecked")
 	private boolean getClasses(Class<?> clazz, Set<Class<? extends ESObserver>> result) {
-		for (Class<?> iface : getAllInterfaces(clazz, new LinkedHashSet<Class<?>>())) {
+		for (final Class<?> iface : getAllInterfaces(clazz, new LinkedHashSet<Class<?>>())) {
 			if (iface.equals(ESObserver.class) && clazz.isInterface()) {
 				result.add((Class<? extends ESObserver>) clazz);
 				return true;
-			} else {
-				if (getClasses(iface, result) && clazz.isInterface()) {
-					result.add((Class<? extends ESObserver>) clazz);
-				}
+			}
+			if (getClasses(iface, result) && clazz.isInterface()) {
+				result.add((Class<? extends ESObserver>) clazz);
 			}
 		}
 		return false;
@@ -330,8 +330,8 @@ public class ObserverBus {
 
 	private Set<Class<?>> getAllInterfaces(final Class<?> clazz, final Set<Class<?>> interfacesFound) {
 
-		for (Class<?> iface : clazz.getInterfaces()) {
-			interfacesFound.add((Class<?>) iface);
+		for (final Class<?> iface : clazz.getInterfaces()) {
+			interfacesFound.add(iface);
 		}
 
 		if (clazz.getSuperclass() == null) {
@@ -345,15 +345,16 @@ public class ObserverBus {
 	 * Pulls observers from an extension point and registers them.
 	 */
 	public void collectionExtensionPoints() {
-		for (ESExtensionElement outer : new ESExtensionPoint(
-			"org.eclipse.emf.emfstore.common.observerBusExtensionPointRegistration", true)
+		for (final ESExtensionElement outer : new ESExtensionPoint(
+			EXTENSION_POINT_ID, true)
 			.getExtensionElements()) {
 			try {
-				for (ESExtensionElement inner : new ESExtensionPoint(outer.getAttribute("extensionPointName"), true)
+				for (final ESExtensionElement inner : new ESExtensionPoint(outer.getAttribute("extensionPointName"), //$NON-NLS-1$
+					true)
 					.getExtensionElements()) {
-					register(inner.getClass(outer.getAttribute("observerAttributeName"), ESObserver.class));
+					register(inner.getClass(outer.getAttribute("observerAttributeName"), ESObserver.class)); //$NON-NLS-1$
 				}
-			} catch (ESExtensionPointException e) {
+			} catch (final ESExtensionPointException e) {
 			}
 		}
 	}

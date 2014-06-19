@@ -22,11 +22,21 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+/**
+ * Dialog for setting a tag.
+ * 
+ */
 public class CreateTagDialog extends BranchSelectionDialog {
 
 	private Field tagNameField;
 	private String tagName;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param parentShell parent shell to display the dialog
+	 * @param branches list of branches
+	 */
 	public CreateTagDialog(Shell parentShell, List<BranchInfo> branches) {
 		super(parentShell, branches);
 	}
@@ -41,7 +51,7 @@ public class CreateTagDialog extends BranchSelectionDialog {
 	}
 
 	private Field createField(Composite container, String labelText, String defaultText) {
-		Field field = new Field(container);
+		final Field field = new Field(container);
 		field.setLabelText(labelText);
 		field.setDefaultText(defaultText);
 		field.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
@@ -64,14 +74,22 @@ public class CreateTagDialog extends BranchSelectionDialog {
 		setMessage("Please specify a tag name and select the branch you want to create a tag for");
 	}
 
+	/**
+	 * Returns the tag name entered by the user.
+	 * 
+	 * @return the tag name
+	 */
 	public String getTagName() {
 		return tagName;
 	}
 
+	/**
+	 * Helper class for creating a label and a text next to each other.
+	 */
 	private class Field extends Composite {
 
-		private Label label;
-		private Text text;
+		private final Label label;
+		private final Text text;
 
 		public Field(Composite parent) {
 			super(parent, SWT.NONE);

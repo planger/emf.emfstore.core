@@ -7,7 +7,6 @@ public class DynamicSuite extends Suite {
 
 	/**
 	 * @param klass
-	 * @param suiteClasses
 	 * @throws InitializationError
 	 */
 	public DynamicSuite(Class<?> klass) throws InitializationError {

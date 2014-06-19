@@ -33,27 +33,21 @@ public class ChangeConflictSet implements APIDelegate<ESConflictSet> {
 
 	private final ModelElementIdToEObjectMapping idToEObjectMapping;
 	private ESConflictSetImpl apiImpl;
-	private Set<ConflictBucket> conflictBuckets;
-	private Set<AbstractOperation> notInvolvedInConflict;
-	private List<ChangePackage> leftChanges;
-	private List<ChangePackage> rightChanges;
+	private final Set<ConflictBucket> conflictBuckets;
+	private final Set<AbstractOperation> notInvolvedInConflict;
+	private final List<ChangePackage> leftChanges;
+	private final List<ChangePackage> rightChanges;
 
 	/**
 	 * Constructor.
 	 * 
-	 * 
-	 * @param projectSpace
-	 *            the ProjectSpace
-	 * @param myChangePackages
-	 *            my change package
-	 * @param newPackages
-	 *            the list of change packages that caused the exception
-	 * @param conflictBucketCandidates
-	 *            a set of conflict candidates
-	 * @param idToEObjectMapping
-	 *            a mapping from IDs to EObjects and vice versa.<br/>
+	 * @param conflictBuckets a set of conflict candidates
+	 * @param notInvolvedInConflict
+	 * @param idToEObjectMapping a mapping from IDs to EObjects and vice versa.<br/>
 	 *            Contains all IDs of model elements involved in the {@link ChangePackage}s
-	 *            as well as those contained by the project in the {@link ProjectSpace}
+	 *            as well as those contained by the project in the ProjectSpace
+	 * @param leftChanges
+	 * @param rightChanges
 	 */
 	public ChangeConflictSet(Set<ConflictBucket> conflictBuckets, Set<AbstractOperation> notInvolvedInConflict,
 		ModelElementIdToEObjectMapping idToEObjectMapping, List<ChangePackage> leftChanges,
@@ -68,7 +62,7 @@ public class ChangeConflictSet implements APIDelegate<ESConflictSet> {
 	/**
 	 * Returns the mapping from IDs to EObjects and vice versa.<br/>
 	 * The mapping contains all IDs of model elements involved in the {@link ChangePackage}s
-	 * as well as those contained by the project in the {@link ProjectSpace}
+	 * as well as those contained by the project in the ProjectSpace
 	 * 
 	 * @return the mapping from IDs to EObjects and vice versa
 	 */

@@ -60,7 +60,7 @@ public class ProjectPropertiesSubInterfaceImpl extends AbstractSubEmfstoreInterf
 			}
 		}
 		if (user == null) {
-			throw new ESException("The user does not exist on the server. Cannot set the property.");
+			throw new ESException(Messages.ProjectPropertiesSubInterfaceImpl_User_Does_Not_Exist);
 		}
 		for (OrgUnitProperty property : user.getProperties()) {
 			if (property.getName().equals(changedProperty.getName()) && isProjectEqual(property, changedProperty)) {
@@ -90,7 +90,7 @@ public class ProjectPropertiesSubInterfaceImpl extends AbstractSubEmfstoreInterf
 		try {
 			getServerSpace().save();
 		} catch (IOException e) {
-			throw new ESException("Cannot set the property on the server.");
+			throw new ESException(Messages.ProjectPropertiesSubInterfaceImpl_Property_Not_Set);
 		}
 	}
 }

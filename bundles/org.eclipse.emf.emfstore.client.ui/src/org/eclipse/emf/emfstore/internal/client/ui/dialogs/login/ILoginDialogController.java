@@ -58,7 +58,7 @@ public interface ILoginDialogController {
 
 	/**
 	 * Returns the {@link ServerInfo} the login dialog controller was assigned to, if any.
-	 * If no server info was set, {@link getUsersession() } will be used to try to determine the
+	 * If no server info was set, {@link #getUsersession() } will be used to try to determine the
 	 * relevant server info.
 	 * 
 	 * @return the server info, if any

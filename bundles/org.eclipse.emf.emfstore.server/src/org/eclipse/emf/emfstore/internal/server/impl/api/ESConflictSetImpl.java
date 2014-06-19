@@ -14,7 +14,6 @@ package org.eclipse.emf.emfstore.internal.server.impl.api;
 import java.util.Set;
 
 import org.eclipse.emf.emfstore.internal.common.APIUtil;
-import org.eclipse.emf.emfstore.internal.common.api.AbstractAPIImpl;
 import org.eclipse.emf.emfstore.internal.common.api.InternalAPIDelegator;
 import org.eclipse.emf.emfstore.internal.server.conflictDetection.ChangeConflictSet;
 import org.eclipse.emf.emfstore.server.ESConflict;
@@ -25,8 +24,8 @@ import org.eclipse.emf.emfstore.server.ESConflictSet;
  * Mapping between {@link ESConflictSet} and {@link ChangeConflictSet}.
  * </p>
  * <p>
- * Note that this class does not inherit from {@link AbstractAPIImpl} since {@link ChangeConflictSet} is not a modeled
- * class.
+ * Note that this class does not inherit from {@link org.eclipse.emf.emfstore.internal.common.api.AbstractAPIImpl
+ * AbstractAPIImpl} since {@link ChangeConflictSet} is not a modeled class.
  * </p>
  * 
  * @author emueller
@@ -34,7 +33,7 @@ import org.eclipse.emf.emfstore.server.ESConflictSet;
  */
 public class ESConflictSetImpl implements ESConflictSet, InternalAPIDelegator<ESConflictSet, ChangeConflictSet> {
 
-	private ChangeConflictSet changeConflict;
+	private final ChangeConflictSet changeConflict;
 
 	/**
 	 * Constructor.
@@ -56,8 +55,14 @@ public class ESConflictSetImpl implements ESConflictSet, InternalAPIDelegator<ES
 		return changeConflict;
 	}
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.server.ESConflictSet#getConflicts()
+	 */
 	public Set<ESConflict> getConflicts() {
-		Set<ESConflict> conflicts = APIUtil
+		final Set<ESConflict> conflicts = APIUtil
 			.toExternal(toInternalAPI().getConflictBuckets());
 		return conflicts;
 

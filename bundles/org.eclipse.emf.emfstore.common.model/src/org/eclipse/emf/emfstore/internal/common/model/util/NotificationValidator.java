@@ -51,7 +51,6 @@ final class NotificationValidator {
 	 * Validates a notification and sets its valid flag and validationmessage string.
 	 * 
 	 * @param n the notification to validate
-	 * @return
 	 */
 	protected void validate(NotificationInfo n) {
 
@@ -274,11 +273,11 @@ final class NotificationValidator {
 		if (n.isReferenceNotification()) {
 
 			// sanity check newValue and oldValue must be ModelElements or null
-			Object newValueObject = n.getNewValue();
-			Object oldValueObject = n.getOldValue();
+			final Object newValueObject = n.getNewValue();
+			final Object oldValueObject = n.getOldValue();
 
-			boolean newValIsNoME = newValueObject != null && !(newValueObject instanceof EObject);
-			boolean oldValIsNoME = oldValueObject != null && !(oldValueObject instanceof EObject);
+			final boolean newValIsNoME = newValueObject != null && !(newValueObject instanceof EObject);
+			final boolean oldValIsNoME = oldValueObject != null && !(oldValueObject instanceof EObject);
 			if (newValIsNoME || oldValIsNoME) {
 				// non model element references must be marked transient
 				n.setValid(false);

@@ -179,9 +179,8 @@ public class CommandTest extends ESTest {
 
 		// copy
 		final CopyCommand.Helper helper = new CopyCommand.Helper();
-		final CopyCommand command = (CopyCommand) editingDomain.createCommand(CopyCommand.class, new CommandParameter(
-			actor,
-			null, helper));
+		final Command command = editingDomain.createCommand(CopyCommand.class, new CommandParameter(
+			actor, null, helper));
 		editingDomain.getCommandStack().execute(command);
 
 		// paste

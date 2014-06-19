@@ -69,6 +69,7 @@ public class CreateDeleteOperationImpl extends AbstractOperationImpl implements 
 		if (isDelete()) {
 			if (!collection.contains(getModelElementId())) {
 				// silently fail
+				applySubOperations(collection);
 				return;
 			}
 
@@ -78,9 +79,7 @@ public class CreateDeleteOperationImpl extends AbstractOperationImpl implements 
 				false);
 			allContainedModelElements.add(localModelElement);
 
-			for (final AbstractOperation op : getSubOperations()) {
-				op.apply(collection);
-			}
+			applySubOperations(collection);
 
 			// remove model element from its parent, this should only apply if
 			// the local model element in directly contained in the project
@@ -97,6 +96,7 @@ public class CreateDeleteOperationImpl extends AbstractOperationImpl implements 
 		} else {
 			if (collection.contains(getModelElementId())) {
 				// silently fail
+				applySubOperations(collection);
 				return;
 			}
 
@@ -132,9 +132,13 @@ public class CreateDeleteOperationImpl extends AbstractOperationImpl implements 
 			collection.allocateModelElementIds(clone.getEObjectToIdMap().map());
 			collection.addModelElement(clone.getModelElement());
 
-			for (final ReferenceOperation operation : getSubOperations()) {
-				operation.apply(collection);
-			}
+			applySubOperations(collection);
+		}
+	}
+
+	private void applySubOperations(IdEObjectCollection collection) {
+		for (final AbstractOperation operation : getSubOperations()) {
+			operation.apply(collection);
 		}
 	}
 

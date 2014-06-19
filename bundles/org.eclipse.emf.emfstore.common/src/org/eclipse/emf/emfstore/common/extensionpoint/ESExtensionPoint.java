@@ -253,7 +253,7 @@ public final class ESExtensionPoint {
 	protected static Object handleErrorOrNull(boolean useException, Exception expOrNull) {
 		if (useException) {
 			if (expOrNull == null) {
-				throw new ESExtensionPointException("Value not found.");
+				throw new ESExtensionPointException(Messages.ESExtensionPoint_ValueNotFound);
 			}
 			logException(expOrNull);
 			throw new ESExtensionPointException(expOrNull);
@@ -267,7 +267,7 @@ public final class ESExtensionPoint {
 	 * @param e exception
 	 */
 	protected static void logException(Exception e) {
-		Activator.getDefault().logException("An exception occurred while using an ESExtensionPoint", e);
+		Activator.getDefault().logException(Messages.ESExtensionPoint_ExceptionOccurred, e);
 	}
 
 	/**
@@ -279,6 +279,11 @@ public final class ESExtensionPoint {
 		return elements.size();
 	}
 
+	/**
+	 * Returns the ID of the extension point.
+	 * 
+	 * @return the ID of the extension point
+	 */
 	public String getId() {
 		return id;
 	}
