@@ -74,7 +74,7 @@ public class PerformanceTest extends ESTestWithLoggedInUser {
 	@Override
 	public void before() {
 		super.before();
-		generateModels(getProjectSpace(), 100000);
+		generateModels(getProjectSpace(), 10000);
 		System.out.println("MODEL SIZE: " + getLocalProject().getAllModelElements().size());
 		initMeasurments();
 	}
