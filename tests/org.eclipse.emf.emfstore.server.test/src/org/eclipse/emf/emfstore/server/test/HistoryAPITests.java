@@ -74,7 +74,7 @@ import org.junit.Test;
  * @author wesendon
  * 
  */
-public class HistoryAPITests {
+public class HistoryAPITests extends ServiceActivator {
 
 	final static public ESPrimaryVersionSpec[] versions = {
 		ESVersionSpec.FACTORY.createPRIMARY("trunk", 0),

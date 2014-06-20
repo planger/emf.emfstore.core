@@ -39,6 +39,7 @@ public final class Messages extends NLS {
 	public static String KeyStoreManager_Loading_Certificate_Failed;
 	public static String KeyStoreManager_Storing_Certificate_Failed;
 	public static String KeyStoreManager_Unable_To_Get_Password;
+	public static String ClientManager_Could_Not_Load_Certificate;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

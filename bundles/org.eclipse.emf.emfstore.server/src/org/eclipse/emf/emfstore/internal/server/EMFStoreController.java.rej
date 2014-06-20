@@ -1,0 +1,29 @@
+diff a/bundles/org.eclipse.emf.emfstore.server/src/org/eclipse/emf/emfstore/internal/server/EMFStoreController.java b/bundles/org.eclipse.emf.emfstore.server/src/org/eclipse/emf/emfstore/internal/server/EMFStoreController.java	(rejected hunks)
+@@ -68,6 +68,7 @@ import org.eclipse.emf.emfstore.internal.server.startup.StartupListener;
+ import org.eclipse.emf.emfstore.internal.server.storage.ServerXMIResourceSetProvider;
+ import org.eclipse.emf.emfstore.server.ESDynamicModelProvider;
+ import org.eclipse.emf.emfstore.server.ESServerURIUtil;
++import org.eclipse.emf.emfstore.server.exceptions.ESException;
+ import org.eclipse.equinox.app.IApplication;
+ import org.eclipse.equinox.app.IApplicationContext;
+ 
+@@ -321,6 +340,19 @@ public class EMFStoreController implements IApplication, Runnable {
+ 		xmlRpcConnectionHander.init(emfStore, accessControl);
+ 		connectionHandlers.add(xmlRpcConnectionHander);
+ 
++		// create connectionHandler
++		final ConnectionHandler<EMFStoreInterface> connectionHandler = initExtensionPointConnectionHandler();
++		if (connectionHandler != null) {
++			try {
++				connectionHandler.init(emfStore, accessControl);
++			} catch (final ESException ex) {
++				ModelUtil.logException(ex);
++			}
++			connectionHandlers.add(connectionHandler);
++
++		}
++
++		// create admin connection handler (only via XML-RPC)
+ 		final XmlRpcAdminConnectionHandler xmlRpcAdminConnectionHander = new XmlRpcAdminConnectionHandler();
+ 		xmlRpcAdminConnectionHander.init(adminEmfStore, accessControl);
+ 		connectionHandlers.add(xmlRpcAdminConnectionHander);

@@ -31,9 +31,10 @@
    <extension-point id="shareObserver" name="Share Observer" schema="schema/shareObserver.exsd"/>
    <extension-point id="pagedUpdate" name="Paged Update Configuration" schema="schema/pagedUpdate.exsd"/>
    <extension-point id="resourceSetProvider" name="ResourceSet Proider" schema="schema/resourceSetProvider.exsd"/>
+   <extension-point id="connectionManager" name="ConnectionManager" schema="schema/connectionManager.exsd"/>
   <extension point="org.eclipse.emf.ecore.generated_package">
-    <package 
-       uri = "http://eclipse.org/emf/emfstore/client/model" 
+    <package
+       uri = "http://eclipse.org/emf/emfstore/client/model"
        class = "org.eclipse.emf.emfstore.internal.client.model.ModelPackage"
        genModel = "model/client.genmodel" /> 
   </extension>

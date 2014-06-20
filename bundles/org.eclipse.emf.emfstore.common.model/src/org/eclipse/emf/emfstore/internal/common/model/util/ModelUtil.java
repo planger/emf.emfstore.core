@@ -12,10 +12,11 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.common.model.util;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.text.MessageFormat;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -60,7 +61,6 @@ import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionPoint;
 import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionPointException;
 import org.eclipse.emf.emfstore.common.extensionpoint.ESPriorityComparator;
 import org.eclipse.emf.emfstore.common.model.ESSingletonIdResolver;
-import org.eclipse.emf.emfstore.internal.common.CommonUtil;
 import org.eclipse.emf.emfstore.internal.common.ResourceFactoryRegistry;
 import org.eclipse.emf.emfstore.internal.common.model.AssociationClassElement;
 import org.eclipse.emf.emfstore.internal.common.model.IdEObjectCollection;
@@ -82,14 +82,6 @@ import org.osgi.framework.Bundle;
  */
 public final class ModelUtil {
 
-	private static final String CLIENT_RESOURCE_SET_PROVIDER_EXT_POINT_ID = "org.eclipse.emf.emfstore.client.resourceSetProvider"; //$NON-NLS-1$
-
-	private static final String SERVER_RESOURCE_SET_PROVIDER_EXT_POINT_ID = "org.eclipse.emf.emfstore.server.resourceSetProvider"; //$NON-NLS-1$
-
-	private static final String SINGLETON_ID_RESOLVER_EXT_POINT_ID = "org.eclipse.emf.emfstore.common.model.singletonIdResolver"; //$NON-NLS-1$
-
-	private static final String IGNORED_DATATYPE_EXT_POINT_ID = "org.eclipse.emf.emfstore.common.model.ignoreDatatype"; //$NON-NLS-1$
-
 	/**
 	 * Constant that may be used in case no checksum computation has taken place.
 	 */
@@ -98,10 +90,10 @@ public final class ModelUtil {
 	/**
 	 * URI used to serialize EObject with the model util.
 	 */
-	public static final URI VIRTUAL_URI = URI.createURI("virtualUri"); //$NON-NLS-1$
+	public static final URI VIRTUAL_URI = URI.createURI("virtualUri");
 
-	private static final String ORG_ECLIPSE_EMF_EMFSTORE_COMMON_MODEL = "org.eclipse.emf.emfstore.common.model"; //$NON-NLS-1$
-	private static final String DISCARD_DANGLING_HREF_ID = "org.eclipse.emf.emfstore.common.discardDanglingHREFs"; //$NON-NLS-1$
+	private static final String ORG_ECLIPSE_EMF_EMFSTORE_COMMON_MODEL = "org.eclipse.emf.emfstore.common.model";
+	private static final String DISCARD_DANGLING_HREF_ID = "org.eclipse.emf.emfstore.common.discardDanglingHREFs";
 
 	private static IResourceLogger resourceLogger = new IResourceLogger() {
 
@@ -130,7 +122,6 @@ public final class ModelUtil {
 	private static Set<ESSingletonIdResolver> singletonIdResolvers;
 	private static HashMap<Object, Object> resourceLoadOptions;
 	private static HashMap<Object, Object> resourceSaveOptions;
-	private static Map<Object, Object> checksumSaveOptions;
 
 	/**
 	 * Private constructor.
@@ -209,29 +200,58 @@ public final class ModelUtil {
 	}
 
 	/**
+	 * Converts a String to an EObject. Note: String must be the result of
+	 * {@link SerializationUtil#eObjectToString(EObject)}
+	 *
+	 * @param object the String representation of the EObject
+	 * @return the deserialized EObject
+	 * @throws SerializationException if deserialization fails
+	 */
+	public static EObject stringToEObject(String object) throws SerializationException {
+		if (object == null) {
+			return null;
+		}
+		final Resource res = new ResourceSetImpl().createResource(VIRTUAL_URI);
+		try {
+			res.load(new ByteArrayInputStream(object.getBytes("UTF-8")), null);
+		} catch (final UnsupportedEncodingException e) {
+			throw new SerializationException(e);
+		} catch (final IOException e) {
+			throw new SerializationException(e);
+		}
+
+		final EObject result = res.getContents().get(0);
+		res.getContents().remove(result);
+		return result;
+	}
+
+	/**
 	 * Converts the given {@link EObject} to a string.
-	 * 
+	 *
 	 * @param copy The copied {@link EObject}.
 	 * @param resource The resource for the {@link EObject}.
 	 * @return The string representing the {@link EObject}.
 	 * @throws SerializationException If a serialization problem occurs.
 	 */
-	private static String copiedEObjectToString(EObject copy, XMIResource resource) throws SerializationException {
+	public static String copiedEObjectToString(EObject copy, XMIResource resource) throws SerializationException {
 		final int step = 200;
 		final int initialSize = step;
 		resource.getContents().add(copy);
 
 		final StringWriter stringWriter = new StringWriter(initialSize);
-		final URIConverter.WriteableOutputStream uws =
-			new URIConverter.WriteableOutputStream(stringWriter, CommonUtil.getEncoding());
+		final URIConverter.WriteableOutputStream uws = new URIConverter.WriteableOutputStream(stringWriter, "UTF-8");
 
+		final String lineSeparator = System.getProperty("line.separator");
 		try {
-			resource.save(uws, getChecksumSaveOptions());
+			System.setProperty("line.separator", "\r\n");
+			resource.save(uws, getResourceSaveOptions());
 		} catch (final IOException e) {
 			throw new SerializationException(e);
+		} finally {
+			System.setProperty("line.separator", lineSeparator);
 		}
 
-		return stringWriter.toString().trim();
+		return stringWriter.toString();
 	}
 
 	/**
@@ -249,10 +269,7 @@ public final class ModelUtil {
 		final int len = eObjectString.length();
 
 		for (int i = 0; i < len; i++) {
-			final char c = eObjectString.charAt(i);
-
-			h = 31 * h + c;
-
+			h = 31 * h + eObjectString.charAt(i);
 		}
 
 		return h;
@@ -300,7 +317,6 @@ public final class ModelUtil {
 		});
 
 		final String serialized = copiedEObjectToString(copy, res);
-
 		return computeChecksum(serialized);
 	}
 
@@ -364,10 +380,10 @@ public final class ModelUtil {
 		if (ignoredDataTypes == null) {
 			ignoredDataTypes = new LinkedHashSet<String>();
 			for (final ESExtensionElement element : new ESExtensionPoint(
-				IGNORED_DATATYPE_EXT_POINT_ID,
+				"org.eclipse.emf.emfstore.common.model.ignoreDatatype",
 				true).getExtensionElements()) {
 				try {
-					ignoredDataTypes.add(element.getAttribute("type")); //$NON-NLS-1$
+					ignoredDataTypes.add(element.getAttribute("type"));
 				} catch (final ESExtensionPointException e) {
 				}
 			}
@@ -393,7 +409,7 @@ public final class ModelUtil {
 			resourceLoadOptions.put(XMLResource.OPTION_USE_PARSER_POOL, new XMLParserPoolImpl());
 			resourceLoadOptions.put(XMLResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP, new HashMap());
 			resourceLoadOptions.put(XMLResource.OPTION_USE_ENCODED_ATTRIBUTE_STYLE, Boolean.TRUE);
-			resourceLoadOptions.put(XMLResource.OPTION_ENCODING, CommonUtil.getEncoding());
+			resourceLoadOptions.put(XMLResource.OPTION_ENCODING, "UTF-8");
 		}
 		return resourceLoadOptions;
 	}
@@ -410,45 +426,28 @@ public final class ModelUtil {
 			resourceSaveOptions = new LinkedHashMap<Object, Object>();
 			resourceSaveOptions.put(XMLResource.OPTION_USE_ENCODED_ATTRIBUTE_STYLE, Boolean.TRUE);
 			resourceSaveOptions.put(XMLResource.OPTION_USE_CACHED_LOOKUP_TABLE, new ArrayList<Object>());
-			resourceSaveOptions.put(XMLResource.OPTION_ENCODING, CommonUtil.getEncoding());
+			resourceSaveOptions.put(XMLResource.OPTION_ENCODING, "UTF-8");
 			resourceSaveOptions.put(XMLResource.OPTION_FLUSH_THRESHOLD, 100000);
 			resourceSaveOptions.put(XMLResource.OPTION_USE_FILE_BUFFER, Boolean.TRUE);
 
 			final ESExtensionPoint extensionPoint = new ESExtensionPoint(DISCARD_DANGLING_HREF_ID);
-			final Boolean discardDanglingHREFs = extensionPoint.getBoolean("value", Boolean.FALSE); //$NON-NLS-1$
+			final Boolean discardDanglingHREFs = extensionPoint.getBoolean("value", Boolean.FALSE);
 			if (discardDanglingHREFs) {
 				resourceSaveOptions.put(XMLResource.OPTION_PROCESS_DANGLING_HREF,
 					XMLResource.OPTION_PROCESS_DANGLING_HREF_RECORD);
 			}
 
-			logInfo(Messages.ModelUtil_Save_Options_Initialized);
+			logInfo("Resource save options initialized:");
 			for (final Map.Entry<Object, Object> entry : resourceSaveOptions.entrySet()) {
-				logInfo("\t" + entry.getKey() + ": " + entry.getValue()); //$NON-NLS-1$ //$NON-NLS-2$
+				logInfo("\t" + entry.getKey() + ": " + entry.getValue());
 			}
 		}
 		return resourceSaveOptions;
 	}
 
 	/**
-	 * Delivers a map of options that is used while computing a checksum.
-	 * 
-	 * @return map of options for {@link XMIResource} or {@link XMLResource}.
-	 */
-	public static synchronized Map<Object, Object> getChecksumSaveOptions() {
-
-		if (checksumSaveOptions == null) {
-			final Map<Object, Object> saveOptions = new LinkedHashMap<Object, Object>(getResourceSaveOptions());
-			saveOptions.put(XMLResource.OPTION_DECLARE_XML, Boolean.FALSE);
-			saveOptions.put(XMLResource.OPTION_FORMATTED, Boolean.FALSE);
-			checksumSaveOptions = saveOptions;
-		}
-
-		return checksumSaveOptions;
-	}
-
-	/**
 	 * Saves a given resource and logs any warning and/or errors.
-	 * 
+	 *
 	 * @param resource
 	 *            the resource to be saved
 	 * @param logger
@@ -507,14 +506,14 @@ public final class ModelUtil {
 	private static StringWriter logDiagnostic(Diagnostic diagnostic) {
 
 		final StringWriter error = new StringWriter();
-		error.append(diagnostic.getLocation() + "\n"); //$NON-NLS-1$
-		error.append(diagnostic.getMessage() + "\n"); //$NON-NLS-1$
+		error.append(diagnostic.getLocation() + "\n");
+		error.append(diagnostic.getMessage() + "\n");
 
 		if (diagnostic instanceof Exception) {
 			final StringWriter stringWriter = new StringWriter();
 			final PrintWriter printWriter = new PrintWriter(stringWriter);
 			((Throwable) diagnostic).printStackTrace(printWriter);
-			error.append(stringWriter.toString() + "\n"); //$NON-NLS-1$
+			error.append(stringWriter.toString() + "\n");
 		}
 
 		return error;
@@ -753,12 +752,12 @@ public final class ModelUtil {
 
 		if (checkConstraints) {
 			if (contents.size() > 1) {
-				throw new IOException(Messages.ModelUtil_Resource_Contains_Multiple_Objects);
+				throw new IOException("Resource containes multiple objects!");
 			}
 		}
 
 		if (contents.size() < 1) {
-			throw new IOException(Messages.ModelUtil_Resource_Contains_No_Objects);
+			throw new IOException("Resource contains no objects");
 		}
 
 		final EObject eObject = contents.get(0);
@@ -783,7 +782,7 @@ public final class ModelUtil {
 		}
 
 		if (!eClass.isInstance(eObject)) {
-			throw new IOException(Messages.ModelUtil_Resource_Contains_No_Objects_Of_Given_Class);
+			throw new IOException("Resource contains no objects of given class");
 		}
 
 		return (T) eObject;
@@ -791,18 +790,19 @@ public final class ModelUtil {
 
 	private static ResourceSet getResourceSetForURI(URI resourceURI) {
 		ResourceSet resourceSet = null;
-		if (resourceURI != null && resourceURI.scheme().equals("emfstore")) { //$NON-NLS-1$
+		if (resourceURI != null && resourceURI.scheme().equals("emfstore")) {
 			ESExtensionPoint extensionPoint = null;
-			if (resourceURI.authority().equals("workspaces")) { //$NON-NLS-1$
-				extensionPoint = new ESExtensionPoint(CLIENT_RESOURCE_SET_PROVIDER_EXT_POINT_ID,
-					false, new ESPriorityComparator("priority", true)); //$NON-NLS-1$
+			if (resourceURI.authority().equals("workspaces")) {
+				extensionPoint = new ESExtensionPoint("org.eclipse.emf.emfstore.client.resourceSetProvider",
+					false, new ESPriorityComparator("priority", true));
 			} else {
-				extensionPoint = new ESExtensionPoint(SERVER_RESOURCE_SET_PROVIDER_EXT_POINT_ID,
-					false, new ESPriorityComparator("priority", true)); //$NON-NLS-1$
+				extensionPoint = new ESExtensionPoint("org.eclipse.emf.emfstore.server.resourceSetProvider",
+					false, new ESPriorityComparator("priority", true));
 			}
 
 			final ESResourceSetProvider resourceSetProvider = extensionPoint
-				.getElementWithHighestPriority().getClass("class", //$NON-NLS-1$
+				.getElementWithHighestPriority().getClass(
+					"class",
 					ESResourceSetProvider.class);
 
 			if (resourceSetProvider == null) {
@@ -962,7 +962,7 @@ public final class ModelUtil {
 		}
 
 		if (seenModelElements.contains(child.eContainer())) {
-			throw new IllegalStateException(Messages.ModelUtil_ModelElement_Is_In_Containment_Cycle);
+			throw new IllegalStateException("ModelElement is in a containment cycle");
 		}
 
 		if (parent.isInstance(child)) {
@@ -1149,9 +1149,8 @@ public final class ModelUtil {
 			if (eStructuralFeature.isMany()) {
 				((EList<?>) opposite.eGet(eStructuralFeature)).remove(modelElement);
 			} else {
-				if (opposite instanceof Map.Entry<?, ?> && eStructuralFeature.getName().equals("key")) { //$NON-NLS-1$
-					logWarning(MessageFormat.format(
-						Messages.ModelUtil_Incoming_CrossRef_Is_Map_Key, modelElement));
+				if (opposite instanceof Map.Entry<?, ?> && eStructuralFeature.getName().equals("key")) {
+					logWarning("Incoming cross reference for model element " + modelElement + " is a map key.");
 				}
 
 				opposite.eUnset(eStructuralFeature);
@@ -1331,11 +1330,11 @@ public final class ModelUtil {
 			singletonIdResolvers = new LinkedHashSet<ESSingletonIdResolver>();
 
 			for (final ESExtensionElement element : new ESExtensionPoint(
-				SINGLETON_ID_RESOLVER_EXT_POINT_ID).getExtensionElements()) {
+				"org.eclipse.emf.emfstore.common.model.singletonIdResolver").getExtensionElements()) {
 				try {
-					singletonIdResolvers.add(element.getClass("class", ESSingletonIdResolver.class)); //$NON-NLS-1$
+					singletonIdResolvers.add(element.getClass("class", ESSingletonIdResolver.class));
 				} catch (final ESExtensionPointException e) {
-					ModelUtil.logWarning(Messages.ModelUtil_SingletonIdResolver_Not_Instantiated + e.getMessage());
+					ModelUtil.logWarning("Couldn't instantiate Singleton ID resolver:" + e.getMessage());
 				}
 			}
 		}

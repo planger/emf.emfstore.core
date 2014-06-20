@@ -87,7 +87,9 @@ public class ShareController extends ServerCall<ProjectInfo> {
 		getProjectSpace().save();
 
 		projectInfo = createProject(logMessage);
-		addParticipant(projectInfo.getProjectId());
+		// FIXME: This needs to be disabled for JAX-RS. Maybe it's a concurrency problem? After completing the call, a
+		// logout is performed as JAX-RS is stateless. Therefore, the client is not logged in anymore
+		// addParticipant(projectInfo.getProjectId());
 
 		getProgressMonitor().worked(30);
 		getProgressMonitor().subTask("Finalizing share"); //$NON-NLS-1$

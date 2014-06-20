@@ -188,6 +188,7 @@ public class ProjectSubInterfaceImpl extends AbstractSubEmfstoreInterface {
 				} catch (final AccessControlException e) {
 					// if this exception occurs, project won't be added to list
 				}
+
 			}
 			return result;
 		}

@@ -64,7 +64,10 @@ public abstract class AbstractAuthenticationControl implements AuthenticationCon
 		ClientVersionInfo clientVersionInfo)
 		throws AccessControlException {
 
-		checkClientVersion(clientVersionInfo);
+		if (clientVersionInfo != null) {
+			checkClientVersion(clientVersionInfo);
+		}
+
 		password = preparePassword(password);
 
 		if (verifySuperUser(username, password) || verifyPassword(resolvedUser, username, password)) {

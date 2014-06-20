@@ -58,7 +58,6 @@ public final class XmlRpcWebserverManager {
 		if (webServerProvider == null) {
 			int port = 8080;
 			try {
-
 				port = Integer.valueOf(ServerConfiguration.getProperties()
 					.getProperty(ServerConfiguration.XML_RPC_PORT));
 			} catch (final NumberFormatException e) {

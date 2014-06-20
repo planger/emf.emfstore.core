@@ -1,0 +1,9 @@
+diff a/bundles/org.eclipse.emf.emfstore.common.model/META-INF/MANIFEST.MF b/bundles/org.eclipse.emf.emfstore.common.model/META-INF/MANIFEST.MF	(rejected hunks)
+@@ -30,6 +30,7 @@ Export-Package: org.eclipse.emf.emfstore.common.model;version="1.2.0",
+    org.eclipse.emf.emfstore.client.conflictdetection.test,
+    org.eclipse.emf.emfstore.client.recording.test,
+    org.eclipse.emf.emfstore.client.test,
++   org.eclipse.emf.emfstore.jaxrs,
+    org.eclipse.emf.emfstore.server.test",
+  org.eclipse.emf.emfstore.internal.common.model.impl;version="1.2.0";
+   x-friends:="org.eclipse.emf.emfstore.client,

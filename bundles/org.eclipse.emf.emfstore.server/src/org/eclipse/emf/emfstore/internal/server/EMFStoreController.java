@@ -68,6 +68,7 @@ import org.eclipse.emf.emfstore.internal.server.startup.StartupListener;
 import org.eclipse.emf.emfstore.internal.server.storage.ServerXMIResourceSetProvider;
 import org.eclipse.emf.emfstore.server.ESDynamicModelProvider;
 import org.eclipse.emf.emfstore.server.ESServerURIUtil;
+import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.eclipse.emf.emfstore.server.exceptions.ESServerInitException;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
@@ -92,6 +93,8 @@ public class EMFStoreController implements IApplication, Runnable {
 
 	private static final String RESOURCE_SET_PROVIDER = "org.eclipse.emf.emfstore.server.resourceSetProvider"; //$NON-NLS-1$
 
+	private static final String CONNECTION_HANDLER = "org.eclipse.emf.emfstore.server.connectionHandler"; //$NON-NLS-1$
+
 	private static final String CONFIG_RESOURCE_KEY = "org.eclipse.emf.emfstore.server.configurationResource"; //$NON-NLS-1$
 
 	private static final String EMFSTORE_COMMON_BUNDLE = "org.eclipse.emf.emfstore.common.model"; //$NON-NLS-1$
@@ -109,6 +112,11 @@ public class EMFStoreController implements IApplication, Runnable {
 	private Set<ConnectionHandler<? extends EMFStoreInterface>> connectionHandlers;
 	private ServerSpace serverSpace;
 	private Resource resource;
+
+	// TODO: wurde exposed. So lassen?!
+	public EMFStore getEmfStore() {
+		return emfStore;
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -314,21 +322,57 @@ public class EMFStoreController implements IApplication, Runnable {
 
 	}
 
+	private ConnectionHandler<EMFStoreInterface> initExtensionPointConnectionHandler() throws FatalESException {
+
+		final ESExtensionPoint extensionPoint = new ESExtensionPoint(
+			CONNECTION_HANDLER, true);
+
+		final ConnectionHandler<EMFStoreInterface> connectionHandler = extensionPoint.getClass("class", //$NON-NLS-1$
+			ConnectionHandler.class);
+
+		return connectionHandler;
+	}
+
 	private Set<ConnectionHandler<? extends EMFStoreInterface>> initConnectionHandlers() throws FatalESException {
 		final Set<ConnectionHandler<? extends EMFStoreInterface>> connectionHandlers = new LinkedHashSet<ConnectionHandler<? extends EMFStoreInterface>>();
 
-		// crate XML RPC connection handlers
 		try {
 			final XmlRpcConnectionHandler xmlRpcConnectionHander = new XmlRpcConnectionHandler();
 			xmlRpcConnectionHander.init(emfStore, accessControl);
 			connectionHandlers.add(xmlRpcConnectionHander);
 
+			// create connectionHandler
+			final ConnectionHandler<EMFStoreInterface> connectionHandler = initExtensionPointConnectionHandler();
+			if (connectionHandler != null) {
+				try {
+					connectionHandler.init(emfStore, accessControl);
+				} catch (final ESException ex) {
+					ModelUtil.logException(ex);
+				}
+				connectionHandlers.add(connectionHandler);
+
+			}
+
+			// create admin connection handler (only via XML-RPC)
 			final XmlRpcAdminConnectionHandler xmlRpcAdminConnectionHander = new XmlRpcAdminConnectionHandler();
 			xmlRpcAdminConnectionHander.init(adminEmfStore, accessControl);
 			connectionHandlers.add(xmlRpcAdminConnectionHander);
 		} catch (final ESServerInitException ex) {
 			throw new FatalESException("Exception initializing Connection Handlers", ex);
 		}
+
+		// // crate XML RPC connection handlers
+		// try {
+		// final XmlRpcConnectionHandler xmlRpcConnectionHander = new XmlRpcConnectionHandler();
+		// xmlRpcConnectionHander.init(emfStore, accessControl);
+		// connectionHandlers.add(xmlRpcConnectionHander);
+		//
+		// final XmlRpcAdminConnectionHandler xmlRpcAdminConnectionHander = new XmlRpcAdminConnectionHandler();
+		// xmlRpcAdminConnectionHander.init(adminEmfStore, accessControl);
+		// connectionHandlers.add(xmlRpcAdminConnectionHander);
+		// } catch (final ESServerInitException ex) {
+		// throw new FatalESException("Exception initializing Connection Handlers", ex);
+		// }
 
 		return connectionHandlers;
 	}

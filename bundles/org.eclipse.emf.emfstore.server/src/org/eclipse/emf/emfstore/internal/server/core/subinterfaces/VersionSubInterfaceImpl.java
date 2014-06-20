@@ -291,7 +291,8 @@ public class VersionSubInterfaceImpl extends AbstractSubEmfstoreInterface {
 				if (!baseVersionSpec.equals(isHeadOfBranch(projectHistory, baseVersion.getPrimarySpec()))) {
 					throw new ESUpdateRequiredException();
 				}
-				newVersion = createVersion(projectHistory, newProjectState, logMessage, user, baseVersion);
+				newVersion = createVersion(projectHistory, newProjectState, logMessage, user,
+					baseVersion);
 				newVersion.setPreviousVersion(baseVersion);
 				baseBranch.setHead(ModelUtil.clone(newVersion.getPrimarySpec()));
 

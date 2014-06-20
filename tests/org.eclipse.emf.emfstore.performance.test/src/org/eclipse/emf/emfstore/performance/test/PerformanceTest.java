@@ -38,9 +38,13 @@ import org.junit.Test;
  * This TestCase tests all methods in the main {@link org.unicase.emfstore.EmfStore} interface.
  * 
  * @author Dmitry Litvinov
+ * @author emueller
  */
 public class PerformanceTest extends ESTestWithLoggedInUser {
 	
+
+	private static final int NUMBER_OF_CHANGES = 100;
+	private static final int PROJECTSIZE = 10000;
 
 	@BeforeClass
 	public static void beforeClass() {
@@ -74,8 +78,8 @@ public class PerformanceTest extends ESTestWithLoggedInUser {
 	@Override
 	public void before() {
 		super.before();
-		generateModels(getProjectSpace(), 10000);
-		System.out.println("MODEL SIZE: " + getLocalProject().getAllModelElements().size());
+		generateModels(getProjectSpace(), PROJECTSIZE);
+		System.out.println("PROJECT SIZE: " + getLocalProject().getAllModelElements().size());
 		initMeasurments();
 	}
 
@@ -198,7 +202,7 @@ public class PerformanceTest extends ESTestWithLoggedInUser {
 			memBeforeMut[i] = usedMemory();
 			long time = System.currentTimeMillis();
 			// TODO: Nr of changes
-			changeModel(getProjectSpace(), 100);
+			changeModel(getProjectSpace(), NUMBER_OF_CHANGES);
 			modelChangeTimes[i] = (System.currentTimeMillis() - time) / 1000.0;
 
 			memDuringMut[i] = memoryMeter.stopMeasurements();

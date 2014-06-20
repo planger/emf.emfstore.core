@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: EMFStore JAX RS Client
+Bundle-SymbolicName: org.eclipse.emf.emfstore.jax.client;singleton:=true
+Bundle-Version: 1.2.0.qualifier
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Require-Bundle: org.eclipse.emf.common;bundle-version="2.9.1",
+ org.eclipse.emf.emfstore.client;bundle-version="[1.2.0,2.0.0)",
+ org.eclipse.emf.emfstore.jax.common;bundle-version="1.1.0",
+ javax.ws.rs-api;bundle-version="[2.0.0,3.0.0)",
+ org.apache.commons.codec;bundle-version="1.3.0",
+ org.glassfish.jersey.core.jersey-client;bundle-version="2.5.0"
+Export-Package: org.eclipse.emf.emfstore.jax.client;version="1.2.0"

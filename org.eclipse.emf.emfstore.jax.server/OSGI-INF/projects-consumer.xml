@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="projectsC">
+   <implementation class="org.eclipse.emf.emfstore.jax.server.JaxrsConnectionHandler"/>
+   <reference bind="setProjects" cardinality="1..1" interface="org.eclipse.emf.emfstore.jax.server.resources.IProjects" name="projects" policy="static" unbind="unsetProjects"/>
+   <service>
+      <provide interface="org.eclipse.emf.emfstore.jax.server.JaxrsConnectionHandler"/>
+   </service>
+</scr:component>

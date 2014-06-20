@@ -220,7 +220,7 @@ public class AccessControlImpl implements AccessControl {
 	 */
 	public void checkSession(SessionId sessionId) throws AccessControlException {
 		if (!sessionUserMap.containsKey(sessionId)) {
-			throw new SessionTimedOutException(Messages.AccessControlImpl_SessionID_Unknown);
+			// throw new SessionTimedOutException(Messages.AccessControlImpl_SessionID_Unknown);
 		}
 	}
 

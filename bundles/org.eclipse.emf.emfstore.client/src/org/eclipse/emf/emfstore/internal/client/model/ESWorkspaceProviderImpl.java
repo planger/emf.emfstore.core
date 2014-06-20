@@ -80,6 +80,8 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 
 	private static ESWorkspaceProviderImpl instance;
 
+	private static final String CONNECTION_MANAGER = "org.eclipse.emf.emfstore.client.connectionManager"; //$NON-NLS-1$
+
 	private AdminConnectionManager adminConnectionManager;
 	private ConnectionManager connectionManager;
 	private EditingDomain editingDomain;
@@ -430,6 +432,17 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 	 */
 	private ConnectionManager initConnectionManager() {
 		KeyStoreManager.getInstance().setupKeys();
+
+		final ESExtensionPoint extensionPoint = new ESExtensionPoint(
+			CONNECTION_MANAGER, false);
+
+		final ConnectionManager connectionManager = extensionPoint.getClass("class", //$NON-NLS-1$
+			ConnectionManager.class);
+
+		if (connectionManager != null) {
+			return connectionManager;
+		}
+
 		return new XmlRpcConnectionManager();
 	}
 
