@@ -42,6 +42,9 @@ import org.junit.Test;
 public class PerformanceTest extends ESTestWithLoggedInUser {
 	
 
+	private static final int PROJECTSIZE = 10000;
+	private static final int NR_OF_CHANGES = 100;
+
 	@BeforeClass
 	public static void beforeClass() {
 		startEMFStore();
@@ -74,7 +77,7 @@ public class PerformanceTest extends ESTestWithLoggedInUser {
 	@Override
 	public void before() {
 		super.before();
-		generateModels(getProjectSpace(), 10000);
+		generateModels(getProjectSpace(), PROJECTSIZE);
 		System.out.println("MODEL SIZE: " + getLocalProject().getAllModelElements().size());
 		initMeasurments();
 	}
@@ -198,7 +201,7 @@ public class PerformanceTest extends ESTestWithLoggedInUser {
 			memBeforeMut[i] = usedMemory();
 			long time = System.currentTimeMillis();
 			// TODO: Nr of changes
-			changeModel(getProjectSpace(), 100);
+			changeModel(getProjectSpace(), NR_OF_CHANGES);
 			modelChangeTimes[i] = (System.currentTimeMillis() - time) / 1000.0;
 
 			memDuringMut[i] = memoryMeter.stopMeasurements();
