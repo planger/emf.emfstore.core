@@ -11,11 +11,13 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.server.startup;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -40,9 +42,11 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.Comp
  * 
  * @author wesendon
  */
-// TODO: internal
-
 public class EmfStoreValidator {
+
+	private static final String CHANGES_FEATURE_NAME = "changes"; //$NON-NLS-1$
+
+	private static final String PROJECTSTATE_FEATURE_NAME = "projectState"; //$NON-NLS-1$
 
 	private final ServerSpace serverSpace;
 
@@ -100,7 +104,7 @@ public class EmfStoreValidator {
 		// }
 
 		if (!errors && throwException) {
-			throw new FatalESException("Validation failed.");
+			throw new FatalESException(Messages.EmfStoreValidator_ValidationFailed);
 		}
 	}
 
@@ -119,11 +123,11 @@ public class EmfStoreValidator {
 	 * {@link #RESOLVEALL}.
 	 */
 	private boolean validateResolveAll() {
-		start("Resolving all elements...");
+		start(Messages.EmfStoreValidator_ResolvingAllElements);
 		EcoreUtil.resolveAll(serverSpace.eResource().getResourceSet());
-		EList<Resource.Diagnostic> errors = new BasicEList<Resource.Diagnostic>();
-		EList<Resource> resources = serverSpace.eResource().getResourceSet().getResources();
-		for (Resource currentResource : resources) {
+		final EList<Resource.Diagnostic> errors = new BasicEList<Resource.Diagnostic>();
+		final EList<Resource> resources = serverSpace.eResource().getResourceSet().getResources();
+		for (final Resource currentResource : resources) {
 			errors.addAll(currentResource.getErrors());
 		}
 		removeAcceptedErrors(errors);
@@ -133,16 +137,16 @@ public class EmfStoreValidator {
 	}
 
 	private void removeAcceptedErrors(EList<Diagnostic> errors) {
-		Iterator<Diagnostic> iterator = errors.iterator();
+		final Iterator<Diagnostic> iterator = errors.iterator();
 		while (iterator.hasNext()) {
-			Resource.Diagnostic diagnostic = iterator.next();
+			final Resource.Diagnostic diagnostic = iterator.next();
 
 			// removes errors for projectState and changePackage references in versions.
 			if (diagnostic instanceof FeatureNotFoundException) {
-				FeatureNotFoundException featureNotFoundException = (FeatureNotFoundException) diagnostic;
+				final FeatureNotFoundException featureNotFoundException = (FeatureNotFoundException) diagnostic;
 				if (featureNotFoundException.getObject() instanceof Version) {
-					if (featureNotFoundException.getName().equals("projectState")
-						|| featureNotFoundException.getName().equals("changes")) {
+					if (featureNotFoundException.getName().equals(PROJECTSTATE_FEATURE_NAME)
+						|| featureNotFoundException.getName().equals(CHANGES_FEATURE_NAME)) {
 						iterator.remove();
 					}
 				}
@@ -154,31 +158,38 @@ public class EmfStoreValidator {
 	 * {@link #MODELELEMENTID}.
 	 */
 	private boolean validateModelelementId() {
-		start("Checking ModelElementIds...");
-		List<String> errors = new ArrayList<String>();
-		for (ProjectHistory projectHistory : serverSpace.getProjects()) {
+		start(Messages.EmfStoreValidator_CheckingModelElementIds);
+		final List<String> errors = new ArrayList<String>();
+		for (final ProjectHistory projectHistory : serverSpace.getProjects()) {
 			if (isExcluded(projectHistory)) {
 				continue;
 			}
-			System.out.println("Checking project: " + projectHistory.getProjectId().getId());
-			for (Version version : projectHistory.getVersions()) {
+			System.out.println(
+				MessageFormat.format(Messages.EmfStoreValidator_CheckingProject,
+					projectHistory.getProjectId().getId()));
+			for (final Version version : projectHistory.getVersions()) {
 				if (version.getChanges() != null) {
-					for (AbstractOperation ao : version.getChanges().getOperations()) {
-						if (!(ao instanceof CompositeOperation)
-							&& (ao.getModelElementId() == null || ao.getModelElementId().getId() == null)) {
-							errors.add("ChangeOperation has no ModelElementId in project: "
-								+ projectHistory.getProjectId() + " version: "
-								+ version.getPrimarySpec().getIdentifier());
+					for (final AbstractOperation abstractOperation : version.getChanges().getOperations()) {
+						if (!(abstractOperation instanceof CompositeOperation)
+							&& (abstractOperation.getModelElementId() == null
+							|| abstractOperation.getModelElementId().getId() == null)) {
+							errors.add(
+								MessageFormat.format(
+									Messages.EmfStoreValidator_ChangeOperation_Has_No_ModelElementId,
+									projectHistory.getProjectId(),
+									version.getPrimarySpec().getIdentifier()));
 						}
 					}
 				}
 				if (version.getProjectState() != null) {
-					for (EObject me : version.getProjectState().getAllModelElements()) {
-						ModelElementId modelElementId = ModelUtil.getProject(me).getModelElementId(me);
+					for (final EObject me : version.getProjectState().getAllModelElements()) {
+						final ModelElementId modelElementId = ModelUtil.getProject(me).getModelElementId(me);
 						if (modelElementId == null || modelElementId.getId() == null) {
-							errors.add("ModelElement has no ModelElementId in project: "
-								+ projectHistory.getProjectId() + " version: "
-								+ version.getPrimarySpec().getIdentifier());
+							errors.add(
+								MessageFormat.format(
+									Messages.EmfStoreValidator_ModelElement_Has_No_ModelElementId,
+									projectHistory.getProjectId(),
+									version.getPrimarySpec().getIdentifier()));
 						}
 					}
 				}
@@ -191,23 +202,25 @@ public class EmfStoreValidator {
 
 	/**
 	 * Note: This validation has been deactivated since the introduction of branch support. With branches this can't be
-	 * done effciently anymore, we have to discuss alternatives.
+	 * done efficiently anymore, we have to discuss alternatives.
 	 * 
 	 * {@value #PROJECTGENERATION}.
 	 */
 	@SuppressWarnings("unused")
 	private boolean validateProjectGeneration() {
-		start("Project generation compare ...");
-		List<String> errors = new ArrayList<String>();
-		for (ProjectHistory history : serverSpace.getProjects()) {
+		start(Messages.EmfStoreValidator_ProjectGenerationCompare);
+		final List<String> errors = new ArrayList<String>();
+		for (final ProjectHistory history : serverSpace.getProjects()) {
 			if (isExcluded(history)) {
 				continue;
 			}
-			System.out.println("Checking project: " + history.getProjectId().getId());
+			System.out.println(
+				MessageFormat.format(
+					Messages.EmfStoreValidator_CheckingProject, history.getProjectId().getId()));
 			// history = (ProjectHistory) ModelUtil.clone(history);
 			Project state = null;
 
-			for (Version version : history.getVersions()) {
+			for (final Version version : history.getVersions()) {
 
 				if (version.getProjectState() != null && state == null) {
 					state = ModelUtil.clone(version.getProjectState());
@@ -216,10 +229,13 @@ public class EmfStoreValidator {
 					version.getChanges().apply(state, true);
 
 					if (version.getProjectState() != null) {
-						int[] compare = linearCompare(version.getProjectState(), state);
+						final int[] compare = linearCompare(version.getProjectState(), state);
 						if (compare[0] == 0) {
-							errors.add("project compare of project " + history.getProjectId().getId()
-								+ " not equal in version " + version.getPrimarySpec().getIdentifier());
+							errors.add(
+								MessageFormat.format(
+									Messages.EmfStoreValidator_ProjectVersionCompareFailed,
+									history.getProjectId().getId(),
+									version.getPrimarySpec().getIdentifier()));
 							// debug(history, state, version);
 						}
 						state = ModelUtil.clone(version.getProjectState());
@@ -249,47 +265,49 @@ public class EmfStoreValidator {
 
 	private void start(String str) {
 		timeMillis = System.currentTimeMillis();
-		System.out.println("Validation: " + str);
+		System.out.println(Messages.EmfStoreValidator_Validation + str);
 	}
 
 	private void stop() {
-		System.out.println("Validation took: " + (System.currentTimeMillis() - timeMillis) + " ms\n");
+		System.out.println(
+			MessageFormat.format(
+				Messages.EmfStoreValidator_ValidationDuration, System.currentTimeMillis() - timeMillis));
 	}
 
 	private void errors(Collection<? extends Object> errorList) {
-		System.out.println("Errors: " + errorList.size());
-		for (Object obj : errorList) {
+		System.out.println(Messages.EmfStoreValidator_Errors + errorList.size());
+		for (final Object obj : errorList) {
 			System.out.println(obj);
 		}
 	}
 
 	private static int[] linearCompare(Project projectA, Project projectB) {
-		int[] result = new int[5];
+		final int[] result = new int[5];
 		final int areEqual = 0;
 		final int differencePosition = 1;
 		final int character = 2;
 		final int lineNum = 3;
 		final int colNum = 4;
 		result[areEqual] = 1;
-		String stringA = "";
-		String stringB = "";
+		String stringA = StringUtils.EMPTY;
+		String stringB = StringUtils.EMPTY;
 
 		try {
 			stringA = ModelUtil.eObjectToString(projectA);
 			stringB = ModelUtil.eObjectToString(projectB);
-		} catch (SerializationException e) {
+		} catch (final SerializationException e) {
 			ModelUtil.logException(e);
 			result[areEqual] = 0;
 			return result;
 		}
 
-		int length = Math.min(stringA.length(), stringB.length());
+		final int length = Math.min(stringA.length(), stringB.length());
 		for (int index = 0; index < length; index++) {
 			if (stringA.charAt(index) != stringB.charAt(index)) {
 				result[areEqual] = 0;
 				result[differencePosition] = index;
 				result[character] = stringA.charAt(index);
-				int lineNumber = getLineNum(stringA, index);
+				final int lineNumber = getLineNum(stringA, index);
 				result[lineNum] = lineNumber;
 				result[colNum] = getColNum(stringA, index);
 				break;

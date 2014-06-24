@@ -73,7 +73,7 @@ public class ServerHrefMigrator {
 					ServerConfiguration.getServerHome() + "../backup" + System.currentTimeMillis()); //$NON-NLS-1$
 			} catch (final IOException ex) {
 				ModelUtil.logException(
-					"Error during the backup creation.", ex);
+					Messages.ServerHrefMigrator_ErrorDuringBackup, ex);
 				return false;
 			}
 
@@ -83,7 +83,7 @@ public class ServerHrefMigrator {
 				return true;
 			} catch (final InvocationTargetException ex) {
 				ModelUtil.logException(
-					"Error during the migration process.", ex);
+					Messages.ServerHrefMigrator_ErrorDuringMigration, ex);
 				return false;
 			}
 		}
@@ -99,13 +99,13 @@ public class ServerHrefMigrator {
 			return toMatch.contains("projectHistory.uph"); //$NON-NLS-1$
 		} catch (final ParserConfigurationException ex) {
 			ModelUtil.logException(
-				"Cannot determine whether migration is needed. Migration will be skipped, backup will be created.", ex);
+				Messages.ServerHrefMigrator_SkipMigration, ex);
 		} catch (final SAXException ex) {
 			ModelUtil.logException(
-				"Cannot determine whether migration is needed. Migration will be skipped, backup will be created.", ex);
+				Messages.ServerHrefMigrator_SkipMigration, ex);
 		} catch (final IOException ex) {
 			ModelUtil.logException(
-				"Cannot determine whether migration is needed. Migration will be skipped, backup will be created.", ex);
+				Messages.ServerHrefMigrator_SkipMigration, ex);
 		}
 		try {
 			backup = createBackup(ServerConfiguration.getServerHome(),
@@ -113,7 +113,7 @@ public class ServerHrefMigrator {
 		} catch (final IOException ex) {
 			backup = new File(""); //$NON-NLS-1$
 			ModelUtil.logException(
-				"Creating the backup failed.", ex);
+				Messages.ServerHrefMigrator_BackupFailed, ex);
 		}
 		return true;
 	}
