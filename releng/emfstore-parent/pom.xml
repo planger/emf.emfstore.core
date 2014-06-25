@@ -208,7 +208,7 @@
 					<show>protected</show>
 					<show>public</show>
 					<nohelp>true</nohelp>
-					<excludePackageNames>*.test.*:*.bowling.*:*.example.*</excludePackageNames>
+					<excludePackageNames>*.test.*:*.bowling.*:*.example.*:*.eclipse.wb.*</excludePackageNames>
 					<tags>
 						<tag>
               				<name>generated</name>
