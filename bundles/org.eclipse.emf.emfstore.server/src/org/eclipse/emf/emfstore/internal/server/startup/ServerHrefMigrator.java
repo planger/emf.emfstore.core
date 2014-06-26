@@ -15,6 +15,9 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -26,6 +29,11 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.eclipse.emf.emfstore.internal.common.model.util.FileUtil;
 import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
@@ -50,6 +58,7 @@ import org.xml.sax.SAXException;
 public class ServerHrefMigrator {
 
 	private File backup;
+	private List<String> corruptProjectIds = new ArrayList<String>();
 
 	/**
 	 * Performs the migration, if needed. Creates a backup beforehand.
@@ -59,10 +68,10 @@ public class ServerHrefMigrator {
 	 */
 	public boolean migrate() {
 
-		final String sEMFStoreServer = ServerConfiguration.getServerHome();
+		final String serverHome = ServerConfiguration.getServerHome();
 
 		// check if migration is needed
-		if (isMigrationNeeded(sEMFStoreServer + "storage.uss")) { //$NON-NLS-1$
+		if (isMigrationNeeded(serverHome + "storage.uss")) { //$NON-NLS-1$
 
 			if (backup != null) {
 				return false;
@@ -79,7 +88,7 @@ public class ServerHrefMigrator {
 
 			// perform migration
 			try {
-				doMigrate(sEMFStoreServer);
+				corruptProjectIds = doMigrate(serverHome);
 				return true;
 			} catch (final InvocationTargetException ex) {
 				ModelUtil.logException(
@@ -133,36 +142,56 @@ public class ServerHrefMigrator {
 		return backupFile;
 	}
 
-	private void doMigrate(String sEMFStoreServer) throws InvocationTargetException {
-		migrateNonContainment(sEMFStoreServer + "storage.uss", "projects", new ServerSpaceRule()); //$NON-NLS-1$ //$NON-NLS-2$
+	private List<String> doMigrate(String serverHome) throws InvocationTargetException {
+		migrateNonContainment(serverHome + "storage.uss", "projects", new ServerSpaceRule()); //$NON-NLS-1$ //$NON-NLS-2$
 
-		final File fEMFStoreServer = new File(sEMFStoreServer);
-		final File[] projects = fEMFStoreServer
-			.listFiles(new FilenameFilter() {
-				public boolean accept(File dir, String name) {
-					return name.startsWith("project-"); //$NON-NLS-1$
-				}
-			});
-		for (final File f : projects) {
-			final String pH = f.getAbsolutePath() + "/projectHistory.uph"; //$NON-NLS-1$
-			migrateContainmentHRefs(pH, "versions", //$NON-NLS-1$
-				new VersionRule());
+		final File serverHomeFile = new File(serverHome);
+		final File[] projectFiles = serverHomeFile.listFiles(new FilenameFilter() {
+			public boolean accept(File dir, String name) {
+				return name.startsWith("project-"); //$NON-NLS-1$
+			}
+		});
 
-			final File[] versions = f.listFiles(new FilenameFilter() {
-				public boolean accept(File dir, String name) {
-					return name.startsWith("version-"); //$NON-NLS-1$
+		final List<String> corruptProjectIds = new ArrayList<String>();
+
+		for (final File f : projectFiles) {
+			try {
+				final String projectHistoryPath = f.getAbsolutePath() + "/projectHistory.uph"; //$NON-NLS-1$
+
+				if (!new File(projectHistoryPath).exists()) {
+					ModelUtil.logWarning(MessageFormat.format(
+						"Project history file {0} does not exist! Marking project as corrupt.", projectHistoryPath));
+					removeReferencesToCorruptProject(serverHome + "storage.uss",
+						f.getName().substring("project-".length()));
+					continue;
 				}
-			});
-			for (final File v : versions) {
-				final String versionPath = v.getAbsolutePath();
-				migrateNonContainment(versionPath, "nextVersion", new VersionMultiRule()); //$NON-NLS-1$
-				migrateNonContainment(versionPath, "previousVersion", new VersionMultiRule()); //$NON-NLS-1$
-				migrateNonContainment(versionPath, "ancestorVersion", new VersionMultiRule()); //$NON-NLS-1$
-				migrateNonContainment(versionPath, "branchedVersions", new VersionMultiRule()); //$NON-NLS-1$
-				migrateNonContainment(versionPath, "mergedToVersion", new VersionMultiRule()); //$NON-NLS-1$
-				migrateNonContainment(versionPath, "mergedFromVersion", new VersionMultiRule()); //$NON-NLS-1$
+
+				migrateContainmentHRefs(projectHistoryPath, "versions", //$NON-NLS-1$
+					new VersionRule());
+
+				final File[] versions = f.listFiles(new FilenameFilter() {
+					public boolean accept(File dir, String name) {
+						return name.startsWith("version-"); //$NON-NLS-1$
+					}
+				});
+				for (final File version : versions) {
+					final String versionPath = version.getAbsolutePath();
+					migrateNonContainment(versionPath, "nextVersion", new VersionMultiRule()); //$NON-NLS-1$
+					migrateNonContainment(versionPath, "previousVersion", new VersionMultiRule()); //$NON-NLS-1$
+					migrateNonContainment(versionPath, "ancestorVersion", new VersionMultiRule()); //$NON-NLS-1$
+					migrateNonContainment(versionPath, "branchedVersions", new VersionMultiRule()); //$NON-NLS-1$
+					migrateNonContainment(versionPath, "mergedToVersion", new VersionMultiRule()); //$NON-NLS-1$
+					migrateNonContainment(versionPath, "mergedFromVersion", new VersionMultiRule()); //$NON-NLS-1$
+				}
+			} catch (final InvocationTargetException exception) {
+				ModelUtil.logException(MessageFormat.format(
+					"Could not migrate {0}.", f.getAbsolutePath()), exception);
+				corruptProjectIds.add(f.getName().substring("project-".length()));
+				continue;
 			}
 		}
+
+		return corruptProjectIds;
 	}
 
 	private String getProjectAttribute(String pathToFile) throws ParserConfigurationException, SAXException,
@@ -237,6 +266,39 @@ public class ServerHrefMigrator {
 		}
 	}
 
+	private void removeReferencesToCorruptProject(String serverHome, String projectId) throws InvocationTargetException {
+		try {
+			final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			final DocumentBuilder builder = factory.newDocumentBuilder();
+			final Document doc = builder.parse(serverHome);
+			final XPathFactory xPathfactory = XPathFactory.newInstance();
+			final XPath xpath = xPathfactory.newXPath();
+			final XPathExpression expr = xpath.compile("//projects[@id=\"" + projectId + "\"]"); //$NON-NLS-1$
+			final NodeList nl = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+			for (int i = 0; i < nl.getLength(); i++) {
+				nl.item(i).getParentNode().removeChild(nl.item(i));
+			}
+			final TransformerFactory transformerFactory = TransformerFactory
+				.newInstance();
+			final Transformer transformer = transformerFactory.newTransformer();
+			final DOMSource source = new DOMSource(doc);
+			final StreamResult result = new StreamResult(new File(serverHome));
+			transformer.transform(source, result);
+		} catch (final ParserConfigurationException ex) {
+			throw new InvocationTargetException(ex);
+		} catch (final SAXException ex) {
+			throw new InvocationTargetException(ex);
+		} catch (final IOException ex) {
+			throw new InvocationTargetException(ex);
+		} catch (final XPathExpressionException ex) {
+			throw new InvocationTargetException(ex);
+		} catch (final TransformerConfigurationException ex) {
+			throw new InvocationTargetException(ex);
+		} catch (final TransformerException ex) {
+			throw new InvocationTargetException(ex);
+		}
+	}
+
 	/**
 	 * Updates the attribute with the given name.
 	 * 
@@ -286,4 +348,12 @@ public class ServerHrefMigrator {
 		}
 	}
 
+	/**
+	 * Returns a list of project IDs that could not be migrated.
+	 * 
+	 * @return the corruptProjectIds
+	 */
+	public List<String> getCorruptProjectIds() {
+		return corruptProjectIds;
+	}
 }

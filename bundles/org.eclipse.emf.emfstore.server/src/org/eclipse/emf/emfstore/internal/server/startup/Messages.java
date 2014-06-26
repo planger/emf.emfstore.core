@@ -7,15 +7,15 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Edgar - initial API and implementation
+ * Edgar Mueller - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.server.startup;
 
 import org.eclipse.osgi.util.NLS;
 
 /**
- * @author Edgar
- *
+ * @author emueller
+ * @generated
  */
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.emf.emfstore.internal.server.startup.messages"; //$NON-NLS-1$
@@ -33,6 +33,8 @@ public class Messages extends NLS {
 	public static String ServerHrefMigrator_BackupFailed;
 	public static String ServerHrefMigrator_ErrorDuringBackup;
 	public static String ServerHrefMigrator_ErrorDuringMigration;
+	public static String ServerHrefMigrator_HistoryFileDoeNotExists;
+	public static String ServerHrefMigrator_MigrationFailed;
 	public static String ServerHrefMigrator_SkipMigration;
 	static {
 		// initialize resource bundle

@@ -17,7 +17,7 @@ import org.eclipse.osgi.util.NLS;
  * Common server functionality related messages.
  * 
  * @author emueller
- * 
+ * @generated
  */
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.emf.emfstore.internal.server.messages"; //$NON-NLS-1$
@@ -26,6 +26,7 @@ public final class Messages extends NLS {
 	public static String EMFStoreController_Cause_For_Server_Shutdown;
 	public static String EMFStoreController_Closing_Of_Properties_File_Failed;
 	public static String EMFStoreController_ConnectionHandler_Stopped;
+	public static String EMFStoreController_ConnectionHandlersInitException;
 	public static String EMFStoreController_Copy_From_To;
 	public static String EMFStoreController_Could_Not_Copy_Properties_File;
 	public static String EMFStoreController_Could_Not_Init_XMLResource;
