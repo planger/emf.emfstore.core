@@ -24,7 +24,6 @@ import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
@@ -42,7 +41,7 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.VersioningPacka
  * @generated
  */
 public class HistoryInfoItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
-	IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+	ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
@@ -59,8 +58,8 @@ public class HistoryInfoItemProvider extends ItemProviderAdapter implements IEdi
 	@Override
 	public Collection<?> getChildren(Object object) {
 		if (object instanceof HistoryInfo) {
-			HistoryInfo historyInfo = (HistoryInfo) object;
-			ChangePackage changePackage = historyInfo.getChangePackage();
+			final HistoryInfo historyInfo = (HistoryInfo) object;
+			final ChangePackage changePackage = historyInfo.getChangePackage();
 			if (changePackage == null) {
 				return new ArrayList<ChangePackage>();
 			}
@@ -97,9 +96,9 @@ public class HistoryInfoItemProvider extends ItemProviderAdapter implements IEdi
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_HistoryInfo_logMessage_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_HistoryInfo_logMessage_feature",
-					"_UI_HistoryInfo_type"),
+				getString("_UI_HistoryInfo_logMessage_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_HistoryInfo_logMessage_feature", //$NON-NLS-1$ //$NON-NLS-2$
+					"_UI_HistoryInfo_type"), //$NON-NLS-1$
 				VersioningPackage.Literals.HISTORY_INFO__LOG_MESSAGE,
 				true,
 				false,
@@ -156,7 +155,7 @@ public class HistoryInfoItemProvider extends ItemProviderAdapter implements IEdi
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/HistoryInfo.png"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/HistoryInfo.png")); //$NON-NLS-1$
 	}
 
 	// end of custom code
@@ -170,7 +169,7 @@ public class HistoryInfoItemProvider extends ItemProviderAdapter implements IEdi
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_HistoryInfo_type");
+		return getString("_UI_HistoryInfo_type"); //$NON-NLS-1$
 	}
 
 	/**
@@ -261,10 +260,10 @@ public class HistoryInfoItemProvider extends ItemProviderAdapter implements IEdi
 	 */
 	@Override
 	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
-		Object childFeature = feature;
-		Object childObject = child;
+		final Object childFeature = feature;
+		final Object childObject = child;
 
-		boolean qualify =
+		final boolean qualify =
 			childFeature == VersioningPackage.Literals.HISTORY_INFO__PRIMARY_SPEC ||
 				childFeature == VersioningPackage.Literals.HISTORY_INFO__NEXT_SPEC ||
 				childFeature == VersioningPackage.Literals.HISTORY_INFO__PREVIOUS_SPEC ||
@@ -273,7 +272,7 @@ public class HistoryInfoItemProvider extends ItemProviderAdapter implements IEdi
 
 		if (qualify)
 		{
-			return getString("_UI_CreateChild_text2",
+			return getString("_UI_CreateChild_text2", //$NON-NLS-1$
 				new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
 		}
 		return super.getCreateChildText(owner, feature, child, selection);

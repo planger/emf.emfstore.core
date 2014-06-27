@@ -22,7 +22,6 @@ import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
@@ -40,7 +39,7 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.VersioningPacka
  * @generated
  */
 public class BranchInfoItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
-	IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+	ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
@@ -80,8 +79,8 @@ public class BranchInfoItemProvider extends ItemProviderAdapter implements IEdit
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_BranchInfo_name_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_BranchInfo_name_feature", "_UI_BranchInfo_type"),
+				getString("_UI_BranchInfo_name_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_BranchInfo_name_feature", "_UI_BranchInfo_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				VersioningPackage.Literals.BRANCH_INFO__NAME,
 				true,
 				false,
@@ -131,7 +130,7 @@ public class BranchInfoItemProvider extends ItemProviderAdapter implements IEdit
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/BranchInfo"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/BranchInfo")); //$NON-NLS-1$
 	}
 
 	/**
@@ -143,10 +142,10 @@ public class BranchInfoItemProvider extends ItemProviderAdapter implements IEdit
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((BranchInfo) object).getName();
+		final String label = ((BranchInfo) object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_BranchInfo_type") :
-			getString("_UI_BranchInfo_type") + " " + label;
+			getString("_UI_BranchInfo_type") : //$NON-NLS-1$
+			getString("_UI_BranchInfo_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
@@ -204,16 +203,16 @@ public class BranchInfoItemProvider extends ItemProviderAdapter implements IEdit
 	 */
 	@Override
 	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
-		Object childFeature = feature;
-		Object childObject = child;
+		final Object childFeature = feature;
+		final Object childObject = child;
 
-		boolean qualify =
+		final boolean qualify =
 			childFeature == VersioningPackage.Literals.BRANCH_INFO__HEAD ||
 				childFeature == VersioningPackage.Literals.BRANCH_INFO__SOURCE;
 
 		if (qualify)
 		{
-			return getString("_UI_CreateChild_text2",
+			return getString("_UI_CreateChild_text2", //$NON-NLS-1$
 				new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
 		}
 		return super.getCreateChildText(owner, feature, child, selection);

@@ -17,12 +17,7 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.emf.emfstore.internal.common.model.ModelFactory;
@@ -37,9 +32,7 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.Oper
  * 
  * @generated
  */
-public class MultiReferenceOperationItemProvider extends ReferenceOperationItemProvider implements
-	IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider,
-	IItemPropertySource {
+public class MultiReferenceOperationItemProvider extends ReferenceOperationItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
@@ -80,9 +73,9 @@ public class MultiReferenceOperationItemProvider extends ReferenceOperationItemP
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_MultiReferenceOperation_add_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_MultiReferenceOperation_add_feature",
-					"_UI_MultiReferenceOperation_type"),
+				getString("_UI_MultiReferenceOperation_add_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_MultiReferenceOperation_add_feature", //$NON-NLS-1$ //$NON-NLS-2$
+					"_UI_MultiReferenceOperation_type"), //$NON-NLS-1$
 				OperationsPackage.Literals.MULTI_REFERENCE_OPERATION__ADD,
 				true,
 				false,
@@ -103,9 +96,9 @@ public class MultiReferenceOperationItemProvider extends ReferenceOperationItemP
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_MultiReferenceOperation_index_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_MultiReferenceOperation_index_feature",
-					"_UI_MultiReferenceOperation_type"),
+				getString("_UI_MultiReferenceOperation_index_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_MultiReferenceOperation_index_feature", //$NON-NLS-1$ //$NON-NLS-2$
+					"_UI_MultiReferenceOperation_type"), //$NON-NLS-1$
 				OperationsPackage.Literals.MULTI_REFERENCE_OPERATION__INDEX,
 				true,
 				false,
@@ -169,14 +162,14 @@ public class MultiReferenceOperationItemProvider extends ReferenceOperationItemP
 	@Override
 	public String getText(Object object) {
 		if (object instanceof MultiReferenceOperation) {
-			MultiReferenceOperation op = (MultiReferenceOperation) object;
+			final MultiReferenceOperation op = (MultiReferenceOperation) object;
 
-			boolean containment = op.getContainmentType().equals(ContainmentType.CONTAINMENT);
-			String featureType = AbstractOperationItemProvider.REFERENCE_TYPE_TAG_SEPARATOR;
+			final boolean containment = op.getContainmentType().equals(ContainmentType.CONTAINMENT);
+			final String featureType = AbstractOperationItemProvider.REFERENCE_TYPE_TAG_SEPARATOR;
 
-			String elemNames = getModelElementClassesAndNames(op.getReferencedModelElements(), featureType);
-			String elementNameAndClass = getModelElementClassAndName(op.getModelElementId());
-			String children = op.getReferencedModelElements().size() > 1 ? "children" : "child";
+			final String elemNames = getModelElementClassesAndNames(op.getReferencedModelElements(), featureType);
+			final String elementNameAndClass = getModelElementClassAndName(op.getModelElementId());
+			final String children = op.getReferencedModelElements().size() > 1 ? "children" : "child";
 			if (op.isAdd()) {
 				if (containment) {
 					return "Added " + elemNames + " as " + children + " in " + elementNameAndClass;

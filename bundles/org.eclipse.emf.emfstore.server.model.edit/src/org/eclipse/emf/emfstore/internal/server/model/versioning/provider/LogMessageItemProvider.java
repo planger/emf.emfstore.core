@@ -21,7 +21,6 @@ import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
@@ -38,7 +37,7 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.VersioningPacka
  * @generated
  */
 public class LogMessageItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
-	IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+	ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
@@ -81,8 +80,8 @@ public class LogMessageItemProvider extends ItemProviderAdapter implements IEdit
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_LogMessage_message_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_LogMessage_message_feature", "_UI_LogMessage_type"),
+				getString("_UI_LogMessage_message_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_LogMessage_message_feature", "_UI_LogMessage_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				VersioningPackage.Literals.LOG_MESSAGE__MESSAGE,
 				true,
 				false,
@@ -104,8 +103,8 @@ public class LogMessageItemProvider extends ItemProviderAdapter implements IEdit
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_LogMessage_date_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_LogMessage_date_feature", "_UI_LogMessage_type"),
+				getString("_UI_LogMessage_date_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_LogMessage_date_feature", "_UI_LogMessage_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				VersioningPackage.Literals.LOG_MESSAGE__DATE,
 				true,
 				false,
@@ -126,9 +125,9 @@ public class LogMessageItemProvider extends ItemProviderAdapter implements IEdit
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_LogMessage_clientDate_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_LogMessage_clientDate_feature",
-					"_UI_LogMessage_type"),
+				getString("_UI_LogMessage_clientDate_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_LogMessage_clientDate_feature", //$NON-NLS-1$ //$NON-NLS-2$
+					"_UI_LogMessage_type"), //$NON-NLS-1$
 				VersioningPackage.Literals.LOG_MESSAGE__CLIENT_DATE,
 				true,
 				false,
@@ -150,8 +149,8 @@ public class LogMessageItemProvider extends ItemProviderAdapter implements IEdit
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_LogMessage_author_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_LogMessage_author_feature", "_UI_LogMessage_type"),
+				getString("_UI_LogMessage_author_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_LogMessage_author_feature", "_UI_LogMessage_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				VersioningPackage.Literals.LOG_MESSAGE__AUTHOR,
 				true,
 				false,
@@ -169,7 +168,7 @@ public class LogMessageItemProvider extends ItemProviderAdapter implements IEdit
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/LogMessage"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/LogMessage")); //$NON-NLS-1$
 	}
 
 	/**
@@ -181,10 +180,10 @@ public class LogMessageItemProvider extends ItemProviderAdapter implements IEdit
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((LogMessage) object).getAuthor();
+		final String label = ((LogMessage) object).getAuthor();
 		return label == null || label.length() == 0 ?
-			getString("_UI_LogMessage_type") :
-			getString("_UI_LogMessage_type") + " " + label;
+			getString("_UI_LogMessage_type") : //$NON-NLS-1$
+			getString("_UI_LogMessage_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

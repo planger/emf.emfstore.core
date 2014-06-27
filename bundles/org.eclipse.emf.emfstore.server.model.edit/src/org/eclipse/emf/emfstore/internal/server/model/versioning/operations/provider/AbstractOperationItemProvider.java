@@ -19,12 +19,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.emf.emfstore.internal.common.model.ModelElementId;
@@ -41,22 +36,20 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.Oper
  * 
  * @generated
  */
-public class AbstractOperationItemProvider extends IdentifiableElementItemProvider implements
-	IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider,
-	IItemPropertySource {
+public class AbstractOperationItemProvider extends IdentifiableElementItemProvider {
 	/**
 	 * Constant for name and class tag separator.
 	 */
-	public static final String NAME_CLASS_TAG_SEPARATOR = "&&&";
+	public static final String NAME_CLASS_TAG_SEPARATOR = "&&&"; //$NON-NLS-1$
 	/**
 	 * Constant for name tag separator.
 	 */
-	public static final String NAME_TAG__SEPARATOR = "%%%";
+	public static final String NAME_TAG__SEPARATOR = "%%%"; //$NON-NLS-1$
 
 	/**
 	 * Constant for reference type separator
 	 */
-	public static final String REFERENCE_TYPE_TAG_SEPARATOR = "#REFERENCE_TYPE_NAME#";
+	public static final String REFERENCE_TYPE_TAG_SEPARATOR = "#REFERENCE_TYPE_NAME#"; //$NON-NLS-1$
 
 	/**
 	 * This constructs an instance from a factory and a notifier. <!--
@@ -119,9 +112,9 @@ public class AbstractOperationItemProvider extends IdentifiableElementItemProvid
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_AbstractOperation_modelElementId_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_AbstractOperation_modelElementId_feature",
-					"_UI_AbstractOperation_type"),
+				getString("_UI_AbstractOperation_modelElementId_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_AbstractOperation_modelElementId_feature", //$NON-NLS-1$ //$NON-NLS-2$
+					"_UI_AbstractOperation_type"), //$NON-NLS-1$
 				OperationsPackage.Literals.ABSTRACT_OPERATION__MODEL_ELEMENT_ID,
 				true,
 				false,
@@ -142,9 +135,9 @@ public class AbstractOperationItemProvider extends IdentifiableElementItemProvid
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_AbstractOperation_accepted_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_AbstractOperation_accepted_feature",
-					"_UI_AbstractOperation_type"),
+				getString("_UI_AbstractOperation_accepted_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_AbstractOperation_accepted_feature", //$NON-NLS-1$ //$NON-NLS-2$
+					"_UI_AbstractOperation_type"), //$NON-NLS-1$
 				OperationsPackage.Literals.ABSTRACT_OPERATION__ACCEPTED,
 				true,
 				false,
@@ -165,9 +158,9 @@ public class AbstractOperationItemProvider extends IdentifiableElementItemProvid
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_AbstractOperation_clientDate_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_AbstractOperation_clientDate_feature",
-					"_UI_AbstractOperation_type"),
+				getString("_UI_AbstractOperation_clientDate_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_AbstractOperation_clientDate_feature", //$NON-NLS-1$ //$NON-NLS-2$
+					"_UI_AbstractOperation_type"), //$NON-NLS-1$
 				OperationsPackage.Literals.ABSTRACT_OPERATION__CLIENT_DATE,
 				true,
 				false,
@@ -186,7 +179,7 @@ public class AbstractOperationItemProvider extends IdentifiableElementItemProvid
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/AbstractOperation"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/AbstractOperation")); //$NON-NLS-1$
 	}
 
 	/**
@@ -200,8 +193,8 @@ public class AbstractOperationItemProvider extends IdentifiableElementItemProvid
 	public String getText(Object object) {
 		final String label = ((AbstractOperation) object).getIdentifier();
 		return label == null || label.length() == 0 ?
-			getString("_UI_AbstractOperation_type") :
-			getString("_UI_AbstractOperation_type") + " " + label;
+			getString("_UI_AbstractOperation_type") : //$NON-NLS-1$
+			getString("_UI_AbstractOperation_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
@@ -259,21 +252,21 @@ public class AbstractOperationItemProvider extends IdentifiableElementItemProvid
 			builder.append(NAME_TAG__SEPARATOR);
 			builder.append(modelElementId.getId());
 			builder.append(NAME_TAG__SEPARATOR);
-			builder.append(", ");
+			builder.append(", "); //$NON-NLS-1$
 		}
 		if (modelElementIds.size() > 0) {
-			builder.replace(builder.lastIndexOf(NAME_TAG__SEPARATOR + ", "), builder.length(), NAME_TAG__SEPARATOR);
+			builder.replace(builder.lastIndexOf(NAME_TAG__SEPARATOR + ", "), builder.length(), NAME_TAG__SEPARATOR); //$NON-NLS-1$
 		}
 		if (modelElementIds.size() > 1) {
-			builder.replace(builder.lastIndexOf(NAME_TAG__SEPARATOR + ", "),
-				builder.lastIndexOf(NAME_TAG__SEPARATOR + ", ") + 3, NAME_TAG__SEPARATOR + " and ");
+			builder.replace(builder.lastIndexOf(NAME_TAG__SEPARATOR + ", "), //$NON-NLS-1$
+				builder.lastIndexOf(NAME_TAG__SEPARATOR + ", ") + 3, NAME_TAG__SEPARATOR + " and "); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		return builder.toString();
 	}
 
 	public static String getModelElementClassAndName(ModelElementId modelElementId) {
 		if (modelElementId == null) {
-			return "(Unkown Element)";
+			return "(Unkown Element)"; //$NON-NLS-1$
 		}
 		return NAME_CLASS_TAG_SEPARATOR + modelElementId.getId() + NAME_CLASS_TAG_SEPARATOR;
 	}
@@ -291,14 +284,14 @@ public class AbstractOperationItemProvider extends IdentifiableElementItemProvid
 		final StringBuilder sb = new StringBuilder();
 
 		if (idList.size() > 2) {
-			return idList.size() + " " + typeName + "s";
+			return idList.size() + " " + typeName + "s"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		for (int i = 0; i < idList.size(); i++) {
 			if (i > 0 && i == idList.size() - 1) {
 				sb.append(" and ");
 			} else if (i > 0) {
-				sb.append(", ");
+				sb.append(", "); //$NON-NLS-1$
 			}
 			final ModelElementId id = idList.get(i);
 			sb.append(getModelElementClassAndName(id));
@@ -310,14 +303,14 @@ public class AbstractOperationItemProvider extends IdentifiableElementItemProvid
 	protected String trim(Object object) {
 
 		if (object == null) {
-			return "(null)";
+			return "(null)"; //$NON-NLS-1$
 		}
 
 		final String string = object.toString();
 		final String result = string.trim();
 
 		if (result.length() == 0) {
-			return "(empty)";
+			return "(empty)"; //$NON-NLS-1$
 		}
 
 		return result;

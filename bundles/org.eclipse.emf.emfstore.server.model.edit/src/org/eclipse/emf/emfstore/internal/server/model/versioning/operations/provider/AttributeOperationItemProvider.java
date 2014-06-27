@@ -16,12 +16,7 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AttributeOperation;
@@ -35,8 +30,7 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.Oper
  * 
  * @generated
  */
-public class AttributeOperationItemProvider extends FeatureOperationItemProvider implements IEditingDomainItemProvider,
-	IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+public class AttributeOperationItemProvider extends FeatureOperationItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
@@ -76,9 +70,9 @@ public class AttributeOperationItemProvider extends FeatureOperationItemProvider
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_AttributeOperation_oldValue_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_AttributeOperation_oldValue_feature",
-					"_UI_AttributeOperation_type"),
+				getString("_UI_AttributeOperation_oldValue_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_AttributeOperation_oldValue_feature", //$NON-NLS-1$ //$NON-NLS-2$
+					"_UI_AttributeOperation_type"), //$NON-NLS-1$
 				OperationsPackage.Literals.ATTRIBUTE_OPERATION__OLD_VALUE,
 				true,
 				false,
@@ -99,9 +93,9 @@ public class AttributeOperationItemProvider extends FeatureOperationItemProvider
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_AttributeOperation_newValue_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_AttributeOperation_newValue_feature",
-					"_UI_AttributeOperation_type"),
+				getString("_UI_AttributeOperation_newValue_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_AttributeOperation_newValue_feature", //$NON-NLS-1$ //$NON-NLS-2$
+					"_UI_AttributeOperation_type"), //$NON-NLS-1$
 				OperationsPackage.Literals.ATTRIBUTE_OPERATION__NEW_VALUE,
 				true,
 				false,
@@ -120,7 +114,7 @@ public class AttributeOperationItemProvider extends FeatureOperationItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/AttributeOperation.png"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/AttributeOperation.png")); //$NON-NLS-1$
 	}
 
 	// end of custom code
@@ -134,18 +128,18 @@ public class AttributeOperationItemProvider extends FeatureOperationItemProvider
 	@Override
 	public String getText(Object object) {
 		if (object instanceof AttributeOperation) {
-			AttributeOperation op = (AttributeOperation) object;
+			final AttributeOperation op = (AttributeOperation) object;
 
 			String oldValue;
 			String newValue;
-			if (op.getFeatureName().equals("description")) {
-				oldValue = (op.getOldValue() == null) ? null : ((String) op.getOldValue());
-				newValue = (op.getNewValue() == null) ? null : ((String) op.getNewValue());
+			if (op.getFeatureName().equals("description")) { //$NON-NLS-1$
+				oldValue = op.getOldValue() == null ? null : (String) op.getOldValue();
+				newValue = op.getNewValue() == null ? null : (String) op.getNewValue();
 			} else {
-				oldValue = (op.getOldValue() == null) ? null : op.getOldValue().toString();
-				newValue = (op.getNewValue() == null) ? null : op.getNewValue().toString();
+				oldValue = op.getOldValue() == null ? null : op.getOldValue().toString();
+				newValue = op.getNewValue() == null ? null : op.getNewValue().toString();
 			}
-			String elemNameAndClass = getModelElementClassAndName(op.getModelElementId());
+			final String elemNameAndClass = getModelElementClassAndName(op.getModelElementId());
 			if (oldValue == null && newValue == null) {
 				return "Unset " + op.getFeatureName() + " in " + elemNameAndClass;
 			} else if (oldValue == null && newValue != null) {

@@ -16,12 +16,7 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.PathQuery;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.VersioningFactory;
@@ -34,8 +29,7 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.VersioningPacka
  * 
  * @generated
  */
-public class PathQueryItemProvider extends HistoryQueryItemProvider implements IEditingDomainItemProvider,
-	IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+public class PathQueryItemProvider extends HistoryQueryItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
@@ -101,7 +95,7 @@ public class PathQueryItemProvider extends HistoryQueryItemProvider implements I
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/PathQuery"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/PathQuery")); //$NON-NLS-1$
 	}
 
 	/**
@@ -113,8 +107,8 @@ public class PathQueryItemProvider extends HistoryQueryItemProvider implements I
 	 */
 	@Override
 	public String getText(Object object) {
-		PathQuery pathQuery = (PathQuery) object;
-		return getString("_UI_PathQuery_type") + " " + pathQuery.isIncludeChangePackages();
+		final PathQuery pathQuery = (PathQuery) object;
+		return getString("_UI_PathQuery_type") + " " + pathQuery.isIncludeChangePackages(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

@@ -16,12 +16,7 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.DateVersionSpec;
@@ -34,8 +29,7 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.VersioningPacka
  * 
  * @generated
  */
-public class DateVersionSpecItemProvider extends VersionSpecItemProvider implements IEditingDomainItemProvider,
-	IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+public class DateVersionSpecItemProvider extends VersionSpecItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
@@ -75,9 +69,9 @@ public class DateVersionSpecItemProvider extends VersionSpecItemProvider impleme
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_DateVersionSpec_date_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_DateVersionSpec_date_feature",
-					"_UI_DateVersionSpec_type"),
+				getString("_UI_DateVersionSpec_date_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_DateVersionSpec_date_feature", //$NON-NLS-1$ //$NON-NLS-2$
+					"_UI_DateVersionSpec_type"), //$NON-NLS-1$
 				VersioningPackage.Literals.DATE_VERSION_SPEC__DATE,
 				true,
 				false,
@@ -96,7 +90,7 @@ public class DateVersionSpecItemProvider extends VersionSpecItemProvider impleme
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/DateVersionSpec"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/DateVersionSpec")); //$NON-NLS-1$
 	}
 
 	/**
@@ -108,10 +102,10 @@ public class DateVersionSpecItemProvider extends VersionSpecItemProvider impleme
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((DateVersionSpec) object).getBranch();
+		final String label = ((DateVersionSpec) object).getBranch();
 		return label == null || label.length() == 0 ?
-			getString("_UI_DateVersionSpec_type") :
-			getString("_UI_DateVersionSpec_type") + " " + label;
+			getString("_UI_DateVersionSpec_type") : //$NON-NLS-1$
+			getString("_UI_DateVersionSpec_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

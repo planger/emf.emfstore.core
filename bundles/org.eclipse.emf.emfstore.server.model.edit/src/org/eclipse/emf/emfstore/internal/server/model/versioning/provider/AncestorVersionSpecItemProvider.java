@@ -16,12 +16,7 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.AncestorVersionSpec;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.VersioningFactory;
@@ -34,8 +29,7 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.VersioningPacka
  * 
  * @generated
  */
-public class AncestorVersionSpecItemProvider extends VersionSpecItemProvider implements IEditingDomainItemProvider,
-	IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+public class AncestorVersionSpecItemProvider extends VersionSpecItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
@@ -103,7 +97,7 @@ public class AncestorVersionSpecItemProvider extends VersionSpecItemProvider imp
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/AncestorVersionSpec"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/AncestorVersionSpec")); //$NON-NLS-1$
 	}
 
 	/**
@@ -115,10 +109,10 @@ public class AncestorVersionSpecItemProvider extends VersionSpecItemProvider imp
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((AncestorVersionSpec) object).getBranch();
+		final String label = ((AncestorVersionSpec) object).getBranch();
 		return label == null || label.length() == 0 ?
-			getString("_UI_AncestorVersionSpec_type") :
-			getString("_UI_AncestorVersionSpec_type") + " " + label;
+			getString("_UI_AncestorVersionSpec_type") : //$NON-NLS-1$
+			getString("_UI_AncestorVersionSpec_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
@@ -173,16 +167,16 @@ public class AncestorVersionSpecItemProvider extends VersionSpecItemProvider imp
 	 */
 	@Override
 	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
-		Object childFeature = feature;
-		Object childObject = child;
+		final Object childFeature = feature;
+		final Object childObject = child;
 
-		boolean qualify =
+		final boolean qualify =
 			childFeature == VersioningPackage.Literals.ANCESTOR_VERSION_SPEC__TARGET ||
 				childFeature == VersioningPackage.Literals.ANCESTOR_VERSION_SPEC__SOURCE;
 
 		if (qualify)
 		{
-			return getString("_UI_CreateChild_text2",
+			return getString("_UI_CreateChild_text2", //$NON-NLS-1$
 				new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
 		}
 		return super.getCreateChildText(owner, feature, child, selection);

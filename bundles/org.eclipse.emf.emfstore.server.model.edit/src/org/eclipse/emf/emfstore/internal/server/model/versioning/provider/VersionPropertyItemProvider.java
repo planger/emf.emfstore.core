@@ -21,7 +21,6 @@ import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
@@ -38,7 +37,7 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.VersioningPacka
  * @generated
  */
 public class VersionPropertyItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
-	IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+	ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
@@ -79,9 +78,9 @@ public class VersionPropertyItemProvider extends ItemProviderAdapter implements 
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_VersionProperty_name_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_VersionProperty_name_feature",
-					"_UI_VersionProperty_type"),
+				getString("_UI_VersionProperty_name_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_VersionProperty_name_feature", //$NON-NLS-1$ //$NON-NLS-2$
+					"_UI_VersionProperty_type"), //$NON-NLS-1$
 				VersioningPackage.Literals.VERSION_PROPERTY__NAME,
 				true,
 				false,
@@ -102,9 +101,9 @@ public class VersionPropertyItemProvider extends ItemProviderAdapter implements 
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_VersionProperty_value_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_VersionProperty_value_feature",
-					"_UI_VersionProperty_type"),
+				getString("_UI_VersionProperty_value_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_VersionProperty_value_feature", //$NON-NLS-1$ //$NON-NLS-2$
+					"_UI_VersionProperty_type"), //$NON-NLS-1$
 				VersioningPackage.Literals.VERSION_PROPERTY__VALUE,
 				true,
 				false,
@@ -123,7 +122,7 @@ public class VersionPropertyItemProvider extends ItemProviderAdapter implements 
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/VersionProperty"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/VersionProperty")); //$NON-NLS-1$
 	}
 
 	/**
@@ -135,10 +134,10 @@ public class VersionPropertyItemProvider extends ItemProviderAdapter implements 
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((VersionProperty) object).getName();
+		final String label = ((VersionProperty) object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_VersionProperty_type") :
-			getString("_UI_VersionProperty_type") + " " + label;
+			getString("_UI_VersionProperty_type") : //$NON-NLS-1$
+			getString("_UI_VersionProperty_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

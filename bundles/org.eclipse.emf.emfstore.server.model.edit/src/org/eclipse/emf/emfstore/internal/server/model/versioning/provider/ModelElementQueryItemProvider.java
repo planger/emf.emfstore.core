@@ -16,12 +16,7 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.emf.emfstore.internal.common.model.ModelFactory;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.ModelElementQuery;
@@ -34,8 +29,7 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.VersioningPacka
  * 
  * @generated
  */
-public class ModelElementQueryItemProvider extends RangeQueryItemProvider implements IEditingDomainItemProvider,
-	IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+public class ModelElementQueryItemProvider extends RangeQueryItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
@@ -102,7 +96,7 @@ public class ModelElementQueryItemProvider extends RangeQueryItemProvider implem
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ModelElementQuery"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/ModelElementQuery")); //$NON-NLS-1$
 	}
 
 	/**
@@ -114,8 +108,8 @@ public class ModelElementQueryItemProvider extends RangeQueryItemProvider implem
 	 */
 	@Override
 	public String getText(Object object) {
-		ModelElementQuery modelElementQuery = (ModelElementQuery) object;
-		return getString("_UI_ModelElementQuery_type") + " " + modelElementQuery.isIncludeChangePackages();
+		final ModelElementQuery modelElementQuery = (ModelElementQuery) object;
+		return getString("_UI_ModelElementQuery_type") + " " + modelElementQuery.isIncludeChangePackages(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

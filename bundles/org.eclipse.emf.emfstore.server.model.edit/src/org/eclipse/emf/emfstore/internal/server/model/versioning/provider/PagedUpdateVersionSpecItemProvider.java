@@ -1,13 +1,13 @@
-/**
- * Copyright 2011 Chair for Applied Software Engineering,
+/*******************************************************************************
+ * Copyright (c) 2008-2011 Chair for Applied Software Engineering,
  * Technische Universitaet Muenchen.
  * All rights reserved. This program and the accompanying materials
- * are made available under the Eclipse Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- */
+ ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.server.model.versioning.provider;
 
 import java.util.Collection;
@@ -16,12 +16,7 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.PagedUpdateVersionSpec;
@@ -36,14 +31,7 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.VersioningPacka
  * @generated
  */
 public class PagedUpdateVersionSpecItemProvider
-	extends VersionSpecItemProvider
-	implements
-	IEditingDomainItemProvider,
-	IStructuredItemContentProvider,
-	ITreeItemContentProvider,
-	IItemLabelProvider,
-	IItemPropertySource
-{
+	extends VersionSpecItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -89,9 +77,9 @@ public class PagedUpdateVersionSpecItemProvider
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_PagedUpdateVersionSpec_maxChanges_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_PagedUpdateVersionSpec_maxChanges_feature",
-					"_UI_PagedUpdateVersionSpec_type"),
+				getString("_UI_PagedUpdateVersionSpec_maxChanges_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_PagedUpdateVersionSpec_maxChanges_feature", //$NON-NLS-1$ //$NON-NLS-2$
+					"_UI_PagedUpdateVersionSpec_type"), //$NON-NLS-1$
 				VersioningPackage.Literals.PAGED_UPDATE_VERSION_SPEC__MAX_CHANGES,
 				true,
 				false,
@@ -114,9 +102,9 @@ public class PagedUpdateVersionSpecItemProvider
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_PagedUpdateVersionSpec_baseVersionSpec_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_PagedUpdateVersionSpec_baseVersionSpec_feature",
-					"_UI_PagedUpdateVersionSpec_type"),
+				getString("_UI_PagedUpdateVersionSpec_baseVersionSpec_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_PagedUpdateVersionSpec_baseVersionSpec_feature", //$NON-NLS-1$ //$NON-NLS-2$
+					"_UI_PagedUpdateVersionSpec_type"), //$NON-NLS-1$
 				VersioningPackage.Literals.PAGED_UPDATE_VERSION_SPEC__BASE_VERSION_SPEC,
 				true,
 				false,
@@ -136,7 +124,7 @@ public class PagedUpdateVersionSpecItemProvider
 	@Override
 	public Object getImage(Object object)
 	{
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/PagedUpdateVersionSpec"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/PagedUpdateVersionSpec")); //$NON-NLS-1$
 	}
 
 	/**
@@ -149,10 +137,10 @@ public class PagedUpdateVersionSpecItemProvider
 	@Override
 	public String getText(Object object)
 	{
-		String label = ((PagedUpdateVersionSpec) object).getBranch();
+		final String label = ((PagedUpdateVersionSpec) object).getBranch();
 		return label == null || label.length() == 0 ?
-			getString("_UI_PagedUpdateVersionSpec_type") :
-			getString("_UI_PagedUpdateVersionSpec_type") + " " + label;
+			getString("_UI_PagedUpdateVersionSpec_type") : //$NON-NLS-1$
+			getString("_UI_PagedUpdateVersionSpec_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

@@ -16,12 +16,7 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.emfstore.internal.common.model.ModelElementId;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.ContainmentType;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.OperationsPackage;
@@ -34,9 +29,7 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.Sing
  * 
  * @generated
  */
-public class SingleReferenceOperationItemProvider extends ReferenceOperationItemProvider implements
-	IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider,
-	IItemPropertySource {
+public class SingleReferenceOperationItemProvider extends ReferenceOperationItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
@@ -76,9 +69,9 @@ public class SingleReferenceOperationItemProvider extends ReferenceOperationItem
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_SingleReferenceOperation_oldValue_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_SingleReferenceOperation_oldValue_feature",
-					"_UI_SingleReferenceOperation_type"),
+				getString("_UI_SingleReferenceOperation_oldValue_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_SingleReferenceOperation_oldValue_feature", //$NON-NLS-1$ //$NON-NLS-2$
+					"_UI_SingleReferenceOperation_type"), //$NON-NLS-1$
 				OperationsPackage.Literals.SINGLE_REFERENCE_OPERATION__OLD_VALUE,
 				true,
 				false,
@@ -99,9 +92,9 @@ public class SingleReferenceOperationItemProvider extends ReferenceOperationItem
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_SingleReferenceOperation_newValue_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_SingleReferenceOperation_newValue_feature",
-					"_UI_SingleReferenceOperation_type"),
+				getString("_UI_SingleReferenceOperation_newValue_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_SingleReferenceOperation_newValue_feature", //$NON-NLS-1$ //$NON-NLS-2$
+					"_UI_SingleReferenceOperation_type"), //$NON-NLS-1$
 				OperationsPackage.Literals.SINGLE_REFERENCE_OPERATION__NEW_VALUE,
 				true,
 				false,
@@ -134,14 +127,14 @@ public class SingleReferenceOperationItemProvider extends ReferenceOperationItem
 	@Override
 	public String getText(Object object) {
 		if (object instanceof SingleReferenceOperation) {
-			SingleReferenceOperation op = (SingleReferenceOperation) object;
-			ModelElementId oldElement = op.getOldValue();
-			ModelElementId newElement = op.getNewValue();
-			String oldName = getModelElementClassAndName(op.getOldValue());
-			String newName = getModelElementClassAndName(op.getNewValue());
-			String elementName = getModelElementClassAndName(op.getModelElementId());
+			final SingleReferenceOperation op = (SingleReferenceOperation) object;
+			final ModelElementId oldElement = op.getOldValue();
+			final ModelElementId newElement = op.getNewValue();
+			final String oldName = getModelElementClassAndName(op.getOldValue());
+			final String newName = getModelElementClassAndName(op.getNewValue());
+			final String elementName = getModelElementClassAndName(op.getModelElementId());
 
-			boolean isContainer = op.getContainmentType().equals(ContainmentType.CONTAINER);
+			final boolean isContainer = op.getContainmentType().equals(ContainmentType.CONTAINER);
 
 			// changing containment means relocating the item
 			if (isContainer && oldElement != null && newElement != null) {

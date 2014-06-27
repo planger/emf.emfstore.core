@@ -21,7 +21,6 @@ import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
@@ -38,7 +37,7 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.VersioningPacka
  * @generated
  */
 public class VersionSpecItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
-	IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+	ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
@@ -77,9 +76,9 @@ public class VersionSpecItemProvider extends ItemProviderAdapter implements IEdi
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_VersionSpec_branch_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_VersionSpec_branch_feature",
-					"_UI_VersionSpec_type"),
+				getString("_UI_VersionSpec_branch_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_VersionSpec_branch_feature", //$NON-NLS-1$//$NON-NLS-2$
+					"_UI_VersionSpec_type"), //$NON-NLS-1$
 				VersioningPackage.Literals.VERSION_SPEC__BRANCH,
 				true,
 				false,
@@ -98,10 +97,10 @@ public class VersionSpecItemProvider extends ItemProviderAdapter implements IEdi
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((VersionSpec) object).getBranch();
+		final String label = ((VersionSpec) object).getBranch();
 		return label == null || label.length() == 0 ?
-			getString("_UI_VersionSpec_type") :
-			getString("_UI_VersionSpec_type") + " " + label;
+			getString("_UI_VersionSpec_type") : //$NON-NLS-1$
+			getString("_UI_VersionSpec_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

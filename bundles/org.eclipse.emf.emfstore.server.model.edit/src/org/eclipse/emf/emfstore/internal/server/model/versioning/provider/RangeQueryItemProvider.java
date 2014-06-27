@@ -16,12 +16,7 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.RangeQuery;
@@ -34,8 +29,7 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.VersioningPacka
  * 
  * @generated
  */
-public class RangeQueryItemProvider extends HistoryQueryItemProvider implements IEditingDomainItemProvider,
-	IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+public class RangeQueryItemProvider extends HistoryQueryItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
@@ -77,9 +71,9 @@ public class RangeQueryItemProvider extends HistoryQueryItemProvider implements 
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_RangeQuery_upperLimit_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_RangeQuery_upperLimit_feature",
-					"_UI_RangeQuery_type"),
+				getString("_UI_RangeQuery_upperLimit_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_RangeQuery_upperLimit_feature", //$NON-NLS-1$ //$NON-NLS-2$
+					"_UI_RangeQuery_type"), //$NON-NLS-1$
 				VersioningPackage.Literals.RANGE_QUERY__UPPER_LIMIT,
 				true,
 				false,
@@ -100,9 +94,9 @@ public class RangeQueryItemProvider extends HistoryQueryItemProvider implements 
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_RangeQuery_lowerLimit_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_RangeQuery_lowerLimit_feature",
-					"_UI_RangeQuery_type"),
+				getString("_UI_RangeQuery_lowerLimit_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_RangeQuery_lowerLimit_feature", //$NON-NLS-1$ //$NON-NLS-2$
+					"_UI_RangeQuery_type"), //$NON-NLS-1$
 				VersioningPackage.Literals.RANGE_QUERY__LOWER_LIMIT,
 				true,
 				false,
@@ -123,9 +117,9 @@ public class RangeQueryItemProvider extends HistoryQueryItemProvider implements 
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_RangeQuery_includeIncoming_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_RangeQuery_includeIncoming_feature",
-					"_UI_RangeQuery_type"),
+				getString("_UI_RangeQuery_includeIncoming_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_RangeQuery_includeIncoming_feature", //$NON-NLS-1$ //$NON-NLS-2$
+					"_UI_RangeQuery_type"), //$NON-NLS-1$
 				VersioningPackage.Literals.RANGE_QUERY__INCLUDE_INCOMING,
 				true,
 				false,
@@ -146,9 +140,9 @@ public class RangeQueryItemProvider extends HistoryQueryItemProvider implements 
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_RangeQuery_includeOutgoing_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_RangeQuery_includeOutgoing_feature",
-					"_UI_RangeQuery_type"),
+				getString("_UI_RangeQuery_includeOutgoing_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_RangeQuery_includeOutgoing_feature", //$NON-NLS-1$ //$NON-NLS-2$
+					"_UI_RangeQuery_type"), //$NON-NLS-1$
 				VersioningPackage.Literals.RANGE_QUERY__INCLUDE_OUTGOING,
 				true,
 				false,
@@ -166,7 +160,7 @@ public class RangeQueryItemProvider extends HistoryQueryItemProvider implements 
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/RangeQuery"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/RangeQuery")); //$NON-NLS-1$
 	}
 
 	/**
@@ -178,8 +172,8 @@ public class RangeQueryItemProvider extends HistoryQueryItemProvider implements 
 	 */
 	@Override
 	public String getText(Object object) {
-		RangeQuery rangeQuery = (RangeQuery) object;
-		return getString("_UI_RangeQuery_type") + " " + rangeQuery.isIncludeChangePackages();
+		final RangeQuery<?> rangeQuery = (RangeQuery<?>) object;
+		return getString("_UI_RangeQuery_type") + " " + rangeQuery.isIncludeChangePackages(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

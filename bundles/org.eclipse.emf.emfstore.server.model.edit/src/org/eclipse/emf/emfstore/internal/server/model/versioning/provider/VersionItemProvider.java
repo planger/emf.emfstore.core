@@ -22,7 +22,6 @@ import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
@@ -39,7 +38,7 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.VersioningPacka
  * @generated
  */
 public class VersionItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
-	IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+	ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
@@ -83,8 +82,8 @@ public class VersionItemProvider extends ItemProviderAdapter implements IEditing
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_Version_nextVersion_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_Version_nextVersion_feature", "_UI_Version_type"),
+				getString("_UI_Version_nextVersion_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_Version_nextVersion_feature", "_UI_Version_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				VersioningPackage.Literals.VERSION__NEXT_VERSION,
 				true,
 				false,
@@ -105,9 +104,9 @@ public class VersionItemProvider extends ItemProviderAdapter implements IEditing
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_Version_previousVersion_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_Version_previousVersion_feature",
-					"_UI_Version_type"),
+				getString("_UI_Version_previousVersion_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_Version_previousVersion_feature", //$NON-NLS-1$ //$NON-NLS-2$
+					"_UI_Version_type"), //$NON-NLS-1$
 				VersioningPackage.Literals.VERSION__PREVIOUS_VERSION,
 				true,
 				false,
@@ -128,9 +127,9 @@ public class VersionItemProvider extends ItemProviderAdapter implements IEditing
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_Version_ancestorVersion_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_Version_ancestorVersion_feature",
-					"_UI_Version_type"),
+				getString("_UI_Version_ancestorVersion_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_Version_ancestorVersion_feature", //$NON-NLS-1$ //$NON-NLS-2$
+					"_UI_Version_type"), //$NON-NLS-1$
 				VersioningPackage.Literals.VERSION__ANCESTOR_VERSION,
 				true,
 				false,
@@ -151,9 +150,9 @@ public class VersionItemProvider extends ItemProviderAdapter implements IEditing
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_Version_branchedVersions_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_Version_branchedVersions_feature",
-					"_UI_Version_type"),
+				getString("_UI_Version_branchedVersions_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_Version_branchedVersions_feature", //$NON-NLS-1$ //$NON-NLS-2$
+					"_UI_Version_type"), //$NON-NLS-1$
 				VersioningPackage.Literals.VERSION__BRANCHED_VERSIONS,
 				true,
 				false,
@@ -174,9 +173,9 @@ public class VersionItemProvider extends ItemProviderAdapter implements IEditing
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_Version_mergedToVersion_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_Version_mergedToVersion_feature",
-					"_UI_Version_type"),
+				getString("_UI_Version_mergedToVersion_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_Version_mergedToVersion_feature", //$NON-NLS-1$ //$NON-NLS-2$
+					"_UI_Version_type"), //$NON-NLS-1$
 				VersioningPackage.Literals.VERSION__MERGED_TO_VERSION,
 				true,
 				false,
@@ -197,9 +196,9 @@ public class VersionItemProvider extends ItemProviderAdapter implements IEditing
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_Version_mergedFromVersion_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_Version_mergedFromVersion_feature",
-					"_UI_Version_type"),
+				getString("_UI_Version_mergedFromVersion_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_Version_mergedFromVersion_feature", //$NON-NLS-1$ //$NON-NLS-2$
+					"_UI_Version_type"), //$NON-NLS-1$
 				VersioningPackage.Literals.VERSION__MERGED_FROM_VERSION,
 				true,
 				false,
@@ -250,7 +249,7 @@ public class VersionItemProvider extends ItemProviderAdapter implements IEditing
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Version"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Version")); //$NON-NLS-1$
 	}
 
 	/**
@@ -262,7 +261,7 @@ public class VersionItemProvider extends ItemProviderAdapter implements IEditing
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_Version_type");
+		return getString("_UI_Version_type"); //$NON-NLS-1$
 	}
 
 	/**

@@ -21,7 +21,6 @@ import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
@@ -38,7 +37,7 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.VersioningPacka
  * @generated
  */
 public class HistoryQueryItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
-	IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+	ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
@@ -79,9 +78,9 @@ public class HistoryQueryItemProvider extends ItemProviderAdapter implements IEd
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_HistoryQuery_source_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_HistoryQuery_source_feature",
-					"_UI_HistoryQuery_type"),
+				getString("_UI_HistoryQuery_source_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_HistoryQuery_source_feature", //$NON-NLS-1$ //$NON-NLS-2$
+					"_UI_HistoryQuery_type"), //$NON-NLS-1$
 				VersioningPackage.Literals.HISTORY_QUERY__SOURCE,
 				true,
 				false,
@@ -102,9 +101,9 @@ public class HistoryQueryItemProvider extends ItemProviderAdapter implements IEd
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_HistoryQuery_includeChangePackages_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_HistoryQuery_includeChangePackages_feature",
-					"_UI_HistoryQuery_type"),
+				getString("_UI_HistoryQuery_includeChangePackages_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_HistoryQuery_includeChangePackages_feature", //$NON-NLS-1$ //$NON-NLS-2$
+					"_UI_HistoryQuery_type"), //$NON-NLS-1$
 				VersioningPackage.Literals.HISTORY_QUERY__INCLUDE_CHANGE_PACKAGES,
 				true,
 				false,
@@ -125,9 +124,9 @@ public class HistoryQueryItemProvider extends ItemProviderAdapter implements IEd
 			(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				getResourceLocator(),
-				getString("_UI_HistoryQuery_includeAllVersions_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_HistoryQuery_includeAllVersions_feature",
-					"_UI_HistoryQuery_type"),
+				getString("_UI_HistoryQuery_includeAllVersions_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_HistoryQuery_includeAllVersions_feature", //$NON-NLS-1$ //$NON-NLS-2$
+					"_UI_HistoryQuery_type"), //$NON-NLS-1$
 				VersioningPackage.Literals.HISTORY_QUERY__INCLUDE_ALL_VERSIONS,
 				true,
 				false,
@@ -145,7 +144,7 @@ public class HistoryQueryItemProvider extends ItemProviderAdapter implements IEd
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/HistoryQuery"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/HistoryQuery")); //$NON-NLS-1$
 	}
 
 	/**
@@ -157,8 +156,8 @@ public class HistoryQueryItemProvider extends ItemProviderAdapter implements IEd
 	 */
 	@Override
 	public String getText(Object object) {
-		HistoryQuery historyQuery = (HistoryQuery) object;
-		return getString("_UI_HistoryQuery_type") + " " + historyQuery.isIncludeChangePackages();
+		final HistoryQuery<?> historyQuery = (HistoryQuery<?>) object;
+		return getString("_UI_HistoryQuery_type") + " " + historyQuery.isIncludeChangePackages(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

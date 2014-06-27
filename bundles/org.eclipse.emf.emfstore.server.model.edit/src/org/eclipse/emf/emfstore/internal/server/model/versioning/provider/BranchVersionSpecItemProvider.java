@@ -15,12 +15,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.BranchVersionSpec;
 
 /**
@@ -30,8 +25,7 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.BranchVersionSp
  * 
  * @generated
  */
-public class BranchVersionSpecItemProvider extends VersionSpecItemProvider implements IEditingDomainItemProvider,
-	IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+public class BranchVersionSpecItemProvider extends VersionSpecItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
@@ -67,7 +61,7 @@ public class BranchVersionSpecItemProvider extends VersionSpecItemProvider imple
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/BranchVersionSpec"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/BranchVersionSpec")); //$NON-NLS-1$
 	}
 
 	/**
@@ -79,10 +73,10 @@ public class BranchVersionSpecItemProvider extends VersionSpecItemProvider imple
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((BranchVersionSpec) object).getBranch();
+		final String label = ((BranchVersionSpec) object).getBranch();
 		return label == null || label.length() == 0 ?
-			getString("_UI_BranchVersionSpec_type") :
-			getString("_UI_BranchVersionSpec_type") + " " + label;
+			getString("_UI_BranchVersionSpec_type") : //$NON-NLS-1$
+			getString("_UI_BranchVersionSpec_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
