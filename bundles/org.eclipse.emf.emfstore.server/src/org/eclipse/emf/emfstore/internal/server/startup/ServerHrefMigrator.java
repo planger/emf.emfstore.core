@@ -46,17 +46,19 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
- * When using the default EMF XMI persistence hrefs between resources are persisted based on the non-normalized URIs of
+ * When using the default EMF XMI persistence HRefs between resources are persisted based on the non-normalized URIs of
  * the resources. Since version 1.1 introduced a new URI scheme for EMFStore, files that were persisted with version 1.0
  * and prior need to be migrated.
  * <p>
- * This migrator will update the Hrefs in legacy files on the server side.
+ * This migrator will update the HRefs in legacy files on the server side.
  * 
  * @author jfaltermeier
  * 
  */
 public class ServerHrefMigrator {
 
+	private static final String STORAGE_USS = "storage.uss"; //$NON-NLS-1$
+	private static final String PROJECT_PREFIX = "project-"; //$NON-NLS-1$
 	private File backup;
 	private List<String> corruptProjectIds = new ArrayList<String>();
 
@@ -71,7 +73,7 @@ public class ServerHrefMigrator {
 		final String serverHome = ServerConfiguration.getServerHome();
 
 		// check if migration is needed
-		if (isMigrationNeeded(serverHome + "storage.uss")) { //$NON-NLS-1$
+		if (isMigrationNeeded(serverHome + STORAGE_USS)) {
 
 			if (backup != null) {
 				return false;
@@ -143,12 +145,12 @@ public class ServerHrefMigrator {
 	}
 
 	private List<String> doMigrate(String serverHome) throws InvocationTargetException {
-		migrateNonContainment(serverHome + "storage.uss", "projects", new ServerSpaceRule()); //$NON-NLS-1$ //$NON-NLS-2$
+		migrateNonContainment(serverHome + STORAGE_USS, "projects", new ServerSpaceRule()); //$NON-NLS-1$
 
 		final File serverHomeFile = new File(serverHome);
 		final File[] projectFiles = serverHomeFile.listFiles(new FilenameFilter() {
 			public boolean accept(File dir, String name) {
-				return name.startsWith("project-"); //$NON-NLS-1$
+				return name.startsWith(PROJECT_PREFIX);
 			}
 		});
 
@@ -160,9 +162,10 @@ public class ServerHrefMigrator {
 
 				if (!new File(projectHistoryPath).exists()) {
 					ModelUtil.logWarning(MessageFormat.format(
-						"Project history file {0} does not exist! Marking project as corrupt.", projectHistoryPath));
-					removeReferencesToCorruptProject(serverHome + "storage.uss",
-						f.getName().substring("project-".length()));
+						Messages.ServerHrefMigrator_HistoryFileDoeNotExists,
+						projectHistoryPath));
+					removeReferencesToCorruptProject(serverHome + STORAGE_USS,
+						f.getName().substring(PROJECT_PREFIX.length()));
 					continue;
 				}
 
@@ -185,8 +188,8 @@ public class ServerHrefMigrator {
 				}
 			} catch (final InvocationTargetException exception) {
 				ModelUtil.logException(MessageFormat.format(
-					"Could not migrate {0}.", f.getAbsolutePath()), exception);
-				corruptProjectIds.add(f.getName().substring("project-".length()));
+					Messages.ServerHrefMigrator_MigrationFailed, f.getAbsolutePath()), exception);
+				corruptProjectIds.add(f.getName().substring(PROJECT_PREFIX.length()));
 				continue;
 			}
 		}
@@ -273,7 +276,7 @@ public class ServerHrefMigrator {
 			final Document doc = builder.parse(serverHome);
 			final XPathFactory xPathfactory = XPathFactory.newInstance();
 			final XPath xpath = xPathfactory.newXPath();
-			final XPathExpression expr = xpath.compile("//projects[@id=\"" + projectId + "\"]"); //$NON-NLS-1$
+			final XPathExpression expr = xpath.compile("//projects[@id=\"" + projectId + "\"]"); //$NON-NLS-1$ //$NON-NLS-2$
 			final NodeList nl = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
 			for (int i = 0; i < nl.getLength(); i++) {
 				nl.item(i).getParentNode().removeChild(nl.item(i));

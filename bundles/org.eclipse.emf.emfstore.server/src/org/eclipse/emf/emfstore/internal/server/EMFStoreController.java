@@ -20,7 +20,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Properties;
@@ -55,12 +54,9 @@ import org.eclipse.emf.emfstore.internal.server.exceptions.FatalESException;
 import org.eclipse.emf.emfstore.internal.server.exceptions.StorageException;
 import org.eclipse.emf.emfstore.internal.server.model.ModelFactory;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectHistory;
-import org.eclipse.emf.emfstore.internal.server.model.ProjectId;
 import org.eclipse.emf.emfstore.internal.server.model.ServerSpace;
-import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnit;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACUser;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.AccesscontrolFactory;
-import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.roles.Role;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.roles.RolesFactory;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.BranchInfo;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.VersionSpec;
@@ -331,7 +327,7 @@ public class EMFStoreController implements IApplication, Runnable {
 			xmlRpcAdminConnectionHander.init(adminEmfStore, accessControl);
 			connectionHandlers.add(xmlRpcAdminConnectionHander);
 		} catch (final ESServerInitException ex) {
-			throw new FatalESException("Exception initializing Connection Handlers", ex);
+			throw new FatalESException(Messages.EMFStoreController_ConnectionHandlersInitException, ex);
 		}
 
 		return connectionHandlers;
@@ -347,7 +343,6 @@ public class EMFStoreController implements IApplication, Runnable {
 
 		// will be used only in case of ServerXMIResourceProvider, but maybe
 		// a more generic mechanism to remove any corrupt projects would make sense
-		final ServerHrefMigrator serverHrefMigrator = new ServerHrefMigrator();
 		if (!resourceSet.getURIConverter().exists(serverspaceURI, null)) {
 			try {
 				resource = resourceSet.createResource(serverspaceURI);
@@ -401,15 +396,6 @@ public class EMFStoreController implements IApplication, Runnable {
 		}
 
 		return result;
-	}
-
-	private void removeFromRoles(List<ACOrgUnit> orgUnits, ProjectId projectId) {
-		for (final ACOrgUnit orgUnit : orgUnits) {
-			final EList<Role> roles = orgUnit.getRoles();
-			for (final Role role : roles) {
-				role.getProjects().remove(projectId);
-			}
-		}
 	}
 
 	/**
