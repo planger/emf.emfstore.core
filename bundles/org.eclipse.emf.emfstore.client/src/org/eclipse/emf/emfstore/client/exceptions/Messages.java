@@ -17,6 +17,7 @@ import org.eclipse.osgi.util.NLS;
  * API exceptions related messages.
  * 
  * @author emueller
+ * @generated
  * @since 1.3
  * 
  */
