@@ -17,10 +17,11 @@ import org.eclipse.osgi.util.NLS;
  * Conflict detection related messages.
  * 
  * @author emueller
- * 
+ * @generated
  */
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.emf.emfstore.internal.server.conflictDetection.messages"; //$NON-NLS-1$
+	public static String ModelElementIdToEObjectMappingImpl_CreateDeleteOp_NullKey;
 	public static String ReservationToConflictBucketCandidateMap_Illegal_Reservation_With_And_Without_Opposite;
 	public static String ReservationToConflictBucketCandidateMap_Key_Is_Null;
 	public static String ReservationToConflictBucketCandidateMap_SingleRefOp_Of_CreateOp_Missing;

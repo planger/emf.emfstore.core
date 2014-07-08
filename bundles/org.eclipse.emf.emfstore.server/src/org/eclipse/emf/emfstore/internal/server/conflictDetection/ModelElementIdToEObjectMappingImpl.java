@@ -14,6 +14,7 @@ package org.eclipse.emf.emfstore.internal.server.conflictDetection;
 
 import static org.eclipse.emf.emfstore.internal.server.model.versioning.operations.util.OperationUtil.isCreateDelete;
 
+import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -25,6 +26,7 @@ import org.eclipse.emf.emfstore.internal.common.model.ModelElementId;
 import org.eclipse.emf.emfstore.internal.common.model.ModelElementIdToEObjectMapping;
 import org.eclipse.emf.emfstore.internal.common.model.Project;
 import org.eclipse.emf.emfstore.internal.common.model.impl.ESModelElementIdToEObjectMappingImpl;
+import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.ChangePackage;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.CompositeOperation;
@@ -144,6 +146,14 @@ public class ModelElementIdToEObjectMappingImpl implements ModelElementIdToEObje
 
 		if (isCreateDelete(operation)) {
 			final CreateDeleteOperation createDeleteOperation = (CreateDeleteOperation) operation;
+
+			if (createDeleteOperation.getEObjectToIdMap().keySet().contains(null)) {
+				// illegal state
+				ModelUtil.logWarning(MessageFormat.format(
+					Messages.ModelElementIdToEObjectMappingImpl_CreateDeleteOp_NullKey,
+					createDeleteOperation.getIdentifier()));
+			}
+
 			for (final EObject modelElement : createDeleteOperation.getEObjectToIdMap().keySet()) {
 				idToEObjectMapping.put(createDeleteOperation.getEObjectToIdMap().get(modelElement).toString(),
 					modelElement);
