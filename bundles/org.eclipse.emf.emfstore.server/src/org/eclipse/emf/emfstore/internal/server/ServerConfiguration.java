@@ -239,9 +239,14 @@ public final class ServerConfiguration {
 	public static final AuthenticationControlType AUTHENTICATION_POLICY_DEFAULT = AuthenticationControlType.spfv;
 
 	/**
-	 * Path to property file for spfv authentication.
+	 * Path to property file for SPFV authentication.
 	 */
 	public static final String AUTHENTICATION_SPFV_FILEPATH = "emfstore.accesscontrol.authentication.spfv"; //$NON-NLS-1$
+
+	/**
+	 * Key for valid ciphers to be used with SSL.
+	 */
+	public static final String SSL_CIPHERS = "emfstore.ssl.ciphers"; //$NON-NLS-1$
 
 	/**
 	 * Property to validate server on start up.
@@ -651,5 +656,4 @@ public final class ServerConfiguration {
 	public static void addPostStartupListener(PostStartupListener listener) {
 		POST_STARTUP_LISTENERS.add(listener);
 	}
-
 }

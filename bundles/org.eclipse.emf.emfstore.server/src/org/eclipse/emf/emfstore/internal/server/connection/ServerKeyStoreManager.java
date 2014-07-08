@@ -114,7 +114,7 @@ public final class ServerKeyStoreManager {
 		if (keyStore == null) {
 			FileInputStream fileInputStream = null;
 			try {
-				keyStore = KeyStore.getInstance("JKS");
+				keyStore = KeyStore.getInstance("JKS"); //$NON-NLS-1$
 				fileInputStream = new FileInputStream(ServerConfiguration.getServerKeyStorePath());
 				keyStore.load(fileInputStream, getKeyStorePassword());
 			} catch (final NoSuchAlgorithmException e) {
@@ -141,7 +141,7 @@ public final class ServerKeyStoreManager {
 	}
 
 	/**
-	 * Unloads the keystore by setting it to
+	 * Unloads the keystore by setting it to null.
 	 */
 	public void unloadKeyStore() {
 		keyStore = null;
@@ -155,10 +155,11 @@ public final class ServerKeyStoreManager {
 	 */
 	public KeyManagerFactory getKeyManagerFactory() throws ServerKeyStoreException {
 		try {
-			final KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(ServerConfiguration
-				.getProperties()
-				.getProperty(ServerConfiguration.KEYSTORE_CERTIFICATE_TYPE,
-					ServerConfiguration.KEYSTORE_CERTIFICATE_TYPE_DEFAULT));
+			final KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(
+				ServerConfiguration.getProperties()
+					.getProperty(
+						ServerConfiguration.KEYSTORE_CERTIFICATE_TYPE,
+						ServerConfiguration.KEYSTORE_CERTIFICATE_TYPE_DEFAULT));
 			keyManagerFactory.init(getKeyStore(), getKeyStorePassword());
 			return keyManagerFactory;
 		} catch (final NoSuchAlgorithmException e) {
@@ -174,10 +175,10 @@ public final class ServerKeyStoreManager {
 	 * Sets java runtime properties for SSL.
 	 */
 	public void setJavaSSLProperties() {
-		System.setProperty("javax.net.ssl.keyStore", ServerConfiguration.getServerKeyStorePath());
-		System.setProperty("javax.net.ssl.trustStore", ServerConfiguration.getServerKeyStorePath());
-		System.setProperty("javax.net.ssl.keyStorePassword", Arrays.toString(getKeyStorePassword()));
-		System.setProperty("javax.net.ssl.trustStorePassword", Arrays.toString(getKeyStorePassword()));
+		System.setProperty("javax.net.ssl.keyStore", ServerConfiguration.getServerKeyStorePath()); //$NON-NLS-1$
+		System.setProperty("javax.net.ssl.trustStore", ServerConfiguration.getServerKeyStorePath()); //$NON-NLS-1$
+		System.setProperty("javax.net.ssl.keyStorePassword", Arrays.toString(getKeyStorePassword())); //$NON-NLS-1$
+		System.setProperty("javax.net.ssl.trustStorePassword", Arrays.toString(getKeyStorePassword())); //$NON-NLS-1$
 	}
 
 	/**
@@ -187,12 +188,15 @@ public final class ServerKeyStoreManager {
 	 */
 	public char[] getKeyStorePassword() {
 		return ServerConfiguration.getProperties()
-			.getProperty(ServerConfiguration.KEYSTORE_PASSWORD, ServerConfiguration.KEYSTORE_PASSWORD_DEFAULT)
+			.getProperty(
+				ServerConfiguration.KEYSTORE_PASSWORD,
+				ServerConfiguration.KEYSTORE_PASSWORD_DEFAULT)
 			.toCharArray();
 	}
 
 	private String getKeyStoreAlias() {
-		return ServerConfiguration.getProperties().getProperty(ServerConfiguration.KEYSTORE_ALIAS,
+		return ServerConfiguration.getProperties().getProperty(
+			ServerConfiguration.KEYSTORE_ALIAS,
 			ServerConfiguration.KEYSTORE_ALIAS_DEFAULT);
 	}
 }

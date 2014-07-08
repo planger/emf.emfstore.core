@@ -12,13 +12,6 @@
 package org.eclipse.emf.emfstore.internal.server.connection.xmlrpc;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLServerSocketFactory;
 
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.server.PropertyHandlerMapping;
@@ -26,17 +19,13 @@ import org.apache.xmlrpc.server.XmlRpcServer;
 import org.apache.xmlrpc.server.XmlRpcServerConfigImpl;
 import org.apache.xmlrpc.webserver.WebServer;
 import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
-import org.eclipse.emf.emfstore.internal.server.EMFStoreController;
-import org.eclipse.emf.emfstore.internal.server.connection.ServerKeyStoreManager;
 import org.eclipse.emf.emfstore.internal.server.connection.xmlrpc.util.EObjectTypeConverterFactory;
 import org.eclipse.emf.emfstore.internal.server.connection.xmlrpc.util.EObjectTypeFactory;
-import org.eclipse.emf.emfstore.internal.server.exceptions.FatalESException;
-import org.eclipse.emf.emfstore.internal.server.exceptions.ServerKeyStoreException;
 import org.eclipse.emf.emfstore.server.ESXmlRpcWebServerProvider;
 import org.eclipse.emf.emfstore.server.exceptions.ESServerInitException;
 
 /**
- * use xmlrpc builtin webserver for XML RPC connections.
+ * XML-RPC built-in web server for XML RPC connections.
  * 
  * @author wesendon
  */
@@ -59,44 +48,15 @@ public final class XmlRpcBuiltinWebServer implements ESXmlRpcWebServerProvider {
 	 */
 	public void initServer() throws ESServerInitException {
 		if (port == -1) {
-			throw new ESServerInitException("Port is not set for EMFStore Server");
+			throw new ESServerInitException(Messages.XmlRpcBuiltinWebServer_PortUnset);
 		}
 		if (webServer != null) {
 			return;
 		}
 		try {
-			webServer = new WebServer(port) {
+			webServer = new EMFStoreWebServer(port);
 
-				@Override
-				protected ServerSocket createServerSocket(int pPort, int backlog, InetAddress addr) throws IOException {
-
-					SSLServerSocketFactory serverSocketFactory = null;
-
-					try {
-						final SSLContext context = SSLContext.getInstance("TLS");
-						context.init(ServerKeyStoreManager.getInstance().getKeyManagerFactory().getKeyManagers(), null,
-							null);
-						serverSocketFactory = context.getServerSocketFactory();
-					} catch (final NoSuchAlgorithmException exception) {
-						shutdown(serverSocketFactory, exception);
-					} catch (final KeyManagementException exception) {
-						shutdown(serverSocketFactory, exception);
-					} catch (final ServerKeyStoreException exception) {
-						shutdown(serverSocketFactory, exception);
-					}
-
-					return serverSocketFactory.createServerSocket(pPort, backlog, addr);
-				}
-
-				private void shutdown(SSLServerSocketFactory serverSocketFactory, Exception e) {
-					if (serverSocketFactory == null) {
-						ModelUtil.logException("Couldn't initialize server socket.", e);
-						EMFStoreController.getInstance().shutdown(new FatalESException());
-					}
-				}
-			};
-
-			ModelUtil.logInfo("Started XML RPC Webserver on port: " + port);
+			ModelUtil.logInfo(Messages.XmlRpcBuiltinWebServer_ServerStarted + port);
 
 			final XmlRpcServer xmlRpcServer = webServer.getXmlRpcServer();
 			xmlRpcServer.setTypeFactory(new EObjectTypeFactory(xmlRpcServer));
@@ -117,7 +77,7 @@ public final class XmlRpcBuiltinWebServer implements ESXmlRpcWebServerProvider {
 
 			webServer.start();
 		} catch (final IOException e) {
-			throw new ESServerInitException("Couldn't start webserver", e);
+			throw new ESServerInitException(Messages.XmlRpcBuiltinWebServer_ServerStartFailed, e);
 		}
 	}
 
@@ -134,7 +94,7 @@ public final class XmlRpcBuiltinWebServer implements ESXmlRpcWebServerProvider {
 				.getHandlerMapping();
 			mapper.addHandler(handlerName, clazz);
 		} catch (final XmlRpcException e) {
-			throw new ESServerInitException("Couldn't add handler", e);
+			throw new ESServerInitException(Messages.XmlRpcBuiltinWebServer_AddHandlerFailed, e);
 		}
 	}
 
