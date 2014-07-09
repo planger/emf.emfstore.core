@@ -14,10 +14,10 @@ package org.eclipse.emf.emfstore.internal.client.ui.views.emfstorebrowser.dialog
 import org.eclipse.osgi.util.NLS;
 
 /**
- * UI Accesscontrol related messages.
+ * UI Access control related messages.
  * 
  * @author emueller
- * 
+ * @generated
  */
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.emf.emfstore.internal.client.ui.views.emfstorebrowser.dialogs.admin.messages"; //$NON-NLS-1$

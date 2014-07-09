@@ -17,7 +17,7 @@ import org.eclipse.osgi.util.NLS;
  * Import wizard related messages.
  * 
  * @author emueller
- * 
+ * @generated
  */
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.emf.emfstore.internal.client.ui.views.emfstorebrowser.dialogs.admin.acimport.messages"; //$NON-NLS-1$

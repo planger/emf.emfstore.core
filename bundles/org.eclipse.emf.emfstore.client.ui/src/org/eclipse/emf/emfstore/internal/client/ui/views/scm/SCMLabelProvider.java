@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
@@ -42,11 +43,13 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
 /**
- * Label provider for the scm views.
+ * Label provider for the SCM views.
  * 
  * @author Shterev
  */
 public class SCMLabelProvider extends ColumnLabelProvider {
+
+	final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd, HH:mm"); //$NON-NLS-1$
 
 	private static final String ELEMENT_NOT_FOUND = "There is no sufficient information to display this element";
 	/**
@@ -54,16 +57,16 @@ public class SCMLabelProvider extends ColumnLabelProvider {
 	 */
 	protected static final String LOCAL_REVISION = "Local revision";
 
-	private List<OperationId> highlighted;
+	private final List<OperationId> highlighted;
 
 	private ChangePackageVisualizationHelper changePackageVisualizationHelper;
-	private Image baseRevision;
-	private Image currentRevision;
-	private Image headRevision;
+	private final Image baseRevision;
+	private final Image currentRevision;
+	private final Image headRevision;
 
-	private ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(
+	private final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(
 		ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-	private AdapterFactoryLabelProvider adapterFactoryLabelProvider = new AdapterFactoryLabelProvider(
+	private final AdapterFactoryLabelProvider adapterFactoryLabelProvider = new AdapterFactoryLabelProvider(
 		adapterFactory);
 	private Project project;
 
@@ -76,7 +79,7 @@ public class SCMLabelProvider extends ColumnLabelProvider {
 	public SCMLabelProvider(Project project) {
 		super();
 		this.project = project;
-		this.highlighted = new ArrayList<OperationId>();
+		highlighted = new ArrayList<OperationId>();
 
 		baseRevision = Activator.getImageDescriptor(
 			"icons/HistoryInfo_base.png").createImage();
@@ -101,7 +104,7 @@ public class SCMLabelProvider extends ColumnLabelProvider {
 
 		String ret = null;
 		if (element instanceof HistoryInfo) {
-			HistoryInfo historyInfo = (HistoryInfo) element;
+			final HistoryInfo historyInfo = (HistoryInfo) element;
 			return getText(historyInfo);
 		} else if (element instanceof AbstractOperation
 			&& changePackageVisualizationHelper != null) {
@@ -109,7 +112,7 @@ public class SCMLabelProvider extends ColumnLabelProvider {
 				.getDescription((AbstractOperation) element);
 		} else if (element instanceof ModelElementId
 			&& changePackageVisualizationHelper != null) {
-			EObject modelElement = changePackageVisualizationHelper
+			final EObject modelElement = changePackageVisualizationHelper
 				.getModelElement((ModelElementId) element);
 			if (modelElement != null) {
 				ret = adapterFactoryLabelProvider.getText(modelElement);
@@ -117,7 +120,7 @@ public class SCMLabelProvider extends ColumnLabelProvider {
 				return ELEMENT_NOT_FOUND;
 			}
 		} else if (element instanceof ChangePackage) {
-			ChangePackage changePackage = (ChangePackage) element;
+			final ChangePackage changePackage = (ChangePackage) element;
 			return getText(changePackage);
 		} else if (element instanceof EObject) {
 			// TODO: rather reference virtual node directly??
@@ -136,27 +139,25 @@ public class SCMLabelProvider extends ColumnLabelProvider {
 	}
 
 	private String getText(ChangePackage changePackage) {
-		StringBuilder builder = new StringBuilder();
+		final StringBuilder builder = new StringBuilder();
 		builder.append("Change Package");
 		if (changePackage.getLogMessage() != null) {
-			SimpleDateFormat dateFormat = new SimpleDateFormat(
-				"yyyy-MM-dd, HH:mm");
-			LogMessage logMessage = changePackage.getLogMessage();
-			builder.append(" [");
+			final LogMessage logMessage = changePackage.getLogMessage();
+			builder.append(" ["); //$NON-NLS-1$
 			builder.append(logMessage.getAuthor());
-			Date clientDate = logMessage.getClientDate();
+			final Date clientDate = logMessage.getClientDate();
 			if (clientDate != null) {
-				builder.append(" @ ");
+				builder.append(" @ "); //$NON-NLS-1$
 				builder.append(dateFormat.format(clientDate));
 			}
-			builder.append("] ");
+			builder.append("] "); //$NON-NLS-1$
 			builder.append(logMessage.getMessage());
 		}
 		return builder.toString();
 	}
 
 	/**
-	 * Gets the text for a history info. This may be overriden by subclasses to
+	 * Gets the text for a history info. This may be overridden by subclasses to
 	 * change the behavior (e.g. if info should be distributed across multiply
 	 * label providers)
 	 * 
@@ -170,21 +171,20 @@ public class SCMLabelProvider extends ColumnLabelProvider {
 			return LOCAL_REVISION;
 		}
 
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd, HH:mm");
-		String baseVersion = "";
+		String baseVersion = StringUtils.EMPTY;
 		if (historyInfo.getPrimarySpec().getIdentifier() == ESWorkspaceProviderImpl
 			.getProjectSpace(project).getBaseVersion().getIdentifier()) {
-			baseVersion = "*";
+			baseVersion = "*"; //$NON-NLS-1$
 		}
-		StringBuilder builder = new StringBuilder();
+		final StringBuilder builder = new StringBuilder();
 
 		if (!historyInfo.getTagSpecs().isEmpty()) {
-			builder.append("[");
-			for (TagVersionSpec versionSpec : historyInfo.getTagSpecs()) {
+			builder.append("["); //$NON-NLS-1$
+			for (final TagVersionSpec versionSpec : historyInfo.getTagSpecs()) {
 				builder.append(versionSpec.getName());
-				builder.append(",");
+				builder.append(","); //$NON-NLS-1$
 			}
-			builder.replace(builder.length() - 1, builder.length(), "] ");
+			builder.replace(builder.length() - 1, builder.length(), "] "); //$NON-NLS-1$
 		}
 
 		builder.append(baseVersion);
@@ -199,14 +199,14 @@ public class SCMLabelProvider extends ColumnLabelProvider {
 			logMessage = historyInfo.getChangePackage().getLogMessage();
 		}
 		if (logMessage != null) {
-			builder.append(" [");
+			builder.append(" ["); //$NON-NLS-1$
 			builder.append(logMessage.getAuthor());
-			Date clientDate = logMessage.getClientDate();
+			final Date clientDate = logMessage.getClientDate();
 			if (clientDate != null) {
-				builder.append(" @ ");
+				builder.append(" @ "); //$NON-NLS-1$
 				builder.append(dateFormat.format(clientDate));
 			}
-			builder.append("] ");
+			builder.append("] "); //$NON-NLS-1$
 			builder.append(logMessage.getMessage());
 		}
 		return builder.toString();
@@ -219,7 +219,7 @@ public class SCMLabelProvider extends ColumnLabelProvider {
 	public Color getForeground(Object element) {
 
 		if (element instanceof AbstractOperation) {
-			AbstractOperation operation = (AbstractOperation) element;
+			final AbstractOperation operation = (AbstractOperation) element;
 			if (highlighted.contains(operation.getOperationId())) {
 				return Display.getCurrent().getSystemColor(SWT.COLOR_RED);
 			}
@@ -234,24 +234,20 @@ public class SCMLabelProvider extends ColumnLabelProvider {
 	@Override
 	public Font getFont(Object element) {
 
-		Font italic = JFaceResources.getFontRegistry().getItalic(
+		final Font italic = JFaceResources.getFontRegistry().getItalic(
 			JFaceResources.DIALOG_FONT);
-		Font bold = JFaceResources.getFontRegistry().getBold(
+		final Font bold = JFaceResources.getFontRegistry().getBold(
 			JFaceResources.DIALOG_FONT);
 
-		// if (getText(findTopParent((TreeNode)
-		// element)).equals(LOCAL_REVISION)) {
-		// return italic;
-		// }
 		String text = getText(element);
 		if (text == null) {
-			text = "";
+			text = StringUtils.EMPTY;
 		}
 		if (element instanceof HistoryInfo) {
 			if (text.equals(LOCAL_REVISION)) {
 				return italic;
 			}
-			HistoryInfo historyInfo = (HistoryInfo) element;
+			final HistoryInfo historyInfo = (HistoryInfo) element;
 			if (historyInfo.getPrimarySpec().getIdentifier() == ESWorkspaceProviderImpl
 				.getProjectSpace(project).getBaseVersion().getIdentifier()) {
 				return bold;
@@ -265,15 +261,15 @@ public class SCMLabelProvider extends ColumnLabelProvider {
 		}
 		if (element instanceof EObject
 			&& ((EObject) element).eContainer() instanceof AbstractOperation) {
-			AbstractOperation op = (AbstractOperation) ((EObject) element)
+			final AbstractOperation op = (AbstractOperation) ((EObject) element)
 				.eContainer();
 			if (element instanceof ModelElementId
 				&& element.equals(op.getModelElementId())) {
 				return bold;
 			}
 
-			EObject modelElement = (EObject) element;
-			Project project = ModelUtil.getProject(modelElement);
+			final EObject modelElement = (EObject) element;
+			final Project project = ModelUtil.getProject(modelElement);
 			if (project != null
 				&& project.getModelElementId(modelElement).equals(
 					op.getModelElementId())) {
@@ -294,14 +290,14 @@ public class SCMLabelProvider extends ColumnLabelProvider {
 				.getImage(changePackageVisualizationHelper
 					.getModelElement((ModelElementId) element));
 		} else if (element instanceof HistoryInfo) {
-			String text = getText(element);
+			final String text = getText(element);
 			if (text.equals(LOCAL_REVISION)) {
 				return currentRevision;
 			}
-			if (text.matches("\\[.*BASE.*\\].*")) {
+			if (text.matches("\\[.*BASE.*\\].*")) { //$NON-NLS-1$
 				return baseRevision;
 			}
-			if (text.matches("\\[.*HEAD.*\\].*")) {
+			if (text.matches("\\[.*HEAD.*\\].*")) { //$NON-NLS-1$
 				return headRevision;
 			}
 		}
@@ -341,7 +337,7 @@ public class SCMLabelProvider extends ColumnLabelProvider {
 	 */
 	@Override
 	public String getToolTipText(Object element) {
-		HistoryInfo historyInfo = ModelUtil.getParent(HistoryInfo.class,
+		final HistoryInfo historyInfo = ModelUtil.getParent(HistoryInfo.class,
 			(EObject) element);
 		return getText(historyInfo);
 	}

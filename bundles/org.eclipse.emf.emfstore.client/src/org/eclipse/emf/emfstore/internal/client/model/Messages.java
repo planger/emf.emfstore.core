@@ -14,10 +14,10 @@ package org.eclipse.emf.emfstore.internal.client.model;
 import org.eclipse.osgi.util.NLS;
 
 /**
- * Messages related to internal model usage of the client
+ * Messages related to internal model usage of the client.
  * 
  * @author emueller
- * 
+ * @generated
  */
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.emf.emfstore.internal.client.model.messages"; //$NON-NLS-1$

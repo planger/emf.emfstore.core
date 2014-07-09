@@ -107,7 +107,7 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 * 
 	 * @generated NOT
 	 */
-	String RUNNABLE_CONTEXT_ID = "org.eclipse.emf.emfstore.client.runnableChangeContext";
+	String RUNNABLE_CONTEXT_ID = "org.eclipse.emf.emfstore.client.runnableChangeContext"; //$NON-NLS-1$
 
 	/**
 	 * <p>
@@ -182,7 +182,7 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 * @throws ESException
 	 *             in case the commit went wrong
 	 * 
-	 * @return the current version spec
+	 * @return the current version specification
 	 **/
 	PrimaryVersionSpec commit(IProgressMonitor monitor) throws ESException;
 
@@ -198,7 +198,7 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 *            an optional progress monitor to be used while the commit is in
 	 *            progress, may be <code>null</code>
 	 * 
-	 * @return the current version spec
+	 * @return the current version specification
 	 * 
 	 * @throws ESException
 	 *             in case the commit went wrong
@@ -217,7 +217,7 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 * @param branch
 	 *            branch specifier
 	 * @param logMessage
-	 *            optional logmessage
+	 *            optional log message
 	 * @param callback
 	 *            optional callback, passing an implementation is recommended
 	 * @param monitor
@@ -231,7 +231,7 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 
 	/**
 	 * Allows to merge a version from another branch into the current
-	 * projectspace.
+	 * project space.
 	 * 
 	 * @param branchSpec
 	 *            the version which is supposed to be merged
@@ -1105,7 +1105,7 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 		throws ESException;
 
 	/**
-	 * Determine if the projectspace has unsave changes to any element in the project.
+	 * Determine if the project space has unsaved changes to any element in the project.
 	 * 
 	 * @return true if there is unsaved changes.
 	 * 
@@ -1125,7 +1125,7 @@ public interface ProjectSpace extends IdentifiableElement, APIDelegate<ESLocalPr
 	 * 
 	 * @return true, if the project space has been shared, false otherwise
 	 * 
-	 * @generated NOt
+	 * @generated NOT
 	 */
 	boolean isShared();
 

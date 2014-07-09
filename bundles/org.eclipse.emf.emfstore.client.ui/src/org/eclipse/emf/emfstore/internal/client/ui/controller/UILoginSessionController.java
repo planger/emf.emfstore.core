@@ -13,7 +13,6 @@ package org.eclipse.emf.emfstore.internal.client.ui.controller;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.emfstore.client.ESServer;
-import org.eclipse.emf.emfstore.internal.client.model.ServerInfo;
 import org.eclipse.emf.emfstore.internal.client.ui.dialogs.login.LoginDialogController;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -33,9 +32,10 @@ public class UILoginSessionController extends AbstractEMFStoreUIController<Void>
 	 * Constructor.
 	 * 
 	 * @param shell
-	 *            the parent {@link Shell} that should be used during loggin in the given session
+	 *            the parent {@link Shell} that should be used during login in the given session
 	 * @param serverInfo
-	 *            the {@link ServerInfo} that is used to determine the server that is used to log in the session against
+	 *            the {@link org.eclipse.emf.emfstore.internal.client.model.ServerInfo ServerInfo} that is used to
+	 *            determine the server that is used to log in the session against
 	 */
 	public UILoginSessionController(Shell shell, ESServer serverInfo) {
 		super(shell);

@@ -15,7 +15,7 @@ import org.eclipse.osgi.util.NLS;
 
 /**
  * @author emueller
- * 
+ * @generated
  */
 public final class Messages extends NLS {
 

@@ -152,7 +152,6 @@ public class UIUpdateProjectController extends
 	 */
 	public boolean conflictOccurred(final ESConflictSet changeConflict,
 		final IProgressMonitor monitor) {
-		// TODO OTS
 		final ProjectSpace internalProject = ((ESLocalProjectImpl) localProject).toInternalAPI();
 		final ChangeConflictSet internalChangeConflict = ((ESConflictSetImpl) changeConflict).toInternalAPI();
 		return new MergeProjectHandler(false).resolveConflicts(internalProject.getProject(), internalChangeConflict);
@@ -248,10 +247,10 @@ public class UIUpdateProjectController extends
 					public void run() {
 						MessageDialog.openError(
 							getShell(),
-							"Update failed",
+							Messages.UIUpdateProjectController_UpdateFailed,
 							MessageFormat
 								.format(
-									"A serious {0} occurred during update. The failure message was: {1}\nPlease consult your administrator.",
+									Messages.UIUpdateProjectController_ErrorDuringUpdate,
 									e.getCause().getMessage(),
 									e.getCause().getClass().getSimpleName()));
 					}
@@ -260,7 +259,7 @@ public class UIUpdateProjectController extends
 				RunInUI.run(new Callable<Void>() {
 					public Void call() throws Exception {
 						MessageDialog.openError(getShell(),
-							"Update failed",
+							Messages.UIUpdateProjectController_UpdateFailed,
 							e.getMessage());
 						return null;
 					}

@@ -17,7 +17,7 @@ import org.eclipse.osgi.util.NLS;
  * Connection manager related messages.
  * 
  * @author emueller
- * 
+ * @generated
  */
 public final class Messages extends NLS {
 

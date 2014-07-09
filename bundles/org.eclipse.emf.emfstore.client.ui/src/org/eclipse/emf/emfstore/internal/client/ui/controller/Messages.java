@@ -17,7 +17,7 @@ import org.eclipse.osgi.util.NLS;
  * UI controller related messages.
  * 
  * @author emueller
- * 
+ * @generated
  */
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.emf.emfstore.internal.client.ui.controller.messages"; //$NON-NLS-1$
@@ -39,6 +39,7 @@ public final class Messages extends NLS {
 	public static String UICheckoutController_ProjectNamePrompt;
 	public static String UICommitProjectController_CommitFailed;
 	public static String UICommitProjectController_Confirmation;
+	public static String UICommitProjectController_ErrorDuringCommit;
 	public static String UICommitProjectController_NoLocalChanges_Message;
 	public static String UICommitProjectController_NoLocalChanges_Title;
 	public static String UICommitProjectController_NoPendingChanges_0;
@@ -102,10 +103,12 @@ public final class Messages extends NLS {
 	public static String UIShowProjectPropertiesController_CurrentRevision;
 	public static String UIShowProjectPropertiesController_ProjectInformation;
 	public static String UIShowProjectPropertiesController_UnknownTag;
+	public static String UIUpdateProjectController_ErrorDuringUpdate;
 	public static String UIUpdateProjectController_MoreUpdatesAvailable_Message;
 	public static String UIUpdateProjectController_MoreUpdatesAvailable_Title;
 	public static String UIUpdateProjectController_NoNeedToUpdate;
 	public static String UIUpdateProjectController_ProjectUpToDate;
+	public static String UIUpdateProjectController_UpdateFailed;
 	public static String UIUpdateProjectToVersionController_SelectVersion_Message;
 	public static String UIUpdateProjectToVersionController_SelectVersion_Title;
 	public static String UIUpdateProjectToVersionController_Version;

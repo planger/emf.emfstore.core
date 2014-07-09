@@ -17,7 +17,7 @@ import org.eclipse.osgi.util.NLS;
  * XML-RPC related messages on client side.
  * 
  * @author emueller
- * 
+ * @generated
  */
 public final class Messages extends NLS {
 

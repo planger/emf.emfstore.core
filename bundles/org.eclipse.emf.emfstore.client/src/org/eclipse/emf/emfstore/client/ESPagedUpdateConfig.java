@@ -24,7 +24,7 @@ public interface ESPagedUpdateConfig {
 	/**
 	 * The ID of an page update configuration class.
 	 */
-	String ID = "org.eclipse.emf.emfstore.client.pagedUpdate.config";
+	String ID = "org.eclipse.emf.emfstore.client.pagedUpdate.config"; //$NON-NLS-1$
 
 	/**
 	 * Whether paged update should be used at all.

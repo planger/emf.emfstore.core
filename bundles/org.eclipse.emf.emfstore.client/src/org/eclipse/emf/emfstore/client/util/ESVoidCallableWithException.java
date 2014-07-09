@@ -30,6 +30,12 @@ public abstract class ESVoidCallableWithException<E extends Exception> implement
 		return null;
 	}
 
+	/**
+	 * Executes this callable.
+	 * 
+	 * @throws Exception
+	 *             in case an error occurs
+	 */
 	// BEGIN SUPRESS CATCH EXCEPTION
 	public abstract void run() throws Exception;
 	// END SUPRESS CATCH EXCEPTION

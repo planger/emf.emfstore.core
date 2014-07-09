@@ -13,17 +13,17 @@ package org.eclipse.emf.emfstore.internal.client.ui.controller;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.emfstore.client.ESLocalProject;
-import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
 import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESLocalProjectImpl;
 import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESRemoteProjectImpl;
 import org.eclipse.emf.emfstore.internal.client.ui.views.historybrowserview.HistoryCompare;
-import org.eclipse.emf.emfstore.internal.server.model.versioning.HistoryInfo;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.eclipse.emf.emfstore.server.model.versionspec.ESPrimaryVersionSpec;
 import org.eclipse.swt.widgets.Shell;
 
 /**
- * Compare two {@link HistoryInfo}s of a {@link ProjectSpace}.
+ * Compare two {@link org.eclipse.emf.emfstore.internal.server.model.versioning.HistoryInfo HistoryInfo}s of a
+ * {@link org.eclipse.emf.emfstore.internal.client.model.ProjectSpace
+ * ProjectSpace}.
  * 
  * @author jsommerfeldt
  * 
@@ -38,8 +38,8 @@ public class UICompareRevisionsController extends AbstractEMFStoreUIController<V
 	 * Constructor.
 	 * 
 	 * @param shell shell to display the controller
-	 * @param versionSpec1 the first verion spec to compare
-	 * @param versionSpec2 the second version spec to compare
+	 * @param versionSpec1 the first version specification to compare
+	 * @param versionSpec2 the second version specification to compare
 	 * @param localProject the project
 	 */
 	public UICompareRevisionsController(Shell shell, ESPrimaryVersionSpec versionSpec1,

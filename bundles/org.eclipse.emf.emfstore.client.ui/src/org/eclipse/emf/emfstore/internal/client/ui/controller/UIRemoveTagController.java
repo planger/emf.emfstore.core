@@ -16,7 +16,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
 import org.eclipse.emf.emfstore.internal.client.ui.views.historybrowserview.HistoryBrowserView;
 import org.eclipse.emf.emfstore.internal.server.model.impl.api.ESHistoryInfoImpl;
-import org.eclipse.emf.emfstore.internal.server.model.versioning.HistoryInfo;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.eclipse.emf.emfstore.server.model.ESHistoryInfo;
 import org.eclipse.emf.emfstore.server.model.versionspec.ESTagVersionSpec;
@@ -46,7 +45,8 @@ public class UIRemoveTagController extends AbstractEMFStoreUIController<Void> {
 	 * @param shell
 	 *            the parent {@link Shell}
 	 * @param historyInfo
-	 *            the {@link HistoryInfo} from which to remove the tag
+	 *            the {@link org.eclipse.emf.emfstore.internal.server.model.versioning.HistoryInfo HistoryInfo} from
+	 *            which to remove the tag
 	 */
 	public UIRemoveTagController(Shell shell, ESHistoryInfo historyInfo) {
 		super(shell);

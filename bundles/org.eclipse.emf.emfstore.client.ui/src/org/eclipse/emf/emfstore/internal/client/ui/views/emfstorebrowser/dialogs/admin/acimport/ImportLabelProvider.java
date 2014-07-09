@@ -26,12 +26,16 @@ import org.eclipse.swt.graphics.Image;
  */
 public class ImportLabelProvider implements ILabelProvider {
 
+	private static final String GROUP_GIF = "icons/Group.gif"; //$NON-NLS-1$
+
+	private static final String USER_PNG = "icons/user.png"; //$NON-NLS-1$
+
 	private ImportSource source;
 
-	private Image userImage;
-	private Image groupImage;
+	private final Image userImage;
+	private final Image groupImage;
 
-	private ArrayList<ILabelProviderListener> listeners;
+	private final ArrayList<ILabelProviderListener> listeners;
 
 	/**
 	 * Constructs a FileTreeLabelProvider.
@@ -40,11 +44,11 @@ public class ImportLabelProvider implements ILabelProvider {
 	 *            the controller which handles the import
 	 */
 	public ImportLabelProvider(ImportController controller) {
-		this.setSource(controller.getImportSource());
-		this.listeners = new ArrayList<ILabelProviderListener>();
+		setSource(controller.getImportSource());
+		listeners = new ArrayList<ILabelProviderListener>();
 
-		this.userImage = Activator.getImageDescriptor("icons/user.png").createImage();
-		this.groupImage = Activator.getImageDescriptor("icons/Group.gif").createImage();
+		userImage = Activator.getImageDescriptor(USER_PNG).createImage();
+		groupImage = Activator.getImageDescriptor(GROUP_GIF).createImage();
 	}
 
 	/**
@@ -55,7 +59,7 @@ public class ImportLabelProvider implements ILabelProvider {
 	 * @return Image
 	 */
 	public Image getImage(Object arg0) {
-		ACOrgUnit orgUnit = ((ImportItemWrapper) arg0).getOrgUnit();
+		final ACOrgUnit orgUnit = ((ImportItemWrapper) arg0).getOrgUnit();
 		if (orgUnit instanceof ACUser) {
 			return userImage;
 		}
@@ -108,7 +112,7 @@ public class ImportLabelProvider implements ILabelProvider {
 	 *            the listener
 	 */
 	public void addListener(ILabelProviderListener arg0) {
-		this.listeners.add(arg0);
+		listeners.add(arg0);
 	}
 
 	/**
@@ -118,7 +122,7 @@ public class ImportLabelProvider implements ILabelProvider {
 	 *            the listener to remove
 	 */
 	public void removeListener(ILabelProviderListener arg0) {
-		this.listeners.remove(arg0);
+		listeners.remove(arg0);
 	}
 
 	/**

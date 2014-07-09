@@ -23,7 +23,6 @@ import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESLocalProjectImp
 import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
 import org.eclipse.emf.emfstore.internal.server.model.impl.api.versionspec.ESPrimaryVersionSpecImpl;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.PrimaryVersionSpec;
-import org.eclipse.emf.emfstore.internal.server.model.versioning.VersionSpec;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.eclipse.emf.emfstore.server.model.versionspec.ESPrimaryVersionSpec;
 import org.eclipse.jface.dialogs.IInputValidator;
@@ -50,9 +49,10 @@ public class UIRevertCommitController extends AbstractEMFStoreUIController<Void>
 	 * @param shell
 	 *            the shell that is used during the revert
 	 * @param versionSpec
-	 *            {@link VersionSpec} of the commit to be reverted
+	 *            {@link org.eclipse.emf.emfstore.internal.server.model.versioning.VersionSpec VersionSpec} of the
+	 *            commit to be reverted
 	 * @param localProject
-	 *            w
+	 *            project that contains the version to be reverted
 	 */
 	public UIRevertCommitController(Shell shell, ESPrimaryVersionSpec versionSpec, ESLocalProject localProject) {
 		super(shell, false, false);

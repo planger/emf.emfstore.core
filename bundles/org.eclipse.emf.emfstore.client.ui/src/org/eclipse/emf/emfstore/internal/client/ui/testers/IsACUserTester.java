@@ -35,17 +35,17 @@ public class IsACUserTester extends PropertyTester {
 
 		if (receiver instanceof ProjectSpace && expectedValue instanceof Boolean) {
 			final ProjectSpace projectSpace = (ProjectSpace) receiver;
-			EMFStoreCommandWithResult<Boolean> command = new EMFStoreCommandWithResult<Boolean>() {
+			final EMFStoreCommandWithResult<Boolean> command = new EMFStoreCommandWithResult<Boolean>() {
 				@Override
 				protected Boolean doRun() {
-					Usersession usersession = projectSpace.getUsersession();
+					final Usersession usersession = projectSpace.getUsersession();
 					boolean isACUser = false;
-					if (usersession != null) {
-						AccessControlHelper accessControlHelper = new AccessControlHelper(usersession);
+					if (usersession != null && usersession.getACUser() != null) {
+						final AccessControlHelper accessControlHelper = new AccessControlHelper(usersession);
 						try {
 							accessControlHelper.checkWriteAccess(projectSpace.getProjectId());
 							isACUser = true;
-						} catch (AccessControlException e) {
+						} catch (final AccessControlException e) {
 							isACUser = false;
 						}
 					}

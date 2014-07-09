@@ -228,7 +228,7 @@ public class UICommitProjectController extends
 							Messages.UICommitProjectController_CommitFailed,
 							MessageFormat
 								.format(
-									"A serious {0} occurred during commit. The failure message was: {1}\nPlease consult your administrator.",
+									Messages.UICommitProjectController_ErrorDuringCommit,
 									e.getCause().getMessage(),
 									e.getCause().getClass().getSimpleName()));
 					}

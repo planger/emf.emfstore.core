@@ -177,7 +177,7 @@ public class XmlRpcClientManager {
 	}
 
 	/**
-	 * Initializes the serialization options for compressed server communication
+	 * Initializes the serialization options for compressed server communication.
 	 */
 	private static void initSerializationOptions() {
 
