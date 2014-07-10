@@ -27,6 +27,7 @@ import org.eclipse.emf.emfstore.internal.server.accesscontrol.AuthorizationContr
 import org.eclipse.emf.emfstore.internal.server.core.helper.EmfStoreMethod;
 import org.eclipse.emf.emfstore.internal.server.core.helper.EmfStoreMethod.MethodId;
 import org.eclipse.emf.emfstore.internal.server.core.subinterfaces.EMFStorePropertiesSubInterfaceImpl;
+import org.eclipse.emf.emfstore.internal.server.core.subinterfaces.EMFStoreVersionSubInterface;
 import org.eclipse.emf.emfstore.internal.server.core.subinterfaces.EPackageSubInterfaceImpl;
 import org.eclipse.emf.emfstore.internal.server.core.subinterfaces.FileTransferSubInterfaceImpl;
 import org.eclipse.emf.emfstore.internal.server.core.subinterfaces.HistorySubInterfaceImpl;
@@ -127,6 +128,7 @@ public class EMFStoreImpl extends AbstractEmfstoreInterface implements Invocatio
 		addSubInterface(new ProjectPropertiesSubInterfaceImpl(this));
 		addSubInterface(new EMFStorePropertiesSubInterfaceImpl(this));
 		addSubInterface(new EPackageSubInterfaceImpl(this));
+		addSubInterface(new EMFStoreVersionSubInterface(this));
 	}
 
 	@Override

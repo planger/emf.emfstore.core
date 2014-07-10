@@ -132,7 +132,7 @@ public abstract class AbstractSubEmfstoreInterface {
 	 */
 	public Object execute(Method method, Object[] args) throws ESException {
 		try {
-			if (method.getParameterTypes()[0] == SessionId.class) {
+			if (method.getParameterTypes().length > 0 && method.getParameterTypes()[0] == SessionId.class) {
 				return method.invoke(this, args);
 			}
 			final Object[] argsWoSessionId = new Object[args.length - 1];

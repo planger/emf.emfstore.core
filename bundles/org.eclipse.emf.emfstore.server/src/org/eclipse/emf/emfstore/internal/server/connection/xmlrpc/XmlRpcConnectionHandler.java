@@ -27,9 +27,9 @@ public class XmlRpcConnectionHandler implements ConnectionHandler<EMFStore> {
 	/**
 	 * String interface identifier.
 	 */
-	public static final String EMFSTORE = "EmfStore";
+	public static final String EMFSTORE = "EmfStore"; //$NON-NLS-1$
 
-	private static final String NAME = "XML RPC Connection Handler";
+	private static final String NAME = "XML RPC Connection Handler"; //$NON-NLS-1$
 
 	private static EMFStore emfStore;
 
@@ -49,10 +49,9 @@ public class XmlRpcConnectionHandler implements ConnectionHandler<EMFStore> {
 	 * @see org.eclipse.emf.emfstore.internal.server.connection.ConnectionHandler#init(org.eclipse.emf.emfstore.internal.server.EMFStoreInterface,
 	 *      org.eclipse.emf.emfstore.internal.server.accesscontrol.AccessControl)
 	 */
-	@SuppressWarnings("static-access")
 	public synchronized void init(EMFStore emfStore, AccessControl accessControl) throws ESServerInitException {
-		this.emfStore = emfStore;
-		this.accessControl = accessControl;
+		XmlRpcConnectionHandler.emfStore = emfStore;
+		XmlRpcConnectionHandler.accessControl = accessControl;
 		final ESXmlRpcWebServerProvider webServer = XmlRpcWebserverManager.getInstance();
 		webServer.initServer();
 		webServer.addHandler(EMFSTORE, XmlRpcEmfStoreImpl.class);

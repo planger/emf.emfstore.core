@@ -418,4 +418,16 @@ public interface EMFStore extends EMFStoreInterface {
 	 */
 	void registerEPackage(SessionId sessionId, EPackage pkg) throws ESException;
 
+	/**
+	 * Returns the version of the EMFStore server.
+	 * 
+	 * @param sessionId
+	 *            a session ID
+	 * 
+	 * @return the version of the EMFStore server
+	 * 
+	 * @throws ESException
+	 *             in case of an error
+	 */
+	String getVersion(SessionId sessionId) throws ESException;
 }

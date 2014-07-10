@@ -23,9 +23,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.net.MalformedURLException;
 import java.util.Date;
 import java.util.List;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.emfstore.client.ESLocalProject;
 import org.eclipse.emf.emfstore.client.test.common.cases.ESTestWithLoggedInUser;
@@ -36,6 +38,7 @@ import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
 import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
 import org.eclipse.emf.emfstore.internal.client.model.Usersession;
 import org.eclipse.emf.emfstore.internal.client.model.connectionmanager.ConnectionManager;
+import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESUsersessionImpl;
 import org.eclipse.emf.emfstore.internal.common.APIUtil;
 import org.eclipse.emf.emfstore.internal.server.exceptions.InvalidProjectIdException;
 import org.eclipse.emf.emfstore.internal.server.exceptions.InvalidVersionSpecException;
@@ -51,6 +54,7 @@ import org.eclipse.emf.emfstore.test.model.TestmodelPackage;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.osgi.framework.Bundle;
 
 public class ServerInterfaceTest extends ESTestWithLoggedInUser {
 
@@ -300,5 +304,19 @@ public class ServerInterfaceTest extends ESTestWithLoggedInUser {
 			toInternal(Usersession.class, getUsersession()).getSessionId(),
 			toInternal(ProjectSpace.class, localProject).getProjectId(),
 			Create.tagVersionSpec(TRUNK, FOOTAG));
+	}
+
+	@Test
+	public void testGetVersion() throws MalformedURLException, ESException {
+		final ConnectionManager connectionManager = ESWorkspaceProviderImpl.getInstance().getConnectionManager();
+		final Bundle emfStoreBundle = Platform.getBundle("org.eclipse.emf.emfstore.server"); //$NON-NLS-1$
+		final String versionId = emfStoreBundle.getHeaders().get(org.osgi.framework.Constants.BUNDLE_VERSION);
+
+		assertEquals(versionId,
+			connectionManager.getVersion(getServerInfo()));
+		assertEquals(versionId,
+			connectionManager.getVersion(
+				ESUsersessionImpl.class.cast(
+					getUsersession()).toInternalAPI().getSessionId()));
 	}
 }

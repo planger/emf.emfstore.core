@@ -29,6 +29,7 @@ import org.eclipse.emf.emfstore.internal.server.filetransfer.FileChunk;
 import org.eclipse.emf.emfstore.internal.server.filetransfer.FileTransferInformation;
 import org.eclipse.emf.emfstore.internal.server.model.AuthenticationInformation;
 import org.eclipse.emf.emfstore.internal.server.model.ClientVersionInfo;
+import org.eclipse.emf.emfstore.internal.server.model.ModelFactory;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectHistory;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectId;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectInfo;
@@ -220,6 +221,27 @@ public class ConnectionMock implements ConnectionManager {
 	public void registerEPackage(SessionId sessionId, EPackage pkg) throws ESException {
 		checkSessionId(sessionId);
 		emfStore.registerEPackage(ModelUtil.clone(sessionId), ModelUtil.clone(pkg));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.server.EMFStore#getVersion(org.eclipse.emf.emfstore.internal.server.model.SessionId)
+	 */
+	public String getVersion(SessionId sessionId) throws ESException {
+		return emfStore.getVersion(sessionId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.connectionmanager.ConnectionManager#getVersion(org.eclipse.emf.emfstore.internal.client.model.ServerInfo)
+	 */
+	public String getVersion(ServerInfo serverInfo) throws ESException {
+		final SessionId sessionId = ModelFactory.eINSTANCE.createSessionId();
+		sessionId.setId(serverInfo.getUrl().toString() + "/defaultSession"); //$NON-NLS-1$			
+		sessions.add(sessionId);
+		return emfStore.getVersion(sessionId);
 	}
 
 }

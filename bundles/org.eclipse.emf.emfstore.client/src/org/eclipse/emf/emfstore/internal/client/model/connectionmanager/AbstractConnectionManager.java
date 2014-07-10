@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * wesendon
+ * Otto von Wesendonk - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model.connectionmanager;
 
@@ -26,7 +26,7 @@ import org.eclipse.emf.emfstore.internal.server.model.SessionId;
  */
 public abstract class AbstractConnectionManager<T> {
 
-	private Map<SessionId, T> map;
+	private final Map<SessionId, T> map;
 
 	/**
 	 * Default constructor.
@@ -64,7 +64,7 @@ public abstract class AbstractConnectionManager<T> {
 	 *             If the given session id has no connection proxy attached
 	 */
 	protected T getConnectionProxy(SessionId id) throws UnknownSessionException {
-		T connectionProxy = map.get(id);
+		final T connectionProxy = map.get(id);
 		if (connectionProxy == null) {
 			throw new UnknownSessionException(ConnectionManager.LOGIN_FIRST);
 		}

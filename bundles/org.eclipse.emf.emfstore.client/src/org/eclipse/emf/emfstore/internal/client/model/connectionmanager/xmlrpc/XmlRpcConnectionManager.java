@@ -25,6 +25,7 @@ import org.eclipse.emf.emfstore.internal.server.filetransfer.FileChunk;
 import org.eclipse.emf.emfstore.internal.server.filetransfer.FileTransferInformation;
 import org.eclipse.emf.emfstore.internal.server.model.AuthenticationInformation;
 import org.eclipse.emf.emfstore.internal.server.model.ClientVersionInfo;
+import org.eclipse.emf.emfstore.internal.server.model.ModelFactory;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectHistory;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectId;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectInfo;
@@ -266,4 +267,41 @@ public class XmlRpcConnectionManager extends AbstractConnectionManager<XmlRpcCli
 		getConnectionProxy(sessionId).call("registerEPackage", sessionId, pkg); //$NON-NLS-1$
 
 	}
+
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.client.model.connectionmanager.ConnectionManager#getVersion(org.eclipse.emf.emfstore.internal.client.model.ServerInfo)
+	 */
+	public String getVersion(ServerInfo serverInfo) throws ESException {
+
+		final SessionId sessionId = createFakeSessionId(serverInfo);
+
+		if (!getConnectionProxyMap().containsKey(sessionId)) {
+			final XmlRpcClientManager clientManager = new XmlRpcClientManager(XmlRpcConnectionHandler.EMFSTORE);
+			clientManager.initConnection(serverInfo);
+			addConnectionProxy(sessionId, clientManager);
+		}
+
+		return getVersion(sessionId);
+	}
+
+	private SessionId createFakeSessionId(ServerInfo serverInfo) {
+		final SessionId sessionId = ModelFactory.eINSTANCE.createSessionId();
+		sessionId.setId(serverInfo.getUrl().toString() + "/defaultSession"); //$NON-NLS-1$
+		return sessionId;
+	}
+
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.server.EMFStore#getVersion(org.eclipse.emf.emfstore.internal.server.model.SessionId)
+	 */
+	public String getVersion(SessionId sessionId) throws ESException {
+		return getConnectionProxy(sessionId)
+			.callWithResult("getVersion", String.class, sessionId); //$NON-NLS-1$ 
+	}
+
 }

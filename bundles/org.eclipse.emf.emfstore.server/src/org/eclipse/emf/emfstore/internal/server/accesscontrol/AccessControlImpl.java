@@ -103,6 +103,9 @@ public class AccessControlImpl implements AccessControl {
 		}
 		accessMap = new EnumMap<MethodId, AccessLevel>(MethodId.class);
 
+		addAccessMapping(AccessLevel.NONE,
+			MethodId.GETVERSION);
+
 		addAccessMapping(AccessLevel.PROJECT_READ,
 			MethodId.GETPROJECT,
 			MethodId.GETEMFPROPERTIES,

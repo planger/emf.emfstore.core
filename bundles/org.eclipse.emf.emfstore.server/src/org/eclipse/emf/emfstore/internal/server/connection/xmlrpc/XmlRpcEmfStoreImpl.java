@@ -261,4 +261,13 @@ public class XmlRpcEmfStoreImpl implements EMFStore {
 		getEmfStore().registerEPackage(sessionId, pkg);
 
 	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.server.EMFStore#getVersion(SessionId)
+	 */
+	public String getVersion(SessionId sessionId) throws ESException {
+		return getEmfStore().getVersion(sessionId);
+	}
 }

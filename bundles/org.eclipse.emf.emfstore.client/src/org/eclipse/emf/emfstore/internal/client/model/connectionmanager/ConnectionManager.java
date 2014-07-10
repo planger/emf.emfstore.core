@@ -81,4 +81,17 @@ public interface ConnectionManager extends EMFStore {
 	 * @return true, if logged in
 	 */
 	boolean isLoggedIn(SessionId id);
+
+	/**
+	 * Returns the version of the EMFStore server.
+	 * 
+	 * @param serverInfo
+	 *            the EMFStore server whose version should be retrieved
+	 * 
+	 * @return the version of the EMFStore server
+	 * 
+	 * @throws ESException
+	 *             in case of a failure
+	 */
+	String getVersion(ServerInfo serverInfo) throws ESException;
 }

@@ -11,7 +11,6 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.server.test;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
@@ -66,8 +65,7 @@ public class InvalidArgumentsTest {
 	private static ESUsersession session;
 
 	@BeforeClass
-	public static void setUpBeforeClass() throws ESException, IOException, IllegalArgumentException,
-		ESServerStartFailedException, FatalESException {
+	public static void setUpBeforeClass() throws ESException, ESServerStartFailedException, FatalESException {
 
 		ServerConfiguration.setTesting(true);
 		CommonUtil.setTesting(true);
@@ -86,7 +84,7 @@ public class InvalidArgumentsTest {
 		ESWorkspaceProviderImpl.getInstance().setConnectionManager(connectionManager);
 
 		server = ServerUtil.startServer();
-		session = server.login("super", "super");
+		session = server.login("super", "super"); //$NON-NLS-1$//$NON-NLS-2$
 		ESWorkspaceProviderImpl.getInstance().getAdminConnectionManager().initConnection(
 			((ESServerImpl) server).toInternalAPI(), ((ESUsersessionImpl) session).toInternalAPI().getSessionId());
 		initArguments();
@@ -98,7 +96,6 @@ public class InvalidArgumentsTest {
 	}
 
 	// / FIXME
-	@SuppressWarnings("restriction")
 	protected static void initArguments() {
 		arguments = new LinkedHashMap<Class<?>, Object>();
 		arguments.put(boolean.class, false);
@@ -107,22 +104,30 @@ public class InvalidArgumentsTest {
 			ModelUtil.clone(ESUsersessionImpl.class.cast(session).toInternalAPI().getSessionId()));
 		arguments.put(ProjectId.class,
 			org.eclipse.emf.emfstore.internal.server.model.ModelFactory.eINSTANCE.createProjectId());
-		arguments.put(PrimaryVersionSpec.class, VersioningFactory.eINSTANCE.createPrimaryVersionSpec());
-		arguments.put(VersionSpec.class, VersioningFactory.eINSTANCE.createPrimaryVersionSpec());
-		arguments.put(TagVersionSpec.class, VersioningFactory.eINSTANCE.createTagVersionSpec());
-		arguments.put(LogMessage.class, VersioningFactory.eINSTANCE.createLogMessage());
+		arguments.put(PrimaryVersionSpec.class,
+			VersioningFactory.eINSTANCE.createPrimaryVersionSpec());
+		arguments.put(VersionSpec.class,
+			VersioningFactory.eINSTANCE.createPrimaryVersionSpec());
+		arguments.put(TagVersionSpec.class,
+			VersioningFactory.eINSTANCE.createTagVersionSpec());
+		arguments.put(LogMessage.class,
+			VersioningFactory.eINSTANCE.createLogMessage());
 		arguments.put(Project.class,
 			org.eclipse.emf.emfstore.internal.common.model.ModelFactory.eINSTANCE.createProject());
-		arguments.put(ChangePackage.class, VersioningFactory.eINSTANCE.createChangePackage());
-		arguments.put(HistoryQuery.class, VersioningFactory.eINSTANCE.createPathQuery());
-		arguments.put(ChangePackage.class, VersioningFactory.eINSTANCE.createChangePackage());
-		arguments.put(ACOrgUnitId.class, AccesscontrolFactory.eINSTANCE.createACOrgUnitId());
+		arguments.put(ChangePackage.class,
+			VersioningFactory.eINSTANCE.createChangePackage());
+		arguments.put(HistoryQuery.class,
+			VersioningFactory.eINSTANCE.createPathQuery());
+		arguments.put(ChangePackage.class,
+			VersioningFactory.eINSTANCE.createChangePackage());
+		arguments.put(ACOrgUnitId.class,
+			AccesscontrolFactory.eINSTANCE.createACOrgUnitId());
 	}
 
 	@Test(expected = InvalidInputException.class)
 	public void deleteProjectTest() throws ESException {
 		try {
-			testAllInvalidCombinations(connectionManager.getClass().getMethod("deleteProject",
+			testAllInvalidCombinations(connectionManager.getClass().getMethod("deleteProject", //$NON-NLS-1$
 				new Class[] { SessionId.class, ProjectId.class, boolean.class }));
 		} catch (final SecurityException e) {
 			throw new ESException(e);
@@ -134,7 +139,7 @@ public class InvalidArgumentsTest {
 	@Test(expected = InvalidInputException.class)
 	public void createProjectTest() throws ESException {
 		try {
-			testAllInvalidCombinations(connectionManager.getClass().getMethod("createEmptyProject",
+			testAllInvalidCombinations(connectionManager.getClass().getMethod("createEmptyProject", //$NON-NLS-1$
 				new Class[] { SessionId.class, String.class, String.class, LogMessage.class }));
 		} catch (final SecurityException e) {
 			throw new ESException(e);
@@ -146,7 +151,7 @@ public class InvalidArgumentsTest {
 	@Test(expected = InvalidInputException.class)
 	public void createProject2Test() throws ESException {
 		try {
-			testAllInvalidCombinations(connectionManager.getClass().getMethod("createProject",
+			testAllInvalidCombinations(connectionManager.getClass().getMethod("createProject", //$NON-NLS-1$
 				new Class[] { SessionId.class, String.class, String.class, LogMessage.class, Project.class }));
 		} catch (final SecurityException e) {
 			throw new ESException(e);
@@ -158,8 +163,7 @@ public class InvalidArgumentsTest {
 	@Test(expected = InvalidInputException.class)
 	public void createVersionTest() throws ESException {
 		try {
-			testAllInvalidCombinations(connectionManager.getClass().getMethod(
-				"createVersion",
+			testAllInvalidCombinations(connectionManager.getClass().getMethod("createVersion", //$NON-NLS-1$
 				new Class[] { SessionId.class, ProjectId.class, PrimaryVersionSpec.class, ChangePackage.class,
 					BranchVersionSpec.class, PrimaryVersionSpec.class, LogMessage.class }));
 		} catch (final SecurityException e) {
@@ -172,7 +176,7 @@ public class InvalidArgumentsTest {
 	@Test(expected = InvalidInputException.class)
 	public void getChangesTest() throws ESException {
 		try {
-			testAllInvalidCombinations(connectionManager.getClass().getMethod("getChanges",
+			testAllInvalidCombinations(connectionManager.getClass().getMethod("getChanges", //$NON-NLS-1$
 				new Class[] { SessionId.class, ProjectId.class, VersionSpec.class, VersionSpec.class }));
 		} catch (final SecurityException e) {
 			throw new ESException(e);
@@ -184,7 +188,7 @@ public class InvalidArgumentsTest {
 	@Test(expected = InvalidInputException.class)
 	public void getHistoryInfoTest() throws ESException {
 		try {
-			testAllInvalidCombinations(connectionManager.getClass().getMethod("getHistoryInfo",
+			testAllInvalidCombinations(connectionManager.getClass().getMethod("getHistoryInfo", //$NON-NLS-1$
 				new Class[] { SessionId.class, ProjectId.class, HistoryQuery.class }));
 		} catch (final SecurityException e) {
 			throw new ESException(e);
@@ -196,7 +200,7 @@ public class InvalidArgumentsTest {
 	@Test(expected = InvalidInputException.class)
 	public void getProjectTest() throws ESException {
 		try {
-			testAllInvalidCombinations(connectionManager.getClass().getMethod("getProject",
+			testAllInvalidCombinations(connectionManager.getClass().getMethod("getProject", //$NON-NLS-1$
 				new Class[] { SessionId.class, ProjectId.class, VersionSpec.class }));
 		} catch (final SecurityException e) {
 			throw new ESException(e);
@@ -208,7 +212,7 @@ public class InvalidArgumentsTest {
 	@Test(expected = InvalidInputException.class)
 	public void addTagTest() throws ESException {
 		try {
-			testAllInvalidCombinations(connectionManager.getClass().getMethod("addTag",
+			testAllInvalidCombinations(connectionManager.getClass().getMethod("addTag", //$NON-NLS-1$
 				new Class[] { SessionId.class, ProjectId.class, PrimaryVersionSpec.class, TagVersionSpec.class }));
 		} catch (final SecurityException e) {
 			throw new ESException(e);
@@ -220,7 +224,7 @@ public class InvalidArgumentsTest {
 	@Test(expected = InvalidInputException.class)
 	public void removeTagTest() throws ESException {
 		try {
-			testAllInvalidCombinations(connectionManager.getClass().getMethod("removeTag",
+			testAllInvalidCombinations(connectionManager.getClass().getMethod("removeTag", //$NON-NLS-1$
 				new Class[] { SessionId.class, ProjectId.class, PrimaryVersionSpec.class, TagVersionSpec.class }));
 		} catch (final SecurityException e) {
 			throw new ESException(e);
@@ -252,12 +256,12 @@ public class InvalidArgumentsTest {
 
 	private void callMethod(Method method, Object[] parameters) throws ESException {
 		if (method.getParameterTypes().length != parameters.length) {
-			throw new AssertionError("parameter length not equal");
+			throw new AssertionError("Parameter length not equal"); //$NON-NLS-1$
 		}
 		for (int i = 0; i < parameters.length; i++) {
-			System.out.print(method.getParameterTypes()[i] + " " + parameters[i] + "; ");
+			System.out.print(method.getParameterTypes()[i] + " " + parameters[i] + "; "); //$NON-NLS-1$ //$NON-NLS-2$
 		}
-		System.out.println("");
+		System.out.println();
 		try {
 			// method.invoke(connectionManager, null, null, false);
 			method.invoke(connectionManager, parameters);
@@ -273,7 +277,7 @@ public class InvalidArgumentsTest {
 			}
 			Assert.assertTrue(false);
 		}
-		throw new AssertionError("No exception was thrown");
+		throw new AssertionError("No exception was thrown"); //$NON-NLS-1$
 	}
 
 	private boolean getArgument(int j, int i) {
