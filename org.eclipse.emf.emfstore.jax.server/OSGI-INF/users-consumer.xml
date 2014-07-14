@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="usersC">
-   <implementation class="org.eclipse.emf.emfstore.jax.server.JaxrsConnectionHandler"/>
-   <service>
-      <provide interface="org.eclipse.emf.emfstore.jax.server.JaxrsConnectionHandler"/>
-   </service>
-   <reference bind="setUsers" cardinality="1..1" interface="org.eclipse.emf.emfstore.jax.server.resources.IUsers" name="IUsers" policy="static" unbind="unsetUsers"/>
-</scr:component>

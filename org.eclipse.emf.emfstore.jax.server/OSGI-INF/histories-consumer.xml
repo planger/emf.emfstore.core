@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="historiesC">
-   <implementation class="org.eclipse.emf.emfstore.jax.server.JaxrsConnectionHandler"/>
-   <reference bind="setHistories" cardinality="1..1" interface="org.eclipse.emf.emfstore.jax.server.resources.IHistories" name="histories" policy="static" unbind="unsetHistories"/>
-   <service>
-      <provide interface="org.eclipse.emf.emfstore.jax.server.JaxrsConnectionHandler"/>
-   </service>
-</scr:component>
