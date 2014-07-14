@@ -14,18 +14,31 @@ package org.eclipse.emf.emfstore.client.conflictdetection.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.emfstore.client.ESLocalProject;
+import org.eclipse.emf.emfstore.client.test.common.dsl.Create;
 import org.eclipse.emf.emfstore.client.test.common.util.TestLogListener;
 import org.eclipse.emf.emfstore.client.util.ESVoidCallable;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
 import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
 import org.eclipse.emf.emfstore.internal.client.model.exceptions.ChangeConflictException;
+import org.eclipse.emf.emfstore.internal.client.model.impl.ProjectSpaceBase;
+import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESLocalProjectImpl;
+import org.eclipse.emf.emfstore.internal.common.model.IdEObjectCollection;
 import org.eclipse.emf.emfstore.internal.common.model.ModelElementId;
+import org.eclipse.emf.emfstore.internal.common.model.impl.IdEObjectCollectionImpl;
+import org.eclipse.emf.emfstore.internal.common.model.util.IdEObjectCollectionChangeObserver;
 import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.CreateDeleteOperation;
@@ -73,8 +86,8 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 			modelElementId);
 		final TestElement clonedKey = (TestElement) clonedProjectSpace.getProject().getModelElement(keyId);
 
-		updateMapEntryNonContainedKey(testElement, key, BAR);
-		updateMapEntryNonContainedKey(clonedTestElement, clonedKey, QUUX);
+		putIntoMapEntryWithNonContainedKey(testElement, key, BAR);
+		putIntoMapEntryWithNonContainedKey(clonedTestElement, clonedKey, QUUX);
 
 		final Set<AbstractOperation> conflicts = getConflicts(
 			getProjectSpace().getLocalChangePackage().getOperations(),
@@ -161,8 +174,8 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 			modelElementId);
 		final TestElement clonedKey = (TestElement) clonedProjectSpace.getProject().getModelElement(keyId);
 
-		updateMapEntryNonContainedKey(testElement, key, BAR);
-		updateMapEntryNonContainedKey(clonedTestElement, clonedKey, QUUX);
+		putIntoMapEntryWithNonContainedKey(testElement, key, BAR);
+		putIntoMapEntryWithNonContainedKey(clonedTestElement, clonedKey, QUUX);
 
 		final EList<AbstractOperation> operations = getProjectSpace().getLocalChangePackage().getOperations();
 		final CreateDeleteOperation createDeleteOperation = CreateDeleteOperation.class.cast(operations.get(0));
@@ -205,8 +218,8 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 			modelElementId);
 		final TestElement clonedKey = (TestElement) clonedProjectSpace.getProject().getModelElement(keyId);
 
-		updateMapEntryNonContainedKey(testElement, key, BAR);
-		updateMapEntryNonContainedKey(clonedTestElement, clonedKey, QUUX);
+		putIntoMapEntryWithNonContainedKey(testElement, key, BAR);
+		putIntoMapEntryWithNonContainedKey(clonedTestElement, clonedKey, QUUX);
 
 		final List<AbstractOperation> operations = ModelUtil.clone(
 			getProjectSpace().getLocalChangePackage().getOperations());
@@ -256,8 +269,8 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 			testElementId);
 		final TestElement clonedSecondKey = (TestElement) clonedProjectSpace.getProject().getModelElement(secondKeyId);
 
-		updateMapEntryNonContainedKey(testElement, key, FOO);
-		updateMapEntryNonContainedKey(clonedTestElement, clonedSecondKey, BAR);
+		putIntoMapEntryWithNonContainedKey(testElement, key, FOO);
+		putIntoMapEntryWithNonContainedKey(clonedTestElement, clonedSecondKey, BAR);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = clonedProjectSpace.getOperations();
@@ -284,8 +297,8 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 			testElementId);
 		final TestElement clonedSecondKey = (TestElement) clonedProjectSpace.getProject().getModelElement(secondKeyId);
 
-		updateMapEntryNonContainedKey(testElement, key, FOO);
-		updateMapEntryNonContainedKey(clonedTestElement, clonedSecondKey, BAR);
+		putIntoMapEntryWithNonContainedKey(testElement, key, FOO);
+		putIntoMapEntryWithNonContainedKey(clonedTestElement, clonedSecondKey, BAR);
 
 		clearOperations();
 
@@ -316,14 +329,14 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 		final ModelElementId modelElementId = getProjectSpace().getProject().getModelElementId(testElement);
 		final ModelElementId keyId = getProjectSpace().getProject().getModelElementId(key);
 
-		updateMapEntryNonContainedKey(testElement, key, BAR);
+		putIntoMapEntryWithNonContainedKey(testElement, key, BAR);
 		clearOperations();
 		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
 		final TestElement clonedTestElement = (TestElement) clonedProjectSpace.getProject().getModelElement(
 			modelElementId);
 		final TestElement clonedKey = (TestElement) clonedProjectSpace.getProject().getModelElement(keyId);
 
-		updateMapEntryNonContainedKey(testElement, key, BAR2);
+		putIntoMapEntryWithNonContainedKey(testElement, key, BAR2);
 		deleteMapEntryNonContainedKey(clonedTestElement, clonedKey);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
@@ -345,7 +358,7 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 		final ModelElementId modelElementId = getProjectSpace().getProject().getModelElementId(testElement);
 		final ModelElementId keyId = getProjectSpace().getProject().getModelElementId(key);
 
-		updateMapEntryNonContainedKey(testElement, key, BAR);
+		putIntoMapEntryWithNonContainedKey(testElement, key, BAR);
 		clearOperations();
 		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
 		final TestElement clonedTestElement = (TestElement) clonedProjectSpace.getProject().getModelElement(
@@ -353,8 +366,8 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 		final TestElement clonedKey = (TestElement) clonedProjectSpace.getProject().getModelElement(
 			keyId);
 
-		updateMapEntryNonContainedKey(testElement, key, HELLO1);
-		updateMapEntryNonContainedKey(clonedTestElement, clonedKey, HELLO2);
+		putIntoMapEntryWithNonContainedKey(testElement, key, HELLO1);
+		putIntoMapEntryWithNonContainedKey(clonedTestElement, clonedKey, HELLO2);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = clonedProjectSpace.getOperations();
@@ -375,7 +388,7 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 		final ModelElementId modelElementId = getProjectSpace().getProject().getModelElementId(testElement);
 		final ModelElementId keyId = getProjectSpace().getProject().getModelElementId(key);
 
-		updateMapEntryNonContainedKey(testElement, key, BAR);
+		putIntoMapEntryWithNonContainedKey(testElement, key, BAR);
 		clearOperations();
 		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
 		final TestElement clonedTestElement = (TestElement) clonedProjectSpace.getProject().getModelElement(
@@ -383,7 +396,7 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 		final TestElement clonedKey = (TestElement) clonedProjectSpace.getProject().getModelElement(
 			keyId);
 
-		updateMapEntryNonContainedKey(testElement, key, HELLO1);
+		putIntoMapEntryWithNonContainedKey(testElement, key, HELLO1);
 		deleteMapEntryNonContainedKey(clonedTestElement, clonedKey);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
@@ -405,7 +418,7 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 		final ModelElementId modelElementId = getProjectSpace().getProject().getModelElementId(testElement);
 		final ModelElementId keyId = getProjectSpace().getProject().getModelElementId(key);
 
-		updateMapEntryNonContainedKey(testElement, key, BAR);
+		putIntoMapEntryWithNonContainedKey(testElement, key, BAR);
 		clearOperations();
 		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
 		final TestElement clonedTestElement = (TestElement) clonedProjectSpace.getProject().getModelElement(
@@ -440,8 +453,8 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 		final TestElement clonedTestElement = (TestElement) clonedProjectSpace.getProject().getModelElement(
 			modelElementId);
 
-		updateMapEntry(testElement, FOO, BAR);
-		updateMapEntry(clonedTestElement, FOO, QUUX);
+		putIntoMapEntry(testElement, FOO, BAR);
+		putIntoMapEntry(clonedTestElement, FOO, QUUX);
 
 		final Set<AbstractOperation> conflicts = getConflicts(
 			getProjectSpace().getLocalChangePackage().getOperations(),
@@ -459,13 +472,13 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 
 		final ModelElementId modelElementId = getProjectSpace().getProject().getModelElementId(testElement);
 
-		updateMapEntry(testElement, FOO, BAR);
+		putIntoMapEntry(testElement, FOO, BAR);
 		clearOperations();
 		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
 		final TestElement clonedTestElement = (TestElement) clonedProjectSpace.getProject().getModelElement(
 			modelElementId);
 
-		updateMapEntry(testElement, FOO, BAR2);
+		putIntoMapEntry(testElement, FOO, BAR2);
 		deleteMapEntry(clonedTestElement, FOO);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
@@ -477,6 +490,103 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 	}
 
 	@Test
+	public void testDeleteMapEntry() throws ChangeConflictException {
+
+		final Map<EObject, String> deletedElements = new LinkedHashMap<EObject, String>();
+
+		final TestElement testElement = Create.testElement();
+		final TestElement keyElement = Create.testElement();
+		addTestElement(testElement);
+		addTestElement(keyElement);
+
+		putIntoMapEntryWithNonContainedKey(testElement, keyElement, "foo");
+
+		// TOOD: provide adapter
+		addObserverTo(getLocalProject(), new IdEObjectCollectionChangeObserver() {
+			public void modelElementRemoved(IdEObjectCollection collection, EObject eObject) {
+				final String id = IdEObjectCollectionImpl.class.cast(collection).getDeletedModelElementId(eObject)
+					.getId();
+				if (deletedElements.containsValue(id)) {
+					System.out.println();
+				} else {
+					deletedElements.put(eObject, id);
+				}
+			}
+
+			public void notify(Notification notification, IdEObjectCollection collection, EObject modelElement) {
+			}
+
+			public void modelElementAdded(IdEObjectCollection collection, EObject eObject) {
+			}
+
+			public void collectionDeleted(IdEObjectCollection collection) {
+			}
+		});
+
+		RunESCommand.run(new ESVoidCallable() {
+			@Override
+			public void run() {
+				getLocalProject().getModelElements().remove(testElement);
+			}
+		});
+
+		assertEquals(1, getLocalProject().getAllModelElements().size());
+		assertEquals(2, deletedElements.size());
+		Iterator<EObject> iterator = deletedElements.keySet().iterator();
+		boolean success = false;
+		while (iterator.hasNext()) {
+			final EObject next = iterator.next();
+			if (Map.Entry.class.isInstance(next)) {
+				final Entry entry = Map.Entry.class.cast(next);
+				if (entry.getKey() != null) {
+					success = true;
+				}
+			}
+		}
+		assertTrue(success);
+
+		deletedElements.clear();
+
+		// revert
+		final List<AbstractOperation> operations = ModelUtil.clone(getProjectSpace().getOperations());
+		getProjectSpace().revert();
+
+		assertEquals(2, getLocalProject().getAllModelElements().size());
+
+		// forward
+		ProjectSpaceBase.class.cast(getProjectSpace()).applyOperations(operations, true);
+		assertEquals(1, getLocalProject().getAllModelElements().size());
+		assertEquals(2, deletedElements.size());
+
+		iterator = deletedElements.keySet().iterator();
+		success = false;
+		while (iterator.hasNext()) {
+			final EObject next = iterator.next();
+			if (Map.Entry.class.isInstance(next)) {
+				final Entry entry = Map.Entry.class.cast(next);
+				if (entry.getKey() != null) {
+					success = true;
+				}
+			}
+		}
+		assertTrue(success);
+	}
+
+	/**
+	 * @param localProject
+	 * @param idEObjectCollectionChangeObserver
+	 */
+	@SuppressWarnings("restriction")
+	private void addObserverTo(ESLocalProject localProject,
+		IdEObjectCollectionChangeObserver idEObjectCollectionChangeObserver) {
+		ESLocalProjectImpl.class.cast(
+			localProject
+			).toInternalAPI().getProject().addIdEObjectCollectionChangeObserver(
+				idEObjectCollectionChangeObserver
+			);
+	}
+
+	@Test
 	public void testConflictUpdateVSUpdateMapEntry() {
 
 		final TestElement testElement = TestmodelFactory.eINSTANCE.createTestElement();
@@ -484,14 +594,14 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 
 		final ModelElementId modelElementId = getProjectSpace().getProject().getModelElementId(testElement);
 
-		updateMapEntry(testElement, FOO, BAR);
+		putIntoMapEntry(testElement, FOO, BAR);
 		clearOperations();
 		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
 		final TestElement clonedTestElement = (TestElement) clonedProjectSpace.getProject().getModelElement(
 			modelElementId);
 
-		updateMapEntry(testElement, FOO, HELLO1);
-		updateMapEntry(clonedTestElement, FOO, HELLO2);
+		putIntoMapEntry(testElement, FOO, HELLO1);
+		putIntoMapEntry(clonedTestElement, FOO, HELLO2);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
 		final List<AbstractOperation> ops2 = clonedProjectSpace.getOperations();
@@ -509,13 +619,13 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 
 		final ModelElementId modelElementId = getProjectSpace().getProject().getModelElementId(testElement);
 
-		updateMapEntry(testElement, FOO, BAR);
+		putIntoMapEntry(testElement, FOO, BAR);
 		clearOperations();
 		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
 		final TestElement clonedTestElement = (TestElement) clonedProjectSpace.getProject().getModelElement(
 			modelElementId);
 
-		updateMapEntry(testElement, FOO, HELLO1);
+		putIntoMapEntry(testElement, FOO, HELLO1);
 		deleteMapEntry(clonedTestElement, FOO);
 
 		final List<AbstractOperation> ops1 = getProjectSpace().getOperations();
@@ -534,7 +644,7 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 
 		final ModelElementId modelElementId = getProjectSpace().getProject().getModelElementId(testElement);
 
-		updateMapEntry(testElement, FOO, BAR);
+		putIntoMapEntry(testElement, FOO, BAR);
 		clearOperations();
 		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
 		final TestElement clonedTestElement = (TestElement) clonedProjectSpace.getProject().getModelElement(
@@ -569,7 +679,7 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 		});
 	}
 
-	private void updateMapEntry(final TestElement testElement, final String key, final String value) {
+	private void putIntoMapEntry(final TestElement testElement, final String key, final String value) {
 		RunESCommand.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				testElement.getStringToStringMap().put(key, value);
@@ -578,7 +688,8 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 		});
 	}
 
-	private void updateMapEntryNonContainedKey(final TestElement testElement, final TestElement key, final String value) {
+	private void putIntoMapEntryWithNonContainedKey(final TestElement testElement, final TestElement key,
+		final String value) {
 		RunESCommand.run(new Callable<Void>() {
 			public Void call() throws Exception {
 				testElement.getElementToStringMap().put(key, value);
