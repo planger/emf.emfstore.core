@@ -12,16 +12,21 @@
 package org.eclipse.emf.emfstore.internal.client.model.changeTracking;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.emfstore.internal.client.model.util.WorkspaceUtil;
+import org.eclipse.emf.emfstore.internal.common.model.IdEObjectCollection;
 import org.eclipse.emf.emfstore.internal.common.model.ModelElementId;
 import org.eclipse.emf.emfstore.internal.common.model.impl.IdEObjectCollectionImpl;
 import org.eclipse.emf.emfstore.internal.common.model.impl.ProjectImpl;
+import org.eclipse.emf.emfstore.internal.common.model.util.IdEObjectCollectionChangeObserver;
 import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
 import org.eclipse.emf.emfstore.internal.common.model.util.NotificationInfo;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation;
@@ -44,9 +49,11 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.Unse
  * 
  * @author chodnick
  */
-public final class NotificationToOperationConverter {
+public final class NotificationToOperationConverter implements IdEObjectCollectionChangeObserver {
 
 	private final IdEObjectCollectionImpl project;
+	private final Set<EObject> added = new LinkedHashSet<EObject>();
+	private final Set<EObject> removed = new LinkedHashSet<EObject>();
 
 	/**
 	 * Default constructor.
@@ -67,57 +74,126 @@ public final class NotificationToOperationConverter {
 	 * @return the operation or null
 	 */
 	// BEGIN COMPLEX CODE
-	public AbstractOperation convert(NotificationInfo n) {
+	public List<AbstractOperation> convert(NotificationInfo n) {
 
 		if (n.isTouch() || n.isTransient() || !n.isValid()) {
+			added.clear();
 			return null;
 		}
+
+		final List<AbstractOperation> ops = new ArrayList<AbstractOperation>();
 
 		switch (n.getEventType()) {
 
 		case Notification.SET:
-			if (n.isAttributeNotification()) {
-				return handleSetAttribute(n);
+
+			if (removed.contains(n.getNotifierModelElement()) || added.contains(n.getNotifierModelElement())) {
+				System.out.println("Ignoring SET 4 " + n.getNotifierModelElement() + " to " + n.getNewValue());
+				removed.remove(n.getNotifierModelElement());
+				return Collections.EMPTY_LIST;
 			}
-			return handleSetReference(n);
+
+			System.out.println("Regular SET 4 " + n.getNotifierModelElement() + " to " + n.getNewValue());
+
+			if (n.isAttributeNotification()) {
+				added.clear();
+				return Collections.singletonList(handleSetAttribute(n));
+			}
+			added.clear();
+			return Collections.singletonList(handleSetReference(n));
 
 		case Notification.UNSET:
 			if (n.isAttributeNotification()) {
-				return handleUnsetAttribute(n);
+				added.clear();
+				return Collections.singletonList(handleUnsetAttribute(n));
 			}
-			return handleUnsetReference(n);
+			added.clear();
+			return Collections.singletonList(handleUnsetReference(n));
 
 		case Notification.ADD:
 			if (n.isAttributeNotification()) {
-				return handleMultiAttribute(n);
+				added.clear();
+				return Collections.singletonList(handleMultiAttribute(n));
 			}
-			return handleMultiReference(n);
+
+			final EReference ref = (EReference) n.getFeature();
+			final ModelElementId oldModelElementId = null; // project.getModelElementId(n.getOldModelElementValue());
+			ModelElementId newModelElementId = project.getModelElementId(n.getNotifierModelElement());
+
+			// if (oldModelElementId == null) {
+			// oldModelElementId = ((ProjectImpl) project).getDeletedModelElementId(n.getOldModelElementValue());
+			// }
+
+			if (newModelElementId == null) {
+				newModelElementId = ((ProjectImpl) project).getDeletedModelElementId(n.getNewModelElementValue());
+			}
+
+			if (ref.getEOpposite() != null) {
+				System.out.println("CREATE ADD SingleRef 4 from " + n.getNotifierModelElement() + " to "
+					+ n.getNewModelElementValue());
+				ops.add(createSingleReferenceOperation(project,
+					oldModelElementId,
+					newModelElementId,
+					ref.getEOpposite(),
+					n.getNewModelElementValue()));
+				added.add(n.getNewModelElementValue());
+			}
+
+			ops.add(handleMultiReference(n));
+			return ops;
 
 		case Notification.ADD_MANY:
 			if (n.isAttributeNotification()) {
-				return handleMultiAttribute(n);
+				added.clear();
+				return Collections.singletonList(handleMultiAttribute(n));
 			}
-			return handleMultiReference(n);
+			added.clear();
+			return Collections.singletonList(handleMultiReference(n));
 
 		case Notification.REMOVE:
 			if (n.isAttributeNotification()) {
-				return handleMultiAttribute(n);
+				added.clear();
+				return Collections.singletonList(handleMultiAttribute(n));
 			}
-			return handleMultiReference(n);
+
+			final EReference ref2 = (EReference) n.getFeature();
+
+			final ModelElementId oldModelElementId2 = project.getModelElementId(n.getNotifierModelElement());
+
+			if (ref2.getEOpposite() != null) {
+				// && removed.contains(n.getOldModelElementValue())) {
+				System.out.println("CREATE REMOVE SingleRef 4 Opposite of " + n.getOldModelElementValue());
+				ops.add(createSingleReferenceOperation(project,
+					oldModelElementId2,
+					null,
+					ref2.getEOpposite(),
+					n.getOldModelElementValue()));
+				removed.add(n.getOldModelElementValue());
+			}
+
+			added.clear();
+			ops.add(handleMultiReference(n));
+			return ops;
 
 		case Notification.REMOVE_MANY:
 			if (n.isAttributeNotification()) {
-				return handleMultiAttribute(n);
+				added.clear();
+				return Collections.singletonList(handleMultiAttribute(n));
 			}
-			return handleMultiReference(n);
+			added.clear();
+
+			return Collections.singletonList(handleMultiReference(n));
 
 		case Notification.MOVE:
 			if (n.isAttributeNotification()) {
-				return handleAttributeMove(n);
+				added.clear();
+				return Collections.singletonList(handleAttributeMove(n));
 			}
-			return handleReferenceMove(n);
+			added.clear();
+			return Collections.singletonList(handleReferenceMove(n));
 
 		default:
+			added.clear();
 			return null;
 		}
 	}
@@ -439,6 +515,47 @@ public final class NotificationToOperationConverter {
 		}
 		op.setUnset(UnsetType.IS_UNSET);
 		return op;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.common.model.util.IdEObjectCollectionChangeObserver#notify(org.eclipse.emf.common.notify.Notification,
+	 *      org.eclipse.emf.emfstore.internal.common.model.IdEObjectCollection, org.eclipse.emf.ecore.EObject)
+	 */
+	public void notify(Notification notification, IdEObjectCollection collection, EObject modelElement) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.common.model.util.IdEObjectCollectionChangeObserver#modelElementAdded(org.eclipse.emf.emfstore.internal.common.model.IdEObjectCollection,
+	 *      org.eclipse.emf.ecore.EObject)
+	 */
+	public void modelElementAdded(IdEObjectCollection collection, EObject eObject) {
+		// added.add(eObject);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.common.model.util.IdEObjectCollectionChangeObserver#modelElementRemoved(org.eclipse.emf.emfstore.internal.common.model.IdEObjectCollection,
+	 *      org.eclipse.emf.ecore.EObject)
+	 */
+	public void modelElementRemoved(IdEObjectCollection collection, EObject eObject) {
+		removed.add(eObject);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.common.model.util.IdEObjectCollectionChangeObserver#collectionDeleted(org.eclipse.emf.emfstore.internal.common.model.IdEObjectCollection)
+	 */
+	public void collectionDeleted(IdEObjectCollection collection) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

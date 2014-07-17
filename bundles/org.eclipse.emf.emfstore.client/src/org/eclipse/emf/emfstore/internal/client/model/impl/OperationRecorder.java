@@ -159,6 +159,10 @@ public class OperationRecorder implements ESCommandObserver, ESCommitObserver, E
 	 *      org.eclipse.emf.ecore.EObject)
 	 */
 	public void modelElementAdded(IdEObjectCollection project, EObject modelElement) {
+
+		converter.modelElementAdded(project,
+			modelElement);
+
 		// if element was just pasted from clipboard then do nothing
 		// if (this.getModelElementsFromClipboard().contains(modelElement)) {
 		// return;
@@ -360,9 +364,9 @@ public class OperationRecorder implements ESCommandObserver, ESCommitObserver, E
 					null, 0);
 				continue;
 			}
-			final AbstractOperation op = converter.convert(n);
+			final List<AbstractOperation> op = converter.convert(n);
 			if (op != null) {
-				ops.add(op);
+				ops.addAll(op);
 			} else {
 				// we should never get here, this would indicate a
 				// consistency error,
@@ -439,6 +443,7 @@ public class OperationRecorder implements ESCommandObserver, ESCommitObserver, E
 	 *      org.eclipse.emf.ecore.EObject)
 	 */
 	public void modelElementRemoved(IdEObjectCollection project, EObject modelElement) {
+
 		if (isRecording) {
 			if (!commandIsRunning) {
 				handleElementDelete(modelElement);
@@ -474,11 +479,11 @@ public class OperationRecorder implements ESCommandObserver, ESCommitObserver, E
 		final List<EObject> deletedElements = new ArrayList<EObject>();
 		for (int i = removedElementsCache.getRemovedElements().size() - 1; i >= 0; i--) {
 			final EObject removedElement = removedElementsCache.getRemovedElements().get(i);
-			if (!collection.contains(removedElement)) {
-				if (!deletedElements.contains(removedElement)) {
-					deletedElements.add(0, removedElement);
-				}
+			// if (!collection.contains(removedElement)) {
+			if (!deletedElements.contains(removedElement)) {
+				deletedElements.add(0, removedElement);
 			}
+			// }
 		}
 
 		for (final EObject deletedElement : deletedElements) {

@@ -240,6 +240,10 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl
 
 		// reapply local changes
 		applyOperations(myChanges.getOperations(), true);
+
+		// ops = applyOperations(myChanges.getOperations(), false);
+		// add ops to local change package
+
 		notifyPostApplyMergedChanges(myChanges);
 
 		setBaseVersion(baseSpec);

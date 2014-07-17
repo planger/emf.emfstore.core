@@ -92,7 +92,7 @@ public class CreateDeleteOperationImpl extends AbstractOperationImpl implements 
 				}
 			}
 
-			collection.clearAllocatedCaches();
+			// collection.clearAllocatedCaches();
 		} else {
 			if (collection.contains(getModelElementId())) {
 				// silently fail

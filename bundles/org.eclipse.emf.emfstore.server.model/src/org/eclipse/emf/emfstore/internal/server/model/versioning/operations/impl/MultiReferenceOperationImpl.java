@@ -409,7 +409,7 @@ public class MultiReferenceOperationImpl extends ReferenceOperationImpl implemen
 				project.allocateModelElementIds(allocatables);
 
 				for (final EObject currentElement : referencedModelElements) {
-					if (reference.isContainment()) {
+					if (reference.isContainment()) { // && !project.contains(currentElement)) {
 						project.addModelElement(currentElement);
 					}
 				}

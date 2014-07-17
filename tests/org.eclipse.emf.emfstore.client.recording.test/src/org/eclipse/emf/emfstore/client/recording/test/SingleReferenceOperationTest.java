@@ -208,7 +208,7 @@ public class SingleReferenceOperationTest extends ESTest {
 		assertEquals(1, getProjectSpace().getOperations().size());
 		final List<AbstractOperation> operations = checkAndCast(getProjectSpace().getOperations().get(0),
 			CompositeOperation.class).getSubOperations();
-		assertEquals(3, operations.size());
+		assertEquals(4, operations.size());
 
 		// note: skipping multireferenceop at index 0 in test, as it is not interesting in this context
 		final SingleReferenceOperation singleReferenceOperation = checkAndCast(operations.get(2),
@@ -430,21 +430,19 @@ public class SingleReferenceOperationTest extends ESTest {
 
 		final ModelElementId issueId = ModelUtil.getProject(issue).getModelElementId(issue);
 
-		final List<ReferenceOperation> subOperations = checkAndCast(operations.get(0), CreateDeleteOperation.class)
+		final List<ReferenceOperation> subOperations = checkAndCast(
+			operations.get(0),
+			CreateDeleteOperation.class)
 			.getSubOperations();
-		assertEquals(2, subOperations.size());
 
-		final AbstractOperation op0 = subOperations.get(0);
-		assertTrue(op0 instanceof MultiReferenceOperation);
-		final MultiReferenceOperation multiReferenceOperation = (MultiReferenceOperation) op0;
-		assertEquals(multiReferenceOperation.getModelElementId(), issueId);
-		assertFalse(multiReferenceOperation.isAdd());
-		assertEquals(multiReferenceOperation.getReferencedModelElements().get(0), proposalId);
-		assertEquals(multiReferenceOperation.getReferencedModelElements().size(), 1);
-		assertEquals(multiReferenceOperation.getIndex(), 0);
-
-		final SingleReferenceOperation singleReferenceOperation = checkAndCast(subOperations.get(1),
+		final SingleReferenceOperation singleReferenceOperation = checkAndCast(
+			subOperations.get(0),
 			SingleReferenceOperation.class);
+		final MultiReferenceOperation multiReferenceOperation = checkAndCast(
+			subOperations.get(1),
+			MultiReferenceOperation.class);
+
+		assertEquals(2, subOperations.size());
 
 		assertEquals(issueId, singleReferenceOperation.getOldValue());
 		assertNull(singleReferenceOperation.getNewValue());
@@ -457,6 +455,12 @@ public class SingleReferenceOperationTest extends ESTest {
 		final Set<ModelElementId> otherInvolvedModelElements = singleReferenceOperation.getOtherInvolvedModelElements();
 		assertEquals(1, otherInvolvedModelElements.size());
 		assertTrue(otherInvolvedModelElements.contains(issueId));
+
+		assertEquals(multiReferenceOperation.getModelElementId(), issueId);
+		assertFalse(multiReferenceOperation.isAdd());
+		assertEquals(multiReferenceOperation.getReferencedModelElements().get(0), proposalId);
+		assertEquals(multiReferenceOperation.getReferencedModelElements().size(), 1);
+		assertEquals(multiReferenceOperation.getIndex(), 0);
 	}
 
 	@Test

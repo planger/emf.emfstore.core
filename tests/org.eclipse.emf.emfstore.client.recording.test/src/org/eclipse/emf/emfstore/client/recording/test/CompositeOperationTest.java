@@ -21,6 +21,7 @@ import java.util.concurrent.Callable;
 import org.eclipse.emf.emfstore.client.handler.ESOperationModifier;
 import org.eclipse.emf.emfstore.client.test.common.cases.ESTest;
 import org.eclipse.emf.emfstore.client.test.common.dsl.Create;
+import org.eclipse.emf.emfstore.client.util.ESVoidCallable;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
 import org.eclipse.emf.emfstore.internal.client.model.CompositeOperationHandle;
 import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
@@ -83,10 +84,9 @@ public class CompositeOperationTest extends ESTest {
 		final TestElement section = addSection();
 		final TestElement useCase = Create.testElement();
 
-		new EMFStoreCommand() {
-
+		RunESCommand.run(new ESVoidCallable() {
 			@Override
-			protected void doRun() {
+			public void run() {
 				final CompositeOperationHandle handle = getProjectSpace().beginCompositeOperation();
 				section.setName(NEW_NAME);
 				section.setDescription(NEW_DESCRIPTION);
@@ -106,19 +106,18 @@ public class CompositeOperationTest extends ESTest {
 					fail();
 				}
 			}
-		}.run(false);
+		});
+
+		final AbstractOperation operation = getProjectSpace().getOperations().iterator().next();
 
 		assertEquals(true, getProject().contains(useCase));
 		assertEquals(getProject(), ModelUtil.getProject(useCase));
 		assertEquals(useCase, section.getContainedElements().iterator().next());
 		assertEquals(NEW_NAME, section.getName());
 		assertEquals(NEW_DESCRIPTION, section.getDescription());
-
 		assertEquals(1, getProjectSpace().getOperations().size());
-		final AbstractOperation operation = getProjectSpace().getOperations().iterator().next();
-		assertEquals(true, operation instanceof CompositeOperation);
-		final CompositeOperation compositeOperation = (CompositeOperation) operation;
-		assertEquals(4, compositeOperation.getSubOperations().size());
+		assertTrue(operation instanceof CompositeOperation);
+		assertEquals(5, CompositeOperation.class.cast(operation).getSubOperations().size());
 	}
 
 	/**
@@ -153,7 +152,6 @@ public class CompositeOperationTest extends ESTest {
 		assertEquals(0, projectSpace.getOperations().size());
 
 		new EMFStoreCommand() {
-
 			@Override
 			protected void doRun() {
 				try {
@@ -164,17 +162,16 @@ public class CompositeOperationTest extends ESTest {
 			}
 		}.run(false);
 
-		assertEquals(true, getProject().contains(useCase));
+		final AbstractOperation operation = getProjectSpace().getOperations().iterator().next();
+
+		assertTrue(getProject().contains(useCase));
 		assertEquals(getProject(), ModelUtil.getProject(useCase));
 		assertEquals(useCase, section.getContainedElements().iterator().next());
 		assertEquals(NEW_NAME, section.getName());
 		assertEquals(NEW_DESCRIPTION, section.getDescription());
-
 		assertEquals(1, getProjectSpace().getOperations().size());
-		final AbstractOperation operation = getProjectSpace().getOperations().iterator().next();
-		assertEquals(true, operation instanceof CompositeOperation);
-		final CompositeOperation compositeOperation = (CompositeOperation) operation;
-		assertEquals(4, compositeOperation.getSubOperations().size());
+		assertTrue(operation instanceof CompositeOperation);
+		assertEquals(5, CompositeOperation.class.cast(operation).getSubOperations().size());
 	}
 
 	/**
@@ -238,7 +235,7 @@ public class CompositeOperationTest extends ESTest {
 		final AbstractOperation operation = getProjectSpace().getOperations().iterator().next();
 		assertEquals(true, operation instanceof CompositeOperation);
 		final CompositeOperation compositeOperation = (CompositeOperation) operation;
-		assertEquals(4, compositeOperation.getSubOperations().size());
+		assertEquals(5, compositeOperation.getSubOperations().size());
 
 		ExtensionRegistry.INSTANCE.set(
 			ESOperationModifier.ID,

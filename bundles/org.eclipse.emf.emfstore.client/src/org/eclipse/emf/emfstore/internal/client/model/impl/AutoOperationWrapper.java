@@ -39,6 +39,8 @@ public class AutoOperationWrapper implements ESOperationModifier {
 	 */
 	public List<AbstractOperation> modify(List<AbstractOperation> operations, Command command) {
 
+		final List<AbstractOperation> flattendedOps = new ArrayList<AbstractOperation>();
+
 		if (operations.size() < 1) {
 			return operations;
 		} else if (operations.size() == 1 && command instanceof AbstractOverrideableCommand) {
@@ -47,7 +49,25 @@ public class AutoOperationWrapper implements ESOperationModifier {
 			final CompositeOperation compositeOperation = (CompositeOperation) operations.get(0);
 			if (compositeOperation.getMainOperation() == null) {
 				return operations;
+			} else {
+				for (final AbstractOperation abstractOperation : operations) {
+					if (CompositeOperation.class.isInstance(abstractOperation)) {
+						flattendedOps.addAll(CompositeOperation.class.cast(abstractOperation).getSubOperations());
+					} else {
+						flattendedOps.add(abstractOperation);
+					}
+				}
 			}
+		} else if (operations.size() > 1) {
+			for (final AbstractOperation abstractOperation : operations) {
+				if (CompositeOperation.class.isInstance(abstractOperation)) {
+					flattendedOps.addAll(CompositeOperation.class.cast(abstractOperation).getSubOperations());
+				} else {
+					flattendedOps.add(abstractOperation);
+				}
+			}
+		} else {
+			flattendedOps.addAll(operations);
 		}
 
 		final CompositeOperation compositeOperation = OperationsFactory.eINSTANCE.createCompositeOperation();
@@ -55,9 +75,10 @@ public class AutoOperationWrapper implements ESOperationModifier {
 		compositeOperation.setCompositeName(getText(command.getLabel()));
 		compositeOperation.setCompositeDescription(getText(command.getDescription()));
 		compositeOperation.setModelElementId(ModelUtil.clone(operations.get(0).getModelElementId()));
-		compositeOperation.getSubOperations().addAll(operations);
+		compositeOperation.getSubOperations().addAll(flattendedOps);
 		final ArrayList<AbstractOperation> result = new ArrayList<AbstractOperation>();
 		result.add(compositeOperation);
+
 		return result;
 	}
 
