@@ -220,6 +220,6 @@
 		<property name="fileExtensions" value="java"/>
 	</module>
 	<module name="SuppressionFilter">
-    <property name="file" value="http://download.eclipse.org/emfclient/config/suppressionsNew.xml"/>
+    <property name="file" value="http://download.eclipse.org/ecp/config/suppressionsNew.xml"/>
 	</module>
 </module>

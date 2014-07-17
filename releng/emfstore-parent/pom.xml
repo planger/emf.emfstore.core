@@ -174,9 +174,9 @@
 				</executions>
 				<configuration>
 					<failOnViolation>false</failOnViolation>
-					<configLocation>http://download.eclipse.org/emfclient/config/esmCheckstyle.xml</configLocation>
+					<configLocation>http://download.eclipse.org/ecp/config/esmCheckstyle.xml</configLocation>
 					<suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
-					<suppressionsLocation>http://download.eclipse.org/emfclient/config/suppressions.xml</suppressionsLocation>
+					<suppressionsLocation>http://download.eclipse.org/ecp/config/suppressions.xml</suppressionsLocation>
 					<propertyExpansion>samedir=${basedir}/../../EMFStoreDeveloper/coding</propertyExpansion>
 				</configuration>
 			</plugin>
