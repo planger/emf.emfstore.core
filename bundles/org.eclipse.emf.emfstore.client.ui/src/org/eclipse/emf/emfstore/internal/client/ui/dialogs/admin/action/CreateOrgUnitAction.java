@@ -43,14 +43,24 @@ public abstract class CreateOrgUnitAction extends Action {
 	private final TableViewer tableViewer;
 	private final PropertiesForm form;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param title
+	 *            the action title
+	 * @param adminBroker
+	 *            the {@link AdminBroker} responsible for creating the {@link ACOrgUnit}
+	 * @param tableViewer
+	 *            the {@link TableViewer} listing all available {@link ACOrgUnit}s
+	 * @param form
+	 *            the {@link PropertiesForm} that will display the details of the created {@link ACOrgUnit}
+	 */
 	public CreateOrgUnitAction(String title, AdminBroker adminBroker, TableViewer tableViewer, PropertiesForm form) {
 		super(title);
 		this.adminBroker = adminBroker;
 		this.tableViewer = tableViewer;
 		this.form = form;
 	}
-
-	protected abstract Set<String> getInputFieldNames();
 
 	@Override
 	public void run() {
@@ -146,9 +156,39 @@ public abstract class CreateOrgUnitAction extends Action {
 		return adminBroker;
 	}
 
+	/**
+	 * Returns the field that is used to identify a {@link ACOrgUnit} such as the name.
+	 * 
+	 * @return the field that is used to identify a ACOrgUnit
+	 */
 	protected abstract String getPrimaryFieldName();
 
+	/**
+	 * Returns the name of the organizational unit.
+	 * Will be used to label the input dialog and such.
+	 * 
+	 * @return a stirng describing the organizational unit
+	 */
 	protected abstract String orgUnitName();
 
+	/**
+	 * Call that is responsible for actually creating the {@link ACOrgUnit}.
+	 * 
+	 * @param primaryFieldValue
+	 *            the field that is used to identify the ACOrgUnit
+	 * @return the created ACOrgUnit
+	 * @throws ESException
+	 *             in case creation of the ACOrgUnit failed
+	 */
 	protected abstract ACOrgUnitId createOrgUnit(String primaryFieldValue) throws ESException;
+
+	/**
+	 * Returns all fields that are necessary for creating a {@link ACOrgUnit}.
+	 * For each field a corresponding text field will be created in the
+	 * input dialog that holds the information about the create user.
+	 * 
+	 * @return all fields that are necessary for creating a {@link ACOrgUnit}
+	 */
+	protected abstract Set<String> getInputFieldNames();
+
 }

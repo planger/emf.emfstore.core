@@ -13,11 +13,11 @@
 package org.eclipse.emf.emfstore.internal.client.ui.dialogs.admin;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionPoint;
 import org.eclipse.emf.emfstore.internal.client.model.AdminBroker;
 import org.eclipse.emf.emfstore.internal.client.ui.Activator;
 import org.eclipse.emf.emfstore.internal.client.ui.dialogs.EMFStoreMessageDialog;
@@ -25,7 +25,6 @@ import org.eclipse.emf.emfstore.internal.client.ui.dialogs.admin.acimport.wizard
 import org.eclipse.emf.emfstore.internal.client.ui.dialogs.admin.action.CreateUserAction;
 import org.eclipse.emf.emfstore.internal.client.ui.dialogs.admin.action.DeleteUserAction;
 import org.eclipse.emf.emfstore.internal.server.exceptions.AccessControlException;
-import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnit;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACUser;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.eclipse.jface.action.Action;
@@ -82,7 +81,7 @@ public class UserTabContent extends TabContent implements IPropertyChangeListene
 				final InputDialog inputDialog = new InputDialog(
 					activeShell,
 					Messages.UserTabContent_Enter_New_Password_For_User
-						+ "'" + user.getName() + "'", //$NON-NLS-1$//$NON-NLS-2$ 
+						+ " '" + user.getName() + "'", //$NON-NLS-1$//$NON-NLS-2$ 
 					Messages.UserTabContent_Enter_New_Password,
 					StringUtils.EMPTY, null);
 
@@ -97,10 +96,6 @@ public class UserTabContent extends TabContent implements IPropertyChangeListene
 					} catch (final ESException ex) {
 						EMFStoreMessageDialog.showExceptionDialog(ex);
 					}
-				}
-
-				if (getForm().getCurrentInput() instanceof ACOrgUnit && getForm().getCurrentInput().equals(user)) {
-					getForm().setInput(null);
 				}
 			}
 			getTableViewer().refresh();
@@ -124,26 +119,34 @@ public class UserTabContent extends TabContent implements IPropertyChangeListene
 	 */
 	@Override
 	protected List<Action> initActions() {
-		final Action createNewUser = new CreateUserAction(getAdminBroker(), getTableViewer(), getForm());
-		createNewUser.setImageDescriptor(Activator.getImageDescriptor(USER_ICON));
-		createNewUser.setToolTipText(Messages.UserTabContent_Create_New_User);
+		final Action createNewUserAction = new CreateUserAction(getAdminBroker(), getTableViewer(), getForm());
+		createNewUserAction.setImageDescriptor(Activator.getImageDescriptor(USER_ICON));
+		createNewUserAction.setToolTipText(Messages.UserTabContent_Create_New_User);
 
-		final Action deleteUser = new DeleteUserAction(getAdminBroker(), getTableViewer(), getForm());
-		deleteUser.setImageDescriptor(Activator.getImageDescriptor(DELETE_ICON));
-		deleteUser.setToolTipText(Messages.UserTabContent_Delete_User);
+		final Action deleteUserAction = new DeleteUserAction(getAdminBroker(), getTableViewer(), getForm());
+		deleteUserAction.setImageDescriptor(Activator.getImageDescriptor(DELETE_ICON));
+		deleteUserAction.setToolTipText(Messages.UserTabContent_Delete_User);
 
-		final Action importOrgUnit = new AcUserImportAction(getAdminBroker());
-		importOrgUnit.addPropertyChangeListener(this);
+		final Action importOrgUnitAction = new AcUserImportAction(getAdminBroker());
+		importOrgUnitAction.addPropertyChangeListener(this);
 
 		final Action changePassword = new ChangePasswordAction();
 		changePassword.setImageDescriptor(Activator.getImageDescriptor(LOCK_ICON));
 		changePassword.setToolTipText(Messages.UserTabContent_Change_Password);
 
-		return Arrays.asList(
-			createNewUser,
-			deleteUser,
-			importOrgUnit,
-			changePassword);
+		final List<Action> actions = new ArrayList<Action>();
+		actions.add(createNewUserAction);
+		actions.add(deleteUserAction);
+		actions.add(importOrgUnitAction);
+
+		final ESExtensionPoint showPasswordControls = new ESExtensionPoint(
+			"org.eclipse.emf.emfstore.client.ui.showPasswordControls"); //$NON-NLS-1$
+
+		if (showPasswordControls.getBoolean("enabled", false)) { //$NON-NLS-1$
+			actions.add(changePassword);
+		}
+
+		return actions;
 	}
 
 	/**

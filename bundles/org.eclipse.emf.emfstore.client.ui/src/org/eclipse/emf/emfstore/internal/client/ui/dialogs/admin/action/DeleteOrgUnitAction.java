@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Edgar - initial API and implementation
+ * Edgar Mueller - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.dialogs.admin.action;
 
@@ -33,12 +33,30 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
+/**
+ * Action for deleting a {@link ACOrgUnit}.
+ * 
+ * @author emueller
+ * 
+ */
 public abstract class DeleteOrgUnitAction extends Action {
 
 	private final TableViewer tableViewer;
 	private final AdminBroker adminBroker;
 	private final PropertiesForm form;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param title
+	 *            the action title
+	 * @param adminBroker
+	 *            the {@link AdminBroker} responsible for deleting the {@link ACOrgUnit}
+	 * @param tableViewer
+	 *            the {@link TableViewer} listing all available {@link ACOrgUnit}s
+	 * @param form
+	 *            the {@link PropertiesForm} that will display the details of the created {@link ACOrgUnit}
+	 */
 	protected DeleteOrgUnitAction(String title, AdminBroker adminBroker, TableViewer tableViewer, PropertiesForm form) {
 		super(title);
 		this.tableViewer = tableViewer;

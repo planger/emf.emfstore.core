@@ -14,12 +14,19 @@ package org.eclipse.emf.emfstore.internal.client.ui.dialogs.admin.action;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionPoint;
 import org.eclipse.emf.emfstore.internal.client.model.AdminBroker;
 import org.eclipse.emf.emfstore.internal.client.ui.dialogs.admin.PropertiesForm;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnitId;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.eclipse.jface.viewers.TableViewer;
 
+/**
+ * Action for creating a user.
+ * 
+ * @author emueller
+ * 
+ */
 public class CreateUserAction extends CreateOrgUnitAction {
 
 	private static final String USER_FIELD_NAME = Messages.CreateUserAction_UserName_Field;
@@ -48,7 +55,14 @@ public class CreateUserAction extends CreateOrgUnitAction {
 	protected Set<String> getInputFieldNames() {
 		final Set<String> fieldNames = new LinkedHashSet<String>();
 		fieldNames.add(USER_FIELD_NAME);
-		fieldNames.add(PW_FIELD_NAME);
+
+		final ESExtensionPoint showPasswordControls = new ESExtensionPoint(
+			"org.eclipse.emf.emfstore.client.ui.showPasswordControls"); //$NON-NLS-1$
+
+		if (showPasswordControls.getBoolean("enabled", false)) { //$NON-NLS-1$
+			fieldNames.add(PW_FIELD_NAME);
+		}
+
 		return fieldNames;
 	}
 

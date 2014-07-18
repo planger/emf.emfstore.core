@@ -20,7 +20,7 @@ import org.eclipse.osgi.util.NLS;
  * @generated
  */
 public final class Messages extends NLS {
-	private static final String BUNDLE_NAME = "org.eclipse.emf.emfstore.internal.client.ui.views.emfstorebrowser.dialogs.admin.acimport.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "org.eclipse.emf.emfstore.internal.client.ui.dialogs.admin.acimport.messages"; //$NON-NLS-1$
 	public static String CSVImportSource_ChooseFile;
 	public static String CSVImportSource_ImportFromCSV;
 	public static String CSVImportSource_Importing;

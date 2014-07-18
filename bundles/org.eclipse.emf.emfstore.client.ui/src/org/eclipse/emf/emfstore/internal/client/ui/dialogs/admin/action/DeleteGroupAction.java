@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Edgar - initial API and implementation
+ * Edgar Mueller - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.dialogs.admin.action;
 
@@ -19,6 +19,12 @@ import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnit;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.eclipse.jface.viewers.TableViewer;
 
+/**
+ * Action for deleting a group.
+ * 
+ * @author emueller
+ * 
+ */
 public class DeleteGroupAction extends DeleteOrgUnitAction {
 
 	/**

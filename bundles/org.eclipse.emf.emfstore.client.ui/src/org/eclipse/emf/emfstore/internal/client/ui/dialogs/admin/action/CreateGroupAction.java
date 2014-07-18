@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Edgar - initial API and implementation
+ * Edgar Mueller - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.dialogs.admin.action;
 
@@ -20,6 +20,12 @@ import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnitId;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.eclipse.jface.viewers.TableViewer;
 
+/**
+ * Action for creating a group.
+ * 
+ * @author emueller
+ * 
+ */
 public class CreateGroupAction extends CreateOrgUnitAction {
 
 	private static final String FIELD_NAME = Messages.CreateGroupAction_GroupName_Field;
