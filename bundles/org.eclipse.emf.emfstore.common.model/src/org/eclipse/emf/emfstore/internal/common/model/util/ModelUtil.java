@@ -1065,7 +1065,7 @@ public final class ModelUtil {
 		for (final EObject modelElement : modelElements) {
 			for (final EObject containee : modelElement.eContents()) {
 
-				if (!ignoreSingletonDatatypes && isSingleton(containee)) {
+				if (ignoreSingletonDatatypes && isSingleton(containee)) {
 					continue;
 				}
 
