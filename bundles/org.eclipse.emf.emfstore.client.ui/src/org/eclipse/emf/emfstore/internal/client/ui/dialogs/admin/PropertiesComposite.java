@@ -13,6 +13,7 @@
 package org.eclipse.emf.emfstore.internal.client.ui.dialogs.admin;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -173,7 +174,7 @@ public abstract class PropertiesComposite extends Composite {
 	 */
 	protected void createTableViewer(Composite parent) {
 
-		final int style = SWT.SINGLE | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.FULL_SELECTION;
+		final int style = SWT.MULTI | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.FULL_SELECTION;
 
 		final Table table = new Table(parent, style);
 		final GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
@@ -239,9 +240,14 @@ public abstract class PropertiesComposite extends Composite {
 			// Remove the selection and refresh the view
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				final ACOrgUnit ou = (ACOrgUnit) ((IStructuredSelection) tableViewer.getSelection()).getFirstElement();
-				if (ou != null) {
-					removeOrgUnit(ou);
+				final IStructuredSelection structuredSelection = IStructuredSelection.class.cast(tableViewer
+					.getSelection());
+				final Iterator<?> iterator = structuredSelection.iterator();
+				while (iterator.hasNext()) {
+					final ACOrgUnit orgUnit = (ACOrgUnit) iterator.next();
+					if (orgUnit != null) {
+						removeOrgUnit(orgUnit);
+					}
 				}
 			}
 		});
