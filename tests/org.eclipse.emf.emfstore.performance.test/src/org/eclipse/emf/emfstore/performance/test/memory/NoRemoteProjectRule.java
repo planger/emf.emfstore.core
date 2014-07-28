@@ -8,7 +8,7 @@
  * 
  * Contributors:
  ******************************************************************************/
-package org.eclipse.emf.emfstore.client.test.memory;
+package org.eclipse.emf.emfstore.performance.test.memory;
 
 import java.io.IOException;
 
@@ -22,6 +22,7 @@ import org.junit.rules.ExternalResource;
 /**
  * JUnit Rule for ensuring no remote projects on an EMFStore.
  */
+@SuppressWarnings("restriction")
 public class NoRemoteProjectRule extends ExternalResource {
 
 	private RunningEMFStoreRule rule;

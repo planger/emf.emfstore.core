@@ -27,7 +27,7 @@
                 </goals>
                 <configuration>
                     <testSuite>org.eclipse.emf.emfstore.performance.test</testSuite>
-                    <testClass>org.eclipse.emf.emfstore.performance.test.PerformanceTest</testClass>
+                    <testClass>org.eclipse.emf.emfstore.performance.test.AllPerformanceTests</testClass>
                     <useUIHarness>true</useUIHarness>
                     <useUIThread>false</useUIThread>
                     <argLine>${tycho.testArgLine} -Dosgi.requiredJavaVersion=1.5 -Xms40m -Xmx512m
@@ -182,7 +182,7 @@
                         <configuration>
                             <reportsDirectory>${project.build.directory}/surefire-reports/transactional</reportsDirectory>
                             <testSuite>org.eclipse.emf.emfstore.performance.test</testSuite>
-                            <testClass>org.eclipse.emf.emfstore.performance.test.PerformanceTest</testClass>
+                            <testClass>org.eclipse.emf.emfstore.performance.test.AllPerformanceTests</testClass>
                             <useUIHarness>true</useUIHarness>
                             <useUIThread>false</useUIThread>
                             <argLine>${tycho.testArgLine} -Dosgi.requiredJavaVersion=1.5 -Xms40m -Xmx512m

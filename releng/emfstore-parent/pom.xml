@@ -36,6 +36,14 @@
 			</activation>
 		</profile>
 		<profile>
+			<id>performance</id>
+			<activation>
+				<property>
+					<name>performance</name>
+				</property>
+			</activation>
+		</profile>
+		<profile>
 			<id>build-server</id>
 			<activation>
 				<property>
