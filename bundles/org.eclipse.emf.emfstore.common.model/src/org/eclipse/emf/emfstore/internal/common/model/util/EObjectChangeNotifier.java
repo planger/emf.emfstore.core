@@ -198,6 +198,7 @@ public class EObjectChangeNotifier extends EContentAdapter {
 					handleMultiReference((List<?>) newValue);
 				}
 			} else if (reference.isContainment()
+				&& reference.getEType().getInstanceClass() != null
 				&& Map.Entry.class.isAssignableFrom(reference.getEType().getInstanceClass())) {
 				handleMapEntry((Map.Entry<?, ?>) newValue, reference);
 			}
