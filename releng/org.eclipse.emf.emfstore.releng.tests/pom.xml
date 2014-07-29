@@ -26,14 +26,6 @@
 		<module>../../tests/org.eclipse.emf.emfstore.client.conflictdetection.test</module>
 		<module>../../tests/org.eclipse.emf.emfstore.client.test</module>
 		<module>../../tests/org.eclipse.emf.emfstore.client.test.ui</module>
+		<module>../../tests/org.eclipse.emf.emfstore.performance.test</module>
 	</modules>
-	
-	<profiles>
-		<profile>
-			<id>performance</id>
-			<modules>
-				<module>../../tests/org.eclipse.emf.emfstore.performance.test</module>
-			</modules>
-		</profile>
-	</profiles>
 </project>
