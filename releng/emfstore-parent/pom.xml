@@ -28,6 +28,15 @@
 
 	<profiles>
 		<profile>
+			<id>default</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<skip-performance>true</skip-performance>
+			</properties>
+		</profile>
+		<profile>
 			<id>aggregateSites</id>
 			<activation>
 				<property>
@@ -42,6 +51,9 @@
 					<name>performance</name>
 				</property>
 			</activation>
+			<properties>
+				<skip-performance>false</skip-performance>
+			</properties>
 		</profile>
 		<profile>
 			<id>build-server</id>
