@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Edgar - initial API and implementation
+ * Edgar Mueller - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.dialogs.admin.action;
 
@@ -27,12 +27,27 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+/**
+ * Dialog for creating a new {@link org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnit
+ * ACOrgUnit}.
+ * 
+ * @author emueller
+ * 
+ */
 public class NewOrgUnitDialog extends Dialog {
 
 	private final Set<String> fieldNames;
 	private final Map<String, Text> fieldToTextMapping;
 	private final Map<String, String> fieldValues;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param parentShell
+	 *            the parent shell
+	 * @param fieldNames
+	 *            the name of the input fields
+	 */
 	public NewOrgUnitDialog(Shell parentShell, Set<String> fieldNames) {
 		super(parentShell);
 		this.fieldNames = fieldNames;
@@ -98,6 +113,13 @@ public class NewOrgUnitDialog extends Dialog {
 		super.cancelPressed();
 	}
 
+	/**
+	 * Returns the field value.
+	 * 
+	 * @param fieldName
+	 *            the name of the field whose value shold be retrieved.
+	 * @return the field's value
+	 */
 	public String getFieldValue(String fieldName) {
 		return fieldValues.get(fieldName);
 	}

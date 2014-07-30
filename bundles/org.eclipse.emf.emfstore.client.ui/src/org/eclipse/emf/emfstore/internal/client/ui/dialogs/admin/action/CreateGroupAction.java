@@ -12,8 +12,10 @@
 package org.eclipse.emf.emfstore.internal.client.ui.dialogs.admin.action;
 
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.emfstore.internal.client.model.AdminBroker;
 import org.eclipse.emf.emfstore.internal.client.ui.dialogs.admin.PropertiesForm;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnitId;
@@ -84,7 +86,13 @@ public class CreateGroupAction extends CreateOrgUnitAction {
 	 * @see org.eclipse.emf.emfstore.internal.client.ui.dialogs.admin.action.CreateOrgUnitAction#createOrgUnit(java.lang.String)
 	 */
 	@Override
-	protected ACOrgUnitId createOrgUnit(String primaryFieldValue) throws ESException {
-		return getAdminBroker().createGroup(primaryFieldValue);
+	protected ACOrgUnitId createOrgUnit(Map<String, String> fieldValues) throws ESException {
+		final String groupName = fieldValues.get(FIELD_NAME);
+
+		if (StringUtils.isBlank(groupName)) {
+			throw new ESException(Messages.CreateGroupAction_GroupName_Empty);
+		}
+
+		return getAdminBroker().createGroup(groupName);
 	}
 }

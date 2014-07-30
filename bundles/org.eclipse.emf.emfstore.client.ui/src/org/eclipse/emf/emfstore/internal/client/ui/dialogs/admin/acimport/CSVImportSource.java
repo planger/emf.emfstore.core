@@ -101,14 +101,8 @@ public class CSVImportSource extends ImportSource {
 		groups = new ArrayList<ImportItemWrapper>();
 		users = new ArrayList<ImportItemWrapper>();
 
-		final FileDialog dialog = new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-			SWT.OPEN);
-		dialog.setText(Messages.CSVImportSource_ChooseFile);
-		final String initialPath = EMFStorePreferenceHelper.getPreference(CSV_IMPORT_SOURCE_PATH,
-			System.getProperty("user.home")); //$NON-NLS-1$
-		dialog.setFilterPath(initialPath);
-		final String fn = dialog.open();
-		if (fn == null) {
+		final FileDialog dialog = createFileDialog();
+		if (dialog.open() == null) {
 			return false;
 		}
 
@@ -121,17 +115,34 @@ public class CSVImportSource extends ImportSource {
 		absFileName = filterPath + File.separatorChar + fileName;
 		final File file = new File(absFileName);
 		EMFStorePreferenceHelper.setPreference(CSV_IMPORT_SOURCE_PATH, filterPath);
-		BufferedReader bufferedReader = null;
-		InputStreamReader isr = null;
 
 		try {
-			isr = new InputStreamReader(new FileInputStream(file)); // "8859_1","ASCII"
-			bufferedReader = new BufferedReader(isr);
-			String line = bufferedReader.readLine();
+			return readFile(file);
+		} catch (final FileNotFoundException e) {
+			// TODO: sensible error messages
+			handleError(e);
+			return false;
+		} catch (final IOException e) {
+			handleError(e);
+			return false;
+		} catch (final ArrayIndexOutOfBoundsException e) {
+			handleError(e);
+			return false;
+		}
+	}
 
-			final int indexUserName = 0;
-			final int indexForGroup = 1;
+	private boolean readFile(File file)
+		throws IOException {
 
+		final InputStreamReader isr = new InputStreamReader(new FileInputStream(file)); // "8859_1","ASCII"
+		final BufferedReader bufferedReader = new BufferedReader(isr);
+
+		String line;
+
+		final int indexUserName = 0;
+		final int indexForGroup = 1;
+
+		try {
 			while ((line = bufferedReader.readLine()) != null) {
 				// Get the user information from the next line
 				final String[] title = line.split(","); //$NON-NLS-1$
@@ -162,19 +173,6 @@ public class CSVImportSource extends ImportSource {
 				childOrgUnits.add(userImportWrapper);
 				importWrapper.setChildOrgUnits(childOrgUnits);
 			}
-		} catch (final FileNotFoundException e) {
-			// TODO: sensible error messages
-			WorkspaceUtil.logWarning(e.getMessage(), e);
-			EMFStoreMessageDialog.showExceptionDialog(e);
-			return false;
-		} catch (final IOException e) {
-			WorkspaceUtil.logWarning(e.getMessage(), e);
-			EMFStoreMessageDialog.showExceptionDialog(e);
-			return false;
-		} catch (final ArrayIndexOutOfBoundsException e) {
-			WorkspaceUtil.logWarning(e.getMessage(), e);
-			EMFStoreMessageDialog.showExceptionDialog(e);
-			return false;
 		} finally {
 			try {
 				bufferedReader.close();
@@ -187,6 +185,27 @@ public class CSVImportSource extends ImportSource {
 		}
 
 		return true;
+	}
+
+	/**
+	 * @return
+	 */
+	private FileDialog createFileDialog() {
+		final FileDialog dialog = new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+			SWT.OPEN);
+		dialog.setText(Messages.CSVImportSource_ChooseFile);
+		final String initialPath = EMFStorePreferenceHelper.getPreference(CSV_IMPORT_SOURCE_PATH,
+			System.getProperty("user.home")); //$NON-NLS-1$
+		dialog.setFilterPath(initialPath);
+		return dialog;
+	}
+
+	/**
+	 * @param e
+	 */
+	private void handleError(final Exception e) {
+		WorkspaceUtil.logWarning(e.getMessage(), e);
+		EMFStoreMessageDialog.showExceptionDialog(e);
 	}
 
 	/**

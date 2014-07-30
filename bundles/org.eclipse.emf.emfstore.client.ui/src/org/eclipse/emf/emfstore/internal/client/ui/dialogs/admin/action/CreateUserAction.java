@@ -12,8 +12,10 @@
 package org.eclipse.emf.emfstore.internal.client.ui.dialogs.admin.action;
 
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionPoint;
 import org.eclipse.emf.emfstore.internal.client.model.AdminBroker;
 import org.eclipse.emf.emfstore.internal.client.ui.dialogs.admin.PropertiesForm;
@@ -92,7 +94,18 @@ public class CreateUserAction extends CreateOrgUnitAction {
 	 * @see org.eclipse.emf.emfstore.internal.client.ui.dialogs.admin.action.CreateOrgUnitAction#createOrgUnit(java.lang.String)
 	 */
 	@Override
-	protected ACOrgUnitId createOrgUnit(String primaryFieldValue) throws ESException {
-		return getAdminBroker().createUser(primaryFieldValue);
+	protected ACOrgUnitId createOrgUnit(Map<String, String> fieldValues) throws ESException {
+		final String userName = fieldValues.get(USER_FIELD_NAME);
+		final String pwd = fieldValues.get(PW_FIELD_NAME);
+
+		if (StringUtils.isBlank(userName)) {
+			throw new ESException(Messages.CreateUserAction_UserName_Empty);
+		} else if (StringUtils.isBlank(pwd)) {
+			throw new ESException(Messages.CreateUserAction_Password_Empty);
+		}
+
+		final ACOrgUnitId userId = getAdminBroker().createUser(userName);
+		getAdminBroker().changeUser(userId, userName, pwd);
+		return userId;
 	}
 }

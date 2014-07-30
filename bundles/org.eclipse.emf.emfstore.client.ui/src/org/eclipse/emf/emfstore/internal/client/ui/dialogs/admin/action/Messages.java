@@ -20,11 +20,14 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.emf.emfstore.internal.client.ui.dialogs.admin.action.messages"; //$NON-NLS-1$
 	public static String CreateGroupAction_ActionTitle;
+	public static String CreateGroupAction_GroupName_Empty;
 	public static String CreateGroupAction_GroupName_Field;
 	public static String CreateGroupAction_OrgUnitName;
 	public static String CreateUserAction_ActionTitle;
 	public static String CreateUserAction_OrgUnitName;
+	public static String CreateUserAction_Password_Empty;
 	public static String CreateUserAction_Password_Field;
+	public static String CreateUserAction_UserName_Empty;
 	public static String CreateUserAction_UserName_Field;
 	public static String DeleteOrgUnitAction_ConfirmationMessage_Many;
 	public static String DeleteOrgUnitAction_ConfirmationMessage_Single;

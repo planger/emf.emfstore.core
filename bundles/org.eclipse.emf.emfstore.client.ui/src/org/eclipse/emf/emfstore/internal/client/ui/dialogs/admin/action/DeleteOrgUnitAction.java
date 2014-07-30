@@ -164,11 +164,31 @@ public abstract class DeleteOrgUnitAction extends Action {
 		return adminBroker;
 	}
 
+	/**
+	 * Returns the title of the confirmation dialog.
+	 * 
+	 * @return the title of the confirmation dialog.
+	 */
 	protected String confirmationMessageTitle() {
 		return MessageFormat.format(Messages.DeleteOrgUnitAction_ConfirmationMessageTitle, orgUnitName());
 	}
 
+	/**
+	 * Actually deletes the given {@link ACOrgUnit}.
+	 * 
+	 * @param orgUnit
+	 *            the {@link ACOrgUnit} to be deleted
+	 * @throws AccessControlException
+	 *             in case the deletion is not allowed
+	 * @throws ESException
+	 *             in case the deletion failed
+	 */
 	protected abstract void deleteAction(ACOrgUnit orgUnit) throws AccessControlException, ESException;
 
+	/**
+	 * Returns the name of the {@link ACOrgUnit} to be deleted.
+	 * 
+	 * @return the name of the {@link ACOrgUnit} to be deleted
+	 */
 	protected abstract String orgUnitName();
 }

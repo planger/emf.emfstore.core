@@ -12,6 +12,8 @@
 package org.eclipse.emf.emfstore.internal.client.ui.dialogs.admin.action;
 
 import java.text.MessageFormat;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -90,8 +92,7 @@ public abstract class CreateOrgUnitAction extends Action {
 			if (orgUnitExists(getPrimaryFieldName())) {
 				openOrgUnitExistsDialog(shell, getPrimaryFieldName());
 			} else {
-				// newUserId = adminBroker.createUser(
-				newUserId = createOrgUnit(newUserDialog.getFieldValue(getPrimaryFieldName()));
+				newUserId = createOrgUnit(getFieldValues(newUserDialog));
 			}
 		} catch (final ESException e) {
 			EMFStoreMessageDialog.showExceptionDialog(e);
@@ -116,6 +117,18 @@ public abstract class CreateOrgUnitAction extends Action {
 			tableViewer.getTable().deselectAll();
 			tableViewer.getTable().select(index);
 		}
+	}
+
+	/**
+	 * @param newUserDialog
+	 * @return
+	 */
+	private Map<String, String> getFieldValues(final NewOrgUnitDialog newUserDialog) {
+		final Map<String, String> fieldValues = new LinkedHashMap<String, String>();
+		for (final String fieldName : getInputFieldNames()) {
+			fieldValues.put(fieldName, newUserDialog.getFieldValue(fieldName));
+		}
+		return fieldValues;
 	}
 
 	private boolean orgUnitExists(String username) {
@@ -174,13 +187,13 @@ public abstract class CreateOrgUnitAction extends Action {
 	/**
 	 * Call that is responsible for actually creating the {@link ACOrgUnit}.
 	 * 
-	 * @param primaryFieldValue
-	 *            the field that is used to identify the ACOrgUnit
+	 * @param fieldValues
+	 *            a mapping from field names to their values
 	 * @return the created ACOrgUnit
 	 * @throws ESException
 	 *             in case creation of the ACOrgUnit failed
 	 */
-	protected abstract ACOrgUnitId createOrgUnit(String primaryFieldValue) throws ESException;
+	protected abstract ACOrgUnitId createOrgUnit(Map<String, String> fieldValues) throws ESException;
 
 	/**
 	 * Returns all fields that are necessary for creating a {@link ACOrgUnit}.
