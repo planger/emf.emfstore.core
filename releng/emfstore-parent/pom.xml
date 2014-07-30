@@ -24,18 +24,10 @@
 		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<sonar.jacoco.reportPath>../../tests/coverage/jacoco.exec</sonar.jacoco.reportPath>
+		<skip-performance>true</skip-performance>
 	</properties>
 
 	<profiles>
-		<profile>
-			<id>default</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<properties>
-				<skip-performance>true</skip-performance>
-			</properties>
-		</profile>
 		<profile>
 			<id>aggregateSites</id>
 			<activation>
