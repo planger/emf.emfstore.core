@@ -111,7 +111,7 @@ public class OrgUnitManagementGUI {
 					break;
 				}
 				activeTabContent.selectFirstElement();
-				activeTabContent.getTableViewer().refresh();
+				// activeTabContent.getTableViewer().refresh();
 			}
 		});
 	}
