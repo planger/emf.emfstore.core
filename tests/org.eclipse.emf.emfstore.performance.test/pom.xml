@@ -30,7 +30,7 @@
 					<testClass>org.eclipse.emf.emfstore.performance.test.AllPerformanceTests</testClass>
 					<useUIHarness>true</useUIHarness>
 					<useUIThread>false</useUIThread>
-					<argLine>${tycho.testArgLine} -Dosgi.requiredJavaVersion=1.5 -Xms40m -Xmx640m</argLine>
+					<argLine>${tycho.testArgLine} -Dosgi.requiredJavaVersion=1.5 -Xms40m -Xmx512m -XX:+HeapDumpOnOutOfMemoryError</argLine>
 					<skipTests>${skip-performance}</skipTests>
 					<testFailureIgnore>true</testFailureIgnore>
 					<!-- Plugins to be loaded to the osgi runtime -->
