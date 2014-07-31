@@ -364,7 +364,6 @@
 							<goal>test</goal>
 						</goals>
 						<configuration>
-							<testSuite>org.eclipse.emf.emfstore.performance.test.memory</testSuite>
 							<testClass>org.eclipse.emf.emfstore.performance.test.memory.MemoryLoadTest</testClass>
 							<useUIHarness>true</useUIHarness>
 							<useUIThread>false</useUIThread>
