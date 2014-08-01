@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.emfstore.common.model.ESModelElementId;
 import org.eclipse.emf.emfstore.internal.common.model.ModelElementId;
 import org.eclipse.emf.emfstore.internal.common.model.ModelElementIdToEObjectMapping;
 import org.eclipse.emf.emfstore.internal.common.model.Project;
@@ -74,7 +73,8 @@ public class ModelElementIdToEObjectMappingImpl implements ModelElementIdToEObje
 	 * Constructor.
 	 * 
 	 * @param mapping
-	 *            an initial mapping from {EObject}s to their {@link ESModelElementId}s
+	 *            an initial mapping from {EObject}s to their
+	 *            {@link org.eclipse.emf.emfstore.common.model.ESModelElementId ESModelElementId}s
 	 * @param operationsList1 list of operations for which involved model elements should
 	 *            be added to the mapping
 	 * @param operationsList2 list of operations for which involved model elements should
@@ -90,7 +90,8 @@ public class ModelElementIdToEObjectMappingImpl implements ModelElementIdToEObje
 	/**
 	 * Constructor.
 	 * 
-	 * @param project the project which contains the initial mapping from {EObject}s to their {@link ESModelElementId}s
+	 * @param project the project which contains the initial mapping from {EObject}s to their
+	 *            {@link org.eclipse.emf.emfstore.common.model.ESModelElementId ESModelElementId}s
 	 * @param changePackage a {@link ChangePackage}s whose involved model elements should
 	 *            be added to the mapping
 	 */

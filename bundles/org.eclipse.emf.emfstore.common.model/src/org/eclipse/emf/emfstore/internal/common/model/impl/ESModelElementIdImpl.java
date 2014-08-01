@@ -43,6 +43,16 @@ public class ESModelElementIdImpl extends AbstractAPIImpl<ESModelElementIdImpl, 
 	}
 
 	/**
+	 * Sets the ID.
+	 * 
+	 * @param id
+	 *            the ID to be set
+	 */
+	public void setId(String id) {
+		toInternalAPI().setId(id);
+	}
+
+	/**
 	 * {@inheritDoc}
 	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)

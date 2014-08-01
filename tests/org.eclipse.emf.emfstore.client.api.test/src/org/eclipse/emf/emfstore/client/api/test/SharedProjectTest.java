@@ -41,6 +41,8 @@ import org.eclipse.emf.emfstore.client.test.common.dsl.Create;
 import org.eclipse.emf.emfstore.client.test.common.util.CommitCallbackAdapter;
 import org.eclipse.emf.emfstore.client.test.common.util.ProjectUtil;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
+import org.eclipse.emf.emfstore.common.model.ESModelElementId;
+import org.eclipse.emf.emfstore.common.model.ESModelElementIdFactory;
 import org.eclipse.emf.emfstore.internal.client.model.Workspace;
 import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESWorkspaceImpl;
 import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
@@ -110,6 +112,17 @@ public class SharedProjectTest extends ESTestWithSharedProject {
 		} catch (final ESException e) {
 			fail(e.getMessage());
 		}
+	}
+
+	@Test
+	public void testContains() {
+		final Player player = Create.player();
+		Add.toProject(getLocalProject(), player);
+		final ESModelElementId id = getLocalProject().getModelElementId(player);
+		final ESModelElementId clonedId = ESModelElementIdFactory.fromString(id.getId());
+		assertTrue(getLocalProject().contains(player));
+		assertTrue(getLocalProject().contains(id));
+		assertTrue(getLocalProject().contains(clonedId));
 	}
 
 	public void testCommitWithoutChange() throws ESException {
@@ -345,7 +358,7 @@ public class SharedProjectTest extends ESTestWithSharedProject {
 	}
 
 	@Test
-	public void testDeleteSession() throws ESException {
+	public void testDeleteESUsersession() throws ESException {
 		final Workspace w = ESWorkspaceImpl.class.cast(getWorkspace()).toInternalAPI();
 		final int size = w.getUsersessions().size();
 		getUsersession().delete();
