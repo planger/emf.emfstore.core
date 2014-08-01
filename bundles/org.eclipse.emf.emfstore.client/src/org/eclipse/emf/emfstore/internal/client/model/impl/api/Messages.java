@@ -17,7 +17,7 @@ import org.eclipse.osgi.util.NLS;
  * API implementation related messages.
  * 
  * @author emueller
- * 
+ * @generated
  */
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.emf.emfstore.internal.client.model.impl.api.messages"; //$NON-NLS-1$
