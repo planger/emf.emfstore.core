@@ -113,7 +113,7 @@ public class DeleteProjectTest extends ProjectAdminTest {
 
 		assertFalse(mock.didDeleteFiles());
 		assertEquals(0, projectList.size());
-		assertFalse(hasProjectAdminRole(user));
+		assertFalse(hasProjectAdminRole(user.getId()));
 	}
 
 	@Test(expected = AccessControlException.class)

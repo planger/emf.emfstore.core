@@ -19,6 +19,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.emfstore.client.test.common.cases.ESTestWithLoggedInUser;
+import org.eclipse.emf.emfstore.client.test.common.dsl.Roles;
 import org.eclipse.emf.emfstore.client.test.common.util.ServerUtil;
 import org.eclipse.emf.emfstore.internal.client.model.AdminBroker;
 import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
@@ -31,6 +32,7 @@ import org.eclipse.emf.emfstore.internal.server.exceptions.ConnectionException;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectId;
 import org.eclipse.emf.emfstore.internal.server.model.SessionId;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnit;
+import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnitId;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACUser;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.roles.ProjectAdminRole;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.roles.Role;
@@ -176,8 +178,8 @@ public class ProjectAdminTest extends ESTestWithLoggedInUser {
 		// getUsersession().refresh();
 	}
 
-	public static boolean hasProjectAdminRole(ACUser user) throws ESException {
-		return hasRole(user, RolesPackage.eINSTANCE.getProjectAdminRole());
+	public static boolean hasProjectAdminRole(ACOrgUnitId orgUnitId) throws ESException {
+		return hasRole(orgUnitId, Roles.projectAdmin());
 	}
 
 	public static boolean hasProjectAdminRole(ACUser user, ProjectId projectId) throws ESException {
@@ -194,17 +196,17 @@ public class ProjectAdminTest extends ESTestWithLoggedInUser {
 
 	}
 
-	public static boolean hasReaderRole(ACUser user) throws ESException {
-		return hasRole(user, RolesPackage.eINSTANCE.getReaderRole());
+	public static boolean hasReaderRole(ACOrgUnitId orgUnitId) throws ESException {
+		return hasRole(orgUnitId, RolesPackage.eINSTANCE.getReaderRole());
 	}
 
-	public static boolean hasWriterRole(ACUser user) throws ESException {
-		return hasRole(user, RolesPackage.eINSTANCE.getWriterRole());
+	public static boolean hasWriterRole(ACOrgUnitId orgUnitId) throws ESException {
+		return hasRole(orgUnitId, RolesPackage.eINSTANCE.getWriterRole());
 	}
 
-	public static boolean hasRole(ACUser user, EClass expectedRole) throws ESException {
+	public static boolean hasRole(ACOrgUnitId orgUnitId, EClass expectedRole) throws ESException {
 
-		final ACOrgUnit orgUnit = getSuperAdminBroker().getOrgUnit(user.getId());
+		final ACOrgUnit orgUnit = getSuperAdminBroker().getOrgUnit(orgUnitId);
 
 		for (final Role role : orgUnit.getRoles()) {
 			if (role.eClass().equals(expectedRole)) {

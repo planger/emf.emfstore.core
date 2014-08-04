@@ -23,6 +23,7 @@ import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
 import org.eclipse.emf.emfstore.internal.server.accesscontrol.PAPrivileges;
 import org.eclipse.emf.emfstore.internal.server.exceptions.AccessControlException;
 import org.eclipse.emf.emfstore.internal.server.model.ProjectId;
+import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACGroup;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnitId;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACUser;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.roles.ReaderRole;
@@ -61,7 +62,7 @@ public class AssignRoleToOrgUnitTests extends ProjectAdminTest {
 		getAdminBroker().assignRole(newUser, RolesPackage.eINSTANCE.getReaderRole());
 
 		final ACUser user = ServerUtil.getUser(getSuperUsersession(), getNewUsername());
-		assertTrue(hasReaderRole(user));
+		assertTrue(hasReaderRole(user.getId()));
 	}
 
 	@Test
@@ -80,12 +81,12 @@ public class AssignRoleToOrgUnitTests extends ProjectAdminTest {
 
 		getAdminBroker().changeRole(projectId, newUser, Roles.reader());
 		final ACUser user = ServerUtil.getUser(getSuperUsersession(), getNewUsername());
-		assertTrue(hasReaderRole(user));
+		assertTrue(hasReaderRole(user.getId()));
 	}
 
 	@Test
 	public void changeRoleAsPAWithGroupBeingMemberOfOtherProject() throws ESException {
-		final ACOrgUnitId newGroup = ServerUtil.createGroup(getSuperUsersession(), getNewUsername());
+		final ACOrgUnitId newGroup = ServerUtil.createGroup(getSuperUsersession(), getNewGroupName());
 		makeUserPA();
 		share(getUsersession(), getLocalProject());
 		final ProjectId projectId = ESGlobalProjectIdImpl.class.cast(
@@ -98,8 +99,8 @@ public class AssignRoleToOrgUnitTests extends ProjectAdminTest {
 		getSuperAdminBroker().addParticipant(secondProjectId, newGroup, Roles.writer());
 
 		getAdminBroker().changeRole(projectId, newGroup, Roles.reader());
-		final ACUser user = ServerUtil.getUser(getSuperUsersession(), getNewUsername());
-		assertTrue(hasReaderRole(user));
+		final ACGroup group = ServerUtil.getGroup(getSuperUsersession(), getNewGroupName());
+		assertTrue(hasReaderRole(group.getId()));
 	}
 
 	@Test
@@ -109,7 +110,7 @@ public class AssignRoleToOrgUnitTests extends ProjectAdminTest {
 		ProjectUtil.share(getUsersession(), getLocalProject());
 		getAdminBroker().changeRole(getProjectSpace().getProjectId(), newUser, Roles.reader());
 		final ACUser user = ServerUtil.getUser(getUsersession(), getNewUsername());
-		assertTrue(hasReaderRole(user));
+		assertTrue(hasReaderRole(user.getId()));
 	}
 
 	@Test
@@ -129,7 +130,7 @@ public class AssignRoleToOrgUnitTests extends ProjectAdminTest {
 		ProjectUtil.share(getUsersession(), getLocalProject());
 		getAdminBroker().changeRole(getProjectSpace().getProjectId(), newUser, Roles.writer());
 		final ACUser user = ServerUtil.getUser(getUsersession(), getNewUsername());
-		assertTrue(hasWriterRole(user));
+		assertTrue(hasWriterRole(user.getId()));
 	}
 
 	@Test
@@ -139,7 +140,7 @@ public class AssignRoleToOrgUnitTests extends ProjectAdminTest {
 		ProjectUtil.share(getUsersession(), getLocalProject());
 		getAdminBroker().changeRole(getProjectSpace().getProjectId(), newUser, Roles.projectAdmin());
 		final ACUser user = ServerUtil.getUser(getUsersession(), getNewUsername());
-		assertTrue(hasProjectAdminRole(user));
+		assertTrue(hasProjectAdminRole(user.getId()));
 	}
 
 	@Test(expected = AccessControlException.class)
@@ -155,7 +156,7 @@ public class AssignRoleToOrgUnitTests extends ProjectAdminTest {
 		makeUserPA();
 		getAdminBroker().assignRole(newUser, Roles.projectAdmin());
 		final ACUser user = ServerUtil.getUser(getSuperUsersession(), getNewUsername());
-		assertTrue(hasProjectAdminRole(user));
+		assertTrue(hasProjectAdminRole(user.getId()));
 	}
 
 	@Test(expected = AccessControlException.class)
@@ -172,7 +173,7 @@ public class AssignRoleToOrgUnitTests extends ProjectAdminTest {
 		ProjectUtil.share(getUsersession(), getLocalProject());
 		getAdminBroker().changeRole(getProjectSpace().getProjectId(), newUser, Roles.writer());
 		final ACUser user = ServerUtil.getUser(getUsersession(), getNewUsername());
-		assertTrue(hasRole(user, Roles.writer()));
+		assertTrue(hasRole(user.getId(), Roles.writer()));
 	}
 
 	@Test
@@ -182,7 +183,7 @@ public class AssignRoleToOrgUnitTests extends ProjectAdminTest {
 		ProjectUtil.share(getUsersession(), getLocalProject());
 		getAdminBroker().changeRole(getProjectSpace().getProjectId(), newUser, Roles.serverAdmin());
 		final ACUser user = ServerUtil.getUser(getUsersession(), getNewUsername());
-		assertTrue(hasRole(user, Roles.serverAdmin()));
+		assertTrue(hasRole(user.getId(), Roles.serverAdmin()));
 	}
 
 	@Test
@@ -214,7 +215,7 @@ public class AssignRoleToOrgUnitTests extends ProjectAdminTest {
 		getAdminBroker().changeRole(getProjectSpace().getProjectId(), newUser,
 			RolesPackage.eINSTANCE.getProjectAdminRole());
 		final ACUser user = ServerUtil.getUser(getUsersession(), getNewUsername());
-		assertFalse(hasRole(user, Roles.writer()));
+		assertFalse(hasWriterRole(user.getId()));
 	}
 
 	@Test(expected = AccessControlException.class)
@@ -251,7 +252,7 @@ public class AssignRoleToOrgUnitTests extends ProjectAdminTest {
 		getAdminBroker().assignRole(newUser, RolesPackage.eINSTANCE.getReaderRole());
 
 		final ACUser user = ServerUtil.getUser(getSuperUsersession(), getNewUsername());
-		assertTrue(hasReaderRole(user));
+		assertTrue(hasReaderRole(user.getId()));
 	}
 
 }

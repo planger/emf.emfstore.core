@@ -268,6 +268,19 @@ public final class ServerUtil {
 		return null;
 	}
 
+	public static ACGroup getGroup(ESUsersession session, String name) throws ESException {
+		final ESUsersessionImpl sessionImpl = ESUsersessionImpl.class.cast(session);
+		final AdminBrokerImpl broker = createAdminBroker(sessionImpl);
+
+		for (final ACGroup group : broker.getGroups()) {
+			if (group.getName().equals(name)) {
+				return group;
+			}
+		}
+
+		return null;
+	}
+
 	public static ACUser getUser(ESUsersession session, ACOrgUnitId userId) throws ESException {
 
 		final ESUsersessionImpl sessionImpl = ESUsersessionImpl.class.cast(session);
