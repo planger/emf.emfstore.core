@@ -40,6 +40,7 @@ import org.eclipse.emf.emfstore.internal.server.model.impl.api.versionspec.ESPri
 import org.eclipse.emf.emfstore.internal.server.model.versioning.PrimaryVersionSpec;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.eclipse.emf.emfstore.server.exceptions.ESUpdateRequiredException;
+import org.eclipse.emf.emfstore.server.model.ESGlobalProjectId;
 import org.eclipse.emf.emfstore.server.model.versionspec.ESPrimaryVersionSpec;
 import org.eclipse.emf.emfstore.server.model.versionspec.ESTagVersionSpec;
 import org.eclipse.emf.emfstore.server.model.versionspec.ESVersionSpec;
@@ -265,9 +266,9 @@ public class ProjectUtil {
 	 * @throws ESException
 	 *             in case anything goes wrong during the share
 	 */
-	public static ESLocalProject share(ESUsersession session, ESLocalProject localProject) throws ESException {
-		localProject.shareProject(session, new NullProgressMonitor());
-		return localProject;
+	public static ESGlobalProjectId share(ESUsersession session, ESLocalProject localProject) throws ESException {
+		final ESRemoteProject shareProject = localProject.shareProject(session, new NullProgressMonitor());
+		return shareProject.getGlobalProjectId();
 	}
 
 	public static ESLocalProject mergeWithBranch(final ESLocalProject trunk, final ESPrimaryVersionSpec latestOnBranch,

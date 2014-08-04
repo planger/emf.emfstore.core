@@ -148,9 +148,12 @@ public class ServerInterfaceTest extends ESTestWithLoggedInUser {
 
 		final ConnectionManager connectionManager = ESWorkspaceProviderImpl.getInstance().getConnectionManager();
 
+		final ESLocalProject project = CreateAPI.project(defaultName());
+		share(getUsersession(), project);
+
 		final ESLocalProject localProject = commit(
 			addElement(
-				share(getUsersession(), CreateAPI.project(defaultName())),
+				project,
 				Create.testElement()));
 
 		final List<ChangePackage> changes = connectionManager.getChanges(
@@ -167,8 +170,9 @@ public class ServerInterfaceTest extends ESTestWithLoggedInUser {
 
 		final ConnectionManager connectionManager = ESWorkspaceProviderImpl.getInstance().getConnectionManager();
 
-		final ESLocalProject localProject = addAndCommit(share(getUsersession(), CreateAPI.project(defaultName())))
-			.times(3);
+		final ESLocalProject project = CreateAPI.project(defaultName());
+		share(getUsersession(), project);
+		final ESLocalProject localProject = addAndCommit(project).times(3);
 
 		final PrimaryVersionSpec resolvedVersionSpec = connectionManager.resolveVersionSpec(
 			toInternal(Usersession.class, getUsersession()).getSessionId(),
@@ -184,7 +188,9 @@ public class ServerInterfaceTest extends ESTestWithLoggedInUser {
 
 		final ConnectionManager connectionManager = ESWorkspaceProviderImpl.getInstance().getConnectionManager();
 
-		final ESLocalProject localProject = addAndCommit(share(getUsersession(), CreateAPI.project(defaultName())))
+		final ESLocalProject project = CreateAPI.project(defaultName());
+		share(getUsersession(), project);
+		final ESLocalProject localProject = addAndCommit(project)
 			.times(3);
 		tag(localProject, CreateAPI.primaryVersionSpec(1), TRUNK, FOOTAG);
 
@@ -214,7 +220,10 @@ public class ServerInterfaceTest extends ESTestWithLoggedInUser {
 
 		final ConnectionManager connectionManager = ESWorkspaceProviderImpl.getInstance().getConnectionManager();
 
-		final ESLocalProject localProject = addAndCommit(share(getUsersession(), CreateAPI.project(defaultName())))
+		final ESLocalProject project = CreateAPI.project(defaultName());
+		share(getUsersession(), project);
+
+		final ESLocalProject localProject = addAndCommit(project)
 			.times(3);
 
 		final PrimaryVersionSpec resolvedVersionSpec = connectionManager.resolveVersionSpec(
@@ -230,8 +239,10 @@ public class ServerInterfaceTest extends ESTestWithLoggedInUser {
 
 		final ConnectionManager connectionManager = ESWorkspaceProviderImpl.getInstance().getConnectionManager();
 
-		final ESLocalProject localProject = addAndCommit(share(getUsersession(), CreateAPI.project(defaultName())))
-			.times(1);
+		final ESLocalProject project = CreateAPI.project(defaultName());
+		share(getUsersession(), project);
+
+		final ESLocalProject localProject = addAndCommit(project).times(1);
 
 		commitToBranch(addElement(localProject, Create.testElement()), FOO_BRANCH);
 
@@ -249,8 +260,9 @@ public class ServerInterfaceTest extends ESTestWithLoggedInUser {
 	public void testResolveDateVersionSpec() throws ESException {
 		final ConnectionManager connectionManager = ESWorkspaceProviderImpl.getInstance().getConnectionManager();
 
-		final ESLocalProject localProject = addAndCommit(share(getUsersession(), CreateAPI.project(defaultName())))
-			.times(1);
+		final ESLocalProject project = CreateAPI.project(defaultName());
+		share(getUsersession(), project);
+		final ESLocalProject localProject = addAndCommit(project).times(1);
 
 		final Date now = new Date();
 		commit(addElement(localProject, Create.testElement()));
@@ -267,8 +279,9 @@ public class ServerInterfaceTest extends ESTestWithLoggedInUser {
 	public void testDeleteProject() throws ESException {
 		final ConnectionManager connectionManager = ESWorkspaceProviderImpl.getInstance().getConnectionManager();
 
-		final ESLocalProject localProject = addAndCommit(share(getUsersession(), CreateAPI.project(defaultName())))
-			.times(1);
+		final ESLocalProject project = CreateAPI.project(defaultName());
+		share(getUsersession(), project);
+		final ESLocalProject localProject = addAndCommit(project).times(1);
 
 		connectionManager.deleteProject(
 			toInternal(Usersession.class, getUsersession()).getSessionId(),
@@ -285,8 +298,9 @@ public class ServerInterfaceTest extends ESTestWithLoggedInUser {
 		final ConnectionManager connectionManager = ESWorkspaceProviderImpl.getInstance().getConnectionManager();
 
 		// add more elements in order to create different VERSIONS
-		final ESLocalProject localProject = addAndCommit(share(getUsersession(), CreateAPI.project(defaultName())))
-			.times(3);
+		final ESLocalProject project = CreateAPI.project(defaultName());
+		share(getUsersession(), project);
+		final ESLocalProject localProject = addAndCommit(project).times(3);
 
 		connectionManager.addTag(
 			toInternal(Usersession.class, getUsersession()).getSessionId(),

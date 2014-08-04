@@ -10,7 +10,9 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.server.test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 
@@ -22,6 +24,7 @@ import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommand;
 import org.eclipse.emf.emfstore.internal.client.properties.PropertyManager;
 import org.eclipse.emf.emfstore.internal.common.model.PropertyStringValue;
 import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
+import org.eclipse.emf.emfstore.internal.server.exceptions.AccessControlException;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.eclipse.emf.emfstore.test.model.TestmodelFactory;
 import org.junit.AfterClass;
@@ -31,6 +34,8 @@ import org.junit.Test;
 
 public class PropertiesTest extends TransmissionTests {
 
+	private static final String SECOND_TEST_PROP = "SecondTest"; //$NON-NLS-1$
+	private static final String FIRST_PROP_KEY = "FirstPropKey"; //$NON-NLS-1$
 	private static PropertyManager propertyManager1;
 	private static PropertyManager propertyManager2;
 
@@ -53,8 +58,8 @@ public class PropertiesTest extends TransmissionTests {
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				propertyManager1.setSharedStringProperty("FirstPropKey", "test1");
-				propertyManager2.setSharedStringProperty("SecondTest", "test2");
+				propertyManager1.setSharedStringProperty(FIRST_PROP_KEY, "test1"); //$NON-NLS-1$
+				propertyManager2.setSharedStringProperty(SECOND_TEST_PROP, "test2"); //$NON-NLS-1$
 
 				try {
 					propertyManager1.synchronizeSharedProperties();
@@ -69,23 +74,23 @@ public class PropertiesTest extends TransmissionTests {
 		}.run(false);
 
 		// 1. Test, ob transmit funktioniert
-		Assert.assertEquals("test1", propertyManager1.getSharedStringProperty("FirstPropKey"));
-		Assert.assertEquals("test1", propertyManager2.getSharedStringProperty("FirstPropKey"));
+		Assert.assertEquals("test1", propertyManager1.getSharedStringProperty(FIRST_PROP_KEY)); //$NON-NLS-1$
+		Assert.assertEquals("test1", propertyManager2.getSharedStringProperty(FIRST_PROP_KEY)); //$NON-NLS-1$
 
-		Assert.assertEquals("test2", propertyManager1.getSharedStringProperty("SecondTest"));
-		Assert.assertEquals("test2", propertyManager2.getSharedStringProperty("SecondTest"));
+		Assert.assertEquals("test2", propertyManager1.getSharedStringProperty(SECOND_TEST_PROP)); //$NON-NLS-1$
+		Assert.assertEquals("test2", propertyManager2.getSharedStringProperty(SECOND_TEST_PROP)); //$NON-NLS-1$
 
-		Assert.assertEquals(propertyManager1.getSharedStringProperty("FirstPropKey"),
-			propertyManager2.getSharedStringProperty("FirstPropKey"));
+		Assert.assertEquals(propertyManager1.getSharedStringProperty(FIRST_PROP_KEY),
+			propertyManager2.getSharedStringProperty(FIRST_PROP_KEY));
 
-		Assert.assertEquals(propertyManager2.getSharedStringProperty("SecondTest"),
-			propertyManager1.getSharedStringProperty("SecondTest"));
+		Assert.assertEquals(propertyManager2.getSharedStringProperty(SECOND_TEST_PROP),
+			propertyManager1.getSharedStringProperty(SECOND_TEST_PROP));
 
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				propertyManager1.setSharedStringProperty("SecondTest", "test4");
-				propertyManager2.setSharedStringProperty("SecondTest", "test5");
+				propertyManager1.setSharedStringProperty(SECOND_TEST_PROP, "test4"); //$NON-NLS-1$
+				propertyManager2.setSharedStringProperty(SECOND_TEST_PROP, "test5"); //$NON-NLS-1$
 
 				try {
 					propertyManager1.synchronizeSharedProperties();
@@ -100,8 +105,8 @@ public class PropertiesTest extends TransmissionTests {
 		}.run(false);
 
 		// 2. Funktioniert update
-		Assert.assertEquals("test5", propertyManager1.getSharedStringProperty("SecondTest"));
-		Assert.assertEquals("test5", propertyManager2.getSharedStringProperty("SecondTest"));
+		Assert.assertEquals("test5", propertyManager1.getSharedStringProperty(SECOND_TEST_PROP)); //$NON-NLS-1$
+		Assert.assertEquals("test5", propertyManager2.getSharedStringProperty(SECOND_TEST_PROP)); //$NON-NLS-1$
 	}
 
 	@Test
@@ -113,23 +118,28 @@ public class PropertiesTest extends TransmissionTests {
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				propertyManager1.setSharedVersionedStringProperty("SecondTest", "test1");
-				propertyManager2.setSharedVersionedStringProperty("SecondTest", "test2");
+				propertyManager1.setSharedVersionedStringProperty(SECOND_TEST_PROP, "test1"); //$NON-NLS-1$
+				propertyManager2.setSharedVersionedStringProperty(SECOND_TEST_PROP, "test2"); //$NON-NLS-1$
 
 				try {
 					propertyManager1.synchronizeSharedProperties();
-				} catch (final Exception e) {
-					junit.framework.Assert.fail();
+				} catch (final AccessControlException e) {
+					fail(e.getMessage());
+				} catch (final ESException e) {
+					fail(e.getMessage());
+				} catch (final EMFStorePropertiesOutdatedException e) {
+					fail(e.getMessage());
 				}
 
 				try {
 					propertyManager2.synchronizeSharedProperties();
-					junit.framework.Assert.fail();
+					fail();
 				} catch (final ESException e) {
-					junit.framework.Assert.fail();
+					fail();
 				} catch (final EMFStorePropertiesOutdatedException e) {
-					junit.framework.Assert.assertEquals(1, e.getOutdatedProperties().size());
-					Assert.assertEquals(propertyManager1.getSharedStringProperty("SecondTest"),
+					assertEquals(1, e.getOutdatedProperties().size());
+					assertEquals(
+						propertyManager1.getSharedStringProperty(SECOND_TEST_PROP),
 						((PropertyStringValue) e.getOutdatedProperties().get(0).getValue()).getValue());
 
 				}
@@ -137,8 +147,8 @@ public class PropertiesTest extends TransmissionTests {
 		}.run(false);
 
 		// check if rollback succeeded
-		Assert.assertEquals("test1", propertyManager1.getSharedStringProperty("SecondTest"));
-		Assert.assertEquals("test1", propertyManager2.getSharedStringProperty("SecondTest"));
+		Assert.assertEquals("test1", propertyManager1.getSharedStringProperty(SECOND_TEST_PROP)); //$NON-NLS-1$
+		Assert.assertEquals("test1", propertyManager2.getSharedStringProperty(SECOND_TEST_PROP)); //$NON-NLS-1$
 	}
 
 	@Test
@@ -146,7 +156,7 @@ public class PropertiesTest extends TransmissionTests {
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				getProjectSpace1().getPropertyManager().setLocalProperty("foo",
+				getProjectSpace1().getPropertyManager().setLocalProperty("foo", //$NON-NLS-1$
 					TestmodelFactory.eINSTANCE.createTestElement());
 			}
 		}.run(false);
@@ -156,6 +166,6 @@ public class PropertiesTest extends TransmissionTests {
 			ModelPackage.eINSTANCE.getProjectSpace(),
 			getProjectSpace1().eResource().getURI(), false);
 
-		assertNotNull(loadedProjectSpace.getPropertyManager().getLocalProperty("foo"));
+		assertNotNull(loadedProjectSpace.getPropertyManager().getLocalProperty("foo")); //$NON-NLS-1$
 	}
 }

@@ -16,18 +16,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.eclipse.emf.emfstore.client.ESLocalProject;
 import org.eclipse.emf.emfstore.client.test.common.dsl.Roles;
 import org.eclipse.emf.emfstore.client.test.common.util.ProjectUtil;
 import org.eclipse.emf.emfstore.client.test.common.util.ServerUtil;
 import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
-import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESLocalProjectImpl;
 import org.eclipse.emf.emfstore.internal.server.accesscontrol.PAPrivileges;
 import org.eclipse.emf.emfstore.internal.server.exceptions.AccessControlException;
+import org.eclipse.emf.emfstore.internal.server.model.ProjectId;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnitId;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACUser;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.roles.ReaderRole;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.roles.RolesPackage;
+import org.eclipse.emf.emfstore.internal.server.model.impl.api.ESGlobalProjectIdImpl;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -60,6 +60,44 @@ public class AssignRoleToOrgUnitTests extends ProjectAdminTest {
 		makeUserPA();
 		getAdminBroker().assignRole(newUser, RolesPackage.eINSTANCE.getReaderRole());
 
+		final ACUser user = ServerUtil.getUser(getSuperUsersession(), getNewUsername());
+		assertTrue(hasReaderRole(user));
+	}
+
+	@Test
+	public void changeRoleAsPAWithUserBeingMemberOfOtherProject() throws ESException {
+		final ACOrgUnitId newUser = ServerUtil.createUser(getSuperUsersession(), getNewUsername());
+		makeUserPA();
+		share(getUsersession(), getLocalProject());
+		final ProjectId projectId = ESGlobalProjectIdImpl.class.cast(
+			getLocalProject().getGlobalProjectId()).toInternalAPI();
+
+		final ProjectId secondProjectId = ESGlobalProjectIdImpl.class.cast(
+			share(getSuperUsersession(), getLocalProject())).toInternalAPI();
+
+		getAdminBroker().addParticipant(projectId, newUser, Roles.writer());
+		getSuperAdminBroker().addParticipant(secondProjectId, newUser, Roles.writer());
+
+		getAdminBroker().changeRole(projectId, newUser, Roles.reader());
+		final ACUser user = ServerUtil.getUser(getSuperUsersession(), getNewUsername());
+		assertTrue(hasReaderRole(user));
+	}
+
+	@Test
+	public void changeRoleAsPAWithGroupBeingMemberOfOtherProject() throws ESException {
+		final ACOrgUnitId newGroup = ServerUtil.createGroup(getSuperUsersession(), getNewUsername());
+		makeUserPA();
+		share(getUsersession(), getLocalProject());
+		final ProjectId projectId = ESGlobalProjectIdImpl.class.cast(
+			getLocalProject().getGlobalProjectId()).toInternalAPI();
+
+		final ProjectId secondProjectId = ESGlobalProjectIdImpl.class.cast(
+			share(getSuperUsersession(), getLocalProject())).toInternalAPI();
+
+		getAdminBroker().addParticipant(projectId, newGroup, Roles.writer());
+		getSuperAdminBroker().addParticipant(secondProjectId, newGroup, Roles.writer());
+
+		getAdminBroker().changeRole(projectId, newGroup, Roles.reader());
 		final ACUser user = ServerUtil.getUser(getSuperUsersession(), getNewUsername());
 		assertTrue(hasReaderRole(user));
 	}
@@ -154,11 +192,13 @@ public class AssignRoleToOrgUnitTests extends ProjectAdminTest {
 		ProjectUtil.share(getUsersession(), getLocalProject());
 
 		final ProjectSpace clonedProjectSpace = cloneProjectSpace(getProjectSpace());
-		final ESLocalProject share2 = share(getUsersession(), clonedProjectSpace.toAPI());
+		final ProjectId projectId = ESGlobalProjectIdImpl.class.cast(
+			share(getUsersession(), clonedProjectSpace.toAPI())
+			).toInternalAPI();
 
 		getAdminBroker().changeRole(getProjectSpace().getProjectId(), newUser, Roles.writer());
 		getAdminBroker().changeRole(
-			ESLocalProjectImpl.class.cast(share2).toInternalAPI().getProjectId(),
+			projectId,
 			newUser,
 			Roles.writer());
 		final ACUser user = ServerUtil.getUser(getUsersession(), getNewUsername());

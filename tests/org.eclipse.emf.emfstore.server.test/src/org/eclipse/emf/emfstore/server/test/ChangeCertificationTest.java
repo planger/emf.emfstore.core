@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.security.KeyStoreException;
 import java.security.cert.Certificate;
 
 import org.apache.commons.io.FileUtils;
@@ -119,7 +118,7 @@ public class ChangeCertificationTest extends ESTest {
 
 	private InputStream getResource(String resource) throws IOException {
 
-		final URL configURL = Platform.getBundle("org.eclipse.emf.emfstore.server.test").getEntry(resource);
+		final URL configURL = Platform.getBundle("org.eclipse.emf.emfstore.server.test").getEntry(resource); //$NON-NLS-1$
 
 		if (configURL != null) {
 			final InputStream input = configURL.openStream();
@@ -137,7 +136,7 @@ public class ChangeCertificationTest extends ESTest {
 
 	@Test
 	public void exchangeCertificateAndLogin()
-		throws ESCertificateException, ESException, KeyStoreException, IOException {
+		throws ESCertificateException, ESException, IOException {
 		importCertificate();
 		assertFalse(KeyStoreManager.getInstance().isDefaultCertificate(TEST_ALIAS));
 		KeyStoreManager.getInstance().setDefaultCertificate(TEST_ALIAS);

@@ -14,13 +14,13 @@ package org.eclipse.emf.emfstore.server.accesscontrol.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import org.eclipse.emf.emfstore.client.ESLocalProject;
 import org.eclipse.emf.emfstore.client.test.common.dsl.Roles;
 import org.eclipse.emf.emfstore.client.test.common.util.ProjectUtil;
 import org.eclipse.emf.emfstore.client.test.common.util.ServerUtil;
 import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
 import org.eclipse.emf.emfstore.internal.server.accesscontrol.PAPrivileges;
 import org.eclipse.emf.emfstore.internal.server.exceptions.AccessControlException;
+import org.eclipse.emf.emfstore.internal.server.model.ProjectId;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnitId;
 import org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACUser;
 import org.eclipse.emf.emfstore.internal.server.model.impl.api.ESGlobalProjectIdImpl;
@@ -104,9 +104,14 @@ public class ChangePasswordTests extends ProjectAdminTest {
 		final ACOrgUnitId newUser = ServerUtil.createUser(getSuperUsersession(), getNewUsername());
 		ProjectUtil.share(getUsersession(), getLocalProject());
 		// share a second project
-		final ESLocalProject share2 = ProjectUtil.share(getSuperUsersession(), getLocalProject());
-		getAdminBroker().changeRole(ESGlobalProjectIdImpl.class.cast(share2.getGlobalProjectId()).toInternalAPI(),
-			newUser, Roles.projectAdmin());
+		final ProjectId projectId =
+			ESGlobalProjectIdImpl.class.cast(
+				ProjectUtil.share(getSuperUsersession(), getLocalProject())
+				).toInternalAPI();
+		getAdminBroker().changeRole(
+			projectId,
+			newUser,
+			Roles.projectAdmin());
 		// try to change the password of the other project admin
 		ServerUtil.changePassword(getUsersession(), newUser, getNewUsername(), NEW_USER_PASSWORD);
 		final ACUser user = ServerUtil.getUser(getSuperUsersession(), newUser);

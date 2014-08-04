@@ -480,6 +480,24 @@ public class AccessControlImpl implements AccessControl {
 			involvedProjects.addAll(role.getProjects());
 		}
 
+		return checkProjectAdminAccessForOrgUnit(sessionId, orgUnitId, involvedProjects);
+	}
+
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.server.accesscontrol.AuthorizationControl#checkProjectAdminAccessForOrgUnit(org.eclipse.emf.emfstore.internal.server.model.SessionId,
+	 *      org.eclipse.emf.emfstore.internal.server.model.accesscontrol.ACOrgUnitId, java.util.Set)
+	 */
+	public boolean checkProjectAdminAccessForOrgUnit(SessionId sessionId, ACOrgUnitId orgUnitId,
+		Set<ProjectId> projectIds)
+		throws AccessControlException {
+
+		cleanupPARole(orgUnitId);
+		final ACUser user = getUser(sessionId);
+		final boolean hasServerAdminRole = hasServerAdminRole(user);
+
 		if (hasServerAdminRole) {
 			return true;
 		}
@@ -493,7 +511,7 @@ public class AccessControlImpl implements AccessControl {
 		}
 
 		// TODO: paRole should never be null here
-		if (paRole.getProjects().containsAll(involvedProjects)) {
+		if (paRole.getProjects().containsAll(projectIds)) {
 			return false;
 		}
 

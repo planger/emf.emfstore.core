@@ -11,11 +11,11 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.server.accesscontrol.test;
 
+import static org.eclipse.emf.emfstore.client.test.common.util.ProjectUtil.share;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.emfstore.client.ESLocalProject;
 import org.eclipse.emf.emfstore.client.test.common.cases.ESTestWithMockServer;
 import org.eclipse.emf.emfstore.client.test.common.dsl.Roles;
 import org.eclipse.emf.emfstore.client.test.common.util.ProjectUtil;
@@ -84,6 +84,23 @@ public class DeleteOrgUnitTest extends ProjectAdminTest {
 	}
 
 	@Test(expected = AccessControlException.class)
+	public void deleteUserAsPAWithUserBeingMemberOfOtherProject() throws ESException {
+		share(getSuperUsersession(), getLocalProject());
+		final ACOrgUnitId newUser = ServerUtil.createUser(getSuperUsersession(), getNewUsername());
+		makeUserPA();
+		final ProjectId projectId = ESGlobalProjectIdImpl.class.cast(
+			getLocalProject().getGlobalProjectId()).toInternalAPI();
+
+		final ProjectId secondProjectId = ESGlobalProjectIdImpl.class.cast(
+			share(getSuperUsersession(), getLocalProject())).toInternalAPI();
+
+		getAdminBroker().addParticipant(projectId, newUser, Roles.writer());
+		getSuperAdminBroker().addParticipant(secondProjectId, newUser, Roles.writer());
+
+		getAdminBroker().deleteUser(newUser);
+	}
+
+	@Test(expected = AccessControlException.class)
 	public void deleteUserFailsIsPartOfNonProjectGroup() throws ESException {
 		makeUserPA();
 		final ACOrgUnitId newUser = ServerUtil.createUser(getSuperUsersession(), getNewUsername());
@@ -105,27 +122,31 @@ public class DeleteOrgUnitTest extends ProjectAdminTest {
 	public void deleteUserWithPAFailsSinceStillHasProject() throws ESException {
 		makeUserPA();
 
-		final ACOrgUnitId newUser = ServerUtil.createUser(getSuperUsersession(), getNewUsername());
-		final ESLocalProject secondProject = ProjectUtil.share(getUsersession(), getLocalProject());
-		final ESLocalProject thirdProject = ProjectUtil.share(getUsersession(), getLocalProject());
-		final ProjectId projectId = ESGlobalProjectIdImpl.class.cast(secondProject.getGlobalProjectId())
-			.toInternalAPI();
+		final ACOrgUnitId newUserId = ServerUtil.createUser(getSuperUsersession(), getNewUsername());
+		final ProjectId secondProjectId =
+			ESGlobalProjectIdImpl.class.cast(
+				ProjectUtil.share(getUsersession(), getLocalProject())
+				).toInternalAPI();
+		final ProjectId thirdProjectId =
+			ESGlobalProjectIdImpl.class.cast(
+				ProjectUtil.share(getUsersession(), getLocalProject())
+				).toInternalAPI();
 
 		getAdminBroker().changeRole(
-			projectId,
-			newUser,
+			secondProjectId,
+			newUserId,
 			Roles.projectAdmin());
 
 		getAdminBroker().changeRole(
-			ESGlobalProjectIdImpl.class.cast(thirdProject.getGlobalProjectId()).toInternalAPI(),
-			newUser,
+			thirdProjectId,
+			newUserId,
 			Roles.projectAdmin());
 
-		final ProjectAdminRole paRole = (ProjectAdminRole) getSuperAdminBroker().getRole(projectId, newUser);
+		final ProjectAdminRole paRole = (ProjectAdminRole) getSuperAdminBroker().getRole(secondProjectId, newUserId);
 		paRole.getProjects().remove(0);
 
 		// must fail since newUser is still PA
-		getAdminBroker().deleteUser(newUser);
+		getAdminBroker().deleteUser(newUserId);
 	}
 
 	@Test
@@ -133,9 +154,9 @@ public class DeleteOrgUnitTest extends ProjectAdminTest {
 		makeUserPA();
 
 		final ACOrgUnitId newUser = ServerUtil.createUser(getSuperUsersession(), getNewUsername());
-		final ESLocalProject secondProject = ProjectUtil.share(getUsersession(), getLocalProject());
 		final ProjectId secondProjectId = ESGlobalProjectIdImpl.class.cast(
-			secondProject.getGlobalProjectId()).toInternalAPI();
+			ProjectUtil.share(getUsersession(), getLocalProject())
+			).toInternalAPI();
 
 		getAdminBroker().changeRole(
 			secondProjectId,
@@ -162,9 +183,13 @@ public class DeleteOrgUnitTest extends ProjectAdminTest {
 		makeUserPA();
 
 		final ACOrgUnitId newUser = ServerUtil.createUser(getSuperUsersession(), getNewUsername());
-		final ESLocalProject secondProject = ProjectUtil.share(getUsersession(), getLocalProject());
+		final ProjectId secondProjectId =
+			ESGlobalProjectIdImpl.class.cast(
+				ProjectUtil.share(getUsersession(), getLocalProject())
+				).toInternalAPI();
+
 		getAdminBroker().changeRole(
-			ESGlobalProjectIdImpl.class.cast(secondProject.getGlobalProjectId()).toInternalAPI(),
+			secondProjectId,
 			newUser,
 			Roles.projectAdmin());
 
@@ -177,15 +202,15 @@ public class DeleteOrgUnitTest extends ProjectAdminTest {
 		makeUserPA();
 
 		final ACOrgUnitId newUser = ServerUtil.createUser(getSuperUsersession(), getNewUsername());
-		final ESLocalProject secondProject = ProjectUtil.share(getUsersession(), getLocalProject());
-		final ProjectId projectId = ESGlobalProjectIdImpl.class.cast(secondProject.getGlobalProjectId())
-			.toInternalAPI();
+		final ProjectId secondProjectId = ESGlobalProjectIdImpl.class.cast(
+			ProjectUtil.share(getUsersession(), getLocalProject())
+			).toInternalAPI();
 		getAdminBroker().changeRole(
-			projectId,
+			secondProjectId,
 			newUser,
 			Roles.projectAdmin());
 
-		final ProjectAdminRole paRole = (ProjectAdminRole) getSuperAdminBroker().getRole(projectId, newUser);
+		final ProjectAdminRole paRole = (ProjectAdminRole) getSuperAdminBroker().getRole(secondProjectId, newUser);
 		paRole.getProjects().remove(0);
 
 		// must succeed since newUser has PARole without a project id

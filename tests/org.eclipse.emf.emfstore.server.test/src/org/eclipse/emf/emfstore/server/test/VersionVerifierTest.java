@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Edgar - initial API and implementation
+ * Edgar Mueller - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.server.test;
 
@@ -21,15 +21,16 @@ import org.eclipse.emf.emfstore.internal.server.model.ModelFactory;
 import org.junit.Test;
 
 /**
- * @author Edgar
+ * Version verifier test.
  * 
+ * @author emueller
  */
 public class VersionVerifierTest {
 
-	private static final String[] ACCEPTED_VERSION_1_2_3 = new String[] { "1.2.3" };
-	private static final String[] ACCEPTED_VERSION_1_2_4 = new String[] { "1.2.4" };
-	private static final String[] WILDCARD_VERSION = new String[] { "1.2.4.*" };
-	private static final String[] WILDCARD_VERSION_WITH_SUFFIX = new String[] { "1.2.4.*FOO" };
+	private static final String[] ACCEPTED_VERSION_1_2_3 = new String[] { "1.2.3" }; //$NON-NLS-1$
+	private static final String[] ACCEPTED_VERSION_1_2_4 = new String[] { "1.2.4" }; //$NON-NLS-1$
+	private static final String[] WILDCARD_VERSION = new String[] { "1.2.4.*" }; //$NON-NLS-1$
+	private static final String[] WILDCARD_VERSION_WITH_SUFFIX = new String[] { "1.2.4.*FOO" }; //$NON-NLS-1$
 	private static final String[] ANY_VERSION = new String[] { ServerConfiguration.ACCEPTED_VERSIONS_ANY };
 	private static final String[] ACCEPTED_VERSIONS = new String[] {
 		ACCEPTED_VERSION_1_2_3[0], ACCEPTED_VERSION_1_2_4[0] };
@@ -47,83 +48,83 @@ public class VersionVerifierTest {
 
 	@Test
 	public void testSupplyNoVersions() throws ClientVersionOutOfDateException {
-		VersionVerifier.verify(null, createVersionInfo("1.2.3"));
+		VersionVerifier.verify(null, createVersionInfo("1.2.3")); //$NON-NLS-1$
 	}
 
 	@Test
 	public void testMathesOneOfMany() throws ClientVersionOutOfDateException {
-		VersionVerifier.verify(ACCEPTED_VERSION_1_2_3, createVersionInfo("1.2.3"));
+		VersionVerifier.verify(ACCEPTED_VERSION_1_2_3, createVersionInfo("1.2.3")); //$NON-NLS-1$
 	}
 
 	@Test
 	public void testMathesOne() throws ClientVersionOutOfDateException {
-		VersionVerifier.verify(ACCEPTED_VERSIONS, createVersionInfo("1.2.3"));
+		VersionVerifier.verify(ACCEPTED_VERSIONS, createVersionInfo("1.2.3")); //$NON-NLS-1$
 	}
 
 	@Test
 	public void testMatchesWildcard() throws ClientVersionOutOfDateException {
-		VersionVerifier.verify(WILDCARD_VERSION, createVersionInfo("1.2.4.1"));
-		VersionVerifier.verify(WILDCARD_VERSION, createVersionInfo("1.2.4.1xyz"));
+		VersionVerifier.verify(WILDCARD_VERSION, createVersionInfo("1.2.4.1")); //$NON-NLS-1$
+		VersionVerifier.verify(WILDCARD_VERSION, createVersionInfo("1.2.4.1xyz")); //$NON-NLS-1$
 	}
 
 	@Test(expected = ClientVersionOutOfDateException.class)
 	public void testMatchesNotWildcard1() throws ClientVersionOutOfDateException {
-		VersionVerifier.verify(WILDCARD_VERSION, createVersionInfo("1.2.3.1"));
+		VersionVerifier.verify(WILDCARD_VERSION, createVersionInfo("1.2.3.1")); //$NON-NLS-1$
 	}
 
 	@Test(expected = ClientVersionOutOfDateException.class)
 	public void testMatchesNotWildcard2() throws ClientVersionOutOfDateException {
-		VersionVerifier.verify(WILDCARD_VERSION, createVersionInfo("1.2.3.4.1xyz"));
+		VersionVerifier.verify(WILDCARD_VERSION, createVersionInfo("1.2.3.4.1xyz")); //$NON-NLS-1$
 	}
 
 	@Test(expected = ClientVersionOutOfDateException.class)
 	public void testMatchesNotWildcard3() throws ClientVersionOutOfDateException {
-		VersionVerifier.verify(WILDCARD_VERSION, createVersionInfo("1.2.3.4"));
+		VersionVerifier.verify(WILDCARD_VERSION, createVersionInfo("1.2.3.4")); //$NON-NLS-1$
 	}
 
 	@Test
 	public void testMatchesWildcardWithSuffix() throws ClientVersionOutOfDateException {
-		VersionVerifier.verify(WILDCARD_VERSION_WITH_SUFFIX, createVersionInfo("1.2.4.1xyzFOO"));
-		VersionVerifier.verify(WILDCARD_VERSION_WITH_SUFFIX, createVersionInfo("1.2.4.1FOO"));
+		VersionVerifier.verify(WILDCARD_VERSION_WITH_SUFFIX, createVersionInfo("1.2.4.1xyzFOO")); //$NON-NLS-1$
+		VersionVerifier.verify(WILDCARD_VERSION_WITH_SUFFIX, createVersionInfo("1.2.4.1FOO")); //$NON-NLS-1$
 	}
 
 	@Test(expected = ClientVersionOutOfDateException.class)
 	public void testMatchesNotWildcardWithSuffix1() throws ClientVersionOutOfDateException {
-		VersionVerifier.verify(WILDCARD_VERSION_WITH_SUFFIX, createVersionInfo("1.2.4.1xyz"));
+		VersionVerifier.verify(WILDCARD_VERSION_WITH_SUFFIX, createVersionInfo("1.2.4.1xyz")); //$NON-NLS-1$
 	}
 
 	@Test(expected = ClientVersionOutOfDateException.class)
 	public void testMatchesNotWildcardWithSuffix2() throws ClientVersionOutOfDateException {
-		VersionVerifier.verify(WILDCARD_VERSION_WITH_SUFFIX, createVersionInfo("1.2.4FOO"));
+		VersionVerifier.verify(WILDCARD_VERSION_WITH_SUFFIX, createVersionInfo("1.2.4FOO")); //$NON-NLS-1$
 	}
 
 	@Test(expected = ClientVersionOutOfDateException.class)
 	public void testMatchesNotWildcardWithSuffix3() throws ClientVersionOutOfDateException {
-		VersionVerifier.verify(WILDCARD_VERSION_WITH_SUFFIX, createVersionInfo("1X2.4FOO"));
+		VersionVerifier.verify(WILDCARD_VERSION_WITH_SUFFIX, createVersionInfo("1X2.4FOO")); //$NON-NLS-1$
 	}
 
 	@Test
 	public void testMatchesAny() throws ClientVersionOutOfDateException {
-		VersionVerifier.verify(ANY_VERSION, createVersionInfo("abc"));
+		VersionVerifier.verify(ANY_VERSION, createVersionInfo("abc")); //$NON-NLS-1$
 	}
 
 	@Test
 	public void testInspectClientVersionOutOfDateMessage() {
 		try {
-			VersionVerifier.verify(ACCEPTED_VERSION_1_2_3, createVersionInfo("1.1.1"));
+			VersionVerifier.verify(ACCEPTED_VERSION_1_2_3, createVersionInfo("1.1.1")); //$NON-NLS-1$
 		} catch (final ClientVersionOutOfDateException ex) {
-			assertEquals("Client version: " + "1.1.1"
-				+ " - Accepted versions: " + "1.2.3.", ex.getMessage());
+			assertEquals("Client version: " + "1.1.1" //$NON-NLS-1$ //$NON-NLS-2$
+				+ " - Accepted versions: " + "1.2.3.", ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
 	@Test
 	public void testInspectClientVersionOutOfDateMessages() {
 		try {
-			VersionVerifier.verify(ACCEPTED_VERSIONS, createVersionInfo("1.1.1"));
+			VersionVerifier.verify(ACCEPTED_VERSIONS, createVersionInfo("1.1.1")); //$NON-NLS-1$
 		} catch (final ClientVersionOutOfDateException ex) {
-			assertEquals("Client version: " + "1.1.1"
-				+ " - Accepted versions: " + "1.2.3, 1.2.4.", ex.getMessage());
+			assertEquals("Client version: " + "1.1.1" //$NON-NLS-1$ //$NON-NLS-2$
+				+ " - Accepted versions: " + "1.2.3, 1.2.4.", ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 }

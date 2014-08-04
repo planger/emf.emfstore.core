@@ -14,6 +14,7 @@ package org.eclipse.emf.emfstore.internal.server.core;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -386,10 +387,6 @@ public class AdminEmfStoreImpl extends AbstractEmfstoreInterface implements Admi
 			projectId,
 			PAPrivileges.AssignRoleToOrgUnit);
 
-		getAuthorizationControl().checkProjectAdminAccessForOrgUnit(
-			sessionId,
-			participantId);
-
 		final ACOrgUnit orgUnit = getOrgUnit(participantId);
 		projectId = getProjectId(projectId);
 
@@ -429,7 +426,8 @@ public class AdminEmfStoreImpl extends AbstractEmfstoreInterface implements Admi
 		checkForNulls(sessionId, projectId, orgUnitId, roleClass);
 
 		getAuthorizationControl().checkProjectAdminAccess(sessionId, projectId);
-		final boolean isServerAdmin = getAuthorizationControl().checkProjectAdminAccessForOrgUnit(sessionId, orgUnitId);
+		final boolean isServerAdmin = getAuthorizationControl().checkProjectAdminAccessForOrgUnit(sessionId, orgUnitId,
+			Collections.singleton(projectId));
 
 		if (!ServerConfiguration.isProjectAdminPrivileg(PAPrivileges.AssignRoleToOrgUnit)) {
 			throw new AccessControlException(Messages.AdminEmfStoreImpl_Assign_Role_Privilege_Not_Set);

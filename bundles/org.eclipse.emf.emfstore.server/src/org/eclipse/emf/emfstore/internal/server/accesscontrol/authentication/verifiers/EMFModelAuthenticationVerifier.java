@@ -41,12 +41,16 @@ public class EMFModelAuthenticationVerifier extends AbstractAuthenticationContro
 
 		final String userPassword = resolvedUser.getPassword();
 
-		if (userPassword == null && (password == null || password.equals(StringUtils.EMPTY))) {
-			// no password set
-			return true;
+		if (userPassword == null) {
+			if (StringUtils.isBlank(password)) {
+				// no password set
+				return true;
+			}
+
+			return false;
 		}
 
-		return resolvedUser.getPassword().equals(password);
+		return userPassword.equals(password);
 	}
 
 	/**
