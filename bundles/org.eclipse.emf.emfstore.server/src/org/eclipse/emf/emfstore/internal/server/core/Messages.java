@@ -31,6 +31,8 @@ public final class Messages extends NLS {
 	public static String AdminEmfStoreImpl_Not_Allowed_To_Assign_ServerAdminRole;
 	public static String AdminEmfStoreImpl_Not_Allowed_To_Create_Participant_With_ServerAdminRole;
 	public static String AdminEmfStoreImpl_OrgUnit_Does_Not_Exist;
+	public static String AdminEmfStoreImpl_RemovePA_Violation_1;
+	public static String AdminEmfStoreImpl_RemovePA_Violation_2;
 	public static String AdminEmfStoreImpl_Unknown_ProjectID;
 	public static String EMFStoreImpl_ServerCallObserverNotifier_Failed;
 	static {

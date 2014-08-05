@@ -12,6 +12,7 @@
 package org.eclipse.emf.emfstore.server.accesscontrol.test;
 
 import static org.eclipse.emf.emfstore.client.test.common.util.ProjectUtil.share;
+import static org.eclipse.emf.emfstore.client.test.common.util.ServerUtil.createUser;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -67,7 +68,7 @@ public class AssignRoleToOrgUnitTests extends ProjectAdminTest {
 
 	@Test
 	public void changeRoleAsPAWithUserBeingMemberOfOtherProject() throws ESException {
-		final ACOrgUnitId newUser = ServerUtil.createUser(getSuperUsersession(), getNewUsername());
+		final ACOrgUnitId newUser = createUser(getSuperUsersession(), getNewUsername());
 		makeUserPA();
 		share(getUsersession(), getLocalProject());
 		final ProjectId projectId = ESGlobalProjectIdImpl.class.cast(
@@ -82,6 +83,38 @@ public class AssignRoleToOrgUnitTests extends ProjectAdminTest {
 		getAdminBroker().changeRole(projectId, newUser, Roles.reader());
 		final ACUser user = ServerUtil.getUser(getSuperUsersession(), getNewUsername());
 		assertTrue(hasReaderRole(user.getId()));
+	}
+
+	/**
+	 * Tries to remove an user as a project admin, where the user to be removed
+	 * is also a project admin.
+	 */
+	@Test(expected = AccessControlException.class)
+	public void removeParticipantAsPAWithParticipantBeingPAToo() throws ESException {
+		final ACOrgUnitId newUserId = createUser(getSuperUsersession(), getNewUsername());
+		makeUserPA();
+		share(getUsersession(), getLocalProject());
+		final ProjectId projectId = ESGlobalProjectIdImpl.class.cast(
+			getLocalProject().getGlobalProjectId()).toInternalAPI();
+
+		getAdminBroker().addParticipant(projectId, newUserId, Roles.projectAdmin());
+		getAdminBroker().removeParticipant(projectId, newUserId);
+	}
+
+	/**
+	 * Tries to change the role of an user as a project admin, where the user whose roles
+	 * to be changed is also a project admin.
+	 */
+	@Test(expected = AccessControlException.class)
+	public void changeRoleAsPAWithUserBeingPAToo() throws ESException {
+		final ACOrgUnitId newUserId = createUser(getSuperUsersession(), getNewUsername());
+		makeUserPA();
+		share(getUsersession(), getLocalProject());
+		final ProjectId projectId = ESGlobalProjectIdImpl.class.cast(
+			getLocalProject().getGlobalProjectId()).toInternalAPI();
+
+		getAdminBroker().addParticipant(projectId, newUserId, Roles.projectAdmin());
+		getAdminBroker().changeRole(projectId, newUserId, Roles.writer());
 	}
 
 	@Test
@@ -220,9 +253,9 @@ public class AssignRoleToOrgUnitTests extends ProjectAdminTest {
 
 	@Test(expected = AccessControlException.class)
 	public void changeRoleToSAAsPA() throws ESException {
-		final ACOrgUnitId newUser = ServerUtil.createUser(getSuperUsersession(), getNewUsername());
+		final ACOrgUnitId newUser = createUser(getSuperUsersession(), getNewUsername());
 		makeUserPA();
-		ProjectUtil.share(getUsersession(), getLocalProject());
+		share(getUsersession(), getLocalProject());
 		getAdminBroker().changeRole(getProjectSpace().getProjectId(), newUser, Roles.serverAdmin());
 	}
 

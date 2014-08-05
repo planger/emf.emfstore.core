@@ -382,7 +382,7 @@ public class AdminEmfStoreImpl extends AbstractEmfstoreInterface implements Admi
 		throws ESException {
 		checkForNulls(sessionId, projectId, participantId);
 
-		getAuthorizationControl().checkProjectAdminAccess(
+		final boolean isServerAdmin = getAuthorizationControl().checkProjectAdminAccess(
 			sessionId,
 			projectId,
 			PAPrivileges.AssignRoleToOrgUnit);
@@ -392,6 +392,10 @@ public class AdminEmfStoreImpl extends AbstractEmfstoreInterface implements Admi
 
 		for (final Role role : orgUnit.getRoles()) {
 			if (role.getProjects().contains(projectId)) {
+				if (!isServerAdmin && role.canAdministrate(projectId)) {
+					throw new AccessControlException(Messages.AdminEmfStoreImpl_RemovePA_Violation_1
+						+ Messages.AdminEmfStoreImpl_RemovePA_Violation_2);
+				}
 				role.getProjects().remove(projectId);
 				save();
 				return;
@@ -432,6 +436,7 @@ public class AdminEmfStoreImpl extends AbstractEmfstoreInterface implements Admi
 		if (!ServerConfiguration.isProjectAdminPrivileg(PAPrivileges.AssignRoleToOrgUnit)) {
 			throw new AccessControlException(Messages.AdminEmfStoreImpl_Assign_Role_Privilege_Not_Set);
 		}
+
 		if (!isServerAdmin && isServerAdminRole(roleClass)) {
 			throw new AccessControlException(Messages.AdminEmfStoreImpl_Not_Allowed_To_Assign_ServerAdminRole);
 		}
@@ -442,6 +447,13 @@ public class AdminEmfStoreImpl extends AbstractEmfstoreInterface implements Admi
 		// delete old role first
 		final Role role = getRole(projectId, orgUnit);
 		if (role != null) {
+
+			if (!isServerAdmin && role.canAdministrate(projectId)) {
+				throw new AccessControlException(
+					Messages.AdminEmfStoreImpl_RemovePA_Violation_1
+						+ Messages.AdminEmfStoreImpl_RemovePA_Violation_2);
+			}
+
 			role.getProjects().remove(projectId);
 			if (role.getProjects().size() == 0) {
 				orgUnit.getRoles().remove(role);
