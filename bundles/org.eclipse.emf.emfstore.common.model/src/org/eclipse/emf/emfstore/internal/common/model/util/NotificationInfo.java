@@ -33,7 +33,7 @@ import org.eclipse.emf.emfstore.internal.common.model.impl.util.ESNotificationIn
 
 public class NotificationInfo implements Notification, APIDelegate<ESNotificationInfo> {
 
-	private final Notification notification;
+	public final Notification notification;
 	private boolean valid;
 	private String validationMessage;
 	private ESNotificationInfo apiImpl;
@@ -215,6 +215,94 @@ public class NotificationInfo implements Notification, APIDelegate<ESNotificatio
 				return nextNextInfo.hasNext();
 			}
 			return true;
+
+			// BEGIN SUPRESS CATCH EXCEPTION
+		} catch (final RuntimeException e) {
+			return false;
+			// END SUPRESS CATCH EXCEPTION
+		} catch (final IllegalAccessException e) {
+			return false;
+		} catch (final NoSuchFieldException e) {
+			return false;
+		}
+	}
+
+	public boolean isAddFollowing(EReference ref) throws SecurityException, IllegalArgumentException,
+		NoSuchFieldException,
+		IllegalAccessException {
+		Notification nextNotification = getNextNotification(notification);
+		while (nextNotification != null && !isAddNotification(nextNotification, ref)) {
+			nextNotification = getNextNotification(nextNotification);
+		}
+
+		if (nextNotification != null) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private boolean isAddNotification(Notification notification, EReference ref) {
+		return (notification.getEventType() == Notification.ADD
+			|| notification.getEventType() == Notification.ADD_MANY)
+			&& notification.getFeature().equals(ref);
+	}
+
+	public Notification getNextNotification(Notification notification) throws SecurityException, NoSuchFieldException,
+		IllegalArgumentException, IllegalAccessException {
+		final Field declaredField = NotificationImpl.class.getDeclaredField("next"); //$NON-NLS-1$
+		declaredField.setAccessible(true);
+		final Object object = declaredField.get(notification);
+		final Notification nextNotification = (Notification) object;
+
+		if (nextNotification == null) {
+			return null;
+		}
+
+		return nextNotification;
+	}
+
+	public void unsetNextNotification() throws SecurityException, NoSuchFieldException,
+		IllegalArgumentException, IllegalAccessException {
+		final Field declaredField = NotificationImpl.class.getDeclaredField("next"); //$NON-NLS-1$
+		declaredField.setAccessible(true);
+		declaredField.set(notification, null);
+	}
+
+	public boolean nextIsAdd() {
+
+		if (!(notification instanceof NotificationImpl)) {
+			return false;
+		}
+
+		try {
+			final Field declaredField = NotificationImpl.class.getDeclaredField("next"); //$NON-NLS-1$
+			declaredField.setAccessible(true);
+			final Object object = declaredField.get(notification);
+			final Notification nextNotification = (Notification) object;
+
+			if (nextNotification == null) {
+				return false;
+			}
+
+			final Object feature = nextNotification.getFeature();
+
+			if (feature instanceof EReference) {
+				final EReference eReference = (EReference) feature;
+
+				if (eReference.isTransient()) {
+					return false;
+				}
+			}
+
+			// notifications from project are never propagated, thus considered nonexistent
+			// however, they themselves might have followups
+			if (nextNotification.getNotifier() instanceof Project) {
+				final NotificationInfo nextNextInfo = new NotificationInfo(nextNotification);
+				return nextNextInfo.hasNext();
+			}
+			return nextNotification.getEventType() == Notification.ADD
+				|| nextNotification.getEventType() == Notification.ADD_MANY;
 
 			// BEGIN SUPRESS CATCH EXCEPTION
 		} catch (final RuntimeException e) {

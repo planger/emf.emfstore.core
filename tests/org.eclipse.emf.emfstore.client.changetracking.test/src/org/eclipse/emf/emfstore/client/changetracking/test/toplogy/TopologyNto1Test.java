@@ -307,15 +307,15 @@ public class TopologyNto1Test extends ESTest {
 		assertEquals(op0.getReferencedModelElements().get(0), useCaseId);
 		assertFalse(op0.isAdd());
 
-		assertTrue(operations.get(1) instanceof MultiReferenceOperation);
-		final MultiReferenceOperation op1 = (MultiReferenceOperation) operations.get(1);
+		assertTrue(operations.get(2) instanceof MultiReferenceOperation);
+		final MultiReferenceOperation op1 = (MultiReferenceOperation) operations.get(2);
 		assertEquals(otherTestElementId, op1.getModelElementId());
 		assertEquals(TestElementFeatures.nonContained1ToN().getName(), op1.getFeatureName());
 		assertEquals(op1.getReferencedModelElements().get(0), useCaseId);
 		assertTrue(op1.isAdd());
 
-		assertTrue(operations.get(2) instanceof SingleReferenceOperation);
-		final SingleReferenceOperation op = (SingleReferenceOperation) operations.get(2);
+		assertTrue(operations.get(1) instanceof SingleReferenceOperation);
+		final SingleReferenceOperation op = (SingleReferenceOperation) operations.get(1);
 		assertEquals(useCaseId, op.getModelElementId());
 		assertEquals(TestElementFeatures.nonContainedNTo1().getName(), op.getFeatureName());
 		assertEquals(op.getNewValue(), otherTestElementId);
@@ -333,9 +333,9 @@ public class TopologyNto1Test extends ESTest {
 	public void setContainerFromValueToOtherValueSameFeature() throws UnsupportedOperationException,
 		UnsupportedNotificationException {
 
-		final TestElement section1 = Create.testElement();
-		final TestElement section2 = Create.testElement();
-		final TestElement useCase = Create.testElement();
+		final TestElement section1 = Create.testElement("A");
+		final TestElement section2 = Create.testElement("B");
+		final TestElement useCase = Create.testElement("C");
 
 		Add.toProject(getLocalProject(), section1);
 		Add.toProject(getLocalProject(), section2);
@@ -373,15 +373,15 @@ public class TopologyNto1Test extends ESTest {
 		assertEquals(op0.getReferencedModelElements().get(0), useCaseId);
 		assertFalse(op0.isAdd());
 
-		assertTrue(operations.get(1) instanceof MultiReferenceOperation);
-		final MultiReferenceOperation op1 = (MultiReferenceOperation) operations.get(1);
+		assertTrue(operations.get(2) instanceof MultiReferenceOperation);
+		final MultiReferenceOperation op1 = (MultiReferenceOperation) operations.get(2);
 		assertEquals(section2Id, op1.getModelElementId());
 		assertEquals(TestElementFeatures.containedElements().getName(), op1.getFeatureName());
 		assertEquals(op1.getReferencedModelElements().get(0), useCaseId);
 		assertTrue(op1.isAdd());
 
-		assertTrue(operations.get(2) instanceof SingleReferenceOperation);
-		final SingleReferenceOperation op = (SingleReferenceOperation) operations.get(2);
+		assertTrue(operations.get(1) instanceof SingleReferenceOperation);
+		final SingleReferenceOperation op = (SingleReferenceOperation) operations.get(1);
 		assertEquals(useCaseId, op.getModelElementId());
 		assertEquals(TestElementFeatures.container().getName(), op.getFeatureName());
 		assertEquals(op.getNewValue(), section2Id);

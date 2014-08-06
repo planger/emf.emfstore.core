@@ -91,7 +91,7 @@ public class OperationRecorder implements ESCommandObserver, ESCommitObserver, E
 	private final List<OperationRecorderListener> observers;
 	private final RemovedElementsCache removedElementsCache;
 
-	private final NotificationToOperationConverter converter;
+	public final NotificationToOperationConverter converter;
 	private NotificationRecorder notificationRecorder;
 	private CompositeOperation compositeOperation;
 
@@ -358,7 +358,22 @@ public class OperationRecorder implements ESCommandObserver, ESCommitObserver, E
 		// accumulate the ops
 		final List<AbstractOperation> ops = new LinkedList<AbstractOperation>();
 		final List<NotificationInfo> rec = notificationRecorder.getRecording().asMutableList();
+
+		final NotificationInfo notificationInfo = rec.get(rec.size() - 1);
+		try {
+			notificationInfo.unsetNextNotification();
+		} catch (final SecurityException ex) {
+			WorkspaceUtil.logException(ex.getMessage(), ex);
+		} catch (final IllegalArgumentException ex) {
+			WorkspaceUtil.logException(ex.getMessage(), ex);
+		} catch (final NoSuchFieldException ex) {
+			WorkspaceUtil.logException(ex.getMessage(), ex);
+		} catch (final IllegalAccessException ex) {
+			WorkspaceUtil.logException(ex.getMessage(), ex);
+		}
+
 		for (final NotificationInfo n : rec) {
+
 			if (!n.isValid()) {
 				WorkspaceUtil.log(Messages.OperationRecorder_InvalidNotificationMessage + n.getValidationMessage(),
 					null, 0);
@@ -708,7 +723,13 @@ public class OperationRecorder implements ESCommandObserver, ESCommitObserver, E
 			final ModelElementId childId = collection.getDeletedModelElementId(child);
 			allDeletedElementsIds.add(childId);
 		}
-		allDeletedElementsIds.add(collection.getDeletedModelElementId(deletedElement));
+
+		ModelElementId deletedModelElementId = collection.getModelElementId(deletedElement);
+
+		if (deletedModelElementId == null) {
+			deletedModelElementId = collection.getDeletedModelElementId(deletedElement);
+		}
+		allDeletedElementsIds.add(deletedModelElementId);
 
 		final List<ReferenceOperation> referenceOperationsForDelete = new ArrayList<ReferenceOperation>();
 		final List<AbstractOperation> newOperations = operations.subList(0, operations.size());

@@ -1,0 +1,170 @@
+#
+# An unexpected error has been detected by HotSpot Virtual Machine:
+#
+#  EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x77ec8f05, pid=14704, tid=21132
+#
+# Java VM: Java HotSpot(TM) Client VM (1.5.0_22-b03 mixed mode)
+# Problematic frame:
+# C  [ntdll.dll+0x48f05]
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x003ebb78):  JavaThread "main" [_thread_in_native, id=21132]
+
+siginfo: ExceptionCode=0xc0000005, reading address 0x761f1008
+
+Registers:
+EAX=0x75de0000, EBX=0x75de0000, ECX=0x6d398a84, EDX=0x00007098
+ESP=0x000cf570, EBP=0x000cf590, ESI=0x761f0fe4, EDI=0x75de0000
+EIP=0x77ec8f05, EFLAGS=0x00010246
+
+Top of Stack: (sp=0x000cf570)
+0x000cf570:   00284908 00284860 75de0000 77ec983f
+0x000cf580:   00000000 00007098 6d398a84 01ecc8b7
+0x000cf590:   000cf69c 77ec8dbf 00000000 000cf5bc
+0x000cf5a0:   000cf88c 6d398a84 75de0000 0028d1b0
+0x000cf5b0:   00000009 6d398a84 00284860 00000012
+0x000cf5c0:   00000000 000301cc 00284908 00000000
+0x000cf5d0:   00030898 00000002 000cf664 77ec047b
+0x000cf5e0:   0000001a 6d386757 000cf6d8 000cf6d0 
+
+Instructions: (pc=0x77ec8f05)
+0x77ec8ef5:   77 05 0f 85 f6 eb 02 00 32 c0 0f 85 ef 75 01 00
+0x77ec8f05:   8b 46 24 83 ca ff 03 c3 50 8b 46 20 03 c3 50 ff 
+
+
+Stack: [0x00090000,0x000d0000),  sp=0x000cf570,  free space=253k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  [ntdll.dll+0x48f05]
+C  [ntdll.dll+0x48dbf]
+C  [KERNELBASE.dll+0x12389]
+C  [KERNEL32.DLL+0x19820]
+C  [java.dll+0x6757]
+C  [java.dll+0x2fc7]
+j  java.lang.System.initProperties(Ljava/util/Properties;)Ljava/util/Properties;+0
+j  java.lang.System.initializeSystemClass()V+13
+v  ~StubRoutines::call_stub
+V  [jvm.dll+0x876b1]
+V  [jvm.dll+0xe0018]
+V  [jvm.dll+0x87582]
+V  [jvm.dll+0x874eb]
+V  [jvm.dll+0x11392b]
+V  [jvm.dll+0x11341a]
+V  [jvm.dll+0x920ec]
+C  [javaw.exe+0x214e]
+C  [javaw.exe+0x11bb]
+C  [javaw.exe+0x317f]
+C  [KERNEL32.DLL+0x1919f]
+C  [ntdll.dll+0x4a22b]
+C  [ntdll.dll+0x4a201]
+
+Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
+j  java.lang.System.initProperties(Ljava/util/Properties;)Ljava/util/Properties;+0
+j  java.lang.System.initializeSystemClass()V+13
+v  ~StubRoutines::call_stub
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x01dc3918 JavaThread "Finalizer" daemon [_thread_blocked, id=7780]
+  0x01dc2568 JavaThread "Reference Handler" daemon [_thread_blocked, id=21576]
+=>0x003ebb78 JavaThread "main" [_thread_in_native, id=21132]
+
+Other Threads:
+  0x01dbe958 VMThread [id=27464]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap
+ def new generation   total 576K, used 10K [0x03e00000, 0x03ea0000, 0x042e0000)
+  eden space 512K,   2% used [0x03e00000, 0x03e02908, 0x03e80000)
+  from space 64K,   0% used [0x03e80000, 0x03e80000, 0x03e90000)
+  to   space 64K,   0% used [0x03e90000, 0x03e90000, 0x03ea0000)
+ tenured generation   total 1408K, used 0K [0x042e0000, 0x04440000, 0x07e00000)
+   the space 1408K,   0% used [0x042e0000, 0x042e0000, 0x042e0200, 0x04440000)
+ compacting perm gen  total 8192K, used 559K [0x07e00000, 0x08600000, 0x0be00000)
+   the space 8192K,   6% used [0x07e00000, 0x07e8bec8, 0x07e8c000, 0x08600000)
+No shared spaces configured.
+
+Dynamic libraries:
+0x00400000 - 0x0040d000 	C:\Program Files (x86)\Java\jdk1.5.0_22\bin\javaw.exe
+0x77e80000 - 0x77fe8000 	C:\WINDOWS\SYSTEM32\ntdll.dll
+0x75de0000 - 0x75f20000 	C:\WINDOWS\SYSTEM32\KERNEL32.DLL
+0x75aa0000 - 0x75b6f000 	C:\WINDOWS\SYSTEM32\KERNELBASE.dll
+0x71690000 - 0x71729000 	C:\WINDOWS\system32\apphelp.dll
+0x001c0000 - 0x0024b000 	C:\WINDOWS\AppPatch\EMET.DLL
+0x77ca0000 - 0x77d5e000 	C:\WINDOWS\SYSTEM32\msvcrt.dll
+0x737e0000 - 0x737ee000 	C:\WINDOWS\SYSTEM32\WTSAPI32.dll
+0x6df80000 - 0x6e1d9000 	C:\WINDOWS\AppPatch\AcGenral.DLL
+0x759c0000 - 0x759fe000 	C:\WINDOWS\SYSTEM32\sechost.dll
+0x758a0000 - 0x758bd000 	C:\WINDOWS\SYSTEM32\SspiCli.dll
+0x764e0000 - 0x76521000 	C:\WINDOWS\SYSTEM32\SHLWAPI.dll
+0x72320000 - 0x723fb000 	C:\WINDOWS\SYSTEM32\UxTheme.dll
+0x75f90000 - 0x760df000 	C:\WINDOWS\SYSTEM32\USER32.dll
+0x760e0000 - 0x761e7000 	C:\WINDOWS\SYSTEM32\GDI32.dll
+0x74ab0000 - 0x74ad0000 	C:\WINDOWS\SYSTEM32\WINMM.dll
+0x6df60000 - 0x6df72000 	C:\WINDOWS\SYSTEM32\samcli.dll
+0x76200000 - 0x7630c000 	C:\WINDOWS\SYSTEM32\ole32.dll
+0x77730000 - 0x777b7000 	C:\WINDOWS\SYSTEM32\OLEAUT32.dll
+0x6df40000 - 0x6df55000 	C:\WINDOWS\SYSTEM32\MSACM32.dll
+0x75820000 - 0x75828000 	C:\WINDOWS\SYSTEM32\VERSION.dll
+0x76530000 - 0x776f0000 	C:\WINDOWS\SYSTEM32\SHELL32.dll
+0x75780000 - 0x75799000 	C:\WINDOWS\SYSTEM32\USERENV.dll
+0x719f0000 - 0x71a08000 	C:\WINDOWS\SYSTEM32\dwmapi.dll
+0x709e0000 - 0x70b00000 	C:\WINDOWS\SYSTEM32\urlmon.dll
+0x758c0000 - 0x75938000 	C:\WINDOWS\SYSTEM32\ADVAPI32.dll
+0x757c0000 - 0x7581e000 	C:\WINDOWS\SYSTEM32\WINSPOOL.DRV
+0x75130000 - 0x75144000 	C:\WINDOWS\SYSTEM32\MPR.dll
+0x75b70000 - 0x75c21000 	C:\WINDOWS\SYSTEM32\RPCRT4.dll
+0x75890000 - 0x75899000 	C:\WINDOWS\SYSTEM32\CRYPTBASE.dll
+0x76310000 - 0x7645e000 	C:\WINDOWS\SYSTEM32\combase.dll
+0x73850000 - 0x73870000 	C:\WINDOWS\SYSTEM32\WINMMBASE.dll
+0x75620000 - 0x7562e000 	C:\WINDOWS\SYSTEM32\profapi.dll
+0x73000000 - 0x73219000 	C:\WINDOWS\SYSTEM32\iertutil.dll
+0x73430000 - 0x735ed000 	C:\WINDOWS\SYSTEM32\WININET.dll
+0x75830000 - 0x75883000 	C:\WINDOWS\SYSTEM32\bcryptPrimitives.dll
+0x75f20000 - 0x75f5a000 	C:\WINDOWS\SYSTEM32\cfgmgr32.dll
+0x757a0000 - 0x757bf000 	C:\WINDOWS\SYSTEM32\DEVOBJ.dll
+0x75570000 - 0x755e6000 	C:\WINDOWS\SYSTEM32\SHCORE.DLL
+0x75f60000 - 0x75f85000 	C:\WINDOWS\system32\IMM32.DLL
+0x779b0000 - 0x77aa7000 	C:\WINDOWS\SYSTEM32\MSCTF.dll
+0x6d740000 - 0x6d8de000 	C:\Program Files (x86)\Java\jdk1.5.0_22\jre\bin\client\jvm.dll
+0x6d300000 - 0x6d308000 	C:\Program Files (x86)\Java\jdk1.5.0_22\jre\bin\hpi.dll
+0x764c0000 - 0x764c6000 	C:\WINDOWS\SYSTEM32\PSAPI.DLL
+0x6d710000 - 0x6d71c000 	C:\Program Files (x86)\Java\jdk1.5.0_22\jre\bin\verify.dll
+0x6d380000 - 0x6d39d000 	C:\Program Files (x86)\Java\jdk1.5.0_22\jre\bin\java.dll
+0x6d730000 - 0x6d73f000 	C:\Program Files (x86)\Java\jdk1.5.0_22\jre\bin\zip.dll
+0x66d10000 - 0x66d91000 	C:\Program Files (x86)\Common Files\G Data\AVKProxy\ExploitProtection.dll
+0x75630000 - 0x75778000 	C:\WINDOWS\SYSTEM32\dbghelp.dll
+0x72dd0000 - 0x72dd8000 	C:\WINDOWS\SYSTEM32\FltLib.dll
+
+VM Arguments:
+jvm_args: -Dfile.encoding=UTF-8
+java_command: org.eclipse.equinox.launcher.Main -os win32 -ws win32 -arch x86_64 -nl de_DE -consoleLog -version 3 -port 58648 -testLoaderClass org.eclipse.jdt.internal.junit4.runner.JUnit4TestLoader -loaderpluginname org.eclipse.jdt.junit4.runtime -test org.eclipse.emf.emfstore.client.recording.test.SingleReferenceOperationTest:moveContainmentReference -application org.eclipse.pde.junit.runtime.coretestapplication -data C:\Users\Edgar\workspaces\emfstore/../junit-workspace -configuration file:C:/Users/Edgar/workspaces/emfstore/.metadata/.plugins/org.eclipse.pde.core/pde-junit/ -dev file:C:/Users/Edgar/workspaces/emfstore/.metadata/.plugins/org.eclipse.pde.core/pde-junit/dev.properties -os win32 -ws win32 -arch x86_64 -nl de_DE -consoleLog -testpluginname org.eclipse.emf.emfstore.client
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+JAVA_HOME=C:\Program Files\Java\jre8
+PATH=C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\Intel\OpenCL SDK\2.0\bin\x86;C:\Program Files (x86)\Intel\OpenCL SDK\2.0\bin\x64;C:\Program Files\ThinkPad\Bluetooth Software\;C:\Program Files\ThinkPad\Bluetooth Software\syswow64;C:\ProgramData\Lenovo\ReadyApps;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files (x86)\GNU\GnuPG\pub;C:\Program Files\Calibre2\;C:\Program Files (x86)\sbt\\bin;C:\Program Files (x86)\WinMerge;C:\Program Files\Microsoft SQL Server\110\Tools\Binn\;C:\Program Files\TortoiseSVN\bin;C:\Program Files (x86)\scala\bin;C:\Program Files\nodejs\;C:\Users\Edgar\dev\activator-1.2.3;C:\Program Files\Java\jdk1.7.0_51\bin;C:\Users\Edgar\dev\mongodb-win32-x86_64-2008plus-2.4.9\bin;C:\Program Files (x86)\apache-maven-3.0.5\bin;C:\Qt\Qt5.1.0\5.1.0-rc2\msvc2012\bin;C:\Ruby200\bin;C:\Python34;C:\Program Files (x86)\scala\bin;C:\Users\Edgar\AppData\Roaming\npm
+USERNAME=Edgar
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 58 Stepping 9, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows NT 6.2 Build 9200 
+
+CPU:total 4 (cores per cpu 8, threads per core 2) family 6 model 10 stepping 9, cmov, cx8, fxsr, mmx, sse, sse2, ht
+
+Memory: 4k page, physical 4194303k(3186020k free), swap 4194303k(4194303k free)
+
+vm_info: Java HotSpot(TM) Client VM (1.5.0_22-b03) for windows-x86, built on Oct  9 2009 01:15:45 by "java_re" with MS VC++ 6.0
+
+time: Tue Aug 05 17:30:46 2014
+elapsed time: 0 seconds
+

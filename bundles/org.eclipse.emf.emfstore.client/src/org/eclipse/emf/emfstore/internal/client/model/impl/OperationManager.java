@@ -183,6 +183,8 @@ public class OperationManager implements OperationRecorderListener, ESDisposable
 	 * @return the cleared operations
 	 */
 	public List<AbstractOperation> clearOperations() {
+		operationRecorder.converter.added.clear();
+		operationRecorder.converter.removed.clear();
 		return operationRecorder.clearOperations();
 	}
 

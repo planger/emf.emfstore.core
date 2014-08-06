@@ -572,13 +572,13 @@ public class Topology1toNTest extends ESTest {
 		// and one additional one, indicating the new parent for all of them
 		assertEquals(7, subOperations.size());
 
-		final SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
-		final SingleReferenceOperation op2 = checkAndCast(subOperations.get(2), SingleReferenceOperation.class);
-		final SingleReferenceOperation op3 = checkAndCast(subOperations.get(3), SingleReferenceOperation.class);
+		final SingleReferenceOperation op1 = checkAndCast(subOperations.get(2), SingleReferenceOperation.class);
+		final SingleReferenceOperation op2 = checkAndCast(subOperations.get(3), SingleReferenceOperation.class);
+		final SingleReferenceOperation op3 = checkAndCast(subOperations.get(4), SingleReferenceOperation.class);
 		final SingleReferenceOperation op5 = checkAndCast(subOperations.get(5), SingleReferenceOperation.class);
 
 		final MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
-		final MultiReferenceOperation op4 = checkAndCast(subOperations.get(4), MultiReferenceOperation.class);
+		final MultiReferenceOperation op4 = checkAndCast(subOperations.get(1), MultiReferenceOperation.class);
 		final MultiReferenceOperation op6 = checkAndCast(subOperations.get(6), MultiReferenceOperation.class);
 
 		assertEquals(actor1Id, op1.getModelElementId());
@@ -680,13 +680,13 @@ public class Topology1toNTest extends ESTest {
 			.getSubOperations();
 		assertEquals(7, subOperations.size());
 
-		final SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
-		final SingleReferenceOperation op2 = checkAndCast(subOperations.get(2), SingleReferenceOperation.class);
-		final SingleReferenceOperation op3 = checkAndCast(subOperations.get(3), SingleReferenceOperation.class);
+		final SingleReferenceOperation op1 = checkAndCast(subOperations.get(2), SingleReferenceOperation.class);
+		final SingleReferenceOperation op2 = checkAndCast(subOperations.get(3), SingleReferenceOperation.class);
+		final SingleReferenceOperation op3 = checkAndCast(subOperations.get(4), SingleReferenceOperation.class);
 		final SingleReferenceOperation op5 = checkAndCast(subOperations.get(5), SingleReferenceOperation.class);
 
 		final MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
-		final MultiReferenceOperation op4 = checkAndCast(subOperations.get(4), MultiReferenceOperation.class);
+		final MultiReferenceOperation op4 = checkAndCast(subOperations.get(1), MultiReferenceOperation.class);
 		final MultiReferenceOperation op6 = checkAndCast(subOperations.get(6), MultiReferenceOperation.class);
 
 		final ModelElementId sectionId = getProject().getModelElementId(section);
@@ -792,7 +792,7 @@ public class Topology1toNTest extends ESTest {
 		assertEquals(TestElementFeatures.containedElements().getName(), op0.getFeatureName());
 		assertEquals(op0.getReferencedModelElements().get(0), bugReportId);
 
-		assertEquals(op1.getOldValue(), sectionId);
+		assertEquals(sectionId, op1.getOldValue());
 		assertNull(op1.getNewValue());
 		assertEquals(TestElementFeatures.container().getName(), op1.getFeatureName());
 
@@ -931,13 +931,13 @@ public class Topology1toNTest extends ESTest {
 		final SingleReferenceOperation op1 = checkAndCast(subOperations.get(1), SingleReferenceOperation.class);
 		final SingleReferenceOperation op2 = checkAndCast(subOperations.get(2), SingleReferenceOperation.class);
 		final SingleReferenceOperation op3 = checkAndCast(subOperations.get(3), SingleReferenceOperation.class);
-		final SingleReferenceOperation op4 = checkAndCast(subOperations.get(4), SingleReferenceOperation.class);
-		final SingleReferenceOperation op5 = checkAndCast(subOperations.get(5), SingleReferenceOperation.class);
-		final SingleReferenceOperation op6 = checkAndCast(subOperations.get(6), SingleReferenceOperation.class);
+		final SingleReferenceOperation op4 = checkAndCast(subOperations.get(5), SingleReferenceOperation.class);
+		final SingleReferenceOperation op5 = checkAndCast(subOperations.get(6), SingleReferenceOperation.class);
+		final SingleReferenceOperation op6 = checkAndCast(subOperations.get(7), SingleReferenceOperation.class);
 		final SingleReferenceOperation op8 = checkAndCast(subOperations.get(8), SingleReferenceOperation.class);
 		final SingleReferenceOperation op9 = checkAndCast(subOperations.get(9), SingleReferenceOperation.class);
 		final MultiReferenceOperation op0 = checkAndCast(subOperations.get(0), MultiReferenceOperation.class);
-		final MultiReferenceOperation op7 = checkAndCast(subOperations.get(7), MultiReferenceOperation.class);
+		final MultiReferenceOperation op7 = checkAndCast(subOperations.get(4), MultiReferenceOperation.class);
 		final MultiReferenceOperation op10 = checkAndCast(subOperations.get(10), MultiReferenceOperation.class);
 
 		assertEquals(bugReport1Id, op1.getModelElementId());
@@ -1409,11 +1409,11 @@ public class Topology1toNTest extends ESTest {
 		final SingleReferenceOperation op5 = checkAndCast(subOperations.get(5), SingleReferenceOperation.class);
 		final SingleReferenceOperation op6 = checkAndCast(subOperations.get(6), SingleReferenceOperation.class);
 		final MultiReferenceOperation op7 = checkAndCast(subOperations.get(7), MultiReferenceOperation.class);
-		final SingleReferenceOperation op8 = checkAndCast(subOperations.get(8), SingleReferenceOperation.class);
-		final SingleReferenceOperation op9 = checkAndCast(subOperations.get(9), SingleReferenceOperation.class);
-		final MultiReferenceOperation op10 = checkAndCast(subOperations.get(10), MultiReferenceOperation.class);
-		final SingleReferenceOperation op11 = checkAndCast(subOperations.get(11), SingleReferenceOperation.class);
-		final MultiReferenceOperation op12 = checkAndCast(subOperations.get(12), MultiReferenceOperation.class);
+		final MultiReferenceOperation op10 = checkAndCast(subOperations.get(8), MultiReferenceOperation.class);
+		final MultiReferenceOperation op12 = checkAndCast(subOperations.get(9), MultiReferenceOperation.class);
+		final SingleReferenceOperation op8 = checkAndCast(subOperations.get(10), SingleReferenceOperation.class);
+		final SingleReferenceOperation op9 = checkAndCast(subOperations.get(11), SingleReferenceOperation.class);
+		final SingleReferenceOperation op11 = checkAndCast(subOperations.get(12), SingleReferenceOperation.class);
 		final SingleReferenceOperation op13 = checkAndCast(subOperations.get(13), SingleReferenceOperation.class);
 		final SingleReferenceOperation op14 = checkAndCast(subOperations.get(14), SingleReferenceOperation.class);
 		final MultiReferenceOperation op15 = checkAndCast(subOperations.get(15), MultiReferenceOperation.class);
@@ -1601,11 +1601,11 @@ public class Topology1toNTest extends ESTest {
 		final SingleReferenceOperation op5 = checkAndCast(subOperations.get(5), SingleReferenceOperation.class);
 		final SingleReferenceOperation op6 = checkAndCast(subOperations.get(6), SingleReferenceOperation.class);
 		final MultiReferenceOperation op7 = checkAndCast(subOperations.get(7), MultiReferenceOperation.class);
-		final SingleReferenceOperation op8 = checkAndCast(subOperations.get(8), SingleReferenceOperation.class);
-		final SingleReferenceOperation op9 = checkAndCast(subOperations.get(9), SingleReferenceOperation.class);
-		final MultiReferenceOperation op10 = checkAndCast(subOperations.get(10), MultiReferenceOperation.class);
-		final SingleReferenceOperation op11 = checkAndCast(subOperations.get(11), SingleReferenceOperation.class);
-		final MultiReferenceOperation op12 = checkAndCast(subOperations.get(12), MultiReferenceOperation.class);
+		final SingleReferenceOperation op8 = checkAndCast(subOperations.get(10), SingleReferenceOperation.class);
+		final SingleReferenceOperation op9 = checkAndCast(subOperations.get(11), SingleReferenceOperation.class);
+		final MultiReferenceOperation op10 = checkAndCast(subOperations.get(8), MultiReferenceOperation.class);
+		final SingleReferenceOperation op11 = checkAndCast(subOperations.get(12), SingleReferenceOperation.class);
+		final MultiReferenceOperation op12 = checkAndCast(subOperations.get(9), MultiReferenceOperation.class);
 		final SingleReferenceOperation op13 = checkAndCast(subOperations.get(13), SingleReferenceOperation.class);
 		final SingleReferenceOperation op14 = checkAndCast(subOperations.get(14), SingleReferenceOperation.class);
 		final MultiReferenceOperation op15 = checkAndCast(subOperations.get(15), MultiReferenceOperation.class);

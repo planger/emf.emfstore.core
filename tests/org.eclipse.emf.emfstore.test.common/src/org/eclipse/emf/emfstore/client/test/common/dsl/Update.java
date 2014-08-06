@@ -20,7 +20,7 @@ import org.eclipse.emf.emfstore.test.model.TestElement;
 /**
  * Convenience class for change the attribute of a {@link TestElement}.
  * 
- * @author emuller
+ * @author emueller
  * 
  */
 public final class Update {
