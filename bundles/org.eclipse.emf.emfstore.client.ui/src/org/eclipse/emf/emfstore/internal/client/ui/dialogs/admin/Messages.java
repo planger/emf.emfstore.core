@@ -41,6 +41,7 @@ public final class Messages extends NLS {
 	public static String GroupTabContent_Not_Allowed_To_Delete_Selected_Group;
 	public static String GroupTabContent_Not_Allowed_To_List_Groups;
 	public static String ManageOrgUnitsDialog_Close;
+	public static String ManageOrgUnitsDialog_Title;
 	public static String OrgUnitManagementGUI_Groups;
 	public static String OrgUnitManagementGUI_Projects;
 	public static String OrgUnitManagementGUI_Properties;

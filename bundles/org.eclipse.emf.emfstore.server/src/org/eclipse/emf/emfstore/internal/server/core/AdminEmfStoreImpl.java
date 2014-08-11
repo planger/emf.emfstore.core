@@ -551,10 +551,14 @@ public class AdminEmfStoreImpl extends AbstractEmfstoreInterface implements Admi
 	 */
 	public List<ProjectInfo> getProjectInfos(SessionId sessionId) throws ESException {
 		checkForNulls(sessionId);
-		getAuthorizationControl().checkProjectAdminAccess(sessionId, null);
 		final List<ProjectInfo> result = new ArrayList<ProjectInfo>();
-		for (final ProjectHistory ph : getServerSpace().getProjects()) {
-			result.add(getProjectInfo(ph));
+		for (final ProjectHistory projectHistory : getServerSpace().getProjects()) {
+			try {
+				getAuthorizationControl().checkProjectAdminAccess(sessionId, projectHistory.getProjectId());
+				result.add(getProjectInfo(projectHistory));
+			} catch (final AccessControlException ace) {
+				// ignore
+			}
 		}
 		return result;
 	}

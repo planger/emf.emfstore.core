@@ -47,6 +47,18 @@ public class ManageOrgUnitsDialog extends Dialog {
 
 	/**
 	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets.Shell)
+	 */
+	@Override
+	protected void configureShell(Shell newShell) {
+		super.configureShell(newShell);
+		newShell.setText(Messages.ManageOrgUnitsDialog_Title);
+
+	}
+
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public int open() {
