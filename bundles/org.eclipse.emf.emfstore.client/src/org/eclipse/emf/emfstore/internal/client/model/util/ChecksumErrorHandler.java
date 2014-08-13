@@ -11,18 +11,26 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model.util;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.emfstore.client.ESLocalProject;
 import org.eclipse.emf.emfstore.client.handler.ESChecksumErrorHandler;
 import org.eclipse.emf.emfstore.internal.client.common.UnknownEMFStoreWorkloadCommand;
+import org.eclipse.emf.emfstore.internal.client.model.Activator;
 import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
 import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
 import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESLocalProjectImpl;
 import org.eclipse.emf.emfstore.internal.common.model.Project;
 import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
+import org.eclipse.emf.emfstore.internal.common.model.util.SerializationException;
 import org.eclipse.emf.emfstore.internal.server.model.impl.api.ESGlobalProjectIdImpl;
 import org.eclipse.emf.emfstore.internal.server.model.impl.api.ESSessionIdImpl;
 import org.eclipse.emf.emfstore.internal.server.model.impl.api.versionspec.ESVersionSpecImpl;
@@ -34,6 +42,7 @@ import org.eclipse.emf.emfstore.server.model.versionspec.ESPrimaryVersionSpec;
  * Pre-defined error handlers.
  * 
  * @author emueller
+ * @author Lucas Koehler
  * 
  */
 public enum ChecksumErrorHandler implements ESChecksumErrorHandler {
@@ -47,9 +56,61 @@ public enum ChecksumErrorHandler implements ESChecksumErrorHandler {
 		 */
 		public boolean execute(ESLocalProject project, ESPrimaryVersionSpec versionSpec, IProgressMonitor monitor)
 			throws ESException {
-			WorkspaceUtil.logWarning("Checksum comparison failed.", null);
+			WorkspaceUtil.logWarning(Messages.ChecksumErrorHandler_ChecksumComparisionFailed, null);
 			return true;
 		}
+	},
+
+	/**
+	 * Logs the checksum comparison failure detailed: the serialization of both project spaces is written in seperate
+	 * files. The execution of the caller will then be continued.
+	 */
+	LOG_DETAILED {
+		/**
+		 * {@inheritDoc}
+		 */
+		public boolean execute(ESLocalProject localProject, ESPrimaryVersionSpec versionSpec, IProgressMonitor monitor)
+			throws ESException {
+			WorkspaceUtil.logWarning("Checksum comparison failed.", null); //$NON-NLS-1$
+
+			final Project project = ESLocalProjectImpl.class.cast(localProject).toInternalAPI().getProject();
+			final ESLocalProject serverESProject = localProject
+				.getRemoteProject()
+				.checkout(
+					"log_error_checksum_debug_checkout", localProject.getUsersession(), versionSpec, new NullProgressMonitor()); //$NON-NLS-1$
+			final Project serverProject = ESLocalProjectImpl.class.cast(serverESProject).toInternalAPI()
+				.getProject();
+			try {
+
+				final Map<Object, Object> formatOptions = new LinkedHashMap<Object, Object>();
+				formatOptions.put(XMLResource.OPTION_DECLARE_XML, Boolean.TRUE);
+				formatOptions.put(XMLResource.OPTION_FORMATTED, Boolean.TRUE);
+
+				final String localSerialization = ModelUtil
+					.eObjectToString(project, ModelUtil.getResourceSaveOptions());
+				final String serverSerialization = ModelUtil.eObjectToString(serverProject,
+					ModelUtil.getResourceSaveOptions());
+
+				serverESProject.delete(new NullProgressMonitor());
+
+				final File localFile = Activator.getDefault().getBundle().getDataFile("localProjectSerialization.txt"); //$NON-NLS-1$
+				final File serverFile = Activator.getDefault().getBundle()
+					.getDataFile("serverProjectSerialization.txt"); //$NON-NLS-1$
+
+				final FileWriter fileWriterLocal = new FileWriter(localFile);
+				fileWriterLocal.write(localSerialization);
+				fileWriterLocal.close();
+				final FileWriter fileWriterServer = new FileWriter(serverFile);
+				fileWriterServer.write(serverSerialization);
+				fileWriterServer.close();
+			} catch (final SerializationException ex) {
+				WorkspaceUtil.logException("Couldn't log the serializations.", ex); //$NON-NLS-1$
+			} catch (final IOException ex) {
+				WorkspaceUtil.logException("Couldn't save the serializations.", ex); //$NON-NLS-1$
+			}
+			return true;
+		}
+
 	},
 
 	/**
@@ -77,7 +138,6 @@ public enum ChecksumErrorHandler implements ESChecksumErrorHandler {
 		public boolean execute(final ESLocalProject project, final ESPrimaryVersionSpec versionSpec,
 			IProgressMonitor monitor) throws ESException {
 
-			// TODO: OTS casts
 			final ESLocalProjectImpl localProjectImpl = (ESLocalProjectImpl) project;
 			final ProjectSpace projectSpace = localProjectImpl.toInternalAPI();
 			final Resource projectResource = localProjectImpl.toInternalAPI().getProject().eResource();
@@ -103,7 +163,7 @@ public enum ChecksumErrorHandler implements ESChecksumErrorHandler {
 			}.execute();
 
 			if (fetchedProject == null) {
-				throw new ESException("Server returned a null project!");
+				throw new ESException(Messages.ChecksumErrorHandler_ServerReturnedNullProject);
 			}
 
 			projectResource.getContents().clear();
@@ -111,7 +171,7 @@ public enum ChecksumErrorHandler implements ESChecksumErrorHandler {
 			try {
 				projectResource.save(ModelUtil.getResourceSaveOptions());
 			} catch (final IOException ex) {
-				throw new ESException("Could not save project resource while performing autocorrect.");
+				throw new ESException(Messages.ChecksumErrorHandler_SaveFailedWhileAutocorrect);
 			}
 			projectSpace.setProject(fetchedProject);
 			projectSpace.init();

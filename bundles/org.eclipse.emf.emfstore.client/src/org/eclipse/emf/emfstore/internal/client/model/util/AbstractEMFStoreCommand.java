@@ -63,7 +63,7 @@ public abstract class AbstractEMFStoreCommand extends AbstractCommand {
 		try {
 			commandBody();
 			// BEGIN SUPRESS CATCH EXCEPTION
-		} catch (RuntimeException e) {
+		} catch (final RuntimeException e) {
 			// END SUPRESS CATCH EXCEPTION
 			// record exception
 			runtimeException = e;
@@ -88,7 +88,7 @@ public abstract class AbstractEMFStoreCommand extends AbstractCommand {
 	 * @see org.eclipse.emf.common.command.Command#redo()
 	 */
 	public void redo() {
-		throw new UnsupportedOperationException("Redo is not implemented in this command!");
+		throw new UnsupportedOperationException(Messages.AbstractEMFStoreCommand_RedoNotImplemented);
 	}
 
 	/**

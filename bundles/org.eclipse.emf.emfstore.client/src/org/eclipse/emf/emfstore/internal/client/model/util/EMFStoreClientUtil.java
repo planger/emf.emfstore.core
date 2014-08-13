@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * koegel
+ * Maximilian Koegel - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model.util;
 
@@ -32,7 +32,7 @@ import org.eclipse.emf.emfstore.server.exceptions.ESException;
  */
 public final class EMFStoreClientUtil {
 
-	private static final String LOCALHOST_GENERATED_ENTRY_NAME = "EMFStore (generated entry)";
+	private static final String LOCALHOST_GENERATED_ENTRY_NAME = "EMFStore (generated entry)"; //$NON-NLS-1$
 
 	/**
 	 * Private constructor for utility class.
@@ -95,7 +95,7 @@ public final class EMFStoreClientUtil {
 	 * @return a user session
 	 */
 	public static Usersession createUsersession() {
-		return createUsersession("super", "super", "localhost", 8080);
+		return createUsersession("super", "super", "localhost", 8080); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	/**

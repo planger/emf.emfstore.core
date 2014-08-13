@@ -12,6 +12,7 @@
 package org.eclipse.emf.emfstore.internal.client.model.util;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
@@ -65,7 +66,9 @@ public final class ResourceHelper {
 
 		// sanity check
 		if (directContents.size() != 1 && !type.isInstance(directContents.get(0))) {
-			throw new IOException("File is corrupt, does not contain a " + type.getName() + " .");
+			throw new IOException(
+				MessageFormat.format(
+					Messages.ResourceHelper_CorruptFile, type.getName()));
 		}
 
 		final T object = (T) directContents.get(index);

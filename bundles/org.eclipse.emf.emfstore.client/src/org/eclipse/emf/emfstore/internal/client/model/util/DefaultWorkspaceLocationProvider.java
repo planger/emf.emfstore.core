@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * wesendon
+ * Otto von Wesendonk - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model.util;
 
@@ -37,7 +37,7 @@ public class DefaultWorkspaceLocationProvider extends DefaultServerWorkspaceLoca
 	protected String getRootDirectory() {
 		final String parameter = getStartParameter(ServerConfiguration.EMFSTORE_HOME);
 		if (parameter == null) {
-			return addFolders(getUserHome(), ".emfstore", "client");
+			return addFolders(getUserHome(), ".emfstore", "client"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		return parameter;
 
@@ -50,16 +50,16 @@ public class DefaultWorkspaceLocationProvider extends DefaultServerWorkspaceLoca
 	 */
 	@Override
 	protected String getSelectedProfile() {
-		String parameter = getStartParameter("-profile");
+		String parameter = getStartParameter("-profile"); //$NON-NLS-1$
 		if (parameter == null) {
-			parameter = "default";
+			parameter = "default"; //$NON-NLS-1$
 			if (CommonUtil.isTesting()) {
-				parameter += "_test";
+				parameter += "_test"; //$NON-NLS-1$
 			} else if (!Configuration.getVersioningInfo().isReleaseVersion()) {
 				if (Configuration.getVersioningInfo().isInternalReleaseVersion()) {
-					parameter += "_internal";
+					parameter += "_internal"; //$NON-NLS-1$
 				} else {
-					parameter += "_dev";
+					parameter += "_dev"; //$NON-NLS-1$
 				}
 			}
 		}

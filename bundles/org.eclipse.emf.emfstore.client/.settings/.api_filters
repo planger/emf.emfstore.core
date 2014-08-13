@@ -73,4 +73,12 @@
             </message_arguments>
         </filter>
     </resource>
+    <resource path="src/org/eclipse/emf/emfstore/internal/client/model/util/ChecksumErrorHandler.java" type="org.eclipse.emf.emfstore.internal.client.model.util.ChecksumErrorHandler">
+        <filter comment="internal API usage" id="572522506">
+            <message_arguments>
+                <message_argument value="ESException"/>
+                <message_argument value="ChecksumErrorHandler"/>
+            </message_arguments>
+        </filter>
+    </resource>
 </component>
