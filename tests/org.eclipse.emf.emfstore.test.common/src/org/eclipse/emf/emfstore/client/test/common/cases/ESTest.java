@@ -20,19 +20,19 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.eclipse.emf.emfstore.client.ESLocalProject;
-import org.eclipse.emf.emfstore.client.ESWorkspaceProvider;
 import org.eclipse.emf.emfstore.client.test.common.dsl.Create;
 import org.eclipse.emf.emfstore.client.test.common.dsl.Delete;
 import org.eclipse.emf.emfstore.client.test.common.util.ProjectUtil;
 import org.eclipse.emf.emfstore.client.util.ESVoidCallable;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
+import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
 import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.notification.recording.NotificationRecording;
 import org.eclipse.emf.emfstore.internal.client.model.impl.ProjectSpaceImpl;
+import org.eclipse.emf.emfstore.internal.client.model.impl.WorkspaceBase;
 import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESLocalProjectImpl;
 import org.eclipse.emf.emfstore.internal.common.CommonUtil;
 import org.eclipse.emf.emfstore.internal.common.model.Project;
-import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.util.OperationsCanonizer;
 import org.eclipse.emf.emfstore.server.exceptions.ESException;
@@ -65,16 +65,9 @@ public abstract class ESTest {
 	 */
 	public ProjectSpace cloneProjectSpace(final ProjectSpace projectSpace) {
 
-		return RunESCommand.runWithResult(new Callable<ProjectSpace>() {
-			public ProjectSpace call() throws Exception {
-				final Project clonedProject = ModelUtil.clone(projectSpace.getProject());
-				final ESLocalProject createLocalProject = ESWorkspaceProvider.INSTANCE.getWorkspace()
-					.createLocalProject(CLONED_PROJECT_NAME);
-				final ProjectSpace internalAPI = ((ESLocalProjectImpl) createLocalProject).toInternalAPI();
-				internalAPI.setProject(clonedProject);
-				return internalAPI;
-			}
-		});
+		final WorkspaceBase workspace = (WorkspaceBase) ESWorkspaceProviderImpl.getInstance().getWorkspace()
+			.toInternalAPI();
+		return workspace.cloneProject(CLONED_PROJECT_NAME, projectSpace.getProject());
 	}
 
 	@Before
