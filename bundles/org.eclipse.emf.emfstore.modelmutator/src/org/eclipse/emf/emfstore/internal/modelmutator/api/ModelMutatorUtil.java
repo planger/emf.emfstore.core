@@ -7,14 +7,12 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * JulianSommerfeldt
- * StephanK?hler
- * EugenNeufeld
- * PhilipAchenbach
- * DmitryLitvinov
+ * Julian Sommerfeldt, Stephan Koehler, Eugen Neufeld, Philip Achenbach, Dmitry Litvinov - initial API and
+ * implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.modelmutator.api;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -66,7 +64,7 @@ import org.eclipse.emf.emfstore.internal.modelmutator.intern.attribute.Attribute
  * Util class for the ModelMutator.
  * 
  * @author Eugen Neufeld
- * @author Stephan K?hler
+ * @author Stephan Koehler
  * @author Philip Achenbach
  * @author Dmitry Litvinov
  * @author Julian Sommerfeldt
@@ -502,9 +500,9 @@ public final class ModelMutatorUtil {
 			}
 			if (newValue instanceof EObject) {
 				return (EObject) newValue;
-			} else {
-				return null;
 			}
+
+			return null;
 			// BEGIN SUPRESS CATCH EXCEPTION
 		} catch (final RuntimeException e) {
 			// END SUPRESS CATCH EXCEPTION
@@ -590,7 +588,9 @@ public final class ModelMutatorUtil {
 
 				// no valid delete mode
 			} else {
-				throw new IllegalArgumentException("This is not a valid delete mode argument: " + howToDelete);
+				throw new IllegalArgumentException(
+					MessageFormat.format(
+						Messages.getString("ModelMutatorUtil.InvalidDeleteMode"), howToDelete)); //$NON-NLS-1$
 			}
 			// BEGIN SUPRESS CATCH EXCEPTION
 		} catch (final RuntimeException e) {
@@ -607,21 +607,30 @@ public final class ModelMutatorUtil {
 	 * @see AttributeSetter
 	 */
 	public void setEObjectAttributes(EObject eObject) {
-		setEObjectAttributes(eObject, Integer.MAX_VALUE);
+		setEObjectAttributes(eObject, Integer.MAX_VALUE, Collections.<EStructuralFeature> emptySet());
 	}
 
 	/**
 	 * Sets all possible attributes of known types to random values using {@link AttributeSetter} and
 	 * SetCommands/AddCommands.
 	 * 
-	 * @param eObject the EObject to set attributes for
-	 * @param maxNumber The maximal number of attributes to mutate.
+	 * @param eObject
+	 *            the EObject to set attributes for
+	 * @param maxNumber
+	 *            the maximal number of attributes to mutate
+	 * @param ignoredFeatures
+	 *            a set of attributes to be ignored
 	 * @see AttributeSetter
 	 */
-	public void setEObjectAttributes(EObject eObject, int maxNumber) {
+	public void setEObjectAttributes(EObject eObject, int maxNumber, Set<EStructuralFeature> ignoredFeatures) {
 		final Random random = config.getRandom();
 		int numAttrLeft = maxNumber;
 		for (final EAttribute attribute : eObject.eClass().getEAllAttributes()) {
+
+			if (ignoredFeatures.contains(attribute)) {
+				continue;
+			}
+
 			final EClassifier attributeType = attribute.getEAttributeType();
 
 			// randomly remove attributes
@@ -876,5 +885,19 @@ public final class ModelMutatorUtil {
 			eAllContents.next();
 		}
 		return i;
+	}
+
+	/**
+	 * Sets all possible attributes of known types to random values using {@link AttributeSetter} and
+	 * SetCommands/AddCommands.
+	 * 
+	 * @param eObject
+	 *            the EObject to set attributes for
+	 * @param ignoredFeatures
+	 *            a set of attributes to be ignored
+	 * @see AttributeSetter
+	 */
+	public void setEObjectAttributes(EObject eObject, Set<EStructuralFeature> ignoredFeatures) {
+		setEObjectAttributes(eObject, Integer.MAX_VALUE, ignoredFeatures);
 	}
 }

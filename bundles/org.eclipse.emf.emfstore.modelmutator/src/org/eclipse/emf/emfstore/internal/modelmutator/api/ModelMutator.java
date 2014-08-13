@@ -7,22 +7,23 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * StephanK?hler
- * EugenNeufeld
- * PhilipAchenbach
- * DmitryLitvinov
+ * Stephan Koehler, Eugen Neufeld, Philip Achenbach, DmitryLitvinov - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.modelmutator.api;
 
+import java.util.Collections;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.emfstore.internal.modelmutator.intern.AbstractModelMutator;
 
 /**
- * Implementaion of AbstractModelMutator with empty preMutate and postMutate methods.
+ * Implementation of AbstractModelMutator with empty preMutate and postMutate methods.
  * 
  * TODO Merge with AbstractModelMutator?
  * 
  * @author Eugen Neufeld
- * @author Stephan K?hler
+ * @author Stephan Koehler
  * @author Philip Achenbach
  * @author Dmitry Litvinov
  */
@@ -34,7 +35,7 @@ public class ModelMutator extends AbstractModelMutator {
 	 * @param config the configuration
 	 */
 	public static void generateModel(ModelMutatorConfiguration config) {
-		ModelMutator modelMutator = new ModelMutator(config);
+		final ModelMutator modelMutator = new ModelMutator(config);
 		modelMutator.generate();
 	}
 
@@ -44,8 +45,21 @@ public class ModelMutator extends AbstractModelMutator {
 	 * @param config the configuration
 	 */
 	public static void changeModel(ModelMutatorConfiguration config) {
-		ModelMutator modelMutator = new ModelMutator(config);
-		modelMutator.mutate();
+		final ModelMutator modelMutator = new ModelMutator(config);
+		modelMutator.mutate(Collections.<EStructuralFeature> emptySet());
+	}
+
+	/**
+	 * Modifies a model as specified in the config.
+	 * 
+	 * @param config
+	 *            the configuration
+	 * @param ignoredFeatures
+	 *            the features that are to be ignored while changing the model
+	 */
+	public static void changeModel(ModelMutatorConfiguration config, Set<EStructuralFeature> ignoredFeatures) {
+		final ModelMutator modelMutator = new ModelMutator(config);
+		modelMutator.mutate(ignoredFeatures);
 	}
 
 	/**
@@ -67,7 +81,7 @@ public class ModelMutator extends AbstractModelMutator {
 	}
 
 	@Override
-	public void mutate() {
-		super.mutate();
+	public void mutate(Set<EStructuralFeature> ignoredFeatures) {
+		super.mutate(ignoredFeatures);
 	}
 }

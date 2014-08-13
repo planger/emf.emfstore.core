@@ -27,11 +27,11 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
  */
 public abstract class FilteredAdapter extends EContentAdapter {
 
-	private static final String E_CLASS_SUFFIX = "Impl";
-	private List<EClass> toLogClasses;
-	private List<EReference> toLogReferences;
-	private boolean attributes;
-	private boolean references;
+	private static final String E_CLASS_SUFFIX = "Impl"; //$NON-NLS-1$
+	private final List<EClass> toLogClasses;
+	private final List<EReference> toLogReferences;
+	private final boolean attributes;
+	private final boolean references;
 
 	/**
 	 * @param toLogClasses The {@link EClass}es to log. If <code>null</code> every {@link EClass} is logged.
@@ -69,16 +69,15 @@ public abstract class FilteredAdapter extends EContentAdapter {
 		}
 
 		// check if the notification message contains a class which should be logged
-		for (EClass eClass : toLogClasses) {
-			String string = notification.toString();
-			if (string.contains("." + eClass.getName() + E_CLASS_SUFFIX)) {
+		for (final EClass eClass : toLogClasses) {
+			final String string = notification.toString();
+			if (string.contains("." + eClass.getName() + E_CLASS_SUFFIX)) { //$NON-NLS-1$
 				if (toLogReferences == null) {
 					return false;
-				} else {
-					for (EReference ref : toLogReferences) {
-						if (string.contains(ref.getName())) {
-							return false;
-						}
+				}
+				for (final EReference ref : toLogReferences) {
+					if (string.contains(ref.getName())) {
+						return false;
 					}
 				}
 			}
@@ -97,31 +96,31 @@ public abstract class FilteredAdapter extends EContentAdapter {
 	public static String getEventType(int eventType) {
 		switch (eventType) {
 		case Notification.SET: {
-			return "SET";
+			return "SET"; //$NON-NLS-1$
 		}
 		case Notification.UNSET: {
-			return "UNSET";
+			return "UNSET"; //$NON-NLS-1$
 		}
 		case Notification.ADD: {
-			return "ADD";
+			return "ADD"; //$NON-NLS-1$
 		}
 		case Notification.ADD_MANY: {
-			return "ADD_MANY";
+			return "ADD_MANY"; //$NON-NLS-1$
 		}
 		case Notification.REMOVE: {
-			return "REMOVE";
+			return "REMOVE"; //$NON-NLS-1$
 		}
 		case Notification.REMOVE_MANY: {
-			return "REMOVE_MANY";
+			return "REMOVE_MANY"; //$NON-NLS-1$
 		}
 		case Notification.MOVE: {
-			return "MOVE";
+			return "MOVE"; //$NON-NLS-1$
 		}
 		case Notification.REMOVING_ADAPTER: {
-			return "REMOVING_ADAPTER";
+			return "REMOVING_ADAPTER"; //$NON-NLS-1$
 		}
 		case Notification.RESOLVE: {
-			return "RESOLVE";
+			return "RESOLVE"; //$NON-NLS-1$
 		}
 		default: {
 			return String.valueOf(eventType);

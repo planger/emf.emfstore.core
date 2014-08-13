@@ -14,6 +14,7 @@ package org.eclipse.emf.emfstore.fuzzy.emf;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -103,7 +104,8 @@ public class MutateUtil implements Util {
 	 *            The {@link ModelMutatorConfiguration} to use for mutation.
 	 */
 	public void mutate(final ModelMutatorConfiguration mmc) {
-		ModelMutator.changeModel(mmc);
+		ModelMutator.changeModel(mmc,
+			new LinkedHashSet<EStructuralFeature>(getEStructuralFeaturesToIgnore()));
 	}
 
 	/**

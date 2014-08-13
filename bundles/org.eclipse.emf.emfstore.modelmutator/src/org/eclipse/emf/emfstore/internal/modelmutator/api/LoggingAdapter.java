@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * JulianSommerfeldt
+ * Julian Sommerfeldt - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.modelmutator.api;
 
@@ -44,7 +44,7 @@ public class LoggingAdapter extends FilteredAdapter {
 			return;
 		}
 
-		System.out.println("NOTIFY:");
+		System.out.println("NOTIFY:"); //$NON-NLS-1$
 		System.out.println(format(notification));
 		System.out.println();
 	}
@@ -56,19 +56,19 @@ public class LoggingAdapter extends FilteredAdapter {
 	 * @return The string representing the {@link Notification}.
 	 */
 	protected String format(Notification notification) {
-		StringBuffer result = new StringBuffer();
-		result.append("Notifier:  " + notification.getNotifier());
-		result.append("\n");
-		result.append("Feature:   " + notification.getFeature());
-		result.append("\n");
-		result.append("Position:  " + notification.getPosition());
-		result.append("\n");
-		result.append("EventType: " + getEventType(notification.getEventType()));
-		result.append("\n");
-		result.append("OldValue:  " + notification.getOldValue());
-		result.append("\n");
-		result.append("NewValue:  " + notification.getNewValue());
-		result.append("\n");
+		final StringBuffer result = new StringBuffer();
+		result.append("Notifier:  " + notification.getNotifier()); //$NON-NLS-1$
+		result.append("\n"); //$NON-NLS-1$
+		result.append("Feature:   " + notification.getFeature()); //$NON-NLS-1$
+		result.append("\n"); //$NON-NLS-1$
+		result.append("Position:  " + notification.getPosition()); //$NON-NLS-1$
+		result.append("\n"); //$NON-NLS-1$
+		result.append("EventType: " + getEventType(notification.getEventType())); //$NON-NLS-1$
+		result.append("\n"); //$NON-NLS-1$
+		result.append("OldValue:  " + notification.getOldValue()); //$NON-NLS-1$
+		result.append("\n"); //$NON-NLS-1$
+		result.append("NewValue:  " + notification.getNewValue()); //$NON-NLS-1$
+		result.append("\n"); //$NON-NLS-1$
 		return result.toString();
 	}
 }
