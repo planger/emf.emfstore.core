@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * wesendon
+ * Otto von Wesendonk - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model.impl;
 
@@ -52,8 +52,9 @@ public class AutoOperationWrapper implements ESOperationModifier {
 
 		final CompositeOperation compositeOperation = OperationsFactory.eINSTANCE.createCompositeOperation();
 		compositeOperation.setClientDate(new Date());
-		compositeOperation.setCompositeName(getText(command.getLabel()));
-		compositeOperation.setCompositeDescription(getText(command.getDescription()));
+		compositeOperation.setCompositeName(command == null ? "Composite Operation" : getText(command.getLabel())); //$NON-NLS-1$
+		compositeOperation.setCompositeDescription(command == null ? StringUtils.EMPTY : getText(command
+			.getDescription()));
 		compositeOperation.setModelElementId(ModelUtil.clone(operations.get(0).getModelElementId()));
 		compositeOperation.getSubOperations().addAll(operations);
 		final ArrayList<AbstractOperation> result = new ArrayList<AbstractOperation>();

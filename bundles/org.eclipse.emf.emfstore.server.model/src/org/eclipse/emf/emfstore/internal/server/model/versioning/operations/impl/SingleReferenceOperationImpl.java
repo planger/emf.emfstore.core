@@ -368,8 +368,8 @@ public class SingleReferenceOperationImpl extends ReferenceOperationImpl impleme
 	@SuppressWarnings("serial")
 	public void apply(IdEObjectCollection project) {
 		final EObject modelElement = getModelElement(project, getModelElementId());
-		EObject oldModelElement = getModelElement(project, getOldValue());
-		final EObject newModelElement = getModelElement(project, getNewValue());
+		EObject oldModelElementValue = getModelElement(project, getOldValue());
+		final EObject newModelElementValue = getModelElement(project, getNewValue());
 
 		if (modelElement == null) {
 			// silently fail
@@ -383,13 +383,22 @@ public class SingleReferenceOperationImpl extends ReferenceOperationImpl impleme
 			reference = (EReference) this.getFeature(modelElement);
 			final EObject oldModelElementReferenceValue = (EObject) modelElement.eGet(reference);
 			if (oldModelElementReferenceValue != null) {
-				final ModelElementId updatedOldValue = project.getModelElementId(oldModelElementReferenceValue);
-				if (!updatedOldValue.equals(oldValue)) {
-					oldModelElement = oldModelElementReferenceValue;
+				ModelElementId updatedOldValue = project.getModelElementId(oldModelElementReferenceValue);
+
+				if (updatedOldValue == null) {
+					updatedOldValue = ((IdEObjectCollectionImpl) project)
+						.getDeletedModelElementId(oldModelElementReferenceValue);
+				}
+
+				if (updatedOldValue != null && !updatedOldValue.equals(oldValue)) {
+					oldModelElementValue = oldModelElementReferenceValue;
 					setOldValue(updatedOldValue);
+				} else if (updatedOldValue == null && oldValue != null) {
+					oldModelElementValue = null;
+					setOldValue(null);
 				}
 			} else if (oldValue != null) {
-				oldModelElement = null;
+				oldModelElementValue = null;
 				setOldValue(null);
 			}
 
@@ -398,28 +407,28 @@ public class SingleReferenceOperationImpl extends ReferenceOperationImpl impleme
 				modelElement.eUnset(reference);
 				break;
 			case UnsetType.NONE_VALUE:
-				modelElement.eSet(reference, newModelElement);
+				modelElement.eSet(reference, newModelElementValue);
 				break;
 			case UnsetType.WAS_UNSET_VALUE:
-				modelElement.eSet(reference, newModelElement);
+				modelElement.eSet(reference, newModelElementValue);
 				break;
 			}
 
 			// keep elements in the project if they are disconnected, if they
 			// really need to be deleted there will be a
 			// delete operation
-			if (reference.isContainer() && newModelElement == null) {
+			if (reference.isContainer() && newModelElementValue == null) {
 				project.allocateModelElementIds(new LinkedHashMap<EObject, ModelElementId>() {
 					{
 						put(modelElement, getModelElementId());
 					}
 				});
 				project.addModelElement(modelElement);
-			} else if (reference.isContainment() && newModelElement == null && oldModelElement != null) {
+			} else if (reference.isContainment() && newModelElementValue == null && oldModelElementValue != null) {
 				final LinkedHashMap<EObject, ModelElementId> ids = new LinkedHashMap<EObject, ModelElementId>();
-				ids.put(oldModelElement, getOldValue());
+				ids.put(oldModelElementValue, getOldValue());
 				project.allocateModelElementIds(ids);
-				project.addModelElement(oldModelElement);
+				project.addModelElement(oldModelElementValue);
 			}
 		} catch (final UnkownFeatureException e) {
 			// silently fail

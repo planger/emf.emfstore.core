@@ -181,31 +181,49 @@ public final class ModelUtil {
 	/**
 	 * Copies the given EObject and converts it to a string.
 	 * 
-	 * @param object
-	 *            the eObject
-	 * @return the string representation of the EObject
+	 * @param eObject
+	 *            the eObject to be serialized
+	 * @return the string representation of the <code>eObject</code>
 	 * @throws SerializationException
 	 *             if a serialization problem occurs
 	 */
-	public static String eObjectToString(EObject object) throws SerializationException {
+	public static String eObjectToString(EObject eObject) throws SerializationException {
+		return eObjectToString(eObject, getResourceSaveOptions());
+	}
 
-		if (object == null) {
+	/**
+	 * Copies the given EObject and converts it to a string.
+	 * 
+	 * @param eObject
+	 *            the eObject to be serialized
+	 * @param saveOptions
+	 *            the EMF save options to be used during serialization
+	 * @return the string representation of the <code>eObject</code>
+	 * @throws SerializationException
+	 *             if a serialization problem occurs
+	 */
+	public static String eObjectToString(EObject eObject, Map<?, ?> saveOptions) throws SerializationException {
+		if (eObject == null) {
 			return null;
 		}
 
 		final ResourceSetImpl resourceSetImpl = new ResourceSetImpl();
 		resourceSetImpl.setResourceFactoryRegistry(new ResourceFactoryRegistry());
-		final XMIResource res = (XMIResource) resourceSetImpl.createResource(VIRTUAL_URI);
-		((ResourceImpl) res).setIntrinsicIDToEObjectMap(new HashMap<String, EObject>());
+		final XMIResource resource = (XMIResource) resourceSetImpl.createResource(VIRTUAL_URI);
+		((ResourceImpl) resource).setIntrinsicIDToEObjectMap(new HashMap<String, EObject>());
 
 		EObject copy;
-		if (object instanceof IdEObjectCollection) {
-			copy = copyIdEObjectCollection((IdEObjectCollection) object, res);
+		if (eObject instanceof IdEObjectCollection) {
+			copy = copyIdEObjectCollection((IdEObjectCollection) eObject, resource);
 		} else {
-			copy = copyEObject(ModelUtil.getProject(object), object, res);
+			copy = copyEObject(ModelUtil.getProject(eObject), eObject, resource);
 		}
 
-		return copiedEObjectToString(copy, res);
+		if (saveOptions != null) {
+			return copiedEObjectToString(copy, resource, saveOptions);
+		}
+
+		return copiedEObjectToString(copy, resource);
 	}
 
 	/**
@@ -217,6 +235,20 @@ public final class ModelUtil {
 	 * @throws SerializationException If a serialization problem occurs.
 	 */
 	private static String copiedEObjectToString(EObject copy, XMIResource resource) throws SerializationException {
+		return copiedEObjectToString(copy, resource, getChecksumSaveOptions());
+	}
+
+	/**
+	 * Converts the given {@link EObject} to a string.
+	 * 
+	 * @param copy The copied {@link EObject}.
+	 * @param resource The resource for the {@link EObject}.
+	 * @param saveOptions define the format of the returned serialization.
+	 * @return The string representing the {@link EObject}.
+	 * @throws SerializationException If a serialization problem occurs.
+	 */
+	private static String copiedEObjectToString(EObject copy, XMIResource resource, Map<?, ?> saveOptions)
+		throws SerializationException {
 		final int step = 200;
 		final int initialSize = step;
 		resource.getContents().add(copy);
@@ -226,7 +258,7 @@ public final class ModelUtil {
 			new URIConverter.WriteableOutputStream(stringWriter, CommonUtil.getEncoding());
 
 		try {
-			resource.save(uws, getChecksumSaveOptions());
+			resource.save(uws, saveOptions);
 		} catch (final IOException e) {
 			throw new SerializationException(e);
 		}
@@ -269,7 +301,7 @@ public final class ModelUtil {
 	 *             in case any errors occur during computation of the checksum
 	 */
 	public static long computeChecksum(EObject eObject) throws SerializationException {
-		return computeChecksum(eObjectToString(eObject));
+		return computeChecksum(eObjectToString(eObject, getChecksumSaveOptions()));
 	}
 
 	/**

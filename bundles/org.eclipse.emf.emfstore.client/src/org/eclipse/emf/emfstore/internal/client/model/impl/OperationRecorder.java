@@ -189,7 +189,7 @@ public class OperationRecorder implements ESCommandObserver, ESCommitObserver, E
 
 		// clean up already existing references when collection already contained the object
 		final List<SettingWithReferencedElement> savedSettings = removedElementsCache
-			.getRemovedElementToReferenceSetting(modelElement);
+			.getRemovedRootElementToReferenceSetting(modelElement);
 		if (savedSettings != null) {
 			final List<SettingWithReferencedElement> toRemove = new ArrayList<SettingWithReferencedElement>();
 			for (final SettingWithReferencedElement setting : savedSettings) {
@@ -211,7 +211,7 @@ public class OperationRecorder implements ESCommandObserver, ESCommitObserver, E
 		List<AbstractOperation> resultingOperations;
 
 		// check if create element has been deleted during running command, if so do not record a create operation
-		if (commandIsRunning && removedElementsCache.getRemovedElements().contains(modelElement)) {
+		if (commandIsRunning && removedElementsCache.getRemovedRootElements().contains(modelElement)) {
 			resultingOperations = new ArrayList<AbstractOperation>(recordedOperations);
 		} else {
 			final CreateDeleteOperation createDeleteOperation = createCreateDeleteOperation(modelElement, false);
@@ -465,6 +465,19 @@ public class OperationRecorder implements ESCommandObserver, ESCommitObserver, E
 	 * @see org.eclipse.emf.emfstore.client.changetracking.ESCommandObserver#commandCompleted(org.eclipse.emf.common.command.Command)
 	 */
 	public void commandCompleted(Command command) {
+		commandCompleted(command, false);
+	}
+
+	/**
+	 * Called to notify listener about the successful completion of the given command.
+	 * 
+	 * @param command
+	 *            the completed command
+	 * @param isCommandChain
+	 *            determines whether the command-is-running state is reset.
+	 *            If true, it won't be reset.
+	 */
+	public void commandCompleted(Command command, boolean isCommandChain) {
 
 		// means that we have not seen a command start yet
 		// if (currentClipboard == null) {
@@ -472,8 +485,8 @@ public class OperationRecorder implements ESCommandObserver, ESCommitObserver, E
 		// }
 
 		final List<EObject> deletedElements = new ArrayList<EObject>();
-		for (int i = removedElementsCache.getRemovedElements().size() - 1; i >= 0; i--) {
-			final EObject removedElement = removedElementsCache.getRemovedElements().get(i);
+		for (int i = removedElementsCache.getRemovedRootElements().size() - 1; i >= 0; i--) {
+			final EObject removedElement = removedElementsCache.getRemovedRootElements().get(i);
 			if (!collection.contains(removedElement)) {
 				if (!deletedElements.contains(removedElement)) {
 					deletedElements.add(0, removedElement);
@@ -508,10 +521,9 @@ public class OperationRecorder implements ESCommandObserver, ESCommitObserver, E
 		operationsRecorded(operations);
 		removedElementsCache.clear();
 		operations.clear();
-
 		collection.clearAllocatedCaches();
 
-		commandIsRunning = false;
+		commandIsRunning = isCommandChain;
 	}
 
 	private List<AbstractOperation> modifyOperations(List<AbstractOperation> operations, Command command) {
@@ -522,7 +534,7 @@ public class OperationRecorder implements ESCommandObserver, ESCommitObserver, E
 	}
 
 	private void deleteOutgoingCrossReferencesOfContainmentTree(Set<EObject> allEObjects) {
-		// delete all non containment cross references to other elments
+		// delete all non containment cross references to other elements
 		for (final EObject modelElement : allEObjects) {
 			for (final EReference reference : modelElement.eClass().getEAllReferences()) {
 				final EClassifier eType = reference.getEType();
@@ -668,7 +680,7 @@ public class OperationRecorder implements ESCommandObserver, ESCommitObserver, E
 		for (int i = 0; i < allContainedModelElements.size(); i++) {
 			final EObject child = allContainedModelElements.get(i);
 			final EObject copiedChild = copiedAllContainedModelElements.get(i);
-			final ModelElementId childId = collection.getDeletedModelElementId(child);
+			final ModelElementId childId = getDeletedModelElementId(child); // collection.getDeletedModelElementId(child);
 			((CreateDeleteOperationImpl) deleteOperation).getEObjectToIdMap().put(copiedChild, childId);
 		}
 

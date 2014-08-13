@@ -293,8 +293,8 @@ public class EmfStoreValidator {
 		String stringB = StringUtils.EMPTY;
 
 		try {
-			stringA = ModelUtil.eObjectToString(projectA);
-			stringB = ModelUtil.eObjectToString(projectB);
+			stringA = ModelUtil.eObjectToString(projectA, ModelUtil.getChecksumSaveOptions());
+			stringB = ModelUtil.eObjectToString(projectB, ModelUtil.getChecksumSaveOptions());
 		} catch (final SerializationException e) {
 			ModelUtil.logException(e);
 			result[areEqual] = 0;

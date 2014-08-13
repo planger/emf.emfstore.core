@@ -239,7 +239,7 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl
 		notifyPostApplyTheirChanges(incoming);
 
 		// reapply local changes
-		applyOperations(myChanges.getOperations(), true);
+		applyOperationsWithRerecording(myChanges.getOperations());
 		notifyPostApplyMergedChanges(myChanges);
 
 		setBaseVersion(baseSpec);
@@ -305,6 +305,19 @@ public abstract class ProjectSpaceBase extends IdentifiableElementImpl
 	 */
 	public void applyOperations(List<AbstractOperation> operations, boolean addOperations) {
 		executeRunnable(new ApplyOperationsRunnable(this, operations, addOperations));
+	}
+
+	/**
+	 * Applies a list of operations to the project. The change tracking will be
+	 * stopped meanwhile.
+	 * 
+	 * 
+	 * @param operations
+	 *            the list of operations to be applied upon the project space
+	 * 
+	 */
+	public void applyOperationsWithRerecording(List<AbstractOperation> operations) {
+		executeRunnable(new ApplyOperationsAndRecordRunnable(this, operations));
 	}
 
 	/**

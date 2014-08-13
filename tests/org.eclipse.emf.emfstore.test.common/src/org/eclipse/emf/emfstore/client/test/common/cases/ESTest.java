@@ -20,14 +20,13 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.eclipse.emf.emfstore.client.ESLocalProject;
+import org.eclipse.emf.emfstore.client.ESWorkspaceProvider;
 import org.eclipse.emf.emfstore.client.test.common.dsl.Create;
 import org.eclipse.emf.emfstore.client.test.common.dsl.Delete;
 import org.eclipse.emf.emfstore.client.test.common.util.ProjectUtil;
 import org.eclipse.emf.emfstore.client.util.ESVoidCallable;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
-import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
 import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
-import org.eclipse.emf.emfstore.internal.client.model.Workspace;
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.notification.recording.NotificationRecording;
 import org.eclipse.emf.emfstore.internal.client.model.impl.ProjectSpaceImpl;
 import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESLocalProjectImpl;
@@ -48,7 +47,6 @@ import org.junit.Before;
  */
 public abstract class ESTest {
 
-	private static final String CLONED_PROJECT_DESCRIPTION = "cloned Project"; //$NON-NLS-1$
 	private static final String CLONED_PROJECT_NAME = "clonedProject"; //$NON-NLS-1$
 
 	private ProjectSpace projectSpace;
@@ -67,12 +65,14 @@ public abstract class ESTest {
 	 */
 	public ProjectSpace cloneProjectSpace(final ProjectSpace projectSpace) {
 
-		final Workspace workspace = ESWorkspaceProviderImpl.getInstance().getWorkspace().toInternalAPI();
-
 		return RunESCommand.runWithResult(new Callable<ProjectSpace>() {
 			public ProjectSpace call() throws Exception {
 				final Project clonedProject = ModelUtil.clone(projectSpace.getProject());
-				return workspace.importProject(clonedProject, CLONED_PROJECT_NAME, CLONED_PROJECT_DESCRIPTION);
+				final ESLocalProject createLocalProject = ESWorkspaceProvider.INSTANCE.getWorkspace()
+					.createLocalProject(CLONED_PROJECT_NAME);
+				final ProjectSpace internalAPI = ((ESLocalProjectImpl) createLocalProject).toInternalAPI();
+				internalAPI.setProject(clonedProject);
+				return internalAPI;
 			}
 		});
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012-2013 EclipseSource Muenchen GmbH and others.
+ * Copyright (c) 2012-2014 EclipseSource Muenchen GmbH and others.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,9 +13,13 @@ package org.eclipse.emf.emfstore.internal.client.model.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.emf.emfstore.internal.client.model.CompositeOperationHandle;
+import org.eclipse.emf.emfstore.internal.client.model.exceptions.InvalidHandleException;
 import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommand;
 import org.eclipse.emf.emfstore.internal.client.model.util.WorkspaceUtil;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation;
+import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.CompositeOperation;
 
 /**
  * A {@link Runnable} implementation that applies a given list of operations
@@ -24,11 +28,10 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.Abst
  * @author emueller
  * 
  */
-public class ApplyOperationsRunnable implements Runnable {
+public class ApplyOperationsAndRecordRunnable implements Runnable {
 
 	private final ProjectSpaceBase projectSpace;
 	private final List<AbstractOperation> operations;
-	private final boolean addOperations;
 
 	/**
 	 * Constructor.
@@ -37,14 +40,12 @@ public class ApplyOperationsRunnable implements Runnable {
 	 *            the {@link ProjectSpaceBase} onto which to apply the operations
 	 * @param operations
 	 *            the operations to be applied upon the project space
-	 * @param addOperations
-	 *            whether the operations should be added to the project space
 	 */
-	public ApplyOperationsRunnable(ProjectSpaceBase projectSpaceBase, List<AbstractOperation> operations,
-		boolean addOperations) {
+	public ApplyOperationsAndRecordRunnable(
+		ProjectSpaceBase projectSpaceBase,
+		List<AbstractOperation> operations) {
 		projectSpace = projectSpaceBase;
 		this.operations = operations;
-		this.addOperations = addOperations;
 	}
 
 	/**
@@ -56,24 +57,27 @@ public class ApplyOperationsRunnable implements Runnable {
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
-				projectSpace.stopChangeRecording();
-				try {
-					for (final AbstractOperation operation : operations) {
-						try {
+				for (final AbstractOperation operation : operations) {
+					try {
+						if (CompositeOperation.class.isInstance(operation)) {
+							final CompositeOperation compositeOperation = CompositeOperation.class.cast(operation);
+							final String compositeName = compositeOperation.getCompositeName();
+							final CompositeOperationHandle handle = projectSpace.getOperationManager()
+								.beginCompositeOperation();
 							operation.apply(projectSpace.getProject());
-							// BEGIN SUPRESS CATCH EXCEPTION
-						} catch (final RuntimeException e) {
-							WorkspaceUtil.handleException(e);
+							try {
+								handle.end(compositeName, StringUtils.EMPTY, compositeOperation.getModelElementId());
+								projectSpace.getOperationManager().commandCompleted(null, false);
+							} catch (final InvalidHandleException ex) {
+								WorkspaceUtil.logException(ex.getMessage(), ex);
+							}
+						} else {
+							operation.apply(projectSpace.getProject());
+							projectSpace.getOperationManager().commandCompleted(null, false);
 						}
-						// END SUPRESS CATCH EXCEPTION
-					}
-
-					if (addOperations) {
-						projectSpace.addOperations(operations);
-					}
-				} finally {
-					if (projectSpace.getOperationManager() != null) {
-						projectSpace.startChangeRecording();
+						// BEGIN SUPRESS CATCH EXCEPTION
+					} catch (final RuntimeException e) {
+						WorkspaceUtil.handleException(e);
 					}
 				}
 			}

@@ -406,14 +406,13 @@ public class MultiReferenceOperationImpl extends ReferenceOperationImpl implemen
 					}
 				}
 
-				project.allocateModelElementIds(allocatables);
-
-				for (final EObject currentElement : referencedModelElements) {
-					if (reference.isContainment()) {
+				if (reference.isContainment()) {
+					project.allocateModelElementIds(allocatables);
+					for (final EObject currentElement : referencedModelElements) {
 						project.addModelElement(currentElement);
 					}
-				}
 
+				}
 				if (referencedModelElements.size() == 0 && getUnset().getValue() == UnsetType.WAS_UNSET_VALUE) {
 					modelElement.eSet(reference, list);
 				}

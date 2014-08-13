@@ -12,6 +12,7 @@
 package org.eclipse.emf.emfstore.internal.common.model.impl;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -51,12 +52,12 @@ public abstract class IdEObjectCollectionImpl extends EObjectImpl implements IdE
 	/**
 	 * The extension point id to configure the {@link ESModelElementIdGenerator}.
 	 */
-	public static final String MODELELEMENTID_GENERATOR_EXTENSIONPOINT = "org.eclipse.emf.emfstore.common.model.modelelementIdGenerator";
+	public static final String MODELELEMENTID_GENERATOR_EXTENSIONPOINT = "org.eclipse.emf.emfstore.common.model.modelelementIdGenerator"; //$NON-NLS-1$
 
 	/**
 	 * The attribute identifying the class of the {@link ESModelElementIdGenerator} extension point.
 	 */
-	public static final String MODELELEMENTID_GENERATOR_CLASS_ATTRIBUTE = "class";
+	public static final String MODELELEMENTID_GENERATOR_CLASS_ATTRIBUTE = "class"; //$NON-NLS-1$
 
 	// Caches
 	private Map<EObject, String> eObjectToIdMap;
@@ -78,6 +79,7 @@ public abstract class IdEObjectCollectionImpl extends EObjectImpl implements IdE
 	/**
 	 * Constructor.
 	 */
+	@SuppressWarnings("unchecked")
 	public IdEObjectCollectionImpl() {
 		eObjectToIdMap = new LinkedHashMap<EObject, String>();
 		idToEObjectMap = new LinkedHashMap<String, EObject>();
@@ -87,8 +89,10 @@ public abstract class IdEObjectCollectionImpl extends EObjectImpl implements IdE
 
 		final ESExtensionElement element = new ESExtensionPoint(MODELELEMENTID_GENERATOR_EXTENSIONPOINT)
 			.getElementWithHighestPriority();
+
 		if (element != null) {
-			modelElementIdGenerator = element.getClass(MODELELEMENTID_GENERATOR_CLASS_ATTRIBUTE,
+			modelElementIdGenerator = element.getClass(
+				MODELELEMENTID_GENERATOR_CLASS_ATTRIBUTE,
 				ESModelElementIdGenerator.class);
 		}
 	}
@@ -113,7 +117,8 @@ public abstract class IdEObjectCollectionImpl extends EObjectImpl implements IdE
 				ModelUtil.loadResource(xmiResource, ModelUtil.getResourceLogger());
 			}
 		} catch (final IOException e) {
-			ModelUtil.logException(String.format("XMIResource %s could not be loaded.", xmiResource.getURI()), e);
+			ModelUtil.logException(
+				String.format(Messages.IdEObjectCollectionImpl_XMIResourceNotLoaded, xmiResource.getURI()), e);
 			throw e;
 		}
 		final TreeIterator<EObject> it = xmiResource.getAllContents();
@@ -252,7 +257,7 @@ public abstract class IdEObjectCollectionImpl extends EObjectImpl implements IdE
 		// EObject _is_ project -> assign magic ModelElementId
 		if (this == eObject) {
 			final ModelElementId modelElementId = getNewModelElementID();
-			modelElementId.setId("001");
+			modelElementId.setId("001"); //$NON-NLS-1$
 			return modelElementId;
 		}
 
@@ -281,7 +286,7 @@ public abstract class IdEObjectCollectionImpl extends EObjectImpl implements IdE
 				return modelElementId;
 
 			} catch (final IOException e) {
-				throw new RuntimeException("Couldn't load resource for model element " + eObject);
+				throw new RuntimeException(Messages.IdEObjectCollectionImpl_CouldNotLoadElementResource + eObject);
 			}
 		}
 
@@ -321,7 +326,7 @@ public abstract class IdEObjectCollectionImpl extends EObjectImpl implements IdE
 	 */
 	public void deleteModelElement(final EObject modelElement) {
 		if (!this.contains(modelElement)) {
-			throw new IllegalArgumentException("Cannot delete a model element that is not contained in this project.");
+			throw new IllegalArgumentException(Messages.IdEObjectCollectionImpl_ElementNotContainedInProject);
 		}
 
 		// remove cross references
@@ -389,8 +394,11 @@ public abstract class IdEObjectCollectionImpl extends EObjectImpl implements IdE
 		try {
 			ModelUtil.saveResource(xmiResource, ModelUtil.getResourceLogger());
 		} catch (final IOException e) {
-			throw new RuntimeException("XMI Resource for model element " + eObject + " could not be saved. "
-				+ "Reason: " + e.getMessage());
+			throw new RuntimeException(
+				MessageFormat.format(
+					Messages.IdEObjectCollectionImpl_ResourceCouldNotBeSaved,
+					eObject,
+					e.getMessage()));
 		}
 	}
 
@@ -412,7 +420,9 @@ public abstract class IdEObjectCollectionImpl extends EObjectImpl implements IdE
 			try {
 				ModelUtil.loadResource(xmiResource, ModelUtil.getResourceLogger());
 			} catch (final IOException e) {
-				throw new RuntimeException("Resource of model element " + modelElement + " couldn't be loaded");
+				throw new RuntimeException(
+					MessageFormat.format(Messages.IdEObjectCollectionImpl_ResoruceCouldNotBeLoaded,
+						modelElement));
 			}
 			final String id = xmiResource.getID(modelElement);
 			if (id != null) {
@@ -759,17 +769,22 @@ public abstract class IdEObjectCollectionImpl extends EObjectImpl implements IdE
 			final EObject modelElement = entry.getKey();
 			final ModelElementId modelElementId = entry.getValue();
 
-			final Boolean isAlreadyContained = getModelElement(modelElementId) != null;
+			final EObject alreadyContainedElement = getModelElement(modelElementId);
 
-			if (isAlreadyContained) {
-				eObjectToIdMap.put(modelElement, modelElementId.getId());
-				idToEObjectMap.put(modelElementId.getId(), modelElement);
+			// if model element to be allocated is different to
+			// model element with same ID in cache OR if model
+			// element ID is not yet in cache
+			if (alreadyContainedElement != modelElement) {
+				if (alreadyContainedElement != null) {
+					eObjectToIdMap.put(modelElement, modelElementId.getId());
+					idToEObjectMap.put(modelElementId.getId(), modelElement);
+				} else {
+					// do this even if the model element is already contained;
+					// this is the case when a copied instance of the model element gets
+					// added again
+					putIntoAllocatedCaches(modelElement, modelElementId);
+				}
 			}
-
-			// do this even if the model element is already contained;
-			// this is the case when a copied instance of the model element gets
-			// added again
-			putIntoAllocatedCaches(modelElement, modelElementId);
 		}
 	}
 

@@ -32,7 +32,7 @@ public class RemovedElementsCache {
 
 	private final IdEObjectCollectionImpl collection;
 
-	private final List<EObject> removedElements;
+	private final List<EObject> removedRootElements;
 	private final Map<EObject, ModelElementId> removedElementsIds;
 	private final Map<EObject, List<SettingWithReferencedElement>> removedElementsToReferenceSettings;
 
@@ -43,7 +43,7 @@ public class RemovedElementsCache {
 	 */
 	public RemovedElementsCache(IdEObjectCollectionImpl collection) {
 		this.collection = collection;
-		removedElements = new ArrayList<EObject>();
+		removedRootElements = new ArrayList<EObject>();
 		removedElementsIds = new HashMap<EObject, ModelElementId>();
 		removedElementsToReferenceSettings = new LinkedHashMap<EObject, List<SettingWithReferencedElement>>();
 	}
@@ -51,17 +51,21 @@ public class RemovedElementsCache {
 	/**
 	 * Adds a new deleted element to the cache.
 	 * 
-	 * @param modelElement
+	 * @param rootElement
 	 *            the deleted element
 	 * @param allModelElements
 	 *            the deleted element and its contained elements
 	 * @param crossReferences
 	 *            in- and outgoing references of all model elements
 	 */
-	public void addRemovedElement(EObject modelElement, Set<EObject> allModelElements,
+	public void addRemovedElement(EObject rootElement, Set<EObject> allModelElements,
 		List<SettingWithReferencedElement> crossReferences) {
-		removedElements.add(modelElement);
-		removedElementsIds.put(modelElement, collection.getDeletedModelElementId(modelElement));
+		removedRootElements.add(rootElement);
+		removedElementsIds.put(rootElement, collection.getDeletedModelElementId(rootElement));
+
+		for (final EObject eObject : allModelElements) {
+			removedElementsIds.put(eObject, collection.getDeletedModelElementId(eObject));
+		}
 
 		if (crossReferences.size() != 0) {
 			for (final EObject eObject : allModelElements) {
@@ -75,8 +79,8 @@ public class RemovedElementsCache {
 	 * 
 	 * @return list of all elements
 	 */
-	public List<EObject> getRemovedElements() {
-		return removedElements;
+	public List<EObject> getRemovedRootElements() {
+		return removedRootElements;
 	}
 
 	/**
@@ -97,7 +101,7 @@ public class RemovedElementsCache {
 	 *            The model element whose settings are requested
 	 * @return the settings
 	 */
-	public List<SettingWithReferencedElement> getRemovedElementToReferenceSetting(EObject modelElement) {
+	public List<SettingWithReferencedElement> getRemovedRootElementToReferenceSetting(EObject modelElement) {
 		return removedElementsToReferenceSettings.get(modelElement);
 	}
 
@@ -105,7 +109,7 @@ public class RemovedElementsCache {
 	 * Clears the cache.
 	 */
 	public void clear() {
-		removedElements.clear();
+		removedRootElements.clear();
 		removedElementsIds.clear();
 		removedElementsToReferenceSettings.clear();
 	}

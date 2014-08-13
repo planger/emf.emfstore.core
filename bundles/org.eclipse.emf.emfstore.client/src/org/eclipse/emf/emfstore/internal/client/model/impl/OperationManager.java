@@ -302,4 +302,19 @@ public class OperationManager implements OperationRecorderListener, ESDisposable
 	public OperationRecorderConfig getRecorderConfig() {
 		return operationRecorder.getConfig();
 	}
+
+	/**
+	 * Notifies the manager that a command has been completed.
+	 * 
+	 * @param command
+	 *            the {@link Command} that has been completed
+	 * @param isCommandChain
+	 *            whether the operation manager should reset its internal
+	 *            command-is-running state. If multiple commands are
+	 *            executed and completed but we don't want the recorder
+	 *            to clear its internal state, set this <code>true</code>
+	 */
+	public void commandCompleted(Command command, boolean isCommandChain) {
+		operationRecorder.commandCompleted(command, isCommandChain);
+	}
 }
