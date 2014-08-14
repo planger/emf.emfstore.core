@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Maximilian Koegel
+ * Maximilian Koegel - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.server.conflictDetection;
 
@@ -21,19 +21,14 @@ import org.eclipse.emf.emfstore.server.ESConflict;
 
 /**
  * Represents a bucket of conflicting operations sets. In this context my operations are operations authored/owned by
- * the current user while their operation are incomming operations from another user.
+ * the current user while their operation are incoming operations from another user.
  * 
  * @author koegel
- * 
- */
-/**
- * @author User
- * 
  */
 public class ConflictBucket implements APIDelegate<ESConflict> {
 
-	private Set<AbstractOperation> myOperations;
-	private Set<AbstractOperation> theirOperations;
+	private final Set<AbstractOperation> myOperations;
+	private final Set<AbstractOperation> theirOperations;
 	private AbstractOperation myOperation;
 	private AbstractOperation theirOperation;
 	private ESConflict apiImpl;
@@ -110,6 +105,12 @@ public class ConflictBucket implements APIDelegate<ESConflict> {
 		this.theirOperation = theirOperation;
 	}
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.common.api.APIDelegate#toAPI()
+	 */
 	public ESConflict toAPI() {
 		if (apiImpl == null) {
 			apiImpl = createAPI();
@@ -117,25 +118,55 @@ public class ConflictBucket implements APIDelegate<ESConflict> {
 		return apiImpl;
 	}
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.emf.emfstore.internal.common.api.APIDelegate#createAPI()
+	 */
 	public ESConflict createAPI() {
 		return new ESConflictImpl(this);
 	}
 
+	/**
+	 * Resolve the conflict by specifying the accepted local operations and the rejected
+	 * remote operations.
+	 * 
+	 * @param acceptedLocalOperations
+	 *            a set of local operations that have been accepted
+	 * @param rejectedRemoteOperations
+	 *            a set of remote operations that have been rejected
+	 */
 	public void resolveConflict(Set<AbstractOperation> acceptedLocalOperations,
 		Set<AbstractOperation> rejectedRemoteOperations) {
 		this.acceptedLocalOperations = acceptedLocalOperations;
 		this.rejectedRemoteOperations = rejectedRemoteOperations;
-		this.isResolved = true;
+		isResolved = true;
 	}
 
+	/**
+	 * Returns the set of local operations that have been accepted.
+	 * 
+	 * @return a set of accepted local operations
+	 */
 	public Set<AbstractOperation> getAcceptedLocalOperations() {
 		return acceptedLocalOperations;
 	}
 
+	/**
+	 * Returns the set of remote operations that have been rejected.
+	 * 
+	 * @return the set of rejected remote operations
+	 */
 	public Set<AbstractOperation> getRejectedRemoteOperations() {
 		return rejectedRemoteOperations;
 	}
 
+	/**
+	 * Whether this conflict bucket is resolved.
+	 * 
+	 * @return <code>true</code> if this bucket is resolved, <code>false</code> otherwise
+	 */
 	public boolean isResolved() {
 		return isResolved;
 	}

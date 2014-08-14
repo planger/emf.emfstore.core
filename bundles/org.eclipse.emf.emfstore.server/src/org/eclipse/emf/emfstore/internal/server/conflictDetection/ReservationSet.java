@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Maximilian Koegel
+ * Maximilian Koegel, Edgar Mueller - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.server.conflictDetection;
 
@@ -175,7 +175,7 @@ public class ReservationSet {
 		}
 		oppositeReservationMap.setConflictBucketCandidate(conflictBucketCandidate);
 		if (oppositeReservationMap.hasOpposites()) {
-			throw new IllegalStateException("Reservation on same feature with AND without opposites is illegal!");
+			throw new IllegalStateException(Messages.ReservationSet_IllegalReservation_SameFeatureAmbigousOpposite);
 		}
 	}
 
@@ -213,7 +213,7 @@ public class ReservationSet {
 			// oppositeReservationMap.setConflictBucketCandidate(conflictBucketCandidate);
 			oppositeReservationMap.put(oppositeModelElementId, conflictBucketCandidate);
 		} else {
-			throw new IllegalStateException("Reservation on same feature with AND without opposites is illegal!");
+			throw new IllegalStateException(Messages.ReservationSet_IllegalReservation_SameFeatureAmbigousOpposite);
 		}
 	}
 

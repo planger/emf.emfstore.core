@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Maximilian Koegel
+ * Maximilian Koegel - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.server.conflictDetection;
 
@@ -34,20 +34,44 @@ public class ConflictDetector {
 	public ConflictDetector() {
 	}
 
+	/**
+	 * Calculates a {@link ChangeConflictSet} based on opposing {@link ChangePackage}s.
+	 * 
+	 * @param myChangePackages
+	 *            a list of {@link ChangePackage}s
+	 * @param theirChangePackages
+	 *            a other list of {@link ChangePackage}s
+	 * @param project
+	 *            the project for which calculate conflicts
+	 * @return a {@link ChangeConflictSet}
+	 */
 	public ChangeConflictSet calculateConflicts(List<ChangePackage> myChangePackages,
 		List<ChangePackage> theirChangePackages, Project project) {
-		ModelElementIdToEObjectMappingImpl idToEObjectMappingImpl = new ModelElementIdToEObjectMappingImpl(project,
+		final ModelElementIdToEObjectMappingImpl idToEObjectMappingImpl = new ModelElementIdToEObjectMappingImpl(
+			project,
 			myChangePackages);
 		idToEObjectMappingImpl.put(theirChangePackages);
 		return calculateConflicts(myChangePackages, theirChangePackages, idToEObjectMappingImpl);
 	}
 
+	/**
+	 * Calculates a {@link ChangeConflictSet} based on opposing {@link ChangePackage}s.
+	 * 
+	 * @param myChangePackages
+	 *            a list of {@link ChangePackage}s
+	 * @param theirChangePackages
+	 *            a other list of {@link ChangePackage}s
+	 * @param idToEObjectMapping
+	 *            a mapping that is used to resolve model elements while calculating conflicts
+	 * @return a {@link ChangeConflictSet}
+	 */
 	public ChangeConflictSet calculateConflicts(List<ChangePackage> myChangePackages,
 		List<ChangePackage> theirChangePackages, ModelElementIdToEObjectMapping idToEObjectMapping) {
-		Set<ConflictBucketCandidate> conflictCandidateBuckets = calculateConflictCandidateBuckets(myChangePackages,
+		final Set<ConflictBucketCandidate> conflictCandidateBuckets = calculateConflictCandidateBuckets(
+			myChangePackages,
 			theirChangePackages, idToEObjectMapping);
-		Set<AbstractOperation> notInvolvedInConflict = new LinkedHashSet<AbstractOperation>();
-		Set<ConflictBucket> conflictBuckets = calculateConflictBucketsFromConflictCandidateBuckets(
+		final Set<AbstractOperation> notInvolvedInConflict = new LinkedHashSet<AbstractOperation>();
+		final Set<ConflictBucket> conflictBuckets = calculateConflictBucketsFromConflictCandidateBuckets(
 			conflictCandidateBuckets, notInvolvedInConflict);
 		return new ChangeConflictSet(conflictBuckets, notInvolvedInConflict, idToEObjectMapping, myChangePackages,
 			theirChangePackages);
@@ -63,8 +87,8 @@ public class ConflictDetector {
 	private Set<ConflictBucketCandidate> calculateConflictCandidateBuckets(List<ChangePackage> myChangePackages,
 		List<ChangePackage> theirChangePackages, ModelElementIdToEObjectMapping idToEObjectMapping) {
 
-		List<AbstractOperation> myOperations = flattenChangepackages(myChangePackages);
-		List<AbstractOperation> theirOperations = flattenChangepackages(theirChangePackages);
+		final List<AbstractOperation> myOperations = flattenChangepackages(myChangePackages);
+		final List<AbstractOperation> theirOperations = flattenChangepackages(theirChangePackages);
 
 		return calculateConflictCandidateBuckets(idToEObjectMapping, myOperations, theirOperations);
 	}
@@ -73,15 +97,15 @@ public class ConflictDetector {
 		ModelElementIdToEObjectMapping idToEObjectMapping,
 		List<AbstractOperation> myOperations, List<AbstractOperation> theirOperations) {
 
-		ReservationToConflictBucketCandidateMap conflictMap = new ReservationToConflictBucketCandidateMap();
+		final ReservationToConflictBucketCandidateMap conflictMap = new ReservationToConflictBucketCandidateMap();
 
 		int counter = 0;
-		for (AbstractOperation myOperation : myOperations) {
+		for (final AbstractOperation myOperation : myOperations) {
 			conflictMap.scanOperationReservations(myOperation, counter, idToEObjectMapping, true);
 			counter++;
 		}
 
-		for (AbstractOperation theirOperation : theirOperations) {
+		for (final AbstractOperation theirOperation : theirOperations) {
 			conflictMap.scanOperationReservations(theirOperation, counter, idToEObjectMapping, false);
 			counter++;
 		}
@@ -89,8 +113,8 @@ public class ConflictDetector {
 	}
 
 	private List<AbstractOperation> flattenChangepackages(List<ChangePackage> cps) {
-		List<AbstractOperation> operations = new ArrayList<AbstractOperation>();
-		for (ChangePackage cp : cps) {
+		final List<AbstractOperation> operations = new ArrayList<AbstractOperation>();
+		for (final ChangePackage cp : cps) {
 			operations.addAll(cp.getOperations());
 		}
 		return operations;
@@ -108,10 +132,11 @@ public class ConflictDetector {
 	private Set<ConflictBucket> calculateConflictBucketsFromConflictCandidateBuckets(
 		Set<ConflictBucketCandidate> conflictBucketsCandidateSet, Set<AbstractOperation> notInvolvedInConflict) {
 
-		Set<ConflictBucket> conflictBucketsSet = new LinkedHashSet<ConflictBucket>();
-		for (ConflictBucketCandidate conflictBucketCandidate : conflictBucketsCandidateSet) {
-			Set<ConflictBucket> buckets = conflictBucketCandidate.calculateConflictBuckets(this, notInvolvedInConflict);
-			for (ConflictBucket bucket : buckets) {
+		final Set<ConflictBucket> conflictBucketsSet = new LinkedHashSet<ConflictBucket>();
+		for (final ConflictBucketCandidate conflictBucketCandidate : conflictBucketsCandidateSet) {
+			final Set<ConflictBucket> buckets = conflictBucketCandidate.calculateConflictBuckets(this,
+				notInvolvedInConflict);
+			for (final ConflictBucket bucket : buckets) {
 				conflictBucketsSet.add(bucket);
 			}
 		}

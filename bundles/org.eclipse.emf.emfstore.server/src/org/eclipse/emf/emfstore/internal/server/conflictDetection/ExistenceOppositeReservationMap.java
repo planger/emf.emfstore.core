@@ -7,18 +7,28 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
+ * Maximilian Koegel, Edgar Mueller - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.server.conflictDetection;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+/**
+ * Tracks any reservation based an a opposite model element.
+ * 
+ * @author mkoegel
+ * @author emueller
+ */
 public class ExistenceOppositeReservationMap extends OppositeReservationMap {
 
 	private static final long serialVersionUID = 6226587689609391089L;
 
-	private Set<ConflictBucketCandidate> candidates;
+	private final Set<ConflictBucketCandidate> candidates;
 
+	/**
+	 * Default constructor that assumes that there are no opposites.
+	 */
 	public ExistenceOppositeReservationMap() {
 		super(false);
 		candidates = new LinkedHashSet<ConflictBucketCandidate>();
@@ -29,6 +39,12 @@ public class ExistenceOppositeReservationMap extends OppositeReservationMap {
 		return candidates;
 	}
 
+	/**
+	 * Adds a {@link ConflictBucketCandidate}.
+	 * 
+	 * @param conflictBucketCandidate
+	 *            the {@link ConflictBucketCandidate} to be added
+	 */
 	public void addConflictBucketCandidate(ConflictBucketCandidate conflictBucketCandidate) {
 		if (conflictBucketCandidate == null) {
 			return;

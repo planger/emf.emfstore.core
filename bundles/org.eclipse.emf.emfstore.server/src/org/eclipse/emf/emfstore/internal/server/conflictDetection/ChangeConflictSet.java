@@ -7,8 +7,8 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Otto von Wesendonk
- * Edgar Mueller
+ * Otto von Wesendonk, Edgar Mueller - initial API and implementation
+ * Maximilian Koegel - Conflict Detection refactorings
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.server.conflictDetection;
 
@@ -28,6 +28,7 @@ import org.eclipse.emf.emfstore.server.ESConflictSet;
  * 
  * @author wesendon
  * @author emueller
+ * @author mkoegel
  */
 public class ChangeConflictSet implements APIDelegate<ESConflictSet> {
 
@@ -41,17 +42,23 @@ public class ChangeConflictSet implements APIDelegate<ESConflictSet> {
 	/**
 	 * Constructor.
 	 * 
-	 * @param conflictBuckets a set of conflict candidates
+	 * @param conflictBuckets
+	 *            a set of conflict candidates
 	 * @param notInvolvedInConflict
-	 * @param idToEObjectMapping a mapping from IDs to EObjects and vice versa.<br/>
+	 *            a set of operations not involved in any conflict
+	 * @param idToEObjectMapping
+	 *            a mapping from IDs to EObjects and vice versa.<br/>
 	 *            Contains all IDs of model elements involved in the {@link ChangePackage}s
 	 *            as well as those contained by the project in the ProjectSpace
 	 * @param leftChanges
+	 *            a list of {@link ChangePackage}s representing one side of the conflict
 	 * @param rightChanges
+	 *            a list of {@link ChangePackage}s representing the other side of the conflict
 	 */
 	public ChangeConflictSet(Set<ConflictBucket> conflictBuckets, Set<AbstractOperation> notInvolvedInConflict,
 		ModelElementIdToEObjectMapping idToEObjectMapping, List<ChangePackage> leftChanges,
 		List<ChangePackage> rightChanges) {
+
 		this.conflictBuckets = conflictBuckets;
 		this.notInvolvedInConflict = notInvolvedInConflict;
 		this.idToEObjectMapping = idToEObjectMapping;
@@ -93,18 +100,38 @@ public class ChangeConflictSet implements APIDelegate<ESConflictSet> {
 		return new ESConflictSetImpl(this);
 	}
 
+	/**
+	 * Returns a set of operations not involved in any conflict.
+	 * 
+	 * @return a set of operations not involved in any conflict
+	 */
 	public Set<AbstractOperation> getNotInvolvedInConflict() {
 		return notInvolvedInConflict;
 	}
 
+	/**
+	 * Returns a set of conflict candidates.
+	 * 
+	 * @return a set of conflict candidates
+	 */
 	public Set<ConflictBucket> getConflictBuckets() {
 		return conflictBuckets;
 	}
 
+	/**
+	 * Returns a list of {@link ChangePackage}s representing one side of the conflict.
+	 * 
+	 * @return a list of {@link ChangePackage}s representing one side of the conflict
+	 */
 	public List<ChangePackage> getLeftChanges() {
 		return leftChanges;
 	}
 
+	/**
+	 * Returns a list of {@link ChangePackage}s representing the other side of the conflict.
+	 * 
+	 * @return a list of {@link ChangePackage}s representing the other side of the conflict
+	 */
 	public List<ChangePackage> getRightChanges() {
 		return rightChanges;
 	}
