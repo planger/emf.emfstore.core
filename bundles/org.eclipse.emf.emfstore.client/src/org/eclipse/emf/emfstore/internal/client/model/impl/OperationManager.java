@@ -317,4 +317,13 @@ public class OperationManager implements OperationRecorderListener, ESDisposable
 	public void commandCompleted(Command command, boolean isCommandChain) {
 		operationRecorder.commandCompleted(command, isCommandChain);
 	}
+
+	/**
+	 * Whether the operation manager considers a command is being run.
+	 * 
+	 * @return <code>true</code> if a command is being run, <code>false</code> otherwise
+	 */
+	public boolean isCommandRunning() {
+		return operationRecorder.isCommandRunning();
+	}
 }

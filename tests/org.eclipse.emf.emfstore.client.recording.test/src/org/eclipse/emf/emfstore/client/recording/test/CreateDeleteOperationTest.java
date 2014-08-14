@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -1736,12 +1737,22 @@ public class CreateDeleteOperationTest extends ESTest {
 		assertEquals(testElement.getStringToStringMap().get(DAY), TAG);
 		assertEquals(testElement.getStringToStringMap().get(HELLO), HALLO);
 
+		clearOperations();
+
 		new EMFStoreCommand() {
 			@Override
 			protected void doRun() {
 				getProject().deleteModelElement(testElement);
 			}
 		}.run(false);
+
+		final CreateDeleteOperation createDeleteOperation = (CreateDeleteOperation) getProjectSpace().getOperations()
+			.get(0);
+		final EMap<EObject, ModelElementId> eObjectToIdMap = createDeleteOperation.getEObjectToIdMap();
+		for (final ModelElementId id : eObjectToIdMap.values()) {
+			assertNotNull(id);
+		}
+
 		assertFalse(getProject().contains(testElement));
 	}
 

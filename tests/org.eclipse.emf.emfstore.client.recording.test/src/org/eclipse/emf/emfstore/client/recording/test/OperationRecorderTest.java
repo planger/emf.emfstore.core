@@ -14,15 +14,24 @@ package org.eclipse.emf.emfstore.client.recording.test;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.emfstore.client.test.common.cases.ComparingESTest;
+import org.eclipse.emf.emfstore.client.test.common.dsl.Add;
 import org.eclipse.emf.emfstore.client.test.common.dsl.Create;
+import org.eclipse.emf.emfstore.client.util.ESVoidCallable;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
+import org.eclipse.emf.emfstore.internal.client.model.CompositeOperationHandle;
 import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.commands.EMFStoreBasicCommandStack;
+import org.eclipse.emf.emfstore.internal.client.model.exceptions.InvalidHandleException;
 import org.eclipse.emf.emfstore.internal.common.model.Project;
 import org.eclipse.emf.emfstore.internal.common.model.impl.IdEObjectCollectionImpl;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.ChangePackage;
@@ -79,6 +88,44 @@ public class OperationRecorderTest extends ComparingESTest {
 				return null;
 			}
 		});
+	}
+
+	@Test
+	public void supportCommandChaining() {
+
+		// final TestElement source = Create.testElement("source");
+		final TestElement target = Create.testElement(TARGET2);
+		final TestElement source = Create.testElement();
+
+		Add.toProject(getLocalProject(), source);
+		Add.toProject(getLocalProject(), target);
+
+		final List<EObject> deletables = new ArrayList<EObject>();
+		deletables.add(source);
+		deletables.add(target);
+
+		RunESCommand.run(new ESVoidCallable() {
+			@Override
+			public void run() {
+				boolean inCommandChain = false;
+				for (final EObject deletable : deletables) {
+					if (inCommandChain) {
+						assertTrue(getProjectSpace().getOperationManager().isCommandRunning());
+					}
+					final CompositeOperationHandle handle = getProjectSpace().getOperationManager()
+						.beginCompositeOperation();
+					getProject().getModelElements().remove(deletable);
+					try {
+						handle.end("Delete source", StringUtils.EMPTY, getProject().getModelElementId(source)); //$NON-NLS-1$
+					} catch (final InvalidHandleException ex) {
+						fail(ex.getMessage());
+					}
+					getProjectSpace().getOperationManager().commandCompleted(null, true);
+					inCommandChain = true;
+				}
+			}
+		});
+
 	}
 
 	/**

@@ -1009,4 +1009,14 @@ public class OperationRecorder implements ESCommandObserver, ESCommitObserver, E
 			collection.clearAllocatedCaches();
 		}
 	}
+
+	/**
+	 * Whether the operation recorder considers a command is being run.
+	 * 
+	 * @return <code>true</code> if a command is being run, <code>false</code> otherwise
+	 */
+	public boolean isCommandRunning() {
+		return commandIsRunning;
+	}
+
 }

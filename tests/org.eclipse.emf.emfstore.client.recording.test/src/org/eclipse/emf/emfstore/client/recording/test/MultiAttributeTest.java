@@ -40,7 +40,7 @@ public class MultiAttributeTest extends ESTest {
 	private static final String SECOND = "second"; //$NON-NLS-1$
 	private static final String FIRST = "first"; //$NON-NLS-1$
 
-	protected TestElement testElement;
+	private TestElement testElement;
 
 	/**
 	 * Add value to empty list.
