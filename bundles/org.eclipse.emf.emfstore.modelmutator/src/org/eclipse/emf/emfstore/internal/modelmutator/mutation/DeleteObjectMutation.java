@@ -11,11 +11,6 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.modelmutator.mutation;
 
-import java.util.Collection;
-import java.util.HashSet;
-
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorUtil;
 
 /**
@@ -24,22 +19,16 @@ import org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorUtil;
  * @author Philip Langer
  *
  */
-public class DeleteObjectMutation extends Mutation {
-
-	private final Collection<EObject> excludedEClasses = new HashSet<EObject>();
-	private final Collection<EStructuralFeature> excludedContainmentFeatures = new HashSet<EStructuralFeature>();
-	private final Collection<EObject> excludedContainerObjects = new HashSet<EObject>();
+public class DeleteObjectMutation extends ContainmentChangeMutation {
 
 	private int maxNumberOfObjects = 1;
-	private EObject targetContainer;
-	private EStructuralFeature targetFeature;
 
-	protected DeleteObjectMutation(ModelMutatorUtil util) {
+	public DeleteObjectMutation(ModelMutatorUtil util) {
 		super(util);
 	}
 
-	public Collection<EObject> getExcludedEClasses() {
-		return excludedEClasses;
+	public DeleteObjectMutation(ModelMutatorUtil util, MutationTargetSelector targetContainerSelector) {
+		super(util, targetContainerSelector);
 	}
 
 	public void setMaxNumberOfDeletedObjects(int maxNumberOfObjects) {
@@ -50,37 +39,10 @@ public class DeleteObjectMutation extends Mutation {
 		return maxNumberOfObjects;
 	}
 
-	public Collection<EStructuralFeature> getExcludedContainmentFeatures() {
-		return excludedContainmentFeatures;
-	}
-
-	public Collection<EObject> getExcludedContainerObjects() {
-		return excludedContainerObjects;
-	}
-
-	public void setTargetContainer(EObject targetContainer) {
-		this.targetContainer = targetContainer;
-	}
-
-	public EObject getTargetContainer() {
-		return targetContainer;
-	}
-
-	public void setTargetFeature(EStructuralFeature targetFeature) {
-		this.targetFeature = targetFeature;
-	}
-
-	public EStructuralFeature getTargetFeature() {
-		return targetFeature;
-	}
-
 	@Override
 	protected Mutation clone() {
-		final DeleteObjectMutation mutation = new DeleteObjectMutation(getUtil());
+		final DeleteObjectMutation mutation = new DeleteObjectMutation(getUtil(), targetContainerSelector);
 		mutation.setMaxNumberOfDeletedObjects(maxNumberOfObjects);
-		mutation.getExcludedEClasses().addAll(excludedEClasses);
-		mutation.getExcludedContainerObjects().addAll(excludedContainerObjects);
-		mutation.getExcludedContainmentFeatures().addAll(excludedContainmentFeatures);
 		return mutation;
 	}
 

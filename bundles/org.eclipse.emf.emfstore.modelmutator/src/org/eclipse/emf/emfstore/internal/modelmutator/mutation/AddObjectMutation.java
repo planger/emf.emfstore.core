@@ -11,11 +11,6 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.modelmutator.mutation;
 
-import java.util.Collection;
-import java.util.HashSet;
-
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorUtil;
 
 /**
@@ -24,54 +19,19 @@ import org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorUtil;
  * @author Philip Langer
  *
  */
-public class AddObjectMutation extends Mutation {
+class AddObjectMutation extends ContainmentChangeMutation {
 
-	private final Collection<EObject> excludedEClasses = new HashSet<EObject>();
-	private final Collection<EStructuralFeature> excludedContainmentFeatures = new HashSet<EStructuralFeature>();
-	private final Collection<EObject> excludedContainerObjects = new HashSet<EObject>();
-
-	private EObject targetContainer;
-	private EStructuralFeature targetFeature;
-
-	protected AddObjectMutation(ModelMutatorUtil util) {
+	public AddObjectMutation(ModelMutatorUtil util) {
 		super(util);
 	}
 
-	public Collection<EObject> getExcludedEClasses() {
-		return excludedEClasses;
-	}
-
-	public Collection<EStructuralFeature> getExcludedContainmentFeatures() {
-		return excludedContainmentFeatures;
-	}
-
-	public Collection<EObject> getExcludedContainerObjects() {
-		return excludedContainerObjects;
-	}
-
-	public void setTargetContainer(EObject targetContainer) {
-		this.targetContainer = targetContainer;
-	}
-
-	public EObject getTargetContainer() {
-		return targetContainer;
-	}
-
-	public void setTargetFeature(EStructuralFeature targetFeature) {
-		this.targetFeature = targetFeature;
-	}
-
-	public EStructuralFeature getTargetFeature() {
-		return targetFeature;
+	public AddObjectMutation(ModelMutatorUtil util, MutationTargetSelector targetContainerSelector) {
+		super(util, targetContainerSelector);
 	}
 
 	@Override
 	protected Mutation clone() {
-		final AddObjectMutation mutation = new AddObjectMutation(getUtil());
-		mutation.getExcludedEClasses().addAll(excludedEClasses);
-		mutation.getExcludedContainerObjects().addAll(excludedContainerObjects);
-		mutation.getExcludedContainmentFeatures().addAll(excludedContainmentFeatures);
-		return mutation;
+		return new AddObjectMutation(getUtil(), targetContainerSelector);
 	}
 
 	@Override
