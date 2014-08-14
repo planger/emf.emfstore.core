@@ -31,6 +31,7 @@ import org.eclipse.emf.emfstore.internal.client.model.changeTracking.notificatio
 import org.eclipse.emf.emfstore.internal.client.model.impl.ProjectSpaceImpl;
 import org.eclipse.emf.emfstore.internal.client.model.impl.WorkspaceBase;
 import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESLocalProjectImpl;
+import org.eclipse.emf.emfstore.internal.client.model.util.EMFStoreCommandWithResult;
 import org.eclipse.emf.emfstore.internal.common.CommonUtil;
 import org.eclipse.emf.emfstore.internal.common.model.Project;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation;
@@ -64,10 +65,14 @@ public abstract class ESTest {
 	 * @return the cloned project space
 	 */
 	public ProjectSpace cloneProjectSpace(final ProjectSpace projectSpace) {
-
-		final WorkspaceBase workspace = (WorkspaceBase) ESWorkspaceProviderImpl.getInstance().getWorkspace()
-			.toInternalAPI();
-		return workspace.cloneProject(CLONED_PROJECT_NAME, projectSpace.getProject());
+		return new EMFStoreCommandWithResult<ProjectSpace>() {
+			@Override
+			protected ProjectSpace doRun() {
+				final WorkspaceBase workspace = (WorkspaceBase) ESWorkspaceProviderImpl.getInstance().getWorkspace()
+					.toInternalAPI();
+				return workspace.cloneProject(CLONED_PROJECT_NAME, projectSpace.getProject());
+			}
+		}.run(false);
 	}
 
 	@Before
