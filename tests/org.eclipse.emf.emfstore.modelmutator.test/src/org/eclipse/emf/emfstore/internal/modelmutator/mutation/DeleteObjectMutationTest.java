@@ -15,6 +15,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import static org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorUtil.getAllObjectsCount;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EReference;
@@ -35,7 +37,7 @@ public class DeleteObjectMutationTest extends AbstractMutationTest {
 		mutation.setup();
 
 		// we only have one possible target container with the given feature
-		assertEquals(rootEPackageWithTwoClasses, mutation.getTargetContainer());
+		assertEquals(ePackageWithTwoClasses, mutation.getTargetContainer());
 	}
 
 	@Test
@@ -46,17 +48,17 @@ public class DeleteObjectMutationTest extends AbstractMutationTest {
 
 		// we only have one possible target container with the given feature
 		// so apply() should have added one new EClassifier to it
-		assertEquals(1, rootEPackageWithTwoClasses.getEClassifiers().size());
+		assertEquals(1, ePackageWithTwoClasses.getEClassifiers().size());
 	}
 
 	@Test
 	public void selectTargetFeatureForGivenObject() throws MutationException {
 		DeleteObjectMutation mutation = new DeleteObjectMutation(utilForEPackageWithTwoClasses);
-		mutation.setTargetContainer(rootEPackageWithTwoClasses);
+		mutation.setTargetContainer(ePackageWithTwoClasses);
 		mutation.setup();
 
 		final EStructuralFeature targetFeature = mutation.getTargetFeature();
-		final EClass targetContainerClass = rootEPackageWithTwoClasses.eClass();
+		final EClass targetContainerClass = ePackageWithTwoClasses.eClass();
 		final EList<EReference> allContainmentFeatures = targetContainerClass.getEAllContainments();
 		assertTrue(allContainmentFeatures.contains(targetFeature));
 	}
@@ -67,18 +69,18 @@ public class DeleteObjectMutationTest extends AbstractMutationTest {
 		mutation.setMaxNumberOfDeletedObjects(1);
 		mutation.apply();
 
-		assertEquals(1, size(rootEPackageWithTwoClasses.eAllContents()));
+		assertEquals(1, getAllObjectsCount(ePackageWithTwoClasses));
 	}
 
 	@Test
 	public void deleteInGivenTargetContainerForGivenFeature() {
 		DeleteObjectMutation mutation = new DeleteObjectMutation(utilForEPackageWithTwoClasses);
 		mutation.setTargetFeature(E_PACKAGE.getEPackage_EClassifiers());
-		mutation.setTargetContainer(rootEPackageWithTwoClasses);
+		mutation.setTargetContainer(ePackageWithTwoClasses);
 		mutation.setMaxNumberOfDeletedObjects(1);
 		mutation.apply();
 
-		assertEquals(1, rootEPackageWithTwoClasses.getEClassifiers().size());
+		assertEquals(1, ePackageWithTwoClasses.getEClassifiers().size());
 	}
 
 	@Test
@@ -100,7 +102,7 @@ public class DeleteObjectMutationTest extends AbstractMutationTest {
 	public void throwsExceptionIfSelectionOfTargetContainerIsImpossible() {
 		DeleteObjectMutation mutation = new DeleteObjectMutation(utilForEPackageWithTwoClasses);
 		mutation.setTargetFeature(E_PACKAGE.getEClass_EStructuralFeatures());
-		mutation.setTargetContainer(rootEPackageWithTwoClasses);
+		mutation.setTargetContainer(ePackageWithTwoClasses);
 
 		try {
 			mutation.setup();
@@ -117,7 +119,7 @@ public class DeleteObjectMutationTest extends AbstractMutationTest {
 		DeleteObjectMutation mutation = new DeleteObjectMutation(utilForEPackageWithTwoClasses);
 		mutation.setMaxNumberOfDeletedObjects(1);
 		mutation.setTargetFeature(E_PACKAGE.getEPackage_EClassifiers());
-		mutation.setTargetContainer(rootEPackageWithTwoClasses);
+		mutation.setTargetContainer(ePackageWithTwoClasses);
 
 		try {
 			mutation.setup();

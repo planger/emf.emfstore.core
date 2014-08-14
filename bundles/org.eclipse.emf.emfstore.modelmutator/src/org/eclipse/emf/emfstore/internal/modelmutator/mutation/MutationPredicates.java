@@ -11,6 +11,8 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.modelmutator.mutation;
 
+import static org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorUtil.getAllObjectsCount;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -51,4 +53,12 @@ public final class MutationPredicates {
 					&& ownsContainmentReference.apply(input.eClass());
 			}
 		};
+
+	public static Predicate<? super EObject> hasMaxNumberOfContainments(final int maxNumberOfContainments) {
+		return new Predicate<EObject>() {
+			public boolean apply(EObject input) {
+				return getAllObjectsCount(input) <= maxNumberOfContainments;
+			}
+		};
+	}
 }

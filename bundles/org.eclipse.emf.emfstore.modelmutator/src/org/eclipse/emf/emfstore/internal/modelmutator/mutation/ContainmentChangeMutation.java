@@ -28,11 +28,13 @@ public abstract class ContainmentChangeMutation extends Mutation {
 	public ContainmentChangeMutation(ModelMutatorUtil util) {
 		super(util);
 		targetContainerSelector = new MutationTargetSelector(util);
+		// TODO set predicates regarding target feature (containment)
 	}
 
 	protected ContainmentChangeMutation(ModelMutatorUtil util, MutationTargetSelector selector) {
 		super(util);
 		targetContainerSelector = new MutationTargetSelector(util, selector);
+		// TODO set predicates regarding target feature (containment)
 	}
 
 	public Collection<EObject> getExcludedEClasses() {

@@ -11,12 +11,16 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.modelmutator.mutation;
 
+import static com.google.common.base.Predicates.alwaysTrue;
+
 import java.util.Collection;
 import java.util.HashSet;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorUtil;
+
+import com.google.common.base.Predicate;
 
 /**
  * @author Philip Langer
@@ -27,9 +31,10 @@ public class MutationTargetSelector {
 	private final Collection<EObject> excludedEClasses = new HashSet<EObject>();
 	private final Collection<EStructuralFeature> excludedFeatures = new HashSet<EStructuralFeature>();
 	private final Collection<EObject> excludedObjects = new HashSet<EObject>();
-
 	private EObject targetObject;
 	private EStructuralFeature targetFeature;
+	private Predicate<? super EStructuralFeature> targetFeaturePredicate = alwaysTrue();
+	private Predicate<? super EObject> targetObjectPredicate = alwaysTrue();
 
 	public MutationTargetSelector(ModelMutatorUtil util) {
 		this.util = util;
@@ -46,6 +51,7 @@ public class MutationTargetSelector {
 		setupExcludedFeatures(selector);
 		setTargetObject(selector.getTargetObject());
 		setTargetFeature(selector.getTargetFeature());
+		setTargetFeaturePredicate(selector.getTargetFeaturePredicate());
 	}
 
 	private void setupExcludedEClasses(MutationTargetSelector selector) {
@@ -89,6 +95,59 @@ public class MutationTargetSelector {
 
 	protected void setTargetFeature(EStructuralFeature targetFeature) {
 		this.targetFeature = targetFeature;
+	}
+
+	protected Predicate<? super EStructuralFeature> getTargetFeaturePredicate() {
+		return targetFeaturePredicate;
+	}
+
+	protected void setTargetFeaturePredicate(Predicate<? super EStructuralFeature> predicate) {
+		targetFeaturePredicate = predicate;
+	}
+
+	protected Predicate<? super EObject> getTargetObjectPredicate() {
+		return targetObjectPredicate;
+	}
+
+	protected void setTargetObjectPredicate(Predicate<? super EObject> predicate) {
+		targetObjectPredicate = predicate;
+	}
+
+	protected EObject getOrSelectValidTargetObject() {
+		if (targetObject == null || !isSelectionValid()) {
+			targetObject = selectTargetObject();
+		}
+		return targetObject;
+	}
+
+	private EObject selectTargetObject() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	protected EStructuralFeature getOrSelectValidTargetFeature() {
+		if (targetFeature == null || !isSelectionValid()) {
+			targetFeature = selectTargetFeature();
+		}
+		return targetFeature;
+	}
+
+	private EStructuralFeature selectTargetFeature() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	protected boolean isSelectionValid() {
+		try {
+			checkSelection();
+			return true;
+		} catch (final MutationException e) {
+			return false;
+		}
+	}
+
+	protected void checkSelection() throws MutationException {
+		// TODO
 	}
 
 }

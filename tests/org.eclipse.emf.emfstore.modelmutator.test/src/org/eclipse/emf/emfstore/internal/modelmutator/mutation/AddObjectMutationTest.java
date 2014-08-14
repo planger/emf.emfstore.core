@@ -15,6 +15,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import static org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorUtil.getAllObjectsCount;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EReference;
@@ -35,7 +37,7 @@ public class AddObjectMutationTest extends AbstractMutationTest {
 		mutation.setup();
 
 		// we only have one possible target container with the given feature
-		assertEquals(rootEPackageWithTwoClasses, mutation.getTargetContainer());
+		assertEquals(ePackageWithTwoClasses, mutation.getTargetContainer());
 	}
 
 	@Test
@@ -46,17 +48,17 @@ public class AddObjectMutationTest extends AbstractMutationTest {
 
 		// we only have one possible target container with the given feature
 		// so apply() should have added one new EClassifier to it
-		assertEquals(3, rootEPackageWithTwoClasses.getEClassifiers().size());
+		assertEquals(3, ePackageWithTwoClasses.getEClassifiers().size());
 	}
 
 	@Test
 	public void selectTargetFeatureForGivenObject() throws MutationException {
 		AddObjectMutation mutation = new AddObjectMutation(utilForEPackageWithTwoClasses);
-		mutation.setTargetContainer(rootEPackageWithTwoClasses);
+		mutation.setTargetContainer(ePackageWithTwoClasses);
 		mutation.setup();
 
 		final EStructuralFeature targetFeature = mutation.getTargetFeature();
-		final EClass targetContainerClass = rootEPackageWithTwoClasses.eClass();
+		final EClass targetContainerClass = ePackageWithTwoClasses.eClass();
 		final EList<EReference> allContainmentFeatures = targetContainerClass.getEAllContainments();
 		assertTrue(allContainmentFeatures.contains(targetFeature));
 	}
@@ -66,17 +68,17 @@ public class AddObjectMutationTest extends AbstractMutationTest {
 		AddObjectMutation mutation = new AddObjectMutation(utilForEPackageWithTwoClasses);
 		mutation.apply();
 
-		assertEquals(3, size(rootEPackageWithTwoClasses.eAllContents()));
+		assertEquals(3, getAllObjectsCount(ePackageWithTwoClasses));
 	}
 
 	@Test
 	public void addGivenObjectForGivenFeature() {
 		AddObjectMutation mutation = new AddObjectMutation(utilForEPackageWithTwoClasses);
 		mutation.setTargetFeature(E_PACKAGE.getEPackage_EClassifiers());
-		mutation.setTargetContainer(rootEPackageWithTwoClasses);
+		mutation.setTargetContainer(ePackageWithTwoClasses);
 		mutation.apply();
 
-		assertEquals(3, rootEPackageWithTwoClasses.getEClassifiers().size());
+		assertEquals(3, ePackageWithTwoClasses.getEClassifiers().size());
 	}
 
 	@Test
@@ -98,7 +100,7 @@ public class AddObjectMutationTest extends AbstractMutationTest {
 	public void throwsExceptionIfSelectionOfTargetContainerIsImpossible() {
 		AddObjectMutation mutation = new AddObjectMutation(utilForEPackageWithTwoClasses);
 		mutation.setTargetFeature(E_PACKAGE.getEClass_EStructuralFeatures());
-		mutation.setTargetContainer(rootEPackageWithTwoClasses);
+		mutation.setTargetContainer(ePackageWithTwoClasses);
 
 		try {
 			mutation.setup();

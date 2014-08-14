@@ -34,13 +34,13 @@ public abstract class AbstractMutationTest {
 	protected static final EcoreFactory E_FACTORY = EcoreFactory.eINSTANCE;
 	protected static final EcorePackage E_PACKAGE = EcorePackage.eINSTANCE;
 	
-	protected EPackage rootEPackageWithTwoClasses;
+	protected EPackage ePackageWithTwoClasses;
 	protected ModelMutatorUtil utilForEPackageWithTwoClasses;
 	
 	@Before
 	public void setUp() {
-		this.rootEPackageWithTwoClasses = createRootEPackageWithTwoClasses();
-		this.utilForEPackageWithTwoClasses = createMutationUtil(this.rootEPackageWithTwoClasses);
+		this.ePackageWithTwoClasses = createRootEPackageWithTwoClasses();
+		this.utilForEPackageWithTwoClasses = createMutationUtil(this.ePackageWithTwoClasses);
 	}
 
 	private EPackage createRootEPackageWithTwoClasses() {
@@ -57,15 +57,6 @@ public abstract class AbstractMutationTest {
 		ModelMutatorConfiguration config = new ModelMutatorConfiguration();
 		config.setRootEObject(rootEObject);
 		return new ModelMutatorUtil(config);
-	}
-	
-	protected int size(TreeIterator<EObject> contents) {
-		int size = 0;
-		while (contents.hasNext()) {
-			size++;
-			contents.next();
-		}
-		return size;
 	}
 
 }
