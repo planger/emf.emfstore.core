@@ -1,16 +1,17 @@
 /*******************************************************************************
  * Copyright (c) 2012-2013 EclipseSource Muenchen GmbH and others.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * JulianSommerfeldt
  * StephanK?hler
  * EugenNeufeld
  * PhilipAchenbach
+ * PhilipLanger
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.modelmutator.api;
 
@@ -31,11 +32,12 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 
 /**
  * Configuration for the ModelMutator.
- * 
+ *
  * @author Eugen Neufeld
  * @author Stephan K?hler
  * @author Philip Achenbach
  * @author Julian Sommerfeldt
+ * @author Philip Langer
  */
 public class ModelMutatorConfiguration {
 
@@ -47,6 +49,7 @@ public class ModelMutatorConfiguration {
 
 	private int minObjectsCount;
 	private Integer maxDeleteCount;
+	private Integer mutationCount;
 
 	private boolean ignoreAndLog;
 	private Collection<EClass> eClassesToIgnore;
@@ -67,7 +70,7 @@ public class ModelMutatorConfiguration {
 
 	/**
 	 * The constructor for the configuration.
-	 * 
+	 *
 	 * @param modelPackage the EPackages
 	 * @param rootEObject the rootObject for the generation/change
 	 * @param seed the seed for the generation/change
@@ -78,7 +81,7 @@ public class ModelMutatorConfiguration {
 
 	/**
 	 * The constructor for the configuration.
-	 * 
+	 *
 	 * @param modelPackages the EPackages
 	 * @param rootEObject the rootObject for the generation/change
 	 * @param seed the seed for the generation/change
@@ -88,10 +91,10 @@ public class ModelMutatorConfiguration {
 		this.rootEObject = rootEObject;
 		this.seed = seed;
 
-		this.eClassesToIgnore = new LinkedHashSet<EClass>();
-		this.eStructuralFeaturesToIgnore = new LinkedHashSet<EStructuralFeature>();
-		this.exceptionLog = new LinkedHashSet<RuntimeException>();
-		this.ignoreAndLog = false;
+		eClassesToIgnore = new LinkedHashSet<EClass>();
+		eStructuralFeaturesToIgnore = new LinkedHashSet<EStructuralFeature>();
+		exceptionLog = new LinkedHashSet<RuntimeException>();
+		ignoreAndLog = false;
 
 		minObjectsCount = 100;
 
@@ -205,7 +208,7 @@ public class ModelMutatorConfiguration {
 	 */
 	public Random getRandom() {
 		if (random == null) {
-			this.random = new Random(seed);
+			random = new Random(seed);
 		}
 		return random;
 	}
@@ -268,7 +271,7 @@ public class ModelMutatorConfiguration {
 	/**
 	 * Should the Mutator use {@link org.eclipse.emf.ecore.util.EcoreUtil#delete(EObject)}?<br>
 	 * NOTE: This is a very expensive method and will decrease the performance dramatically.
-	 * 
+	 *
 	 * @param useEcoreUtilDelete Should the Mutator use {@link org.eclipse.emf.ecore.util.EcoreUtil#delete(EObject)}?
 	 */
 	public void setUseEcoreUtilDelete(boolean useEcoreUtilDelete) {
@@ -287,6 +290,24 @@ public class ModelMutatorConfiguration {
 	 */
 	public void setMaxDeleteCount(Integer maxDeleteCount) {
 		this.maxDeleteCount = maxDeleteCount;
+	}
+
+	/**
+	 * Returns the number of mutations to be performed.
+	 *
+	 * @return the number of mutations
+	 */
+	public int getMutationCount() {
+		return mutationCount != null ? mutationCount : Integer.MAX_VALUE;
+	}
+
+	/**
+	 * Sets the number of mutations to be performed.
+	 *
+	 * @param mutationCount the number of mutations to set
+	 */
+	public void setMutationCount(Integer mutationCount) {
+		this.mutationCount = mutationCount;
 	}
 
 }
