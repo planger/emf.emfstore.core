@@ -37,15 +37,15 @@ public abstract class ContainmentChangeMutation extends Mutation {
 		// TODO set predicates regarding target feature (containment)
 	}
 
-	public Collection<EObject> getExcludedEClasses() {
+	public Collection<EObject> getExcludedTargetContainerEClasses() {
 		return targetContainerSelector.getExcludedEClasses();
 	}
 
-	public Collection<EStructuralFeature> getExcludedContainmentFeatures() {
+	public Collection<EStructuralFeature> getExcludedTargetContainmentFeatures() {
 		return targetContainerSelector.getExcludedFeatures();
 	}
 
-	public Collection<EObject> getExcludedContainerObjects() {
+	public Collection<EObject> getExcludedTargetContainerObjects() {
 		return targetContainerSelector.getExcludedObjects();
 	}
 

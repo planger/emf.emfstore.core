@@ -31,15 +31,15 @@ import org.junit.Test;
 public class AddObjectMutationTest extends AbstractMutationTest {
 
 	@Test
-	public void selectTargetContainerForGivenFeature() throws MutationException {
+	public void addObjectForGivenFeatureAndContainer() {
 		AddObjectMutation mutation = new AddObjectMutation(utilForEPackageWithTwoClasses);
+		mutation.setTargetContainer(ePackageWithTwoClasses);
 		mutation.setTargetFeature(E_PACKAGE.getEPackage_EClassifiers());
-		mutation.setup();
+		mutation.apply();
 
-		// we only have one possible target container with the given feature
-		assertEquals(ePackageWithTwoClasses, mutation.getTargetContainer());
+		assertEquals(3, ePackageWithTwoClasses.getEClassifiers().size());
 	}
-
+	
 	@Test
 	public void addObjectForGivenFeature() {
 		AddObjectMutation mutation = new AddObjectMutation(utilForEPackageWithTwoClasses);
@@ -49,6 +49,16 @@ public class AddObjectMutationTest extends AbstractMutationTest {
 		// we only have one possible target container with the given feature
 		// so apply() should have added one new EClassifier to it
 		assertEquals(3, ePackageWithTwoClasses.getEClassifiers().size());
+	}
+	
+	@Test
+	public void selectTargetContainerForGivenFeature() throws MutationException {
+		AddObjectMutation mutation = new AddObjectMutation(utilForEPackageWithTwoClasses);
+		mutation.setTargetFeature(E_PACKAGE.getEPackage_EClassifiers());
+		mutation.setup();
+
+		// we only have one possible target container with the given feature
+		assertEquals(ePackageWithTwoClasses, mutation.getTargetContainer());
 	}
 
 	@Test

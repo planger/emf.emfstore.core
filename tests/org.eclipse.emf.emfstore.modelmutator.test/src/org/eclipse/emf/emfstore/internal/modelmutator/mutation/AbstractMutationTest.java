@@ -11,9 +11,6 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.modelmutator.mutation;
 
-import static org.junit.Assert.*;
-
-import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -22,7 +19,6 @@ import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorConfiguration;
 import org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorUtil;
 import org.junit.Before;
-import org.junit.Test;
 
 /**
  * Abstract test case providing common functionalities for all unit tests of {@link Mutation mutations}.
