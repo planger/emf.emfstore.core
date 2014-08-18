@@ -12,15 +12,23 @@
 package org.eclipse.emf.emfstore.internal.modelmutator.mutation;
 
 import static com.google.common.base.Predicates.alwaysTrue;
+import static com.google.common.base.Predicates.and;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
 
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorUtil;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
 
 /**
  * @author Philip Langer
@@ -51,7 +59,8 @@ public class MutationTargetSelector {
 		setupExcludedFeatures(selector);
 		setTargetObject(selector.getTargetObject());
 		setTargetFeature(selector.getTargetFeature());
-		setTargetFeaturePredicate(selector.getTargetFeaturePredicate());
+		targetFeaturePredicate = selector.getTargetFeaturePredicate();
+		targetObjectPredicate = selector.getTargetObjectPredicate();
 	}
 
 	private void setupExcludedEClasses(MutationTargetSelector selector) {
@@ -101,40 +110,107 @@ public class MutationTargetSelector {
 		return targetFeaturePredicate;
 	}
 
-	protected void setTargetFeaturePredicate(Predicate<? super EStructuralFeature> predicate) {
-		targetFeaturePredicate = predicate;
+	protected void addTargetFeaturePredicate(Predicate<? super EStructuralFeature> predicate) {
+		targetFeaturePredicate = and(targetFeaturePredicate, predicate);
 	}
 
 	protected Predicate<? super EObject> getTargetObjectPredicate() {
 		return targetObjectPredicate;
 	}
 
-	protected void setTargetObjectPredicate(Predicate<? super EObject> predicate) {
-		targetObjectPredicate = predicate;
+	protected void addTargetObjectPredicate(Predicate<? super EObject> predicate) {
+		targetObjectPredicate = and(targetObjectPredicate, predicate);
 	}
 
 	protected EObject getOrSelectValidTargetObject() {
-		if (targetObject == null || !isSelectionValid()) {
-			targetObject = selectTargetObject();
+		if (targetObject == null) {
+			doSelection();
 		}
 		return targetObject;
 	}
 
-	private EObject selectTargetObject() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	protected EStructuralFeature getOrSelectValidTargetFeature() {
-		if (targetFeature == null || !isSelectionValid()) {
-			targetFeature = selectTargetFeature();
+		if (targetFeature == null) {
+			doSelection();
 		}
 		return targetFeature;
 	}
 
-	private EStructuralFeature selectTargetFeature() {
-		// TODO Auto-generated method stub
-		return null;
+	protected void doSelection() {
+		final List<EStructuralFeature> features = getShuffledFeaturesToSelect();
+		for (final EStructuralFeature feature : features) {
+			for (final EObject eObject : getShuffledTargetObjectsToSelect(feature)) {
+				if (isValid(feature, eObject)) {
+					setTargetFeature(feature);
+					setTargetObject(eObject);
+					return;
+				}
+			}
+		}
+	}
+
+	private List<EStructuralFeature> getShuffledFeaturesToSelect() {
+		if (hasTargetFeature()) {
+			return Lists.newArrayList(getTargetFeature());
+		} else if (hasTargetObject()) {
+			return getShuffledAvailableFeaturesFromTargetObject();
+		} else {
+			return getShuffledAvailableFeatures();
+		}
+	}
+
+	private boolean hasTargetFeature() {
+		return targetFeature != null;
+	}
+
+	private boolean hasTargetObject() {
+		return targetObject != null;
+	}
+
+	private List<EStructuralFeature> getShuffledAvailableFeaturesFromTargetObject() {
+		final List<EStructuralFeature> availableFeatures = new ArrayList<EStructuralFeature>();
+		final EClass eClassOfTargetObject = targetObject.eClass();
+		availableFeatures.addAll(eClassOfTargetObject.getEAllStructuralFeatures());
+		excludeAndShuffle(availableFeatures);
+		return availableFeatures;
+	}
+
+	private void excludeAndShuffle(final List<EStructuralFeature> features) {
+		features.removeAll(excludedFeatures);
+		Collections.shuffle(features, getRandom());
+	}
+
+	private List<EStructuralFeature> getShuffledAvailableFeatures() {
+		final List<EStructuralFeature> features = getAvailableFeatures();
+		excludeAndShuffle(features);
+		return features;
+	}
+
+	private List<EStructuralFeature> getAvailableFeatures() {
+		return Lists.newArrayList(util
+			.getAvailableFeatures(getTargetFeaturePredicate()));
+	}
+
+	private List<EObject> getShuffledTargetObjectsToSelect(EStructuralFeature feature) {
+		if (hasTargetObject()) {
+			return Lists.newArrayList(targetObject);
+		}
+		return getShuffledEObjectsForAvailableFeature(feature);
+	}
+
+	private List<EObject> getShuffledEObjectsForAvailableFeature(EStructuralFeature feature) {
+		final ArrayList<EObject> eObjects = getEObjectsForAvailableFeature(feature);
+		eObjects.removeAll(excludedObjects);
+		Collections.shuffle(eObjects);
+		return eObjects;
+	}
+
+	private ArrayList<EObject> getEObjectsForAvailableFeature(EStructuralFeature feature) {
+		return Lists.newArrayList(util.getEObjectsOfAvailableFeature(feature, getTargetObjectPredicate()));
+	}
+
+	private Random getRandom() {
+		return util.getModelMutatorConfiguration().getRandom();
 	}
 
 	protected boolean isSelectionValid() {
@@ -147,7 +223,35 @@ public class MutationTargetSelector {
 	}
 
 	protected void checkSelection() throws MutationException {
-		// TODO
+		if (!isValid(targetFeature, targetObject)) {
+			throw new MutationException();
+		}
+	}
+
+	private boolean isValid(final EStructuralFeature feature, final EObject eObject) {
+		if (feature == null || eObject == null) {
+			return false;
+		}
+		final EClass eClass = eObject.eClass();
+		final EList<EStructuralFeature> featuresOfEClass = eClass.getEAllStructuralFeatures();
+		return !isExcluded(feature, eObject)
+			&& featuresOfEClass.contains(feature)
+			&& fulfillsTargetFeaturePredicate(feature)
+			&& fulfillsTargetObjectPredicate(eObject);
+	}
+
+	private boolean isExcluded(EStructuralFeature feature, EObject eObject) {
+		final EClass eClass = eObject.eClass();
+		return excludedFeatures.contains(feature) || excludedEClasses.contains(eClass)
+			|| excludedObjects.contains(eObject);
+	}
+
+	private boolean fulfillsTargetFeaturePredicate(EStructuralFeature feature) {
+		return getTargetFeaturePredicate().apply(feature);
+	}
+
+	private boolean fulfillsTargetObjectPredicate(EObject eObject) {
+		return getTargetObjectPredicate().apply(eObject);
 	}
 
 }

@@ -52,6 +52,7 @@ public abstract class AbstractMutationTest {
 	private ModelMutatorUtil createMutationUtil(EObject rootEObject) {
 		ModelMutatorConfiguration config = new ModelMutatorConfiguration();
 		config.setRootEObject(rootEObject);
+		config.setSeed(1L);
 		return new ModelMutatorUtil(config);
 	}
 
