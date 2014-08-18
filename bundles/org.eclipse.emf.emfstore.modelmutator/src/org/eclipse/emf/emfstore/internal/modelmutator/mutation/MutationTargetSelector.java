@@ -48,6 +48,12 @@ public class MutationTargetSelector {
 
 	public MutationTargetSelector(ModelMutatorUtil util) {
 		this.util = util;
+		addExcludedEStructuralFeaturesAndEClassesFromConfig();
+	}
+
+	private void addExcludedEStructuralFeaturesAndEClassesFromConfig() {
+		excludedFeatures.addAll(util.getModelMutatorConfiguration().geteStructuralFeaturesToIgnore());
+		excludedEClasses.addAll(util.getModelMutatorConfiguration().geteClassesToIgnore());
 	}
 
 	public MutationTargetSelector(ModelMutatorUtil util, MutationTargetSelector selector) {

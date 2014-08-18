@@ -216,7 +216,7 @@ public final class ModelMutatorUtil {
 	 * @param exceptionLog the current log of exceptions
 	 * @param ignoreAndLog should exceptions be ignored and added to <code>exceptionLog</code>?
 	 */
-	private static void handle(RuntimeException exception, ModelMutatorConfiguration config) {
+	public static void handle(RuntimeException exception, ModelMutatorConfiguration config) {
 		if (config.isIgnoreAndLog()) {
 			config.getExceptionLog().add(exception);
 		} else {
@@ -660,7 +660,7 @@ public final class ModelMutatorUtil {
 							setPerCommand(eObject, attribute, attributeSetter.createNewAttribute(), i);
 						} else {
 							final Object attributeToMove = ((Collection<?>) eObject.eGet(attribute)).toArray()[random
-							                                                                                   .nextInt(size)];
+								.nextInt(size)];
 							movePerCommand(eObject, attribute, attributeToMove, random.nextInt(size));
 						}
 					}
@@ -964,6 +964,20 @@ public final class ModelMutatorUtil {
 		for (final EStructuralFeature feature : objectsFeatures) {
 			removeFromFeatureToOfferingObjectsMap(feature, deletedEObject);
 		}
+	}
+
+	public List<Integer> getDeleteModes() {
+		final List<Integer> deleteModes = new ArrayList<Integer>();
+		deleteModes.add(ModelMutatorUtil.DELETE_DELETE_COMMAND);
+		deleteModes.add(ModelMutatorUtil.DELETE_CUT_CONTAINMENT);
+		if (config.isUseEcoreUtilDelete()) {
+			deleteModes.add(ModelMutatorUtil.DELETE_ECORE);
+		}
+		return deleteModes;
+	}
+
+	public int getRandomDeleteMode() {
+		return getDeleteModes().get(config.getRandom().nextInt(getDeleteModes().size() - 1));
 	}
 
 }

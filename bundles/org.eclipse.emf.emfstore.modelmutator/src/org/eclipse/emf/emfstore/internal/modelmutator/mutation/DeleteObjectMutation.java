@@ -11,8 +11,18 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.modelmutator.mutation;
 
+import static com.google.common.collect.Iterables.filter;
+import static com.google.common.collect.Iterables.get;
+import static com.google.common.collect.Iterables.size;
+import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.containsEObjectWithMaxNumberOfContainments;
+import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.hasMaxNumberOfContainments;
 import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.isNonEmptyEObjectValueOrList;
 
+import java.util.List;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorUtil;
 
 /**
@@ -24,6 +34,7 @@ import org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorUtil;
 public class DeleteObjectMutation extends ContainmentChangeMutation {
 
 	private int maxNumberOfContainments = 0;
+	private EObject eObjectToDelete;
 
 	public DeleteObjectMutation(ModelMutatorUtil util) {
 		super(util);
@@ -58,20 +69,50 @@ public class DeleteObjectMutation extends ContainmentChangeMutation {
 	protected boolean doApply() throws MutationException {
 		doSelection();
 
-		// TODO Auto-generated method stub
+		eObjectToDelete = selectEObjectToDelete();
+		final int deleteMode = getUtil().getRandomDeleteMode();
+		// TODO we should use the removeFullPerCommand but it does not work in the tests
+		EcoreUtil.delete(eObjectToDelete);
+		// getUtil().removeFullPerCommand(eObjectToDelete, deleteMode);
+		getUtil().deletedEObject(eObjectToDelete);
 
-		if (false) { // success
-			getUtil().deletedEObject(null);
-		}
-
-		return false;
+		return true;
 	}
 
 	private void doSelection() throws MutationException {
-		// TODO this is wrong: (must be tested on the object to delete)
-		targetContainerSelector.getTargetObjectPredicates().add(
-			MutationPredicates.hasMaxNumberOfContainments(maxNumberOfContainments));
+		targetContainerSelector.getOriginalFeatureValuePredicates().add(
+			containsEObjectWithMaxNumberOfContainments(maxNumberOfContainments));
 		targetContainerSelector.doSelection();
+	}
+
+	private EObject selectEObjectToDelete() {
+		final EObject eObjectToDelete;
+		if (targetContainerSelector.getTargetFeature().isMany()) {
+			eObjectToDelete = selectEObjectToDeleteFromMultiValuedReference();
+		} else {
+			eObjectToDelete = selectObjectToDeleteFromSingleValuedReference();
+		}
+		return eObjectToDelete;
+	}
+
+	private EObject selectEObjectToDeleteFromMultiValuedReference() {
+		final EObject container = targetContainerSelector.getTargetObject();
+		final EReference reference = (EReference) targetContainerSelector.getTargetFeature();
+
+		@SuppressWarnings("unchecked")
+		final List<EObject> valueList = (List<EObject>) container.eGet(reference);
+		final Iterable<EObject> filteredValueList = filter(valueList,
+			hasMaxNumberOfContainments(maxNumberOfContainments));
+		final int indices = size(filteredValueList) - 1;
+		final Object objectToDelete = get(filteredValueList, getRandom().nextInt(indices));
+
+		return (EObject) objectToDelete;
+	}
+
+	private EObject selectObjectToDeleteFromSingleValuedReference() {
+		final EObject container = targetContainerSelector.getTargetObject();
+		final EReference reference = (EReference) targetContainerSelector.getTargetFeature();
+		return (EObject) container.eGet(reference);
 	}
 
 }

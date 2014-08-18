@@ -125,7 +125,7 @@ public class DeleteObjectMutationTest extends AbstractMutationTest {
 	@Test
 	public void throwsExceptionIfSelectionOfTargetContainerViolatesMaxNumberOfObjects() {
 		DeleteObjectMutation mutation = new DeleteObjectMutation(utilForEPackageWithTwoClasses);
-		mutation.setMaxNumberOfContainments(1);
+		mutation.setMaxNumberOfContainments(-1);
 		mutation.setTargetFeature(E_PACKAGE.getEPackage_EClassifiers());
 		mutation.setTargetContainer(ePackageWithTwoClasses);
 

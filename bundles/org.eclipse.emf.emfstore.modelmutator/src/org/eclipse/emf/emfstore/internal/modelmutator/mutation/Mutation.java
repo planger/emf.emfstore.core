@@ -11,6 +11,8 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.modelmutator.mutation;
 
+import java.util.Random;
+
 import org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorUtil;
 
 /**
@@ -29,6 +31,10 @@ public abstract class Mutation implements Cloneable {
 		return util;
 	}
 
+	protected Random getRandom() {
+		return util.getModelMutatorConfiguration().getRandom();
+	}
+
 	@Override
 	protected abstract Mutation clone();
 
@@ -44,7 +50,7 @@ public abstract class Mutation implements Cloneable {
 	protected abstract boolean doApply() throws MutationException;
 
 	protected void handle(MutationException e) {
-		// TODO implement
+		ModelMutatorUtil.handle(new RuntimeException(e), util.getModelMutatorConfiguration());
 	}
 
 }

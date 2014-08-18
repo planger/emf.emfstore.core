@@ -230,12 +230,7 @@ public abstract class AbstractModelMutator {
 		}
 
 		// check for delete modes to use
-		final List<Integer> deleteModes = new ArrayList<Integer>();
-		deleteModes.add(ModelMutatorUtil.DELETE_DELETE_COMMAND);
-		deleteModes.add(ModelMutatorUtil.DELETE_CUT_CONTAINMENT);
-		if (config.isUseEcoreUtilDelete()) {
-			deleteModes.add(ModelMutatorUtil.DELETE_ECORE);
-		}
+		final List<Integer> deleteModes = util.getDeleteModes();
 
 		// delete selected objects
 		final int size = deleteModes.size();

@@ -11,7 +11,9 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.modelmutator.mutation;
 
+import static com.google.common.base.Predicates.or;
 import static com.google.common.collect.Iterables.all;
+import static com.google.common.collect.Iterables.any;
 import static org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorUtil.getAllObjectsCount;
 
 import java.util.List;
@@ -90,6 +92,35 @@ public final class MutationPredicates {
 		}
 	};
 
+	public static Predicate<? super Object> containsEObjectWithMaxNumberOfContainments(final int maxNumberOfContainments) {
+		return new Predicate<Object>() {
+			public boolean apply(Object input) {
+				return input != null
+					&& or(isListContainingEObjectWithMaxNumberOfContainments(maxNumberOfContainments),
+						isEObjectWithMaxNumberOfContainments(maxNumberOfContainments)).apply(input);
+			}
+		};
+	}
+
+	public static Predicate<? super Object> isListContainingEObjectWithMaxNumberOfContainments(
+		final int maxNumberOfContainments) {
+		return new Predicate<Object>() {
+			public boolean apply(Object input) {
+				return input instanceof List<?>
+				&& any((List<EObject>) input, hasMaxNumberOfContainments(maxNumberOfContainments));
+			}
+		};
+	}
+
+	public static Predicate<? super Object> isEObjectWithMaxNumberOfContainments(final int maxNumberOfContainments) {
+		return new Predicate<Object>() {
+			public boolean apply(Object input) {
+				return input instanceof EObject
+					&& hasMaxNumberOfContainments(maxNumberOfContainments).apply((EObject) input);
+			}
+		};
+	}
+
 	public static Predicate<? super EObject> hasMaxNumberOfContainments(final int maxNumberOfContainments) {
 		return new Predicate<EObject>() {
 			public boolean apply(EObject input) {
@@ -109,4 +140,5 @@ public final class MutationPredicates {
 			}
 		};
 	}
+
 }
