@@ -103,8 +103,8 @@ public class DeleteObjectMutation extends ContainmentChangeMutation {
 		final List<EObject> valueList = (List<EObject>) container.eGet(reference);
 		final Iterable<EObject> filteredValueList = filter(valueList,
 			hasMaxNumberOfContainments(maxNumberOfContainments));
-		final int indices = size(filteredValueList) - 1;
-		final Object objectToDelete = get(filteredValueList, getRandom().nextInt(indices));
+		final int randomIndex = getRandom().nextInt(size(filteredValueList));
+		final Object objectToDelete = get(filteredValueList, randomIndex);
 
 		return (EObject) objectToDelete;
 	}

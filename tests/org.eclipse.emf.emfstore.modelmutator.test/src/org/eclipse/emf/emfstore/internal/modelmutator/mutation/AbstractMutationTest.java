@@ -11,6 +11,9 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.modelmutator.mutation;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -51,6 +54,9 @@ public abstract class AbstractMutationTest {
 
 	private ModelMutatorUtil createMutationUtil(EObject rootEObject) {
 		ModelMutatorConfiguration config = new ModelMutatorConfiguration();
+		List<EPackage> modelPackages = new ArrayList<EPackage>();
+		modelPackages.add(rootEObject.eClass().getEPackage());
+		config.setModelPackages(modelPackages);
 		config.setRootEObject(rootEObject);
 		config.setSeed(1L);
 		return new ModelMutatorUtil(config);

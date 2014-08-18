@@ -237,7 +237,9 @@ public class MutationTargetSelector {
 
 	private boolean isExcluded(EStructuralFeature feature, EObject eObject) {
 		final EClass eClass = eObject.eClass();
-		return excludedFeatures.contains(feature) || excludedEClasses.contains(eClass)
+		return excludedFeatures.contains(feature)
+			|| excludedEClasses.contains(feature.getEType())
+			|| excludedEClasses.contains(eClass)
 			|| excludedObjects.contains(eObject);
 	}
 
