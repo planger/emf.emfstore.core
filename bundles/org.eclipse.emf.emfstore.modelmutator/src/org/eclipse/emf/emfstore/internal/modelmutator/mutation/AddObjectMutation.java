@@ -35,22 +35,16 @@ class AddObjectMutation extends ContainmentChangeMutation {
 	}
 
 	@Override
-	protected void setup() throws MutationException {
-		// TODO Auto-generated method stub
-		// get candidate containers (that have a containment reference)
-		// select one of those randomly
-		// setTargetContainer and setTargetFeature //? setTargetValue
-	}
+	protected boolean doApply() throws MutationException {
+		targetContainerSelector.doSelection();
 
-	@Override
-	protected void doApply() {
 		// create an object of that type
 		// add it to the reference
-	}
-
-	@Override
-	protected void report() {
-		// report that we added an object
+		if (false) { // success
+			getUtil().addedEObject(null); // added object
+		}
+		// TODO set deletedEObject
+		return false;
 	}
 
 }

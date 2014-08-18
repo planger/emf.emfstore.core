@@ -19,4 +19,12 @@ public class MutationException extends Exception {
 
 	private static final long serialVersionUID = 5880905487870618741L;
 
+	public MutationException() {
+		super();
+	}
+
+	public MutationException(String message) {
+		super(message);
+	}
+
 }

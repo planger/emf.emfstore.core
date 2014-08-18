@@ -21,7 +21,7 @@ import org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorUtil;
  */
 public class DeleteObjectMutation extends ContainmentChangeMutation {
 
-	private int maxNumberOfObjects = 1;
+	private int maxNumberOfContainments = 0;
 
 	public DeleteObjectMutation(ModelMutatorUtil util) {
 		super(util);
@@ -31,34 +31,38 @@ public class DeleteObjectMutation extends ContainmentChangeMutation {
 		super(util, targetContainerSelector);
 	}
 
-	public void setMaxNumberOfDeletedObjects(int maxNumberOfObjects) {
-		this.maxNumberOfObjects = maxNumberOfObjects;
+	public void setMaxNumberOfContainments(int maxNumberOfContainments) {
+		this.maxNumberOfContainments = maxNumberOfContainments;
 	}
 
-	public int getMaxNumberOfObjects() {
-		return maxNumberOfObjects;
+	public int getMaxNumberOfContainments() {
+		return maxNumberOfContainments;
 	}
 
 	@Override
 	protected Mutation clone() {
 		final DeleteObjectMutation mutation = new DeleteObjectMutation(getUtil(), targetContainerSelector);
-		mutation.setMaxNumberOfDeletedObjects(maxNumberOfObjects);
+		mutation.setMaxNumberOfContainments(maxNumberOfContainments);
 		return mutation;
 	}
 
 	@Override
-	protected void setup() throws MutationException {
+	protected boolean doApply() throws MutationException {
+		doSelection();
+
 		// TODO Auto-generated method stub
+
+		if (false) { // success
+			getUtil().deletedEObject(null);
+		}
+
+		return false;
 	}
 
-	@Override
-	protected void doApply() {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	protected void report() {
-		// TODO Auto-generated method stub
+	private void doSelection() throws MutationException {
+		targetContainerSelector.addTargetObjectPredicate(MutationPredicates
+			.hasMaxNumberOfContainments(maxNumberOfContainments));
+		targetContainerSelector.doSelection();
 	}
 
 }

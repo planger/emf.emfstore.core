@@ -122,21 +122,7 @@ public class MutationTargetSelector {
 		targetObjectPredicate = and(targetObjectPredicate, predicate);
 	}
 
-	protected EObject getOrSelectValidTargetObject() {
-		if (targetObject == null) {
-			doSelection();
-		}
-		return targetObject;
-	}
-
-	protected EStructuralFeature getOrSelectValidTargetFeature() {
-		if (targetFeature == null) {
-			doSelection();
-		}
-		return targetFeature;
-	}
-
-	protected void doSelection() {
+	protected void doSelection() throws MutationException {
 		final List<EStructuralFeature> features = getShuffledFeaturesToSelect();
 		for (final EStructuralFeature feature : features) {
 			for (final EObject eObject : getShuffledTargetObjectsToSelect(feature)) {
@@ -147,6 +133,7 @@ public class MutationTargetSelector {
 				}
 			}
 		}
+		throw new MutationException("No valid target found."); //$NON-NLS-1$
 	}
 
 	private List<EStructuralFeature> getShuffledFeaturesToSelect() {
@@ -213,19 +200,8 @@ public class MutationTargetSelector {
 		return util.getModelMutatorConfiguration().getRandom();
 	}
 
-	protected boolean isSelectionValid() {
-		try {
-			checkSelection();
-			return true;
-		} catch (final MutationException e) {
-			return false;
-		}
-	}
-
-	protected void checkSelection() throws MutationException {
-		if (!isValid(targetFeature, targetObject)) {
-			throw new MutationException();
-		}
+	protected boolean isValid() {
+		return isValid(targetFeature, targetObject);
 	}
 
 	private boolean isValid(final EStructuralFeature feature, final EObject eObject) {

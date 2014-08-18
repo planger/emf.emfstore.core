@@ -34,21 +34,14 @@ public abstract class Mutation implements Cloneable {
 
 	public boolean apply() {
 		try {
-			setup();
-			doApply();
-			report();
-			return true;
+			return doApply();
 		} catch (final MutationException e) {
 			handle(e);
 			return false;
 		}
 	}
 
-	protected abstract void setup() throws MutationException;
-
-	protected abstract void doApply() throws MutationException;
-
-	protected abstract void report() throws MutationException;
+	protected abstract boolean doApply() throws MutationException;
 
 	protected void handle(MutationException e) {
 		// TODO implement

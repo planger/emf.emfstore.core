@@ -31,12 +31,14 @@ class MoveObjectMutation extends ContainmentChangeMutation {
 	public MoveObjectMutation(ModelMutatorUtil util) {
 		super(util);
 		sourceContainerSelector = new MutationTargetSelector(util);
+		sourceContainerSelector.addTargetFeaturePredicate(MutationPredicates.isMutatableContainmentReference);
 	}
 
 	public MoveObjectMutation(ModelMutatorUtil util, MutationTargetSelector sourceContainerSelector,
 		MutationTargetSelector targetContainerSelector) {
 		super(util, targetContainerSelector);
 		this.sourceContainerSelector = sourceContainerSelector;
+		sourceContainerSelector.addTargetFeaturePredicate(MutationPredicates.isMutatableContainmentReference);
 	}
 
 	public Collection<EObject> getExcludedSourceContainerEClasses() {
@@ -84,18 +86,10 @@ class MoveObjectMutation extends ContainmentChangeMutation {
 	}
 
 	@Override
-	protected void setup() throws MutationException {
+	protected boolean doApply() throws MutationException {
+		targetContainerSelector.doSelection();
 		// TODO Auto-generated method stub
-	}
-
-	@Override
-	protected void doApply() {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	protected void report() {
-		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

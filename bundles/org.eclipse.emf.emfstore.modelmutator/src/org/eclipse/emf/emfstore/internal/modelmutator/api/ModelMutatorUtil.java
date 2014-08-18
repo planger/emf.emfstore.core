@@ -948,8 +948,22 @@ public final class ModelMutatorUtil {
 		featureToOfferingObjects.get(feature).add(eObject);
 	}
 
+	private void removeFromFeatureToOfferingObjectsMap(EStructuralFeature feature, EObject eObject) {
+		if (featureToOfferingObjects.containsKey(feature)) {
+			featureToOfferingObjects.get(feature).remove(eObject);
+		}
+	}
+
 	public void addedEObject(EObject addedEObject) {
 		addToFeatureToOfferingObjectsMap(addedEObject);
+	}
+
+	public void deletedEObject(EObject deletedEObject) {
+		final EClass eClassOfDeletedObject = deletedEObject.eClass();
+		final List<EStructuralFeature> objectsFeatures = eClassOfDeletedObject.getEAllStructuralFeatures();
+		for (final EStructuralFeature feature : objectsFeatures) {
+			removeFromFeatureToOfferingObjectsMap(feature, deletedEObject);
+		}
 	}
 
 }
