@@ -90,7 +90,7 @@ public class MoveObjectMutationTest extends AbstractMutationTest {
 	public void setupForSourceGivenFeature() throws MutationException {
 		MoveObjectMutation mutation = new MoveObjectMutation(utilForEPackageWithTwoClasses);
 		mutation.setSourceFeature(E_PACKAGE.getEClass_EStructuralFeatures());
-		mutation.setup();
+		mutation.doApply();
 
 		assertEquals(getFirstEClass(), mutation.getSourceContainer());
 		assertEquals(getEAttributeInFirstClass(), mutation.getEObjectToMove());
@@ -103,7 +103,7 @@ public class MoveObjectMutationTest extends AbstractMutationTest {
 	public void setupForGivenTargetContainer() throws MutationException {
 		MoveObjectMutation mutation = new MoveObjectMutation(utilForEPackageWithTwoClasses);
 		mutation.setTargetContainer(getSecondEClass());
-		mutation.setup();
+		mutation.doApply();
 
 		assertEquals(getFirstEClass(), mutation.getSourceContainer());
 		assertEquals(getEAttributeInFirstClass(), mutation.getEObjectToMove());
@@ -116,7 +116,6 @@ public class MoveObjectMutationTest extends AbstractMutationTest {
 		mutation.setTargetFeature(E_PACKAGE.getEEnum_ELiterals());
 
 		try {
-			mutation.setup();
 			mutation.doApply();
 			fail("Should have thrown a Mutation Exception, because there is no valid setup.");
 		} catch (MutationException e) {
@@ -130,7 +129,6 @@ public class MoveObjectMutationTest extends AbstractMutationTest {
 		mutation.setTargetFeature(E_PACKAGE.getEPackage_EClassifiers());
 
 		try {
-			mutation.setup();
 			mutation.doApply();
 			fail("Should have thrown a Mutation Exception, because there is no valid setup.");
 		} catch (MutationException e) {

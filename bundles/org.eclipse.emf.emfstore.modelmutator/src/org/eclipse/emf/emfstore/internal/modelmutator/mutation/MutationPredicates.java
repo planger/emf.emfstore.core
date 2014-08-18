@@ -11,7 +11,10 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.modelmutator.mutation;
 
+import static com.google.common.collect.Iterables.all;
 import static org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorUtil.getAllObjectsCount;
+
+import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -27,31 +30,82 @@ public final class MutationPredicates {
 
 	public static final Predicate<? super EStructuralFeature> isContainmentReference =
 		new Predicate<EStructuralFeature>() {
-			public boolean apply(EStructuralFeature input) {
-				return input instanceof EReference
-					&& ((EReference) input).isContainment();
-			}
-		};
+		public boolean apply(EStructuralFeature input) {
+			return input instanceof EReference
+				&& ((EReference) input).isContainment();
+		}
+	};
 
 	public static final Predicate<? super EStructuralFeature> isMutatableContainmentReference =
 		new Predicate<EStructuralFeature>() {
-			public boolean apply(EStructuralFeature input) {
-				return isMutatable.apply(input)
-					&& isContainmentReference.apply(input);
-			}
-		};
+		public boolean apply(EStructuralFeature input) {
+			return isMutatable.apply(input)
+				&& isContainmentReference.apply(input);
+		}
+	};
 
 	public static final Predicate<? super EStructuralFeature> isMutatable =
 		new Predicate<EStructuralFeature>() {
-			public boolean apply(EStructuralFeature input) {
-				return input != null && input.isChangeable() && !input.isDerived();
-			}
-		};
+		public boolean apply(EStructuralFeature input) {
+			return input != null && input.isChangeable() && !input.isDerived();
+		}
+	};
+
+	public static final Predicate<? super Object> isNonEmptyEObjectValueOrList =
+		new Predicate<Object>() {
+		public boolean apply(Object input) {
+			return isNonNullEObject.apply(input) || isNonEmptyEObjectList.apply(input);
+		}
+	};
+
+	public static final Predicate<? super Object> isNonNullEObject =
+		new Predicate<Object>() {
+		public boolean apply(Object input) {
+			return input != null && input instanceof EObject;
+		}
+	};
+
+	public static final Predicate<? super Object> isNonEmptyEObjectList =
+		new Predicate<Object>() {
+		public boolean apply(Object input) {
+			return input instanceof List<?> && isNonEmptyEObjectList((List<?>) input);
+		}
+	};
+
+	private static boolean isNonEmptyEObjectList(List<?> input) {
+		return !input.isEmpty() && all(input, isNonNullEObject);
+	}
+
+	public static final Predicate<? super Object> isEmptyEObjectValueOrList =
+		new Predicate<Object>() {
+		public boolean apply(Object input) {
+			return input == null || isList.apply(input);
+		}
+	};
+
+	public static final Predicate<? super Object> isList =
+		new Predicate<Object>() {
+		public boolean apply(Object input) {
+			return input instanceof List<?>;
+		}
+	};
 
 	public static Predicate<? super EObject> hasMaxNumberOfContainments(final int maxNumberOfContainments) {
 		return new Predicate<EObject>() {
 			public boolean apply(EObject input) {
 				return getAllObjectsCount(input) <= maxNumberOfContainments;
+			}
+		};
+	}
+
+	public static Predicate<? super Object> isListWithSpecifiedSize(final int size) {
+		return new Predicate<Object>() {
+			public boolean apply(Object originalValue) {
+				if (originalValue instanceof List<?>) {
+					final List<?> originalValueList = (List<?>) originalValue;
+					return originalValueList.size() == size;
+				}
+				return false;
 			}
 		};
 	}

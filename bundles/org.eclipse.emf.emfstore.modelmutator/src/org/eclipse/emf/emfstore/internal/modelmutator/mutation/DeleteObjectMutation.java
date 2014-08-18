@@ -11,6 +11,8 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.modelmutator.mutation;
 
+import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.isNonEmptyEObjectValueOrList;
+
 import org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorUtil;
 
 /**
@@ -25,10 +27,16 @@ public class DeleteObjectMutation extends ContainmentChangeMutation {
 
 	public DeleteObjectMutation(ModelMutatorUtil util) {
 		super(util);
+		addHasObjectToDeletePredicate();
 	}
 
 	public DeleteObjectMutation(ModelMutatorUtil util, MutationTargetSelector targetContainerSelector) {
 		super(util, targetContainerSelector);
+		addHasObjectToDeletePredicate();
+	}
+
+	private void addHasObjectToDeletePredicate() {
+		targetContainerSelector.getOriginalFeatureValuePredicates().add(isNonEmptyEObjectValueOrList);
 	}
 
 	public void setMaxNumberOfContainments(int maxNumberOfContainments) {
@@ -60,8 +68,9 @@ public class DeleteObjectMutation extends ContainmentChangeMutation {
 	}
 
 	private void doSelection() throws MutationException {
-		targetContainerSelector.addTargetObjectPredicate(MutationPredicates
-			.hasMaxNumberOfContainments(maxNumberOfContainments));
+		// TODO this is wrong: (must be tested on the object to delete)
+		targetContainerSelector.getTargetObjectPredicates().add(
+			MutationPredicates.hasMaxNumberOfContainments(maxNumberOfContainments));
 		targetContainerSelector.doSelection();
 	}
 

@@ -28,13 +28,18 @@ public abstract class ContainmentChangeMutation extends Mutation {
 	public ContainmentChangeMutation(ModelMutatorUtil util) {
 		super(util);
 		targetContainerSelector = new MutationTargetSelector(util);
-		targetContainerSelector.addTargetFeaturePredicate(MutationPredicates.isMutatableContainmentReference);
+		addTargetFeatureContainmentPredicate();
 	}
 
 	protected ContainmentChangeMutation(ModelMutatorUtil util, MutationTargetSelector selector) {
 		super(util);
 		targetContainerSelector = new MutationTargetSelector(util, selector);
-		targetContainerSelector.addTargetFeaturePredicate(MutationPredicates.isMutatableContainmentReference);
+		addTargetFeatureContainmentPredicate();
+	}
+
+	private void addTargetFeatureContainmentPredicate() {
+		targetContainerSelector.getTargetFeaturePredicates().add(
+			MutationPredicates.isMutatableContainmentReference);
 	}
 
 	public Collection<EObject> getExcludedTargetContainerEClasses() {

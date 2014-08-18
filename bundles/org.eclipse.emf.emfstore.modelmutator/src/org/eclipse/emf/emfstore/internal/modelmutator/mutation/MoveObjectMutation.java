@@ -31,14 +31,19 @@ class MoveObjectMutation extends ContainmentChangeMutation {
 	public MoveObjectMutation(ModelMutatorUtil util) {
 		super(util);
 		sourceContainerSelector = new MutationTargetSelector(util);
-		sourceContainerSelector.addTargetFeaturePredicate(MutationPredicates.isMutatableContainmentReference);
+		addSourceContainmentFeaturePredicate();
 	}
 
 	public MoveObjectMutation(ModelMutatorUtil util, MutationTargetSelector sourceContainerSelector,
 		MutationTargetSelector targetContainerSelector) {
 		super(util, targetContainerSelector);
 		this.sourceContainerSelector = sourceContainerSelector;
-		sourceContainerSelector.addTargetFeaturePredicate(MutationPredicates.isMutatableContainmentReference);
+		addSourceContainmentFeaturePredicate();
+	}
+
+	private void addSourceContainmentFeaturePredicate() {
+		sourceContainerSelector.getTargetFeaturePredicates().add(
+			MutationPredicates.isMutatableContainmentReference);
 	}
 
 	public Collection<EObject> getExcludedSourceContainerEClasses() {

@@ -55,7 +55,7 @@ public class DeleteObjectMutationTest extends AbstractMutationTest {
 	public void selectTargetContainerForGivenFeature() throws MutationException {
 		DeleteObjectMutation mutation = new DeleteObjectMutation(utilForEPackageWithTwoClasses);
 		mutation.setTargetFeature(E_PACKAGE.getEPackage_EClassifiers());
-		mutation.setup();
+		mutation.doApply();
 
 		// we only have one possible target container with the given feature
 		assertEquals(ePackageWithTwoClasses, mutation.getTargetContainer());
@@ -65,7 +65,7 @@ public class DeleteObjectMutationTest extends AbstractMutationTest {
 	public void selectTargetFeatureForGivenObject() throws MutationException {
 		DeleteObjectMutation mutation = new DeleteObjectMutation(utilForEPackageWithTwoClasses);
 		mutation.setTargetContainer(ePackageWithTwoClasses);
-		mutation.setup();
+		mutation.doApply();
 
 		final EStructuralFeature targetFeature = mutation.getTargetFeature();
 		final EClass targetContainerClass = ePackageWithTwoClasses.eClass();
@@ -76,7 +76,7 @@ public class DeleteObjectMutationTest extends AbstractMutationTest {
 	@Test
 	public void deleteObject() {
 		DeleteObjectMutation mutation = new DeleteObjectMutation(utilForEPackageWithTwoClasses);
-		mutation.setMaxNumberOfDeletedObjects(1);
+		mutation.setMaxNumberOfContainments(1);
 		mutation.apply();
 
 		assertEquals(1, getAllObjectsCount(ePackageWithTwoClasses));
@@ -87,7 +87,7 @@ public class DeleteObjectMutationTest extends AbstractMutationTest {
 		DeleteObjectMutation mutation = new DeleteObjectMutation(utilForEPackageWithTwoClasses);
 		mutation.setTargetFeature(E_PACKAGE.getEPackage_EClassifiers());
 		mutation.setTargetContainer(ePackageWithTwoClasses);
-		mutation.setMaxNumberOfDeletedObjects(1);
+		mutation.setMaxNumberOfContainments(1);
 		mutation.apply();
 
 		assertEquals(1, ePackageWithTwoClasses.getEClassifiers().size());
@@ -99,7 +99,6 @@ public class DeleteObjectMutationTest extends AbstractMutationTest {
 		mutation.setTargetFeature(E_PACKAGE.getEEnum_ELiterals());
 
 		try {
-			mutation.setup();
 			mutation.doApply();
 			fail("Should have thrown a Mutation Exception, because there is "
 					+ "no valid target container.");
@@ -115,7 +114,6 @@ public class DeleteObjectMutationTest extends AbstractMutationTest {
 		mutation.setTargetContainer(ePackageWithTwoClasses);
 
 		try {
-			mutation.setup();
 			mutation.doApply();
 			fail("Should have thrown a Mutation Exception, because there is "
 					+ "no valid target container.");
@@ -127,12 +125,11 @@ public class DeleteObjectMutationTest extends AbstractMutationTest {
 	@Test
 	public void throwsExceptionIfSelectionOfTargetContainerViolatesMaxNumberOfObjects() {
 		DeleteObjectMutation mutation = new DeleteObjectMutation(utilForEPackageWithTwoClasses);
-		mutation.setMaxNumberOfDeletedObjects(1);
+		mutation.setMaxNumberOfContainments(1);
 		mutation.setTargetFeature(E_PACKAGE.getEPackage_EClassifiers());
 		mutation.setTargetContainer(ePackageWithTwoClasses);
 
 		try {
-			mutation.setup();
 			mutation.doApply();
 			fail("Should have thrown a Mutation Exception, because there this mutation "
 					+ "would delete more than the specified maximum number of objects.");

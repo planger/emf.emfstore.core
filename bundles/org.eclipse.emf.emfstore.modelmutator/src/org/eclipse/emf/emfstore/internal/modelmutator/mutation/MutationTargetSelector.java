@@ -11,7 +11,6 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.modelmutator.mutation;
 
-import static com.google.common.base.Predicates.alwaysTrue;
 import static com.google.common.base.Predicates.and;
 
 import java.util.ArrayList;
@@ -20,6 +19,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
@@ -39,10 +39,12 @@ public class MutationTargetSelector {
 	private final Collection<EObject> excludedEClasses = new HashSet<EObject>();
 	private final Collection<EStructuralFeature> excludedFeatures = new HashSet<EStructuralFeature>();
 	private final Collection<EObject> excludedObjects = new HashSet<EObject>();
+	private final Set<Predicate<? super EStructuralFeature>> targetFeaturePredicates = new HashSet<Predicate<? super EStructuralFeature>>();
+	private final Set<Predicate<? super EObject>> targetObjectPredicates = new HashSet<Predicate<? super EObject>>();
+	private final Set<Predicate<? super Object>> originalFeatureValuePredicates = new HashSet<Predicate<? super Object>>();
+
 	private EObject targetObject;
 	private EStructuralFeature targetFeature;
-	private Predicate<? super EStructuralFeature> targetFeaturePredicate = alwaysTrue();
-	private Predicate<? super EObject> targetObjectPredicate = alwaysTrue();
 
 	public MutationTargetSelector(ModelMutatorUtil util) {
 		this.util = util;
@@ -59,8 +61,9 @@ public class MutationTargetSelector {
 		setupExcludedFeatures(selector);
 		setTargetObject(selector.getTargetObject());
 		setTargetFeature(selector.getTargetFeature());
-		targetFeaturePredicate = selector.getTargetFeaturePredicate();
-		targetObjectPredicate = selector.getTargetObjectPredicate();
+		targetFeaturePredicates.addAll(selector.getTargetFeaturePredicates());
+		targetObjectPredicates.addAll(selector.getTargetObjectPredicates());
+		originalFeatureValuePredicates.addAll(selector.getOriginalFeatureValuePredicates());
 	}
 
 	private void setupExcludedEClasses(MutationTargetSelector selector) {
@@ -106,20 +109,28 @@ public class MutationTargetSelector {
 		this.targetFeature = targetFeature;
 	}
 
-	protected Predicate<? super EStructuralFeature> getTargetFeaturePredicate() {
-		return targetFeaturePredicate;
+	protected Set<Predicate<? super EStructuralFeature>> getTargetFeaturePredicates() {
+		return targetFeaturePredicates;
 	}
 
-	protected void addTargetFeaturePredicate(Predicate<? super EStructuralFeature> predicate) {
-		targetFeaturePredicate = and(targetFeaturePredicate, predicate);
+	private Predicate<? super EStructuralFeature> getTargetFeaturePredicatesConjunction() {
+		return and(getTargetFeaturePredicates());
 	}
 
-	protected Predicate<? super EObject> getTargetObjectPredicate() {
-		return targetObjectPredicate;
+	protected Set<Predicate<? super EObject>> getTargetObjectPredicates() {
+		return targetObjectPredicates;
 	}
 
-	protected void addTargetObjectPredicate(Predicate<? super EObject> predicate) {
-		targetObjectPredicate = and(targetObjectPredicate, predicate);
+	private Predicate<? super EObject> getTargetObjectPredicatesConjunction() {
+		return and(getTargetObjectPredicates());
+	}
+
+	protected Set<Predicate<? super Object>> getOriginalFeatureValuePredicates() {
+		return originalFeatureValuePredicates;
+	}
+
+	private Predicate<? super Object> getOriginalFeatureValuePredicatesConjunction() {
+		return and(getOriginalFeatureValuePredicates());
 	}
 
 	protected void doSelection() throws MutationException {
@@ -175,7 +186,7 @@ public class MutationTargetSelector {
 
 	private List<EStructuralFeature> getAvailableFeatures() {
 		return Lists.newArrayList(util
-			.getAvailableFeatures(getTargetFeaturePredicate()));
+			.getAvailableFeatures(getTargetFeaturePredicatesConjunction()));
 	}
 
 	private List<EObject> getShuffledTargetObjectsToSelect(EStructuralFeature feature) {
@@ -193,7 +204,8 @@ public class MutationTargetSelector {
 	}
 
 	private ArrayList<EObject> getEObjectsForAvailableFeature(EStructuralFeature feature) {
-		return Lists.newArrayList(util.getEObjectsOfAvailableFeature(feature, getTargetObjectPredicate()));
+		final Predicate<? super EObject> targetObjectPredicate = getTargetObjectPredicatesConjunction();
+		return Lists.newArrayList(util.getEObjectsOfAvailableFeature(feature, targetObjectPredicate));
 	}
 
 	private Random getRandom() {
@@ -213,7 +225,8 @@ public class MutationTargetSelector {
 		return !isExcluded(feature, eObject)
 			&& featuresOfEClass.contains(feature)
 			&& fulfillsTargetFeaturePredicate(feature)
-			&& fulfillsTargetObjectPredicate(eObject);
+			&& fulfillsTargetObjectPredicate(eObject)
+			&& fulfullsOriginalFeatureValuePredicate(feature, eObject);
 	}
 
 	private boolean isExcluded(EStructuralFeature feature, EObject eObject) {
@@ -223,11 +236,16 @@ public class MutationTargetSelector {
 	}
 
 	private boolean fulfillsTargetFeaturePredicate(EStructuralFeature feature) {
-		return getTargetFeaturePredicate().apply(feature);
+		return getTargetFeaturePredicatesConjunction().apply(feature);
 	}
 
 	private boolean fulfillsTargetObjectPredicate(EObject eObject) {
-		return getTargetObjectPredicate().apply(eObject);
+		return getTargetObjectPredicatesConjunction().apply(eObject);
+	}
+
+	private boolean fulfullsOriginalFeatureValuePredicate(EStructuralFeature feature, EObject eObject) {
+		final Object originalValue = eObject.eGet(feature);
+		return getOriginalFeatureValuePredicatesConjunction().apply(originalValue);
 	}
 
 }

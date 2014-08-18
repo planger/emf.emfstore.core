@@ -55,7 +55,7 @@ public class AddObjectMutationTest extends AbstractMutationTest {
 	public void selectTargetContainerForGivenFeature() throws MutationException {
 		AddObjectMutation mutation = new AddObjectMutation(utilForEPackageWithTwoClasses);
 		mutation.setTargetFeature(E_PACKAGE.getEPackage_EClassifiers());
-		mutation.setup();
+		mutation.doApply();
 
 		// we only have one possible target container with the given feature
 		assertEquals(ePackageWithTwoClasses, mutation.getTargetContainer());
@@ -65,7 +65,7 @@ public class AddObjectMutationTest extends AbstractMutationTest {
 	public void selectTargetFeatureForGivenObject() throws MutationException {
 		AddObjectMutation mutation = new AddObjectMutation(utilForEPackageWithTwoClasses);
 		mutation.setTargetContainer(ePackageWithTwoClasses);
-		mutation.setup();
+		mutation.doApply();
 
 		final EStructuralFeature targetFeature = mutation.getTargetFeature();
 		final EClass targetContainerClass = ePackageWithTwoClasses.eClass();
@@ -97,7 +97,6 @@ public class AddObjectMutationTest extends AbstractMutationTest {
 		mutation.setTargetFeature(E_PACKAGE.getEEnum_ELiterals());
 
 		try {
-			mutation.setup();
 			mutation.doApply();
 			fail("Should have thrown a Mutation Exception, because there is "
 					+ "no valid target container.");
@@ -113,7 +112,6 @@ public class AddObjectMutationTest extends AbstractMutationTest {
 		mutation.setTargetContainer(ePackageWithTwoClasses);
 
 		try {
-			mutation.setup();
 			mutation.doApply();
 			fail("Should have thrown a Mutation Exception, because there is "
 					+ "no valid target container.");
