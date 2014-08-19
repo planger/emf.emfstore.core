@@ -774,7 +774,7 @@ public final class ModelMutatorUtil {
 		return attributeSetters;
 	}
 
-	private AttributeSetter<?> getAttributeSetter(EClassifier attributeType) {
+	public AttributeSetter<?> getAttributeSetter(EClassifier attributeType) {
 		getAttributeSetters();
 		if (attributeSetters.containsKey(attributeType)) {
 			return attributeSetters.get(attributeType);
@@ -977,7 +977,7 @@ public final class ModelMutatorUtil {
 	}
 
 	public int getRandomDeleteMode() {
-		return getDeleteModes().get(config.getRandom().nextInt(getDeleteModes().size() - 1));
+		return getDeleteModes().get(config.getRandom().nextInt(getDeleteModes().size()));
 	}
 
 }

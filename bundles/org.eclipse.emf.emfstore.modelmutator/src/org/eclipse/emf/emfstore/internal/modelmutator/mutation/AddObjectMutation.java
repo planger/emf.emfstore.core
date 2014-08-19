@@ -11,7 +11,7 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.modelmutator.mutation;
 
-import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.isEmptyEObjectValueOrList;
+import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.isNullValueOrList;
 import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.mayTakeEObjectAsValue;
 
 import java.util.List;
@@ -44,7 +44,7 @@ class AddObjectMutation extends ContainmentChangeMutation {
 	}
 
 	private void addIsEmptySingleValuedReferenceOrMultivalueReferencePredicate() {
-		targetContainerSelector.getOriginalFeatureValuePredicates().add(isEmptyEObjectValueOrList);
+		targetContainerSelector.getOriginalFeatureValuePredicates().add(isNullValueOrList);
 	}
 
 	public void setEObjectToAdd(EObject eObjectToAdd) {

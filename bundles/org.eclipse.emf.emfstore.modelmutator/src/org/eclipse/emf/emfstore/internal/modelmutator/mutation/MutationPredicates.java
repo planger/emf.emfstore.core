@@ -18,6 +18,7 @@ import static org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorUti
 
 import java.util.List;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
@@ -53,6 +54,20 @@ public final class MutationPredicates {
 		new Predicate<EStructuralFeature>() {
 		public boolean apply(EStructuralFeature input) {
 			return input != null && input.isChangeable() && !input.isDerived();
+		}
+	};
+
+	public static final Predicate<? super EStructuralFeature> isMultiValued =
+		new Predicate<EStructuralFeature>() {
+		public boolean apply(EStructuralFeature input) {
+			return input != null && input.isMany();
+		}
+	};
+
+	public static final Predicate<? super EStructuralFeature> isMutatableAttribute =
+		new Predicate<EStructuralFeature>() {
+		public boolean apply(EStructuralFeature input) {
+			return isMutatable.apply(input) && input instanceof EAttribute;
 		}
 	};
 
@@ -178,7 +193,7 @@ public final class MutationPredicates {
 		return !input.isEmpty() && all(input, isNonNullEObject);
 	}
 
-	public static final Predicate<? super Object> isEmptyEObjectValueOrList =
+	public static final Predicate<? super Object> isNullValueOrList =
 		new Predicate<Object>() {
 		public boolean apply(Object input) {
 			return input == null || isList.apply(input);

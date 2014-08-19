@@ -19,7 +19,7 @@ import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPr
 import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.isCompatibleWithAnyFeatureOfEClass;
 import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.isContainedByEObject;
 import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.isContainedByFeature;
-import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.isEmptyEObjectValueOrList;
+import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.isNullValueOrList;
 import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.isNonEmptyEObjectValueOrList;
 import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.isNotTheSame;
 import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.mayBeContainedByAnyOfTheseReferences;
@@ -78,7 +78,7 @@ class MoveObjectMutation extends ContainmentChangeMutation {
 	}
 
 	private void addTargetValueIsEmptySingleValuedReferenceOrMultivalueReferencePredicate() {
-		targetContainerSelector.getOriginalFeatureValuePredicates().add(isEmptyEObjectValueOrList);
+		targetContainerSelector.getOriginalFeatureValuePredicates().add(isNullValueOrList);
 	}
 
 	public Collection<EObject> getExcludedSourceContainerEClasses() {
