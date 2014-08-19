@@ -32,47 +32,59 @@ public final class MutationPredicates {
 
 	public static final Predicate<? super EStructuralFeature> isContainmentReference =
 		new Predicate<EStructuralFeature>() {
-		public boolean apply(EStructuralFeature input) {
-			return input instanceof EReference
-				&& ((EReference) input).isContainment();
-		}
-	};
+			public boolean apply(EStructuralFeature input) {
+				return input instanceof EReference
+					&& ((EReference) input).isContainment();
+			}
+		};
 
 	public static final Predicate<? super EStructuralFeature> isMutatableContainmentReference =
 		new Predicate<EStructuralFeature>() {
-		public boolean apply(EStructuralFeature input) {
-			return isMutatable.apply(input)
-				&& isContainmentReference.apply(input);
-		}
-	};
+			public boolean apply(EStructuralFeature input) {
+				return isMutatable.apply(input)
+					&& isContainmentReference.apply(input);
+			}
+		};
 
 	public static final Predicate<? super EStructuralFeature> isMutatable =
 		new Predicate<EStructuralFeature>() {
-		public boolean apply(EStructuralFeature input) {
-			return input != null && input.isChangeable() && !input.isDerived();
-		}
-	};
+			public boolean apply(EStructuralFeature input) {
+				return input != null && input.isChangeable() && !input.isDerived();
+			}
+		};
+
+	public static Predicate<? super EStructuralFeature> mayTakeEObjectAsValue(final EObject eObject) {
+		return new Predicate<EStructuralFeature>() {
+			public boolean apply(EStructuralFeature input) {
+				if (input != null && input instanceof EReference) {
+					final EReference eReference = (EReference) input;
+					return eReference.getEType().isInstance(eObject);
+				}
+				return false;
+			}
+		};
+	}
 
 	public static final Predicate<? super Object> isNonEmptyEObjectValueOrList =
 		new Predicate<Object>() {
-		public boolean apply(Object input) {
-			return isNonNullEObject.apply(input) || isNonEmptyEObjectList.apply(input);
-		}
-	};
+			public boolean apply(Object input) {
+				return isNonNullEObject.apply(input) || isNonEmptyEObjectList.apply(input);
+			}
+		};
 
 	public static final Predicate<? super Object> isNonNullEObject =
 		new Predicate<Object>() {
-		public boolean apply(Object input) {
-			return input != null && input instanceof EObject;
-		}
-	};
+			public boolean apply(Object input) {
+				return input != null && input instanceof EObject;
+			}
+		};
 
 	public static final Predicate<? super Object> isNonEmptyEObjectList =
 		new Predicate<Object>() {
-		public boolean apply(Object input) {
-			return input instanceof List<?> && isNonEmptyEObjectList((List<?>) input);
-		}
-	};
+			public boolean apply(Object input) {
+				return input instanceof List<?> && isNonEmptyEObjectList((List<?>) input);
+			}
+		};
 
 	private static boolean isNonEmptyEObjectList(List<?> input) {
 		return !input.isEmpty() && all(input, isNonNullEObject);
@@ -80,17 +92,17 @@ public final class MutationPredicates {
 
 	public static final Predicate<? super Object> isEmptyEObjectValueOrList =
 		new Predicate<Object>() {
-		public boolean apply(Object input) {
-			return input == null || isList.apply(input);
-		}
-	};
+			public boolean apply(Object input) {
+				return input == null || isList.apply(input);
+			}
+		};
 
 	public static final Predicate<? super Object> isList =
 		new Predicate<Object>() {
-		public boolean apply(Object input) {
-			return input instanceof List<?>;
-		}
-	};
+			public boolean apply(Object input) {
+				return input instanceof List<?>;
+			}
+		};
 
 	public static Predicate<? super Object> containsEObjectWithMaxNumberOfContainments(final int maxNumberOfContainments) {
 		return new Predicate<Object>() {
@@ -107,7 +119,7 @@ public final class MutationPredicates {
 		return new Predicate<Object>() {
 			public boolean apply(Object input) {
 				return input instanceof List<?>
-				&& any((List<EObject>) input, hasMaxNumberOfContainments(maxNumberOfContainments));
+					&& any((List<EObject>) input, hasMaxNumberOfContainments(maxNumberOfContainments));
 			}
 		};
 	}

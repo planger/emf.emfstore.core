@@ -12,6 +12,7 @@
 package org.eclipse.emf.emfstore.internal.modelmutator.mutation;
 
 import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.isEmptyEObjectValueOrList;
+import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.mayTakeEObjectAsValue;
 
 import java.util.List;
 import java.util.Random;
@@ -46,20 +47,45 @@ class AddObjectMutation extends ContainmentChangeMutation {
 		targetContainerSelector.getOriginalFeatureValuePredicates().add(isEmptyEObjectValueOrList);
 	}
 
+	public void setEObjectToAdd(EObject eObjectToAdd) {
+		this.eObjectToAdd = eObjectToAdd;
+	}
+
+	public EObject getEObjectToAdd() {
+		return eObjectToAdd;
+	}
+
 	@Override
 	protected Mutation clone() {
-		return new AddObjectMutation(getUtil(), targetContainerSelector);
+		final AddObjectMutation mutation = new AddObjectMutation(getUtil(), targetContainerSelector);
+		mutation.setEObjectToAdd(getEObjectToAdd());
+		return mutation;
 	}
 
 	@Override
 	protected boolean doApply() throws MutationException {
-		targetContainerSelector.doSelection();
+		doSelection();
 
-		final EObject eObjectToAdd = createEObjectToAdd();
+		final EObject eObjectToAdd = getOrCreateEObjectToAdd();
 		addEObjectToTargetContainer(eObjectToAdd);
 		getUtil().addedEObject(eObjectToAdd);
 
 		return true;
+	}
+
+	private void doSelection() throws MutationException {
+		if (getEObjectToAdd() != null) {
+			targetContainerSelector.getTargetFeaturePredicates().add(
+				mayTakeEObjectAsValue(getEObjectToAdd()));
+		}
+		targetContainerSelector.doSelection();
+	}
+
+	private EObject getOrCreateEObjectToAdd() {
+		if (getEObjectToAdd() == null) {
+			setEObjectToAdd(createEObjectToAdd());
+		}
+		return getEObjectToAdd();
 	}
 
 	private EClass selectEClassToInstantiate() {

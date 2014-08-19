@@ -14,11 +14,11 @@ package org.eclipse.emf.emfstore.internal.modelmutator.mutation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-
 import static org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorUtil.getAllObjectsCount;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.junit.Test;
@@ -62,7 +62,7 @@ public class AddObjectMutationTest extends AbstractMutationTest {
 	}
 
 	@Test
-	public void selectTargetFeatureForGivenObject() throws MutationException {
+	public void selectTargetFeatureForGivenTargetContainer() throws MutationException {
 		AddObjectMutation mutation = new AddObjectMutation(utilForEPackageWithTwoClasses);
 		mutation.setTargetContainer(ePackageWithTwoClasses);
 		mutation.doApply();
@@ -71,6 +71,20 @@ public class AddObjectMutationTest extends AbstractMutationTest {
 		final EClass targetContainerClass = ePackageWithTwoClasses.eClass();
 		final EList<EReference> allContainmentFeatures = targetContainerClass.getEAllContainments();
 		assertTrue(allContainmentFeatures.contains(targetFeature));
+	}
+	
+	@Test
+	public void selectTargetFeatureAndContainerForGivenEObjectToAdd() throws MutationException {
+		AddObjectMutation mutation = new AddObjectMutation(utilForEPackageWithTwoClasses);
+		mutation.setEObjectToAdd(E_FACTORY.createEAttribute());
+		mutation.doApply();
+
+		final EStructuralFeature targetFeature = mutation.getTargetFeature();
+		final EObject targetContainer = mutation.getTargetContainer();
+		assertEquals(E_PACKAGE.getEClass_EStructuralFeatures(), targetFeature);
+		assertEquals(E_PACKAGE.getEClass(), targetContainer.eClass());
+		final EObject realContainer = mutation.getEObjectToAdd().eContainer();
+		assertTrue(ePackageWithTwoClasses.getEClassifiers().contains(realContainer));
 	}
 
 	@Test

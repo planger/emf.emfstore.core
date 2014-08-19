@@ -58,10 +58,19 @@ public class DeleteObjectMutation extends ContainmentChangeMutation {
 		return maxNumberOfContainments;
 	}
 
+	public void setEObjectToDelete(EObject eObjectToDelete) {
+		this.eObjectToDelete = eObjectToDelete;
+	}
+
+	public EObject getEObjectToDelete() {
+		return eObjectToDelete;
+	}
+
 	@Override
 	protected Mutation clone() {
 		final DeleteObjectMutation mutation = new DeleteObjectMutation(getUtil(), targetContainerSelector);
 		mutation.setMaxNumberOfContainments(maxNumberOfContainments);
+		mutation.setEObjectToDelete(getEObjectToDelete());
 		return mutation;
 	}
 
@@ -69,7 +78,7 @@ public class DeleteObjectMutation extends ContainmentChangeMutation {
 	protected boolean doApply() throws MutationException {
 		doSelection();
 
-		eObjectToDelete = selectEObjectToDelete();
+		final EObject eObjectToDelete = getOrSelectEObjectToDelete();
 		final int deleteMode = getUtil().getRandomDeleteMode();
 		// TODO we should use the removeFullPerCommand but it does not work in the tests
 		EcoreUtil.delete(eObjectToDelete);
@@ -80,19 +89,22 @@ public class DeleteObjectMutation extends ContainmentChangeMutation {
 	}
 
 	private void doSelection() throws MutationException {
-		targetContainerSelector.getOriginalFeatureValuePredicates().add(
-			containsEObjectWithMaxNumberOfContainments(maxNumberOfContainments));
-		targetContainerSelector.doSelection();
+		if (getEObjectToDelete() == null) {
+			targetContainerSelector.getOriginalFeatureValuePredicates().add(
+				containsEObjectWithMaxNumberOfContainments(maxNumberOfContainments));
+			targetContainerSelector.doSelection();
+		}
 	}
 
-	private EObject selectEObjectToDelete() {
-		final EObject eObjectToDelete;
-		if (targetContainerSelector.getTargetFeature().isMany()) {
-			eObjectToDelete = selectEObjectToDeleteFromMultiValuedReference();
-		} else {
-			eObjectToDelete = selectObjectToDeleteFromSingleValuedReference();
+	private EObject getOrSelectEObjectToDelete() {
+		if (getEObjectToDelete() == null) {
+			if (targetContainerSelector.getTargetFeature().isMany()) {
+				setEObjectToDelete(selectEObjectToDeleteFromMultiValuedReference());
+			} else {
+				setEObjectToDelete(selectObjectToDeleteFromSingleValuedReference());
+			}
 		}
-		return eObjectToDelete;
+		return getEObjectToDelete();
 	}
 
 	private EObject selectEObjectToDeleteFromMultiValuedReference() {
