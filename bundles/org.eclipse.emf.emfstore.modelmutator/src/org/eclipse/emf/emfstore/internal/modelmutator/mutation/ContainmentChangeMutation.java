@@ -11,63 +11,27 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.modelmutator.mutation;
 
-import java.util.Collection;
-
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorUtil;
 
 /**
  * @author Philip Langer
  *
  */
-public abstract class ContainmentChangeMutation extends Mutation {
-
-	protected final MutationTargetSelector targetContainerSelector;
+public abstract class ContainmentChangeMutation extends StructuralFeatureMutation {
 
 	public ContainmentChangeMutation(ModelMutatorUtil util) {
 		super(util);
-		targetContainerSelector = new MutationTargetSelector(util);
 		addTargetFeatureContainmentPredicate();
 	}
 
 	protected ContainmentChangeMutation(ModelMutatorUtil util, MutationTargetSelector selector) {
 		super(util);
-		targetContainerSelector = new MutationTargetSelector(util, selector);
 		addTargetFeatureContainmentPredicate();
 	}
 
 	private void addTargetFeatureContainmentPredicate() {
 		targetContainerSelector.getTargetFeaturePredicates().add(
 			MutationPredicates.isMutatableContainmentReference);
-	}
-
-	public Collection<EObject> getExcludedTargetContainerEClasses() {
-		return targetContainerSelector.getExcludedEClasses();
-	}
-
-	public Collection<EStructuralFeature> getExcludedTargetContainmentFeatures() {
-		return targetContainerSelector.getExcludedFeatures();
-	}
-
-	public Collection<EObject> getExcludedTargetContainerObjects() {
-		return targetContainerSelector.getExcludedObjects();
-	}
-
-	public void setTargetContainer(EObject targetContainer) {
-		targetContainerSelector.setTargetObject(targetContainer);
-	}
-
-	public EObject getTargetContainer() {
-		return targetContainerSelector.getTargetObject();
-	}
-
-	public void setTargetFeature(EStructuralFeature targetFeature) {
-		targetContainerSelector.setTargetFeature(targetFeature);
-	}
-
-	public EStructuralFeature getTargetFeature() {
-		return targetContainerSelector.getTargetFeature();
 	}
 
 }
