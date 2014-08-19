@@ -12,6 +12,7 @@
 package org.eclipse.emf.emfstore.internal.modelmutator.mutation;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -40,35 +41,61 @@ public class MoveObjectMutationTest extends AbstractMutationTest {
 	}
 
 	private EAttribute getEAttributeInFirstClass() {
-		return getFirstEClass().getEAttributes().get(0);
+		return getFirstEAttribute(getFirstEClass());
 	}
 
 	private EClass getSecondEClass() {
 		return (EClass)ePackageWithTwoClasses.getEClassifiers().get(1);
 	}
+	
+	private EAttribute getEAttributeInSecondClass() {
+		return getFirstEAttribute(getSecondEClass());
+	}
 
-	private EObject getThirdEClass() {
+	private EClass getThirdEClass() {
 		return (EClass)ePackageWithTwoClasses.getEClassifiers().get(2);
+	}
+	
+	private EAttribute getEAttributeInThirdClass() {
+		return getFirstEAttribute(getThirdEClass());
+	}
+
+	private EAttribute getFirstEAttribute(EClass eClass) {
+		if (eClass.getEAttributes().isEmpty()) {
+			return null;
+		}
+		return eClass.getEAttributes().get(0);
 	}
 
 	@Test
 	public void moveObjectForGivenSourceFeatureAndSourceContainerAndTargetFeatureAndTargetContainer() {
+		EAttribute attributeToMove = getEAttributeInFirstClass();
+		
 		MoveObjectMutation mutation = new MoveObjectMutation(utilForEPackageWithTwoClasses);
 		mutation.setSourceContainer(getFirstEClass());
 		mutation.setSourceFeature(E_PACKAGE.getEClass_EStructuralFeatures());
 		mutation.setTargetContainer(getSecondEClass());
 		mutation.setTargetFeature(E_PACKAGE.getEClass_EStructuralFeatures());
-		mutation.setEObjectToMove(getEAttributeInFirstClass());
+		mutation.setEObjectToMove(attributeToMove);
 		mutation.apply();
 
-		assertEquals(getSecondEClass(), getEAttributeInFirstClass().eContainer());
+		assertEquals(getSecondEClass(), attributeToMove.eContainer());
 	}
 
 	@Test
 	public void moveObject() {
+		int tries = 0;
+		try {
+			applyUnconfigeredMove();
+		} catch (Exception e) {
+			if (tries++ < 4)
+				applyUnconfigeredMove();
+		}
+	}
+
+	private void applyUnconfigeredMove() {
 		MoveObjectMutation mutation = new MoveObjectMutation(utilForEPackageWithTwoClasses);
 		mutation.apply();
-
 		assertEAttributeInFirstClassHasBeenMoved();
 	}
 
@@ -82,32 +109,38 @@ public class MoveObjectMutationTest extends AbstractMutationTest {
 	}
 
 	private void assertEAttributeInFirstClassHasBeenMoved() {
-		final EObject newContainerofEAttribute = getEAttributeInFirstClass().eContainer();
-		assertTrue("Attribute has not been moved", newContainerofEAttribute != getFirstEClass());
+		final EObject eAttributeInFirstClass = getEAttributeInFirstClass();
+		final EObject eAttributeInSecondClass = getEAttributeInSecondClass();
+		assertNull(eAttributeInFirstClass);
+		assertTrue("Attribute has not been moved", eAttributeInSecondClass != null);
 	}
 
 	@Test
 	public void setupForSourceGivenFeature() throws MutationException {
+		EAttribute eAttribute = getEAttributeInFirstClass();
+		
 		MoveObjectMutation mutation = new MoveObjectMutation(utilForEPackageWithTwoClasses);
 		mutation.setSourceFeature(E_PACKAGE.getEClass_EStructuralFeatures());
 		mutation.doApply();
 
 		assertEquals(getFirstEClass(), mutation.getSourceContainer());
-		assertEquals(getEAttributeInFirstClass(), mutation.getEObjectToMove());
+		assertEquals(eAttribute, mutation.getEObjectToMove());
 		assertEquals(E_PACKAGE.getEClass_EStructuralFeatures(), mutation.getTargetFeature());
-		assertTrue(mutation.getTargetContainer() == getSecondEClass()
-				|| mutation.getTargetContainer() == getThirdEClass());
+		assertTrue(mutation.getTargetContainer() == getSecondEClass());
 	}
 
 	@Test
 	public void setupForGivenTargetContainer() throws MutationException {
+		EAttribute eAttribute = getEAttributeInFirstClass();
+		
 		MoveObjectMutation mutation = new MoveObjectMutation(utilForEPackageWithTwoClasses);
 		mutation.setTargetContainer(getSecondEClass());
 		mutation.doApply();
 
 		assertEquals(getFirstEClass(), mutation.getSourceContainer());
-		assertEquals(getEAttributeInFirstClass(), mutation.getEObjectToMove());
+		assertEquals(eAttribute, mutation.getEObjectToMove());
 		assertEquals(E_PACKAGE.getEClass_EStructuralFeatures(), mutation.getTargetFeature());
+		assertEquals(getSecondEClass(), eAttribute.eContainer());
 	}
 
 	@Test

@@ -11,19 +11,15 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.modelmutator.mutation;
 
-import static com.google.common.collect.Iterables.filter;
-import static com.google.common.collect.Iterables.get;
-import static com.google.common.collect.Iterables.size;
 import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.containsEObjectWithMaxNumberOfContainments;
 import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.hasMaxNumberOfContainments;
 import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.isNonEmptyEObjectValueOrList;
 
-import java.util.List;
-
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorUtil;
+
+import com.google.common.base.Predicate;
 
 /**
  * TODO javadoc
@@ -96,35 +92,21 @@ public class DeleteObjectMutation extends ContainmentChangeMutation {
 		}
 	}
 
-	private EObject getOrSelectEObjectToDelete() {
+	private EObject getOrSelectEObjectToDelete() throws MutationException {
 		if (getEObjectToDelete() == null) {
-			if (targetContainerSelector.getTargetFeature().isMany()) {
-				setEObjectToDelete(selectEObjectToDeleteFromMultiValuedReference());
+			final Predicate<? super Object> predicate = getMaxNumberOfContainmentsPredicate();
+			final Object objectToDelete = targetContainerSelector.selectRandomContainedValue(predicate);
+			if (objectToDelete != null && objectToDelete instanceof EObject) {
+				setEObjectToDelete((EObject) objectToDelete);
 			} else {
-				setEObjectToDelete(selectObjectToDeleteFromSingleValuedReference());
+				throw new MutationException("Cannot find object to delete.");
 			}
 		}
 		return getEObjectToDelete();
 	}
 
-	private EObject selectEObjectToDeleteFromMultiValuedReference() {
-		final EObject container = targetContainerSelector.getTargetObject();
-		final EReference reference = (EReference) targetContainerSelector.getTargetFeature();
-
-		@SuppressWarnings("unchecked")
-		final List<EObject> valueList = (List<EObject>) container.eGet(reference);
-		final Iterable<EObject> filteredValueList = filter(valueList,
-			hasMaxNumberOfContainments(maxNumberOfContainments));
-		final int randomIndex = getRandom().nextInt(size(filteredValueList));
-		final Object objectToDelete = get(filteredValueList, randomIndex);
-
-		return (EObject) objectToDelete;
+	@SuppressWarnings("unchecked")
+	private Predicate<Object> getMaxNumberOfContainmentsPredicate() {
+		return (Predicate<? super Object>) hasMaxNumberOfContainments(maxNumberOfContainments);
 	}
-
-	private EObject selectObjectToDeleteFromSingleValuedReference() {
-		final EObject container = targetContainerSelector.getTargetObject();
-		final EReference reference = (EReference) targetContainerSelector.getTargetFeature();
-		return (EObject) container.eGet(reference);
-	}
-
 }

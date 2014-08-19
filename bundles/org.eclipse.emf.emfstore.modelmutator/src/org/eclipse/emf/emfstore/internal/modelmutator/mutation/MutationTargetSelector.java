@@ -11,7 +11,11 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.modelmutator.mutation;
 
+import static com.google.common.base.Predicates.alwaysTrue;
 import static com.google.common.base.Predicates.and;
+import static com.google.common.collect.Iterables.filter;
+import static com.google.common.collect.Iterables.get;
+import static com.google.common.collect.Iterables.size;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -254,6 +258,42 @@ public class MutationTargetSelector {
 	private boolean fulfullsOriginalFeatureValuePredicate(EStructuralFeature feature, EObject eObject) {
 		final Object originalValue = eObject.eGet(feature);
 		return getOriginalFeatureValuePredicatesConjunction().apply(originalValue);
+	}
+
+	protected Object selectRandomValueFromTargetObject() {
+		return selectRandomContainedValue(alwaysTrue());
+	}
+
+	protected Object selectRandomContainedValue(Predicate<? super Object> predicate) {
+		if (!isValid()) {
+			throw new IllegalStateException("There is no valid selection to get value for."); //$NON-NLS-1$
+		} else if (getTargetFeature().isMany()) {
+			return selectRandomValueFromTargetObjectWithMultiValuedFeature(predicate);
+		} else {
+			return selectRandomValueFromTargetObjectWithSingleValuedFeature(predicate);
+		}
+	}
+
+	private Object selectRandomValueFromTargetObjectWithMultiValuedFeature(Predicate<? super Object> predicate) {
+		@SuppressWarnings("unchecked")
+		final List<Object> values = (List<Object>) getTargetValue();
+		final Iterable<Object> filteredValues = filter(values, predicate);
+		final int randomIndex = getRandom().nextInt(size(filteredValues));
+		final Object randomObject = get(filteredValues, randomIndex);
+
+		return randomObject;
+	}
+
+	private Object getTargetValue() {
+		return getTargetObject().eGet(getTargetFeature());
+	}
+
+	private Object selectRandomValueFromTargetObjectWithSingleValuedFeature(Predicate<? super Object> predicate) {
+		final Object targetValue = getTargetValue();
+		if (predicate.apply(targetValue)) {
+			return targetValue;
+		}
+		return null;
 	}
 
 }
