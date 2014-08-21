@@ -64,6 +64,7 @@ import org.eclipse.emf.emfstore.internal.modelmutator.intern.attribute.Attribute
 import org.eclipse.emf.emfstore.internal.modelmutator.intern.attribute.AttributeSetterELong;
 import org.eclipse.emf.emfstore.internal.modelmutator.intern.attribute.AttributeSetterEShort;
 import org.eclipse.emf.emfstore.internal.modelmutator.intern.attribute.AttributeSetterEString;
+import org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates;
 
 import com.google.common.base.Predicate;
 
@@ -660,7 +661,7 @@ public final class ModelMutatorUtil {
 							setPerCommand(eObject, attribute, attributeSetter.createNewAttribute(), i);
 						} else {
 							final Object attributeToMove = ((Collection<?>) eObject.eGet(attribute)).toArray()[random
-								.nextInt(size)];
+							                                                                                   .nextInt(size)];
 							movePerCommand(eObject, attribute, attributeToMove, random.nextInt(size));
 						}
 					}
@@ -896,6 +897,8 @@ public final class ModelMutatorUtil {
 
 	private final Map<EStructuralFeature, List<EObject>> featureToOfferingObjects = new LinkedHashMap<EStructuralFeature, List<EObject>>();
 
+	private final Map<EStructuralFeature, List<EObject>> featureToSuitableObjects = new LinkedHashMap<EStructuralFeature, List<EObject>>();
+
 	private Map<EStructuralFeature, List<EObject>> getOrBuildFeatureToOfferingObjectsMap() {
 		if (featureToOfferingObjects.isEmpty()) {
 			buildFeatureToOfferingObjectsMap();
@@ -911,7 +914,7 @@ public final class ModelMutatorUtil {
 		return filter(getAvailableFeatures(), predicate);
 	}
 
-	private Iterable<EObject> getEObjectsOfAvailableFeature(EStructuralFeature feature) {
+	public Iterable<EObject> getOfferingEObjectsForAvailableFeature(EStructuralFeature feature) {
 		final List<EObject> objectsOfferingFeature = getOrBuildFeatureToOfferingObjectsMap().get(feature);
 		if (objectsOfferingFeature == null) {
 			return Collections.emptyList();
@@ -919,9 +922,9 @@ public final class ModelMutatorUtil {
 		return objectsOfferingFeature;
 	}
 
-	public Iterable<EObject> getEObjectsOfAvailableFeature(EStructuralFeature feature,
+	public Iterable<EObject> getOfferingEObjectsForAvailableFeature(EStructuralFeature feature,
 		Predicate<? super EObject> predicate) {
-		return filter(getEObjectsOfAvailableFeature(feature), predicate);
+		return filter(getOfferingEObjectsForAvailableFeature(feature), predicate);
 	}
 
 	private void buildFeatureToOfferingObjectsMap() {
@@ -954,15 +957,71 @@ public final class ModelMutatorUtil {
 		}
 	}
 
+	public Iterable<EObject> getSuitableEObjectsForAvailableFeature(EStructuralFeature feature) {
+		final List<EObject> suitableEObjectsForFeature = getOrBuildFeatureToSuitableObjectsMap().get(feature);
+		if (suitableEObjectsForFeature == null) {
+			return Collections.emptyList();
+		}
+		return suitableEObjectsForFeature;
+	}
+
+	public Iterable<EObject> getSuitableEObjectsForAvailableFeature(EStructuralFeature feature,
+		Predicate<? super EObject> predicate) {
+		return filter(getSuitableEObjectsForAvailableFeature(feature), predicate);
+	}
+
+	private Map<EStructuralFeature, List<EObject>> getOrBuildFeatureToSuitableObjectsMap() {
+		if (featureToSuitableObjects.isEmpty()) {
+			buildFeatureToSuitableObjectsMap();
+		}
+		return featureToSuitableObjects;
+	}
+
+	private void buildFeatureToSuitableObjectsMap() {
+		featureToSuitableObjects.clear();
+		final EObject rootEObject = config.getRootEObject();
+		addToFeatureToSuitableObjectsMap(rootEObject);
+		for (final Iterator<EObject> iter = rootEObject.eAllContents(); iter.hasNext();) {
+			addToFeatureToSuitableObjectsMap(iter.next());
+		}
+	}
+
+	private void addToFeatureToSuitableObjectsMap(EObject eObject) {
+		for (final EStructuralFeature feature : getAvailableFeatures(MutationPredicates.isReference)) {
+			if (feature.getEType().isInstance(eObject)) {
+				addToFeatureToSuitableObjectsMap(feature, eObject);
+			}
+		}
+	}
+
+	private void addToFeatureToSuitableObjectsMap(EStructuralFeature feature, EObject eObject) {
+		if (!featureToSuitableObjects.containsKey(feature)) {
+			featureToSuitableObjects.put(feature, new ArrayList<EObject>());
+		}
+		featureToSuitableObjects.get(feature).add(eObject);
+	}
+
 	public void addedEObject(EObject addedEObject) {
 		addToFeatureToOfferingObjectsMap(addedEObject);
+		addToFeatureToSuitableObjectsMap(addedEObject);
 	}
 
 	public void deletedEObject(EObject deletedEObject) {
+		removeFromFeatureToOfferingObjectsMap(deletedEObject);
+		removeFromFeatureToSuitableObjectMap(deletedEObject);
+	}
+
+	private void removeFromFeatureToOfferingObjectsMap(EObject deletedEObject) {
 		final EClass eClassOfDeletedObject = deletedEObject.eClass();
 		final List<EStructuralFeature> objectsFeatures = eClassOfDeletedObject.getEAllStructuralFeatures();
 		for (final EStructuralFeature feature : objectsFeatures) {
 			removeFromFeatureToOfferingObjectsMap(feature, deletedEObject);
+		}
+	}
+
+	private void removeFromFeatureToSuitableObjectMap(EObject deletedEObject) {
+		for (final EStructuralFeature feature : featureToSuitableObjects.keySet()) {
+			featureToSuitableObjects.get(feature).remove(deletedEObject);
 		}
 	}
 

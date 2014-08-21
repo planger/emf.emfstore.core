@@ -179,18 +179,27 @@ public class MutationTargetSelector {
 		final List<EStructuralFeature> availableFeatures = new ArrayList<EStructuralFeature>();
 		final EClass eClassOfTargetObject = targetObject.eClass();
 		availableFeatures.addAll(eClassOfTargetObject.getEAllStructuralFeatures());
-		excludeAndShuffle(availableFeatures);
+		excludeAndShuffleTargetFeatures(availableFeatures);
 		return availableFeatures;
 	}
 
-	private void excludeAndShuffle(final List<EStructuralFeature> features) {
+	private void excludeAndShuffleTargetFeatures(final List<EStructuralFeature> features) {
 		features.removeAll(excludedFeatures);
+		filterTargetFeaturePredicates(features);
 		Collections.shuffle(features, getRandom());
+	}
+
+	private void filterTargetFeaturePredicates(final List<EStructuralFeature> features) {
+		for (final EStructuralFeature feature : Lists.newArrayList(features)) {
+			if (!getTargetFeaturePredicatesConjunction().apply(feature)) {
+				features.remove(feature);
+			}
+		}
 	}
 
 	private List<EStructuralFeature> getShuffledAvailableFeatures() {
 		final List<EStructuralFeature> features = getAvailableFeatures();
-		excludeAndShuffle(features);
+		excludeAndShuffleTargetFeatures(features);
 		return features;
 	}
 
@@ -208,14 +217,27 @@ public class MutationTargetSelector {
 
 	private List<EObject> getShuffledEObjectsForAvailableFeature(EStructuralFeature feature) {
 		final ArrayList<EObject> eObjects = getEObjectsForAvailableFeature(feature);
-		eObjects.removeAll(excludedObjects);
-		Collections.shuffle(eObjects);
+		excludeAndShuffleTargetObjects(eObjects);
 		return eObjects;
+	}
+
+	private void excludeAndShuffleTargetObjects(final List<EObject> eObjects) {
+		eObjects.removeAll(excludedObjects);
+		filterTargetObjectPredicates(eObjects);
+		Collections.shuffle(eObjects);
+	}
+
+	private void filterTargetObjectPredicates(final List<EObject> eObjects) {
+		for (final EObject eObject : Lists.newArrayList(eObjects)) {
+			if (!getTargetObjectPredicatesConjunction().apply(eObject)) {
+				eObjects.remove(eObject);
+			}
+		}
 	}
 
 	private ArrayList<EObject> getEObjectsForAvailableFeature(EStructuralFeature feature) {
 		final Predicate<? super EObject> targetObjectPredicate = getTargetObjectPredicatesConjunction();
-		return Lists.newArrayList(util.getEObjectsOfAvailableFeature(feature, targetObjectPredicate));
+		return Lists.newArrayList(util.getOfferingEObjectsForAvailableFeature(feature, targetObjectPredicate));
 	}
 
 	private Random getRandom() {
@@ -278,7 +300,7 @@ public class MutationTargetSelector {
 		@SuppressWarnings("unchecked")
 		final List<Object> values = (List<Object>) getTargetValue();
 		final Iterable<Object> filteredValues = filter(values, predicate);
-		final int randomIndex = getRandom().nextInt(size(filteredValues));
+		final int randomIndex = getRandomIndexFromValueRange(filteredValues);
 		final Object randomObject = get(filteredValues, randomIndex);
 
 		return randomObject;
@@ -296,4 +318,20 @@ public class MutationTargetSelector {
 		return null;
 	}
 
+	protected int getRandomIndexFromTargetObjectAndFeatureValueRange() {
+		@SuppressWarnings("unchecked")
+		final Collection<Object> values = (Collection<Object>) getTargetValue();
+		return getRandomIndexFromValueRange(values);
+	}
+
+	private int getRandomIndexFromValueRange(Iterable<Object> values) {
+		final int randomIndex;
+		final int numberOfCurrentValues = size(values);
+		if (numberOfCurrentValues > 0) {
+			randomIndex = getRandom().nextInt(numberOfCurrentValues);
+		} else {
+			randomIndex = 0;
+		}
+		return randomIndex;
+	}
 }
