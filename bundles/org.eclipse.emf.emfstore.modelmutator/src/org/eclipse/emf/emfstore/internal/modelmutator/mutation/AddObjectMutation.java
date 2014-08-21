@@ -29,7 +29,7 @@ import org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorUtil;
  * @author Philip Langer
  *
  */
-class AddObjectMutation extends ContainmentChangeMutation {
+public class AddObjectMutation extends ContainmentChangeMutation {
 
 	private EObject eObjectToAdd;
 
@@ -56,7 +56,7 @@ class AddObjectMutation extends ContainmentChangeMutation {
 	}
 
 	@Override
-	protected Mutation clone() {
+	public Mutation clone() {
 		final AddObjectMutation mutation = new AddObjectMutation(getUtil(), targetContainerSelector);
 		mutation.setEObjectToAdd(getEObjectToAdd());
 		return mutation;
@@ -91,6 +91,7 @@ class AddObjectMutation extends ContainmentChangeMutation {
 	private EClass selectEClassToInstantiate() {
 		final EReference reference = (EReference) targetContainerSelector.getTargetFeature();
 		final List<EClass> eClasses = getUtil().getAllEContainments(reference);
+		// remove abstract and interface classes
 		eClasses.removeAll(getUtil().getModelMutatorConfiguration().geteClassesToIgnore());
 		final int randomIndex = getRandom().nextInt(eClasses.size());
 		return eClasses.get(randomIndex);

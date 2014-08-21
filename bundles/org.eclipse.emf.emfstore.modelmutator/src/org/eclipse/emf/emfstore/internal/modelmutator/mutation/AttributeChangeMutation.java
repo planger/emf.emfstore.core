@@ -11,8 +11,11 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.modelmutator.mutation;
 
-import java.util.Collection;
-import java.util.Collections;
+import static com.google.common.base.Predicates.not;
+import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.hasFeatureMapEntryType;
+import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.isMutatableAttribute;
+import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.isNonEmptyValueOrList;
+
 import java.util.List;
 
 import org.eclipse.emf.ecore.EAttribute;
@@ -34,20 +37,25 @@ public class AttributeChangeMutation extends StructuralFeatureMutation {
 	public AttributeChangeMutation(ModelMutatorUtil util) {
 		super(util);
 		addTargetFeatureAttributePredicate();
+		addAttributeTypeNotFeatureMapPredicate();
 	}
 
 	protected AttributeChangeMutation(ModelMutatorUtil util, MutationTargetSelector selector) {
 		super(util, selector);
 		addTargetFeatureAttributePredicate();
+		addAttributeTypeNotFeatureMapPredicate();
 	}
 
 	private void addTargetFeatureAttributePredicate() {
-		targetContainerSelector.getTargetFeaturePredicates().add(
-			MutationPredicates.isMutatableAttribute);
+		targetContainerSelector.getTargetFeaturePredicates().add(isMutatableAttribute);
+	}
+
+	private void addAttributeTypeNotFeatureMapPredicate() {
+		targetContainerSelector.getTargetFeaturePredicates().add(not(hasFeatureMapEntryType));
 	}
 
 	@Override
-	protected Mutation clone() {
+	public Mutation clone() {
 		return new AttributeChangeMutation(getUtil(), targetContainerSelector);
 	}
 
@@ -72,8 +80,8 @@ public class AttributeChangeMutation extends StructuralFeatureMutation {
 
 		final Object newValue = createNewValue(eAttribute);
 		if (eAttribute.isMany()) {
-			final int numberOfCurrentValues = ((Collection<?>) eObject.eGet(eAttribute)).size();
-			final int insertionIndex = getRandom().nextInt(numberOfCurrentValues);
+			final int insertionIndex = targetContainerSelector.
+				getRandomIndexFromTargetObjectAndFeatureValueRange();
 			getUtil().setPerCommand(eObject, eAttribute, newValue, insertionIndex);
 		} else {
 			getUtil().setPerCommand(eObject, eAttribute, newValue);
@@ -82,14 +90,15 @@ public class AttributeChangeMutation extends StructuralFeatureMutation {
 	}
 
 	private boolean doDeleteAttributeValue() throws MutationException {
+		makeSureWeHaveAValueInSelectedObjectAtSelectedFeature();
 		targetContainerSelector.doSelection();
 		final EObject eObject = targetContainerSelector.getTargetObject();
 		final EAttribute eAttribute = (EAttribute) targetContainerSelector.getTargetFeature();
 
 		if (eAttribute.isMany()) {
 			final List<?> currentValues = (List<?>) eObject.eGet(eAttribute);
-			final int numberOfCurrentValues = currentValues.size();
-			final int deletionIndex = getRandom().nextInt(numberOfCurrentValues);
+			final int deletionIndex = targetContainerSelector.
+				getRandomIndexFromTargetObjectAndFeatureValueRange();
 			currentValues.remove(deletionIndex);
 			getUtil().setPerCommand(eObject, eAttribute, currentValues);
 		} else {
@@ -98,9 +107,14 @@ public class AttributeChangeMutation extends StructuralFeatureMutation {
 		return true;
 	}
 
+	private void makeSureWeHaveAValueInSelectedObjectAtSelectedFeature() {
+		targetContainerSelector.getOriginalFeatureValuePredicates().add(isNonEmptyValueOrList);
+	}
+
 	private boolean doReorderAttributeValue() throws MutationException {
 		final boolean success;
-		targetContainerSelector.getTargetFeaturePredicates().add(MutationPredicates.isMultiValued);
+		makeSureAttributeIsMutliValued();
+		makeSureWeHaveAValueInSelectedObjectAtSelectedFeature();
 		targetContainerSelector.doSelection();
 		final EObject eObject = targetContainerSelector.getTargetObject();
 		final EAttribute eAttribute = (EAttribute) targetContainerSelector.getTargetFeature();
@@ -110,13 +124,16 @@ public class AttributeChangeMutation extends StructuralFeatureMutation {
 			final int numberOfCurrentValues = currentValues.size();
 			final int pickIndex = getRandom().nextInt(numberOfCurrentValues);
 			final int putIndex = getRandom().nextInt(numberOfCurrentValues);
-			Collections.swap(currentValues, pickIndex, putIndex);
-			getUtil().setPerCommand(eObject, eAttribute, currentValues);
+			getUtil().movePerCommand(eObject, eAttribute, currentValues.get(pickIndex), putIndex);
 			success = true;
 		} else {
 			success = false;
 		}
 		return success;
+	}
+
+	private void makeSureAttributeIsMutliValued() {
+		targetContainerSelector.getTargetFeaturePredicates().add(MutationPredicates.isMultiValued);
 	}
 
 	protected Object createNewValue(EAttribute eAttribute) {

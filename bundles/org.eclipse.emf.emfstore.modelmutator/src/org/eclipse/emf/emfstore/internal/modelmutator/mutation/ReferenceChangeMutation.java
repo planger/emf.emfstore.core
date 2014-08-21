@@ -55,7 +55,7 @@ public class ReferenceChangeMutation extends StructuralFeatureMutation {
 	}
 
 	@Override
-	protected Mutation clone() {
+	public Mutation clone() {
 		return new ReferenceChangeMutation(getUtil(), targetContainerSelector);
 	}
 
@@ -134,7 +134,7 @@ public class ReferenceChangeMutation extends StructuralFeatureMutation {
 
 	private boolean doDeleteReferenceValue() throws MutationException {
 		makeSureChangingTargetDoesNotAffectContainmentReference();
-		makeSureCurrentWeHaveValuesInSelectedObjectAtSelectedFeatures();
+		makeSureCurrentWeHaveValuesInSelectedObjectAtSelectedFeature();
 		targetContainerSelector.doSelection();
 		final EObject eObject = targetContainerSelector.getTargetObject();
 		final EReference eReference = (EReference) targetContainerSelector.getTargetFeature();
@@ -169,7 +169,7 @@ public class ReferenceChangeMutation extends StructuralFeatureMutation {
 	private boolean doReorderReferenceValue() throws MutationException {
 		final boolean success;
 		makeSureSelectedFeatureIsMultiValued();
-		makeSureCurrentWeHaveValuesInSelectedObjectAtSelectedFeatures();
+		makeSureCurrentWeHaveValuesInSelectedObjectAtSelectedFeature();
 		targetContainerSelector.doSelection();
 		final EObject eObject = targetContainerSelector.getTargetObject();
 		final EReference eReference = (EReference) targetContainerSelector.getTargetFeature();
@@ -193,7 +193,7 @@ public class ReferenceChangeMutation extends StructuralFeatureMutation {
 		targetContainerSelector.getTargetFeaturePredicates().add(isMultiValued);
 	}
 
-	private void makeSureCurrentWeHaveValuesInSelectedObjectAtSelectedFeatures() {
+	private void makeSureCurrentWeHaveValuesInSelectedObjectAtSelectedFeature() {
 		targetContainerSelector.getOriginalFeatureValuePredicates().add(isNonEmptyEObjectList);
 	}
 

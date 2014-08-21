@@ -36,7 +36,7 @@ public abstract class Mutation implements Cloneable {
 	}
 
 	@Override
-	protected abstract Mutation clone();
+	public abstract Mutation clone();
 
 	public boolean apply() {
 		try {
@@ -50,7 +50,8 @@ public abstract class Mutation implements Cloneable {
 	protected abstract boolean doApply() throws MutationException;
 
 	protected void handle(MutationException e) {
-		ModelMutatorUtil.handle(new RuntimeException(e), util.getModelMutatorConfiguration());
+		System.out.println(this + " this fail:" + e.getMessage());
+		// ModelMutatorUtil.handle(new RuntimeException(e), util.getModelMutatorConfiguration());
 	}
 
 }

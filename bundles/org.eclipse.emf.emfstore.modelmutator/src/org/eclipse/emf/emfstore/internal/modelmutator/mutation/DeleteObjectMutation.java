@@ -63,7 +63,7 @@ public class DeleteObjectMutation extends ContainmentChangeMutation {
 	}
 
 	@Override
-	protected Mutation clone() {
+	public Mutation clone() {
 		final DeleteObjectMutation mutation = new DeleteObjectMutation(getUtil(), targetContainerSelector);
 		mutation.setMaxNumberOfContainments(maxNumberOfContainments);
 		mutation.setEObjectToDelete(getEObjectToDelete());

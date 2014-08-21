@@ -19,9 +19,9 @@ import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPr
 import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.isCompatibleWithAnyFeatureOfEClass;
 import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.isContainedByEObject;
 import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.isContainedByFeature;
-import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.isNullValueOrList;
 import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.isNonEmptyEObjectValueOrList;
 import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.isNotTheSame;
+import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.isNullValueOrList;
 import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.mayBeContainedByAnyOfTheseReferences;
 import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.mayBeContainedByFeature;
 import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.mayTakeEObjectAsValue;
@@ -44,7 +44,7 @@ import com.google.common.base.Predicate;
  * @author Philip Langer
  *
  */
-class MoveObjectMutation extends ContainmentChangeMutation {
+public class MoveObjectMutation extends ContainmentChangeMutation {
 
 	private final MutationTargetSelector sourceContainerSelector;
 	private EObject eObjectToMove;
@@ -118,7 +118,7 @@ class MoveObjectMutation extends ContainmentChangeMutation {
 	}
 
 	@Override
-	protected Mutation clone() {
+	public Mutation clone() {
 		final MoveObjectMutation clone = new MoveObjectMutation(getUtil(), sourceContainerSelector,
 			targetContainerSelector);
 		clone.setEObjectToMove(eObjectToMove);
