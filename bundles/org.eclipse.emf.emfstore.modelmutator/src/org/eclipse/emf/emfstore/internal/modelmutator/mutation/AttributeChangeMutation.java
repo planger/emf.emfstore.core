@@ -13,6 +13,7 @@ package org.eclipse.emf.emfstore.internal.modelmutator.mutation;
 
 import static com.google.common.base.Predicates.not;
 import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.hasFeatureMapEntryType;
+import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.isMultiValued;
 import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.isMutatableAttribute;
 import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.isNonEmptyValueOrList;
 
@@ -20,9 +21,13 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorUtil;
 import org.eclipse.emf.emfstore.internal.modelmutator.intern.attribute.AttributeSetter;
+
+import com.google.common.base.Predicate;
 
 /**
  * @author Philip Langer
@@ -36,14 +41,18 @@ public class AttributeChangeMutation extends StructuralFeatureMutation {
 
 	public AttributeChangeMutation(ModelMutatorUtil util) {
 		super(util);
-		addTargetFeatureAttributePredicate();
-		addAttributeTypeNotFeatureMapPredicate();
+		addGeneralAttributeChangeMutationPredicates();
 	}
 
 	protected AttributeChangeMutation(ModelMutatorUtil util, MutationTargetSelector selector) {
 		super(util, selector);
+		addGeneralAttributeChangeMutationPredicates();
+	}
+
+	private void addGeneralAttributeChangeMutationPredicates() {
 		addTargetFeatureAttributePredicate();
 		addAttributeTypeNotFeatureMapPredicate();
+		addAttributeTypeNotEEnumeratorPredicate();
 	}
 
 	private void addTargetFeatureAttributePredicate() {
@@ -52,6 +61,15 @@ public class AttributeChangeMutation extends StructuralFeatureMutation {
 
 	private void addAttributeTypeNotFeatureMapPredicate() {
 		targetContainerSelector.getTargetFeaturePredicates().add(not(hasFeatureMapEntryType));
+	}
+
+	private void addAttributeTypeNotEEnumeratorPredicate() {
+		targetContainerSelector.getTargetFeaturePredicates().add(
+			not(new Predicate<EStructuralFeature>() {
+				public boolean apply(EStructuralFeature input) {
+					return input != null && EcorePackage.eINSTANCE.getEEnumerator().equals(input.getEType());
+				}
+			}));
 	}
 
 	@Override
@@ -133,7 +151,7 @@ public class AttributeChangeMutation extends StructuralFeatureMutation {
 	}
 
 	private void makeSureAttributeIsMutliValued() {
-		targetContainerSelector.getTargetFeaturePredicates().add(MutationPredicates.isMultiValued);
+		targetContainerSelector.getTargetFeaturePredicates().add(isMultiValued);
 	}
 
 	protected Object createNewValue(EAttribute eAttribute) {
