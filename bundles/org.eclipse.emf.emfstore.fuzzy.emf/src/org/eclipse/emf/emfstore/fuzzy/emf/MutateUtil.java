@@ -1,11 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2012-2013 EclipseSource Muenchen GmbH and others.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * JulianSommerfeldt
  ******************************************************************************/
@@ -30,9 +30,9 @@ import org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorConfigurat
 
 /**
  * A {@link Util} class for tests using the {@link EMFDataProvider}.
- * 
+ *
  * @author Julian Sommerfeldt
- * 
+ *
  */
 public class MutateUtil implements Util {
 
@@ -43,7 +43,7 @@ public class MutateUtil implements Util {
 
 	/**
 	 * For internal use.
-	 * 
+	 *
 	 * @param dataProvider
 	 *            The {@link EMFDataProvider} of the test.
 	 */
@@ -98,7 +98,7 @@ public class MutateUtil implements Util {
 
 	/**
 	 * Mutate with a {@link ModelMutatorConfiguration}.
-	 * 
+	 *
 	 * @param mmc
 	 *            The {@link ModelMutatorConfiguration} to use for mutation.
 	 */
@@ -106,9 +106,15 @@ public class MutateUtil implements Util {
 		ModelMutator.changeModel(mmc);
 	}
 
+	public void mutate(EPackage ePackage, EObject rootObject) {
+		final ModelMutatorConfiguration conf = new ModelMutatorConfiguration(ePackage, rootObject, getSeed());
+		conf.setIgnoreAndLog(true);
+		ModelMutator.changeModel(conf);
+	}
+
 	/**
 	 * @see #saveEObject(EObject, String, boolean)
-	 * 
+	 *
 	 * @param obj
 	 *            The {@link EObject} to save.
 	 */
@@ -118,11 +124,11 @@ public class MutateUtil implements Util {
 
 	/**
 	 * Save an {@link EObject} in the folder: artifacts/runs/configID.
-	 * 
+	 *
 	 * Use it for instance to save objects, when an error occurs.
-	 * 
+	 *
 	 * The file name is always: COUNT_SUFFIX.xml so e.g. 3_testFile.xml
-	 * 
+	 *
 	 * @param obj
 	 *            The EObject to save.
 	 * @param suffix
@@ -163,7 +169,7 @@ public class MutateUtil implements Util {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param suffix
 	 *            The suffix for the file: e.g. testFile. <code>null</code> permitted.
 	 * @return A file {@link URI} to the current run folder.
@@ -174,7 +180,7 @@ public class MutateUtil implements Util {
 
 	/**
 	 * Returns the {@link EMFDataProvider} that is used to generated data.
-	 * 
+	 *
 	 * @return the dataProvider
 	 */
 	protected EMFDataProvider getDataProvider() {
