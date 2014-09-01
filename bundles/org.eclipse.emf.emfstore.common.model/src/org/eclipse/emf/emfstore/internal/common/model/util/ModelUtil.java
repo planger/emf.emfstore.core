@@ -619,7 +619,6 @@ public final class ModelUtil {
 	 * @param statusInt
 	 *            severity. Use one of constants in
 	 *            org.eclipse.core.runtime.Status class.
-	 * @throws LoggedException
 	 */
 	public static void log(String message, Throwable exception, int statusInt) {
 		final Bundle bundle = Platform.getBundle(ORG_ECLIPSE_EMF_EMFSTORE_COMMON_MODEL);
