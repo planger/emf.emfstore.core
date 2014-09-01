@@ -7,10 +7,11 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * chodnick
+ * chodnick - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.common.model.util;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -55,12 +56,12 @@ final class NotificationValidator {
 	protected void validate(NotificationInfo n) {
 
 		if (n == null) {
-			throw new IllegalArgumentException("NotificationInfo argument cannot be null");
+			throw new IllegalArgumentException(Messages.NotificationValidator_NotificationInfoMustNotBeNull);
 		}
 
 		// assume notification is valid, handlers will reset state and message, if something is wrong
 		n.setValid(true);
-		n.setValidationMessage("OK");
+		n.setValidationMessage("OK"); //$NON-NLS-1$
 
 		// consider touch and transient notification to always be valid
 		if (n.isTouch() || n.isTransient()) {
@@ -99,7 +100,7 @@ final class NotificationValidator {
 
 	private void handleUnknownNotification(NotificationInfo n) {
 		n.setValid(false);
-		n.setValidationMessage("Error: unknown notification event type. " + n.toString());
+		n.setValidationMessage(Messages.NotificationValidator_UnknownNotificationType + n.toString());
 	}
 
 	private void handleMoveNotification(NotificationInfo n) {
@@ -115,23 +116,28 @@ final class NotificationValidator {
 			// sanity checks
 			if (n.getNewValue() == null || n.getOldValue() == null) {
 				n.setValid(false);
-				n.setValidationMessage("Null detected in oldValue or NewValue of move notification about: "
-					+ n.getNotifier().getClass().getCanonicalName() + "-" + n.getReference().getName());
+				n.setValidationMessage(
+					MessageFormat.format(
+						Messages.NotificationValidator_NullDetected,
+						n.getNotifier().getClass().getCanonicalName(),
+						n.getReference().getName()));
 				return;
 			}
 
 			if (!(n.getNewValue() instanceof EObject)) {
 				// non model element references must be marked transient
-
 				n.setValid(false);
-				n.setValidationMessage("Non-transient non-EObject reference feature detected: "
-					+ n.getNotifier().getClass().getCanonicalName() + "-" + n.getReference().getName());
+				n.setValidationMessage(
+					MessageFormat.format(
+						Messages.NotificationValidator_NonTransientFeatureDetected,
+						n.getNotifier().getClass().getCanonicalName(),
+						n.getReference().getName()));
 				return;
 			}
 
 			if (!(n.getOldValue() instanceof Integer)) {
 				n.setValid(false);
-				n.setValidationMessage("Error with old position in move: not an Integer");
+				n.setValidationMessage(Messages.NotificationValidator_ErrorDuringMove);
 				return;
 			}
 
@@ -141,7 +147,7 @@ final class NotificationValidator {
 
 	private void handleUnsetNotification(NotificationInfo n) {
 		if (!((EStructuralFeature) n.getFeature()).isUnsettable()) {
-			n.setValidationMessage("Feature cannot be unset");
+			n.setValidationMessage(Messages.NotificationValidator_FeatureCantBeUnset);
 			n.setValid(false);
 			return;
 		}
@@ -163,16 +169,19 @@ final class NotificationValidator {
 			// the new guys must come in a list
 			if (!(n.getOldValue() instanceof List<?>)) {
 				n.setValid(false);
-				n.setValidationMessage("Non-List oldValue argument for REMOVE_MANY notification on: "
-					+ n.getNotifier().getClass().getCanonicalName() + "-" + n.getReference().getName());
+				n.setValidationMessage(
+					MessageFormat.format(
+						Messages.NotificationValidator_NonListOldValue_REMOVE_MANY,
+						n.getNotifier().getClass().getCanonicalName(),
+						n.getReference().getName()));
 				return;
 			}
 
 			// checking up on EMF, the reference must have max multiplicity greater than 1...
 			if (!n.getReference().isMany()) {
 				n.setValid(false);
-				n.setValidationMessage("Unkown notification state: REMOVE_MANY notification on reference "
-					+ "feature with isMany==false");
+				n.setValidationMessage(
+					Messages.NotificationValidator_UnknownNotificationState_REMOVE_MANY);
 				return;
 			}
 
@@ -195,16 +204,19 @@ final class NotificationValidator {
 			// the new guys must come in a list
 			if (!(n.getNewValue() instanceof List<?>)) {
 				n.setValid(false);
-				n.setValidationMessage("Non-List newValue argument for ADD_MANY notification on: "
-					+ n.getNotifier().getClass().getCanonicalName() + "-" + n.getReference().getName());
+				n.setValidationMessage(
+					MessageFormat.format(
+						Messages.NotificationValidator_NonListNewValue_REMOVE_MANY,
+						n.getNotifier().getClass().getCanonicalName(),
+						n.getReference().getName()));
 				return;
 			}
 
 			// checking up on EMF, the reference must have max multiplicity greater than 1...
 			if (!n.getReference().isMany()) {
 				n.setValid(false);
-				n.setValidationMessage("Unkown notification state: ADD_MANY notification on reference "
-					+ "feature with isMany==false");
+				n.setValidationMessage(
+					Messages.NotificationValidator_UnknownNotificationState_ADD_MANY);
 				return;
 			}
 
@@ -220,8 +232,11 @@ final class NotificationValidator {
 			// non model element references must be marked transient
 			if (!(n.getOldValue() instanceof EObject)) {
 				n.setValid(false);
-				n.setValidationMessage("Non-transient non-EObject reference feature detected: "
-					+ n.getNotifier().getClass().getCanonicalName() + "-" + n.getReference().getName());
+				n.setValidationMessage(
+					MessageFormat.format(
+						Messages.NotificationValidator_NonTransientFeatureDetected,
+						n.getNotifier().getClass().getCanonicalName(),
+						n.getReference().getName()));
 				return;
 
 			}
@@ -229,14 +244,13 @@ final class NotificationValidator {
 			// checking up on EMF...
 			if (!n.getReference().isMany()) {
 				n.setValid(false);
-				n.setValidationMessage("Unkown notification state: REMOVE notification on reference "
-					+ "feature with isMany==false");
+				n.setValidationMessage(
+					Messages.NotificationValidator_UnknownNotificationState_REMOVE);
 			}
 
 		}
 
 		// no validation for REMOVE attribute
-
 	}
 
 	private void handleAddNotification(NotificationInfo n) {
@@ -247,8 +261,11 @@ final class NotificationValidator {
 			// non model element references must be marked transient
 			if (!(n.getNewValue() instanceof EObject)) {
 				n.setValid(false);
-				n.setValidationMessage("Non-transient non-EObject reference feature detected: "
-					+ n.getNotifier().getClass().getCanonicalName() + "-" + n.getReference().getName());
+				n.setValidationMessage(
+					MessageFormat.format(
+						Messages.NotificationValidator_NonTransientFeatureDetected,
+						n.getNotifier().getClass().getCanonicalName(),
+						n.getReference().getName()));
 				return;
 
 			}
@@ -256,8 +273,8 @@ final class NotificationValidator {
 			// checking up on EMF...
 			if (!n.getReference().isMany()) {
 				n.setValid(false);
-				n.setValidationMessage("Unkown notification state: ADD notification on reference "
-					+ "feature with isMany==false");
+				n.setValidationMessage(
+					Messages.NotificationValidator_UnknownNotificationState_ADD);
 			}
 
 		}
@@ -281,8 +298,11 @@ final class NotificationValidator {
 			if (newValIsNoME || oldValIsNoME) {
 				// non model element references must be marked transient
 				n.setValid(false);
-				n.setValidationMessage("Non-transient non-EObject reference feature detected: "
-					+ n.getNotifier().getClass().getCanonicalName() + "-" + n.getReference().getName());
+				n.setValidationMessage(
+					MessageFormat.format(
+						Messages.NotificationValidator_NonTransientFeatureDetected,
+						n.getNotifier().getClass().getCanonicalName(),
+						n.getReference().getName()));
 				return;
 			}
 

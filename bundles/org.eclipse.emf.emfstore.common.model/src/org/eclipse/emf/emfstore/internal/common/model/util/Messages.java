@@ -17,7 +17,7 @@ import org.eclipse.osgi.util.NLS;
  * Common util related messages.
  * 
  * @author emueller
- * 
+ * @generated
  */
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.emf.emfstore.internal.common.model.util.messages"; //$NON-NLS-1$
@@ -32,6 +32,18 @@ public final class Messages extends NLS {
 	public static String ModelUtil_Resource_Contains_No_Objects_Of_Given_Class;
 	public static String ModelUtil_Save_Options_Initialized;
 	public static String ModelUtil_SingletonIdResolver_Not_Instantiated;
+	public static String NotificationValidator_ErrorDuringMove;
+	public static String NotificationValidator_FeatureCantBeUnset;
+	public static String NotificationValidator_NonListNewValue_REMOVE_MANY;
+	public static String NotificationValidator_NonListOldValue_REMOVE_MANY;
+	public static String NotificationValidator_NonTransientFeatureDetected;
+	public static String NotificationValidator_NotificationInfoMustNotBeNull;
+	public static String NotificationValidator_NullDetected;
+	public static String NotificationValidator_UnknownNotificationState_ADD;
+	public static String NotificationValidator_UnknownNotificationState_ADD_MANY;
+	public static String NotificationValidator_UnknownNotificationState_REMOVE;
+	public static String NotificationValidator_UnknownNotificationState_REMOVE_MANY;
+	public static String NotificationValidator_UnknownNotificationType;
 	public static String SerializationException_Failed;
 	static {
 		// initialize resource bundle
