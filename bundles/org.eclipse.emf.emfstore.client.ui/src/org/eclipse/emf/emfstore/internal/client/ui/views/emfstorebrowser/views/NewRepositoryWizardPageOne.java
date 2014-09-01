@@ -7,13 +7,13 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * shterev
- * pfeifferc
+ * Alexander Shterev, Carl Pfeiffer - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.views.emfstorebrowser.views;
 
 import java.util.ArrayList;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.emfstore.client.ESServer;
 import org.eclipse.emf.emfstore.client.exceptions.ESCertificateException;
 import org.eclipse.emf.emfstore.internal.client.model.connectionmanager.KeyStoreManager;
@@ -51,9 +51,9 @@ public class NewRepositoryWizardPageOne extends WizardPage {
 	 * Default constructor.
 	 */
 	public NewRepositoryWizardPageOne() {
-		super("Main");
-		setTitle("Server Details");
-		setDescription("Select the details for the new repository");
+		super(Messages.NewRepositoryWizardPageOne_Main);
+		setTitle(Messages.NewRepositoryWizardPageOne_ServerDetails);
+		setDescription(Messages.NewRepositoryWizardPageOne_SelectDetails);
 	}
 
 	/**
@@ -72,21 +72,21 @@ public class NewRepositoryWizardPageOne extends WizardPage {
 		composite.setLayout(gl);
 
 		// Server Name
-		new Label(composite, SWT.NONE).setText("Name:");
+		new Label(composite, SWT.NONE).setText(Messages.NewRepositoryWizardPageOne_Name);
 		name = new Text(composite, SWT.BORDER);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = ncol - 1;
 		name.setLayoutData(gd);
 
 		// Server URL
-		new Label(composite, SWT.NONE).setText("URL:");
+		new Label(composite, SWT.NONE).setText(Messages.NewRepositoryWizardPageOne_URL);
 		url = new Text(composite, SWT.BORDER);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = ncol - 1;
 		url.setLayoutData(gd);
 
 		// Server Port
-		new Label(composite, SWT.NONE).setText("Port:");
+		new Label(composite, SWT.NONE).setText(Messages.NewRepositoryWizardPageOne_Port);
 		port = new Spinner(composite, SWT.BORDER);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = ncol - 1;
@@ -95,7 +95,7 @@ public class NewRepositoryWizardPageOne extends WizardPage {
 		setControl(composite);
 
 		// Certificate
-		new Label(composite, SWT.NONE).setText("Certificate:");
+		new Label(composite, SWT.NONE).setText(Messages.NewRepositoryWizardPageOne_Certificate);
 		certificateCombo = new Combo(composite, SWT.BORDER);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = ncol - 2;
@@ -105,7 +105,7 @@ public class NewRepositoryWizardPageOne extends WizardPage {
 
 		// Choose Certificate, Opens Dialogue
 		final Button button = new Button(composite, SWT.NONE);
-		button.setText("Edit");
+		button.setText(Messages.NewRepositoryWizardPageOne_Edit);
 		button.addSelectionListener(new SelectionDialogListener());
 
 		gd = new GridData(GridData.HORIZONTAL_ALIGN_END);
@@ -129,10 +129,10 @@ public class NewRepositoryWizardPageOne extends WizardPage {
 						}
 					}
 				} else {
-					certificateCombo.setText("");
+					certificateCombo.setText(StringUtils.EMPTY);
 				}
 			} catch (final ESCertificateException e1) {
-				certificateCombo.setText("");
+				certificateCombo.setText(StringUtils.EMPTY);
 			}
 		}
 	}
@@ -225,9 +225,8 @@ public class NewRepositoryWizardPageOne extends WizardPage {
 					public String getText(Object element) {
 						if (element instanceof String) {
 							return element.toString();
-						} else {
-							return "";
 						}
+						return StringUtils.EMPTY;
 					}
 				});
 			ArrayList<String> certificates;
@@ -238,7 +237,7 @@ public class NewRepositoryWizardPageOne extends WizardPage {
 				csd.setErrorMessage(e1.getMessage());
 			}
 			csd.setBlockOnOpen(true);
-			csd.setTitle("Certificate Selection Dialog");
+			csd.setTitle(Messages.NewRepositoryWizardPageOne_CertificateSelectionDialog);
 			csd.open();
 			if (csd.getReturnCode() == Window.OK) {
 				initCombo();

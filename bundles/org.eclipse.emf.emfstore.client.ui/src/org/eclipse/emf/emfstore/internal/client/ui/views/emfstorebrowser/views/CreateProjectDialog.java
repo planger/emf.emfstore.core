@@ -7,8 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Aleksander Shterev
- * Edgar Mueller
+ * Aleksander Shterev, Edgar Mueller - initial API and implementation
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.ui.views.emfstorebrowser.views;
 
@@ -67,23 +66,23 @@ public class CreateProjectDialog extends TitleAreaDialog {
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		Composite contents = new Composite(parent, SWT.NONE);
+		final Composite contents = new Composite(parent, SWT.NONE);
 		contents.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		setTitle("Create new project");
-		getShell().setText("Create new project");
+		setTitle(Messages.CreateProjectDialog_CreateNewProject);
+		getShell().setText(Messages.CreateProjectDialog_CreateNewProject);
 
 		if (labelText != null) {
 			setMessage(labelText);
 		} else {
-			setMessage("Enter the name and the description of the project");
+			setMessage(Messages.CreateProjectDialog_EnterName);
 		}
 
-		Label name = new Label(contents, SWT.NULL);
-		name.setText("Name:");
+		final Label name = new Label(contents, SWT.NULL);
+		name.setText(Messages.CreateProjectDialog_Name);
 		txtProjectName = new Text(contents, SWT.SINGLE | SWT.BORDER);
 		txtProjectName.setSize(150, 20);
 
-		Point defaultMargins = LayoutConstants.getMargins();
+		final Point defaultMargins = LayoutConstants.getMargins();
 		GridLayoutFactory.fillDefaults().numColumns(2).margins(defaultMargins.x, defaultMargins.y)
 			.generateLayout(contents);
 
