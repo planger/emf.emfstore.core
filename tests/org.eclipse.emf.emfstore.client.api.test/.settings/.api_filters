@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component id="org.eclipse.emf.emfstore.client.api.test" version="2">
+    <resource path="src/org/eclipse/emf/emfstore/client/api/test/RunESCommandTest.java" type="org.eclipse.emf.emfstore.client.api.test.RunESCommandTest">
+        <filter comment="internal test API usage" id="572522506">
+            <message_arguments>
+                <message_argument value="ESException"/>
+                <message_argument value="RunESCommandTest"/>
+            </message_arguments>
+        </filter>
+    </resource>
+</component>

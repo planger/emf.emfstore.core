@@ -28,15 +28,15 @@ public class TestConflictResolver extends AbstractConflictResolver {
 	@Override
 	protected boolean controlDecisionManager(DecisionManager decisionManager, ChangeConflictSet changeConflictSet) {
 		int counter = 0;
-		for (VisualConflict conflict : decisionManager.getConflicts()) {
+		for (final VisualConflict conflict : decisionManager.getConflicts()) {
 			conflict.setSolution(conflict.getOptionOfType(OptionType.MyOperation));
 			counter++;
 		}
 		if (!decisionManager.isResolved()) {
-			throw new RuntimeException("Conflicts not resolved");
+			throw new RuntimeException("Conflicts not resolved"); //$NON-NLS-1$
 		}
 		if (counter > -1 && counter != expectedConflicts) {
-			throw new RuntimeException("more or less conflicts then expected");
+			throw new RuntimeException("more or less conflicts then expected"); //$NON-NLS-1$
 		}
 		return true;
 	}

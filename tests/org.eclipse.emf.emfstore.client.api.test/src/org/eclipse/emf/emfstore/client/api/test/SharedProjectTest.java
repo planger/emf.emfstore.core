@@ -33,6 +33,7 @@ import org.eclipse.emf.emfstore.bowling.Player;
 import org.eclipse.emf.emfstore.bowling.Tournament;
 import org.eclipse.emf.emfstore.client.ESLocalProject;
 import org.eclipse.emf.emfstore.client.ESRemoteProject;
+import org.eclipse.emf.emfstore.client.ESUsersession;
 import org.eclipse.emf.emfstore.client.ESWorkspaceProvider;
 import org.eclipse.emf.emfstore.client.callbacks.ESCommitCallback;
 import org.eclipse.emf.emfstore.client.test.common.cases.ESTestWithSharedProject;
@@ -58,6 +59,7 @@ import org.eclipse.emf.emfstore.server.model.versionspec.ESVersionSpec;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class SharedProjectTest extends ESTestWithSharedProject {
@@ -97,6 +99,22 @@ public class SharedProjectTest extends ESTestWithSharedProject {
 			final ESRemoteProject remoteProject = getLocalProject().getRemoteProject();
 			assertNotNull(remoteProject);
 			assertTrue(getLocalProject().isShared());
+		} catch (final ESException e) {
+			fail(e.getMessage());
+		}
+	}
+
+	@Ignore
+	@Test
+	public void testShareAfterRemoteProjectHasBeenDeleted() {
+		try {
+			final ESRemoteProject remoteProject = getLocalProject().getRemoteProject();
+			assertNotNull(remoteProject);
+			remoteProject.delete(new NullProgressMonitor());
+			final ESUsersession session = getLocalProject().getUsersession();
+			session.logout();
+			session.refresh();
+			assertFalse(getLocalProject().isShared());
 		} catch (final ESException e) {
 			fail(e.getMessage());
 		}
