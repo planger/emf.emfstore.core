@@ -12,13 +12,13 @@
 package org.eclipse.emf.emfstore.client.conflictdetection.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
@@ -33,7 +33,6 @@ import org.eclipse.emf.emfstore.client.util.ESVoidCallable;
 import org.eclipse.emf.emfstore.client.util.RunESCommand;
 import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
 import org.eclipse.emf.emfstore.internal.client.model.exceptions.ChangeConflictException;
-import org.eclipse.emf.emfstore.internal.client.model.impl.ProjectSpaceBase;
 import org.eclipse.emf.emfstore.internal.client.model.impl.api.ESLocalProjectImpl;
 import org.eclipse.emf.emfstore.internal.common.model.IdEObjectCollection;
 import org.eclipse.emf.emfstore.internal.common.model.ModelElementId;
@@ -42,6 +41,7 @@ import org.eclipse.emf.emfstore.internal.common.model.util.IdEObjectCollectionCh
 import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.AbstractOperation;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.CreateDeleteOperation;
+import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.MultiReferenceOperation;
 import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.SingleReferenceOperation;
 import org.eclipse.emf.emfstore.test.model.TestElement;
 import org.eclipse.emf.emfstore.test.model.TestmodelFactory;
@@ -499,18 +499,18 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 		addTestElement(testElement);
 		addTestElement(keyElement);
 
-		putIntoMapEntryWithNonContainedKey(testElement, keyElement, "foo");
+		final ModelElementId testElementId = getProject().getModelElementId(testElement);
+
+		putIntoMapEntryWithNonContainedKey(testElement, keyElement, "foo"); //$NON-NLS-1$
+
+		clearOperations();
 
 		// TOOD: provide adapter
 		addObserverTo(getLocalProject(), new IdEObjectCollectionChangeObserver() {
 			public void modelElementRemoved(IdEObjectCollection collection, EObject eObject) {
 				final String id = IdEObjectCollectionImpl.class.cast(collection).getDeletedModelElementId(eObject)
 					.getId();
-				if (deletedElements.containsValue(id)) {
-					System.out.println();
-				} else {
-					deletedElements.put(eObject, id);
-				}
+				deletedElements.put(eObject, id);
 			}
 
 			public void notify(Notification notification, IdEObjectCollection collection, EObject modelElement) {
@@ -532,44 +532,42 @@ public class ConflictDetectionMapTest extends ConflictDetectionTest {
 
 		assertEquals(1, getLocalProject().getAllModelElements().size());
 		assertEquals(2, deletedElements.size());
-		Iterator<EObject> iterator = deletedElements.keySet().iterator();
-		boolean success = false;
-		while (iterator.hasNext()) {
-			final EObject next = iterator.next();
-			if (Map.Entry.class.isInstance(next)) {
-				final Entry entry = Map.Entry.class.cast(next);
-				if (entry.getKey() != null) {
-					success = true;
-				}
-			}
-		}
-		assertTrue(success);
+		assertTrue(testElement.getElementToStringMap().isEmpty());
 
 		deletedElements.clear();
 
-		// revert
-		final List<AbstractOperation> operations = ModelUtil.clone(getProjectSpace().getOperations());
-		getProjectSpace().revert();
+		final List<AbstractOperation> operations = getProjectSpace().getOperations();
+		assertEquals(2, operations.size());
+		final CreateDeleteOperation createDeleteOperation = checkAndCast(operations.get(0), CreateDeleteOperation.class);
 
-		assertEquals(2, getLocalProject().getAllModelElements().size());
+		final SingleReferenceOperation singleRefOp = checkAndCast(
+			createDeleteOperation.getSubOperations().get(0),
+			SingleReferenceOperation.class);
+		final MultiReferenceOperation multiRefOp = checkAndCast(
+			createDeleteOperation.getSubOperations().get(1),
+			MultiReferenceOperation.class);
+
+		assertEquals("key", singleRefOp.getFeatureName()); //$NON-NLS-1$
+		assertNull(singleRefOp.getNewValue());
+
+		assertEquals("elementToStringMap", multiRefOp.getFeatureName()); //$NON-NLS-1$
+		assertFalse(multiRefOp.isAdd());
+
+		// revert
+		RunESCommand.run(new ESVoidCallable() {
+			@Override
+			public void run() {
+				getProjectSpace().revert();
+			}
+		});
+
+		final TestElement element = (TestElement) getProject().getModelElement(testElementId);
 
 		// forward
-		ProjectSpaceBase.class.cast(getProjectSpace()).applyOperations(operations, true);
-		assertEquals(1, getLocalProject().getAllModelElements().size());
-		assertEquals(2, deletedElements.size());
-
-		iterator = deletedElements.keySet().iterator();
-		success = false;
-		while (iterator.hasNext()) {
-			final EObject next = iterator.next();
-			if (Map.Entry.class.isInstance(next)) {
-				final Entry entry = Map.Entry.class.cast(next);
-				if (entry.getKey() != null) {
-					success = true;
-				}
-			}
-		}
-		assertTrue(success);
+		assertEquals(1,
+			element.getElementToStringMap().size());
+		assertEquals("foo", //$NON-NLS-1$
+			element.getElementToStringMap().get(keyElement));
 	}
 
 	/**
