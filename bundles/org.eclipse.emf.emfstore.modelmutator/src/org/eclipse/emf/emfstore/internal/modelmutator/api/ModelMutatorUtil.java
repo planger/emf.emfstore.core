@@ -349,7 +349,7 @@ public final class ModelMutatorUtil {
 			}
 			// obtain all EClasses that are direct contents of the EPackage
 			for (final EClassifier classifier : ePackage.getEClassifiers()) {
-				if (classifier instanceof EClass && canHaveInstance((EClass) classifier)) {
+				if (classifier instanceof EClass) {
 					list.add((EClass) classifier);
 				}
 			}
@@ -661,7 +661,7 @@ public final class ModelMutatorUtil {
 							setPerCommand(eObject, attribute, attributeSetter.createNewAttribute(), i);
 						} else {
 							final Object attributeToMove = ((Collection<?>) eObject.eGet(attribute)).toArray()[random
-								.nextInt(size)];
+							                                                                                   .nextInt(size)];
 							movePerCommand(eObject, attribute, attributeToMove, random.nextInt(size));
 						}
 					}
