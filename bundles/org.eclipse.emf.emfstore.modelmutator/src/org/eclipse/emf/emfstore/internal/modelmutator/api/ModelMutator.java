@@ -63,7 +63,7 @@ public class ModelMutator extends AbstractModelMutator {
 		mutations.add(new ReferenceChangeMutation(util));
 
 		int i = 0;
-		while (i < 3) {
+		while (i < config.getMutationCount()) {
 			final int rndIdx = config.getRandom().nextInt(mutations.size());
 			final Mutation nextMutation = mutations.get(rndIdx);
 			final Mutation mutationToRun = nextMutation.clone();

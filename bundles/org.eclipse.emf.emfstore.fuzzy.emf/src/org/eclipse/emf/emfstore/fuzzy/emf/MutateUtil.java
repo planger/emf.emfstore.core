@@ -106,8 +106,9 @@ public class MutateUtil implements Util {
 		ModelMutator.changeModel(mmc);
 	}
 
-	public void mutate(EPackage ePackage, EObject rootObject) {
+	public void mutate(EPackage ePackage, EObject rootObject, int mutationCount) {
 		final ModelMutatorConfiguration conf = new ModelMutatorConfiguration(ePackage, rootObject, getSeed());
+		conf.setMutationCount(mutationCount);
 		conf.setIgnoreAndLog(true);
 		ModelMutator.changeModel(conf);
 	}
