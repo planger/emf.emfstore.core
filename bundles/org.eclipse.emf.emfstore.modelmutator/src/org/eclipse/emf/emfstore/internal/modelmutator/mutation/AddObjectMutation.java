@@ -14,6 +14,7 @@ package org.eclipse.emf.emfstore.internal.modelmutator.mutation;
 import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.isNullValueOrList;
 import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.mayTakeEObjectAsValue;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -89,12 +90,21 @@ public class AddObjectMutation extends ContainmentChangeMutation {
 	}
 
 	private EClass selectEClassToInstantiate() {
-		final EReference reference = (EReference) targetContainerSelector.getTargetFeature();
-		final List<EClass> eClasses = getUtil().getAllEContainments(reference);
-		// remove abstract and interface classes
-		eClasses.removeAll(getUtil().getModelMutatorConfiguration().geteClassesToIgnore());
+		final List<EClass> eClasses = getAllInstatiableEClassesCompatibleWithSelectedFeature();
 		final int randomIndex = getRandom().nextInt(eClasses.size());
 		return eClasses.get(randomIndex);
+	}
+
+	private List<EClass> getAllInstatiableEClassesCompatibleWithSelectedFeature() {
+		final EReference reference = (EReference) targetContainerSelector.getTargetFeature();
+		final List<EClass> eClasses = getUtil().getAllEContainments(reference);
+		eClasses.removeAll(getUtil().getModelMutatorConfiguration().geteClassesToIgnore());
+		for (final EClass eClass : new ArrayList<EClass>(eClasses)) {
+			if (!ModelMutatorUtil.canHaveInstance(eClass)) {
+				eClasses.remove(eClass);
+			}
+		}
+		return eClasses;
 	}
 
 	private EObject createEObjectToAdd() {
