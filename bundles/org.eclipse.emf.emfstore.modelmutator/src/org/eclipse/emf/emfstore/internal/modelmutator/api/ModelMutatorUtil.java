@@ -94,6 +94,8 @@ public final class ModelMutatorUtil {
 	 */
 	public static final int DELETE_ECORE = 2;
 
+	private static final Set<Object> registeredIDs = new LinkedHashSet<Object>();
+
 	private Map<EClassifier, AttributeSetter<?>> attributeSetters;
 
 	private final Map<EObject, List<EReference>> validContainmentReferences = new LinkedHashMap<EObject, List<EReference>>();
@@ -1037,6 +1039,21 @@ public final class ModelMutatorUtil {
 
 	public int getRandomDeleteMode() {
 		return getDeleteModes().get(config.getRandom().nextInt(getDeleteModes().size()));
+	}
+
+	/**
+	 * @param id the ID to check for uniqueness
+	 * @return true if {@code id} is unique, false otherwise
+	 */
+	public static boolean isUniqueID(Object id) {
+		return !registeredIDs.contains(id);
+	}
+
+	/**
+	 * @param id the ID to register
+	 */
+	public static void registerID(Object id) {
+		registeredIDs.add(id);
 	}
 
 }
