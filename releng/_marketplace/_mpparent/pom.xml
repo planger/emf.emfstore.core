@@ -1,89 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <groupId>org.eclipse.emf.emfstore</groupId>
+  <artifactId>org.eclipse.emf.emfstore.marketplave</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
 
-	<groupId>org.eclipse.emf.emfstore</groupId>
-	<artifactId>mp-parent</artifactId>
-	<version>1.4.0-SNAPSHOT</version>
-	<packaging>pom</packaging>
+  <properties>
+    <tycho-version>0.21.0</tycho-version>
+    <tycho-extras-version>${tycho-version}</tycho-extras-version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<tycho-version>0.20.0</tycho-version>
-		<emfstore-version>1.4.0-SNAPSHOT</emfstore-version>
-	</properties>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.eclipse.tycho.extras</groupId>
+        <artifactId>tycho-p2-extras-plugin</artifactId>
+        <version>${tycho-extras-version}</version>
+        <executions>
+          <execution>
+            <id>emfstoreAndECP</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>mirror</goal>
+            </goals>
+            <configuration>
+              <source>
+                <repository>
+                    <url>http://download.eclipse.org/ecp/releases/releases_14/140</url>
+                    <layout>p2</layout>
+                </repository>
+                <repository>
+                    <url>http://download.eclipse.org/emf-store/releases_14/140</url>
+                    <layout>p2</layout>
+                </repository>
+              </source>
 
-	<pluginRepositories>
-		<pluginRepository>
-			<id>eclipse-maven-releases</id>
-			<url>https://repo.eclipse.org/content/repositories/releases/</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
-
-	<modules>
-		<module>../_mptarget</module>
-		<module>../_mpp2</module>
-	</modules>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-maven-plugin</artifactId>
-				<version>${tycho-version}</version>
-				<extensions>true</extensions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>target-platform-configuration</artifactId>
-				<version>${tycho-version}</version>
-				<configuration>
-					<resolver>p2</resolver>
-					<pomDependencies>consider</pomDependencies>
-					<includePackedArtifacts>true</includePackedArtifacts>
-					<environments>
-						<environment>
-							<os>linux</os>
-							<ws>gtk</ws>
-							<arch>x86</arch>
-						</environment>
-						<environment>
-							<os>linux</os>
-							<ws>gtk</ws>
-							<arch>x86_64</arch>
-						</environment>
-						<environment>
-							<os>win32</os>
-							<ws>win32</ws>
-							<arch>x86</arch>
-						</environment>
-						<environment>
-							<os>win32</os>
-							<ws>win32</ws>
-							<arch>x86_64</arch>
-						</environment>
-						<environment>
-							<os>macosx</os>
-							<ws>cocoa</ws>
-							<arch>x86_64</arch>
-						</environment>
-					</environments>
-					<target>
-						<artifact>
-							<groupId>org.eclipse.emf.emfstore</groupId>
-							<artifactId>mp</artifactId>
-							<version>${emfstore-version}</version>
-						</artifact>
-					</target>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-
+              <ius>
+                <iu><id>org.eclipse.emf.emfstore.sdk.feature.feature.group</id></iu>
+                <iu><id>org.eclipse.emf.ecp.sdk.feature.feature.group</id></iu>
+              </ius>
+              
+              <destination>${project.build.directory}/repository</destination>
+              <followStrictOnly>true</followStrictOnly>
+              <includeOptional>false</includeOptional>
+              <includeNonGreedy>true</includeNonGreedy>
+              <latestVersionOnly>true</latestVersionOnly>
+              <mirrorMetadataOnly>false</mirrorMetadataOnly>
+              <compress>true</compress>
+              <append>true</append>
+              <includePacked>true</includePacked>
+              <includeFeatures>true</includeFeatures>
+              <name>EMFStore marketplace</name>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>
