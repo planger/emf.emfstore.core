@@ -14,13 +14,9 @@ package org.eclipse.emf.emfstore.internal.modelmutator.mutation;
 import static org.junit.Assert.*;
 import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.*;
 
-import java.util.List;
-
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.junit.Test;
-
-import com.google.common.base.Predicate;
 
 /**
  * @author Philip Langer

@@ -52,14 +52,6 @@ public class MoveObjectMutationTest extends AbstractMutationTest {
 		return getFirstEAttribute(getSecondEClass());
 	}
 
-	private EClass getThirdEClass() {
-		return (EClass)ePackageWithTwoClasses.getEClassifiers().get(2);
-	}
-	
-	private EAttribute getEAttributeInThirdClass() {
-		return getFirstEAttribute(getThirdEClass());
-	}
-
 	private EAttribute getFirstEAttribute(EClass eClass) {
 		if (eClass.getEAttributes().isEmpty()) {
 			return null;
