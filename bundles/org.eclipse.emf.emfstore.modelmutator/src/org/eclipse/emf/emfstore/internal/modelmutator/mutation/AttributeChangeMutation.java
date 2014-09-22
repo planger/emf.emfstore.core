@@ -97,11 +97,12 @@ public class AttributeChangeMutation extends StructuralFeatureMutation {
 		final EAttribute eAttribute = (EAttribute) targetContainerSelector.getTargetFeature();
 
 		Object newValue = createNewValue(eAttribute);
-		if (eAttribute.isID()) {
-			while (!ModelMutatorUtil.isUniqueID(newValue)) {
+		if (newValue != null && eAttribute.isID() && !getUtil().getModelMutatorConfiguration().isAllowDuplicateIDs())
+		{
+			while (!getUtil().isUniqueID(newValue)) {
 				newValue = createNewValue(eAttribute);
 			}
-			ModelMutatorUtil.registerID(newValue);
+			getUtil().registerID(newValue);
 		}
 		if (eAttribute.isMany()) {
 			final int insertionIndex = targetContainerSelector.
