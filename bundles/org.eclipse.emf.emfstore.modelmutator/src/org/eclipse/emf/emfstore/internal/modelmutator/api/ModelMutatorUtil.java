@@ -94,7 +94,7 @@ public final class ModelMutatorUtil {
 	 */
 	public static final int DELETE_ECORE = 2;
 
-	private static final Set<Object> registeredIDs = new LinkedHashSet<Object>();
+	private final Set<Object> registeredIDs = new LinkedHashSet<Object>();
 
 	private Map<EClassifier, AttributeSetter<?>> attributeSetters;
 
@@ -1045,14 +1045,14 @@ public final class ModelMutatorUtil {
 	 * @param id the ID to check for uniqueness
 	 * @return true if {@code id} is unique, false otherwise
 	 */
-	public static boolean isUniqueID(Object id) {
+	public boolean isUniqueID(Object id) {
 		return !registeredIDs.contains(id);
 	}
 
 	/**
 	 * @param id the ID to register
 	 */
-	public static void registerID(Object id) {
+	public void registerID(Object id) {
 		registeredIDs.add(id);
 	}
 

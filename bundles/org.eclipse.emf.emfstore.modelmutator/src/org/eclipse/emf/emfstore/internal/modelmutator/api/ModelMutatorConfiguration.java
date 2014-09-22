@@ -58,6 +58,7 @@ public class ModelMutatorConfiguration {
 
 	private boolean doNotGenerateRoot;
 	private boolean useEcoreUtilDelete;
+	private boolean allowDuplicateIDs;
 
 	private EditingDomain editingDomain;
 
@@ -308,6 +309,20 @@ public class ModelMutatorConfiguration {
 	 */
 	public void setMutationCount(Integer mutationCount) {
 		this.mutationCount = mutationCount;
+	}
+
+	/**
+	 * @return the allowDuplicateIDs
+	 */
+	public boolean isAllowDuplicateIDs() {
+		return allowDuplicateIDs;
+	}
+
+	/**
+	 * @param allowDuplicateIDs the allowDuplicateIDs to set
+	 */
+	public void setAllowDuplicateIDs(boolean allowDuplicateIDs) {
+		this.allowDuplicateIDs = allowDuplicateIDs;
 	}
 
 }
