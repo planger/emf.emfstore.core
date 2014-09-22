@@ -21,6 +21,10 @@ import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorConfiguration;
 import org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorUtil;
+import org.eclipse.emfstore.internal.modelmutator.mutation.testmodel.TestModelFactory;
+import org.eclipse.emfstore.internal.modelmutator.mutation.testmodel.TestType;
+import org.eclipse.emfstore.internal.modelmutator.mutation.testmodel.TypeWithFeatureMapContainment;
+import org.eclipse.emfstore.internal.modelmutator.mutation.testmodel.TypeWithFeatureMapNonContainment;
 import org.junit.Before;
 
 /**
@@ -29,17 +33,25 @@ import org.junit.Before;
  * @author Philip Langer
  */
 public abstract class AbstractMutationTest {
-	
+
 	protected static final EcoreFactory E_FACTORY = EcoreFactory.eINSTANCE;
+
 	protected static final EcorePackage E_PACKAGE = EcorePackage.eINSTANCE;
-	
+
 	protected EPackage ePackageWithTwoClasses;
+
 	protected ModelMutatorUtil utilForEPackageWithTwoClasses;
-	
+
+	protected TestType testTypeModel;
+
+	protected ModelMutatorUtil utilForTestTypeModel;
+
 	@Before
 	public void setUp() {
 		this.ePackageWithTwoClasses = createRootEPackageWithTwoClasses();
 		this.utilForEPackageWithTwoClasses = createMutationUtil(this.ePackageWithTwoClasses);
+		this.testTypeModel = createTestTypeModel();
+		this.utilForTestTypeModel = createMutationUtil(this.testTypeModel);
 	}
 
 	private EPackage createRootEPackageWithTwoClasses() {
@@ -50,7 +62,25 @@ public abstract class AbstractMutationTest {
 		rootEPackage.getEClassifiers().add(eClass2);
 		return rootEPackage;
 	}
-	
+
+	private TestType createTestTypeModel() {
+		TestModelFactory tFactory = TestModelFactory.eINSTANCE;
+
+		TypeWithFeatureMapContainment root = tFactory.createTypeWithFeatureMapContainment();
+		root.setName("Root");
+
+		TypeWithFeatureMapContainment child1 = tFactory.createTypeWithFeatureMapContainment();
+		child1.setName("Child2Containment");
+		root.getSecondKeyContainment().add(child1);
+		
+		TypeWithFeatureMapNonContainment child2 = tFactory.createTypeWithFeatureMapNonContainment();
+		child2.setName("Child1NonContainment");
+		child2.getFirstKey().add(root);
+		child2.getSecondKey().add(child2);
+		root.getFirstKeyContainment().add(child2);
+		
+		return root;
+	}
 
 	private ModelMutatorUtil createMutationUtil(EObject rootEObject) {
 		ModelMutatorConfiguration config = new ModelMutatorConfiguration();

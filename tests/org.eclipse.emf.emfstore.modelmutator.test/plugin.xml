@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+ Copyright (c) 2011-2014 EclipseSource Muenchen GmbH and others.
+ 
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v1.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v10.html
+ 
+ Contributors:
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated TestModel -->
+      <package
+            uri="http://eclipse.org/emf/emfstore/mutation/test/model"
+            class="org.eclipse.emfstore.internal.modelmutator.mutation.testmodel.TestModelPackage"
+            genModel="model/TestModel.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.extension_parser">
+      <!-- @generated TestModel -->
+      <parser
+            type="testmodel"
+            class="org.eclipse.emfstore.internal.modelmutator.mutation.testmodel.util.TestModelResourceFactoryImpl"/>
+   </extension>
+
+</plugin>
