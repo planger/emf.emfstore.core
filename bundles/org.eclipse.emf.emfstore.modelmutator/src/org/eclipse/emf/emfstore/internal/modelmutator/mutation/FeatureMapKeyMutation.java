@@ -11,6 +11,9 @@
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.modelmutator.mutation;
 
+import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.hasGroupFeatureMapEntryType;
+import static org.eclipse.emf.emfstore.internal.modelmutator.mutation.MutationPredicates.isNonEmptyFeatureMap;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,29 +21,77 @@ import java.util.List;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.change.FeatureMapEntry;
+import org.eclipse.emf.ecore.util.FeatureMap;
+import org.eclipse.emf.ecore.util.FeatureMap.Entry;
+import org.eclipse.emf.ecore.util.FeatureMapUtil;
 import org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorUtil;
 
+import com.google.common.collect.Lists;
+
 /**
- * TODO consider setting prototypes for containment, reference, and attribute mutations to make it configurable
+ * A mutation that changes the keys of {@link FeatureMapEntry feature map entries}.
  *
  * @author Philip Langer
  *
  */
-public class FeatureMapGroupMutation extends StructuralFeatureMutation {
+public class FeatureMapKeyMutation extends StructuralFeatureMutation {
 
-	public FeatureMapGroupMutation(ModelMutatorUtil util) {
+	public FeatureMapKeyMutation(ModelMutatorUtil util) {
 		super(util);
 		addTargetFeaturePredicate();
+		addOriginalFeatureValuePredicate();
 	}
 
-	public FeatureMapGroupMutation(ModelMutatorUtil util, MutationTargetSelector targetContainerSelector) {
+	public FeatureMapKeyMutation(ModelMutatorUtil util, MutationTargetSelector targetContainerSelector) {
 		super(util, targetContainerSelector);
 		addTargetFeaturePredicate();
+		addOriginalFeatureValuePredicate();
 	}
 
 	private void addTargetFeaturePredicate() {
-		targetContainerSelector.getTargetFeaturePredicates().add(
-			MutationPredicates.hasGroupFeatureMapEntryType);
+		targetContainerSelector.getTargetFeaturePredicates().add(hasGroupFeatureMapEntryType);
+	}
+
+	private void addOriginalFeatureValuePredicate() {
+		targetContainerSelector.getOriginalFeatureValuePredicates().add(isNonEmptyFeatureMap);
+	}
+
+	@Override
+	public Mutation clone() {
+		return new FeatureMapKeyMutation(getUtil(), targetContainerSelector);
+	}
+
+	@Override
+	protected boolean doApply() throws MutationException {
+		targetContainerSelector.doSelection();
+
+		final List<FeatureMap.Entry> currentEntries = getFeatureMapEntries();
+		final FeatureMap.Entry entry = getRandomFeatureMapEntryOfTarget(currentEntries);
+		final EStructuralFeature currentFeatureKey = entry.getEStructuralFeature();
+
+		final EStructuralFeature newFeatureKey = getRandomFeatureKeyExcludingCurrent(currentFeatureKey);
+		final Entry newEntry = FeatureMapUtil.createEntry(newFeatureKey, entry.getValue());
+		currentEntries.set(currentEntries.indexOf(entry), newEntry);
+
+		return true;
+	}
+
+	private FeatureMap.Entry getRandomFeatureMapEntryOfTarget(List<Entry> currentEntries) {
+		final int pickIndex = getRandom().nextInt(currentEntries.size());
+		return currentEntries.get(pickIndex);
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<Entry> getFeatureMapEntries() {
+		return (List<FeatureMap.Entry>) getTargetContainer().eGet(getTargetFeature());
+	}
+
+	private EStructuralFeature getRandomFeatureKeyExcludingCurrent(EStructuralFeature currentFeatureKey) {
+		final List<EStructuralFeature> availableFeatures = Lists.newArrayList(getFeaturesOfFeatureMapGroup());
+		availableFeatures.remove(currentFeatureKey);
+		final int pickIndex = getRandom().nextInt(availableFeatures.size());
+		return availableFeatures.get(pickIndex);
 	}
 
 	protected List<EStructuralFeature> getFeaturesOfFeatureMapGroup() {
@@ -82,54 +133,4 @@ public class FeatureMapGroupMutation extends StructuralFeatureMutation {
 		}
 		return extendedMetaDataGroupName;
 	}
-
-	@Override
-	public Mutation clone() {
-		return new FeatureMapGroupMutation(getUtil(), targetContainerSelector);
-	}
-
-	@Override
-	protected boolean doApply() throws MutationException {
-		boolean success = false;
-		targetContainerSelector.doSelection();
-		final List<EStructuralFeature> featuresOfFeatureMapGroup = getFeaturesOfFeatureMapGroup();
-		for (final EStructuralFeature targetFeature : featuresOfFeatureMapGroup) {
-			if (MutationPredicates.isContainmentReference.apply(targetFeature)) {
-				success = applyContainmentReferenceMutation(targetFeature);
-			} else if (MutationPredicates.isMutatableReference.apply(targetFeature)) {
-				success = applyReferenceMutation(targetFeature);
-			} else if (MutationPredicates.isMutatableAttribute.apply(targetFeature)) {
-				success = applyAttributeMutation(targetFeature);
-			}
-			if (success) {
-				break;
-			}
-		}
-		return success;
-	}
-
-	private boolean applyContainmentReferenceMutation(EStructuralFeature targetFeature) {
-		final boolean shouldAdd = getRandom().nextBoolean();
-		final ContainmentChangeMutation mutation;
-		if (shouldAdd) {
-			mutation = new AddObjectMutation(getUtil());
-		} else {
-			mutation = new DeleteObjectMutation(getUtil());
-		}
-		mutation.setTargetFeature(targetFeature);
-		return mutation.apply();
-	}
-
-	private boolean applyReferenceMutation(EStructuralFeature targetFeature) {
-		final ReferenceChangeMutation mutation = new ReferenceChangeMutation(getUtil());
-		mutation.setTargetFeature(targetFeature);
-		return mutation.apply();
-	}
-
-	private boolean applyAttributeMutation(EStructuralFeature targetFeature) {
-		final AttributeChangeMutation mutation = new AttributeChangeMutation(getUtil());
-		mutation.setTargetFeature(targetFeature);
-		return mutation.apply();
-	}
-
 }

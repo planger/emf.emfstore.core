@@ -21,7 +21,7 @@ import org.eclipse.emf.emfstore.internal.modelmutator.intern.AbstractModelMutato
 import org.eclipse.emf.emfstore.internal.modelmutator.mutation.AddObjectMutation;
 import org.eclipse.emf.emfstore.internal.modelmutator.mutation.AttributeChangeMutation;
 import org.eclipse.emf.emfstore.internal.modelmutator.mutation.DeleteObjectMutation;
-import org.eclipse.emf.emfstore.internal.modelmutator.mutation.FeatureMapGroupMutation;
+import org.eclipse.emf.emfstore.internal.modelmutator.mutation.FeatureMapKeyMutation;
 import org.eclipse.emf.emfstore.internal.modelmutator.mutation.MoveObjectMutation;
 import org.eclipse.emf.emfstore.internal.modelmutator.mutation.Mutation;
 import org.eclipse.emf.emfstore.internal.modelmutator.mutation.ReferenceChangeMutation;
@@ -62,7 +62,7 @@ public class ModelMutator extends AbstractModelMutator {
 		mutations.add(new MoveObjectMutation(util));
 		mutations.add(new AttributeChangeMutation(util));
 		mutations.add(new ReferenceChangeMutation(util));
-		mutations.add(new FeatureMapGroupMutation(util));
+		mutations.add(new FeatureMapKeyMutation(util));
 
 		int i = 0;
 		while (i < config.getMutationCount()) {

@@ -60,7 +60,7 @@ public interface TypeWithFeatureMapNonContainment extends TestType {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>First Key</em>' reference list.
 	 * @see org.eclipse.emfstore.internal.modelmutator.mutation.testmodel.TestModelPackage#getTypeWithFeatureMapNonContainment_FirstKey()
-	 * @model transient="true" volatile="true"
+	 * @model transient="true" volatile="true" derived="true"
 	 *        extendedMetaData="group='#map'"
 	 * @generated
 	 */
@@ -77,7 +77,7 @@ public interface TypeWithFeatureMapNonContainment extends TestType {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Second Key</em>' reference list.
 	 * @see org.eclipse.emfstore.internal.modelmutator.mutation.testmodel.TestModelPackage#getTypeWithFeatureMapNonContainment_SecondKey()
-	 * @model transient="true" volatile="true"
+	 * @model transient="true" volatile="true" derived="true"
 	 *        extendedMetaData="group='#map'"
 	 * @generated
 	 */

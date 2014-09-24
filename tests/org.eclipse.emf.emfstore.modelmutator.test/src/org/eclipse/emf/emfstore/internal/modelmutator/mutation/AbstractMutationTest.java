@@ -22,7 +22,6 @@ import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorConfiguration;
 import org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorUtil;
 import org.eclipse.emfstore.internal.modelmutator.mutation.testmodel.TestModelFactory;
-import org.eclipse.emfstore.internal.modelmutator.mutation.testmodel.TestType;
 import org.eclipse.emfstore.internal.modelmutator.mutation.testmodel.TypeWithFeatureMapContainment;
 import org.eclipse.emfstore.internal.modelmutator.mutation.testmodel.TypeWithFeatureMapNonContainment;
 import org.junit.Before;
@@ -42,7 +41,7 @@ public abstract class AbstractMutationTest {
 
 	protected ModelMutatorUtil utilForEPackageWithTwoClasses;
 
-	protected TestType testTypeModel;
+	protected TypeWithFeatureMapContainment testTypeModel;
 
 	protected ModelMutatorUtil utilForTestTypeModel;
 
@@ -63,7 +62,7 @@ public abstract class AbstractMutationTest {
 		return rootEPackage;
 	}
 
-	private TestType createTestTypeModel() {
+	private TypeWithFeatureMapContainment createTestTypeModel() {
 		TestModelFactory tFactory = TestModelFactory.eINSTANCE;
 
 		TypeWithFeatureMapContainment root = tFactory.createTypeWithFeatureMapContainment();

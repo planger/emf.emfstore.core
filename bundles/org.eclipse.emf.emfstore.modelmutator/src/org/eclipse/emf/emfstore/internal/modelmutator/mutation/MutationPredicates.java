@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.util.FeatureMap;
 
 import com.google.common.base.Predicate;
 
@@ -82,7 +83,7 @@ public final class MutationPredicates {
 	public static final Predicate<? super EStructuralFeature> isMutatable =
 		new Predicate<EStructuralFeature>() {
 			public boolean apply(EStructuralFeature input) {
-				return input != null && input.isChangeable() && !input.isDerived();
+				return input != null && input.isChangeable();
 			}
 		};
 
@@ -236,6 +237,13 @@ public final class MutationPredicates {
 		}
 		return false;
 	}
+
+	public static final Predicate<? super Object> isNonEmptyFeatureMap =
+		new Predicate<Object>() {
+			public boolean apply(Object input) {
+				return input != null && input instanceof FeatureMap && ((FeatureMap) input).size() > 0;
+			}
+		};
 
 	public static final Predicate<? super Object> isNonEmptyEObjectValueOrList =
 		new Predicate<Object>() {

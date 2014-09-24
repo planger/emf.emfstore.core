@@ -12,13 +12,13 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="firstKey" upperBound="-1"
-        eType="#//TestType" volatile="true" transient="true">
+        eType="#//TestType" volatile="true" transient="true" derived="true">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="group" value="#map"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="secondKey" upperBound="-1"
-        eType="#//TestType" volatile="true" transient="true">
+        eType="#//TestType" volatile="true" transient="true" derived="true">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="group" value="#map"/>
       </eAnnotations>
