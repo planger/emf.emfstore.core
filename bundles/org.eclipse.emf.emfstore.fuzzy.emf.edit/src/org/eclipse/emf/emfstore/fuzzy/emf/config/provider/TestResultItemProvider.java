@@ -75,18 +75,19 @@ public class TestResultItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addSeedCountPropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-			.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-					.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_TestResult_seedCount_feature"),
-				getString("_UI_PropertyDescriptor_description",
-					"_UI_TestResult_seedCount_feature",
-					"_UI_TestResult_type"),
-				ConfigPackage.Literals.TEST_RESULT__SEED_COUNT, true,
-				false, false,
-				ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_TestResult_seedCount_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_TestResult_seedCount_feature", "_UI_TestResult_type"),
+				 ConfigPackage.Literals.TEST_RESULT__SEED_COUNT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -96,16 +97,19 @@ public class TestResultItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addTestNamePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-			((ComposeableAdapterFactory) adapterFactory)
-				.getRootAdapterFactory(),
-			getResourceLocator(),
-			getString("_UI_TestResult_testName_feature"),
-			getString("_UI_PropertyDescriptor_description",
-				"_UI_TestResult_testName_feature",
-				"_UI_TestResult_type"),
-			ConfigPackage.Literals.TEST_RESULT__TEST_NAME, true, false,
-			false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_TestResult_testName_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_TestResult_testName_feature", "_UI_TestResult_type"),
+				 ConfigPackage.Literals.TEST_RESULT__TEST_NAME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -115,15 +119,19 @@ public class TestResultItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addErrorPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-			((ComposeableAdapterFactory) adapterFactory)
-				.getRootAdapterFactory(),
-			getResourceLocator(),
-			getString("_UI_TestResult_error_feature"),
-			getString("_UI_PropertyDescriptor_description",
-				"_UI_TestResult_error_feature", "_UI_TestResult_type"),
-			ConfigPackage.Literals.TEST_RESULT__ERROR, true, false, false,
-			ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_TestResult_error_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_TestResult_error_feature", "_UI_TestResult_type"),
+				 ConfigPackage.Literals.TEST_RESULT__ERROR,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -133,18 +141,19 @@ public class TestResultItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addFailurePropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-			.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-					.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_TestResult_failure_feature"),
-				getString("_UI_PropertyDescriptor_description",
-					"_UI_TestResult_failure_feature",
-					"_UI_TestResult_type"),
-				ConfigPackage.Literals.TEST_RESULT__FAILURE, true,
-				false, false,
-				ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_TestResult_failure_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_TestResult_failure_feature", "_UI_TestResult_type"),
+				 ConfigPackage.Literals.TEST_RESULT__FAILURE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -154,17 +163,19 @@ public class TestResultItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addExecutionTimePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-			((ComposeableAdapterFactory) adapterFactory)
-				.getRootAdapterFactory(),
-			getResourceLocator(),
-			getString("_UI_TestResult_executionTime_feature"),
-			getString("_UI_PropertyDescriptor_description",
-				"_UI_TestResult_executionTime_feature",
-				"_UI_TestResult_type"),
-			ConfigPackage.Literals.TEST_RESULT__EXECUTION_TIME, true,
-			false, false, ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-			null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_TestResult_executionTime_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_TestResult_executionTime_feature", "_UI_TestResult_type"),
+				 ConfigPackage.Literals.TEST_RESULT__EXECUTION_TIME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -175,29 +186,28 @@ public class TestResultItemProvider extends ItemProviderAdapter implements
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object,
-			getResourceLocator().getImage("full/obj16/TestResult"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/TestResult"));
 	}
 
 	/**
-	 * This returns the label text for the adapted class. <!-- begin-user-doc
+	 * This returns the label text for the adapted class.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((TestResult) object).getTestName();
-		return label == null || label.length() == 0 ? getString("_UI_TestResult_type")
-			: getString("_UI_TestResult_type") + " " + label;
+		String label = ((TestResult)object).getTestName();
+		return label == null || label.length() == 0 ?
+			getString("_UI_TestResult_type") :
+			getString("_UI_TestResult_type") + " " + label;
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to
-	 * update any cached children and by creating a viewer notification, which
-	 * it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached
+	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -205,14 +215,13 @@ public class TestResultItemProvider extends ItemProviderAdapter implements
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(TestResult.class)) {
-		case ConfigPackage.TEST_RESULT__SEED_COUNT:
-		case ConfigPackage.TEST_RESULT__TEST_NAME:
-		case ConfigPackage.TEST_RESULT__ERROR:
-		case ConfigPackage.TEST_RESULT__FAILURE:
-		case ConfigPackage.TEST_RESULT__EXECUTION_TIME:
-			fireNotifyChanged(new ViewerNotification(notification,
-				notification.getNotifier(), false, true));
-			return;
+			case ConfigPackage.TEST_RESULT__SEED_COUNT:
+			case ConfigPackage.TEST_RESULT__TEST_NAME:
+			case ConfigPackage.TEST_RESULT__ERROR:
+			case ConfigPackage.TEST_RESULT__FAILURE:
+			case ConfigPackage.TEST_RESULT__EXECUTION_TIME:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
 		}
 		super.notifyChanged(notification);
 	}

@@ -1,13 +1,14 @@
 /*******************************************************************************
  * Copyright (c) 2012-2013 EclipseSource Muenchen GmbH and others.
- *
+ * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * 
  * Contributors:
  * JulianSommerfeldt
+ * PhilipLanger
  ******************************************************************************/
 package org.eclipse.emf.emfstore.fuzzy.emf;
 
@@ -54,9 +55,9 @@ import org.junit.runners.model.TestClass;
  * <br>
  * During the run it records {@link TestResult}s to create a {@link TestRun} for
  * reporting purpose.
- *
+ * 
  * @author Julian Sommerfeldt
- *
+ * 
  */
 public class EMFDataProvider implements FuzzyDataProvider<EObject> {
 
@@ -87,23 +88,23 @@ public class EMFDataProvider implements FuzzyDataProvider<EObject> {
 	/**
 	 * Prefix of the properties concerning the {@link EMFDataProvider}.
 	 */
-	public static final String PROP_EMFDATAPROVIDER = ".emfdataprovider"; //$NON-NLS-1$
+	public static final String PROP_EMFDATAPROVIDER = ".emfdataprovider";
 
 	/**
 	 * Property specifying the path to the config file for the {@link EMFDataProvider}.
 	 */
-	public static final String PROP_CONFIGS_FILE = ".configsFile"; //$NON-NLS-1$
+	public static final String PROP_CONFIGS_FILE = ".configsFile";
 
 	/**
 	 * Options constant for the exception log set for the mutator. Has to be
 	 * filled with a <code>Set</code> of <code>RuntimeException</code>.
 	 */
-	public static final String MUTATOR_EXC_LOG = "mutatorExcLog"; //$NON-NLS-1$
+	public static final String MUTATOR_EXC_LOG = "mutatorExcLog";
 
 	/**
 	 * Options constant for the {@link EditingDomain} for the {@link ModelMutator}.
 	 */
-	public static final String MUTATOR_EDITINGDOMAIN = "mutatorEditingDomain"; //$NON-NLS-1$
+	public static final String MUTATOR_EDITINGDOMAIN = "mutatorEditingDomain";
 
 	/**
 	 * Init the {@link EMFDataProvider}.
@@ -113,11 +114,11 @@ public class EMFDataProvider implements FuzzyDataProvider<EObject> {
 		fillProperties();
 
 		// load testconfig from file
-		final Resource loadResource = FuzzyUtil.createResource(configFile);
+		Resource loadResource = FuzzyUtil.createResource(configFile);
 		try {
 			loadResource.load(null);
-		} catch (final IOException e) {
-			throw new RuntimeException("Could not load " + configFile, e); //$NON-NLS-1$
+		} catch (IOException e) {
+			throw new RuntimeException("Could not load " + configFile, e);
 		}
 
 		// get the testconfig fitting to the current testclass
@@ -132,7 +133,7 @@ public class EMFDataProvider implements FuzzyDataProvider<EObject> {
 		seedCount = 0;
 
 		// read variables out of mutatorConfig and write into modelmutatorConfig
-		final MutatorConfig mutatorConfig = config.getMutatorConfig();
+		MutatorConfig mutatorConfig = config.getMutatorConfig();
 		rootEClass = mutatorConfig.getRootEClass();
 		if (rootEClass == null) {
 			rootEClass = ConfigPackage.Literals.ROOT;
@@ -151,7 +152,8 @@ public class EMFDataProvider implements FuzzyDataProvider<EObject> {
 			.isUseEcoreUtilDelete());
 		modelMutatorConfig.setMaxDeleteCount(mutatorConfig.getMaxDeleteCount());
 		modelMutatorConfig.setModelPackages(mutatorConfig.getEPackages());
-		modelMutatorConfig.setAllowDuplicateIDs(false);
+		modelMutatorConfig.setMutationCount(mutatorConfig.getMutationCount());
+		modelMutatorConfig.setAllowDuplicateIDs(mutatorConfig.isAllowDuplicateIDs());
 
 		// create new TestRun with config
 		testRun = ConfigFactory.eINSTANCE.createTestRun();
@@ -163,7 +165,7 @@ public class EMFDataProvider implements FuzzyDataProvider<EObject> {
 	 * Add the config to the file containing all configs.
 	 */
 	private void addToConfigFile() {
-		final Resource resource = FuzzyUtil.createResource(FuzzyUtil.ROOT_FOLDER
+		Resource resource = FuzzyUtil.createResource(FuzzyUtil.ROOT_FOLDER
 			+ FuzzyUtil.TEST_CONFIG_FILE);
 		try {
 			if (FuzzyUtil.resourceExists(resource)) {
@@ -173,14 +175,14 @@ public class EMFDataProvider implements FuzzyDataProvider<EObject> {
 				resource.getContents().add(config);
 				resource.save(null);
 			}
-		} catch (final IOException e) {
-			throw new RuntimeException("Could not save config!", e); //$NON-NLS-1$
+		} catch (IOException e) {
+			throw new RuntimeException("Could not save config!", e);
 		}
 	}
 
 	/**
 	 * See {@link FuzzyDataProvider}.
-	 *
+	 * 
 	 * @param count
 	 *            Which run is it?
 	 * @return The new {@link EObject}.
@@ -195,7 +197,7 @@ public class EMFDataProvider implements FuzzyDataProvider<EObject> {
 		nextSeed = random.nextLong();
 
 		// get the root eclass for the generation
-		final EObject root = EcoreUtil.create(rootEClass);
+		EObject root = EcoreUtil.create(rootEClass);
 
 		// generate the model
 		modelMutatorConfig.reset();
@@ -226,15 +228,16 @@ public class EMFDataProvider implements FuzzyDataProvider<EObject> {
 	 */
 	public void finish() {
 		// create run resource
-		final Resource runResource = FuzzyUtil
+		Resource runResource = FuzzyUtil
 			.createResource(FuzzyUtil.ROOT_FOLDER + FuzzyUtil.RUN_FOLDER
 				+ config.getId() + FuzzyUtil.FILE_SUFFIX);
 		runResource.getContents().add(testRun);
 
 		try {
 			runResource.save(null);
-		} catch (final IOException e) {
-			throw new RuntimeException("Could not save the run result after running!", e); //$NON-NLS-1$
+		} catch (IOException e) {
+			throw new RuntimeException(
+				"Could not save the run result after running!", e);
 		}
 	}
 
@@ -274,21 +277,21 @@ public class EMFDataProvider implements FuzzyDataProvider<EObject> {
 			try {
 				diffResource = HudsonTestRunProvider.getDiffResource();
 				diffResource.load(null);
-			} catch (final IOException e) {
-				throw new RuntimeException("Could not load diff file!", e); //$NON-NLS-1$
-			} catch (final DocumentException e) {
-				throw new RuntimeException("Could not load diff file!", e); //$NON-NLS-1$
+			} catch (IOException e) {
+				throw new RuntimeException("Could not load diff file!", e);
+			} catch (DocumentException e) {
+				throw new RuntimeException("Could not load diff file!", e);
 			}
 		}
 
 		// filter for correct config
-		final EList<EObject> contents = diffResource.getContents();
-		final List<Test> tests = new ArrayList<Test>();
-		for (final EObject obj : contents) {
+		EList<EObject> contents = diffResource.getContents();
+		List<Test> tests = new ArrayList<Test>();
+		for (EObject obj : contents) {
 			if (obj instanceof DiffReport) {
-				for (final TestDiff diff : ((DiffReport) obj).getDiffs()) {
+				for (TestDiff diff : ((DiffReport) obj).getDiffs()) {
 					if (diff.getConfig().getId().equals(config.getId())) {
-						final TestResult result = FuzzyUtil.getValidTestResult(diff);
+						TestResult result = FuzzyUtil.getValidTestResult(diff);
 						tests.add(new Test(result.getTestName(), result
 							.getSeedCount()));
 					}
@@ -321,7 +324,7 @@ public class EMFDataProvider implements FuzzyDataProvider<EObject> {
 	}
 
 	private void fillProperties() {
-		final String filterTests = System.getProperty("filterTests"); //$NON-NLS-1$
+		String filterTests = System.getProperty("filterTests");
 		if (filterTests == null) {
 			this.filterTests = false;
 		} else {
@@ -347,7 +350,7 @@ public class EMFDataProvider implements FuzzyDataProvider<EObject> {
 
 	/**
 	 * Set the options for the {@link EMFDataProvider}.
-	 *
+	 * 
 	 * @param options
 	 *            the options.
 	 */
@@ -356,13 +359,13 @@ public class EMFDataProvider implements FuzzyDataProvider<EObject> {
 		// exc log
 		Object o = options.get(MUTATOR_EXC_LOG);
 		if (o != null && o instanceof Set<?>) {
-			modelMutatorConfig.setExceptionLog((Set<RuntimeException>) o);
+			this.modelMutatorConfig.setExceptionLog((Set<RuntimeException>) o);
 		}
 
 		// model mutator editing domain
 		o = options.get(MUTATOR_EDITINGDOMAIN);
 		if (o != null && o instanceof EditingDomain) {
-			modelMutatorConfig.setEditingDomain((EditingDomain) o);
+			this.modelMutatorConfig.setEditingDomain((EditingDomain) o);
 		}
 	}
 

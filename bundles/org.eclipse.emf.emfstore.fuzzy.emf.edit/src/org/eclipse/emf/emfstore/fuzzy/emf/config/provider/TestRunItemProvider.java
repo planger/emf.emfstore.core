@@ -68,29 +68,32 @@ public class TestRunItemProvider extends ItemProviderAdapter implements
 	}
 
 	/**
-	 * This adds a property descriptor for the Time feature. <!-- begin-user-doc
+	 * This adds a property descriptor for the Time feature.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected void addTimePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-			((ComposeableAdapterFactory) adapterFactory)
-				.getRootAdapterFactory(),
-			getResourceLocator(),
-			getString("_UI_TestRun_time_feature"),
-			getString("_UI_PropertyDescriptor_description",
-				"_UI_TestRun_time_feature", "_UI_TestRun_type"),
-			ConfigPackage.Literals.TEST_RUN__TIME, true, false, false,
-			ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_TestRun_time_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_TestRun_time_feature", "_UI_TestRun_type"),
+				 ConfigPackage.Literals.TEST_RUN__TIME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
-	 * This specifies how to implement {@link #getChildren} and is used to
-	 * deduce an appropriate feature for an {@link org.eclipse.emf.edit.command.AddCommand},
-	 * {@link org.eclipse.emf.edit.command.RemoveCommand} or {@link org.eclipse.emf.edit.command.MoveCommand} in
-	 * {@link #createCommand}. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -106,49 +109,46 @@ public class TestRunItemProvider extends ItemProviderAdapter implements
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper
-		// feature to use for
+		// Check the type of the specified child object and return the proper feature to use for
 		// adding (see {@link AddCommand}) it as a child.
 
 		return super.getChildFeature(object, child);
 	}
 
 	/**
-	 * This returns TestRun.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This returns TestRun.gif.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object,
-			getResourceLocator().getImage("full/obj16/TestRun"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/TestRun"));
 	}
 
 	/**
-	 * This returns the label text for the adapted class. <!-- begin-user-doc
+	 * This returns the label text for the adapted class.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		Date labelValue = ((TestRun) object).getTime();
+		Date labelValue = ((TestRun)object).getTime();
 		String label = labelValue == null ? null : labelValue.toString();
-		return label == null || label.length() == 0 ? getString("_UI_TestRun_type")
-			: getString("_UI_TestRun_type") + " " + label;
+		return label == null || label.length() == 0 ?
+			getString("_UI_TestRun_type") :
+			getString("_UI_TestRun_type") + " " + label;
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to
-	 * update any cached children and by creating a viewer notification, which
-	 * it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached
+	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -156,15 +156,13 @@ public class TestRunItemProvider extends ItemProviderAdapter implements
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(TestRun.class)) {
-		case ConfigPackage.TEST_RUN__TIME:
-			fireNotifyChanged(new ViewerNotification(notification,
-				notification.getNotifier(), false, true));
-			return;
-		case ConfigPackage.TEST_RUN__CONFIG:
-		case ConfigPackage.TEST_RUN__RESULTS:
-			fireNotifyChanged(new ViewerNotification(notification,
-				notification.getNotifier(), true, false));
-			return;
+			case ConfigPackage.TEST_RUN__TIME:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+			case ConfigPackage.TEST_RUN__CONFIG:
+			case ConfigPackage.TEST_RUN__RESULTS:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+				return;
 		}
 		super.notifyChanged(notification);
 	}
@@ -181,13 +179,15 @@ public class TestRunItemProvider extends ItemProviderAdapter implements
 		Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add(createChildParameter(
-			ConfigPackage.Literals.TEST_RUN__CONFIG,
-			ConfigFactory.eINSTANCE.createTestConfig()));
+		newChildDescriptors.add
+			(createChildParameter
+				(ConfigPackage.Literals.TEST_RUN__CONFIG,
+				 ConfigFactory.eINSTANCE.createTestConfig()));
 
-		newChildDescriptors.add(createChildParameter(
-			ConfigPackage.Literals.TEST_RUN__RESULTS,
-			ConfigFactory.eINSTANCE.createTestResult()));
+		newChildDescriptors.add
+			(createChildParameter
+				(ConfigPackage.Literals.TEST_RUN__RESULTS,
+				 ConfigFactory.eINSTANCE.createTestResult()));
 	}
 
 	/**

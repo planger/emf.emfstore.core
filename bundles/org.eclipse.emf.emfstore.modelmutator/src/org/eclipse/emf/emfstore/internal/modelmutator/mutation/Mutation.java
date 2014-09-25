@@ -42,15 +42,10 @@ public abstract class Mutation implements Cloneable {
 		try {
 			return doApply();
 		} catch (final MutationException e) {
-			handle(e);
 			return false;
 		}
 	}
 
 	protected abstract boolean doApply() throws MutationException;
-
-	protected void handle(MutationException e) {
-		ModelMutatorUtil.handle(new RuntimeException(e), util.getModelMutatorConfiguration());
-	}
 
 }

@@ -1,11 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2012-2013 EclipseSource Muenchen GmbH and others.
- *
+ * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * 
  * Contributors:
  * JulianSommerfeldt
  * StephanK?hler
@@ -70,7 +70,7 @@ import com.google.common.base.Predicate;
 
 /**
  * Util class for the ModelMutator.
- *
+ * 
  * @author Eugen Neufeld
  * @author Stephan K?hler
  * @author Philip Achenbach
@@ -109,12 +109,16 @@ public final class ModelMutatorUtil {
 	private final Map<EPackage, List<EClass>> allClassesInPackage = new LinkedHashMap<EPackage, List<EClass>>();
 
 	private final ModelMutatorConfiguration config;
+	
+	private final Map<EStructuralFeature, List<EObject>> featureToOfferingObjects = new LinkedHashMap<EStructuralFeature, List<EObject>>();
 
+	private final Map<EStructuralFeature, List<EObject>> featureToSuitableObjects = new LinkedHashMap<EStructuralFeature, List<EObject>>();
+	
 	private List<EClass> allEClasses;
 
 	/**
 	 * A new {@link ModelMutatorUtil}.
-	 *
+	 * 
 	 * @param config The {@link ModelMutatorConfiguration} of the {@link ModelMutatorUtil}.
 	 */
 	public ModelMutatorUtil(ModelMutatorConfiguration config) {
@@ -123,7 +127,7 @@ public final class ModelMutatorUtil {
 
 	/**
 	 * Returns the EPackage to the specified <code>nsURI</code>.
-	 *
+	 * 
 	 * @param nsURI
 	 *            the NsUri of the EPackage to get
 	 * @return the EPackage belonging to <code>nsURI</code>
@@ -137,10 +141,10 @@ public final class ModelMutatorUtil {
 	 * Returns all valid containment references for an EObject. A reference is valid if it is neither
 	 * derived nor volatile and if it is changeable and either many-valued or
 	 * not already set.
-	 *
+	 * 
 	 * @param eObject
 	 *            the EObject to get references for
-	 *
+	 * 
 	 * @return all valid references as a list
 	 */
 	public List<EReference> getValidContainmentReferences(EObject eObject) {
@@ -162,7 +166,7 @@ public final class ModelMutatorUtil {
 	 * container/containment references. A reference is valid if it is neither
 	 * derived nor volatile and if it is changeable and either many-valued or
 	 * not already set.
-	 *
+	 * 
 	 * @param eObject
 	 *            the EObject to get references for
 	 * @return all valid references as a list
@@ -184,7 +188,7 @@ public final class ModelMutatorUtil {
 	/**
 	 * Returns whether an EStructuralFeature is valid for an EObject or not. A
 	 * reference is valid, if it can be set or added to.
-	 *
+	 * 
 	 * @param feature
 	 *            the EStructuralFeature in question
 	 * @param eObject
@@ -214,10 +218,9 @@ public final class ModelMutatorUtil {
 	/**
 	 * Handles <code>exception</code>, meaning it is thrown if <code>ignoreAndLog</code> is <code>false</code>.
 	 * Otherwise <code>exception</code> is ignored and added to <code>exceptionLog</code>.
-	 *
+	 * 
 	 * @param exception the exception to handle
-	 * @param exceptionLog the current log of exceptions
-	 * @param ignoreAndLog should exceptions be ignored and added to <code>exceptionLog</code>?
+	 * @param config the config to be used for looking up whether to ignore and log exceptions
 	 */
 	public static void handle(RuntimeException exception, ModelMutatorConfiguration config) {
 		if (config.isIgnoreAndLog()) {
@@ -229,7 +232,7 @@ public final class ModelMutatorUtil {
 
 	/**
 	 * Get all containments of a reference.
-	 *
+	 * 
 	 * @param reference The {@link EReference} for which to get all containments.
 	 * @return All containments of the {@link EReference}.
 	 */
@@ -259,7 +262,7 @@ public final class ModelMutatorUtil {
 	/**
 	 * Returns whether <code>eClass</code> can be instantiated or not. An EClass
 	 * can be instantiated, if it is neither an interface nor abstract.
-	 *
+	 * 
 	 * @param eClass
 	 *            the EClass in question
 	 * @return whether <code>eClass</code> can be instantiated or not.
@@ -271,7 +274,7 @@ public final class ModelMutatorUtil {
 	/**
 	 * Returns all subclasses of an EClass, excluding abstract classes and
 	 * interfaces.
-	 *
+	 * 
 	 * @param eClass
 	 *            the EClass to get subclasses for
 	 * @return all subclasses of <code>eClass</code>
@@ -298,7 +301,7 @@ public final class ModelMutatorUtil {
 	 * Iterates over all registered EPackages in order to retrieve all available
 	 * EClasses, excluding abstract classes and interfaces, and returns them as
 	 * a Set.
-	 *
+	 * 
 	 * @return a set of all EClasses that are contained in registered EPackages
 	 * @see Registry
 	 */
@@ -322,7 +325,7 @@ public final class ModelMutatorUtil {
 
 	/**
 	 * Get all {@link EClass}es in the {@link EPackage}s.
-	 *
+	 * 
 	 * @param ePackages The {@link EPackage}s containg the {@link EClass}es.
 	 * @return The {@link EClass}es contained in the {@link EPackage}s.
 	 */
@@ -336,7 +339,7 @@ public final class ModelMutatorUtil {
 
 	/**
 	 * Retrieve all EClasses that are contained in <code>ePackage</code>.
-	 *
+	 * 
 	 * @param ePackage
 	 *            the package to get contained EClasses from
 	 * @return a set of EClasses contained in <code>ePackage</code>
@@ -365,10 +368,10 @@ public final class ModelMutatorUtil {
 	 * Returns all direct and indirect contents of <code>rootObject</code> as a
 	 * map. All EObjects that appear in these contents are mapped to their
 	 * corresponding EClass.<br>
-	 *
+	 * 
 	 * NOTE: this is a very expensive method!
-	 *
-	 *
+	 * 
+	 * 
 	 * @param rootObject
 	 *            the EObject to get contents for
 	 * @return all contents as a map from EClass to lists of EObjects
@@ -399,7 +402,7 @@ public final class ModelMutatorUtil {
 	 * Adds <code>newValue</code> to the many-valued feature of <code>eObject</code> using an AddCommand. Exceptions are
 	 * caught if <code>ignoreAndLog</code> is true, otherwise a RuntimeException might be
 	 * thrown if the command fails.
-	 *
+	 * 
 	 * @param eObject the EObject to which <code>newObject</code> shall be added
 	 * @param feature the EStructuralFeature that <code>newObject</code> shall be added to
 	 * @param newValue the Object that shall be added to <code>feature</code>
@@ -430,7 +433,7 @@ public final class ModelMutatorUtil {
 	 * Adds all <code>objects</code> to the many-valued feature of <code>eObject</code> using an AddCommand. Exceptions
 	 * are caught if <code>ignoreAndLog</code> is true, otherwise a RuntimeException might be
 	 * thrown if the command fails.
-	 *
+	 * 
 	 * @param eObject the EObject to which <code>objects</code> shall be added
 	 * @param feature the EReference that <code>objects</code> shall be added to
 	 * @param objects collection of objects that shall be added to <code>feature</code>
@@ -458,7 +461,7 @@ public final class ModelMutatorUtil {
 
 	/**
 	 * Move an object.
-	 *
+	 * 
 	 * @param parent The parent object.
 	 * @param feature The feature of the parent object.
 	 * @param objectToMove The object to move within the parents feature.
@@ -484,7 +487,7 @@ public final class ModelMutatorUtil {
 	 * Sets a feature between <code>eObject</code> and <code>newValue</code> using a SetCommand. Exceptions are caught
 	 * if <code>ignoreAndLog</code> is
 	 * true, otherwise a RuntimeException might be thrown if the command fails.
-	 *
+	 * 
 	 * @param eObject the EObject for which <code>feature</code> shall be set
 	 * @param feature the EStructuralFeature that shall be set
 	 * @param newValue the Object that shall be set as a feature in <code>parentEObject</code>
@@ -525,7 +528,7 @@ public final class ModelMutatorUtil {
 	 * Sets a feature between <code>eObject</code> and <code>newValue</code> using a SetCommand. Exceptions are caught
 	 * if <code>ignoreAndLog</code> is
 	 * true, otherwise a RuntimeException might be thrown if the command fails.
-	 *
+	 * 
 	 * @param eObject the EObject for which <code>feature</code> shall be set
 	 * @param feature the EStructuralFeature that shall be set
 	 * @param newValue the Object that shall be set as a feature in <code>parentEObject</code>
@@ -541,7 +544,7 @@ public final class ModelMutatorUtil {
 	 * Removes <code>objects</code> from a feature of <code>eObject</code> using
 	 * a RemoveCommand. Exceptions are caught if <code>ignoreAndLog</code> is
 	 * true, otherwise a RuntimeException might be thrown if the command fails.
-	 *
+	 * 
 	 * @param eObject
 	 *            the EObject to remove <code>objects</code> from
 	 * @param feature
@@ -564,7 +567,7 @@ public final class ModelMutatorUtil {
 
 	/**
 	 * Deletes the {@link EObject} using the specified <code>howToDelete</code>.
-	 *
+	 * 
 	 * @param eObject The {@link EObject} to delete.
 	 * @param howToDelete The way to delete: {@link #DELETE_ECORE}, {@link #DELETE_DELETE_COMMAND} or
 	 *            {@link #DELETE_CUT_CONTAINMENT}.
@@ -610,7 +613,7 @@ public final class ModelMutatorUtil {
 	/**
 	 * Sets all possible attributes of known types to random values using {@link AttributeSetter} and
 	 * SetCommands/AddCommands.
-	 *
+	 * 
 	 * @param eObject the EObject to set attributes for
 	 * @see AttributeSetter
 	 */
@@ -621,7 +624,7 @@ public final class ModelMutatorUtil {
 	/**
 	 * Sets all possible attributes of known types to random values using {@link AttributeSetter} and
 	 * SetCommands/AddCommands.
-	 *
+	 * 
 	 * @param eObject the EObject to set attributes for
 	 * @param maxNumber The maximal number of attributes to mutate.
 	 * @see AttributeSetter
@@ -663,7 +666,7 @@ public final class ModelMutatorUtil {
 							setPerCommand(eObject, attribute, attributeSetter.createNewAttribute(), i);
 						} else {
 							final Object attributeToMove = ((Collection<?>) eObject.eGet(attribute)).toArray()[random
-							                                                                                   .nextInt(size)];
+								.nextInt(size)];
 							movePerCommand(eObject, attribute, attributeToMove, random.nextInt(size));
 						}
 					}
@@ -680,7 +683,7 @@ public final class ModelMutatorUtil {
 
 	/**
 	 * Returns whether <code>attributeType</code> is an instance of EEnum.
-	 *
+	 * 
 	 * @param attributeType
 	 *            the EClassifier in question
 	 * @return is <code>attributeType</code> an instance of EEnum?
@@ -691,7 +694,7 @@ public final class ModelMutatorUtil {
 
 	/**
 	 * Computes the random amount of objects to add to a feature.
-	 *
+	 * 
 	 * @param feature
 	 *            the feature to compute the amount of objects for
 	 * @param random
@@ -715,7 +718,7 @@ public final class ModelMutatorUtil {
 	/**
 	 * Returns a map containing an AttributeSetter-instance for each attribute
 	 * type, granting access to all AttributeSetters.
-	 *
+	 * 
 	 * @return the map that maps every attribute type to its attribute setter
 	 * @see AttributeSetter
 	 */
@@ -777,6 +780,15 @@ public final class ModelMutatorUtil {
 		return attributeSetters;
 	}
 
+	/**
+	 * Returns the attribute setter for the given {@code attributeType}.
+	 * <p>
+	 * The returned attribute set may be <code>null</code> if there is no setter for the given {@code attributeType}.
+	 * </p>
+	 * 
+	 * @param attributeType the type to get the attribute setter for.
+	 * @return The attribute setter for the given {@code attributeType}.
+	 */
 	public AttributeSetter<?> getAttributeSetter(EClassifier attributeType) {
 		getAttributeSetters();
 		if (attributeSetters.containsKey(attributeType)) {
@@ -790,7 +802,7 @@ public final class ModelMutatorUtil {
 	/**
 	 * Retrieves all EClasses from <code>allEClasses</code> that can possibly be
 	 * referenced by <code>reference</code> and returns them as a list.
-	 *
+	 * 
 	 * @param reference
 	 *            the EReference to get EClasses for
 	 * @param allEClasses
@@ -818,7 +830,7 @@ public final class ModelMutatorUtil {
 	 * SetCommand/AddCommand. If the reference
 	 * is not required, <code>random</code> decides whether the reference is set
 	 * or how many EObjects are added to it.
-	 *
+	 * 
 	 * @param eObject the EObject to set the reference for
 	 * @param referenceClass the EClass all referenced EObject shall be instances of
 	 * @param reference the reference to set
@@ -894,12 +906,6 @@ public final class ModelMutatorUtil {
 	public ModelMutatorConfiguration getModelMutatorConfiguration() {
 		return config;
 	}
-
-	// /////////////////////////////////////////
-
-	private final Map<EStructuralFeature, List<EObject>> featureToOfferingObjects = new LinkedHashMap<EStructuralFeature, List<EObject>>();
-
-	private final Map<EStructuralFeature, List<EObject>> featureToSuitableObjects = new LinkedHashMap<EStructuralFeature, List<EObject>>();
 
 	private Map<EStructuralFeature, List<EObject>> getOrBuildFeatureToOfferingObjectsMap() {
 		if (featureToOfferingObjects.isEmpty()) {
