@@ -18,8 +18,8 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.emfstore.client.changetracking.ESCommandObserver;
-import org.eclipse.emf.emfstore.common.extensionpoint.ESExtensionPoint;
 import org.eclipse.emf.emfstore.internal.client.model.CompositeOperationHandle;
+import org.eclipse.emf.emfstore.internal.client.model.Configuration;
 import org.eclipse.emf.emfstore.internal.client.model.ESWorkspaceProviderImpl;
 import org.eclipse.emf.emfstore.internal.client.model.ProjectSpace;
 import org.eclipse.emf.emfstore.internal.client.model.changeTracking.notification.recording.NotificationRecorder;
@@ -40,7 +40,6 @@ import org.eclipse.emf.emfstore.internal.server.model.versioning.operations.sema
 public class OperationManager implements OperationRecorderListener, ESDisposable, ESCommandObserver,
 	IdEObjectCollectionChangeObserver {
 
-	private static final String RECORDING_OPTIONS_EXT_ID = "org.eclipse.emf.emfstore.client.recordingOptions"; //$NON-NLS-1$
 	private final OperationRecorder operationRecorder;
 	private final List<OperationObserver> operationListeners;
 	private final ProjectSpace projectSpace;
@@ -61,19 +60,16 @@ public class OperationManager implements OperationRecorderListener, ESDisposable
 	}
 
 	private void configureOperationRecorder() {
-		// cut off incoming cross-references by default
+		// incoming cross-references are cut off by default
 		operationRecorder.getConfig().setCutOffIncomingCrossReferences(
-			new ESExtensionPoint(
-				RECORDING_OPTIONS_EXT_ID).getBoolean("cutOffIncomingCrossReferences", true)); //$NON-NLS-1$
+			Configuration.getClientBehavior().isCutOffIncomingCrossReferencesActivated());
 		// usage of commands is not forced by default
 		operationRecorder.getConfig()
 			.setForceCommands(
-				new ESExtensionPoint(
-					RECORDING_OPTIONS_EXT_ID).getBoolean("forceCommands", false));//$NON-NLS-1$
-		// cut elements are added automatically as regular model elements by default
+				Configuration.getClientBehavior().isForceCommandsActived());
+		// cut elements aren't added automatically as regular model elements by default
 		operationRecorder.getConfig().setDenyAddCutElementsToModelElements(
-			new ESExtensionPoint(
-				RECORDING_OPTIONS_EXT_ID).getBoolean("denyAddCutElementsToModelElements", false)); //$NON-NLS-1$
+			Configuration.getClientBehavior().isDenyAddCutElementsToModelElementsFeatureActived());
 	}
 
 	/**

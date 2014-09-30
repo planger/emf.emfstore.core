@@ -77,6 +77,13 @@
                </documentation>
             </annotation>
          </attribute>
+         <attribute name="rerecordLocalChanges" type="boolean">
+            <annotation>
+               <documentation>
+                  Whether local changes should be rerecorded while reapplying them during a merge.
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 
