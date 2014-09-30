@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 EclipseSource Muenchen GmbH and others.
+ * Copyright (c) 2014 EclipseSource Muenchen GmbH and others.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,61 +7,51 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * neilmack - initial API and implementation
+ * Edgar Mueller, Neil Mackenzie - initial API and implementation
+ *
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model;
-
-/*******************************************************************************
- * Copyright (c) 2011-2014 EclipseSource Muenchen GmbH and others.
- *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- * Edgar - initial API and implementation
- * neilmack
- * This class maintains a list of sessionId's to ESWorkspaceProviderImpl's
- *
- ******************************************************************************/
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.eclipse.emf.emfstore.internal.common.model.util.ModelUtil;
 
-public class WorkspaceLocator {
+/**
+ * This class maintains a mapping for each workspace provider to its ID.
+ */
+public final class WorkspaceLocator {
 
 	private WorkspaceLocator() {
 
 	}
 
-	private final static Map<String, ESWorkspaceProviderImpl> SESSIONS_TO_WS = new LinkedHashMap<String, ESWorkspaceProviderImpl>();
+	private static final Map<String, ESWorkspaceProviderImpl> WORKSPACE_PROVIDER_MAP =
+		new LinkedHashMap<String, ESWorkspaceProviderImpl>();
 
 	/**
-	 * creates a ESWorkspaceProviderImpl and associates it with a sessionID
+	 * Creates a workspace and associates it with the given ID.
 	 *
-	 * @param session
-	 *            the sessionID
-	 * @return the ESWorkspaceProviderImpl
+	 * @param workspaceProviderId
+	 *            the identifier that will be associated with the workspace
+	 * @return the created workspace
 	 */
-	public static ESWorkspaceProviderImpl createWSFor(String session) {
-		final ESWorkspaceProviderImpl ws = createWS("Workspace " + session);
-		SESSIONS_TO_WS.put(session, ws);
+	public static ESWorkspaceProviderImpl createWorkspaceProviderFor(String workspaceProviderId) {
+		final ESWorkspaceProviderImpl ws = createWorkspace(workspaceProviderId);
+		WORKSPACE_PROVIDER_MAP.put(workspaceProviderId, ws);
 		return ws;
 	}
 
 	/**
-	 * creates a ESWorkspaceProviderImpl with a particualr name
+	 * Creates a workspace with a particular ID.
 	 *
-	 * @param name
-	 *            the name
-	 * @return the ESWorkspaceProviderImpl
+	 * @param workspaceProviderId
+	 *            the workspace identifier
+	 * @return the created workspace
 	 */
-	private static ESWorkspaceProviderImpl createWS(String name) {
+	private static ESWorkspaceProviderImpl createWorkspace(String workspaceProviderId) {
 		final ESWorkspaceProviderImpl ws = new ESWorkspaceProviderImpl();
-		ws.setName(name);
+		ws.setName(workspaceProviderId);
 		try {
 			ws.initialize();
 			// BEGIN SUPRESS CATCH EXCEPTION
@@ -75,15 +65,15 @@ public class WorkspaceLocator {
 	}
 
 	/**
-	 * checks whether a workspaceprovider exists for the sessionID
+	 * Checks whether a workspace provier exists for the given identifier.
 	 *
-	 * @param session
-	 *            the session ID
+	 * @param workspaceProviderId
+	 *            the workspace provider identifier
 	 * @return the resulting boolean
 	 */
-	public static boolean hasSession(String session) {
-		for (final String s : SESSIONS_TO_WS.keySet()) {
-			if (s.equals(session)) {
+	public static boolean hasId(String workspaceProviderId) {
+		for (final String id : WORKSPACE_PROVIDER_MAP.keySet()) {
+			if (id.equals(workspaceProviderId)) {
 				return true;
 			}
 		}
@@ -92,19 +82,21 @@ public class WorkspaceLocator {
 	}
 
 	/**
-	 * retrieves the workspaceprovider associated with the sessionID
+	 * Retrieves the workspace associated with the given ID.
+	 * If no such workspace can be found, one will be created.
 	 *
-	 * @param session
-	 *            the session ID
-	 * @return the associated ESWorkspaceProviderImpl
+	 * @param workspaceProviderId
+	 *            the workspace ID
+	 * @return the associated workspace provider, if any
 	 */
-	public static ESWorkspaceProviderImpl getWSBySession(String session) {
-		for (final Map.Entry<String, ESWorkspaceProviderImpl> t : SESSIONS_TO_WS.entrySet()) {
-			if (t.getKey().equals(session)) {
-				return t.getValue();
+	public static ESWorkspaceProviderImpl getWorkspaceById(String workspaceProviderId) {
+		for (final Map.Entry<String, ESWorkspaceProviderImpl> entry : WORKSPACE_PROVIDER_MAP.entrySet()) {
+			final String id = entry.getKey();
+			if (id.equals(workspaceProviderId)) {
+				return entry.getValue();
 			}
 		}
 
-		return createWSFor(session);
+		return createWorkspaceProviderFor(workspaceProviderId);
 	}
 }

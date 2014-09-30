@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Maximilian Koegel - initial API and implementation
+ * Maximilian Koegel, Edgar Mueller - initial API and implementation
  * Johannes Faltermeier - EMFStore specific URI migration
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.client.model;
@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -71,17 +72,31 @@ import org.eclipse.emf.emfstore.server.model.versionspec.ESPrimaryVersionSpec;
 
 /**
  * Controller for workspaces. Different threads can have a different instances associated with them.
- * This is useful in the
- * situation common where the client is a webserver, and different user sessions have different
- * threads associated with them.
+ * This is useful in the situation common where the client is a webserver,
+ * and different user sessions have different threads associated with them.
  *
  * @author mkoegel
+ * @author emueller
  * @author jfaltermeier
  */
 public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCommitObserver, ESUpdateObserver,
 ESShareObserver, ESCheckoutObserver, ESDisposable {
 
-	// private static ESWorkspaceProviderImpl instance;
+	/**
+	 * This thread local variable stores the ESWorkspaceProviderImpl associated with this thread.
+	 * different threads may have different instances associated with them. This allows the EMFStore
+	 * client code to provide a separate workspace provider for different threads.This is useful in the
+	 * situation common where the client is a webserver, and different user sessions have different
+	 * threads associated with them. When new threads are started this this threadlocal variable
+	 * is inherited by the newly created thread.
+	 */
+	private static final ThreadLocal<ESWorkspaceProviderImpl> WS_THREAD_LOCAL =
+		new InheritableThreadLocal<ESWorkspaceProviderImpl>();
+
+	private static final String DEFAULT_WORKSPACE_ID = "default"; //$NON-NLS-1$
+
+	private static ESWorkspaceProviderImpl defaultInstance;
+	private String id;
 
 	private AdminConnectionManager adminConnectionManager;
 	private ConnectionManager connectionManager;
@@ -91,49 +106,41 @@ ESShareObserver, ESCheckoutObserver, ESDisposable {
 	private SessionManager sessionManager;
 	private Workspace currentWorkspace;
 
-	private static ESWorkspaceProviderImpl defaultInstance = null;
 	/**
-	 * This thread local variable stores the ESWorkspaceProviderImpl associated with this thread.
-	 * different threads may have different instances associated with them. This allows the emfstore
-	 * client code to provide a seperate workspace provider for different threads.This is useful in the
-	 * situation common where the client is a webserver, and different user sessions have different
-	 * threads associated with them. When new threads are started this this threadlocal variable
-	 * is inhereted by the newly created thread.
-	 */
-	private static final ThreadLocal<ESWorkspaceProviderImpl> WS_THREAD_LOCAL = new InheritableThreadLocal<ESWorkspaceProviderImpl>();
-	private String name;
-
-	/**
-	 * Default constructor
-	 *
+	 * Default constructor.
 	 */
 	public ESWorkspaceProviderImpl() {
-		name = "";
+		id = StringUtils.EMPTY;
 	}
 
 	/**
-	 * Constructor. constructs an instance with a specific name
+	 * Constructor that creates an instance with a specific ID.
 	 *
-	 * @param name
-	 *            the name for the instance
+	 * @param id
+	 *            the workspace identifier for the instance
 	 *
 	 */
-	public ESWorkspaceProviderImpl(String name) {
-		this.name = name;
+	public ESWorkspaceProviderImpl(String id) {
+		this.id = id;
 	}
 
 	/**
-	 * This method is used by WSPool which acts as a customized threadpool. When behaviour is run in a
-	 * WSPool threadpool, the WSPool first ensures that the thread local ESWorkspaceProviderImpl is
-	 * taken from the thread that called for behaviour to be run in the threadpool, and then set as the
-	 * threadlocal instance for the thread running in the behaviour in the threadpool.
+	 * This method is used by {@link org.eclipse.emf.emfstore.internal.client.common.ScopedWorkspaceThreadPoolExecutor
+	 * ScopedWorkspaceThreadPoolExecutor} which acts as a customized threadpool.
+	 * When behavior is run in a
+	 * {@link org.eclipse.emf.emfstore.internal.client.common.ScopedWorkspaceThreadPoolExecutor
+	 * ScopedWorkspaceThreadPoolExecutor}, the pool
+	 * first ensures that the thread local ESWorkspaceProviderImpl is taken from the thread that called for
+	 * behavior to be run in the threadpool, and then set as the
+	 * threadlocal instance for the thread running in the behavior in the threadpool.
 	 *
 	 *
 	 * @param runnable
-	 *            the model element
+	 *            the {@link Runnable} to be executed in the context of the current workspace
+	 *
+	 * @return the updated {@link Runnable} that accordingly sets the workspace
 	 */
 	public static Runnable initRunnable(final Runnable runnable) {
-
 		final ESWorkspaceProviderImpl ws = WS_THREAD_LOCAL.get();
 		return new Runnable() {
 			public void run() {
@@ -147,14 +154,14 @@ ESShareObserver, ESCheckoutObserver, ESDisposable {
 	 * @return the name
 	 */
 	public String getName() {
-		return name;
+		return id;
 	}
 
 	/**
 	 * @param name the name to set
 	 */
 	public void setName(String name) {
-		this.name = name;
+		id = name;
 	}
 
 	/**
@@ -169,7 +176,7 @@ ESShareObserver, ESCheckoutObserver, ESDisposable {
 			if (defaultInstance == null)
 			{
 				try {
-					defaultInstance = new ESWorkspaceProviderImpl("default");
+					defaultInstance = new ESWorkspaceProviderImpl(DEFAULT_WORKSPACE_ID);
 					defaultInstance.initialize();
 					// BEGIN SUPRESS CATCH EXCEPTION
 				} catch (final RuntimeException e) {
@@ -182,26 +189,26 @@ ESShareObserver, ESCheckoutObserver, ESDisposable {
 				defaultInstance.notifyPostWorkspaceInitiators();
 			}
 			return defaultInstance;
-		} else {
-			return WS_THREAD_LOCAL.get();
 		}
+
+		return WS_THREAD_LOCAL.get();
 	}
 
 	/**
-	 * This method retrives the instance of ESWorkspaceProviderImpl associated with the token provided.
-	 * If there is not yet an associated with the token, then an instance
+	 * This method retrieves the workspace provider instance associated with the given ID.
+	 * If there is not yet an associated workspace with the given ID, then an instance
 	 * is created and associated with the calling thread.
 	 *
-	 * @param session
-	 *            the token, ussually a session id.
-	 * @return the WorkspaceProvider for this token
+	 * @param workspaceProviderId
+	 *            the workspace identifier, usually a session id
+	 * @return the WorkspaceProvider associated this workspaceIdentifier
 	 */
-	public static ESWorkspaceProviderImpl getInstance(String session) {
-		if (WorkspaceLocator.hasSession(session)) {
-			return WorkspaceLocator.getWSBySession(session);
+	public static ESWorkspaceProviderImpl getInstance(String workspaceProviderId) {
+		if (WorkspaceLocator.hasId(workspaceProviderId)) {
+			return WorkspaceLocator.getWorkspaceById(workspaceProviderId);
 		}
 
-		final ESWorkspaceProviderImpl ws = WorkspaceLocator.createWSFor(session);
+		final ESWorkspaceProviderImpl ws = WorkspaceLocator.createWorkspaceProviderFor(workspaceProviderId);
 		WS_THREAD_LOCAL.set(ws);
 		return ws;
 	}
@@ -332,26 +339,26 @@ ESShareObserver, ESCheckoutObserver, ESDisposable {
 		getEditingDomain().getCommandStack().flush();
 	}
 
-	public void migrate(String absoluteFilename) {
-		// FIXME JF
-		// final URI projectURI = URI.createFileURI(absoluteFilename);
-		//
-		// final List<URI> modelURIs = new ArrayList<URI>();
-		// modelURIs.add(projectURI);
-		//
-		// final ModelVersion workspaceModelVersion = getWorkspaceModelVersion();
-		// if (!EMFStoreMigratorUtil.isMigratorAvailable()) {
-		// ModelUtil.logWarning("No Migrator available to migrate imported file");
-		// return;
-		// }
-		//
-		// try {
-		// EMFStoreMigratorUtil.getEMFStoreMigrator().migrate(modelURIs, workspaceModelVersion.getReleaseNumber() - 1,
-		// new NullProgressMonitor());
-		// } catch (final EMFStoreMigrationException e) {
-		// WorkspaceUtil.logWarning("The migration of the project in the file " + absoluteFilename + " failed!", e);
-		// }
-	}
+	// public void migrate(String absoluteFilename) {
+	// FIXME JF
+	// final URI projectURI = URI.createFileURI(absoluteFilename);
+	//
+	// final List<URI> modelURIs = new ArrayList<URI>();
+	// modelURIs.add(projectURI);
+	//
+	// final ModelVersion workspaceModelVersion = getWorkspaceModelVersion();
+	// if (!EMFStoreMigratorUtil.isMigratorAvailable()) {
+	// ModelUtil.logWarning("No Migrator available to migrate imported file");
+	// return;
+	// }
+	//
+	// try {
+	// EMFStoreMigratorUtil.getEMFStoreMigrator().migrate(modelURIs, workspaceModelVersion.getReleaseNumber() - 1,
+	// new NullProgressMonitor());
+	// } catch (final EMFStoreMigrationException e) {
+	// WorkspaceUtil.logWarning("The migration of the project in the file " + absoluteFilename + " failed!", e);
+	// }
+	// }
 
 	/**
 	 * Get the admin connection manager. Return the admin connection manager for
@@ -448,6 +455,11 @@ ESShareObserver, ESCheckoutObserver, ESDisposable {
 		});
 	}
 
+	/**
+	 * Returns the internal workspace.
+	 *
+	 * @return the workspace
+	 */
 	public Workspace getInternalWorkspace() {
 
 		if (currentWorkspace == null) {
@@ -488,6 +500,9 @@ ESShareObserver, ESCheckoutObserver, ESDisposable {
 		getSessionManager().setSessionProvider(sessionProvider);
 	}
 
+	/**
+	 * Initializes the workspace.
+	 */
 	void initialize() {
 		observerBus = new ObserverBus();
 		connectionManager = initConnectionManager();
@@ -496,10 +511,12 @@ ESShareObserver, ESCheckoutObserver, ESDisposable {
 		load();
 	}
 
+	/**
+	 * Notifies all {@link ESWorkspaceInitObserver} that the workspace initialization is complete.
+	 */
 	void notifyPostWorkspaceInitiators() {
 		for (final ESExtensionElement element : new ESExtensionPoint("org.eclipse.emf.emfstore.client.notify.postinit", //$NON-NLS-1$
-			true)
-		.getExtensionElements()) {
+			true).getExtensionElements()) {
 			try {
 				element.getClass("class", ESWorkspaceInitObserver.class).workspaceInitComplete( //$NON-NLS-1$
 					currentWorkspace

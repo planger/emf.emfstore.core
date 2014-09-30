@@ -14,7 +14,6 @@ package org.eclipse.emf.emfstore.internal.client.common;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -42,8 +41,8 @@ public abstract class UnknownEMFStoreWorkloadCommand<T> {
 	 * Singleton.
 	 */
 	private static class SingletonHolder {
-		private static WSPool EXECUTOR = new WSPool(10, 10, 10000, TimeUnit.SECONDS,
-			new LinkedBlockingQueue<Runnable>());
+		private static ScopedWorkspaceThreadPoolExecutor executor =
+			new ScopedWorkspaceThreadPoolExecutor();
 	}
 
 	/**
@@ -68,7 +67,7 @@ public abstract class UnknownEMFStoreWorkloadCommand<T> {
 	public T execute() throws ESException {
 
 		double factor = 1.05;
-		final Future<T> future = SingletonHolder.EXECUTOR.submit(new Callable<T>() {
+		final Future<T> future = SingletonHolder.executor.submit(new Callable<T>() {
 			public T call() throws Exception {
 				return run(monitor);
 			}
@@ -84,7 +83,7 @@ public abstract class UnknownEMFStoreWorkloadCommand<T> {
 				resultReceived = true;
 			} catch (final InterruptedException e) {
 				WorkspaceUtil.logException(e.getMessage(), e);
-				throw new ESException("Workload command got interrupted", e);
+				throw new ESException(Messages.UnknownEMFStoreWorkloadCommand_CommandInterrupted, e);
 			} catch (final ExecutionException e) {
 				WorkspaceUtil.logException(e.getMessage(), e);
 				if (e.getCause() instanceof ESException) {
