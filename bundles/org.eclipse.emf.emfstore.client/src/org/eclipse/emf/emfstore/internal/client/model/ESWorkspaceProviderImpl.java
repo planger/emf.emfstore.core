@@ -5,7 +5,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Maximilian Koegel - initial API and implementation
  * Johannes Faltermeier - EMFStore specific URI migration
@@ -70,15 +70,18 @@ import org.eclipse.emf.emfstore.server.model.ESChangePackage;
 import org.eclipse.emf.emfstore.server.model.versionspec.ESPrimaryVersionSpec;
 
 /**
- * Controller for workspaces. Workspace Manager is a singleton.
- * 
+ * Controller for workspaces. Different threads can have a different instances associated with them.
+ * This is useful in the
+ * situation common where the client is a webserver, and different user sessions have different
+ * threads associated with them.
+ *
  * @author mkoegel
  * @author jfaltermeier
  */
 public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCommitObserver, ESUpdateObserver,
-	ESShareObserver, ESCheckoutObserver, ESDisposable {
+ESShareObserver, ESCheckoutObserver, ESDisposable {
 
-	private static ESWorkspaceProviderImpl instance;
+	// private static ESWorkspaceProviderImpl instance;
 
 	private AdminConnectionManager adminConnectionManager;
 	private ConnectionManager connectionManager;
@@ -88,33 +91,123 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 	private SessionManager sessionManager;
 	private Workspace currentWorkspace;
 
+	private static ESWorkspaceProviderImpl defaultInstance = null;
 	/**
-	 * Get an instance of the workspace manager. Will create an instance if no
-	 * workspace manager is present.
-	 * 
-	 * @return the workspace manager singleton
-	 * @generated NOT
+	 * This thread local variable stores the ESWorkspaceProviderImpl associated with this thread.
+	 * different threads may have different instances associated with them. This allows the emfstore
+	 * client code to provide a seperate workspace provider for different threads.This is useful in the
+	 * situation common where the client is a webserver, and different user sessions have different
+	 * threads associated with them. When new threads are started this this threadlocal variable
+	 * is inhereted by the newly created thread.
 	 */
-	public static synchronized ESWorkspaceProviderImpl getInstance() {
-		if (instance == null) {
-			try {
-				instance = new ESWorkspaceProviderImpl();
-				instance.initialize();
-				// BEGIN SUPRESS CATCH EXCEPTION
-			} catch (final RuntimeException e) {
-				// END SURPRESS CATCH EXCEPTION
-				ModelUtil.logException(Messages.ESWorkspaceProviderImpl_WorkspaceInit_Failed, e);
-				throw e;
-			}
+	private static final ThreadLocal<ESWorkspaceProviderImpl> WS_THREAD_LOCAL = new InheritableThreadLocal<ESWorkspaceProviderImpl>();
+	private String name;
 
-			// notify post workspace observers
-			instance.notifyPostWorkspaceInitiators();
-		}
-		return instance;
+	/**
+	 * Default constructor
+	 *
+	 */
+	public ESWorkspaceProviderImpl() {
+		name = "";
 	}
 
 	/**
-	 * Initialize the Workspace Manager singleton.
+	 * Constructor. constructs an instance with a specific name
+	 *
+	 * @param name
+	 *            the name for the instance
+	 *
+	 */
+	public ESWorkspaceProviderImpl(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * This method is used by WSPool which acts as a customized threadpool. When behaviour is run in a
+	 * WSPool threadpool, the WSPool first ensures that the thread local ESWorkspaceProviderImpl is
+	 * taken from the thread that called for behaviour to be run in the threadpool, and then set as the
+	 * threadlocal instance for the thread running in the behaviour in the threadpool.
+	 *
+	 *
+	 * @param runnable
+	 *            the model element
+	 */
+	public static Runnable initRunnable(final Runnable runnable) {
+
+		final ESWorkspaceProviderImpl ws = WS_THREAD_LOCAL.get();
+		return new Runnable() {
+			public void run() {
+				WS_THREAD_LOCAL.set(ws);
+				runnable.run();
+			}
+		};
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * This method retrieves the instance of ESWorkspaceProviderImpl associated with this thread.
+	 * If there is not yet an associated instance, and no default instance then an instance
+	 * is created and associated with the calling thread.
+	 *
+	 * @return the WorkspaceProvider for this thread
+	 */
+	public static ESWorkspaceProviderImpl getInstance() {
+		if (WS_THREAD_LOCAL.get() == null) {
+			if (defaultInstance == null)
+			{
+				try {
+					defaultInstance = new ESWorkspaceProviderImpl("default");
+					defaultInstance.initialize();
+					// BEGIN SUPRESS CATCH EXCEPTION
+				} catch (final RuntimeException e) {
+					// END SURPRESS CATCH EXCEPTION
+					ModelUtil.logException(Messages.ESWorkspaceProviderImpl_WorkspaceInit_Failed, e);
+					throw e;
+				}
+
+				// notify post workspace observers
+				defaultInstance.notifyPostWorkspaceInitiators();
+			}
+			return defaultInstance;
+		} else {
+			return WS_THREAD_LOCAL.get();
+		}
+	}
+
+	/**
+	 * This method retrives the instance of ESWorkspaceProviderImpl associated with the token provided.
+	 * If there is not yet an associated with the token, then an instance
+	 * is created and associated with the calling thread.
+	 *
+	 * @param session
+	 *            the token, ussually a session id.
+	 * @return the WorkspaceProvider for this token
+	 */
+	public static ESWorkspaceProviderImpl getInstance(String session) {
+		if (WorkspaceLocator.hasSession(session)) {
+			return WorkspaceLocator.getWSBySession(session);
+		}
+
+		final ESWorkspaceProviderImpl ws = WorkspaceLocator.createWSFor(session);
+		WS_THREAD_LOCAL.set(ws);
+		return ws;
+	}
+
+	/**
+	 * Initialize the Workspace Manager.
 	 */
 	public static synchronized void init() {
 		getInstance();
@@ -122,7 +215,7 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 
 	/**
 	 * Retrieve the editing domain.
-	 * 
+	 *
 	 * @return the workspace editing domain
 	 */
 	public EditingDomain getEditingDomain() {
@@ -134,7 +227,7 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 
 	/**
 	 * Sets the EditingDomain.
-	 * 
+	 *
 	 * @param editingDomain
 	 *            new domain.
 	 */
@@ -143,16 +236,9 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 	}
 
 	/**
-	 * Private constructor.
-	 * 
-	 */
-	private ESWorkspaceProviderImpl() {
-	}
-
-	/**
-	 * 
+	 *
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @see org.eclipse.emf.emfstore.internal.common.ESDisposable#dispose()
 	 */
 	public void dispose() {
@@ -169,7 +255,7 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 
 	/**
 	 * Whether the current workspace is disposed.
-	 * 
+	 *
 	 * @return {@code true} if the current workspace is disposed, {@code false} otherwise
 	 */
 	public boolean isDisposed() {
@@ -270,7 +356,7 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 	/**
 	 * Get the admin connection manager. Return the admin connection manager for
 	 * this workspace.
-	 * 
+	 *
 	 * @return the connectionManager
 	 */
 	public AdminConnectionManager getAdminConnectionManager() {
@@ -279,7 +365,7 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 
 	/**
 	 * Set the admin connection manager.
-	 * 
+	 *
 	 * @param adminConnectionManager
 	 *            the new {@link AdminConnectionManager} to be set
 	 */
@@ -289,7 +375,7 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 
 	/**
 	 * Retrieve the project space for a model element.
-	 * 
+	 *
 	 * @param modelElement
 	 *            the model element
 	 * @return the project space
@@ -313,7 +399,7 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 
 	/**
 	 * Retrieve the project space for a project.
-	 * 
+	 *
 	 * @param project
 	 *            the project
 	 * @return the project space
@@ -332,7 +418,7 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 
 	/**
 	 * Returns the {@link ObserverBus}.
-	 * 
+	 *
 	 * @return observer bus
 	 */
 	public static ObserverBus getObserverBus() {
@@ -341,16 +427,17 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 
 	/**
 	 * Returns the {@link SessionManager}.
-	 * 
+	 *
 	 * @return session manager
 	 */
 	public SessionManager getSessionManager() {
+
 		return sessionManager;
 	}
 
 	/**
 	 * Get the current workspace. There is always one current workspace.
-	 * 
+	 *
 	 * @return the workspace
 	 */
 	public ESWorkspaceImpl getWorkspace() {
@@ -373,16 +460,17 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 	/**
 	 * Get the connection manager. Return the connection manager for this
 	 * workspace.
-	 * 
+	 *
 	 * @return the connectionManager
 	 */
 	public ConnectionManager getConnectionManager() {
+
 		return connectionManager;
 	}
 
 	/**
 	 * Set the connectionmanager.
-	 * 
+	 *
 	 * @param manager
 	 *            connection manager.
 	 */
@@ -391,16 +479,16 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 	}
 
 	/**
-	 * 
+	 *
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @see ESWorkspaceProvider#setSessionProvider(ESAbstractSessionProvider)
 	 */
 	public void setSessionProvider(ESAbstractSessionProvider sessionProvider) {
 		getSessionManager().setSessionProvider(sessionProvider);
 	}
 
-	private void initialize() {
+	void initialize() {
 		observerBus = new ObserverBus();
 		connectionManager = initConnectionManager();
 		adminConnectionManager = initAdminConnectionManager();
@@ -408,14 +496,14 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 		load();
 	}
 
-	private void notifyPostWorkspaceInitiators() {
+	void notifyPostWorkspaceInitiators() {
 		for (final ESExtensionElement element : new ESExtensionPoint("org.eclipse.emf.emfstore.client.notify.postinit", //$NON-NLS-1$
 			true)
-			.getExtensionElements()) {
+		.getExtensionElements()) {
 			try {
 				element.getClass("class", ESWorkspaceInitObserver.class).workspaceInitComplete( //$NON-NLS-1$
 					currentWorkspace
-						.toAPI());
+					.toAPI());
 			} catch (final ESExtensionPointException e) {
 				WorkspaceUtil.logException(e.getMessage(), e);
 			}
@@ -425,7 +513,7 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 	/**
 	 * Initialize the connection manager of the workspace. The connection
 	 * manager connects the workspace with EMFStore.
-	 * 
+	 *
 	 * @return the connection manager
 	 */
 	private ConnectionManager initConnectionManager() {
@@ -436,7 +524,7 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 	/**
 	 * Initialize the connection manager of the workspace. The connection
 	 * manager connects the workspace with the emf store.
-	 * 
+	 *
 	 * @return the admin connection manager
 	 * @generated NOT
 	 */
@@ -465,8 +553,8 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 	private ESEditingDomainProvider getDomainProvider() {
 		// TODO EXPT PRIO
 		return new ESExtensionPoint("org.eclipse.emf.emfstore.client.editingDomainProvider") //$NON-NLS-1$
-			.getClass("class", //$NON-NLS-1$
-				ESEditingDomainProvider.class);
+		.getClass("class", //$NON-NLS-1$
+			ESEditingDomainProvider.class);
 	}
 
 	private Workspace createNewWorkspace(ResourceSet resourceSet, URI fileURI) {
@@ -496,7 +584,7 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 		} catch (final IOException e) {
 			WorkspaceUtil.logException(
 				Messages.ESWorkspaceProviderImpl_Create_Workspace_Failed
-					+ Configuration.getFileInfo().getWorkspaceDirectory(), e);
+				+ Configuration.getFileInfo().getWorkspaceDirectory(), e);
 		}
 		return workspace;
 	}
@@ -566,9 +654,9 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 	}
 
 	/**
-	 * 
+	 *
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @see org.eclipse.emf.emfstore.client.observer.ESCheckoutObserver#checkoutDone(org.eclipse.emf.emfstore.client.ESLocalProject)
 	 */
 	public void checkoutDone(ESLocalProject project) {
@@ -576,9 +664,9 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 	}
 
 	/**
-	 * 
+	 *
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @see org.eclipse.emf.emfstore.client.observer.ESShareObserver#shareDone(org.eclipse.emf.emfstore.client.ESLocalProject)
 	 */
 	public void shareDone(ESLocalProject localProject) {
@@ -586,9 +674,9 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 	}
 
 	/**
-	 * 
+	 *
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @see org.eclipse.emf.emfstore.client.observer.ESUpdateObserver#inspectChanges(org.eclipse.emf.emfstore.client.ESLocalProject,
 	 *      java.util.List, org.eclipse.core.runtime.IProgressMonitor)
 	 */
@@ -597,9 +685,9 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 	}
 
 	/**
-	 * 
+	 *
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @see org.eclipse.emf.emfstore.client.observer.ESUpdateObserver#updateCompleted(org.eclipse.emf.emfstore.client.ESLocalProject,
 	 *      org.eclipse.core.runtime.IProgressMonitor)
 	 */
@@ -608,9 +696,9 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 	}
 
 	/**
-	 * 
+	 *
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @see org.eclipse.emf.emfstore.client.observer.ESCommitObserver#inspectChanges(org.eclipse.emf.emfstore.client.ESLocalProject,
 	 *      org.eclipse.emf.emfstore.server.model.ESChangePackage, org.eclipse.core.runtime.IProgressMonitor)
 	 */
@@ -619,9 +707,9 @@ public final class ESWorkspaceProviderImpl implements ESWorkspaceProvider, ESCom
 	}
 
 	/**
-	 * 
+	 *
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @see org.eclipse.emf.emfstore.client.observer.ESCommitObserver#commitCompleted(org.eclipse.emf.emfstore.client.ESLocalProject,
 	 *      org.eclipse.emf.emfstore.server.model.versionspec.ESPrimaryVersionSpec,
 	 *      org.eclipse.core.runtime.IProgressMonitor)
