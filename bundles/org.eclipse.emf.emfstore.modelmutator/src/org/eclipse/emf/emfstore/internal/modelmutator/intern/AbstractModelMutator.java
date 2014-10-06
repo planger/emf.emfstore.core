@@ -1,13 +1,14 @@
 /*******************************************************************************
  * Copyright (c) 2012-2013 EclipseSource Muenchen GmbH and others.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * JulianSommerfeldt
+ * PhilipLanger
  ******************************************************************************/
 package org.eclipse.emf.emfstore.internal.modelmutator.intern;
 
@@ -29,12 +30,19 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorConfiguration;
 import org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutatorUtil;
+import org.eclipse.emf.emfstore.internal.modelmutator.mutation.AddObjectMutation;
+import org.eclipse.emf.emfstore.internal.modelmutator.mutation.AttributeChangeMutation;
+import org.eclipse.emf.emfstore.internal.modelmutator.mutation.DeleteObjectMutation;
+import org.eclipse.emf.emfstore.internal.modelmutator.mutation.FeatureMapKeyMutation;
+import org.eclipse.emf.emfstore.internal.modelmutator.mutation.MoveObjectMutation;
+import org.eclipse.emf.emfstore.internal.modelmutator.mutation.Mutation;
+import org.eclipse.emf.emfstore.internal.modelmutator.mutation.ReferenceChangeMutation;
 
 /**
  * Basic implementation of the {@link org.eclipse.emf.emfstore.internal.modelmutator.api.ModelMutator}.
- * 
+ *
  * @author Julian Sommerfeldt
- * 
+ *
  */
 public abstract class AbstractModelMutator {
 
@@ -56,6 +64,8 @@ public abstract class AbstractModelMutator {
 	private int currentWidth = 1;
 
 	private int currentDepth = 1;
+
+	private List<Mutation> defaultMutationPrototypes;
 
 	/**
 	 * @param config The {@link ModelMutatorConfiguration} to use for mutation.
@@ -97,11 +107,19 @@ public abstract class AbstractModelMutator {
 
 	/**
 	 * Mutation after an initial generation.
-	 * 
+	 *
 	 * @param ignoredFeatures
 	 *            a set of features to be ignored while mutating
 	 */
 	public void mutate(Set<EStructuralFeature> ignoredFeatures) {
+		if (config.getMutationCount() == -1) {
+			performFullMutation(ignoredFeatures);
+		} else {
+			performConfiguredNumberOfMutations();
+		}
+	}
+
+	private void performFullMutation(Set<EStructuralFeature> ignoredFeatures) {
 		deleteEObjects(config.getRootEObject());
 
 		currentObjectCount = ModelMutatorUtil.getAllObjectsCount(config.getRootEObject());
@@ -111,6 +129,38 @@ public abstract class AbstractModelMutator {
 		changeCrossReferences();
 
 		mutateAttributes(ignoredFeatures);
+	}
+
+	private void performConfiguredNumberOfMutations() {
+		final List<Mutation> mutations = getDefaultMutationPrototypes();
+
+		int i = 0;
+		while (i < config.getMutationCount()) {
+			final int rndIdx = config.getRandom().nextInt(mutations.size());
+			final Mutation nextMutation = mutations.get(rndIdx);
+			final Mutation mutationToRun = nextMutation.clone();
+			if (mutationToRun.apply()) {
+				i++;
+			}
+		}
+	}
+
+	private List<Mutation> getDefaultMutationPrototypes() {
+		if (defaultMutationPrototypes == null) {
+			defaultMutationPrototypes = createDefaultMutationPrototypes();
+		}
+		return defaultMutationPrototypes;
+	}
+
+	private List<Mutation> createDefaultMutationPrototypes() {
+		final List<Mutation> defaultMutationPrototypes = new ArrayList<Mutation>();
+		defaultMutationPrototypes.add(new AddObjectMutation(util));
+		defaultMutationPrototypes.add(new DeleteObjectMutation(util));
+		defaultMutationPrototypes.add(new MoveObjectMutation(util));
+		defaultMutationPrototypes.add(new AttributeChangeMutation(util));
+		defaultMutationPrototypes.add(new ReferenceChangeMutation(util));
+		defaultMutationPrototypes.add(new FeatureMapKeyMutation(util));
+		return defaultMutationPrototypes;
 	}
 
 	/**
@@ -131,7 +181,7 @@ public abstract class AbstractModelMutator {
 
 	/**
 	 * Create recursively direct and indirect children for a given {@link EObject} and its children.
-	 * 
+	 *
 	 * @param root The {@link EObject} for which children should be generated.
 	 * @param depth The depth of the EObject in the total tree.
 	 */
@@ -156,7 +206,7 @@ public abstract class AbstractModelMutator {
 
 	/**
 	 * Creates/deletes direct children for the given {@link EObject}.
-	 * 
+	 *
 	 * @param root The {@link EObject} for which children should be created.
 	 * @return A list of the newly generated children.
 	 */
@@ -212,7 +262,7 @@ public abstract class AbstractModelMutator {
 
 	/**
 	 * Randomly deletes direct and indirect children of the given root {@link EObject}.
-	 * 
+	 *
 	 * @param root The {@link EObject} from which children should be deleted.
 	 */
 	public void deleteEObjects(EObject root) {
@@ -258,7 +308,7 @@ public abstract class AbstractModelMutator {
 
 	/**
 	 * Get a {@link EClass}, which is valid for the given {@link EReference}.
-	 * 
+	 *
 	 * @param reference The {@link EReference} to search a {@link EClass} for.
 	 * @return A valid {@link EClass} for the given {@link EReference} or <code>null</code> if there is none.
 	 */
@@ -301,7 +351,7 @@ public abstract class AbstractModelMutator {
 
 	/**
 	 * Creates a new {@link EObject} and sets its attributes.
-	 * 
+	 *
 	 * @param eClass The {@link EClass} of the new {@link EObject}.
 	 * @param ignoredFeatures
 	 *            a set of features to be ignored while mutating
@@ -325,7 +375,7 @@ public abstract class AbstractModelMutator {
 
 	/**
 	 * Adds an {@link EObject} to the given parent.
-	 * 
+	 *
 	 * @param parent The {@link EObject} where to add the newObject
 	 * @param newObject The new {@link EObject} to add to the parent.
 	 * @param reference The {@link EReference} where to add the newObject.
@@ -341,7 +391,7 @@ public abstract class AbstractModelMutator {
 
 	/**
 	 * Randomly mutates all attributes.
-	 * 
+	 *
 	 * @param ignoredFeatures
 	 *            a set of features to be ignored while mutating
 	 */
@@ -365,7 +415,7 @@ public abstract class AbstractModelMutator {
 
 	/**
 	 * Changes CrossReferences of an {@link EObject}.
-	 * 
+	 *
 	 * @param obj The {@link EObject} where to change the CrossReferences.
 	 */
 	public void changeCrossReferences(EObject obj) {
